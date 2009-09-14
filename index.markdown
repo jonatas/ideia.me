@@ -3,4 +3,10 @@ layout: default
 title: Projetos do GitHub do Jônatas
 ---
 
-Home
+{
+
+  [[:twitter]](http://twitter.com/jonatasdp) => "http://twitter.com/jonatasdp",
+
+  \:mail\_to => "jonatasdp@gmail.com"
+
+}

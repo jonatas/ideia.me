@@ -3,18 +3,8 @@ html {
 }
 body {
   background: #FFFFFF url('http://a1.twimg.com/profile_background_images/4066654/carbon-footprint-1.jpg') fixed no-repeat top left;
- }
-
-
-a[href] {
-	color: #525151;
 }
 
-#wrapper { /* IE workaround */
-	margin: 0 auto;
-	padding: 0;
-	width: 750px;
-}
 html>body #wrapper {
 	margin: 0 auto;
 	padding: 0;
@@ -25,9 +15,8 @@ html>body #wrapper {
 #header {
 	position: relative;
 /*  background: #4B055A url("http://macromates.com/images/site/bg_header") no-repeat 0px 0px;*/
-	background: #6F1A77;
-	border-bottom: 1px solid #861b90;
-	height: 113px;
+	background: Black;
+	height: 100px;
 }
 #header h1 {
 	position: absolute;
@@ -61,17 +50,6 @@ html>body #wrapper {
 #navigation li a {
 	color: #5b5b5b;
 	text-decoration: none;
-}
-
-#intro		#navi_intro			a,
-#blog			#navi_blog			a,
-#toc			#navi_manual		a,
-#chapter		#navi_manual		a,
-#wiki			#navi_wiki			a,
-#community	#navi_community	a,
-#contact		#navi_contact		a,
-#navigation li a:hover {
-	color: #fff;
 }
 
 #page_body {
