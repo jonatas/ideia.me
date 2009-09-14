@@ -12,22 +12,6 @@ html>body #wrapper {
 	max-width: 750px;
 }
 
-#header {
-	position: relative;
-/*  background: #4B055A url("http://macromates.com/images/site/bg_header") no-repeat 0px 0px;*/
-	background: Black;
-	height: 100px;
-}
-#header h1 {
-	position: absolute;
-	left: 60px;
-	top: 40px;
-	width: 380px;
-	height: 50px;
-	cursor: pointer;
-	color: white;
-}
-
 #navigation {
 	background: #232323 url("http://macromates.com/images/site/bg_navigation") repeat-x 0px 0px;
 	border-top: 5px solid #6D0E79;
@@ -68,10 +52,11 @@ html>body #wrapper {
 }
 html>body #content {
 	margin: 0;
-	padding: 25px;
+	padding: 30px;
 	width: auto;
 	height: auto;
 	max-width: 430px;
+  font-size: 24px;
 	min-height: 584px; /* (64+2*20+2)*6 - 2 - 2*25 */
 	background: #fff;
 }
