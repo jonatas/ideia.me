@@ -3,14 +3,9 @@ html {
 }
 body {
   background: #FFFFFF url('http://a1.twimg.com/profile_background_images/4066654/carbon-footprint-1.jpg') fixed no-repeat top left;
+ }
 
 
-
-/* font: 0.72em/170% "Lucida Grande", Verdana, Helvetica, sans-serif;*/
-	font: 12px "Lucida Grande", Verdana, Helvetica, sans-serif;
-	margin: 0;
-	padding: 0;
-}
 a[href] {
 	color: #525151;
 }
