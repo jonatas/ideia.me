@@ -10,7 +10,7 @@ layout: nil
  <updated>{{ site.time | date_to_xmlschema }}</updated>
  <id>http://jonatas.github.com/jonatas.github.com/</id>
  <author>
-   <name>Dr Nic Williams</name>
+   <name>Jônatas Davi Paganini</name>
    <email>jonataswilliams@gmail.com</email>
  </author>
 
