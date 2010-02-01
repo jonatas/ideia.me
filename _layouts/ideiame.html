@@ -5,6 +5,7 @@
   <link href="prettify/prettify.css" type="text/css" rel="stylesheet" />
   <link href="css/style.css" type="text/css" rel="stylesheet" />
   <script type="text/javascript" src="prettify/prettify.js"></script>
+  <link href="http://feeds2.feedburner.com/ideiame" rel="alternate" title="Ideia.me Jônatas!" type="application/atom+xml" />
   </head>
   <body>
     <div class="links">
@@ -12,11 +13,9 @@
        <a href="/produtos" class="link grey">Produtos</a> | 
        <a href="/contrate_me" class="link">Contrate-me</a> | 
        <a href="/posts" class="link red">Blog</a> | 
-       <a href="/portfolio" class="link blue">Portfólio</a> | 
+       <a href="/portfolio/2010/02/01/portfolio.html" class="link blue">Portfólio</a> | 
        <a href="/curriculo" class="link yellowback">Currículo</a>
     </div>
-
-  <h1>{{ page.title }}</h1>
    <table>
 
     <td class="content">
@@ -36,7 +35,7 @@ about_me = {
      </pre>
 </table>
 
-  <h1>Blog</h1>
+  <h1 class="grey">Blog</h1>
   <ul class="posts">
     {% for post in site.posts %}
     <li><span class="yellow">{{ post.date | date_to_string }}</span> &raquo; 
