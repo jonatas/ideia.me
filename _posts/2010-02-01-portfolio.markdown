@@ -137,7 +137,7 @@ O [projeto Tia Neta][tianeta-url] é uma homenagem a primeira usuária do sistem
 [troper-url]: http://github.com/jonatas/troper
 [appointme-url]: http://github.com/jonatas/appointme
 [guiamed-url]: http://www.guiamed.info
-[coopnet-url]: http://coopnet.leosoft.com.br
+[coopnet-url]: http://coopnet.leosoft.com.br/coopnet
 [agecel-url]: http://www.agecel.com
 [printscreen-use-sms-prototipo]: /../../../images/printscreen-prototipo-envia-sms.jpg
 [url-use-sms]: http://usesms.heroku.com
