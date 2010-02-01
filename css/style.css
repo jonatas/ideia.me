@@ -3,12 +3,11 @@ body {
   color:#5fba3d;
   font-family:monospace, prestige;
 }
+
 div.content {
-  width:100%;
+  width:70%;
 }
 div.about_me {
-  float:left;
-  margin-left:70%;
   width:30%;
 }
 div.links {

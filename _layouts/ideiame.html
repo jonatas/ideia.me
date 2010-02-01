@@ -13,13 +13,16 @@
        <a href="/contrate_me" class="link">Contrate-me</a> | 
        <a href="/posts" class="link red">Blog</a> | 
        <a href="/portfolio" class="link blue">Portfólio</a> | 
-       <a href="/curriculo" class="link">Currículo</a>
+       <a href="/curriculo" class="link yellowback">Currículo</a>
     </div>
 
   <h1>{{ page.title }}</h1>
-    <div class="content">
+   <table>
+
+    <td class="content">
       {{ content }}
-    <div class="about_me" >
+    </div>
+    <td class="about_me" >
      <pre class="prettyprint lang-ruby">
 about_me = {
  :nome => "Jônatas Paganini",
@@ -31,8 +34,7 @@ about_me = {
 
 }
      </pre>
-    </div>
-   </div>
+</table>
 
   <h1>Blog</h1>
   <ul class="posts">

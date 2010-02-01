@@ -31,14 +31,6 @@
      {% endif %}
    {% endfor %}
   </span>
-
-  <h2>Posts relacionados</h2>
-  <ul class="posts">
-   {% for post in site.related_posts limit:3 %}
-   <li><span class="yellow">{{ post.date | date_to_string }}</span> &raquo; 
-   <a class="grey" href="{{ post.url }}">{{ post.title }}</a></li>
-   {% endfor %}
-  </ul>
  </body>
  <script type='text/javascript'>
   addEventListener('load', function (event) { prettyPrint() }, false);  
