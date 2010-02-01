@@ -1,0 +1,46 @@
+<html>
+ <head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <title>{{ page.title }}</title>
+
+  <link href="/../../../prettify/prettify.css" type="text/css" rel="stylesheet" />
+  <link href="/../../../css/style.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="/../../../prettify/prettify.js"></script>
+ </head>
+ <body>
+  <div class="links">
+   <a href="/" class="link yellow">Ideia-me</a> | 
+   <a href="/produtos" class="link grey">Produtos</a> | 
+   <a href="/contrate_me" class="link">Contrate-me</a> | 
+   <a href="/posts" class="link red">Blog</a> | 
+   <a href="/portfolio" class="link blue">Portfólio</a> | 
+   <a href="/curriculo" class="link">Currículo</a>
+  </div>
+
+  <h1>{{ page.title }}</h1>
+  <div class="content">
+   {{ content }}
+  </div>
+
+  <span class="tags">
+   Tags:
+   {% for tag in page.categories %}
+     <a href="/{{ tag.url }}" title="Ver posts com a tag &quot;{{ tag }}&quot;">{{ tag }}</a>
+     {% if forloop.last != true %}
+       ,
+     {% endif %}
+   {% endfor %}
+  </span>
+
+  <h2>Posts relacionados</h2>
+  <ul class="posts">
+   {% for post in site.related_posts limit:3 %}
+   <li><span class="yellow">{{ post.date | date_to_string }}</span> &raquo; 
+   <a class="grey" href="{{ post.url }}">{{ post.title }}</a></li>
+   {% endfor %}
+  </ul>
+ </body>
+ <script type='text/javascript'>
+  addEventListener('load', function (event) { prettyPrint() }, false);  
+  </script>
+ </html>

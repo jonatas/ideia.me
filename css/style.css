@@ -1,0 +1,98 @@
+body {
+  background-color:#080808;
+  color:#5fba3d;
+  font-family:monospace, prestige;
+}
+div.content {
+  width:100%;
+}
+div.about_me {
+  float:left;
+  margin-left:70%;
+  width:30%;
+}
+div.links {
+    border-style:solid inset;
+    border-width:6px;
+    border-color:#ccd9d8;
+}
+a.link {
+ margin-left: 2%;
+ margin-right: 2%;
+ font-size: 120%;
+}
+
+a{
+    color:#5fba3d;
+    text-decoration:underline;
+}
+
+.journaltop{
+    background-color:#080808;
+    color:#5fba3d;
+}
+
+h2{
+    color:#5fba3d;
+    font-family:monospace, prestige;
+}
+
+li{
+    background-color:#080808;
+}
+
+.a{
+    background-color:#080808;
+}
+
+.redback{
+    background-color:#d5381a;
+    color:#080808;
+}
+.red{
+    color:#d5381a;
+}
+.blue{
+  color:#0034dc;
+}
+
+.blueback{
+    background-color:#0034dc;
+    color:#5fba3d;
+}
+
+.green{
+  background-color:#5fba3d;
+}
+.greenback{
+    background-color:#5fba3d;
+    color:#080808;
+}
+
+.yellow{
+  color:#e5df43;
+}
+.yellowback{
+    background-color:#e5df43;
+    color:#d5381a;
+}
+.grey {
+  color:#ffffff;
+}
+.greyback{
+    background-color:#888888;
+    color:#ffffff;
+}
+
+.border{
+    width:auto;
+    height:auto;
+    border-style:solid;
+    border-width:3px;
+    border-color:#888888;
+}
+
+.image{
+    width:auto;
+    height:auto;
+} 
