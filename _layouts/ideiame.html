@@ -2,9 +2,10 @@
  <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
   <title>{{ page.title }}</title>
-  <link href="prettify/prettify.css" type="text/css" rel="stylesheet" />
-  <link href="css/style.css" type="text/css" rel="stylesheet" />
-  <script type="text/javascript" src="prettify/prettify.js"></script>
+  <link id="base" href="{{page.dirbase}}/css/base.css" type="text/css" rel="stylesheet" />
+  <link id="stylesheet_prettify" href="{{page.dirbase}}/prettify/prettify_black.css" type="text/css" rel="stylesheet" />
+  <link id="stylesheet"href="{{page.dirbase}}/css/black.css" type="text/css" rel="stylesheet" />
+  <script type="text/javascript" src="{{page.dirbase}}/prettify/prettify.js"></script>
   <link href="http://feeds2.feedburner.com/ideiame" rel="alternate" title="Ideia.me Jônatas!" type="application/atom+xml" />
   </head>
   <body>
@@ -14,9 +15,12 @@
        <a href="/contrate_me" class="link">Contrate-me</a> | 
        <a href="/posts" class="link red">Blog</a> | 
        <a href="/portfolio/2010/02/01/portfolio.html" class="link blue">Portfólio</a> | 
-       <a href="/curriculo" class="link yellowback">Currículo</a>
+
+       <a href="/curriculo/2010/02/01/curriculo.html" class="link yellowback">Currículo</a>
+       <a href="#" onclick="changeStyleTo('black')" class="link greenback">Preto</a>
+       <a href="#" onclick="changeStyleTo('white')" class="link white">Branco</a>
     </div>
-   <table>
+   <table id="layout" >
 
     <td class="content">
       {{ content }}
@@ -38,12 +42,19 @@ about_me = {
   <h1 class="grey">Blog</h1>
   <ul class="posts">
     {% for post in site.posts %}
-    <li><span class="yellow">{{ post.date | date_to_string }}</span> &raquo; 
+    <li><span class="post_date">{{ post.date | date_to_string }}</span> &raquo; 
         <a class="grey" href="{{ post.url }}">{{ post.title }}</a></li>
     {% endfor %}
   </ul>
   </body>
   <script type='text/javascript'>
     addEventListener('load', function (event) { prettyPrint() }, false);  
+    function changeStyleTo(style) {
+     document.getElementById('stylesheet').href = '{{page.dirbase}}/css/' + style + '.css';
+     document.getElementById('stylesheet_prettify').href = '{{page.dirbase}}/prettify/prettify_' + style + '.css';
+     
+     prettyPrint();  
+    }
+
   </script>
 </html>

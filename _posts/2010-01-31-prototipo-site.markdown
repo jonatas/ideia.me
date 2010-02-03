@@ -1,7 +1,8 @@
 ---
-  layout: posts 
+  layout: ideiame 
   title: Protótipo do site
   categories: ['jekyll', 'github', 'prettify']
+  dirbase: /../../..
 ---
 
 Confira a primeira tentativa de leiaute do site.

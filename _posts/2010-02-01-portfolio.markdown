@@ -1,7 +1,8 @@
 ---
- layout: posts
+ layout: ideiame 
  title: Portfolio::Base 
  categories: portfolio
+ dirbase: /../../..
 ---
 
 <style>
@@ -53,7 +54,7 @@ Usa Java, acompanhado apenas por ferramentas open-source.
 
 ***
 
-## Agecel 
+## Agecel {#agecel}
 
 A [Agecel][agecel-url] é uma empresa que disponibiliza listas telefônicas comerciais de quase todas cidades brasileiras por meio do site e também no celular – por um aplicativo com enorme capacidade de compactação de dados, a Agecel viabiliza que listas telefônicas possam ser baixadas em aparelhos de telefonia móvel, ocupando espaço menor que uma foto!
 Ambos os canais (site e celular) oferecem comodidade, praticidade e bons negócios.
@@ -72,7 +73,7 @@ O sistema interno, controla todos os dados do site, assim como relacionamento co
 
 ***
 
-## GuiaMed
+## GuiaMed {#guiamed}
 
 [GuiaMed][guiamed-url] é uma solução para as empresas de saúde.
 
@@ -82,7 +83,7 @@ O sistema interno, controla todos os dados do site, assim como relacionamento co
 
 ***
 
-## Use SMS
+## Use SMS {#use-sms}
 
 [Use SMS][url-use-sms] é uma solução integrada para envio de mensagens em massa. Ainda é um protótipo e logo estará disponível para enviar Sms mais barato do que o normal.
 
@@ -90,7 +91,7 @@ O sistema interno, controla todos os dados do site, assim como relacionamento co
 
 ***
 
-## Tia Neta
+## Tia Neta {#tianeta}
 
 O [projeto Tia Neta][tianeta-url] é uma homenagem a primeira usuária do sistema, também minha tia, que 'separava os pedidos' todas as noites e indexava no caderno segundo algumas condições para ir para produção. Com poucas horas de esforço o problema dela foi resolvido.
 
@@ -99,7 +100,7 @@ O [projeto Tia Neta][tianeta-url] é uma homenagem a primeira usuária do sistem
 ***
 
 # Outros Projetos
-## BOO: Bible Object Oriented
+## BOO: Bible Object Oriented {#boo}
 
 [Boo][boo-url] é uma biblioteca de apenas 500 kilobytes que permite acessar o conteúdo da bíblia em inglês.
 
@@ -107,7 +108,7 @@ O [projeto Tia Neta][tianeta-url] é uma homenagem a primeira usuária do sistem
 
 ***
 
-## Appointme
+## Appointme {#appointme}
 
 [Appointme][appointme-url] é um agendador que funciona em linguagem natural. Com ela, você pode agendar seus compromissos digitando o que e quando você irá fazer. Parecendo-se com uma conversa, é possível pedir para que o agendador te responda a respeito de seus compromissos.
 
@@ -115,11 +116,25 @@ O [projeto Tia Neta][tianeta-url] é uma homenagem a primeira usuária do sistem
 
 ***
 
-## Troper 
+## Troper  {#troper}
 
 [Troper][troper-url] é um sistema parasita de sistemas Rails.  Esta em formato de plugin e serve para construção e execução de relatórios na web.
 
 ![printscreen-troper]
+
+## Resumo das tecnologias usadas em cada projeto {#resumo}
+
+
+projeto               | linguagem | tempo     | framework mvc |  servidor | Persistência | ORM          
+----------------------|-----------|-----------|---------------|-----------|----------------|--------------
+[Agecel](#agecel)     | Ruby      | 30 meses  | Rails         | Mongrel   | Postgresql     | ActiveRecord 
+[GuiaMed](#guiamed)   | Ruby      | 3 meses   | Rails         | Mongrel   | Postgresql     | ActiveRecord 
+[Tia Neta](#tianeta)  | Ruby      | 15 horas  | Rails         | WebRick   | Sqlite         | ActiveRecord 
+[BOO](#boo)           | Ruby      | 5 horas   | ----          |           | Madeleine      | --- 
+[Envia SMS](#use-sms) | Ruby      | 10 horas  | Sinatra       | Thin      | MongoDB        | MongoRecord 
+[Troper](#troper)     | Ruby      | 180 horas | Rails         | ----      | Qualquer um    | ActiveRecord 
+[Coopnet](#coopnet)   | Java      | 14 meses  | Struts 1.2    | JBoss     | Postgresql     | Hibernate 
+
 
 
 [printscreen-coopnet]: /../../../images/printscreen-coopnet.jpg
@@ -132,7 +147,6 @@ O [projeto Tia Neta][tianeta-url] é uma homenagem a primeira usuária do sistem
 [printscreen-troper]: /../../../images/printscreen-troper.jpg
 
 [boo-url]: http://boo.rubyforge.org 
-
 [tianeta-url]: http://github.com/jonatas/tia_neta
 [troper-url]: http://github.com/jonatas/troper
 [appointme-url]: http://github.com/jonatas/appointme
@@ -141,4 +155,3 @@ O [projeto Tia Neta][tianeta-url] é uma homenagem a primeira usuária do sistem
 [agecel-url]: http://www.agecel.com
 [printscreen-use-sms-prototipo]: /../../../images/printscreen-prototipo-envia-sms.jpg
 [url-use-sms]: http://usesms.heroku.com
-

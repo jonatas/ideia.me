@@ -1,0 +1,56 @@
+body {
+  background-color:white;
+  color:black;
+}
+div.links {
+    border-color:#ccd9d8;
+    background-color:#080808;
+}
+a, h2 {
+  color:#5fba3d;
+}
+.redback{
+    background-color:#d5381a;
+    color:#080808;
+}
+.red{
+    color:#d5381a;
+}
+.blue{
+  color:#0034dc;
+}
+.blueback{
+    background-color:#0034dc;
+    color:#5fba3d;
+}
+.green{
+  background-color:#5fba3d;
+}
+.greenback{
+  color:#5fba3d;
+  background-color:#080808;
+}
+
+.white{
+  color:#080808;
+ background-color:white;
+}
+.yellow{
+  color:#e5df43;
+}
+.yellowback{
+  background-color:#e5df43;
+  color:#d5381a;
+}
+.grey{
+ background-color:#ffffff;
+}
+
+.border{
+ border-color:#888888;
+}
+
+.post_date {
+  background-color:white;
+  color: blue;
+}
