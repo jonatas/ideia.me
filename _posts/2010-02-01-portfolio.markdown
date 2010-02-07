@@ -16,7 +16,7 @@
     color: 5EC2C7;
   } 
   #site {
-    color: FBE89A;
+    color: Brown;
   } 
   #guiamed {
     color: 2CA8B0;
@@ -45,7 +45,7 @@ O meu portfólio, está ligado a todos os trabalhos que venho realizando e goste
 Os projetos Coopnet, Agecel, Guiamed não são de minha autoria, mas participei integralmente do desenvolvimento e por isso fazem parte do meu portfólio.
 
 
-## CoopNet 
+## CoopNet  {#coopnet}
 
 O [Coopnet][coopnet-url] é um sistema completo, de baixo custo e que acompanha a evolução do seu negócio.
 Usa Java, acompanhado apenas por ferramentas open-source.

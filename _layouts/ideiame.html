@@ -12,20 +12,20 @@
     <div class="links">
        <a href="/" class="link yellow">Ideia-me</a> | 
        <a href="/produtos" class="link grey">Produtos</a> | 
-       <a href="/contrate_me" class="link">Contrate-me</a> | 
+       <a href="/contrate_me" class="link green">Contrate-me</a> | 
        <a href="/posts" class="link red">Blog</a> | 
        <a href="/portfolio/2010/02/01/portfolio.html" class="link blue">Portfólio</a> | 
-       <a href="/curriculo/2010/02/01/curriculo.html" class="link yellowback">Currículo</a>
+       <a href="/curriculo/2010/02/01/curriculo.html" class="link orange">Currículo</a>
     
-       <div onclick="changeStyleTo('black')" class="black style"></div>
-       <div onclick="changeStyleTo('white')" class="white style"></div>
+       <div onclick="changeStyleTo('black')" class="black style" title="Apagar a luz">&nbsp;</div>
+       <div onclick="changeStyleTo('white')" class="white style" title="Acender a luz">&nbsp;</div>
      </div>
-   <table id="layout" >
+   <table class="layout" >
 
     <td class="content">
       {{ content }}
     </div>
-    <td class="about_me" >
+    <td class="about_me">
      <pre class="prettyprint lang-ruby">
 about_me = {
  :nome => "Jônatas Paganini",
@@ -39,11 +39,11 @@ about_me = {
      </pre>
 </table>
 
-  <h1 class="grey">Blog</h1>
+  <h1>Blog</h1>
   <ul class="posts">
     {% for post in site.posts %}
     <li><span class="post_date">{{ post.date | date_to_string }}</span> &raquo; 
-        <a class="grey" href="{{ post.url }}">{{ post.title }}</a></li>
+        <a class="post" href="{{ post.url }}">{{ post.title }}</a></li>
     {% endfor %}
   </ul>
   </body>

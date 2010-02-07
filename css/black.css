@@ -8,16 +8,6 @@ div.links {
   background-color:#080808;
 }
 
-
-
-a {
-  color:#5fba3d;
-}
-
-h2{
-  color:#5fba3d;
-}
-
 li {
   background-color:#080808;
 }
@@ -40,7 +30,11 @@ li {
 }
 
 .green{
-  background-color:#5fba3d;
+  color:green;
+}
+
+.orange{
+  color:orange;
 }
 .greenback{
     background-color:#5fba3d;
@@ -56,6 +50,9 @@ li {
 }
 .grey {
   color:#ffffff;
+}
+.post{
+  color: FloralWhite;
 }
 .greyback{
   background-color:#888888;
@@ -73,5 +70,13 @@ li {
 
 .white{
  color:white;
+}
+
+ul.posts {
+  color: OrangeRed;
+}
+
+a, h1, h2 {
+ color: SlateBlue;
 }
 
