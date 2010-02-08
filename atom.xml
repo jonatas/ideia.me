@@ -5,10 +5,10 @@ layout: nil
 <feed xmlns="http://www.w3.org/2005/Atom">
  
  <title>Ideia.me Jônatas!</title>
- <link href="http://jonatas.ideia.me/atom.xml" rel="self"/>
- <link href="http://jonatas.ideia.me"/>
+ <link href="http://ideia.me/atom.xml" rel="self"/>
+ <link href="http://ideia.me"/>
  <updated>{{ site.time | date_to_xmlschema }}</updated>
- <id>http://jonatas.ideia.me</id>
+ <id>http://ideia.me</id>
  <author>
    <name>Jônatas Davi Paganini</name>
    <email>jonatasdp@gmail.com</email>
@@ -17,10 +17,11 @@ layout: nil
  {% for post in site.posts %}
  <entry>
    <title>{{ post.title }}</title>
-   <link href="http://jonatas.ideia.me/{{ post.url }}"/>
+   <link href="http://ideia.me{{ post.url }}"/>
    <updated>{{ post.date | date_to_xmlschema }}</updated>
-   <id>http://jonatas.ideia.me/{{ post.id }}</id>
+   <id>http://ideia.me{{ post.id }}</id>
    <content type="html">{{ post.content | xml_escape }}</content>
  </entry>
  {% endfor %}
+
 </feed>

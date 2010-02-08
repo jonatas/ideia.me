@@ -1,5 +1,6 @@
 body, h1, h2 {
- font-family:monospace, prestige;
+ font-family: monospace, prestige;
+ font-size: 110%;
 }
 div.links {
  border-style:solid inset;
