@@ -11,6 +11,10 @@ Como não queria escrever um currículo, então criei este RML - Resume Markup L
 
 Neste linguagem, os olhos do contratante são o compilador, e o objetivo deste código é mostrar cada chave com seu determinado valor. Se deseja me contratar, envie um email para a chave **email**.
 
+ps: Googlando descobri que a linguagem RML [realmente existe][rml-google], e é para este fim também, mas não usa chave => valor, mas <chave>valor</chave>.
+
+[rml-google]: http://terpconnect.umd.edu/~freeman1/rml.html
+
 <div><pre class="prettyprint lang-js">
 {
  name: Jônatas Davi Paganini
