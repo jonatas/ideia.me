@@ -1,7 +1,7 @@
 ---
   layout: ideiame 
   title: Google code playground 
-  categories: ['jekyll', 'github', 'prettify']
+  categories: coding for fun 
   dirbase: /../../..
 ---
 
