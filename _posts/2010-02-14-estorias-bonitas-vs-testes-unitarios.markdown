@@ -1,8 +1,8 @@
 ---
  layout: ideiame
  title: Estórias Bonitas vs Testes Unitários
- categories: coding for fun 
- dirbase: /../../..
+ categories: ['coding for fun']
+ dirbase: /../../../../../..
 ---
 
 # Estórias Bonitas vs Testes Unitários
@@ -31,7 +31,7 @@ end
 Quando executamos o código acima e o teste passou, então resolvemos escrever uma estória do [Cucumber][cucumber], para fazer uma comparação entre os frameworks de teste.
 
 <div><pre class="prettyprint">
-Funcionalidade: Alterar uma string sql da linguagem access para o padrão postgresql
+Funcionalidade: Alterar um sql de Access para Postgresql
   Como um programador preguiçoso
   Desejo criar um conversor de string
   Por que quero poupar o meu tempo
@@ -39,10 +39,11 @@ Funcionalidade: Alterar uma string sql da linguagem access para o padrão postgr
   Dado a consulta "select DateValue('12/02/2010')"
   Quando eu converter
   Então não deve conter a função DateValue
-  E a data deve estar no formato yyyy-mm-dd
-  E a consulta sql deve ser igual a "select '2010-02-12'"
+  E a data com formato yyyy-mm-dd
+  E a consulta como "select '2010-02-12'"
 
-  Dado a consulta "select DateValue('12/02/2010') as data_1, DateValue('12/04/1995') as b"
+  Dado a consulta "select DateValue('12/02/2010') as data_1, 
+                          DateValue('12/04/1995') as b"
 
   Quando eu converter
   Então não deve conter a função DateValue
@@ -65,11 +66,11 @@ Entao /^não deve conter a função (.*)$/ do |string|
   @resolvida.should_not include(string)
 end
 
-Entao /^a data deve estar no formato yyyy\-mm\-dd$/ do
+Entao /^a data com formato  yyyy\-mm\-dd$/ do
   @resolvida.should match(/\d{4}-\d{2}-\d{2}/)
 end
 
-Entao /^a consulta sql deve ser igual a "([^\"]*)"$/ do |esperado|
+Entao /^a consulta como "([^\"]*)"$/ do |esperado|
   @resolvida.should == esperado 
 end
 </pre></div>
@@ -83,12 +84,12 @@ Esquecendo do resultado esperado, BDD aborda o que cada linha faz, e o teste é 
 O código **resolver.rb** que é o código que resolve os dois testes acima, segue abaixo:
 
 <div><pre class="prettyprint">
-HAS_DATE_VALUE_FUNCTION = /(.*)DateValue\(['"]([^\1]+)\1\)(.*)/
+HAS_DATE_VALUE = /(.*)DateValue\(['"]([^\1]+)\1\)(.*)/
 </pre></div>
 
 <div><pre class="prettyprint">
 def resolver(str)
-  while str =~ HAS_DATE_VALUE_FUNCTION
+  while str =~ HAS_DATE_VALUE
     start, date, finish = $1, $2, $3
     date = "'" + date.split("/").reverse.join("-") + "'"
     str = [start, date, finish].join 
