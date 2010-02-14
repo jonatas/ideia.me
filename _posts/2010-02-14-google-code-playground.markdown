@@ -1,7 +1,6 @@
 ---
   layout: ideiame 
   title: Google code playground 
-  categories: coding for fun 
   dirbase: /../../..
 ---
 
@@ -16,40 +15,40 @@ Brincando mais um pouco, vamos embutir este serviço [nesta página][pagina-html
 <div><pre class="prettyprint">
 &lt;script src="http://www.google.com/jsapi" type="text/javascript"&gt;&lt;/script&gt;
 &lt;script type="text/javascript"&gt;
-  google.load("gdata", "1.x", { packages : ["blogger"] });
+google.load("gdata", "1.x", { packages : ["blogger"] });
 &lt;/script&gt;
-
 &lt;script type="text/javascript"&gt;
   function _run() {
+
+  var bloggerService =
+      new google.gdata.blogger.BloggerService('com.appspot.interactivesampler');
+  
+  var feedUri = "http://www.consultoria-lingua.com/feeds/posts/default?alt=rss";
+  var handleBlogFeed = function(blogFeedRoot) {
+     var author = blogFeedRoot.feed.getAuthors();
+     var authorName = author[0].getName().getValue();
+     var authorUri = author[0].getUri().getValue();
+     var blogEntries = blogFeedRoot.feed.getEntries();
+     var html = '&lt;h1&gt;&lt;a href="' + authorUri + '"&gt;' + 
+                authorName + '&lt;/a&gt;&lt;/h1&gt;';
      
-      var bloggerService =
-          new google.gdata.blogger.BloggerService('com.appspot.interactivesampler');
-      
-      var feedUri = "http://www.consultoria-lingua.com/feeds/posts/default?alt=rss";
-      var handleBlogFeed = function(blogFeedRoot) {
-         var author = blogFeedRoot.feed.getAuthors();
-         var authorName = author[0].getName().getValue();
-         var authorUri = author[0].getUri().getValue();
-         var blogEntries = blogFeedRoot.feed.getEntries();
-         var html = '&lt;h1&gt;&lt;a href="' + authorUri + '"&gt;' + authorName + '&lt;/a&gt;&lt;/h1&gt;';
+     for (var i = 0, blogEntry; blogEntry = blogEntries[i]; i++) {
+        var blogTitle = blogEntry.getTitle().getText();
+        var blogURL = blogEntry.getHtmlLink().getHref();
          
-         for (var i = 0, blogEntry; blogEntry = blogEntries[i]; i++) {
-            var blogTitle = blogEntry.getTitle().getText();
-            var blogURL = blogEntry.getHtmlLink().getHref();
-             
-            html += '&lt;li&gt;&lt;a href="' + blogURL + '" target="_blank"&gt;'
-                 + blogTitle + '&lt;/a&gt;&lt;/li&gt;'
-            
-         };
-        document.body.innerHTML = html;
-      };
-      var handleError = function(error) {
-        document.body.innerHTML = '&lt;pre&gt;' + error + '&lt;/pre&gt;';
-      };
-      bloggerService.getBlogFeed(feedUri, handleBlogFeed, handleError);
-      
-    }
-    google.setOnLoadCallback(_run);
+        html += '&lt;li&gt;&lt;a href="' + blogURL + '" target="_blank"&gt;'
+             + blogTitle + '&lt;/a&gt;&lt;/li&gt;'
+        
+     };
+    document.body.innerHTML = html;
+  };
+  var handleError = function(error) {
+    document.body.innerHTML = '&lt;pre&gt;' + error + '&lt;/pre&gt;';
+  };
+  bloggerService.getBlogFeed(feedUri, handleBlogFeed, handleError);
+  
+}
+google.setOnLoadCallback(_run);
   &lt;/script&gt;
 &lt;body style="font-family: Arial;border: 0 none;"&gt;
 Carregando...
