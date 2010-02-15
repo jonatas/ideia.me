@@ -17,7 +17,7 @@ layout: nil
 
   {% for post in site.posts %}
   <entry>
-    <title>{{ post.subtitle }}</title>
+    <title>{{ post.title }}</title>
     <link href="http://ideia.me{{ post.url }}"/>
     <updated>{{ post.date | date_to_xmlschema }}</updated>
     <id>http://ideia.me{{ post.id }}</id>
