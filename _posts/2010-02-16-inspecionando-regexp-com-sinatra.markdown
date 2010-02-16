@@ -53,7 +53,7 @@ A expressão regular pode ser substituída por esta, que coloca a tag span:
 Testando a expressão acima, esta deve retornar a seguinte expressão:
 
 <div><pre class="prettyprint">
-"jon&lt;span class='match'&gt;a&lt;/span&gt;t&lt;span class='match'&gt;a&lt;/span&gt;s"
+"jon&lt;span class='match'&gt;a&lt;/span&gt;t&lt;span..."
 </pre></div>
 
 Colocando "tudo isso" em um servidor sinatra temos:
@@ -67,7 +67,8 @@ get "/" do
 end
 post "/match" do 
   regex = Regexp.new(params[:pattern])
-  @match = params[:string].gsub(regex,"&lt;span class='match'&gt;\\&amp;&lt;/span&gt;")
+  replace =  "&lt;span class='match'&gt;\\&amp;&lt;/span&gt;"
+  @match = params[:string].gsub(regex,replace)
   erb :index
 end
 </pre></div>
@@ -77,7 +78,8 @@ E na view views/index.erb temos:
 <div><pre class="prettyprint">
 &lt;html&gt;
   &lt;head&gt;
-    &lt;meta http-equiv="Content-type" content="text/html; charset=utf-8" /&gt;
+    &lt;meta http-equiv="Content-type" 
+              content="text/html; charset=utf-8" /&gt;
     &lt;style type="text/css" media="screen"&gt;
       span.match {
         color: white;
@@ -88,8 +90,10 @@ E na view views/index.erb temos:
   &lt;/head&gt;
   &lt;body&gt; 
     &lt;form action="match" method="post"&gt;
-      String: &lt;input type="text" name="string" value="jonatas" /&gt;&lt;br&gt;
-      Casa com: &lt;input type="text" name="pattern" value="[a]+"/&gt;
+      String: 
+      &lt;input type="text" name="string" value="jonatas" /&gt;&lt;br&gt;
+      Casa com: 
+      &lt;input type="text" name="pattern" value="[a]+"/&gt;
       &lt;p&gt;&lt;input type="submit" value="Testar" /&gt;&lt;/p&gt;
     &lt;/form&gt;
     &lt;%= @match %&gt;
