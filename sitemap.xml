@@ -6,14 +6,14 @@ rooturi: http://ideia.me
  <url>
   <loc>http://ideia.me/</loc>
   <lastmod>{{ site.time | date: '%Y-%m-%d' }}</lastmod>
-  <changefreq>weekly</changefreq>
+  <changefreq>daily</changefreq>
   <priority>1</priority>
  </url>
  {% for post in site.posts %}
  <url>
   <loc>{{ page.rooturl }}{{ post.url }}</loc>
   <lastmod>{{ site.time | date: '%Y-%m-%d' }}</lastmod>
-  <changefreq>weekly</changefreq>
+  <changefreq>daily</changefreq>
   <priority>0.8</priority>
  </url>
  {% endfor %}
