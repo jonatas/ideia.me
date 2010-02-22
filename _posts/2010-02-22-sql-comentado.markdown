@@ -208,7 +208,13 @@ CREATE TRIGGER ocupar_mesa
 -- para desocupada.
 CREATE TRIGGER desocupar_mesa 
        after UPDATE ON conversas FOR EACH ROW EXECUTE PROCEDURE desocupar_mesa_TRIGGER();
+</pre></div>
 
+## CREATE RULE
+
+Criar regras no banco de dados, se torna uma mão na roda para tornas as coisas simples. Através de uma regra, é possível fazer um **INSERT** em uma **VIEW** e pegar o resultado do insert e distribuir entre a(s) tabela(s) desejadas.
+
+<div><pre class="prettyprint lang-sql">
 -- regra para ficar mais amigável a inserção de meninos
 -- na tabela de pessoas e para isso trocaremos o uso de:
 -- -- INSERT INTO pessoas (nome, sexo) VALUES ('joaozinho', 'M');
