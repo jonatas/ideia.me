@@ -82,8 +82,7 @@ Neste caso, o exemplo aborda:
   { :sintaxe_antiga => nova_sintaxe }
 </pre></div>
 
-E o mais divertido, é esta possibilidade de apontar qualquer tipo de objeto, para qualquer tipo de ocorrência. Sem especificar o tipo, é possível esperar algo, de forma simples e objetiva, ou seja, sem muitas formalidades.
-
+E o mais divertido, é esta possibilidade de apontar qualquer tipo de objeto, para qualquer tipo de valor. Sem especificar o tipo, é possível esperar algo, de forma simples e objetiva, ou seja, sem muitas formalidades.
 
 Para ler um arquivo do **Oracle** e criar um novo arquivo do **PostgreSql**, é simples como o exemplo abaixo:
 
