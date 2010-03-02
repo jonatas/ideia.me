@@ -8,6 +8,7 @@
 # {{ page.title }}
 
 A versão original do meu cartão de visitas, foi feita assim:
+
 <div><pre class="prettyprint">
 (x)(-)(+)---[ Jonatas Davi Paganini ]-----+
 |                                         |  
