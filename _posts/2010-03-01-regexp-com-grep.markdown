@@ -54,8 +54,7 @@ Desta forma, é fácil de pegar a versão e colocar na área de transferência a
 :! echo % | grep -oEi '([0-9]+)' | pbcopy
 </pre></div>
 
-
-Automatizando a tarefa rake é possível executar com o auxílio das aspas ``.
+Automatizando a tarefa rake é possível executar com o auxílio das aspas \` \`.
 
 <div><pre class="prettyprint">
 :!rake db:migrate:redo VERSION=`echo % | grep -oEi '([0-9]+)'` 
