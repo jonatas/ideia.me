@@ -54,7 +54,12 @@ Desta forma, é fácil de pegar a versão e colocar na área de transferência a
 :! echo % | grep -oEi '([0-9]+)' | pbcopy
 </pre></div>
 
-ps: Ainda não encontrei uma forma de automatizar a tarefa de rodar a migração direto de dentro do sistema. Se você souber como fazer, mande-me um email em <jonatasdp@gmail.com> ou uma twittada para [@jonatasdp][twitter].
+
+Automatizando a tarefa rake é possível executar com o auxílio das aspas ``.
+
+<div><pre class="prettyprint">
+:!rake db:migrate:redo VERSION=`echo % | grep -oEi '([0-9]+)'` 
+</pre></div>
 
 O comando grep também pode ser útil para ajudar a encontrar arquivos buscando pelo seu conteúdo.
 
@@ -90,4 +95,3 @@ Conclusão: divirta-se concatenando comandos!
 
 [stackoverflow]: http://stackoverflow.com/questions/1891797/capturing-groups-from-a-grep-regex
 [parazito]: http://parasitando.com
-[twitter]: <http://twitter.com/jonatasdp>.
