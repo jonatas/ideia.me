@@ -1,0 +1,131 @@
+---
+ layout: ideiame
+ title: Aula de Sistemas Operacionais
+---
+
+# {{ page.title }}
+
+O sistema operacional é dividido em dois modos básicos, sendo estes o modo Kernel e o modo Usuário. Esta divisão permite que os aplicativos sejam executados com segurança.
+
+Em uma divisão de camadas do sistema em auto-nível seria uma sequência como:
+
+* Usuário
+* Aplicativo
+* Kernel
+* Hardware
+
+# Modos de acesso
+
+## modo usuário
+
+O processador, entende um conjunto de instruções. Cada instrução pode fica no modo Kernel ou no modo Usuário. Do lado do aplicativo, é possível apenas trabalhar com o conjunto de instruções que está do modo usuário.
+
+## modo Kernel
+
+O modo Kernel, é composto pelo modo usuário e também por outro conjunto de comandos que são restritos apenas ao uso interno. Os processos, quando são executados, consultam o Kernel e verificam se o comando pertence ao modo usuário e não tem privilégios, comparado a um estagiário.
+
+A linguagem de programação Assembly, é a linguagem que interpreta uma série de comandos e envia os comandos para o processador.
+
+As rotinas do sistema operacional, podem fazer chamadas a respeito de x comandos.
+
+# Questões sobre a arquitetura do Sistema Operacional
+
+## o que é um núcleo do sistema e quais são suas principais funções?
+
+   o núcleo do sistema é composto por um conjunto de rotinas, que estão disponíveis para ser usado pelo usuário e às suas aplicações. este núcleo, também recebe um outro nome: kernel, e as suas principais funções são:
+  * tratamento de interrupções e excessões
+  * criação e eliminação de processos e threads
+  * sincronização e comunicação entre processos e threads
+  * escalonamento e controle dos processos e threads
+  * gerência de memória
+  * gerência do sistema de arquivos
+  * gerência de dispositíivos de e/s
+  * suporte a redes locais e distribuídas
+  * contabilização do uso do sistema
+  * auditoria e segurança
+
+## o que são instrucões privilegiadas e não privilegiadas? qual a relação entre as instruções e seus modos de acesso?
+
+  o processador se comunica com o sistema operacional através de funções, que podem ser executadas básicamente em dois modos:  kernel e usuário. 
+  o modo kernel é conhecido como privilegiado por ter acesso completo ao computador, a todas as partes do hardware. diferente do modo usuário, que limita as ações para garantir a segurança e não comprometer nenhuma parte do próprio sistema. neste modo, é mais difícil de um aplicativo violar a privacidade de outro.
+
+este mecanismo, garante que nenhuma parte da memória será violada por outro aplicativo.
+
+## explique como se faz uso deste mecanismo. 
+
+  o processador executa todas as operações em modo kernel, mas para isso, é necessário que as rotinas enviadas em modo usuário sejam carregadas e validadas e consideradas seguras. se algum dos passos falhar, o sistema envia uma excessão e nega a execução da operação. 
+
+por exemplo, se desejo salvar um arquivo, uso uma linguagem de alto-nível como java, ruby e mando salvar, o sistema, em modo usuário tenta salvar, se o arquivo comprometer a integridade do so de alguma forma, então o sistema lançara uma excessão, e não permitirá a alteração. a linguagem que programou esta execução também receberá uma excessão mapeada para linguagem, que é resultado da excessão lançada pelo modo kernel. 
+
+desta forma, foi enviado um comando do modo usuário, passado para o kernel, o qual se recusa a executar, e responde para a linguagem que deve tratar o erro.
+
+as chamadas ao sistema são chamadas de "system calls" ou seja, chamada ao sistema.
+
+##  como o kernel do sistema operacional pode ser protegido pelos mecanismos e modos de acesso?
+
+através do modo usuário. neste modo, todos os comandos não privilegiados podem ser executados. todos os aplicativos são executados no modo usuário, e enviam as instruções para o modo kernel que avaliam a segurança e garantia da execução protegida de cada "system call". este forma de chamadas identifica se o aplicativo possúi permissão para executar o comando.
+
+
+## por que as rotinas do sistema operacional possuem instruções privilegiadas?
+
+como é o sistema operacional que controla tudo, apenas ele tem o poder de dizer o que está certo ou errado. assim ele mesmo é responsável por qualquer situação de risco para o hardware ou software. usar o modo kernel, o sistema pode administrar a memória de forma transparente, e também deve saber a hora de cada evento acontecer. no modo kernel, ações delicadas são realizadas e é seguro ao máximo para não falhar.
+
+para gerenciar uma memória, liberar o espaço de memória utilizado por um aplicativo, não deve ser uma tarefa realizada pela programação do programador, mas sim pela observação do sistema operacional. operações deste tipo, são delicadas e devem ser executadas com segurança. para evitar erros e intenções maliciosas, apenas o sistema operacional consegue fazer isso, e só realmente faz se estiver seguro.
+
+
+##  o que é uma system calll e qual a sua importância para a segurança do sistema?
+
+system call é uma chamada do sistema, como sua própria tradução indica. em uma chamada ao sistema, o sistema operacional recebe um comando e possíveis parâmetros. como resposta, recebe um outro código, que pode indicar sucesso, falha ou até mesmo o resultado do próprio comando. 
+
+no processo de receber o comando, o sistema identifica o aplicativo que fez a chamada e verifica a sua permissão para execução do comando. dada a permissão executa e retorna o resultado.
+
+## quais das instruções abaixo devem ser executadas apenas no modo kernel?
+
+* desabilitar todas as interrupções
+* alterar a data e hora do sistema
+* realizar um desvio para uma instrução dentro do programa e acessar diretamente posições do disco
+
+## pesquise comandos disponíveis em linguagens de controle do sistema operacional.
+
+unix:
+  ls -> lista conteúdos e diretórios
+  rm -> remove algum arquivo, passando o parâmetro -r é possível remover um diretório
+  cat -> concatena e imprime arquivos
+  > -> aponta a saída de um programa para outro dispositivo ou arquivo
+  | -> concatena um comando a outro
+  touch -> altera a data de modificação de um arquivo
+
+ms-dos:
+  md -> cria uma pasta
+
+ps: sou um fã de comandos :D
+
+## explique o processo de ativação do sistema operacional:
+
+quando o computador é ligado, não existe nada na memória, então o primeiro programa a ser chamado, é chamado boot, que fica gravado na memória rom. este programa chama um programa que testa a existência dos recursos mínimos para inicializar o sistema e se comunicar com o hardware. este sistema se chama post (power on self test), que identifica possíveis erros do hardware, como falta de memória, teclado etc.  se tudo estiver ok, é verificado a existência de algum sistema operacional instalado em algum dispositivo. quando encontrado ele chama procura por um espaço chamado boot sector, que contém as informações iniciais para carregar o sistema operacional na memória.
+
+## compare as arquiteturas monolítica e de camadas. quais as vantagens e desvantagens?
+
+a primeira, é composta por módulos que se comunicam livremente e a segunda é arquitetada em camadas, classificando as funções em cada uma destas camadas.
+
+a arquitetura monolítica funcionou muito bem até o sistema operacional se tornar complexo. como foi evoluindo muito rápido, também se tornou complexo e de difícil manutenção. 
+
+em 1968 foi programado o primeiro sistema operacional em camadas implementando este conceito. e como vantagem, este sistema consegue isolar as funções do sistema operacional e cria uma hierarquia dos modos de acesso. isso é segurança.
+
+## quais as vantagens do modelo de máquina virtual?
+
+permite executar uma instrução sobre um computador virtual, desta forma não prejudica o hardware real. sendo que uma computador real pode conter várias máquinas virtuais, qualquer comando não prejudica as outras máquinas virtuais, apenas a que está em execução.
+
+## como funciona o modelo cliente-servidor na arquitetura micro-kernel? quais as vantagens e desvantagens?
+
+funciona como um sistema de chamadas cliente-servidor. o cliente, que pode ser um usuário ou recurso do sistema, faz uma chamada e o sistema verifica a possibilidade de execução ou não do comando. 
+
+como vantagem, o sistema desabilita e recusa as chamadas comprometedoras e disponibiliza mais recursos para as que possuem.
+
+como desvantagem, o sistema têm problemas com acesso a certas partes diretas do hardware, que seriam necessárias.
+
+## por que a programação orientada a objetos é o caminho natural para o projeto de sistemas operacionais?
+
+por que a vida é orientada a objetos. o hardware e o software também serão. em outras palavras, todas as coisas podem ser representadas através de objetos e suas propriedades, atributos, família, tipo, escala, recurso etc. através deste tipo de programação é possível simplificar os módulos programaveis.
+
+#
