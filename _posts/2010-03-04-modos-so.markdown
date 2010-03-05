@@ -128,5 +128,4 @@ como desvantagem, o sistema têm problemas com acesso a certas partes diretas do
 
 Por que a vida é orientada a objetos. o hardware e o software também serão. em outras palavras, todas as coisas podem ser representadas através de objetos e suas propriedades, atributos, família, tipo, escala, recurso etc. através deste tipo de programação é possível simplificar os módulos programaveis e reutilizar os recursos existentes.
 
-
 ps: As aulas foram ministradas pelo professor Marcelo Riedi e as considerações são minhas usando a apostila do professor como base.
