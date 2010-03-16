@@ -10,9 +10,8 @@ div.links {
 a, h2 {
   color:#5fba3d;
 }
-a.post {
-  color: SaddleBrown;
- 
+.post {
+  color: Teal;
 }
 .redback{
     background-color:#d5381a;
