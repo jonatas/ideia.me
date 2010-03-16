@@ -87,16 +87,19 @@ no processo de receber o comando, o sistema identifica o aplicativo que fez a ch
 
 ## pesquise comandos disponíveis em linguagens de controle do sistema operacional.
 
-unix:
-  ls -> lista conteúdos e diretórios
-  rm -> remove algum arquivo, passando o parâmetro -r é possível remover um diretório
-  cat -> concatena e imprime arquivos
-  > -> aponta a saída de um programa para outro dispositivo ou arquivo
-  | -> concatena um comando a outro
-  touch -> altera a data de modificação de um arquivo
+### unix
 
-ms-dos:
-  md -> cria uma pasta
+* ls: lista conteúdos e diretórios
+* rm: remove algum arquivo, passando o parâmetro -r é possível remover um diretório
+* cat: concatena e imprime arquivos
+* \>\: aponta a saída de um programa para outro dispositivo ou arquivo
+* |: concatena um comando a outro
+* touch: altera a data de modificação de um arquivo
+
+### ms-dos
+
+* md: cria uma pasta
+* del: remove algum arquivo
 
 ps: sou um fã de comandos :D
 
