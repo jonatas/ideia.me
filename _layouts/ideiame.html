@@ -29,9 +29,11 @@
    <table class="layout" >
 
     <td class="content">
+
+    
       {{ content }}
     </div>
-    <td class="about_me">
+    <td rowspan="2" class="about_me">
      <pre class="prettyprint lang-ruby">
 about_me = {
  :nome => "Jônatas Paganini",
@@ -44,10 +46,20 @@ about_me = {
 }
 </pre>
 </td>
+</tr>
+<tr><td>
+    {% for post in site.posts limit: 3 %}
+    <a class="post" href="{{ post.url }}">
+     <h1 class="post">{{ post.date | date_to_string }} &raquo; {{ post.title }}</h1>
+    </a>
+    {{ post.content }}
+    {% endfor %}
+  </td>
+ </tr>
 </table>
-  <h1>Blog</h1>
+  <h1 class="post">Blog</h1>
   <ul class="posts">
-    {% for post in site.posts %}
+    {% for post in site.posts offset: 3 %}
     <li><span class="post_date">{{ post.date | date_to_string }}</span> &raquo; 
         <a class="post" href="{{ post.url }}">{{ post.title }}</a></li>
     {% endfor %}
