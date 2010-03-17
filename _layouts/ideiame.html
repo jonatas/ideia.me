@@ -27,10 +27,7 @@
       <hr>
      </div>
    <table class="layout" >
-
     <td class="content">
-
-    
       {{ content }}
     </div>
     <td rowspan="2" class="about_me">
@@ -47,6 +44,7 @@ about_me = {
 </pre>
 </td>
 </tr>
+{% if page.title == 'Ideia-me - Jônatas' %}
 <tr><td>
     {% for post in site.posts limit: 3 %}
     <a class="post" href="{{ post.url }}">
@@ -56,13 +54,21 @@ about_me = {
     {% endfor %}
   </td>
  </tr>
+{% endif %}
 </table>
   <h1 class="post">Blog</h1>
   <ul class="posts">
+{% if page.title == 'Ideia-me - Jônatas' %}
     {% for post in site.posts offset: 3 %}
     <li><span class="post_date">{{ post.date | date_to_string }}</span> &raquo; 
         <a class="post" href="{{ post.url }}">{{ post.title }}</a></li>
     {% endfor %}
+{% else %}
+    {% for post in site.related_posts %}
+    <li><span class="post_date">{{ post.date | date_to_string }}</span> &raquo; 
+        <a class="post" href="{{ post.url }}">{{ post.title }}</a></li>
+    {% endfor %}
+{% endif %}
   </ul>
   </body>
   <script type='text/javascript'>
