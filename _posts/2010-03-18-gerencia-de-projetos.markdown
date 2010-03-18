@@ -5,7 +5,7 @@
 
 # {{ page.title }} 
 
-Um projeto do porte deste carro, apesar de longo, têm um **início e um fim**. Com centenas de pessoas envolvidas, processos e tarefas foram executados ao longo de 5 anos, com sincronismo total. 
+Um projeto do porte [deste carro][post-anterior], apesar de longo, têm um **início e um fim**. Com centenas de pessoas envolvidas, processos e tarefas foram executados ao longo de 5 anos, com sincronismo total. 
 
 Através do **objetivo** do **projeto**, traçou-se um **início** e **fim**. As **necessidades** foram idêntificadas, os **processos** foram definidos e as **tarefas** foram sendo **escaladas** e **concluídas** no seu devido **tempo**.
 
@@ -43,3 +43,4 @@ Apesar do vídeo não trazer detalhes sobre a gerência do projeto, percebe-se q
 * Lançamento do carro no evento Tokio Motor Show 
 * Inicio da produção em escala
 
+[post-anterior]: /2010/03/11/gerencia-de-projetos.html
