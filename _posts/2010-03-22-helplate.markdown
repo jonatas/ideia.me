@@ -1,0 +1,112 @@
+---
+ layout: ideiame
+ title: Helplate = Help + Template
+---
+
+# {{ page.title }} 
+
+Helplate é uma ideia que nasceu a dois anos atrás, e inicialmente se chamava **helpme**.  Escrevi um arquivo falando da ideia, que chamava-se helpme, pois é inspirada em situar a pessoa na sua atividade e contexto. Eu estava trabalhando e pensando sobre quantos aspectos, muitas vezes são **esquecidos** de avaliar ou de se especificar por que simplesmente foram esquecidos.
+
+As empresas estão cheias de experiências, e lembram de péssimas experiências na integração de pessoas novas no roteiro de atividades do cotidiano.
+
+A primeira linha do arquivo mencionado anteriormente diz:
+
+> Todos os dias fizemos repetidamente várias tarefas como esta:
+
+Esta qual?
+
+No meu caso podem ser tarefas de desenvolvimento, escrever no blog, fazer um orçamento, criar um projeto etc.
+
+Cada tarefa, é composta por diversos passos, diversas variáveis que podem fazer com que você não realize-a com sucesso. Quando você faz uma vez com sucesso, logo sabe como fazer e aprende a receita. Quando erra, procura não seguir mais aquele caminho do erro.
+
+Durante muito tempo me perguntei como poderia criar uma lingugem simples de ajuda que também pudesse realizar a tarefa. O que esta "ajuda" precisava saber era como a tarefa era executada, e se faltasse alguma informação, esta própria ajuda poderia lhe pedir explicações sobre o assunto.
+
+Helplate é uma ideia de criar uma linguagem para auxiliar o preenchimento de uma template interativa e humanizada. Inicialmente cobre apenas um documento, mas é possível "programar" ela. A primeira programação a ser executada, é o levantamento das variáveis ainda não descobertas. 
+
+Esta template tem como objetivo, sugerir a estrutura de um documento, e questionar sobre as variáveis do contexto.
+
+O exemplo a seguir, mostra a criação de um novo post no meu blog, iniciando pelo uso da template.
+<pre class="prettyprint">
+jonatas@xonatax-mac: helplate $ ./helplate new_post title='Helplate welcome aboard!'
+</pre>
+
+Após isso, a template irá pedir se quero adicionar alguma tag:
+
+   Tags dividido por ','
+
+Então preencho:
+
+   helplate, template, ruby, liquid
+
+Então a template pede:
+
+    Inicie seu post assim
+
+E eu digito:
+
+<pre>
+Helplate é uma ideia que veio para ficar
+</pre>
+
+Então a template pede:
+
+<pre>
+Deseja adicionar algum código fonte
+</pre>
+
+Digito enter sem escrever nada.
+
+Então a template é preenchida conforme as respostas dadas por mim exibindo o seguinte post:
+
+<pre class="prettyprint">
+---
+  layout: ideiame
+  title: Helplate welcome aboard!
+  categories: ['helplate', 'template', 'ruby', 'liquid']
+  dirbase: /../../..
+---
+
+# Helplate welcome aboard!
+
+Helplate é uma ideia que veio para ficar
+
+&lt;div&gt;&lt;pre class="prettyprint"&gt;
+$ ./helplate new_post title='helplate welcome aboard'
+&lt;/pre&gt;&lt;/div&gt;
+</pre>
+
+As perguntas foram feitas e a estrutura foi definida através da seguinte template:
+
+<pre class="prettyprint" markdown="0">
+jonatas@xonatax-mac: helplate $  cat new_post<br>
+---<br>
+  layout: ideiame<br>
+  title:  \{\{ title }}<br>
+  categories: ['\{\{ categories | join glue: ', ' }}']<br>
+  dirbase: /../../..<br>
+---
+<br>
+<br>
+# \{\{ title }}
+<br>
+<br>
+\{\{ description }}
+<br>
+<br>
+help:<br>
+ description: Inicie seu post assim<br>
+ title: Qual é o título<br>
+ categories: Tags dividido por ','<br>
+</pre>
+
+A template vai até a linha em que começa com a palavra **help:**, e neste local, são descritos as variáveis anteriormente utilizadas. O interessante desta descrição é tornar a template menos confusa, e resolver o problema dos passos iterando sobre cada uma das variáveis do contexto.
+
+Trabalhando com uma ajuda útil, é possível gerar documentos específicos e ao mesmo tempo padrõnizar os documentos. A descrição de cada variável pode ser simplesmente colocada como:
+
+<pre class="prettyprint" markdown="0">
+bem vindo ao mundo \{\{ nome }}<br>
+help:<br>
+&nbsp;&nbsp;nome: Digite seu nome
+</pre>
+
+O protótipo está no ar em <http://github.com/jonatas/helplate>, quem puder ajudar, acredito que a ideia pode evoluir!
