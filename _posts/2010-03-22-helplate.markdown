@@ -27,7 +27,7 @@ Esta template tem como objetivo, sugerir a estrutura de um documento, e question
 
 O exemplo a seguir, mostra a criação de um novo post no meu blog, iniciando pelo uso da template.
 <pre class="prettyprint">
-jonatas@xonatax-mac: helplate $ ./helplate new_post title='Helplate welcome aboard!'
+jonatas@xonatax-mac: helplate $ ./helplate newpost title='Helplate welcome aboard!'
 </pre>
 
 Após isso, a template irá pedir se quero adicionar alguma tag:
@@ -71,18 +71,18 @@ Então a template é preenchida conforme as respostas dadas por mim exibindo o s
 Helplate é uma ideia que veio para ficar
 
 &lt;div&gt;&lt;pre class="prettyprint"&gt;
-$ ./helplate new_post title='helplate welcome aboard'
+$ ./helplate newpost title='helplate welcome aboard'
 &lt;/pre&gt;&lt;/div&gt;
 </pre>
 
 As perguntas foram feitas e a estrutura foi definida através da seguinte template:
 
 <pre class="prettyprint" markdown="0">
-jonatas@xonatax-mac: helplate $  cat new_post<br>
+jonatas@xonatax-mac: helplate $  cat newpost<br>
 ---<br>
   layout: ideiame<br>
   title:  \{\{ title }}<br>
-  categories: ['\{\{ categories | join glue: ', ' }}']<br>
+  categories: \['\{\{ categories \| join glue: ', ' }}'\]<br>
   dirbase: /../../..<br>
 ---
 <br>
