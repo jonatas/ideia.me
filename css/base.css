@@ -1,7 +1,7 @@
 body, h1, h2 {
  font-family: monospace, prestige;
- font-size: 110%;
 }
+
 div.links {
  left:0;
  margin:0;
@@ -28,14 +28,9 @@ div.white {
 a.link {
  margin-left: 2%;
  margin-right: 2%;
- font-size: 120%;
-}
-a {
- font-size: 120%;
 }
 table.layout {
   padding-top: 3%;
-
 }
 td.content {
  width:70%;
@@ -46,10 +41,10 @@ td.about_me {
  border:none;
  left:auto;
  position:fixed;
- padding-top: 27px;
+ padding-top: 10%;
 }
 .content {
- padding-top: 40px;
+ padding-top: 5%;
 }
 .border {
  width:auto;

@@ -43,4 +43,6 @@ Apesar do vídeo não trazer detalhes sobre a gerência do projeto, percebe-se q
 * Lançamento do carro no evento Tokio Motor Show 
 * Inicio da produção em escala
 
+ps: As aulas foram dadas pelo professor Eder Gasparin e foram descritos por mim durante o horário de aula.
+
 [post-anterior]: /2010/03/11/gerencia-de-projetos.html
