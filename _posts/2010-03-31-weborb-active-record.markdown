@@ -74,7 +74,7 @@ A classe model do ActionScript deve possuir os atributos que serão instanciados
 <div><pre class="prettyprint">
 package com.model {
   [RemoteClass(alias="com.model.Person")]
-  public class User {
+  public class Person {
     public var name:String;
     public var age:Number;
     public var address:Address;
