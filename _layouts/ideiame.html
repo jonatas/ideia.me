@@ -64,7 +64,7 @@ about_me = {
         <a class="post" href="{{ post.url }}">{{ post.title }}</a></li>
     {% endfor %}
 {% else %}
-    {% for post in site.related_posts %}
+    {% for post in site.posts %}
     <li><span class="post_date">{{ post.date | date_to_string }}</span> &raquo; 
         <a class="post" href="{{ post.url }}">{{ post.title }}</a></li>
     {% endfor %}
