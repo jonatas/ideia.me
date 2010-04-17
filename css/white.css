@@ -1,14 +1,19 @@
 body {
-  background-color:Azure;
+  background-color:white;
   color:black;
 }
 div.links {
-    border-color:#ccd9d8;
-    background-color:white;
+  border-color:#ccd9d8;
+  background-color:white;
 }
-
-a, h2 {
-  color:#5fba3d;
+a {
+  color: blue;
+}
+h1 {
+ color: #00FF88;
+}
+h2 {
+  color: #00FF22;
 }
 .post {
   color: Teal;
@@ -56,12 +61,16 @@ a, h2 {
   background-color:SeaShell;
   color: GoldenRod;
 }
-
-h1, h2, a {
- color: SlateBlue;
-}
-
 ul.posts {
   background-color: MintCream;
   color: BlueViolet;
+}
+a.home {
+ color: red;
+}
+a.portfolio {
+ color: green;
+}
+a.curriculo {
+ color: blue;
 }
