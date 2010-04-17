@@ -1,6 +1,6 @@
 body {
-  background-color:#080808;
-  color:#5fba3d;
+  background-color: #080808;
+  color: SeaShell;
 }
 
 div.links {
@@ -58,25 +58,34 @@ li {
   background-color:#888888;
   color:#ffffff;
 }
-
 .greenback{
   background-color:green;
   color:black;
 }
-
 .border{
     border-color:#888888;
 }
-
 .white{
  color:white;
 }
-
 ul.posts {
   color: OrangeRed;
 }
-
-a, h1, h2 {
- color: SlateBlue;
+a.portfolio {
+  color: coral;
 }
-
+a.curriculo {
+ color: cyan;
+}
+a.home {
+ color: yellow;
+}
+h1 {
+ color: Yellow;
+}
+a {
+ color: White;
+}
+h2 {
+  color: Chartreuse;
+}

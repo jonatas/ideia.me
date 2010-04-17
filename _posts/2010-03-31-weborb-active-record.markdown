@@ -1,7 +1,7 @@
 ---
   layout: ideiame
   title: WebOrb + ActiveRecord
-  categories: ['weborb', 'flex', 'rails']
+  categories: weborb flex rails
   dirbase: /../../..
 ---
 
