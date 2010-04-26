@@ -1,6 +1,7 @@
 ---
 layout: ideiame 
-title: Ideia-me - Jônatas
+title: Ideia-me - Jônatas Davi Paganini
+main: true
 ---
 
 # Ideia-me! estou aqui! 

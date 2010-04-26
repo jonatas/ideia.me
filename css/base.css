@@ -29,22 +29,11 @@ a.link {
  margin-left: 2%;
  margin-right: 2%;
 }
-table.layout {
-  padding-top: 3%;
-}
-td.content {
+.content {
  width:70%;
- border:none;
-}
-td.about_me {
- width:30%;
- border:none;
- left:auto;
- position:fixed;
- padding-top: 10%;
 }
 .content {
- padding-top: 5%;
+ padding-top: 8%;
 }
 .border {
  width:auto;
@@ -56,3 +45,6 @@ td.about_me {
  width:auto;
  height:auto;
 } 
+.feedme{
+ color:orange;
+}

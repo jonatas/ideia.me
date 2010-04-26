@@ -15,50 +15,30 @@
     <div class="links" id="header">
        <h1>
        <a href="/" class="link home">Home</a> 
-       <!-- a href="/produtos" class="link grey">Produtos</a> | 
-       <a href="/contrate_me" class="link green">Contrate-me</a> | 
-       <a href="/posts" class="link red">Blog</a -->  
+       <a href="/atom.xml" id="feedme" class="link feedme">Feed-me</a>
        <a href="/portfolio/2010/02/01/portfolio.html" class="link portfolio">Portfólio</a> 
        <a href="/curriculo/2010/02/01/curriculo.html" class="link curriculo">Currículo</a>
     
        <div onclick="changeStyleTo('black')" class="black style" title="Apagar a luz">&nbsp;</div>
        <div onclick="changeStyleTo('white')" class="white style" title="Acender a luz">&nbsp;</div>
        </h1>
-      <hr>
-     </div>
-   <table class="layout" >
-    <td class="content">
+       <pre class="prettyprint lang-ruby">{ :nome => "Jônatas Paganini", :email => %w(jonatasdp @ gmail.com), :telefone => "+55 46 9911 7879", :skype => "jonatas.paganini"} </pre>
+  </div>
+   <div class="layout" >
+    <div class="content">
       {{ content }}
     </div>
-    <td rowspan="2" class="about_me">
-     <pre class="prettyprint lang-ruby">
-about_me = {
- :nome => "Jônatas Paganini",
- :email => %w(jonatasdp @ gmail.com),
- :phone => "+55 46 9911 7879",
- :languages => /pt|en/,
- :skype => "jonatas.paganini",
- :estou_em => "Francisco Beltrão - PR"
-
-}
-</pre>
-</td>
-</tr>
-{% if page.title == 'Ideia-me - Jônatas' %}
-<tr><td>
+{% if page.main == true %}
     {% for post in site.posts limit: 3 %}
     <a class="post" href="{{ post.url }}">
      <h1 class="post">{{ post.date | date_to_string }} &raquo; {{ post.title }}</h1>
     </a>
     {{ post.content }}
     {% endfor %}
-  </td>
- </tr>
 {% endif %}
-</table>
   <h1 class="post">Blog</h1>
   <ul class="posts">
-{% if page.title == 'Ideia-me - Jônatas' %}
+{% if page.main == true %}
     {% for post in site.posts offset: 3 %}
     <li><span class="post_date">{{ post.date | date_to_string }}</span> &raquo; 
         <a class="post" href="{{ post.url }}">{{ post.title }}</a></li>
@@ -72,7 +52,17 @@ about_me = {
   </ul>
   </body>
   <script type='text/javascript'>
-    addEventListener('load', function (event) { prettyPrint() }, false);  
+    addEventListener('load', function (event) { prettyPrint(); payAttentionForFeedMe(); }, false);  
+    function payAttentionForFeedMe(){
+     link = document.getElementById("feedme");
+     setTimeout(function(){ link.style.color = 'red'},    500);
+     setTimeout(function(){ link.style.color = 'green'}, 1000);
+     setTimeout(function(){ link.style.color = 'blue'},  1500);
+     setTimeout(function(){ link.style.color = 'yellow'},2000);
+     setTimeout(function(){ link.style.color = 'white'}, 2500);
+     setTimeout(function(){ link.style.color = "orange"},3000);
+
+    }
     function changeStyleTo(style) {
      document.getElementById('stylesheet').href = '{{page.dirbase}}/css/' + style + '.css';
      document.getElementById('stylesheet_prettify').href = '{{page.dirbase}}/prettify/prettify_' + style + '.css';
