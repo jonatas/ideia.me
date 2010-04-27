@@ -5,30 +5,26 @@
 
 # {{ page.title }}
 
-Programador Web, passei 2 anos com Java e seus diversos frameworks e ferramentas (jUnit, ant, apache, jboss, hibernate, struts, prevayler etc). Sempre atento as novidades do mundo ágil, começei a estudar Ruby e ferramentas que pudessem me ajudar a tornar o desenvolvimento de software mais imples e objetivo. Empolgado nos estudos, aprendi sobre estratégias na orientação a objetos, padrões de arquitetura, desenvolvimento orientado a testes e comportamento, modelagem ágil, metaprogramação e práticas ágeis.
+Iniciei na programação para web em 2006, passei so primeiros 2 anos trabalhando com Java e seus diversos frameworks e ferramentas. Durante este tempo trabalhei com Java, jUnit, ANT, TomCat e jBoss, Hibernate, Struts entre outros. 
 
-Já trabalho com Ruby profissionalmente a 3 anos e por estes trilhos desenvolvi vários estudos sobre a linguagem de programação, frameworks, Inteligência Artificial e ferramentas ágeis. Dentre os trabalhos desenvolvidos destaca-se:
+Sempre atento as novidades do mundo ágil, começei a estudar Ruby e ferramentas que pudessem me ajudar a tornar o desenvolvimento de software mais imples e objetivo. Empolgado nos estudos, aprendi sobre estratégias na orientação a objetos, padrões de arquitetura, desenvolvimento orientado a testes e comportamento, modelagem ágil, metaprogramação e outras práticas ágeis.
+
+Já trabalho com Ruby profissionalmente a 3 anos e por estes trilhos desenvolvi vários estudos sobre a linguagem de programação, frameworks, Inteligência Artificial e ferramentas ágeis. Dentre os trabalhos desenvolvidos posso citar:
 
 * [Appointme][appointme]: Um agendador de compromissos em linguagem natural (2007)
 * [Troper][troper]: Plugin para sistemas Rails que fornece um gerador de relatórios (projeto de TCC) (2009)
-* [Boo][boo]: Um projeto em que o conteúdo da bíblia está disponível em uma biblioteca usando objetos prevalentes na memória. A biblioteca com o código da bíblia têm aproximadamente 52 KBytes. (2007)
+* [Boo][boo]: Um projeto em que o conteúdo da bíblia está disponível em uma biblioteca usando objetos prevalentes na memória.
 * Ceps on Rails: Webservice com todos os endereços do Brasil prevalentes na memória. (2008)
 
-Atualmente, estou concluindo o Bacharelado em Sistemas de Informação, e este ano publicarei dois artigos na área de programação voltado para os domínios específicos da linguagem. Os artigos têm os seguintes títulos:
+Atualmente, estou concluindo o Bacharelado em **Sistemas de Informação**, e este ano publicarei dois artigos na área de programação voltado para os domínios específicos da linguagem. Os artigos têm os seguintes títulos:
 
 * [Expressividade da linguagem no ato de programar][artigo_elep]
 * [A estatística aplicada à linguagem de programação Ruby][artigo_estatistica]
 
-Também comunico-me muito bem e estou sempre disposto a ministrar palestras, workshops e cursos. Nos últimos 3 anos ensinei sobre:
+## Objetivo 
 
-* Ruby e Rails 
-* PostgreSql, PlPgSql e pgUnit
-* Desenvolvimento Orientado a Testes e Comportamento
-* rSpec e Cucumber
-* Editor de textos Vim 
-* Extremme Programming
-* Expressões Regulares
-* JavaScript e Prototype JS
+Desenvolver e entregar software de **valor**, com qualidade e excelência. Seguindo os princípios ágeis, compartilhar conhecimento e adquirir novas habilidades com a equipe. Conhecer novas técnologias e áreas de negócio, assim como agregar valor para a empresa com minhas qualificações e objetos de estudo.
+
 
 ## Experiência 
 
@@ -75,6 +71,21 @@ Dentre as métodologias que trabalhei, a que mais gosto é Extremme Programming(
 
 Acredito na forma humanizada que XP encara os papéis em um projeto, e hoje já consigo evitar alguns enganos que cometi usando outros métodos processuais. Trabalho com XP desde 2006 e gostaria de continuar aplicando suas ideias na medida do possível. 
 
+### Comunicação 
+
+Acredito que tenho uma boa habilidade de comunicação. Estou sempre disposto a ministrar palestras, workshops e cursos. Nos últimos 3 anos ensinei sobre:
+
+* Ruby e Rails 
+* PostgreSql, PlPgSql e pgUnit
+* Desenvolvimento Orientado a Testes e Comportamento
+* rSpec e Cucumber
+* Editor de textos Vim 
+* Extremme Programming
+* Expressões Regulares
+* JavaScript e Prototype JS
+
+Também coordenei reuniões, iterações e planejamento de projetos com frequência. Apoio a objetividade das reuniões em pé e __brainstorms__ com início e fim.
+
 ### Ferramentas de Desenvolvimento
 
 O ferramental para mim é algo extremamente necessário. Através do bom uso e habilidade, é possível ganhar agilidade na execução qualquer tipo de tarefa, além de enriquecer o software com qualidade, padronização, documentação entre outros. Um dos principais motivos de utilizar o Linux, é a facilidade de acesso a este ferramental e acredito que isto faz toda a diferença para programar. Minhas preferidas são:
@@ -99,6 +110,7 @@ As bibliotecas de programação, em propósito geral, fazem todo trabalho repeti
  rSpec               |     2007     | Ferramenta para testes de comportamento do software
 
 Também trabalhei com muitas bibliotecas e sistemas auxiliares como Selenium, iReport, WebRat, Rake, FunFx, NewGem, Markdown, Liquid, Zen Autotest, WebOrb, RestFulX, etc.
+
 
 [appointme]: http://github.com/jonatas/appointme 
 [troper]: http://github.com/jonatas/troper

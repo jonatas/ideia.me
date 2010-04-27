@@ -84,8 +84,11 @@ h1 {
  color: Yellow;
 }
 a {
- color: White;
+ color: Cyan;
 }
 h2 {
   color: Chartreuse;
+}
+h3 {
+  color: Orange;
 }
