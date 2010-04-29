@@ -1,0 +1,31 @@
+---
+  title: Usufruindo do comando find do Unix 
+  layout: ideiame
+  categories: linux find terminal
+---
+
+# {{ page.title }}
+
+Geralmente quando busco arquivos no terminal, desejo fazer uma determinada ação com estes arquivos. Para buscar arquivos, geralmente uso locate, find ou Spotligth, para realizar uma busca por exemplo, na pasta app por todos arquivos que iniciem com . e tenham a extensão swp.
+
+Para isso posso utilizar o seguinte comando:
+
+<div><pre>
+[jonatas] ~/projetos/flex/din (master)
+$ find app -type f -name .*.swp 
+app/controllers/.weborb_controller.rb.swp
+app/models/.party.rb.swp
+app/services/.Persistence.rb.swp
+</pre></div>
+
+Neste caso, como meu objetivo é remover estes arquivos, eu posso passar o parâmetro **-exec** e logo após o comando desejado. Quando este parâmetro é passado, é necessário que o comando termine com **;**. 
+
+<div><pre>
+[jonatas] ~/projetos/flex/din (master)
+$ find app -type f -name .*.swp -exec rm {} \;
+</pre></div>
+
+Pronto! removido os arquivos com sucesso!
+
+Observe que o nome do arquivo que está sendo iterado é representado por chaves **{}** e o resto é por conta da imaginação nerd!
+
