@@ -10,6 +10,53 @@
   <link id="stylesheet"href="{{page.dirbase}}/css/black.css" type="text/css" rel="stylesheet" />
   <script type="text/javascript" src="{{page.dirbase}}/prettify/prettify.js"></script>
   <meta name="google-site-verification" content="pEhVWERbmTGzsNq-acKyhMtjmxG2o5LUb6POdY0wBns" />
+ <script src="http://www.google.com/jsapi?key=ABQIAAAArYOF4yKN2_Dpo42LXgneURRClFnncuL58ZPRE4fBeXHL_xpARBSaUxRW5VmjLu9VUsUxs_Lbc7TVew" type="text/javascript"></script>
+<script type="text/javascript">
+    /*
+    *  How to load a feed via the Feeds API.
+    */
+    
+    google.load("feeds", "1");
+    
+    // Our callback function, for when a feed is loaded.
+    function feedLoaded(result) {
+      if (!result.error) {
+        // Grab the container we will put the results into
+        var container = document.getElementById("gbuzz");
+    
+        // Loop through the feeds, putting the titles onto the page.
+        // Check out the result object for a list of properties returned in each entry.
+        // http://code.google.com/apis/ajaxfeeds/documentation/reference.html#JSON
+        for (var i = 0; i < result.feed.entries.length; i++) {
+          var entry = result.feed.entries[i];
+          var buzz = document.createElement("div");
+          var title = document.createElement("a");
+          title.innerHTML = entry.title.replace(/Buzz by Jônatas Paganini from/g, "");   
+          title.href = entry.link;
+          var content = document.createElement("div");
+
+          content.innerHTML = entry.content;
+          buzz.setAttribute("class", "buzz-item");
+          buzz.appendChild(title);
+          buzz.appendChild(content);
+          if (i < result.feed.entries.length-1){
+            buzz.appendChild(document.createElement("hr"));
+          }
+          container.appendChild(buzz);
+        }
+      }
+    }
+    
+    function OnLoad() {
+      // Create a feed instance that will grab Digg's feed.
+      var feed = new google.feeds.Feed("http://buzz.googleapis.com/feeds/jonatasdp/public/posted");
+    
+      // Calling load sends the request off.  It requires a callback function.
+      feed.load(feedLoaded);
+    }
+    
+    google.setOnLoadCallback(OnLoad);
+    </script>
   </head>
   <body>
     <div class="links" id="header">
@@ -28,6 +75,7 @@
     <div class="content">
       {{ content }}
     </div>
+    <fieldset id="gbuzz" class="gbuzz"><legend>[Google Buzz]</legend></fieldset>
 {% if page.main == true %}
     {% for post in site.posts limit: 3 %}
     <a class="post" href="{{ post.url }}">
