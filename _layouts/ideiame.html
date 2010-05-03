@@ -72,10 +72,11 @@
        <pre class="prettyprint lang-ruby">{ :nome => "Jônatas Paganini", :email => %w(jonatasdp @ gmail.com), :telefone => "+55 46 9911 7879", :skype => "jonatas.paganini"} </pre>
   </div>
    <div class="layout" >
+    <fieldset id="gbuzz" class="gbuzz"><legend>[Google Buzz]</legend></fieldset>
     <div class="content">
       {{ content }}
     </div>
-    <fieldset id="gbuzz" class="gbuzz"><legend>[Google Buzz]</legend></fieldset>
+
 {% if page.main == true %}
     {% for post in site.posts limit: 3 %}
     <a class="post" href="{{ post.url }}">

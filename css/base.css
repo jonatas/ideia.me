@@ -1,5 +1,5 @@
 body, h1, h2 {
- font-family: monospace, prestige;
+ font-family: Arial monospace;
 }
 
 div.links {
@@ -32,10 +32,10 @@ a.link {
 
 .layout {
  width:100%;
+ padding-top: 8%;
 }
 .content {
  width:70%;
- padding-top: 8%;
 }
 .gbuzz{
  width:30%;
@@ -58,4 +58,7 @@ a.link {
 } 
 .feedme{
  color:orange;
+}
+a.link { 
+ text-decoration:none;
 }
