@@ -3,6 +3,8 @@
  title: Ruby Legal
 ---
 
+# {{ page.title }}
+
 Hoje fiquei vendo um exercício de probabilidade na aula de estatística, o exercício dizia o seguinte:
 
     Uma moeda é lançada 10 vezes. Qual a probabilidade de:
