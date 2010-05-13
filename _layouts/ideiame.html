@@ -1,6 +1,7 @@
 <html>
  <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
   <link href="/atom.xml" rel="alternate" title="Ideia.me Jônatas!" type="application/atom+xml" />
   <title>{{ page.title }}</title>
   <meta name="viewport" content="user-scalable=no, width=device-width" />
@@ -9,25 +10,13 @@
   <link id="stylesheet_prettify" href="{{page.dirbase}}/prettify/prettify_black.css" type="text/css" rel="stylesheet" />
   <link id="stylesheet"href="{{page.dirbase}}/css/black.css" type="text/css" rel="stylesheet" />
   <script type="text/javascript" src="{{page.dirbase}}/prettify/prettify.js"></script>
-
   <meta name="google-site-verification" content="pEhVWERbmTGzsNq-acKyhMtjmxG2o5LUb6POdY0wBns" />
- <script src="http://www.google.com/jsapi?key=ABQIAAAArYOF4yKN2_Dpo42LXgneURRClFnncuL58ZPRE4fBeXHL_xpARBSaUxRW5VmjLu9VUsUxs_Lbc7TVew" type="text/javascript"></script>
+  <script src="http://www.google.com/jsapi?key=ABQIAAAArYOF4yKN2_Dpo42LXgneURRClFnncuL58ZPRE4fBeXHL_xpARBSaUxRW5VmjLu9VUsUxs_Lbc7TVew" type="text/javascript"></script>
 <script type="text/javascript">
-    /*
-    *  How to load a feed via the Feeds API.
-    */
-    
-    google.load("feeds", "1");
-    
-    // Our callback function, for when a feed is loaded.
     function feedLoaded(result) {
       if (!result.error) {
-        // Grab the container we will put the results into
         var container = document.getElementById("gbuzz");
-    
-        // Loop through the feeds, putting the titles onto the page.
-        // Check out the result object for a list of properties returned in each entry.
-        // http://code.google.com/apis/ajaxfeeds/documentation/reference.html#JSON
+        container.innerHTML = "";
         for (var i = 0; i < result.feed.entries.length; i++) {
           var entry = result.feed.entries[i];
           var buzz = document.createElement("div");
@@ -47,16 +36,37 @@
         }
       }
     }
-    
+
     function OnLoad() {
-      // Create a feed instance that will grab Digg's feed.
       var feed = new google.feeds.Feed("http://buzz.googleapis.com/feeds/jonatasdp/public/posted");
-    
-      // Calling load sends the request off.  It requires a callback function.
       feed.load(feedLoaded);
     }
+
+    function writeLinksToShare(){
+      var urlBlog = 'http://blogplay.com/servers/sociable_web.php?jq=1&id=7047&amp;';
+      var scriptUrl = urlBlog + 'u=' + document.URL+ '&amp;t=' + document.title;
+      var sociableSrc=String.fromCharCode(60) + 'scr' +'ipt type="text/javascript" language="javascript" src="' + scriptUrl + '"' + String.fromCharCode(62,60) + '/scr' + 'ipt>';
+      document.getElementById("body_content").innerHTML += sociableSrc; 
+    }
+
+    function payAttentionForFeedMe(){
+     link = document.getElementById("feedme");
+     setTimeout(function(){ link.style.color = 'red'},    500);
+     setTimeout(function(){ link.style.color = 'green'}, 1000);
+     setTimeout(function(){ link.style.color = 'blue'},  1500);
+     setTimeout(function(){ link.style.color = 'yellow'},2000);
+     setTimeout(function(){ link.style.color = 'white'}, 2500);
+     setTimeout(function(){ link.style.color = "orange"},3000);
+    }
     
-    google.setOnLoadCallback(OnLoad);
+    addEventListener('load', function (event) { 
+      prettyPrint(); 
+      payAttentionForFeedMe();
+      writeLinksToShare(); 
+    }, false);
+
+      google.load("feeds", "1");
+      google.setOnLoadCallback(OnLoad);
     </script>
   </head>
   <body>
@@ -74,10 +84,11 @@
        <pre class="prettyprint lang-ruby">{ :nome => "Jônatas Paganini", :email => %w(jonatasdp @ gmail.com), :telefone => "+55 46 9911 7879", :skype => "jonatas.paganini"} </pre>
   </div>
    <div class="layout" >
-    <fieldset id="gbuzz" class="gbuzz"><legend>[Google Buzz]</legend></fieldset>
-    <div class="content">
+    <fieldset id="gbuzz" class="gbuzz"><legend>[Google Buzz]</legend>Conectando...</fieldset>
+    <div class="content" id="body_content">
       {{ content }}
     </div>
+</div>
 
 {% if page.main == true %}
     {% for post in site.posts limit: 3 %}
@@ -101,9 +112,10 @@
     {% endfor %}
 {% endif %}
   </ul>
+
   </body>
   <script type='text/javascript'>
-    addEventListener('load', function (event) { prettyPrint(); payAttentionForFeedMe(); }, false);  
+    addEventListener('load', function (event) { }, false);  
     function payAttentionForFeedMe(){
      link = document.getElementById("feedme");
      setTimeout(function(){ link.style.color = 'red'},    500);

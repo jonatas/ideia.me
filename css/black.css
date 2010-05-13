@@ -1,78 +1,34 @@
 body {
-  background-color: #080808;
-  color: SeaShell;
+ background-color: #080808;
+ color: SeaShell;
 }
-
 div.links {
-  border-color:#ccd9d8;
-  background-color:#080808;
+ border-color:#ccd9d8;
+ background-color:#080808;
 }
-
-li {
-  background-color:#080808;
-}
-
-.redback{
-    background-color:#d5381a;
-    color:#080808;
-}
-
 .red{
-    color:#d5381a;
+ color:#d5381a;
 }
 .blue{
-  color:#0034dc;
+ color:#0034dc;
 }
-
-.blueback{
-    background-color:#0034dc;
-    color:#5fba3d;
-}
-
 .green{
-  color:green;
+ color:green;
 }
-
 .orange{
-  color:orange;
+ color:orange;
 }
-.greenback{
-    background-color:#5fba3d;
-    color:#080808;
-}
-
 .yellow, .post_date{
-  color:#e5df43;
-}
-.yellowback{
-  background-color:#e5df43;
-  color:#d5381a;
-}
-.grey {
-  color:#ffffff;
+ color:#e5df43;
 }
 .post{
-  color: FloralWhite;
-}
-.greyback{
-  background-color:#888888;
-  color:#ffffff;
-}
-.greenback{
-  background-color:green;
-  color:black;
-}
-.border{
-    border-color:#888888;
-}
-.white{
- color:white;
+ color: FloralWhite;
 }
 ul.posts {
-  color: OrangeRed;
+ color: OrangeRed;
 }
 a.portfolio {
-  color: coral;
+ color: coral;
 }
 a.curriculo {
  color: cyan;
@@ -87,11 +43,11 @@ a {
  color: Cyan;
 }
 h2 {
-  color: Chartreuse;
+ color: Chartreuse;
 }
 h3 {
-  color: Orange;
+ color: Orange;
 }
 .gbuzz {
-color: white;
+ color: white;
 }

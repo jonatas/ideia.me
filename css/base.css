@@ -1,7 +1,9 @@
 body, h1, h2 {
  font-family: Arial monospace;
 }
-
+.pps {
+font-size: 140%;
+}
 div.links {
  left:0;
  margin:0;
