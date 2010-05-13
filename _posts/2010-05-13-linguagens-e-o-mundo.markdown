@@ -1,6 +1,7 @@
 ---
  layout: ideiame
- title: Inglês a vista
+ title:  As linguagens e o mundo
+ categories: linguagem
 ---
 
 # {{ page.title }}
