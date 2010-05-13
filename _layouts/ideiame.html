@@ -40,7 +40,35 @@
     function OnLoad() {
       var feed = new google.feeds.Feed("http://buzz.googleapis.com/feeds/jonatasdp/public/posted");
       feed.load(feedLoaded);
+
+      var webSearch = new google.search.WebSearch();
+      var searchControl = new google.search.SearchControl();
+
+      webSearch.setSiteRestriction('ideia.me');
+      searchControl.addSearcher(webSearch);
+      //searchControl.setSearchCompleteCallback(this, onCompleteSearch);
+      searchControl.draw(document.getElementById("google_search"));
     }
+    
+/*
+ function onCompleteSearch(sc, searcher) {
+
+      // if we have local search results, put them on the map
+      if ( searcher.results && searcher.results.length > 0) {
+          var container = document.getElementById("content");
+          var result = searcher.results[i];
+          var a = document.createElement("a");
+          var p = document.createElement("p");
+
+          a.innerHTML = result.title;
+          p.appendChild(a);
+          p.appendChild(document.createTextNode(result.content);        
+          container.appendChild(p);
+        }
+      }
+*/
+    
+
 
     function writeLinksToShare(){
       var urlBlog = 'http://blogplay.com/servers/sociable_web.php?jq=1&id=7047&amp;';
@@ -66,6 +94,7 @@
     }, false);
 
       google.load("feeds", "1");
+      google.load("search", "1");
       google.setOnLoadCallback(OnLoad);
     </script>
   </head>
@@ -77,6 +106,8 @@
        <a href="/portfolio/2010/02/01/portfolio.html" class="link portfolio">Portfólio</a> 
        <a href="/2010/04/27/curriculo-jonatas-davi-paganini.html" class="link curriculo">Currículo</a>
 <!--iframe src="http://www.google.com/talk/service/badge/Show?tk=z01q6amlq6hh2lq0fmd0p1ir7k0vug8m521nl2795ld6i98fmtedsrvoorfl517k8ide72c6s69t79is1uu6v3t3qqjq8eiv62ircagvo954v0siue5di257k9gs1p2dt169qaq1gb4j58f3053ruljn6i3dbbism5377o811&amp;w=200&amp;h=60" frameborder="0" allowtransparency="true" width="200" height="60"></iframe-->
+       
+
     
        <div onclick="changeStyleTo('black')" class="black style" title="Apagar a luz">&nbsp;</div>
        <div onclick="changeStyleTo('white')" class="white style" title="Acender a luz">&nbsp;</div>
@@ -84,7 +115,10 @@
        <pre class="prettyprint lang-ruby">{ :nome => "Jônatas Paganini", :email => %w(jonatasdp @ gmail.com), :telefone => "+55 46 9911 7879", :skype => "jonatas.paganini"} </pre>
   </div>
    <div class="layout" >
-    <fieldset id="gbuzz" class="gbuzz"><legend>[Google Buzz]</legend>Conectando...</fieldset>
+    <div class="lateral">
+      <fieldset id="gbuzz" class="gbuzz"><legend>[Google Buzz]</legend>Conectando...</fieldset>
+      <div id="google_search" class="google_search"> </div>
+    </div>
     <div class="content" id="body_content">
       {{ content }}
     </div>

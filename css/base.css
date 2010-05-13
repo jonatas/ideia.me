@@ -12,6 +12,10 @@ div.links {
  top:0;
  text-decoration:none;
 }
+div.google_search {
+ float:right;
+ left:0;
+}
 div.style {
  border-style:solid inset;
  border-width:4px;
@@ -39,14 +43,14 @@ a.link {
 .content {
  width:70%;
 }
-.gbuzz{
+.lateral{
  width:30%;
  float:right;
- 
+ padding-top:10px;
 }
-.buzz-item {
+.google_search{
+ padding:10px;
 }
-
 .border {
  width:auto;
  height:auto;
