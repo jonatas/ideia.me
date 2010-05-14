@@ -97,7 +97,20 @@
     </div>
     <div class="content" id="body_content">
       {{ content }}
+
+      {% if page.main != true %}
+      <div id="disqus_thread"></div>
+      <script type="text/javascript">
+         (function() {
+           var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+           dsq.src = 'http://ideiame.disqus.com/embed.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+      </script>
+      <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
+    <a href="/page.url#disqus_thread">Comments</a>
+    {% endif %}
 </div>
 
 {% if page.main == true %}
@@ -123,6 +136,20 @@
 {% endif %}
   </ul>
 
+  <script type="text/javascript">
+   //<![CDATA[
+   (function() {
+    functionvar links = document.getElementsByTagName('a');
+    getElementsByTagNamevar query = '?';
+    queryfor(var i = 0; i < links.length; i++) {
+     lengthif(links[i].href.indexOf('#disqus_thread') >= 0) {
+      indexOfquery += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+      href}
+     href}
+    hrefdocument.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/ideiame/get_num_replies.js' + query + '"></' + 'script>');
+    })();
+    //]]>
+   </script>
   </body>
   <script type='text/javascript'>
     addEventListener('load', function (event) { }, false);  
