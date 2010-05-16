@@ -1,7 +1,7 @@
 ---
   layout: ideiame
-  title: Coffescript Legal
-  categories: coffescript ruby javascript linguagem
+  title: Coffeescript Legal
+  categories: coffeescript ruby javascript linguagem
   dirbase: /../../..
 ---
 
