@@ -50,27 +50,21 @@
       searchControl.draw(document.getElementById("google_search"));
     }
 
-    function writeLinksToShare(){
-      var urlBlog = 'http://blogplay.com/servers/sociable_web.php?jq=1&id=7047&amp;';
-      var scriptUrl = urlBlog + 'u=' + document.URL+ '&amp;t=' + document.title;
-      var sociableSrc=String.fromCharCode(60) + 'scr' +'ipt type="text/javascript" language="javascript" src="' + scriptUrl + '"' + String.fromCharCode(62,60) + '/scr' + 'ipt>';
-      document.getElementById("body_content").innerHTML += sociableSrc; 
-    }
 
     function payAttentionForFeedMe(){
-     link = document.getElementById("feedme");
-     setTimeout(function(){ link.style.color = 'red'},    500);
-     setTimeout(function(){ link.style.color = 'green'}, 1000);
-     setTimeout(function(){ link.style.color = 'blue'},  1500);
-     setTimeout(function(){ link.style.color = 'yellow'},2000);
-     setTimeout(function(){ link.style.color = 'white'}, 2500);
-     setTimeout(function(){ link.style.color = "orange"},3000);
+     var colors = ['red','green','blue','yellow','white','orange'];
+     var link = document.getElementById("feedme");
+
+     for ( var i = 0; i < 5; i++ ) (function(i){
+       setTimeout(function(){ 
+         link.style.color = colors[i] 
+       }, i * 1000)}
+     )(i);
     }
     
     addEventListener('load', function (event) { 
       prettyPrint(); 
       payAttentionForFeedMe();
-      writeLinksToShare(); 
     }, false);
 
       google.load("feeds", "1");
@@ -95,7 +89,7 @@
       <fieldset id="gbuzz" class="gbuzz"><legend>[Google Buzz]</legend>Conectando...</fieldset>
       <div id="google_search" class="google_search"> </div>
     </div>
-    <div class="content" id="body_content">
+    <div class="content">
       {{ content }}
 
       {% if page.main != true %}
