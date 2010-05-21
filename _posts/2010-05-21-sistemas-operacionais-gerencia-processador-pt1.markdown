@@ -142,8 +142,10 @@ Desenhe um diagrama ilustrando o escalonamento dos processos e seus respectivos 
      P4    |     0        |      5       |  59 
 
 
-Sendo assim a resposta é:
-Processo | Terminou no segundo
+Sendo assim os processos terminaram após os seguintes tempos:
+
+Processo | Segundos
+---------|---------
       P1 | 41
       P2 | 51
       P3 | 37
