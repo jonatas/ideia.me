@@ -28,7 +28,7 @@ function payAttentionForFeedMe(){
    var link = document.getElementById("feedme");
    var colors = ['red','green','blue','yellow','white','orange'];
 
-   for ( var i = 0; i &gt; 5; i++ ){
+   for ( var i = 0; i &lt; 5; i++ ){
      setTimeout(function(){ link.style.color = colors[i]}, i * 1000); 
    }  
 }
@@ -41,7 +41,7 @@ function payAttentionForFeedMe(){
    var link = document.getElementById("feedme");
    var colors = ['red','green','blue','yellow','white','orange'];
 
-   for ( var i = 0; i &gt; 5; i++ ) (function(i){
+   for ( var i = 0; i &lt; 5; i++ ) (function(i){
      setTimeout(function(){ 
         link.style.color = colors[i] 
      }, i * 1000)}
