@@ -1,0 +1,119 @@
+---
+ layout: ideiame
+ title: SH Legal
+ categories: shell sh terminal peepcode linux mac
+---
+
+# {{ page.title }}
+
+Hoje estou muito satisfeito com minhas evoluções na linha de comando. Ontem resolvi por começar a assistir todos os vídeos do [peepcode], já que comprei uma conta premium vou poder assistir muito conteúdo de qualidade. 
+
+Em 2 dias já assisti alguns vídeos e a qualidade do screencast é realmente muito boa. Já assisti:
+
+* Smash into VIM
+* Advanced Command Line
+* Productivity for programmers
+* Sinatra
+* jQuery
+
+Esta semana estive trabalhando em colocar um ambiente totalmente novo e mais descente no meu Ubuntu 10.4. Quero utilizar apenas tecnologias Open Source para desenvolver e este é meu primeiro post deixando o Maczinho de lado. 
+
+* _Mas por que abandonar o Mac?_
+
+Não estou abandonando o Mac, mas vou ministrar um curso daqui a alguns meses e quero utilizar apenas software livre no curso. 
+
+Como sou consultor, quero sempre utilizar o que há de melhor em tecnologia e também saber dos hits da comunidade (Rails, HTML5, jQuery) entre outros frameworks, ferramentas, linguagens que facilitem a vida.
+
+Uma de minhas estratégias será criar um ambiente funcional de desenvolvimento já customizado. Uma forma de incentivo aos programadores mais novos já conhecerem um ambiente mais produtivo.
+
+A respeito da produtividade, gostaria de citar a linguagem sh. Após assistir o vídeo Advanced Command Line do [peepcode], percebi que apesar de me sentir confortável com a linha de comando, muitas vezes deixava de usufruir das funcionalidades por simples desleixo.
+
+Por exemplo, utilizar funções em sh é muito simples:
+
+<pre class="prettyprint sh">
+~/code/site$ function hello(){ echo "seja bem vindo $1" ;  }
+</pre>
+
+E agora é só usufruir do "hello world"
+
+<pre>
+~/code/site$ hello jonatas
+seja bem vindo jonatas
+~/code/site$ hello ubuntu linux
+seja bem vindo ubuntu
+</pre>
+
+Mas note que não pegou os outros argumentos por que utilizei "$1". Para pegar todos os argumentos, é só utilizar "\*" ao invés do número do argumento. Desta forma podemos sobrescrever a função:
+
+<pre class="prettyprint sh">
+~/code/site$ function hello(){ echo "seja bem vindo $*" ;  }
+~/code/site$ hello ubuntu linux da silva junior
+seja bem vindo ubuntu linux da silva junior
+</pre>
+
+Agora só vamos dar uma twittada sobre o assunto:
+
+<pre class="prettyprint sh">
+~/code/site$ function twitt() { \
+curl -d status='$*' \
+http://jonatasdp:pegadinhadomalandro@twitter.com/statuses/update.xml ;}
+</pre>
+
+<pre>
+~$ twitt consigo twittar pela linha de comando livremente! #uhuu
+</pre>
+
+Esta linha de comando devolveu o seguinte xml:
+
+<pre class="prettyprint xml">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;status&gt;
+  &lt;created_at&gt;Sun May 30 23:09:12 +0000 2010&lt;/created_at&gt;
+    &lt;id&gt;15069961307&lt;/id&gt;
+    &lt;text&gt;twitting from comand line :D&lt;/text&gt;
+    &lt;source&gt;&lt;a href=&quot;http://apiwiki.twitter.com/&quot; rel=&quot;nofollow&quot;&gt;API&lt;/a&gt;&lt;/source&gt;
+    &lt;truncated&gt;false&lt;/truncated&gt;
+    &lt;in_reply_to_status_id&gt;&lt;/in_reply_to_status_id&gt;
+    &lt;in_reply_to_user_id&gt;&lt;/in_reply_to_user_id&gt;
+    &lt;favorited&gt;false&lt;/favorited&gt;
+    &lt;in_reply_to_screen_name&gt;&lt;/in_reply_to_screen_name&gt;
+    &lt;user&gt;
+      &lt;id&gt;19349634&lt;/id&gt;
+      &lt;name&gt;J&#244;natas Paganini&lt;/name&gt;
+      &lt;screen_name&gt;jonatasdp&lt;/screen_name&gt;
+      &lt;location&gt;Francisco Beltr&#227;o, PR&lt;/location&gt;
+      &lt;description&gt;Programador freelancer em Francisco Beltr&#227;o. Nerd interessado em web 2.0, novidades, tecnologias Open Source, trabalhar pouco e ganhar bem 8-) &lt;/description&gt;
+      &lt;profile_image_url&gt;http://a3.twimg.com/profile_images/337906557/twitterProfilePhoto_normal.jpg&lt;/profile_image_url&gt;
+      &lt;url&gt;http://ideia.me&lt;/url&gt;
+      &lt;protected&gt;false&lt;/protected&gt;
+      &lt;followers_count&gt;94&lt;/followers_count&gt;
+      &lt;profile_background_color&gt;ffffff&lt;/profile_background_color&gt;
+      &lt;profile_text_color&gt;333333&lt;/profile_text_color&gt;
+      &lt;profile_link_color&gt;0084B4&lt;/profile_link_color&gt;
+      &lt;profile_sidebar_fill_color&gt;DDFFCC&lt;/profile_sidebar_fill_color&gt;
+      &lt;profile_sidebar_border_color&gt;BDDCAD&lt;/profile_sidebar_border_color&gt;
+      &lt;friends_count&gt;121&lt;/friends_count&gt;
+      &lt;created_at&gt;Thu Jan 22 17:31:54 +0000 2009&lt;/created_at&gt;
+      &lt;favourites_count&gt;1&lt;/favourites_count&gt;
+      &lt;utc_offset&gt;-10800&lt;/utc_offset&gt;
+      &lt;time_zone&gt;Brasilia&lt;/time_zone&gt;
+      &lt;profile_background_image_url&gt;http://a1.twimg.com/profile_background_images/4066654/carbon-footprint-1.jpg&lt;/profile_background_image_url&gt;
+      &lt;profile_background_tile&gt;false&lt;/profile_background_tile&gt;
+      &lt;notifications&gt;false&lt;/notifications&gt;
+      &lt;geo_enabled&gt;true&lt;/geo_enabled&gt;
+      &lt;verified&gt;false&lt;/verified&gt;
+      &lt;following&gt;false&lt;/following&gt;
+      &lt;statuses_count&gt;331&lt;/statuses_count&gt;
+      &lt;lang&gt;en&lt;/lang&gt;
+      &lt;contributors_enabled&gt;false&lt;/contributors_enabled&gt;
+    &lt;/user&gt;
+    &lt;geo/&gt;
+    &lt;coordinates/&gt;
+  &lt;place/&gt;
+ &lt;contributors/&gt;
+&lt;/status&gt;
+</pre>
+
+ps: Se você é um programador saiba que o Terminal é seu amigo e juntos vão fazer maravilhas 8-)
+
+[peepcode]: http://peepcode.com
