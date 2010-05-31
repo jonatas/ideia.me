@@ -116,4 +116,6 @@ Esta linha de comando devolveu o seguinte xml:
 
 ps: Se você é um programador saiba que o Terminal é seu amigo e juntos vão fazer maravilhas 8-)
 
+ps2: Investir tempo em aprender estes tricks vale a pena! 
+
 [peepcode]: http://peepcode.com
