@@ -50,21 +50,22 @@
         </p>
       </div>
     </div>
-    <div id="sobremim">
+    <div id="sobremim" itemscope itemtype="/sobre">
       <div class="toolbar">
         <a class="back">Voltar</a>
-        <h1>Eu sou Jônatas!</h1>
+        <h1 itemprop='name'>Jônatas Paganini</h1>
       </div>
      
       <div class="info">
           <img id="foto_twitter" alt="foto do twitter.." />
           <blockquote id="resume_twitter">Buscando do twitter...</blockquote>
       </div>
-      <pre class="prettyprint lang-ruby">{
- :nome => "Jônatas Paganini", 
+      <pre class="prettyprint lang-ruby" itemprop='attrs'>{
+ :nome => "Jônatas Davi Paganini", 
  :email => %w(jonatasdp @ gmail.com), 
  :telefone => "+55 46 9911 7879", 
  :twitter => @jonatasdp,
+ :social => [:facebook, :orkut],
  :skype => "jonatas.paganini"
 }</pre>
     </div>
