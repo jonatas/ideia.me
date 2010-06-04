@@ -106,7 +106,7 @@ Trabalhando com uma ajuda útil, é possível gerar documentos específicos e ao
 <pre class="prettyprint" markdown="0">
 bem vindo ao mundo \{\{ nome }}<br>
 help:<br>
-&nbsp;&nbsp;nome: Digite seu nome
+nome: Digite seu nome
 </pre>
 
 O protótipo está no ar em <http://github.com/jonatas/helplate>, quem puder ajudar, acredito que a ideia pode evoluir!

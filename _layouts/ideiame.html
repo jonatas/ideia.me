@@ -94,6 +94,7 @@
 
       {% if page.main != true %}
       <div id="disqus_thread"></div>
+      <div id="dsq-loading-problem"></div>
       <script type="text/javascript">
          (function() {
            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -133,30 +134,19 @@
   <script type="text/javascript">
    //<![CDATA[
    (function() {
-    functionvar links = document.getElementsByTagName('a');
-    getElementsByTagNamevar query = '?';
-    queryfor(var i = 0; i < links.length; i++) {
-     lengthif(links[i].href.indexOf('#disqus_thread') >= 0) {
-      indexOfquery += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
-      href}
-     href}
-    hrefdocument.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/ideiame/get_num_replies.js' + query + '"></' + 'script>');
+    var links = document.getElementsByTagName('a');
+    var query = '?';
+    for (var i = 0; i < links.length; i++) {
+     if (links[i].href.indexOf('#disqus_thread') >= 0) {
+      query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+      }
+    }
+    document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/ideiame/get_num_replies.js' + query + '"></' + 'script>');
     })();
     //]]>
    </script>
   </body>
   <script type='text/javascript'>
-    addEventListener('load', function (event) { }, false);  
-    function payAttentionForFeedMe(){
-     link = document.getElementById("feedme");
-     setTimeout(function(){ link.style.color = 'red'},    500);
-     setTimeout(function(){ link.style.color = 'green'}, 1000);
-     setTimeout(function(){ link.style.color = 'blue'},  1500);
-     setTimeout(function(){ link.style.color = 'yellow'},2000);
-     setTimeout(function(){ link.style.color = 'white'}, 2500);
-     setTimeout(function(){ link.style.color = "orange"},3000);
-
-    }
     function changeStyleTo(style) {
      document.getElementById('stylesheet').href = '{{page.dirbase}}/css/' + style + '.css';
      document.getElementById('stylesheet_prettify').href = '{{page.dirbase}}/prettify/prettify_' + style + '.css';

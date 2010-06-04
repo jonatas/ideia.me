@@ -82,7 +82,7 @@ class Object
  def objeto(nome)
    $objeto = $objetos[nome] = Object.new 
  end
- def method_missing(nome, *args, &block)
+ def method_missing(nome, *args, &amp;block)
    $objetos[nome.to_s] || super
  end
 end
@@ -111,7 +111,7 @@ Depois que este elemento foi declarado é possivel declarar atributos para o obj
 Dado que os atributos foram declarados, é necessário poder acessá-los também. Para tornar o acesso público, é necessário alterar a implementação do método  "method\_missing" para ler os atributos do objeto também.
 
 <pre class="prettyprint">
-def method_missing(nome, *args, &block)
+def method_missing(nome, *args, &amp;block)
   $objetos[nome.to_s] ||
    $objeto.instance_variable_get("@#{nome}") ||
     super
@@ -133,8 +133,8 @@ Agora é necessário tomar as ações para que possa "aprender" a dirigir o carr
 A deste método consiste em:
 
 <pre class="prettyprint">
-def quando(acao, &block)
-  $objeto.class.send(:define_method, acao, &block)
+def quando(acao, &amp;block)
+  $objeto.class.send(:define_method, acao, &amp;block)
 end
 </pre>
 
@@ -160,7 +160,7 @@ class Object
  def objeto(nome)
    $objeto = $objetos[nome] = Object.new 
  end
- def method_missing(nome, *args, &block)
+ def method_missing(nome, *args, &amp;block)
    $objetos[nome.to_s] ||
     $objeto.instance_variable_get("@#{nome}") ||
      super
@@ -170,8 +170,8 @@ class Object
      $objeto.instance_variable_set("@#{nome}",valor)
    end
  end
- def quando(acao, &block)
-   $objeto.class.send(:define_method, acao, &block)
+ def quando(acao, &amp;block)
+   $objeto.class.send(:define_method, acao, &amp;block)
  end
  def sortear(atributo)
    atributo = $objeto.instance_variable_get("@#{atributo}")

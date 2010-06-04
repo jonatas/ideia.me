@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang='en' xml:lang='en' xmlns='http://www.w3.org/1999/xhtml'>
+  <!-- Add in production to cache offline: manifest="production.manifest" -->
+  <head>
+    <meta charset='UTF-8' />
+    <title>
+      Mobile App
+    </title>
+    <style media='screen' type='text/css'>
+      @import "/jqtouch/jqtouch/jqtouch.min.css";
+    </style>
+    <style media='screen' type='text/css'>
+      @import "/jqtouch/themes/ideiame/theme.css";
+    </style>
+    <style media='screen' type='text/css'>
+      @import "/jqtouch/mobile.css";
+    </style>
+
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href="/atom.xml" rel="alternate" title="Ideia.me Jônatas!" type="application/atom+xml" />
+
+    <link id="stylesheet_prettify" href="{{page.dirbase}}/prettify/prettify_black.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="{{page.dirbase}}/prettify/prettify.js"></script>
+    <meta name="google-site-verification" content="pEhVWERbmTGzsNq-acKyhMtjmxG2o5LUb6POdY0wBns" />
+
+    <script charset='utf-8' src='/jqtouch/jqtouch/jquery.1.3.2.min.js' type='text/javascript'></script>
+    <script charset='utf-8' src='/jqtouch/jqtouch/jqtouch.min.js' type='application/x-javascript'></script>
+    <script charset='utf-8' src='/jqtouch/javascripts/raphael-min.js' type='application/x-javascript'></script>
+    <script charset='utf-8' src='/jqtouch/javascripts/topfunky-sparkline.js' type='application/x-javascript'></script>
+    <script charset='utf-8' src='/jqtouch/mobile.js' type='text/javascript'></script>
+  </head>
+  <body>
+    <div class='current' id='home'>
+      <div class='toolbar'>
+        <h1>Ideia.me</h1>
+        <a href="#sobremim" class="button slideup">Sobre Mim</a>
+      </div>
+      <ul class='plastic'>
+        {% for post in site.posts limit: 15 %}
+          <li class='arrow'>
+              <a href="#{{ post_ }}{{ forloop.index }}">{{ post.title }}</a>
+              <!--small>{{ post.date | split "-" | reverse | join ":" }}</smalli-->
+          </li>
+       {% endfor %}
+      </ul>
+
+      <div class='info'>
+        <p class="big">
+          Powered by jQTouch 2
+        </p>
+      </div>
+    </div>
+    <div id="sobremim">
+      <div class="toolbar">
+        <a class="back">Voltar</a>
+        <h1>Eu sou Jônatas!</h1>
+      </div>
+     
+      <div class="info">
+          <img id="foto_twitter" alt="foto do twitter.." />
+          <blockquote id="resume_twitter">Buscando do twitter...</blockquote>
+      </div>
+      <pre class="prettyprint lang-ruby">{
+ :nome => "Jônatas Paganini", 
+ :email => %w(jonatasdp @ gmail.com), 
+ :telefone => "+55 46 9911 7879", 
+ :twitter => @jonatasdp,
+ :skype => "jonatas.paganini"
+}</pre>
+    </div>
+    <!-- Add other pages below -->
+
+    {% for post in site.posts limit: 15 %}
+    <div id="{{ post_ }}{{ forloop.index }}">
+      <div class="toolbar">
+        <a class="back">Voltar</a>
+        <h1>{{ post.title}}</h1>
+      </div>
+      {{ post.content }}
+
+      <div class="toolbar">
+        <a class="back">Voltar</a>
+      </div>
+    </div>
+    {% endfor %}
+
+  </body>
+
+  <script type='text/javascript'>
+    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    try {
+      var pageTracker = _gat._getTracker("UA-12893758-1");
+      pageTracker._trackPageview();
+     } catch(err) {}
+  </script>
+</html>
