@@ -65,6 +65,12 @@
     addEventListener('load', function (event) { 
       prettyPrint(); 
       payAttentionForFeedMe();
+      var agent=navigator.userAgent.toLowerCase();
+      alert(agent);
+      var is_iphone = (agent.indexOf('iphone')!=-1);
+      if (is_iphone) { 
+       return window.location = "/mobile.html"; 
+      }
     }, false);
 
       google.load("feeds", "1");
