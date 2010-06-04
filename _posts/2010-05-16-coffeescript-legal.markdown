@@ -73,6 +73,7 @@ Que imprime o seguinte Javascript gerado:
 Existem diversas oportunidades para explorar estas linguagens. Javascript deixou de ser apenas uma linguagem para browsers e está se tornando uma potência após o lançamento da engine v8 do google a qual é a base do Google Chrome.
 
 Também é possível compilar e visualizar no terminal.
+
 <pre>
 [jonatas] ~/projetos/coffee-script
 $ coffee moeda.coffee 
