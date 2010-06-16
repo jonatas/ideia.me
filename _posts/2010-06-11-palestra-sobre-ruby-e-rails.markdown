@@ -10,7 +10,7 @@ Hoje estarei palestrando as 21:15 na [ViziVali] para o curso de Tecnologia em Si
 
 Sinta-se livre para copiar e usar esta [apresentação][palestra] como quiser.
 
-![folder]
+[Veja o folder aqui.][folder]
 
 Se você está no sudoeste do Paraná e têm interesse no assunto não perca esta oportunidade!
 
