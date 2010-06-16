@@ -12,7 +12,10 @@
   <script type="text/javascript" src="{{page.dirbase}}/prettify/prettify.js"></script>
   <meta name="google-site-verification" content="pEhVWERbmTGzsNq-acKyhMtjmxG2o5LUb6POdY0wBns" />
   <script src="http://www.google.com/jsapi?key=ABQIAAAArYOF4yKN2_Dpo42LXgneURRClFnncuL58ZPRE4fBeXHL_xpARBSaUxRW5VmjLu9VUsUxs_Lbc7TVew" type="text/javascript"></script>
-<script type="text/javascript">
+
+  <script type="text/javascript" language="javascript" charset="utf-8">
+// <![CDATA[
+  
     function feedLoaded(result) {
       if (!result.error) {
         var container = document.getElementById("gbuzz");
@@ -55,7 +58,7 @@
      var colors = ['red','green','blue','yellow','white','orange'];
      var link = document.getElementById("feedme");
 
-     for ( var i = 0; i < 5; i++ ) (function(i){
+     for ( var i = 0; i < 6; i++ ) (function(i){
        setTimeout(function(){ 
          link.style.color = colors[i] 
        }, i * 1000)}
@@ -72,10 +75,12 @@
       }
     }, false);
 
-      google.load("feeds", "1");
-      google.load("search", "1");
-      google.setOnLoadCallback(OnLoad);
-    </script>
+    google.load("feeds", "1");
+    google.load("search", "1");
+    google.setOnLoadCallback(OnLoad);
+
+// ]]>
+</script>
   </head>
   <body>
     <div class="links" id="header">
