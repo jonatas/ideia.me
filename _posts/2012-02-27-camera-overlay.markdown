@@ -6,6 +6,7 @@
 
 # {{ page.title }} 
 
+![logo]
 
 ## A ideia
 
@@ -144,6 +145,7 @@ O futuro depende de [quantos aplicativos][android-market-link] iremos vender e q
 [vaso2]: /../../../images/camera-overlay-vaso-2.jpg
 [vaso3]: /../../../images/camera-overlay-vaso-dia-1.jpg
 [vaso4]: /../../../images/camera-overlay-vaso-dia-2.jpg
+[logo]: /../../../images/camera-overlay-logo64.png
 [semverde]: /../../../images/camera-overlay-sem-verde.png
 [combordastransparente]: /../../../images/camera-overlay-com-bordas-transparente.png
 [semvermelhonegativo]: /../../../images/camera-overlay-sem-vermelho-negativo.png
