@@ -69,10 +69,19 @@
       prettyPrint(); 
       payAttentionForFeedMe();
       var agent=navigator.userAgent.toLowerCase();
-      var is_iphone = (agent.indexOf('iphone')!=-1);
-      if (is_iphone) { 
+      if (agent.indexOf('iphone')!=-1 || agent.indexOf('android')!=-1) { 
        return window.location = "/mobile.html"; 
       }
+      var links = document.getElementsByTagName('a');
+
+      var regex = new RegExp('^'+window.location.protocol + '//' + window.location.hostname);
+
+      for (var i = 0, linksLength = links.length; i < linksLength; i++) {
+        if ( ! links[i].href.match(regex)) {
+           links[i].setAttribute('target', '_blank');
+       } 
+     }
+
     }, false);
 
     google.load("feeds", "1");
