@@ -140,7 +140,7 @@ O futuro depende de [quantos aplicativos][android-market-link] iremos vender e q
 [combordastransparente]: /../../../images/camera-overlay-com-bordas-transparente.png
 [semvermelhonegativo]: /../../../images/camera-overlay-sem-vermelho-negativo.png
 [vasodiaquadriculado]: /../../../images/camera-overlay-vaso-dia-quadriculado.png
-[android-market-link]: https://market.android.com/details?id=me.ideia.cameraoverlay&feature=search_result#?t=W251bGwsMSwxLDEsIm1lLmlkZWlhLmNhbWVyYW92ZXJsYXkiXQ..
+[android-market-link]: https://play.google.com/store/apps/details?id=me.ideia.cameraoverlay&feature=search_result#?t=W251bGwsMSwxLDEsIm1lLmlkZWlhLmNhbWVyYW92ZXJsYXkiXQ..
 [marlon]: mailto:marlonscalabrin@gmail.com
 [link-primeira-sequencia-boa]: http://www.facebook.com/media/set/?set=a.1691903151672.87739.1660567052&type=3&l=6db59445b9
 [erro-paralaxe]: http://pt.wikipedia.org/wiki/Erro_de_paralaxe
