@@ -15,35 +15,7 @@
 
   <script type="text/javascript" language="javascript" charset="utf-8">
 // <![CDATA[
-  
-    function feedLoaded(result) {
-      if (!result.error) {
-        var container = document.getElementById("gbuzz");
-        container.innerHTML = "";
-        for (var i = 0; i < result.feed.entries.length; i++) {
-          var entry = result.feed.entries[i];
-          var buzz = document.createElement("div");
-          var title = document.createElement("a");
-          title.innerHTML = entry.title.replace(/Buzz by Jônatas Paganini from/g, "");   
-          title.href = entry.link;
-          var content = document.createElement("div");
-
-          content.innerHTML = entry.content;
-          buzz.setAttribute("class", "buzz-item");
-          buzz.appendChild(title);
-          buzz.appendChild(content);
-          if (i < result.feed.entries.length-1){
-            buzz.appendChild(document.createElement("hr"));
-          }
-          container.appendChild(buzz);
-        }
-      }
-    }
-
     function OnLoad() {
-      var feed = new google.feeds.Feed("http://buzz.googleapis.com/feeds/jonatasdp/public/posted");
-      feed.load(feedLoaded);
-
       var webSearch = new google.search.WebSearch();
       var searchControl = new google.search.SearchControl();
 
@@ -86,6 +58,7 @@
 
     google.load("feeds", "1");
     google.load("search", "1");
+    google.load("jquery", "1.7.1");
     google.setOnLoadCallback(OnLoad);
 
 // ]]>
@@ -106,10 +79,12 @@
   </div>
    <div class="layout" >
     <div class="lateral">
-      <fieldset id="gbuzz" class="gbuzz"><legend>[Google Buzz]</legend>Conectando...</fieldset>
+     <div id="facebook">
+     	
+<iframe src="//www.facebook.com/plugins/activity.php?site=ideia.me&amp;app_id=138593009602387&amp;action=like&amp;width=300&amp;height=400&amp;header=true&amp;colorscheme=dark&amp;linktarget=_blank&amp;border_color=yellow&amp;font=trebuchet+ms&amp;recommendations=true&amp;appId=138593009602387" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:300px; height:400px;" allowTransparency="true"></iframe>
+     </div>
       <div id="google_search" class="google_search"> </div>
-<div id="google_adsense">
-	
+    <div id="google_adsense">
     <script type="text/javascript">
 google_ad_client = "ca-pub-1171230226237014";
 /* basico */

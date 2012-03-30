@@ -12,7 +12,7 @@ div.links {
  top:0;
  text-decoration:none;
 }
-div.google_search {
+#facebook, #google_adsense, div.google_search {
  float:right;
  left:0;
 }
@@ -51,6 +51,7 @@ a.link {
 .google_search{
  padding:10px;
 }
+
 .border {
  width:auto;
  height:auto;
