@@ -93,6 +93,12 @@ _posts/2010-02-23-regexp-maravilha.markdown:Nesta idéia, foi simples de convert
 
 Exibe o final de um arquivo e é muito interessante para inspecionar logs. Gosto do tail pois é possível observar mais de um arquivo no mesmo comando, por exemplo, as vezes estou testando algo e utilizo o thin como servidor. Logo o standard output ($stdout) está configurado para receber o arquivo thin.log e estou em observação de mais de um arquivo. 
 
+<pre>
+tail -n 200 -f log/development.log log/thin.log
+</pre>
+
+Sempre uso -n 200 para ver as últimas  200 linhas de ambos arquivos.
+
 ## alias
 
 Sempre esqueço todos os atalhos que tenho no terminal, então o alias é um ótimo comando para retornar todos os atalhos que você tem. Eu gostaria de saber como faz pra retornar o nome das funções que criamos, se alguém souber  :D
