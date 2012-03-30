@@ -1,7 +1,6 @@
 ---
   layout: ideiame
   title: Chave Dicotômica
-  categories: ['biologia','android','jruby']
 ---
 
 # {{ page.title }}
