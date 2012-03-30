@@ -1,13 +1,15 @@
 ---
   layout: ideiame
-  title: Recursos super-úteis para linux 
+  title: Recursos úteis para desenvolvimento na linha de comando
 ---
+
+# {{ page.title }}
 
 Existe uma gama de comandos muito forte para se tornar mais ágil no linux e também no msysgit e eu me sinto feliz em compartilhar aqui meus preferidos:
 
 ##  $!
 
-Sempre uso este atalho para fazer mil coisas. O comando $! retorna o último parâmetro da função utilizada. Por exemplo, eu crio e depois adiciono um determinado arquivo no meu projeto logo eu digito.
+Sempre uso este atalho para fazer mil coisas. O comando $! retorna o último parâmetro da última função utilizada. Por exemplo, eu crio e depois adiciono um determinado arquivo no meu projeto logo eu digito.
 
 <pre>
 touch /my/dir/file
@@ -23,9 +25,7 @@ git add !$
 
 ## locate
 
-Localiza todos arquivos apartir da pesquisa no HD. Se o arquivo foi criado recentemente talvez você tenha que usar o comando `sudo updatedb` para encontrar o arquivo.
-
-Isto é muito útil para encontar arquivos no hd.
+Localiza arquivos do HD rápidamente. Se o arquivo foi criado recentemente talvez você tenha que usar o comando `sudo updatedb` para encontrar o arquivo.
 
 <pre>
 jonatas@jonatax:~/ideia.me$ locate rubygems.rb
@@ -60,20 +60,9 @@ jonatas@jonatax:~/ideia.me$
 </pre>
 
 
-## Sub terminal: `` ou $()
-
-Quando preciso fazer uma combinação de comandos e preciso usar o resultado em outra expressão, logo é possível concatenar os resultados com $().
-
-<pre>
-locate mySearch | grep $(cat filter.txt)
-</pre>
-
 ## grep
 
-Filtra por uma expressão regular de diversas formas, eu geral uso `grep -r` e `| grep` para duas situações distintas.
-
-### filtrando apartir de outros resultados
-
+Filtra por uma [expressão regular][regexp] de diversas formas, eu geral uso [comando][grep] `grep -r` e `| grep` para duas situações distintas.
 O exemplo abaixo usa o mesmo exemplo do locate acima, mas e filtrando novamente apenas por "jruby".
 
 <pre>
@@ -90,6 +79,7 @@ jonatas@jonatax:~/ideia.me$ locate rubygems.rb | grep jruby
 /usr/lib/jruby/lib/ruby/site\_ruby/1.8/rubygems.rb
 </pre>
 
+## Buscando 
 Outra maneira que utilizo bastante é para procurar por texto dentro de arquivos. Por exemplo, digamos que estou procurando pela palavra "éia" que vem de ideia e assembleia e que agora perdeu o acento nas novas normas. Como quero corrigir meu site preciso pesquisar por esta expressão:
 
 <pre>
@@ -120,16 +110,29 @@ alias rvm-restart='rvm\_reload\_flag=1 source '\''/home/jonatas/.rvm/scripts/rvm
 alias trab='cd ~/photon/workspace/ActiveScripts/'
 </pre>
 
+## \` \` ou $()
+
+Já tinha escrito outro [post][regexp] com este comando mas é muito bacana e aqui segue a ideia. Quando preciso fazer uma combinação de comandos e preciso usar o resultado em outra expressão, logo é possível concatenar os resultados com $(). Por exemplo fiz um locate e agora quero buscar apenas dentro do meu diretório. Para pegar o diretório atual, é necessário utilizar o comando pwd, mas naturalmente utilizado após o grep ele se torna a palavra, logo um sub-terminal resolve o problema.
+
+<pre>
+locate myFile | grep $(pwd)
+</pre>
+ou
+<pre>
+locate myFile | grep `pwd`
+</pre>
+
 
 ## Conclusões
 
 A vida no terminal é muito mais que um canivete suiço e você só consegue ter agilidade quando se acostumar com as opções e optar por utilizá-las ao invés de pegar o mouse e partir para uma ferramenta mais visuais. 
 
-Escrevo este post inspirado em um freelancer que estamos desenvolvendo na [Leosoft], em que estamos codificando tudo diretamente em um Ubuntu Server sem interface gráfica lá da [Leosoft], e simplesmente, não senti falta de nada. Conseguimos realizar o desenvolvimento de todas as funcionalidades sem intervenção de uma interface gráfica e estamos apenas usando ssh e usando o VIM como editor.
+Escrevo este post inspirado em um freelancer que estamos desenvolvendo na [Leosoft], em que estamos codificando tudo diretamente em um Ubuntu Server sem interface gráfica lá da [Leosoft], e simplesmente, não senti falta de nada. Conseguimos realizar o desenvolvimento de todas as funcionalidades sem intervenção de uma interface gráfica e estamos apenas usando ssh e usando o [VIM][vim] como editor.
 
 
-[Leosoft]: www.leosoft.com.br
-[vim]: 
-[grep]:
-[regexp]:
+[Leosoft]: www.leosoft.com.br "veja os produtos da Leosoft"
+[vim]: /shell/regexp/unix/grep/rails/migrations/vim/2010/03/01/regexp-com-grep.html "post sobre o grep"
+[grep]: /ruby/regexp/2010/02/23/regexp-maravilha.html "eu gosto mesmo de expressões regulares"
+[regexp]: /ruby/sinatra/regexp/2010/02/16/inspecionando-regexp-com-sinatra.html "post super legal sobre expressões regulares"
+[regexp_maravilha]: /ruby/regexp/2010/02/23/regexp-maravilha.html "veja uma aplicabilidade bacana para expressões regulares"
 
