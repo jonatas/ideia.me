@@ -1,5 +1,5 @@
 ---
-  title: Cursando aulas na Stanford University
+  title: Cursando aulas da Stanford University
   layout: ideiame
 ---
 
