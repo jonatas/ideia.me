@@ -1,0 +1,53 @@
+---
+  layout: ideiame
+  title: Sansung Galaxy Note N7000
+---
+
+# {{ page.title }}
+
+
+Após algum tempo usando intensamente meu Galaxy S Note, decidi falar um pouco sobre os tais "phoblets". Meu maior objetivo em comprar este aparelho foi o hardware maravilhoso e a espessura realmente me impressionou. Este mega-celular tem mais processador que meu primeiro notebook e tem sido muito confortável realmente ter um hardware de primeira para trabalhar.
+
+## O hardware
+
+Após começar a [desenvolver] para android, logo me inconformei com os 10 segundos a 1 minuto que meu antigo Galaxy Ace demorava para instalar e rodar um app. Quando estou desenvolvendo agora, este tempo nunca passa de 2 segundos mas geralmente é instantâneo.
+
+## A caneta
+
+Muito estranho em primeira impressão, a caneta "S Pen" realmente é decepcionante em termos de precisão, principalmente se você tentar encontrar bugs nela. Sinceramente ela está longe de ter um toque preciso. Mas se você é como eu que não é um artista e precisa dar um toque preciso, ela é ótima. Eu realmente saco a caneta o tempo todo para utilizar, e é incrível como a tela fica mais limpa :D
+
+Conforme você esquece que está escrevendo em uma tela touch com uma caneta não verdadeira, parece que o toque se torna mais real. Na prática e utilização que se começa a utilizar mais a pressão sobre a tela e perceber quanto é possível explorar esta mega tela como um bloco de papel.
+
+Existe um botão que tem alguns "tricks"  mas realmente ele é muito difícil de ser acionado com perfeição pois ele escorrega desposiciona o browser ou aonde a caneta escorregar. Eu realmente utilizei este botão umas 10 vezes e foi para teste, mas no dia a dia acabou não sendo tão interessante. Ele possuí atalho para tirar um printscreen e outro abre o menu mas realmente não consegui me adaptar.	
+
+## Acesso a internet
+
+Eu realmente gosto de usar o Google Play, Facebook, Twitter e GMail via móvel e sempre que tenho uma folga aproveito para navegar, conhecer novos aplicativos e me reconectar ao mundo real. Recentemente instalei uma série de apps que tenho tentado conhecer, me adaptar, e utilizar.
+
+Tenho um monte de ideias para desenvolver no android então sempre procuro ser um bom usuário e tentar observar o melhor do mundo mobile. Existem pessoas realmente mudando as coisas, criando novos conceitos, tentando reinventar as coisas e criar novas formas de interação. 
+
+Uma coisa que ainda fico triste é pela quantia de pessoas sem criatividade que copiam aplicativos na cara dura e criam 'coisas' conceitualmente iguais e sem nenhuma originalidade ou motivo.
+
+## Vídeos, som e viva voz
+
+Tenho [assistido muitos vídeos] nesta tela de 5,3 polegadas. É muito legal pois a qualidade do som é o suficiente para ficar muito satisfeito. O fone de ouvido também tem uma qualidade muito boa mas uma pena que vive caindo da minha orelha então não tenho muita segurança em fazer as coisas com ele.
+
+O som do aparelho também é muito bom, e faço várias reuniões no viva-voz e tem sido muito útil e eficiente neste sentido também.
+
+## O tamanho 
+
+Como celular realmente não é muito legal colocar este aparelho na orelha, pois ele ocupa um bom pedaço do rosto. Eu geralmente, sempre que conveniente uso no viva voz, pois como trabalho em casa, não tem nada que me impeça de atender todas as ligações desta forma. 
+
+No bolso até que é tranquilo, as vezes dá um receio de forçar mas até agora estou transitando bastante com ele.
+
+Na mão ele parece bem seguro mas se tentar tirar fotos com uma mão dá uma impressão de que pode cair ou escapar dos dedos.
+
+Mas sinceramente esta diferença de 1 polegada mudou a minha concepção de tela, e ainda cabe no bolso :D
+
+## O android e as versões
+
+Ainda estou com a versão original (2.3.5) e não pretendo atualizar para versão 4 até que realmente não me sinta seguro disso. Nunca fiz atualizações deste sistema operacional e nem tenho ideia de como faz. Como estou desenvolvendo aplicações para telefones mais simples, o alvo é android versão 2+ então realmente não preciso fazer isso agora.
+
+## A durabilidade
+
+Assim como meu iPhone primeira geração, acredito que irei utilizar este aparelho pelo menos 3 anos. Talvez troque ele como o próprio iPhone por enjoar e não pelo aparelho quebrar ou parar de funcionar. Meus primeiros meses tive uma experiência muito boa usando o primeiro phoblet do mercado. Eu tinha certeza que ele seria extremamente útil para mim e está sendo. Como no mundo real, nem tudo é perfeito e ele dá umas travadinhas, tem alguns problemas mas em geral estou muito mais satisfeito do que instatisfeito com o produto.
