@@ -14,7 +14,7 @@ Durante vários dias fiquei meio que durmindo / sonhando que estava programando 
 
 No dia das crianças foi uma maravilha pois com o feriado eu consegui dormir bem e a tarde me concentrei em me ambientar e ler todas as regras e posts sobre o rais rumble. 
 
-A tarde me encontrei com a [Eliége Jachini] e começamos a pensar sobre como organizaríamos os passos e as imagens que ela criaria para montar as fases e fazer o setup do jogo. 
+A tarde me encontrei com a [Eliége Jachini][eliege_jachini] e começamos a pensar sobre como organizaríamos os passos e as imagens que ela criaria para montar as fases e fazer o setup do jogo. 
 
 
 Foi muito divertido e gratificante poder usar o Linode e os scripts mágicos para fazer o setup do ambiente. Foi realmente rápido. Executou, criou o banco, gerou as permissões e consegui dar o cap deploy na sequência com sucesso. 
@@ -73,7 +73,7 @@ Trabalhar com testes definitivamente exige que o framework e o setup seja ágil.
 
 ### Sprint.ly
 
-O rails rumble este ano teve uma série de patrocinadores legais e um eles era o sprint.ly. Decidi usar desde o início e foi bacana. Eu e a [Eliége] integramos todas nossas tarefas com o github e o [sprint.ly].
+O rails rumble este ano teve uma série de patrocinadores legais e um eles era o sprint.ly. Decidi usar desde o início e foi bacana. Eu e a [Eliége][eliege] integramos todas nossas tarefas com o github e o [sprint.ly].
 
 #### Integração entre o Sprint.ly e o GitHub não funcionou
 
