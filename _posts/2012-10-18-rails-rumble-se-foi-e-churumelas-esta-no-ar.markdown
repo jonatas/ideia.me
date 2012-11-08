@@ -73,7 +73,7 @@ Trabalhar com testes definitivamente exige que o framework e o setup seja ágil.
 
 ### Sprint.ly
 
-O rails rumble este ano teve uma série de patrocinadores legais e um eles era o sprint.ly. Decidi usar desde o início e foi bacana. Eu e a [Eliége][eliege] integramos todas nossas tarefas com o github e o [sprint.ly].
+O rails rumble este ano teve uma série de patrocinadores legais e um eles era o sprint.ly. Decidi usar desde o início e foi bacana. Eu e a [Eliége][eliege_jachini] integramos todas nossas tarefas com o github e o [sprint.ly].
 
 #### Integração entre o Sprint.ly e o GitHub não funcionou
 
