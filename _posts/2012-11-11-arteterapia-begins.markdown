@@ -58,4 +58,4 @@ Além do mais como podemos comparar as experiências? Como podemos organiza-las 
 
 Fica mais do que claro que não. O próprio objetivo da viagem não é esse. Apesar de estarmos em um curso de pós graduação, algumas vivências não podem ser qualificadas ou mesmo serem usadas como notas para as matérias, ficando difícil de "cientificizar" a viagem.
 
-Espero que o longo do curso seja proveitoso como estas primeiras aulas.
+Espero que ao longo do curso possa ser proveitoso como estas primeiras aulas.
