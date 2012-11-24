@@ -22,10 +22,15 @@ Me sinto muito feliz em não estar tão preso a este facebook e também tantas o
 No entanto sinto esses lugares virtuais muito semelhantes a um boteco (com muitas cadeiras como diria o facebook). Este local está completo pois seus frequentadores acíduos estão lá tornando tudo mais orgânico e você chega lá e alguém sempre tem assunto, no fim você fica lá por horas e torna-se parte daquilo.
 Muitas noites você aprende muitas coisas 'legais', 'culturais' e outras nem se lembra pela enchurrada de informações que seu cérebro levou (misturado com cerveja).
 
-O bloco acima serve tanto para bodega quanto para o facebook. Sinto mesmo é o software entrando na mente das pessoas e fazendo algo mais químico. Os usuários estão fazendo justo ao nome e a essência do concentrar-se no computador como ferramenta de trabalho está perdendo um pouco o sentido. Sinto o computador um playground para maioria das pessoas e ao mesmo tempo as pessoas não estão interessadas em perceber que isto está tornando sua vida menos efetiva.
+O bloco acima serve tanto para bodega quanto para o facebook.
+Parece que o software está entrando na mente das pessoas e fazendo algo mais químico. Os *usuários* estão fazendo justo ao -nome- e a essência do concentrar-se no computador como ferramenta de trabalho está perdendo um pouco o sentido. Sinto o computador um playground para maioria das pessoas e ao mesmo tempo as pessoas não estão interessadas em perceber que isto está tornando sua vida menos efetiva.
 
-Lembro que alguns anos atrás quando assisti a um episódio do peepcode chamado "productive programmers" isto realmente mecheu comigo, me colocando sempre em mente de realizar uma tarefa por vez e também tentar organizar as tarefas de forma que consiga concluí-las em um fragmento pequeno de tempo.
+Lembro que alguns anos atrás quando assisti a um episódio do peepcode chamado [productity for programmers] isto realmente mecheu comigo, me colocando sempre em mente de realizar uma tarefa por vez e também tentar organizar as tarefas de forma que consiga concluí-las em um fragmento pequeno de tempo.
 
 Tentamos usar o máximo de ferramentas possíveis para nos integrar e mantermos 'conectados' mas quase sempre elas não permitem nosso cérebro se manter conectado em uma linha de codificação.
 
 Gosto de escrever testes automatizados pois eles me forçam a ficar na linha de raciocínio de conclusão da funcionalidade e sinto que uma das melhores escolhas que fiz foi trabalhar com VIM + testes automatizados no terminal full screen. Não me lembro que existe browser no meu computador por 70% do tempo :D
+
+[vincius_teles]: http://viniciusteles.com.br/
+[vale_a_pena_ler_a_histria]: http://blog.viniciusteles.com.br/nomade-digital-efeitos-sobre-a-produtividade
+[productity_for_programmers]: https://peepcode.com/products/productivity-for-programmers
