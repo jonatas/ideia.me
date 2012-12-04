@@ -9,7 +9,7 @@ A hora chegou e estou de mudança em 3 semanas. Decidi mudar meu Home Office par
 
 Estou muito feliz que vou morar numa casa, pois quero aproveitar muitas horas melhorando a horta orgânica pré-existente lá. Também tem um parreiral de uvas e quem sabe até vou aprender dar manutenção nele no futuro. Eu e a Tânia vamos fazer uma compra de sementes legais para incrementar a nossa horta e principalmente os mini-legumes e pimentas picantes :D
 
-A casa também tem árvores para pra mim praticar slackline e também deitar é muito próximo de uma praça muito legal com muitas árvores de slackline!
+A casa também tem árvores para pra mim praticar slackline e também é muito próximo de uma praça muito legal com muitas árvores de slackline!
 
 Eu trabalho em casa então ocupo *mesmo* o local e isso faz com que tenhamos um reaproveitamento de espaço/coisas. A minha máquina de café espresso ainda que simples é muito útil e dou muito valor pra ela quando saio de casa e tenho que tomar cafés melados ou cháfés. O fato de que compro no rancho e compartilho a mesma geladeira e cozinha da casa em que moro enquanto trabalhando também são um diferencial incrível e sou gordinho feliz não é por acaso :D
 
