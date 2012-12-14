@@ -1,0 +1,92 @@
+---
+  layout: ideiame
+  title: Retrospectiva 2012
+---
+
+# {{ page.title }}
+
+## Coisas que eu fiz
+
+* Comprei uma bicicleta velha e ainda não consegui consertar
+* Começei a praticar slackline
+
+## Estudos
+
+Este ano após terminar a faculdade foi muito bom em termos de estudo. Sempre fui autodidata e este ano explorei os seguintes recursos:
+
+### Peepcode
+
+O [peepcode] é um site de screencasts de programação. Paguei 2 anos ilimitados e estou ganhando vários cupons no codeschool agora. Este ano conheci o backbone profundamente através desta ferramenta. E também estão com uma série [play by play] que está muito legal.
+
+### Railscasts
+
+O [railscasts] é produzido pelo Ryan Bates que também produziu vários [peepcode]s :D, e por apenas $9 dá pra assistir qualquer um dos 400 episódios de programação que ele já produziu.
+
+### Coursera
+
+O coursera é um sistema totalmente aberto e voltado para conteúdos gratuítos de alta qualidade. Este ano [fiz um curso][courserando] e agora estou fazendo [outro][think-again]. Vale mesmo a pena. Sem palavras para descrever a qualidade do conteúdo.
+
+### Codeschool
+
+O [codeschool] foi uma das minhas maiores inspirações este ano. Por causa desta ferramenta de ensino, até desenvolvi o [churumelas] este ano no [rails rumble]. Eu aprendi muitas coisas legais sobre programação neste sistema. Principalmente o curso [Runtime web with node]. Este foi o primeiro e realmente foi muito legal desenvolver cada desafio e aprender mais sobre o [node] e o [socket.io].
+
+## Livros
+
+Realmente os livros tem sido o método mais longo para se aprender algo novo. Mas são com muitas palavras que consegue se dizer muitas coisas e se conhecem muitos detalhes. Acredito que as ferramentas acima conseguem trazer muitas informações pontuais mas os livros tendem a ser mais completos quando bem escritos. Este ano li poucos livros e mesmo assim foi muito bom ver quantos livros novos surgem a cada dia. Para a maioria dos assuntos existe uma série de livros e tutoriais e outros conteúdos. Mas para contextos mais específicos só restam algumas míseras páginas e ou poucos capítulos.
+
+### ReWork
+
+Este livro vale a pena ler. Quem quiser acho que tem em português de graça na net.
+
+### Programming Java Concurrency
+
+Este foi o ano da programação assíncrona pra mim. Nunca programei e desprogramei tanta thread na minha vida. Este livro me ajudou a modelar melhor os sistemas com threads criando uns ciclos de vida mais interessantes para o processo e aumentando a velocidade dos sistemas em que trabalhei.
+
+### Making Musical Apps
+
+Agora estou trabalhando em um aplicativo musical e apesar de não estar usando o conteúdo deste livro, tem sido muito interessante conhecer o [puredata]. Esta linguagem pure data vale a pena ser estudada a fundo. Em 2013 quero explorar mais a fundo esta biblioteca.
+
+Este livro está me despertando muito a desenvolver algum sintetizador de preços do mercado financeiro para gerar música conforme o preço sobe e desce criando correlações e mesmo usando outros indicadores estatísticos em conjunto para criar ondas sonoras que possam trazer uma assimilação da situação do mercado através de som. Estive pesquisando mas parece que ninguém fez isso ainda :D
+
+## Projetos
+
+Projetos são delicíosos no começo. Como é bom planejar e iniciar um projeto. Mas a inconsequente frase vêm: "difícil de terminar". Este ano iniciei uma série de projetos pessoais mas poucos consegui chegar a publicar. Abaixo segue alguns dos que mais gostei de ter trabalhado nas minhas horas vagas:
+
+
+### [Camera Overlay][camera-overlay]
+
+Este projeto foi muito legal e está disponível [open source no github][cv-opensource] e disponível no google play para download. Eu e o Marlon iniciamos algumas tentativas para melhorarmos o perfeccionismo do reposicionamento mas não tivemos muito tempo para dar continuidade nas atividades. Apresentamos a ideia no sebrae mas não demos continuidade na criação de um produto voltado para uma finalidade específica. Pelo fato de ser genérico, precisamos buscar um campo apenas para termos uma versão com alguma utilidade. Pensemos em institutos de beleza ou acompanhamento dentário ou dermatológico. Para tratar o reposicionamento com mais cuidado.
+
+
+### [Chave Dicotômica][chave-dicotomica]
+
+Pra mim este projeto foi um dos mais divertidos deste ano. Gostei muito pois estou sempre em busca do desenvolvimento voltado para linguagem natural e neste caso consegui cumprir este papel.
+
+
+### [Rails Rumble - Churumelas][churumelas]
+
+Participei pela primeira vez da Rails Rumble e foi demais. Sonhei vários dias e fiquei muito ancioso até começar. Consegui implementar a ideia base durante o evento e até estou com meu [server][churumelas] rodando.
+
+Agora depois do evento, já consegui migrar para o jruby e usar a mesma engine que o pessoal da codeschool está usando.
+
+O ano que vem pretendo iniciar uma série de desafios voltado a plataforma Marketcetera. Tenho programado muito com Marketcetera e quero criar vários desafios explicativos sobre a plataforma e também que possam estar fomentando desenvolvimento de sistemas de trade aqui no Brasil e usando a plataforma Marketcetera. Eu uso ela a quase 2 anos e estou muito feliz por que tem muitas coisas boas neste mundo open source e basta explorar para descobrir.
+
+## Viva a jogabilidade da vida
+
+Enfim estou muito feliz por viver e não deixar este ano passar em branco na minha vida. Tive um filho e agora tenho família e muitas outras coisas aconteceram este ano. E ainda vou estar me mudando de cidade pela primeira vez na vida.
+
+Gosto muito de viver e acredito que pensar sobre a vida (na minha principalmente) é um investimento que traz muito prazer e é parte do autoconhecimento. Facilita muito a vida refletir sobre como estou dirigindo meus passos e para onde vou e com quem vou andar ou quais atividades vou fazer. Planejar ajuda muito a viver bem. Quero muito em cumprir minha parte neste jogo.
+
+# Boas fe(st|ri)as a todos!
+
+[peepcode]: http://peepcode.com
+[railscasts]: http://railscasts.com
+[courserando]: /2012/04/01/cursando-aulas-da-stanford.html
+[think-again]:https://class.coursera.org/thinkagain-2012-001/
+[play-by-play]: https://peepcode.com/screencasts/play-by-play
+[node]: http://nodejs.org
+[camera-overlay]: /2012/03/13/camera-overlay-open-source.html
+[chave-dicotomica]: /2012/03/08/chave-dicotomica-android.html
+[puredata]: http://puredata.info
+[churumelas]: http://churumelas.ideia.me
+[cv-opensource]: http://github.com/jonatas/CameraOverlay
