@@ -1,6 +1,6 @@
 ---
-  layout: ideiame
-  title: Concentração na era da distração
+ title: Concentração na era da distração
+ layout: ideiame
 ---
 
 # {{ page.title }}
