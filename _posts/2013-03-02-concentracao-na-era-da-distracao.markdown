@@ -1,6 +1,6 @@
 ---
- title: Concentração na era da distração
- layout: ideiame
+  title: Concentração na era da distração
+  layout: ideiame
 ---
 
 # {{ page.title }}
@@ -16,6 +16,7 @@ Com isso estou pensando em algumas dicas para aqueles que não conseguem largar 
 ## Comprometimento pessoal
 
 Acima de tudo, para conseguir se livrar do hábito de distrair-se você precisa querer mudar e este tem que estar ligado não apenas a vontade mas também a um comprometimento.
+
 Se você quiser entrar no AA, existe uma regra que diz que em primeiro lugar você precisa querer mudar. Esse processo só acontece se você realmente tem um comprometimento pessoal de mudança e melhoria.
 
 ## Auto conhecimento
@@ -49,7 +50,7 @@ Para se fazer grandes coisas é necessário estudar muito. Ser diferente. Pensar
 Vou fazer uma pequena lista de itens que atrapalham e fazem com que a distração se tornem ainda mais interessante:
 
 * Expectativa sobre alguém "curtir" ou "comentar" algo que você publicou, comentou ou compartilhou
-* Expectativa sobre a retribuição dos atos ou espera por demontrações de afeto em público (mesmoq ue virtual)
+* Expectativa sobre a retribuição dos atos ou espera por demontrações de afeto em público (mesmo que virtual)
 * Expectativa sobre a aleatoriedade do stream (ver alguma novidade!, algo diferente!)
 * Lembrou de falar com alguém sobre algo que poderia ser falado depois
 * Desculpas de 'estudo' para estar na rede social
@@ -58,3 +59,6 @@ Vou fazer uma pequena lista de itens que atrapalham e fazem com que a distraçã
 Para que haja o desenvolvimento real, é necessário haver planejamento de vida. Pensar no futuro. Decidir e sacrificar o próprio ego por algo. Sinto que vivo num mundo de admiradores, poucos construtores e muitos reclamões.
 
 Este texto foi escrito pois me sinto totalmente cúmplice com meu futuro e percebo que a maioria das pessoas "não está nem aí" pra isso. Exatamente como diz a música.
+
+[pair_programming]: /2012/05/23/disciplina-no-home-office.html
+[pomodoro]: /2010/05/18/iteracao-legal.html
