@@ -90,3 +90,4 @@ Gosto muito de viver e acredito que pensar sobre a vida (na minha principalmente
 [puredata]: http://puredata.info
 [churumelas]: http://churumelas.ideia.me
 [cv-opensource]: http://github.com/jonatas/CameraOverlay
+[socket.io]: http://socket.io
