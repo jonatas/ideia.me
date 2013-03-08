@@ -34,10 +34,10 @@
         <a href="#sobremim" class="button slideup">Sobre Mim</a>
       </div>
       <ul class='plastic'>
-        {% for post in site.posts limit: 15 %}
+        {% for post in site.posts %}
           <li class='arrow'>
               <a href="#{{ post_ }}{{ forloop.index }}">{{ post.title }}</a>
-              <!--small>{{ post.date | split "-" | reverse | join ":" }}</smalli-->
+              <!--small>{{ post.date }}</smalli-->
           </li>
        {% endfor %}
       </ul>
@@ -108,7 +108,7 @@
     </div>
     <!-- Add other pages below -->
 
-    {% for post in site.posts limit: 15 %}
+    {% for post in site.posts %}
     <div id="{{ post_ }}{{ forloop.index }}">
       <div class="toolbar">
         <a class="back">Voltar</a>
