@@ -19,7 +19,6 @@ Enfim me sinto grato por ter conhecido e obtido ajuda destes grandes programador
 
 Não deixe de [conferir][churumelas]! já tem mais 5 novos desafios! E alguns bloqueios nos antigos...
 
-[railsrumble]: http://railsrumble.com/
 [sandbox_do_jruby]: https://github.com/omghax/jruby-sandbox
 [codeschool]: http://codeschool.com
 [churumelas]: http://churumelas.ideia.me

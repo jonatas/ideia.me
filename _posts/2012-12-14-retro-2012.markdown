@@ -24,11 +24,11 @@ O [railscasts] é produzido pelo Ryan Bates que também produziu vários [peepco
 
 ### Coursera
 
-O coursera é um sistema totalmente aberto e voltado para conteúdos gratuítos de alta qualidade. Este ano [fiz um curso][courserando] e agora estou fazendo [outro][think-again]. Vale mesmo a pena. Sem palavras para descrever a qualidade do conteúdo.
+O coursera é um sistema totalmente aberto e voltado para conteúdos gratuítos de alta qualidade. Este ano [fiz um curso][courserando] e agora estou fazendo [outro][thinkagain]. Vale mesmo a pena. Sem palavras para descrever a qualidade do conteúdo.
 
 ### Codeschool
 
-O [codeschool] foi uma das minhas maiores inspirações este ano. Por causa desta ferramenta de ensino, até desenvolvi o [churumelas] este ano no [rails rumble]. Eu aprendi muitas coisas legais sobre programação neste sistema. Principalmente o curso [Runtime web with node]. Este foi o primeiro e realmente foi muito legal desenvolver cada desafio e aprender mais sobre o [node] e o [socket.io].
+O [codeschool] foi uma das minhas maiores inspirações este ano. Por causa desta ferramenta de ensino, até desenvolvi o [churumelas] este ano no [rails rumble]. Eu aprendi muitas coisas legais sobre programação neste sistema. Principalmente o curso [Runtime web with node][codeschool]. Este foi o primeiro e realmente foi muito legal desenvolver cada desafio e aprender mais sobre o [node] e o [socket.io].
 
 ## Livros
 
@@ -81,9 +81,11 @@ Gosto muito de viver e acredito que pensar sobre a vida (na minha principalmente
 
 [peepcode]: http://peepcode.com
 [railscasts]: http://railscasts.com
+[codeschool]: http://codeschool.com
+[rails_rumble]: http://railsrumble.com
 [courserando]: /2012/04/01/cursando-aulas-da-stanford.html
-[think-again]:https://class.coursera.org/thinkagain-2012-001/
-[play-by-play]: https://peepcode.com/screencasts/play-by-play
+[thinkagain]:https://class.coursera.org/thinkagain-2012-001/
+[play_by_play]: https://peepcode.com/screencasts/play-by-play
 [node]: http://nodejs.org
 [camera-overlay]: /2012/03/13/camera-overlay-open-source.html
 [chave-dicotomica]: /2012/03/08/chave-dicotomica-android.html

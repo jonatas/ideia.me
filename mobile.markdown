@@ -1,6 +1,6 @@
 ---
-layout: mobile 
-title: Ideia-me
+  layout: mobile
+  title: Ideia-me
 ---
 
 

@@ -10,7 +10,7 @@ Como postei [minhas ideias sobre rails rumble] a alguns dias atrás, agora realm
 
 ## A preparação
 
-Durante vários dias fiquei meio que durmindo / sonhando que estava programando no [rails rumble] as decisões que teria que tomar nas 48 horas do [evento][railsrumble]. Me senti extremamente tentado a fazer os [codes][churumelas-github] antes de iniciar o desafio mas me senti totalmente cumplice de que queria fazer o code por inteiro e ficaram apenas para os sonhos.
+Durante vários dias fiquei meio que durmindo / sonhando que estava programando no [rails rumble] as decisões que teria que tomar nas 48 horas do [evento][rails_rumble]. Me senti extremamente tentado a fazer os [codes][churumelas_github] antes de iniciar o desafio mas me senti totalmente cumplice de que queria fazer o code por inteiro e ficaram apenas para os sonhos.
 
 No dia das crianças foi uma maravilha pois com o feriado eu consegui dormir bem e a tarde me concentrei em me ambientar e ler todas as regras e posts sobre o rais rumble. 
 
@@ -103,11 +103,11 @@ Conforme vocês podem ver, eu, meu primo Lucao, o Marlon meu compa{rsa,dre} de p
 Se você cumpriu os desafios do [churumelas] e ainda der tempo [vote] no site e deixe seu comentário /(des)?construtivo/, estou aguardando por isso!
 
 
-[minhas-ideias-sobre-rails-rumble]: /2012/10/01/rails-rumble-ideias.html
-[churumelas-github]: https://github.com/railsrumble/r12-team-370/ 
+[minhas_ideias_sobre_rails_rumble]: /2012/10/01/rails-rumble-ideias.html
+[churumelas_github]: https://github.com/railsrumble/r12-team-370/ 
 [churumelas]: http://churumelas.r12.railsrumble.com/
 [vote]: http://railsrumble.com/entries/370-churumelas-small-challenges
-[railsrumble]: http://railsrumble.com/
+[rails_rumble]: http://railsrumble.com/
 [hack-1]: /../../../images/hack-1.png
 [eliege_jachini]: http://eliegejachini.blogspot.com/ 
 [elige]: http://twitter.com/eliegejachini

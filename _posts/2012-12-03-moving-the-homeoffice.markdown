@@ -5,7 +5,7 @@
 
 # {{ page.title }}
 
-A hora chegou e estou de mudança em 3 semanas. Decidi mudar meu Home Office para São Miguel do Oeste - SC aonde mora a família da minha namorada. Apesar de ser uma cidade menor que Francisco Beltrão - PR estou empolgado com a ideia. Acredito nessa pequena cidade. Estou fechado no meu ap[ae]rtamento de 60 metros quadrados a um bom tempo e agora meu filho já tem um ano e merecemos uma casa espaçosa.
+A hora chegou e estou de mudança em 3 semanas. Decidi mudar meu Home Office para São Miguel do Oeste - SC aonde mora a família da minha namorada. Apesar de ser uma cidade menor que Francisco Beltrão - PR estou empolgado com a ideia. Acredito nessa pequena cidade. Estou fechado no meu `ap[ae]rtamento` de 60 metros quadrados a um bom tempo e agora meu filho já tem um ano e merecemos uma casa espaçosa.
 
 Estou muito feliz que vou morar numa casa, pois quero aproveitar muitas horas melhorando a horta orgânica pré-existente lá. Também tem um parreiral de uvas e quem sabe até vou aprender dar manutenção nele no futuro. Eu e a Tânia vamos fazer uma compra de sementes legais para incrementar a nossa horta e principalmente os mini-legumes e pimentas picantes :D
 

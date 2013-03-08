@@ -8,7 +8,7 @@ Estou muito feliz em estar programando pra web novamente. Estive olhando uma por
 
 ## Backend
 
-Do velho pro novo, continuo usando [rspec], [rails] e agora meu [ruby] passou de 1.8.7 para vários com [rvm]: `rvm --default jruby`. Também percebi que a qualidade do open-source como um todo melhorou muito. Existe uma documentação muito mais clara e superior e todo mundo está fazendo como no mundo dos meus sonhos de programador.
+Do velho pro novo, continuo usando [rspec], [rails] e agora meu ruby passou de 1.8.7 para vários com [rvm]: `rvm --default jruby`. Também percebi que a qualidade do open-source como um todo melhorou muito. Existe uma documentação muito mais clara e superior e todo mundo está fazendo como no mundo dos meus sonhos de programador.
 
 O [bundler] com um simples `bundle install` mudou o rumo de nossas dores de cabeça com bibliotecas e outros problemas de -require- se tornou simplesmente `require "bundle/setup"`.
 

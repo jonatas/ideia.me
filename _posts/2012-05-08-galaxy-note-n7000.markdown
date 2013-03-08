@@ -30,7 +30,7 @@ Uma coisa que ainda fico triste é pela quantia de pessoas sem criatividade que 
 
 ## Vídeos, som e viva voz
 
-Tenho [assistido muitos vídeos] nesta tela de 5,3 polegadas. É muito legal pois a qualidade do som é o suficiente para ficar muito satisfeito. O fone de ouvido também tem uma qualidade muito boa mas uma pena que vive caindo da minha orelha então não tenho muita segurança em fazer as coisas com ele.
+Tenho assistido muitos vídeos nesta tela de 5,3 polegadas. É muito legal pois a qualidade do som é o suficiente para ficar muito satisfeito. O fone de ouvido também tem uma qualidade muito boa mas uma pena que vive caindo da minha orelha então não tenho muita segurança em fazer as coisas com ele.
 
 O som do aparelho também é muito bom, e faço várias reuniões no viva-voz e tem sido muito útil e eficiente neste sentido também.
 
@@ -51,3 +51,5 @@ Ainda estou com a versão original (2.3.5) e não pretendo atualizar para versã
 ## A durabilidade
 
 Assim como meu iPhone primeira geração, acredito que irei utilizar este aparelho pelo menos 3 anos. Talvez troque ele como o próprio iPhone por enjoar e não pelo aparelho quebrar ou parar de funcionar. Meus primeiros meses tive uma experiência muito boa usando o primeiro phoblet do mercado. Eu tinha certeza que ele seria extremamente útil para mim e está sendo. Como no mundo real, nem tudo é perfeito e ele dá umas travadinhas, tem alguns problemas mas em geral estou muito mais satisfeito do que instatisfeito com o produto.
+
+[desenvolver]: http://github.com/jonatas

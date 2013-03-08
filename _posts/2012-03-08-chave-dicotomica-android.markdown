@@ -230,15 +230,15 @@ $activity.start_ruboto_activity "$dicotomica" do
       go_to_list 
   end
   def go_to_list 
-    items = @node.children.collect(&:name)
-    setContentView(list_view :list =&gt; items, 
+    items = @node.children.collect(&amp;:name)
+    setContentView(list_view :list => items, 
           :on_item_long_click_listener =&gt; proc{|av, v, pos, item_id| 
                 @node = @node.children[pos]
                 help_about
           },
           :on_item_click_listener =&gt; proc{|av, v, pos, item_id| 
                 @node = @node.children[pos]
-                if @node &amp;&amp; @node.hasChildren?
+                if @node and @node.hasChildren?
                   go_to_list
                 else
 
