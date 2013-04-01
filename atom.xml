@@ -1,11 +1,9 @@
 ---
-layout: nil
+  layout: nil
 ---
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/css" href="/css/white.css"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-
- <title>Ideia.me Jônatas!</title>
+  <title>Ideia.me Jônatas!</title>
   <link href="http://ideia.me/atom.xml" rel="self"/>
   <link href="http://ideia.me/"/>
   <updated>{{ site.time | date_to_xmlschema }}</updated>
