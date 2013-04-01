@@ -15,3 +15,4 @@ A ideia é criar um formato contribuitívo deste assunto e depois também adicio
 [noar]: http://flu.ideia.me
 [gist]: http://gist.github.com/jonatas/5201725
 [eliege]: http://eliegejachini.blogspot.com.br
+[arteterapia]: /2012/11/11/arteterapia-begins.html
