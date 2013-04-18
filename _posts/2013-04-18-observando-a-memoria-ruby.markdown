@@ -116,8 +116,10 @@ Observando os resultados com jruby-1.7.3 temos os seguintes tamanhos de memória
  memory\_e.rb |   94691328
  memory\_f.rb |   94236672
 
-No meu caso o modelo __memory\_f__ parece ser o mais adequado em vista do consumo de memória e a implementação também é relativamente simples.
+No meu caso o modelo __memory\_f__ parece ser o mais adequado em vista do consumo de memória e a implementação também é relativamente simples. O interessante destes objetos em branco é por que de certa forma eles não podem ser clonados, mas para casos específicos podem ajudar muito, neste caso têm uma significância de aproximadamente 12%.
 
 Baixe e teste o [code] você mesmo!
+
+Assim que sobrar um tempo vou evoluir os modelos para comparar entre tipos de númericos. Hoje estamos usando o java.math.BigDecimal para cálculos precisos mas este é um dos mais lentos e grandes para trabalhar com números.
 
 [code]: https://github.com/jonatas/ruby-memory-comparison
