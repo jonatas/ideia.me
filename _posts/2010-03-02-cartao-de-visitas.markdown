@@ -1,11 +1,11 @@
 ---
-  layout: ideiame
+  layout: post
   title: Cartão de visitas
   categories: ['terminal']
   dirbase: /../../..
 ---
 
-# {{ page.title }}
+
 
 A versão original do meu cartão de visitas, foi feita assim:
 

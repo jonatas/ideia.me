@@ -1,11 +1,11 @@
 ---
-  layout: ideiame
+  layout: post
   title: Sinceridade não faz mal a ninguém
   categories: sinceridade xp freelancer pensamentos
   dirbase: /../../..
 ---
 
-# {{ page.title }}
+
 
 Estou aqui pensando sobre minha vida e sobre o quanto estou satisfeito com a minha forma de trabalhar. 
 

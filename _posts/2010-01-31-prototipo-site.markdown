@@ -1,5 +1,5 @@
 ---
-  layout: ideiame 
+  layout: post 
   title: Protótipo do site
   categories: ['jekyll', 'github', 'prettify']
   dirbase: /../../..

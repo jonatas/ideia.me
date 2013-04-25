@@ -1,9 +1,9 @@
 ---
- layout: ideiame
+ layout: post
  title: gerência do projetos
 ---
 
-# {{ page.title }}
+
 
 ## Projeto de prestação de serviço
 

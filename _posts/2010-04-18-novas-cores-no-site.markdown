@@ -1,5 +1,5 @@
 ---
-  layout: ideiame 
+  layout: post 
   title: Novas cores no site 
   dirbase: /../../..
 ---

@@ -1,10 +1,10 @@
 ---
-  layout: ideiame
+  layout: post
   title: Diário de um feriado
   categories: latex xp
 --- 
 
-# {{ page.title }}
+
 
 Hoje, como é feriado resolvi me dedicar a outras atividades além do desenvolvimento. Como fui convidado pelo professor Eder Gasparin para ministrar uma aula sobre [Extremme Programming][pdf], então resolvi [preparar o material][pdf]. 
 

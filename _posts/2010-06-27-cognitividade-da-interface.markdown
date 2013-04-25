@@ -1,11 +1,11 @@
 ---
-  layout: ideiame
+  layout: post
   title: Cognitividade da Interface
   categories: cognitividade ux interface
   dirbase: /../../..
 ---
 
-# {{ page.title }}
+
 
 Nos últimos dias tenho observado muito sobre a cognitividade da interface. Trata-se de fazer menos e criar mais resultados. Como os sistemas podem impedir o usuário de realizar a sua tarefa impondo um processo árduo e nada cognitivo. A busca dos 80/20 têm sido muito forte agora que sou freelancer e consultor. Tenho conversado muito com meus clientes sobre fazer o mínimo de esforço render o máximo de resultados.
 

@@ -1,10 +1,10 @@
 ---
- layout: ideiame
+ layout: post
  categories: rails ruby palestra vizivali
  title: Palestra na Vizivali
 ---
 
-# {{ page.title }}
+
 
 Hoje estarei palestrando as 21:15 na [ViziVali] para o curso de Tecnologia em Sistemas para Internet. O tema será [Rails][palestra], e a apresentação pode ser baixada [aqui][palestra].
 

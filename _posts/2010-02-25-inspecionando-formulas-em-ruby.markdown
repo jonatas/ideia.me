@@ -1,5 +1,5 @@
 ---
-  layout: ideiame
+  layout: post
   title: Inspecionando fórmulas em ruby
   categories: ['ruby', 'regexp', 'gerencia de projetos']
   dirbase: /../../..

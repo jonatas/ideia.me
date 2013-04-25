@@ -1,5 +1,5 @@
 ---
-  layout: ideiame
+  layout: post
   title: Javascript Ninja Legal
   categories: javascript ideiame
   dirbase: /../../..

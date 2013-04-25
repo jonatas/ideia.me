@@ -1,9 +1,9 @@
 ---
   title: Efetivamente....
-  layout: ideiame
+  layout: post
 ---
 
-# {{ page.title }}
+
 
 Ontem o [Vinícius Teles] escreveu um post com uma reflexão muito interessante sobre o "efetivamente". Este cara está viajando o mundo com sua mulher já faz um tempo e [vale a pena ler a história] para entender bem do que estamos falando em ser efetivos.
 

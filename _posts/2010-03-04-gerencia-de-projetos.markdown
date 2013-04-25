@@ -1,11 +1,11 @@
 ---
- layout: ideiame
+ layout: post
  title: Gerência de Projetos 
  categories: gerencia de projetos
  dirbase: /../../..
 ---
 
-# {{ page.title }}
+
 
 ## O que é uma tarefa?
 

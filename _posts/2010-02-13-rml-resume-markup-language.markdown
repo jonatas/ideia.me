@@ -1,5 +1,5 @@
 ---
- layout: ideiame
+ layout: post
  title: RML - Resume Markup Language
  categories: code for fun 
  dirbase: /../../..

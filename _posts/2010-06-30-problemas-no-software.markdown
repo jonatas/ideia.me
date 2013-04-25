@@ -1,9 +1,9 @@
 ---
   title: Problemas no software e hardware
-  layout: ideiame
+  layout: post
 ---
 
-# {{ page.title }}
+
 
 Esta semana consegui me machucar sozinho. Torci o meu pé e tive uma luxação nos nervos e estou preso dentro de meu home office. Não sou acostumado a sentir dor e como isso consegue corromper com várias outras coisas da rotina diária.
 

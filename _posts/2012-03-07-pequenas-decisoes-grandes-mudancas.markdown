@@ -1,9 +1,9 @@
 ---
   title: Pequenas mudanças e grandes decisões
-  layout: ideiame
+  layout: post
 ---
 
-# {{ page.title }} 
+ 
 
 Como desenvolvedor, me sinto sedento pela busca mais rápida de colocar os sistemas pra funcionar de forma automática, simples e fácil de se construir.
 

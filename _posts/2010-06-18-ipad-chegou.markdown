@@ -1,11 +1,11 @@
 ---
-  layout: ideiame
+  layout: post
   title: Meu iPad Chegou!
   categories: ipad ideias possibilidades
   dirbase: /../../..
 ---
 
-# {{ page.title }}
+
 
 Comprei meu iPad! que legal ele chegou! Já faz uns 15 dias e simplesmente depois disso o meu blog se desativou para dar total atenção a este novo brinquedo.
 

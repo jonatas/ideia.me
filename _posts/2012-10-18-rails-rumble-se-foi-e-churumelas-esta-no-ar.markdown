@@ -1,9 +1,9 @@
 ---
   title: Como foi a Rails Rumble 2012
-  layout: ideiame
+  layout: post
 ---
 
-# {{ page.title }}
+
 
 Como postei [minhas ideias sobre rails rumble] a alguns dias atrás, agora realmente podemos falar do [churumelas], pois assim foi batizado. Após pouco tempo pensando no nome lembrei desta expressão que pra mim sempre tem um sotaque nordestino de ser.
 

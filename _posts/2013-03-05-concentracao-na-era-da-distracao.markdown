@@ -1,9 +1,9 @@
 ---
   title: Concentração na era da distração
-  layout: ideiame
+  layout: post
 ---
 
-# {{ page.title }}
+
 
 Este mês iniciei como professor na UNOESC, aqui em São Miguel do Oeste, SC. Apenas com uma turma estou pasmo com o poder da internet sobre as aulas. Mesmo durante a pós graduação observei que a internet deixou de ser uma ferramenta, tem sido uma arma destruidora na mão dos alunos, tomados de libertinagem.
 

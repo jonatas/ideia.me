@@ -1,10 +1,10 @@
 ---
- layout: ideiame
+ layout: post
  title: SH Legal
  categories: shell sh terminal peepcode linux mac
 ---
 
-# {{ page.title }}
+
 
 Hoje estou muito satisfeito com minhas evoluções na linha de comando. Ontem resolvi por começar a assistir todos os vídeos do [peepcode], já que comprei uma conta premium vou poder assistir muito conteúdo de qualidade. 
 

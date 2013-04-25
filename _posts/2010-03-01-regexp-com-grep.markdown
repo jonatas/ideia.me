@@ -1,11 +1,11 @@
 ---
-  layout: ideiame
+  layout: post
   title: Expressões Regulares com grep
   categories: ['shell', 'regexp', 'unix', 'grep', 'rails', 'migrations', 'vim']
   dirbase: /../../..
 ---
 
-# {{ page.title }}
+
 
 Expressões regulares são úteis para muitas situações no coditiano linux. Hoje mesmo me deparei com a situação em que toda vez que altero uma migração, desejo refazer a migração do rails e para isso é necessário pegar a versão da migração. Encontrei um [exemplo no stackoverflow][stackoverflow] que caiu bem.
 

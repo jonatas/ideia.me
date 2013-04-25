@@ -1,9 +1,9 @@
 ---
   title: Ideias sobre o Rails Rumble
-  layout: ideiame
+  layout: post
 ---
 
-# {{ page.title }} 
+ 
 
 Estou muito empolgado com a ideia de participar do [Rails Rumble]. Desde que vi o tweet de que iria ter esta competição pensei: este ano não posso perder! E hoje estou aqui a organizar minhas ideias para o projeto. 
 

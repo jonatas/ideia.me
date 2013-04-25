@@ -1,5 +1,5 @@
 ---
- layout: ideiame
+ layout: post
  title: Estórias Bonitas vs Testes Unitários
  categories: ['coding for fun']
  dirbase: /../../../../../..

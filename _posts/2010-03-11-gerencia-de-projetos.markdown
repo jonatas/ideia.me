@@ -1,10 +1,10 @@
 ---
- layout: ideiame
+ layout: post
  title: gtR - um projeto da nissan
 ---
 
 
-# {{ page.title }} 
+ 
 
 
 

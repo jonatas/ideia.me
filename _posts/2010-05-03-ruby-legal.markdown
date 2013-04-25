@@ -1,9 +1,9 @@
 ---
- layout: ideiame
+ layout: post
  title: Ruby Legal
 ---
 
-# {{ page.title }}
+
 
 Hoje fiquei vendo um exercício de probabilidade na aula de estatística, o exercício dizia o seguinte:
 

@@ -1,9 +1,9 @@
 ---
- layout: ideiame
+ layout: post
  title: Integrando API do Google Buzz no Ideia.me
 ---
 
-# {{ page.title }}
+
 
 Após muito pensar em qual melhor forma de veicular minhas informações públicas no site, decidi por integrar com a [API do Google Buzz][gbuzz-api]. Me [divertindo no google playground][load-feed] decidi integrar meus últimos posts do google buzz através dos [feeds do gbuzz][meu-feed]. Usando o Google Playground para testar logo produzi um exemplo a partir do [Load Feed Oficial][load-feed]:
 

@@ -1,9 +1,9 @@
 ---
-  layout: ideiame
+  layout: post
   title: Pixel no ar!
 ---
 
-# {{ page.title }}
+
 
 Essa semana foi [incrivelmente positiva][pixel] em minha vida. Terça feira estive analisando o [meteor] e foi amor a primeira vista.
 

@@ -1,5 +1,5 @@
 ---
-  layout: ideiame
+  layout: post
   title: De volta as aulas
   categories: ['unipar', 'artigo', 'estatistica', 'ruby']
   dirbase: /../../..

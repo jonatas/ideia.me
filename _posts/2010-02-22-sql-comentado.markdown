@@ -1,5 +1,5 @@
 ---
- layout: ideiame
+ layout: post
  title: A linguagem SQL
  categories: postgresql
  dirbase: /../../..

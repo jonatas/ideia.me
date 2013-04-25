@@ -1,10 +1,10 @@
 ---
- layout: ideiame
+ layout: post
  title:  As linguagens e o mundo
  categories: linguagem
 ---
 
-# {{ page.title }}
+
 
 Hoje estava navegando entre sites e pesquisando coisas legais e aprendi muita coisa. Não apenas lendo tutoriais mas também lendo código aberto. Javascript das páginas, baixando projetos legais no github. Tudo isso é muito bacana e incrívelmente existe apenas uma casquinha de material e códigos em português.
 

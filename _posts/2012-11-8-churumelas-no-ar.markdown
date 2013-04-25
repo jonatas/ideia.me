@@ -1,9 +1,9 @@
 ---
   title: Não me venha com churumelas!
-  layout: ideiame
+  layout: post
 ---
 
-# {{ page.title }}
+
 
 Após quase um mês do [Rails Rumble] consegui migrar e fazer [algumas modificações][meu_fork] da [versão original] do Churumelas. [FINALMENTE está no AR!][churumelas]!
 

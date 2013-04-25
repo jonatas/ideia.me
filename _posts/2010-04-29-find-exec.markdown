@@ -1,10 +1,10 @@
 ---
   title: Usufruindo do comando find do Unix 
-  layout: ideiame
+  layout: post
   categories: linux find terminal
 ---
 
-# {{ page.title }}
+
 
 Geralmente quando busco arquivos no terminal, desejo fazer uma determinada ação com estes arquivos. Para buscar arquivos, geralmente uso locate, find ou Spotligth, para realizar uma busca por exemplo, na pasta app por todos arquivos que iniciem com . e tenham a extensão swp.
 

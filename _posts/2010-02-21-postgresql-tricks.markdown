@@ -1,5 +1,5 @@
 ---
- layout: ideiame
+ layout: post
  title: PostgreSql Tricks
  categories: postgresql
  dirbase: /../../..

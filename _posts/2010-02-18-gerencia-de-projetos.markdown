@@ -1,6 +1,6 @@
 ---
   title: Gerência de Projetos
-  layout: ideiame
+  layout: post
   categories: ['unipar', 'gerencia de projetos']
   dirbase: /../../..
 ---

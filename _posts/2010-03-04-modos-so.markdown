@@ -1,9 +1,9 @@
 ---
- layout: ideiame
+ layout: post
  title: Aula de Sistemas Operacionais
 ---
 
-# {{ page.title }}
+
 
 O sistema operacional é dividido em dois modos básicos, sendo estes o modo Kernel e o modo Usuário. Esta divisão permite que os aplicativos sejam executados com segurança.
 

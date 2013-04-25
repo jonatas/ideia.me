@@ -1,9 +1,9 @@
 ---
- layout: ideiame
+ layout: post
  title: Jônatas Davi Paganini
 ---
 
-# {{ page.title }}
+
 
 Iniciei na programação para web em 2006. Passei os primeiros dois anos trabalhando somente com Java e seus diversos frameworks e ferramentas, tais como jUnit, ANT, TomCat e jBoss, Hibernate, Struts, entre outros. 
 

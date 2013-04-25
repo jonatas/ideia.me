@@ -1,9 +1,9 @@
 ---
-  layout: ideiame
+  layout: post
   title: Câmera Overlay Open Source
 ---
 
-# {{ page.title }}
+
 
 Hoje, eu e o Marlon nos sentimos aptos para abrir a [primeira versão][github] do [Camera Overlay][link-google-play] com o objetivo de seguirmos nossa filosofia [openess] de se ver a vida. Então agora, após algumas boas refatorações no [código][github] liberamos o acesso a versão em andamento.
 

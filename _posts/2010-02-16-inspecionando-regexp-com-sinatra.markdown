@@ -1,5 +1,5 @@
 ---
-  layout: ideiame 
+  layout: post 
   title: Inspecionando expressões regulares com Sinatra! 
   dirbase: /../../..
   categories: ['ruby', 'sinatra', 'regexp']

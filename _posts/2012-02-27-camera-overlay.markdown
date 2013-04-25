@@ -1,10 +1,10 @@
 ---
-  layout: ideiame
+  layout: post
   title: Camera Overlay
   categories: ['android', 'camera-overlay', 'camera', 'app', 'image-filters']
 ---
 
-# {{ page.title }} 
+ 
 
 ![logo]
 

@@ -1,9 +1,9 @@
 ---
- layout: ideiame
+ layout: post
  title: Helplate = Help + Template
 ---
 
-# {{ page.title }} 
+ 
 
 Helplate é uma ideia que nasceu a dois anos atrás, e inicialmente se chamava **helpme**.  Escrevi um arquivo falando da ideia, que chamava-se helpme, pois é inspirada em situar a pessoa na sua atividade e contexto. Eu estava trabalhando e pensando sobre quantos aspectos, muitas vezes são **esquecidos** de avaliar ou de se especificar por que simplesmente foram esquecidos.
 
@@ -60,7 +60,7 @@ Então a template é preenchida conforme as respostas dadas por mim exibindo o s
 
 <pre class="prettyprint">
 ---
-  layout: ideiame
+  layout: post
   title: Helplate welcome aboard!
   categories: ['helplate', 'template', 'ruby', 'liquid']
   dirbase: /../../..
@@ -80,7 +80,7 @@ As perguntas foram feitas e a estrutura foi definida através da seguinte templa
 <pre class="prettyprint" markdown="0">
 jonatas@xonatax-mac: helplate $  cat newpost<br>
 ---<br>
-  layout: ideiame<br>
+  layout: post<br>
   title:  \{\{ title }}<br>
   categories: \['\{\{ categories \| join glue: ', ' }}'\]<br>
   dirbase: /../../..<br>

@@ -1,10 +1,10 @@
 ---
-  layout: ideiame
+  layout: post
   title: A importância dos baby steps
   categories: ['xp', 'bdd', 'tdd']
 ---
 
-# {{ page.title }} 
+ 
 
 Estou trabalhando em um projeto em que a interface foi construída com Flex. Estou me adaptando novamente a IDE e não consegui encontrar nenhuma ferramenta de integração entre o VIM e o Eclipse que funcionasse no mac. 
 

@@ -4,7 +4,7 @@
  dirbase: /../../..
 ---
 
-# {{ page.title }}
+
 
 A nova roda mágica do google é uma forma bacana de visualizar os conteúdos e pesquisas relacionadas. Eu achei muito interessante pois permite você viajar nas tags e assuntos relacionados. Enquanto pesquisando foi bem útil e agradável! 
 

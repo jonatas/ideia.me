@@ -1,9 +1,9 @@
 ---
- layout: ideiame
+ layout: post
  title: gtR - gerência do projeto do gtR da nissan
 ---
 
-# {{ page.title }} 
+ 
 
 Um projeto do porte [deste carro][post-anterior], apesar de longo, têm um **início e um fim**. Com centenas de pessoas envolvidas, processos e tarefas foram executados ao longo de 5 anos, com sincronismo total. 
 

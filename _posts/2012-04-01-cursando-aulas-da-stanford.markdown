@@ -1,9 +1,9 @@
 ---
   title: Cursando aulas da Stanford University
-  layout: ideiame
+  layout: post
 ---
 
-# {{ page.title }}
+
 
 Um belo título para o dia da mentira mas não é. A distância, é possível estudar [muitos][coursera] cursos direto da [Stanford University][stanford].
 

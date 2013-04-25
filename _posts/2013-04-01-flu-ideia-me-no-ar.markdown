@@ -1,9 +1,9 @@
 ---
   title: Flu.ideia.me no ar!
-  layout: ideiame
+  layout: post
 ---
 
-# {{ page.title }}
+
 
 [Está online][noar], finalmente!
 

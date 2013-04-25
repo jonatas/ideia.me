@@ -1,6 +1,6 @@
 ---
   title: Arteterapia o início
-  layout: ideiame
+  layout: post
   tags: arteterapia
 ---
 

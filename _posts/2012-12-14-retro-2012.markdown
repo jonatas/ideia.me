@@ -1,9 +1,9 @@
 ---
-  layout: ideiame
+  layout: post
   title: Retrospectiva 2012
 ---
 
-# {{ page.title }}
+
 
 ## Coisas que eu fiz
 

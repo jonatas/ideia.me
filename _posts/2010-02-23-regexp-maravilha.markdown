@@ -1,11 +1,11 @@
 ---
-  layout: ideiame
+  layout: post
   title: Expressões Regulares + Ruby = \*maravilhas 
   categories: ['ruby', 'regexp']
   dirbase: /../../..
 ---
 
-# {{ page.title }}
+
 
 Sempre falo, que depois que conheci as expressões regulares, minha vida mudou! Semana passada, tive que converter um backup de um banco de dados do Oracle para o PostgreSql, então, reparei algumas diferenças na sintaxe.
 

@@ -1,9 +1,9 @@
 ---
- layout: ideiame
+ layout: post
  title: Disciplina no home office
 ---
 
-# {{ page.title }} 
+ 
 
 Já estou trabalhando em casa a mais de 3 anos e a satisfação por conseguir manter o trabalho em casa é muito grande. Hoje meu objetivo é comentar sobre a disciplina, fator chave  para conquistar habilidade, confiança e profissionalismo no trabalho.
 

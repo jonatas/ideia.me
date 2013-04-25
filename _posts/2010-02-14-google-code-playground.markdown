@@ -1,5 +1,5 @@
 ---
-  layout: ideiame 
+  layout: post 
   title: Google code playground 
   dirbase: /../../..
 ---

@@ -1,5 +1,5 @@
 ---
-  layout: ideiame
+  layout: post
   title: WebOrb + ActiveRecord
   categories: weborb flex rails
   dirbase: /../../..

@@ -1,9 +1,9 @@
 ---
   title: Observando a memória no ruby
-  layout: ideiame
+  layout: post
 ---
 
-# {{ page.title }}
+
 
 Hoje fiz vários testes de gerência de memória e achei interessante como cada ganho de byte pode ser interessante conforme a quantidade de dados que se tem para manusear. Apesar da memória ser barata, tratando-se de performance e escalabilidade o barato sai caro muitas vezes.
 

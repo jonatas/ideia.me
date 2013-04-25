@@ -1,5 +1,5 @@
 ---
-  layout: ideiame 
+  layout: post 
   title: Bom dia a dia do desenvolvimento 
   categories: ['decisoes', 'oraclexe', 'postgresql', 'java', 'ferramentas', 'linux', 'mac'] 
   dirbase: /../../..
