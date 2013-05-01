@@ -1,9 +1,8 @@
 ---
  layout: post
- title: gerência do projetos
+ title: Gerência do Projetos
+ categories: [unipar]
 ---
-
-
 
 ## Projeto de prestação de serviço
 

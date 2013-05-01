@@ -1,6 +1,7 @@
 ---
   title: Efetivamente....
   layout: post
+  categories: [pense]
 ---
 
 

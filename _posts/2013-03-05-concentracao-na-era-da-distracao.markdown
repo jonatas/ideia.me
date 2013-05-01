@@ -1,6 +1,7 @@
 ---
   title: Concentração na era da distração
   layout: post
+  categories: [pense]
 ---
 
 

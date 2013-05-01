@@ -1,6 +1,7 @@
 ---
   layout: post
   title: Chave Dicotômica
+  categories: [ruby, android, dsl]
 ---
 
 

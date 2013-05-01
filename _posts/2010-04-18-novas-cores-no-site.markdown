@@ -1,7 +1,7 @@
 ---
-  layout: post 
-  title: Novas cores no site 
-  dirbase: /../../..
+  layout: post
+  title: Novas cores no site
+  categories: [css]
 ---
 
 # Renovação das cores do site
@@ -26,8 +26,8 @@ Após muito tempo sem publicar nada, resolvi de mudar algumas cores no site para
 
 ![depois-luz]
 
-[antes]: /../../../images/antes.jpg
-[depois]: /../../../images/depois.jpg
+[antes]: /images/antes.jpg
+[depois]: /images/depois.jpg
 
-[antes-luz]: /../../../images/antes-luz-acesa.jpg
-[depois-luz]: /../../../images/depois-luz-acesa.jpg
+[antes-luz]: /images/antes-luz-acesa.jpg
+[depois-luz]: /images/depois-luz-acesa.jpg

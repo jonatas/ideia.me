@@ -1,7 +1,7 @@
 ---
   layout: post
   title: Camera Overlay
-  categories: ['android', 'camera-overlay', 'camera', 'app', 'image-filters']
+  categories: [android, camera overlay, open-source]
 ---
 
  
@@ -125,6 +125,10 @@ Além dos efeitos acima mostrados, também criamos opções com alto-contraste, 
 O futuro depende de [quantos aplicativos][android-market-link] iremos vender e qual o feedback recebido dos usuários. Tenho sido um usuário ativo do meu aplicativo e preciso descobrir que não sou o único que irei usá-lo :)
 
 
+    O projeto camera overlay é [opensource][github] e está no [github].
+
+
+[github]: https://github.com/jonatas/CameraOverlay
 [link-album-facebook]: http://www.facebook.com/media/set/?set=a.1691903151672.87739.1660567052&type=3&l=6db59445b9
 [foto-base]: /../../../images/camera-overlay-foto-base.jpg
 [primeira-sobreposicao]: /../../../images/camera-overlay-primeira-sobreposicao.png

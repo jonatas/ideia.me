@@ -1,6 +1,7 @@
 ---
   title: Flu.ideia.me no ar!
   layout: post
+  categories: [pense, artigo, opensource, arteterapia]
 ---
 
 

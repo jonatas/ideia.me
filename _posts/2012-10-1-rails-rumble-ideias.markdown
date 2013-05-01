@@ -1,6 +1,7 @@
 ---
   title: Ideias sobre o Rails Rumble
   layout: post
+  categories: [pense, rails, ruby, railsrumble, churumelas]
 ---
 
  

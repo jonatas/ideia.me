@@ -1,11 +1,8 @@
 ---
   layout: post
   title: WebOrb + ActiveRecord
-  categories: weborb flex rails
-  dirbase: /../../..
+  categories: [weborb, flex, rails]
 ---
-
-# weborb + active record
 
 WebOrb tem se demonstrado muito bom no seu trabalho, estou gostando de desenvolver com ele, após descobrir que qualquer classe do ruby, não apenas as classes Service podem ser usadas como objetos remotos, fiquei muito feliz e logo tive boas experiências.
 

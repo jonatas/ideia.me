@@ -1,6 +1,7 @@
 ---
  layout: post
  title: Disciplina no home office
+ categories: [pense, homeoffice, produtividade]
 ---
 
  

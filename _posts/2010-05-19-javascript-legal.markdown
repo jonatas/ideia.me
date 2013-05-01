@@ -1,8 +1,7 @@
 ---
   layout: post
   title: Javascript Ninja Legal
-  categories: javascript ideiame
-  dirbase: /../../..
+  categories: [javascript,ideiame]
 ---
 
 # Javascript Ninja Legal

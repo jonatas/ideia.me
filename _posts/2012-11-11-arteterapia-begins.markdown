@@ -1,7 +1,7 @@
 ---
   title: Arteterapia o início
   layout: post
-  tags: arteterapia
+  categories: [pense, arteterapia]
 ---
 
 # Rá! meu primeiro fim de semana na pós graduação

@@ -1,6 +1,7 @@
 ---
   layout: post
   title: Câmera Overlay Open Source
+  categories: [opensource, java, android, camera overlay]
 ---
 
 

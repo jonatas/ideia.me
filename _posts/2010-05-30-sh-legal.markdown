@@ -1,7 +1,7 @@
 ---
  layout: post
  title: SH Legal
- categories: shell sh terminal peepcode linux mac
+ categories: [shell, sh, terminal, peepcode, linux, mac]
 ---
 
 

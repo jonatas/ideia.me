@@ -1,9 +1,8 @@
 ---
  layout: post
  title: Inglês Legal
+ categories: [pense, linguagem]
 ---
-
-
 
 Hoje, após mais de 15 meses retomei às aulas de inglês. Apesar de estar pensando bastante em inglês sei que não estou praticando suficiente para falar. Como minha rotina não tem imposto nada do gênero não tenho falado muito. Apesar de estar ligado em muitos screencasts e materiais em inglês percebo que a iteração é completamente diferente. Quando parte do princípio de falar e pensar em uma outra língua muda totalmente a forma de pensar.
 

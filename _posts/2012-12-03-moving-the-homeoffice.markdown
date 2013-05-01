@@ -1,6 +1,7 @@
 ---
   layout: post
   title: Home office de mudança
+  categories: [homeoffice, pense]
 ---
 
 

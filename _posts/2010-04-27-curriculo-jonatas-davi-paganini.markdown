@@ -1,20 +1,22 @@
 ---
  layout: post
  title: Jônatas Davi Paganini
+ categories: [opensource ruby dsl curriculo]
 ---
 
-
-
-Iniciei na programação para web em 2006. Passei os primeiros dois anos trabalhando somente com Java e seus diversos frameworks e ferramentas, tais como jUnit, ANT, TomCat e jBoss, Hibernate, Struts, entre outros. 
+Iniciei na programação para web em 2006. Passei os primeiros dois anos trabalhando somente com Java e seus diversos frameworks e ferramentas, tais como jUnit, ANT, TomCat e jBoss, Hibernate, Struts, entre outros.
 
 Sempre atento às novidades do mundo ágil, começei a estudar Ruby e ferramentas que pudessem me ajudar a tornar o desenvolvimento de software mais simples e objetivo. Empolgado nos estudos, aprendi sobre estratégias de orientação a objetos, padrões de arquitetura, desenvolvimento orientado a testes e comportamento, modelagem ágil, metaprogramação e outras práticas ágeis.
 
- Trabalho com Ruby profissionalmente há 3 anos e por estes trilhos desenvolvi vários estudos sobre a linguagem de programação, frameworks, Inteligência Artificial e ferramentas ágeis. Dentre os trabalhos desenvolvidos posso citar:
+ Trabalho com Ruby profissionalmente desde 2007 e por estes trilhos desenvolvi vários estudos sobre a linguagem de programação, frameworks, Inteligência Artificial e ferramentas ágeis. Dentre os trabalhos desenvolvidos posso citar:
 
 * [Appointme][appointme]: Um agendador de compromissos em linguagem natural (2007)
 * [Troper][troper]: Plugin para sistemas Rails que fornece um gerador de relatórios (projeto de TCC) (2009)
 * [Boo][boo]: Um projeto em que o conteúdo da bíblia está disponível em uma biblioteca usando objetos prevalentes na memória.
 * Ceps on Rails: Webservice com todos os endereços do Brasil prevalentes na memória. (2008)
+* [CameraOverlay][cameraoverlay]: Um aplicativo android para sobreposição de imagens
+* [Churumelas][churumelas]: Um jogo de desafios de programação
+* [Pixel][pixel]: Um paint contribuitivo online
 
 Atualmente, estou concluindo o Bacharelado em **Sistemas de Informação** e tenho dois artigos, em fase de publicação, na área de programação voltada para os domínios específicos da linguagem. Os artigos têm os seguintes títulos:
 
@@ -38,6 +40,8 @@ empresa     | de - até
 ------------|-----------------
 TJ Sistemas | 02/2004 - 04/2006
 Leosoft     | 05/2006 - 01/2010
+Executive   | 02/2010 - 02/2011
+Freelancer e Inventto | 02/2011 até hoje :D
 
 Atualmente estou trabalhando como Consultor e FreeLancer e mantendo o site <http://ideia.me>.
 
@@ -50,8 +54,8 @@ Segue a lista das linguagens que venho usando:
  qual       | usando desde
 ----------- | ------------
  Ruby       | 2007
- JavaScript | 2006 
- Java       | 2006 até 2007
+ JavaScript | 2006
+ Java       | 2006
  SQL        | 2004
  HTML       | 2006
  DHTML      | 2007
@@ -59,7 +63,7 @@ Segue a lista das linguagens que venho usando:
  Shell      | 2004
  PlPgSql    | 2005
  LaTex      | 2008
- FlagShip   | 2004 até 2006 
+ FlagShip   | 2004 até 2006
 
 ### Métodologias de desenvolvimento
 
@@ -97,7 +101,7 @@ O ferramental para mim é algo extremamente necessário. Através do bom uso e h
  Cucumber            |     2008     | Ferramenta para criar cenários e teste do comportamento do software
  Integration plugin  |     2007     | Plugin para integração contínua com a equipe de desenvolvimento
 
-### Bibliotecas e Frameworks 
+### Bibliotecas e Frameworks
 
 As bibliotecas de programação, de modo geral, fazem todo trabalho repetitivo e abstraem problemas comuns no desenvolvimento. Também funcionam como sistemas pré-programados que permitem ser configurados e executados com menor esforço. Cada biblioteca serve para facilitar uma ou mais tarefas com objetivo específico, ou podem estar empacotados em MetaFrameworks como o Rails. As principais bibliotecas/frameworks que utilizo são:
 
@@ -115,3 +119,6 @@ Também trabalhei com muitas bibliotecas e sistemas auxiliares como Selenium, iR
 [artigo_estatistica]: http://github.com/jonatas/artigo_estatistica
 [artigo_elep]: http://github.com/jonatas/artigo_elep
 [boo]: http://boo.rubyforge.org
+[cameraoverlay]: http://github.com/jonatas/CameraOverlay
+[churumelas]: http://github.com/jonatas/churumelas
+[pixel]: http://github.com/jonatas/pixel

@@ -1,6 +1,7 @@
 ---
   title: Observando a memória no ruby
   layout: post
+  categories: [ruby, performance]
 ---
 
 

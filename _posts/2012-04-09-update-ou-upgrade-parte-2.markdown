@@ -1,6 +1,7 @@
 ---
   layout: post
   title: Update ou upgrade parte 2
+  categories: [pense, decisoes]
 ---
 
 

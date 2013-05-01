@@ -1,6 +1,7 @@
 ---
   layout: post
   title: Pixel no ar!
+  categories: [javascript, meteor js, pixel, opensource, heroku]
 ---
 
 

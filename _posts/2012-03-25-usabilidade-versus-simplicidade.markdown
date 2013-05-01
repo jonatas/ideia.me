@@ -1,9 +1,8 @@
 ---
-  layout: post
   title: Usabilidade versus simplicidade
+  layout: post
+  categories: [pense, usabilidade, simplicidade]
 ---
-
-
 
 Desde dezembro de 2011 troquei meu iPhone primeira geração (comprei em dezembro de 2007) por um celular com Android. Peguei um Galaxy Ace que é um modelo com hardware bem mais fraco do que meu iPhone antigo, e mesmo assim gostei muito do famoso robozinho.
 

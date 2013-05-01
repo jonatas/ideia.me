@@ -1,8 +1,7 @@
 ---
  layout: post
  title: Estórias Bonitas vs Testes Unitários
- categories: ['coding for fun']
- dirbase: /../../../../../..
+ categories: [coding for fun,tdd,bdd]
 ---
 
 # Estórias Bonitas vs Testes Unitários

@@ -1,9 +1,8 @@
 ---
  layout: post
  title: Helplate = Help + Template
+ categories: [linguagem, template]
 ---
-
- 
 
 Helplate é uma ideia que nasceu a dois anos atrás, e inicialmente se chamava **helpme**.  Escrevi um arquivo falando da ideia, que chamava-se helpme, pois é inspirada em situar a pessoa na sua atividade e contexto. Eu estava trabalhando e pensando sobre quantos aspectos, muitas vezes são **esquecidos** de avaliar ou de se especificar por que simplesmente foram esquecidos.
 

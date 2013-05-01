@@ -1,7 +1,8 @@
 ---
+ title: Os programadores do futuro
  layout: post
+ categories: [pense, ruby, javascript, opensource]
 ---
-
 
 
 Estou muito feliz em estar programando pra web novamente. Estive olhando uma porrada de projetos open-source que mudaram meu destino na programação. Durante os últimos anos estou mais focado no mercado financeiro e agora estou voltando a todo vapor na web.

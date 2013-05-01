@@ -1,6 +1,7 @@
 ---
   title: Experiências com o Meteor js
   layout: post
+  categories: [javascript, meteor js, pixel, opensource]
 ---
 
 

@@ -1,8 +1,7 @@
 ---
   layout: post 
   title: Protótipo do site
-  categories: ['jekyll', 'github', 'prettify']
-  dirbase: /../../..
+  categories: [jekyll, prettify, javascript]
 ---
 
 Confira a primeira tentativa de leiaute do site.
@@ -27,5 +26,5 @@ Apenas usando o simples código do [prettify][prettify-code].
 </pre>
 </div>
 
-[prototipo]: /../../../images/prototipo_site.jpg
+[prototipo]: /images/prototipo_site.jpg
 [prettify-code]:http://code.google.com/p/google-code-prettify/
