@@ -2,7 +2,7 @@
  layout: post
  title: A linguagem SQL
  categories: postgresql
- dirbase: /../../..
+
 ---
 
 # Um projeto de SQL comentado

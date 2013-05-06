@@ -1,8 +1,7 @@
 ---
  layout: post
  title: RML - Resume Markup Language
- categories: [code for fun, dsl]
- dirbase: /../../..
+ categories: [code for fun, dsl, linguagem]
 ---
 
 # RML - Resume Markup Language

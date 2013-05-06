@@ -62,7 +62,7 @@ Então a template é preenchida conforme as respostas dadas por mim exibindo o s
   layout: post
   title: Helplate welcome aboard!
   categories: ['helplate', 'template', 'ruby', 'liquid']
-  dirbase: /../../..
+
 ---
 
 # Helplate welcome aboard!
@@ -82,7 +82,7 @@ jonatas@xonatax-mac: helplate $  cat newpost<br>
   layout: post<br>
   title:  \{\{ title }}<br>
   categories: \['\{\{ categories \| join glue: ', ' }}'\]<br>
-  dirbase: /../../..<br>
+
 ---
 <br>
 <br>

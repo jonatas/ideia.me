@@ -2,7 +2,7 @@
   layout: post
   title: Expressões Regulares com grep
   categories: ['shell', 'regexp', 'unix', 'grep', 'rails', 'migrations', 'vim']
-  dirbase: /../../..
+
 ---
 
 

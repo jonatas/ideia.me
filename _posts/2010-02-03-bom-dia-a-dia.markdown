@@ -2,7 +2,7 @@
   layout: post 
   title: Bom dia a dia do desenvolvimento 
   categories: ['decisoes', 'oraclexe', 'postgresql', 'java', 'ferramentas', 'linux', 'mac'] 
-  dirbase: /../../..
+
 ---
 <style>
  table, tr, td { border: 1px solid gray}

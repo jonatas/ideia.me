@@ -2,7 +2,7 @@
  layout: post
  title: Gerência de Projetos 
  categories: gerencia de projetos
- dirbase: /../../..
+
 ---
 
 

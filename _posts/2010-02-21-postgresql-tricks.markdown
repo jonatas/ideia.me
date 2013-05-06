@@ -2,7 +2,7 @@
  layout: post
  title: PostgreSql Tricks
  categories: postgresql
- dirbase: /../../..
+
 ---
 
 # Quanto espaço seu banco PostgreSql usa?

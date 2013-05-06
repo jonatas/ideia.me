@@ -2,7 +2,7 @@
   layout: post
   title: Leiaute para iPhone no Ideia.me
   categories: ['css', 'iphone']
-  dirbase: /../../..
+
 ---
 
 # Leiaute para iPhone

@@ -1,7 +1,7 @@
 ---
   layout: post 
   title: Google Api
-  dirbase: /../../..
+
 ---
 
 # Integrando Google Api no Ideia.me

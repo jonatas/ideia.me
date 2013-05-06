@@ -2,7 +2,7 @@
   layout: post
   title: Iteração legal
   categories: balsamiq mockups prototipo xp usesms iteracao cucumber
-  dirbase: /../../..
+
 ---
 
 
@@ -95,5 +95,5 @@ Muito interessante trabalhar com feedback. Passei um tempo sem este feedback e �
 Estamos usando o Pivotal Tracker para controlar as estórias e o GitHub como repositório oficial. Assim tenho sempre qualquer notificação do Edson por email quando faz algum comentário ou adiciona novas informações ao projeto, ou seja: feedback automático.
 
 
-[enviarsms]: {{page.dirbase}}/images/enviar_sms.png
-[busca]: {{page.dirbase}}/images/busca.png
+[enviarsms]: /images/enviar_sms.png
+[busca]: /images/busca.png

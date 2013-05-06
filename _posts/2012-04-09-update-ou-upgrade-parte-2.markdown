@@ -42,5 +42,5 @@ Hoje meu maior objetivo em manter-me postando é ser lembrado como um programado
  
 
 [post]: /2012/03/29/update-ou-upgrade.html
-[nota]: {{page.dirbase}}/images/nota.jpg
+[nota]: /images/nota.jpg
 [bounce]: http://en.wikipedia.org/wiki/Bounce_rate

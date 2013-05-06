@@ -2,7 +2,7 @@
   title: Gerência de Projetos
   layout: post
   categories: ['unipar', 'gerencia de projetos']
-  dirbase: /../../..
+
 ---
 
 # Gerência de Projetos

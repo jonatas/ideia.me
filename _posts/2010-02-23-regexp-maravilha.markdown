@@ -2,7 +2,7 @@
   layout: post
   title: Expressões Regulares + Ruby = \*maravilhas 
   categories: ['ruby', 'regexp']
-  dirbase: /../../..
+
 ---
 
 

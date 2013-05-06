@@ -1,7 +1,7 @@
 ---
  layout: ideime
  title: Nova roda mágica do google
- dirbase: /../../..
+
 ---
 
 
@@ -13,5 +13,5 @@ A nova roda mágica do google é uma forma bacana de visualizar os conteúdos e 
 ps: só não sei oque o Rational Unified Process está fazendo ali. 
 
 
-[img]: {{page.dirbase}}/images/google_legal.jpg
+[img]: /images/google_legal.jpg
  

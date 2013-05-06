@@ -1,7 +1,7 @@
 ---
   layout: post 
   title: Google code playground 
-  dirbase: /../../..
+
 ---
 
 # Diverta-se no google code playground

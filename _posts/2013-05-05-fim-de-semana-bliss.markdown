@@ -1,13 +1,13 @@
 ---
   layout: post
   title: Fim de semana bliss
-  categories: [Blizz, linguagem, acessibilidade]
+  categories: [Bliss, linguagem, acessibilidade]
 ---
 
-Este fim de semana estive na minha pós graduação estudando sobre educação especial e arte. Então assisti um vídeo falando sobre a integração entre alunos especiais e sistemas de educação mais híbridos e multi-disciplinares com sistemas de inclusão e acessibilidade muito evoluídos. Então havia uma mãe falando o quanto havia mudado sua vida conhecer a linguagem ["bliss"][1]. Não bastassem as 15 horas de pós graduação me internei em [uma][2] [série][3] de[4] links[5] para aprender essa linguagem, mas desta vez não era de programação.
+Este fim de semana estive na minha pós graduação estudando sobre educação especial e arte. Então assisti um vídeo falando sobre a integração entre alunos especiais e sistemas de educação mais híbridos e multi-disciplinares com sistemas de inclusão e acessibilidade muito evoluídos. Então havia uma mãe falando o quanto havia mudado sua vida conhecer a linguagem ["bliss"][1]. Não bastassem as 15 horas de pós graduação me internei em [uma][2] [série][3] [de][4] [links][5] [para][6] [aprender][7] essa [linguagem][1], mas desta vez não era de programação.
 
 
-Apesar de existir também a [linguagem de programação Blizz][2] aqui estou me referindo exclusivamente a [linguagem de símbolos bliss][1]. Então a história começou pois o austríaco Charless Blizz foi para china e não conseguiu aprender a escrever mandarim e compreender como um todo com tanta eficiência. Então pensou em criar uma linguagem universal com símbolos [ideográficos] que tinham a capacidade de interagir com uma forma visual simples e cognitiva.
+Apesar de existir também a [linguagem de programação Blizz][2] aqui estou me referindo exclusivamente a [linguagem de símbolos bliss][1]. Então a história começou pois o austríaco Charless Blizz foi para china e não conseguiu aprender a escrever mandarim e compreender como um todo com tanta eficiência. Então pensou em criar uma linguagem universal com símbolos ideográficos que tinham a capacidade de interagir com uma forma visual simples e cognitiva.
 
 Essa linguagem também usufrui do . ou espaço de forma natural e o sistema é bem cognitivo.
 
@@ -45,3 +45,4 @@ Por fim estou muito feliz por terminar meu fim de semanas de uma maneira melhor 
 [explain]: http://www.symbols.net/blissymbolics/phraseguide_images/bliss01.gif
 [favico]: /favicon.ico
 
+[8]:http://ideia.me/categories.html#linguagem-ref

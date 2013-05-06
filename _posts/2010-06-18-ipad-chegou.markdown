@@ -34,4 +34,4 @@ Acredito que chegamos em um momento em que o esforço mínimo para o resultado m
 
 Eu quero trabalhar consciente de que preciso trazer o máximo de resultado no mínimo de software! Estou trabalhando para isto!
 
-[apresentacao]: {{page.dirbase}}/Rails.pdf
+[apresentacao]: /Rails.pdf

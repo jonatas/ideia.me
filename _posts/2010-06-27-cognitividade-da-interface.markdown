@@ -2,7 +2,7 @@
   layout: post
   title: Cognitividade da Interface
   categories: cognitividade ux interface
-  dirbase: /../../..
+
 ---
 
 

@@ -2,7 +2,7 @@
   layout: post
   title: Sinceridade não faz mal a ninguém
   categories: sinceridade xp freelancer pensamentos
-  dirbase: /../../..
+
 ---
 
 

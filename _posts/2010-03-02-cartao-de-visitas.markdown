@@ -2,7 +2,7 @@
   layout: post
   title: Cartão de visitas
   categories: ['terminal']
-  dirbase: /../../..
+
 ---
 
 
@@ -36,5 +36,5 @@ E depois fiz o verso:
 
 Agora vou passar para a arte ser criada, e depois impressão!
 
-[frente]: {{page.dirbase}}/images/cartao_frente.jpg
-[verso]: {{page.dirbase}}/images/cartao_verso.jpg
+[frente]: /images/cartao_frente.jpg
+[verso]: /images/cartao_verso.jpg

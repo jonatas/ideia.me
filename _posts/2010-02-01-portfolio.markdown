@@ -2,7 +2,7 @@
  layout: post 
  title: Portfolio::Base 
  categories: portfolio
- dirbase: /../../..
+
 ---
 
 <style>
