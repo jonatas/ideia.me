@@ -19,6 +19,8 @@ ps: Sinta-se livre para conversar comigo por email ou gtalk: <jonatasdp@gmail.co
 {% for post in site.posts limit: 3 %}
    <h1 class="post"><a class="post" href="{{ post.url }}"> {{ post.title }}</a></h1>
  {{ post.content }}
+ <hr />
+ <hr />
 {% endfor %}
 <ul class="posts">
  {% for post in site.posts offset: 3 %}

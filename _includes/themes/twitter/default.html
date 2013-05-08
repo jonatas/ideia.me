@@ -58,35 +58,52 @@
     <div class="navbar-inner">
       <div class="container">
        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-         <span class="icon-bar"> </span>
-         <span class="icon-bar"></span>
-         <span class="icon-bar"></span>
+         <span class="icon-bar">a </span>
+         <span class="icon-bar">v</span>
+         <span class="icon-bar">c</span>
        </a>
        <a class="brand" href="{{ HOME_PATH }}">{{ site.title }}</a>
        <div class="nav-collapse collapse" id="main-menu">
         <ul class="nav" id"main-menu-left">
-          <li><a href="http://flu.ideia.me"><img src="http://flu.ideia.me/favicon.ico" width=32></a</li>
-          <li><a href="http://pixel.ideia.me"><img src="http://pixel.ideia.me/favicon.ico" width=32></a></li>
-          <li><a href="http://churumelas.ideia.me"><img src="/images/logo-churumelas-green.png" width=32></a></li>
-          <li><a href="/camera-overlay"><img src="/images/camera-overlay-logo64.png" width=32></a></li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Social<b class="caret"></b></a>
+            <ul class="dropdown-menu" id="swatch-menu">
+              <li><a href="http://github.com/jonatas">Github</a></li>
+              <li><a href="http://instagram.com/jonatasdp">Instagram</a></li>
+              <li><a href="https://plus.google.com/100136762810302102952/">Google+</a></li>
+              <li><a href="http://twitter.com/jonatasdp">Twitter</a></li>
+              <li><a href="http://facebook.com/jonatas.paganini">Facebook</a></li>
+              <li><a href="http://grooveshark.com/#!/jonatasdp">Grooveshark</a></li>
+           </ul>
+          </li>
+          <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Projetos<b class="caret"></b></a>
+            <ul class="dropdown-menu" id="swatch-menu">
+            <li><a href="http://flu.ideia.me"><img src="http://flu.ideia.me/favicon.ico" width=32>Leia minhas ideias</a</li>
+            <li><a href="http://pixel.ideia.me"><img src="http://pixel.ideia.me/favicon.ico" width=32>Desenhe com pixel</a></li>
+            <li><a href="http://churumelas.ideia.me"><img src="/images/logo-churumelas-green.png" width=32>Desafie-se no churumelas</a></li>
+            <li><a href="/camera-overlay"><img src="/images/camera-overlay-logo64.png" width=32>Fotografia com Camera Overlay</a></li>
+           </ul>
+          </li>
           {% assign pages_list = site.pages %}
           {% assign group = 'navigation' %}
           {% include JB/pages_list %}
+
           <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tema<b class="caret"></b></a>
             <ul class="dropdown-menu" id="swatch-menu">
-              <li><a href"#" onclick="changeStyleTo('amelia')">Amelia</a></li>
-              <li><a href"#" onclick="changeStyleTo('cerulean')">Cerulean</a></li>
-              <li><a href"#" onclick="changeStyleTo('cosmo')">Cosmo</a></li>
-              <li><a href"#" onclick="changeStyleTo('cyborg')">Cyborg</a></li>
-              <li><a href"#" onclick="changeStyleTo('journal')">Journal</a></li>
-              <li><a href"#" onclick="changeStyleTo('readable')">Readable</a></li>
-              <li><a href"#" onclick="changeStyleTo('simplex')">Simplex</a></li>
-              <li><a href"#" onclick="changeStyleTo('slate')">Slate</a></li>
-              <li><a href"#" onclick="changeStyleTo('spacelab')">Spacelab</a></li>
-              <li><a href"#" onclick="changeStyleTo('spruce')">Spruce</a></li>
-              <li><a href"#" onclick="changeStyleTo('superhero')">Superhero</a></li>
-              <li><a href"#" onclick="changeStyleTo('united')">United</a></li>
+              <li><a href="#" onclick="changeStyleTo('amelia')">Amelia</a></li>
+              <li><a href="#" onclick="changeStyleTo('cerulean')">Cerulean</a></li>
+              <li><a href="#" onclick="changeStyleTo('cosmo')">Cosmo</a></li>
+              <li><a href="#" onclick="changeStyleTo('cyborg')">Cyborg</a></li>
+              <li><a href="#" onclick="changeStyleTo('journal')">Journal</a></li>
+              <li><a href="#" onclick="changeStyleTo('readable')">Readable</a></li>
+              <li><a href="#" onclick="changeStyleTo('simplex')">Simplex</a></li>
+              <li><a href="#" onclick="changeStyleTo('slate')">Slate</a></li>
+              <li><a href="#" onclick="changeStyleTo('spacelab')">Spacelab</a></li>
+              <li><a href="#" onclick="changeStyleTo('spruce')">Spruce</a></li>
+              <li><a href="#" onclick="changeStyleTo('superhero')">Superhero</a></li>
+              <li><a href="#" onclick="changeStyleTo('united')">United</a></li>
             </ul>
           </li>
           </ul>
@@ -116,6 +133,6 @@
      } catch(err) {}
     </script>
     <footer>
-       <center><pre class="prettyprint lang-ruby">{ :nome => "Jônatas Paganini", :email => %w(jonatasdp @ gmail.com), :telefone => "+55 46 9911 7879", :skype => "jonatas.paganini"} </pre></center>
+       <center><pre class="prettyprint lang-ruby">{ nome: "Jônatas Paganini", email: %w(jonatasdp @ gmail.com), telefone: "+55 46 9911 7879", skype: "jonatas.paganini"}</pre></center>
     </footer>
 </html>
