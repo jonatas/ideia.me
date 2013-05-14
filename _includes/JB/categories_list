@@ -17,9 +17,11 @@ Usage:
   This helper can be seen in use at: ../_layouts/default.html
 -->{% endcomment %}
 
-{% if site.JB.categories_list.provider == "custom" %}
-  {% include custom/categories_list %}
-{% else %}
-  {% tag_cloud font-size: 100 - 500%, threshold: 2%}
-{% endif %}
+{% for category in site.categories %}
+    <li style="font-size: {{ category | last | size | times: 5500 | divided_by: site.categories.size }}%">
+        <a href="/categories.html#{{ category | first | slugize }}-ref">
+            {{ category | first }}
+        </a>
+    </li>
+{% endfor %}
 {% assign categories_list = nil %}
