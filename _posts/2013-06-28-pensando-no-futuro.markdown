@@ -102,6 +102,8 @@ maior vontade é de trabalhar com projetos voltados para educação e informaç�
 
 Estou feliz em ver tantos novos sistemas e-learning e acho que este mercado está próximo de realmente se popularizar.
 
+Veja o [churumelas][5], que é um projeto mistura de jogo com aprendizado. Também estou trabalhando continuamente no [bliss][1] que tem a mesma mistura de aprendizado com desafio.
+
 Estou trabalhando em busca de uma vida melhor. Estou repensando sobre como o dinheiro é importante na minha vida e como
 realizar coisas boas e que fazem a gente feliz valem mais do que dinheiro. Estou também repensando em como estou usando o
 dinheiro e quais as reais retribuições ele está fazendo na minha vida. Conforme vou dependendo deste sistema capitalista
@@ -136,3 +138,4 @@ Com isso termino este pensamento com um dos meus versos favoritos do poema "Mon�
 [2]: http://elixir-lang.org
 [3]: http://pixel.ideia.me
 [4]: http://grooveshark.com/s/MON+LOGO+DE+ORFEU/2uKjkF?src=5
+[5]: http://churumelas.ideia.me
