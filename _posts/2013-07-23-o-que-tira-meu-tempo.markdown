@@ -32,3 +32,6 @@ As distrações estão aí. Funciona como ligar a tv, você liga e ela decide qu
 
 Evitar distrações engaja você no problema de forma que sua mente aponta apenas para um foco com objetivo de cumprir apenas uma tarefa.
 
+Por fim estou aqui, sempre observando meu comportamento e disposto a mudar. 
+
+    E você escreve quanto do que pensa? A cada quanto tempo?
