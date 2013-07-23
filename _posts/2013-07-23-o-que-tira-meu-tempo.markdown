@@ -6,7 +6,7 @@
 Hoje estou pensando em porquê não consigo escrever tantas coisas quanto desejo em meu blog. O que tira meu tempo que eu não consigo vir aqui e me dedicar escrevendo sobre meus pensamentos....
 O que é ter tempo e como tiramos ele? O que faz o tempo esvaiair e as semanas passar tão depressa?
 
-## Seriedade com o blog
+## Falta de compromisso com a escrita
 
 Levar mais a sério ao ponto de manter uma constância, tipo 2 vezes por mês. Ou uma vez por semana.
 
@@ -17,7 +17,6 @@ Percebo que muitas vezes me inspiro e acabo colocando uma série de outros asssu
 Não é sempre que estamos bem para escrever ou mesmo programar mas sinto que não podemos perder um momento de inspiração. Geralmente antes de escrever já venho de algum tempo que estou andando lunaticamente pela casa ou fingindo que estou fazendo outra coisa e pensando em escrever até que decido que é hora de sentar e escrever.
 
 O processo é relativamente rápido quando se tem umas ideias em mente sobre oque falar e como desenvolver, mas o que não nos permite descrever muitas vezes são as interrupções. Elas acontecem a todo momento. Enquanto você estiver online on com um celular ligado você poderá ser interrompido a qualquer momento.
-
 
 ## As interrupções
 
