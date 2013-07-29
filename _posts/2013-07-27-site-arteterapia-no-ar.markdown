@@ -4,7 +4,7 @@
   categories: ['pense','arteterapia']
 ---
 
-Estou muito orgulhoso de anunciar mais uma de minhas produções pessoais independentes: [[arteterapia.ideia.me][1]. Estou trabalhando com muita dedicação nos artigos da pós graduação e então pensei: Vou fazer o mesmo que com o [flu.ideia.me][2] e [aqui está][1].
+Estou muito orgulhoso de anunciar mais uma de minhas produções pessoais independentes: [arteterapia.ideia.me][1]. Estou [trabalhando][3] com muita dedicação nos artigos da pós graduação e então pensei: Vou fazer o mesmo que com o [flu.ideia.me][2] e [aqui está][1].
 
 Agora apenas mantive a ideia do site mais genérica e o subdomínio [arteterapia][1] vai reunir os materias escritos por mim e meus colegas de classe sobre as matérias e pensamentos afins. O código fonte da página está [aqui][3].
 
