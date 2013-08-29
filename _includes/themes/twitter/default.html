@@ -15,7 +15,8 @@
     <![endif]-->
 
     <!-- Le styles -->
-    <link id="bootstrap" href="http://bootswatch.com/superhero/bootstrap.min.css" rel="stylesheet">
+    <link id="bootstrap" href="/css/bootstrap.css" rel="stylesheet">
+    <link id="bootstrap" href="/css/bootswatch.min.css" rel="stylesheet">
     <link id="stylesheet_prettify" href="/prettify/prettify_black.css" type="text/css" rel="stylesheet" />
 
     <script type="text/javascript" src="/prettify/prettify.js"></script>
@@ -54,18 +55,19 @@
 </script>
 </head>
 <body>
-  <div class="navbar">
-    <div class="navbar-inner">
+    <div class="navbar navbar-default navbar-fixed-top">
       <div class="container">
-       <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-         <span class="icon-bar">a </span>
-         <span class="icon-bar">v</span>
-         <span class="icon-bar">c</span>
-       </a>
-       <a class="brand" href="{{ HOME_PATH }}">{{ site.title }}</a>
-       <div class="nav-collapse collapse" id="main-menu">
-        <ul class="nav" id"main-menu-left">
-          <li class="dropdown">
+        <div class="navbar-header">
+          <a href="./" class="navbar-brand">{{site.title}}</a>
+            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+           </button>
+       </div>
+   <div class="navbar-collapse collapse" id="navbar-main">
+     <ul class="nav navbar-nav">
+      <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#">Social<b class="caret"></b></a>
             <ul class="dropdown-menu" id="swatch-menu">
               <li><a href="http://github.com/jonatas">Github</a></li>
