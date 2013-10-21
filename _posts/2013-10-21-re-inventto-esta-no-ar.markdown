@@ -1,14 +1,24 @@
 ---
   title: ReInvent.to está no ar!
+  layout: post
 ---
 
-Estou muito orgulhoso de falar do nosso trabalho no [Re.Invent.to][1]!. 
+Estou muito orgulhoso de falar do nosso trabalho no [Re.Invent.to][1]!.
+
+### Tudo começou assim:
+
+![sketch]
+
+[Planejando](http://instagram.com/p/fn8uUxnfSk/) as telas e o que a equipe ia fazer.
 
 Hoje é o primeiro dia depois das 48 horas de desenvolvimento que tivemos e a [Rails Rumble][2] foi incrível.
 Nos conhecemos cada vez mais como [equipe][7] e também como pessoas.
 
 Após umas boas horas de programação é necessário ser muito empolgado para seguir num bom ritmo por mais horas,
  acredito que a equipe também serve para dar este ânimo 
+
+![]
+
 
 Trabalhamos em 2 cidades diferentes: Eu e o [Tafarel][3] aqui em São Miguel do Oeste - SC e o [Marlon][4] e o [Mitruti][5]
 em Francisco Beltrão. O [Wellinton Mitruti][5] substituiu o [Edson][6] no time e teve uma excelente participacão como designer da equipe.
@@ -46,13 +56,19 @@ Decidimos umas questões como:
 Conseguimos fazer o setup do server, capistrano e o setup do projeto na primeira hora. Então criamos um fluxo bem interessante
 de deploy e tivemos um acompanhamento contínuo e evolutivo de todas as tarefas.
 
+Quando eram 6 horas da manhã, 9 horas após o início - já tinhamos a primeira sobreposição de camera funcional:
+
+![primeirooverlay]
+
 Também trabalhamos uma boa parte do tempo em par e em alguns momentos de maior tensão em três.
 
 ## Um descanso bem merecido
 
 Dormimos no sábado de manhã e a tarde pegamos novamente. Foi muito legal pois rendeu muito até de manhã cedo. Fui dormir as 9:50.
 
-Pegamos das 13 as 21 e foi bem interessante a satisfaçãod o rendimento que tivemos quanto a produção e organização da interface.
+Pegamos das 13 as 21 e foi bem interessante a satisfação do rendimento que tivemos quanto a produção e organização da interface.
+
+![testando]
 
 Tinhamos muitos desafios que ainda não tinhamos certeza do funcionamento mas no fim o canvas foi nosso melhor amigo :D
 
@@ -61,7 +77,7 @@ Eu e o [tafarel][3] saímos jantar e tomar umas cervejas após uma tarde intensa
 ##  O segundo dia
 
 No segundo dia mantemos em mente a ideia de que tudo ia funcionar bem e então começamos a fazer testes online. Tivemos um problema
-de incompatibilidade com a versão do ffmpeg e não conseguimos nem mesmo usar o paperclip e o rmagick tbm não funcionou 100%. Por algum 
+de incompatibilidade com a versão do ffmpeg e não conseguimos nem mesmo usar o paperclip pois o rmagick também não funcionou 100%. Por algum 
 motivo os argumentos da linha de comando não eram compatíveis na versão instalada no servidor. Parecia que estava faltando alguma biblioteca
 para lidar com o PNG ou algum detalhe neste sentido. Nos desgastamos profundamente tentando substituir os comandos que funcionavam em
 todas as nossas máquinas locais, porém no nosso servidor não funcionavam.
@@ -93,3 +109,6 @@ Fizemos o último deploy da aplicação uns 7 minutos antes do horário oficial 
 [5]: https://github.com/Wmitrut
 [6]: https://play.google.com/store/apps/details?id=me.ideia.cameraoverlay
 [7]: http://railsrumble.com/entries/113-reinventto
+[testando]: /images/reinventto-testando.png
+[sketch]: /images/reinventto-sketch.png
+[primeirooverlay]: /images/reinventto_primeiro_overlay.png
