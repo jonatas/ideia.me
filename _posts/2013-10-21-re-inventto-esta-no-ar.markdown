@@ -17,9 +17,6 @@ Nos conhecemos cada vez mais como [equipe][7] e também como pessoas.
 Após umas boas horas de programação é necessário ser muito empolgado para seguir num bom ritmo por mais horas,
  acredito que a equipe também serve para dar este ânimo 
 
-![]
-
-
 Trabalhamos em 2 cidades diferentes: Eu e o [Tafarel][3] aqui em São Miguel do Oeste - SC e o [Marlon][4] e o [Mitruti][5]
 em Francisco Beltrão. O [Wellinton Mitruti][5] substituiu o [Edson][6] no time e teve uma excelente participacão como designer da equipe.
 
