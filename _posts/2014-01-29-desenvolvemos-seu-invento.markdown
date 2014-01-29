@@ -3,7 +3,11 @@
   title: Desenvolvemos seu invento!
 ---
 
+
 Este mês completamos 1 ano de [invent.to][1]. Estou muito feliz por estar trabalhando de forma independente com o meu sócio Marlon Scalabrin.
+
+![inventto_loggo]
+
 
 Nossa sociedade têm sido muito saudável e nosso compromisso constante. Estamos com uma carreira inteira pela frente neste setor da tecnologia e que a [invent.to][1] é o lugar aonde eu quero trabalhar. Estamos buscando tornar o nosso trabalho um prazer e fazer da nossa empresa o lugar onde queremos trabalhar.
 
@@ -77,7 +81,11 @@ Nossas principais demandas deste último ano foram:
 
 Estamos abertos para desenvolver novos inventos, se você precisa de ajuda para explorar uma ideia, criar um produto, ou mesmo integrar uma ideia a um produto tecnológico, nós podemos te ajudar!
 
+Também não deixe de acompanhar os [inventtores no instagram][3].
+
 Envie-nos um email em <falecom@invent.to> e entraremos em contato!
 
 [1]: http://invent.to
 [2]: http://academi.as
+[3]: http://instagram.com/inventtores
+[inventto_loggo]: /images/logo_inventto.png
