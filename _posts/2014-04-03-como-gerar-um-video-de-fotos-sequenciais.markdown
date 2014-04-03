@@ -1,6 +1,7 @@
 ---
   layout: post
   title: Como gerar um vídeo de fotos sequênciais
+  categories: [video, ffmpeg, ruby, sh]
 ---
 
 Estive gerando uma série de vídeos com fotos sequências estilo _timelapse_ e existem muitas formas de fazer isso. Aqui estou  usando o bom e velho [ffmpeg](http://www.ffmpeg.org/).
