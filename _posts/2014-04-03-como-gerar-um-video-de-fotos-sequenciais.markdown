@@ -1,9 +1,9 @@
 ---
   layout: post
-  title: Como gerar um vídeo de timelapse
+  title: Como gerar um vídeo de fotos sequênciais
 ---
 
-Estive gerando uma série de vídeos de timelapse e existem muitas formas de fazer isso. Aqui estou  usando o bom e velho [ffmpeg](http://www.ffmpeg.org/).
+Estive gerando uma série de vídeos com fotos sequências estilo _timelapse_ e existem muitas formas de fazer isso. Aqui estou  usando o bom e velho [ffmpeg](http://www.ffmpeg.org/).
 
 Coloquei todas as fotos em um diretório e digitei: 
 
