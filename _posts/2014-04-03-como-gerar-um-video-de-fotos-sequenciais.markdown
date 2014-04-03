@@ -57,3 +57,12 @@ Se as suas imagens não tiverem um padrão de nomes também é possível utiliza
 
     ffmpeg -r 24 -pattern_type glob -i "*.jpg" out.mkv
 
+### Veja um exemplo de vídeo
+
+O vídeo abaixo é um timelapse de 120 fotos, uma foto a cada 64 segundos. Girando 1 grau para a direita. O framerate utilizado foi 24 fotos por segundo.
+
+<video src="/images/motolapse.mp4"></video>
+
+O vídeo foi gerado com o comando: `ffmpeg -r 24 -i deg%04d.jpg -c:v libx264 motolapse.mp4`.
+
+
