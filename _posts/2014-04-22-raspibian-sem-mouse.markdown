@@ -1,18 +1,19 @@
 ---
   layout: post
-  title: Raspberry PI sem mouse
+  title: Raspibian sem mouse
   categories: [raspberry pi, linux, debian, interface]
 ---
 
-Durante os últimos dias venho me desafiando a não comprar um mouse para utilizar no raspberry pi. Está rodando o raspibian original mas acabo utilizando a interface gráfica poucas vezes. No entanto precisei aprender um pouco sobre esta interface e principalmente sem mouse acabei me batendo um pouco no começo.
+Durante os últimos dias venho me desafiando a não comprar um mouse para utilizar no Raspberry PI. Está rodando o Raspibian original mas acabo utilizando a interface gráfica poucas vezes.
 
+No entanto precisei aprender um pouco sobre esta interface pois instalei o puredata e não dá pra fazer muita coisa sem mouse nele.
 
-Por padrão, o comando é ``startx`` para iniciar a interface gráfica.
+Usei ``startx`` para iniciar a interface gráfica.
 
  
 ## ALT+F2 = Rodar comando
 
-No ambiente gráfico. O primeiro atalho interessante é o ``ALT+F2``. Com este comando é possível rodar um comando em ambiente gráfico. Experimente ``lxterminal`` no imput que aparecer.
+No ambiente gráfico, o primeiro atalho interessante é o ``ALT+F2``. Com este comando é possível rodar um comando em ambiente gráfico. Experimente ``lxterminal`` no input que aparecer.
 
 ## CTRL+ALT+F1 = volta para o terminal
 
@@ -41,4 +42,5 @@ Se você usa o VIM como eu não irá ter problemas em se adaptar com a navegaç�
 * ``gpicview [arquivo]`` visualizador de imagem
 * ``wpa_gui`` configure the wifi via interface gráfica
 * ``midori [url]`` navegador web
+
 
