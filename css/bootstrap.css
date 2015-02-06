@@ -287,6 +287,9 @@ table {
     border: 1px solid #ddd !important;
   }
 }
+th, td {
+  border: 1px solid #e5e5e5!important;
+}
 
 *,
 *:before,
