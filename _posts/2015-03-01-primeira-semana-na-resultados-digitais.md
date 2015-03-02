@@ -65,7 +65,7 @@ Muito aprendizado sobre marketing digital e me adaptando com o workflow e ritmo 
 
 Gostei muito da área de devs, criaram um setup do ambiente e um workflow muito legal para trabalhar. Os times de devs trabalham fluídos e integrados. Todo o pessoal bem humorado e se ajuda mesmo.
 
-Muito gratificante trabalhar com uma equipe como essa :)
+Muito gratificante trabalhar com essa equipe :)
 
 [rd]: http://resultadosdigitais.com.br/
 [rd-blog]: http://blog.resultadosdigitais.com.br/
