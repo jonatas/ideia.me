@@ -63,7 +63,9 @@ A RD é muito mais do que citei aqui e essa foi apenas minha primeira semana.
 
 Muito aprendizado sobre marketing digital e me adaptando com o workflow e ritmo da empresa. Estou apenas iniciando e tenho muito a aprender e contribuir com essa equipe fantástica.
 
-Gostei muito da equipe de devs, criaram um setup do ambiente e um workflow muito bom para trabalhar. Os times de devs trabalham fluídos e integrados. A galera é gente boa, bem humorada e se ajuda mesmo. Sexta-feira enviei meu primeiro pull request e amanhã alguém do time vai revisar. Nestas primeiras interações já recebi alguns feedbacks e isso é muito importante para se integrar rápido a equipe.  Estou percebendo a importância do feedback contínuo para equipe progredir rapidamente.
+Gostei muito da área de devs, criaram um setup do ambiente e um workflow muito legal para trabalhar. Os times de devs trabalham fluídos e integrados. Todo o pessoal bem humorado e se ajuda mesmo.
+
+Muito gratificante trabalhar com uma equipe como essa :)
 
 [rd]: http://resultadosdigitais.com.br/
 [rd-blog]: http://blog.resultadosdigitais.com.br/
@@ -73,5 +75,4 @@ Gostei muito da equipe de devs, criaram um setup do ambiente e um workflow muito
 [rdontheroad]: http://rdontheroad.com.br/
 [rd-culture-code]: http://resultadosdigitais.com.br/blog/culture-code-rd/
 [book]: https://pragprog.com/book/mjwti/my-job-went-to-india
-[rd-marketing-digital]: 
 [rd-time]: http://shipit.resultadosdigitais.com.br/time/
