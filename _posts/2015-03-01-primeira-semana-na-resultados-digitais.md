@@ -7,11 +7,11 @@ Hoje completo uma semana morando em Florianópolis. Agora tenho uma vida e rotin
 
 ## Primeira semana na Resultados Digitais
 
-Entrei para o time da [Resultados Digitais][rd] e estou me sentindo muito orgulhoso em fazer parte dessa [equipe][rd-equipe]. Uma empresa focada em seu produto e sucesso do cliente. Levando a sério o marketing digital e a produção de conteúdo de qualidade.
+Entrei para o time da [Resultados Digitais][rd] e estou me sentindo muito orgulhoso em fazer parte dessa [equipe][rd-time]. Uma empresa focada em seu produto e sucesso do cliente. Levando a sério o marketing digital e a produção de conteúdo de qualidade.
 
-## O business da RD
+## O business da RD: Marketing Digital
 
-O ramo de negócio da empresa é o [marketing-digital][rd-marketing-digital] e o pessoal trabalha com foco em resultado e sucesso do cliente.
+O ramo de negócio da empresa é o marketing digital. O pessoal trabalha com foco em resultado e sucesso do cliente.
 
 Este modelo de negócio é tudo que o cliente espera de uma empresa e o que a empresa espera do cliente. Uma troca mais saudável e focada no resultado e sucesso do cliente.
 
@@ -35,9 +35,9 @@ Eu estou gostando muito de conhecer a galera, só tem gente profissional mesmo. 
 
 A própria Resultados Digitais é um cliente acíduo do [rdstation][rdstation]. Sendo assim, produzir conteúdo é parte do trabalho na RD.
 
-Eles têm produzido material de alta qualidade gratuíto sobre Marketing Digital além de interagir e colaborar com as redes sociais e outros meios como 
+Eles têm produzido material de alta qualidade gratuíto sobre Marketing Digital além de interagir e colaborar com as redes sociais em grupos do mesmo ramo.
 
-A galera dos devs também não escapa e têm um blog forte de devs com posts semanais! Acesse o blog do [Ship It][rd-shipit]!
+O time dos devs também não escapa e têm um blog forte de devs com posts semanais! Acesse o blog do [Ship It][rd-shipit]!
 
 Gosto muito da ideia de escrever e compartilhar conhecimento, a difusão de conhecimento está na base da RD e isso é algo que sempre acreditei como valor em um negócio.
 
@@ -63,8 +63,7 @@ A RD é muito mais do que citei aqui e essa foi apenas minha primeira semana.
 
 Muito aprendizado sobre marketing digital e me adaptando com o workflow e ritmo da empresa. Estou apenas iniciando e tenho muito a aprender e contribuir com essa equipe fantástica.
 
-Gostei muito da equipe de devs. Criaram um setup do ambiente e workflow muito bom para trabalhar. Os times de devs trabalham fluídos e integrados. A galera é gente boa e se ajuda mesmo. Sexta-feira enviei meu primeiro pull request e amanhã alguém do time vai revisar :)
-
+Gostei muito da equipe de devs, criaram um setup do ambiente e um workflow muito bom para trabalhar. Os times de devs trabalham fluídos e integrados. A galera é gente boa, bem humorada e se ajuda mesmo. Sexta-feira enviei meu primeiro pull request e amanhã alguém do time vai revisar. Nestas primeiras interações já recebi alguns feedbacks e isso é muito importante para se integrar rápido a equipe.  Estou percebendo a importância do feedback contínuo para equipe progredir rapidamente.
 
 [rd]: http://resultadosdigitais.com.br/
 [rd-blog]: http://blog.resultadosdigitais.com.br/
@@ -74,3 +73,5 @@ Gostei muito da equipe de devs. Criaram um setup do ambiente e workflow muito bo
 [rdontheroad]: http://rdontheroad.com.br/
 [rd-culture-code]: http://resultadosdigitais.com.br/blog/culture-code-rd/
 [book]: https://pragprog.com/book/mjwti/my-job-went-to-india
+[rd-marketing-digital]: 
+[rd-time]: http://shipit.resultadosdigitais.com.br/time/
