@@ -13,8 +13,6 @@ Entrei para o time da [Resultados Digitais][rd] e estou me sentindo muito orgulh
 
 O ramo de negócio da empresa é o marketing digital. O pessoal trabalha com foco em resultado e sucesso do cliente.
 
-Este modelo de negócio é tudo que o cliente espera de uma empresa e o que a empresa espera do cliente. Uma troca mais saudável e focada no resultado e sucesso do cliente.
-
 O marketing digital não quer enfiar guela abaixo qualquer promoção ou venda para qualquer possível cliente. O primeiro passo é conhecer e descobrir quem é o usuário, no que está interessado, seu potencial de compra e influência na rede, capacidade de se tornar um cliente.
 
 Após conhecer o cliente, é possível estabelecer estratégias de engajamento e nutrição do mesmo, mantendo ele sempre em contato com a empresa e coisas de seu interesse.
