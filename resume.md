@@ -9,7 +9,7 @@ Senior developer remote or allocated. 27 years. In a stable relationship, with o
 
 **City/State/Country**: Francisco Beltrão/PR/Brazil
 
-**Phone**: [+55 (46) 9911 7879](tel:554699117879)
+**Phone**: [+55 (48) 9637 8119](tel:554896378119)
 
 **Mail**: jonatasdp@gmail.com
 
