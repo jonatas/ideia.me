@@ -44,7 +44,7 @@ Existem duas pessoas diretas no suporte mas aqui todos devs são suporte também
 
 Lembro que quando li o livro do ReWork o pessoal da 37Signals falava disso. Aí me lembro da tradicional contratação de estagiários para fazer o suporte e o quanta m!@#! isso causa!
 
-Aqui na RD existe uma escala do suporte e todos os devs fazem parte da escala. Isso torna o produto uma responsabilidade de todos e também permite que mais de uma pessoa sinta as dores dos clientes. Assim fica muito mais fácil de perceber o que é mito e o que é necessidade dos usuários do [RDStation](rdstation.com.br).
+Aqui na RD existe uma escala do suporte e todos os devs fazem parte da escala. Isso torna o produto uma responsabilidade de todos e também permite que mais de uma pessoa sinta as dores dos clientes. Assim fica muito mais fácil de perceber o que é mito e o que é necessidade dos usuários do [RDStation](http://rdstation.com.br).
 
 ### Todo mundo escreve e gera conteúdo
 
