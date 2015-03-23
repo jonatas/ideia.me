@@ -3,7 +3,7 @@
   title: Primeiro mês na Resultados Digitais
 ---
 
-Seguindo minha experiência [da primeira semana](/primeira-semana-na-resultados-digitais/), pensei seriamente em escrever sobre o primeiro mês que completo exatamente hoje!
+Seguindo minha experiência [da primeira semana](/primeira-semana-na-resultados-digitais/), decidi escrever sobre o primeiro mês que completo exatamente hoje!
 
 __Primeiro__ por que no dia que publiquei o meu [post](/primeira-semana-na-resultados-digitais/), foi o dia que tive minha imersão com os gestores de cada setor da RD mostrando a visão e estratégia de crescimento da empresa. E isso explodiu minha cabeça, abriu para mais coisas novas e interessantes para pensar e compartilhar.
 
@@ -71,6 +71,12 @@ Não sei o quão preciso é esta minha observação mas acredito que a idade men
 Neste [glossário de marketing digital](http://resultadosdigitais.com.br/blog/glossario-de-marketing-digital/) têm uma sessão só de métricas e vale a pena conferir. Como na RD usam índices de performance para tudo, ficou mais fácil de entender como direcionam as tomadas de decisão da empresa baseada em números.
 
 Como comentei acima sobre o Data Driven, a empresa realmente é dirigida pelos dados e não exatamente pela "experiência" ou "achismo" dos gestores. Isso traz um crescimento mais realista e livre do [Extremme Go Horse](http://www.gohorseprocess.com.br/).
+
+## Conclusão
+
+Estou muito satisfeito neste primeiro mês de experiência. Fazer parte de um [negócio de sucesso](http://rdstation.com.br) em pleno crescimento é uma experiência incrível!
+
+Gostou da [empresa](http://resultadosdigitais.com.br/sobre/) e sua [cultura](http://resultadosdigitais.com.br/blog/culture-code-rd/)? Venha [trabalhar com a gente](http://resultadosdigitais.com.br/trabalhe-conosco/)!
 
 [ship]: http://shipit.resultadosdigitais.com.br
 [rd]: http://resultadosdigitais.com.br
