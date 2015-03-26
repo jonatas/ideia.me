@@ -54,10 +54,10 @@ Escrever é literalmente programar as mentes em linguagem natural. Logo, se sou 
 
 Na RD existem alguns blogs, cada um dos blogs têm uma frequência média de um post por semana:
 
-* [Blog do ShipIt](ship)
+k [Blog do ShipIt](ship)
 * [Blog do RDStation](http://blog.rdstation.com.br/) - veja também a sessão de [estudos de caso](http://blog.rdstation.com.br/estudos-de-caso/) mostrando os cases dos clientes.
 * [Blog da Resultados Digitais](http://resultadosdigitais.com.br/blog/)
-* [Blog da Agência de Resultados](http://agenciasderesultados.resultadosdigitais.com.br/)
+* [Blog das Agências de Resultados](http://agenciasderesultados.resultadosdigitais.com.br/)
 
 Os conteúdos publicados trazem as próprias experiências dos RDoers nas suas diversas frentes da empresa. Desde as estratégias de crescimento, até o enfrentamento de problemas e design da solução.
 
