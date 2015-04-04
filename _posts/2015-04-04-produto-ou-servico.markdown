@@ -1,17 +1,17 @@
 ---
   layout: post
-  title: Freelancer não escala
+  title: Produto ou serviço?
 ---
 
-Depois de muito defender a vida de freelancer/prestar serviço, venho aqui confessar que estou mudando.
+Depois de muito defender a vida de freelancer prestando serviço, venho aqui confessar que estou mudando.
 
-Trabalhei de freelancer nos últimos anos e tive uma vida muito confortável e agradável. Tive uma boa estabilidade financeira na maior parte do tempo e teria demandas para viver nesse modelo para o resto da vida se quisesse.
+Trabalhei de freelancer e prestando serviço nos últimos anos e tive uma vida muito confortável e agradável. Tive uma boa estabilidade financeira na maior parte do tempo e teria demandas para viver nesse modelo para o resto da vida se quisesse.
 
 Defendi e em alguns momentos até mesmo vendi a ideia do estilo de vida "freelancer" para uma série de pessoas que estavam empregados e ao mesmo tempo não estavam tão empolgados com seu estilo de vida e qualidade no trabalho ou mesmo a carreira.
 
 O tópico é: trabalhar de freelancer ou seja prestando serviço vs construir um produto.
 
-## Vantagens de ser freelancer
+## Vantagens de ser freelancer (prestar serviço)
 
 As vantagens estão muito ligadas ao fator home office também. No entanto são mais ou menos assim:
 
@@ -44,7 +44,7 @@ Eu sempre adorei o homeoffice e achei esta uma forma linda de se encarar a vida.
 * Trabalhar com roupas confortáveis
 * Ver o crescimento do seu filho - acompanhei até ele ir na creche com 2 anos
 
-## Desvantagens de ser freelancer
+## Desvantagens do serviço
 
 Nem tudo são flores e agora você também precisa pensar em tantas fortes emoções que terás como freelancer.
 
