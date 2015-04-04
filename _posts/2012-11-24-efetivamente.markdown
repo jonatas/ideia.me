@@ -26,7 +26,7 @@ Muitas noites você aprende muitas coisas 'legais', 'culturais' e outras nem se 
 O bloco acima serve tanto para bodega quanto para o facebook.
 Parece que o software está entrando na mente das pessoas e fazendo algo mais químico. Os *usuários* estão fazendo justo ao -nome- e a essência do concentrar-se no computador como ferramenta de trabalho está perdendo um pouco o sentido. Sinto o computador um playground para maioria das pessoas e ao mesmo tempo as pessoas não estão interessadas em perceber que isto está tornando sua vida menos efetiva.
 
-Lembro que alguns anos atrás quando assisti a um episódio do peepcode chamado [productity for programmers] isto realmente mecheu comigo, me colocando sempre em mente de realizar uma tarefa por vez e também tentar organizar as tarefas de forma que consiga concluí-las em um fragmento pequeno de tempo.
+Lembro que alguns anos atrás quando assisti a um episódio do peepcode chamado [productity for programmers][productity_for_programmers] isto realmente mecheu comigo, me colocando sempre em mente de realizar uma tarefa por vez e também tentar organizar as tarefas de forma que consiga concluí-las em um fragmento pequeno de tempo.
 
 Tentamos usar o máximo de ferramentas possíveis para nos integrar e mantermos 'conectados' mas quase sempre elas não permitem nosso cérebro se manter conectado em uma linha de codificação.
 
