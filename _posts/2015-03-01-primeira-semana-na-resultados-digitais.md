@@ -31,7 +31,7 @@ Eu estou gostando muito de conhecer a galera, só tem gente profissional mesmo. 
 
 ## A produção de conteúdo na RD
 
-A própria Resultados Digitais é um cliente acíduo do [rdstation][rdstation]. Sendo assim, produzir conteúdo é parte do trabalho na RD.
+A própria Resultados Digitais é um cliente assíduo do [rdstation][rdstation]. Sendo assim, produzir conteúdo é parte do trabalho na RD.
 
 Eles têm produzido material de alta qualidade gratuíto sobre Marketing Digital além de interagir e colaborar com as redes sociais em grupos do mesmo ramo.
 

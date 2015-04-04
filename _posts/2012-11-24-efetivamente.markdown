@@ -20,7 +20,7 @@ Cada dia que passa me convenço mais que as pessoas não nasceram para serem tã
 
 Me sinto muito feliz em não estar tão preso a este facebook e também tantas outras redes sociais e coisas divertidas pra se ver na net, confesso sentir uma certa 'vontade' e as vezes até gasto um bom tempo navegando, mas não sinto que isto é parte de mim mais.
 
-No entanto sinto esses lugares virtuais muito semelhantes a um boteco (com muitas cadeiras como diria o facebook). Este local está completo pois seus frequentadores acíduos estão lá tornando tudo mais orgânico e você chega lá e alguém sempre tem assunto, no fim você fica lá por horas e torna-se parte daquilo.
+No entanto sinto esses lugares virtuais muito semelhantes a um boteco (com muitas cadeiras como diria o facebook). Este local está completo pois seus frequentadores assíduos estão lá tornando tudo mais orgânico e você chega lá e alguém sempre tem assunto, no fim você fica lá por horas e torna-se parte daquilo.
 Muitas noites você aprende muitas coisas 'legais', 'culturais' e outras nem se lembra pela enchurrada de informações que seu cérebro levou (misturado com cerveja).
 
 O bloco acima serve tanto para bodega quanto para o facebook.
