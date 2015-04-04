@@ -7342,19 +7342,8 @@ input[type="color"]:focus,
   border: 2px solid #18bc9c;
 }
 
-.pagination a {
-  color: #fff;
-}
-
 .pagination a:hover {
   color: #2c3e50;
-}
-
-.pagination .disabled > a,
-.pagination .disabled > a:hover,
-.pagination .disabled > a:focus,
-.pagination .disabled > span {
-  background-color: #3be6c4;
 }
 
 .pager a {
