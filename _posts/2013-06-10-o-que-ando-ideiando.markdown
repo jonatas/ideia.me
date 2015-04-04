@@ -143,7 +143,7 @@ desenvolvimento orientado a testes o tempo todo.
 
 ## Elixir
 
-Essa linguagem realmente mecheu comigo. Estou disposto a investir um bom tempo
+Essa linguagem realmente mexeu comigo. Estou disposto a investir um bom tempo
 aprendendo [elixir] nos próximos dias. Parece ser muito interessante para uma
 série de coisas e estou inteiramente interessado em entrar no mundo das macros e
 criar uma DSL com elixir.
