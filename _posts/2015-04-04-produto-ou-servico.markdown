@@ -100,7 +100,7 @@ Trabalhando na prestação de serviço você está trabalhando em problemas espe
 
 Quando você faz têm um produto bom que resolve algo ou ajuda de verdade, o próprio produto se paga, o próprio produto se vende.
 
-Se ele cumpre um determinado propósito e faz com excelência, existe uma chance muito grande mais e mais pessoas chegarem até ele.
+Se ele cumpre um determinado propósito e faz com excelência, existe uma chance muito grande de mais e mais pessoas chegarem até ele.
 
 ### Escalabilidade
 
