@@ -7,7 +7,7 @@ Dia 23 completei três meses na Resultados Digitais.
 
 Três meses que moro em floripa. Três meses que aprendi a adorar o clima litorâneo.
 
-Estou muito feliz por estar aqui. A vida na praia tem um clima diferente. `Incrivelmente me sinto mais livre aqui.` _não tens algum post que falar sobre a vida aqui? aqui caberia um link pra lá_
+Estou muito feliz por estar aqui. A vida na praia tem um clima diferente. Incrivelmente me sinto mais livre aqui.
 
 O trabalho também está sendo muito legal, e este post é mais uma reflexão sobre como está sendo minha vida na Resultados Digitais.
 
@@ -15,11 +15,11 @@ O trabalho também está sendo muito legal, e este post é mais uma reflexão so
 
 Faço parte de um [Team "A"](http://shipit.resultadosdigitais.com.br/time/) e estou aprendendo muito com eles. Estou gostando de fazer parte de uma equipe maior, estamos em mais de 30 pessoas em 6 equipes. Então sempre é possível aprender mais e ver uma ótica diferente de outros programadores.
 
-Dentro dos times, faço parte de uma equipe que fica mais focada nos problemas de performance e escalabilidade do produto. Está sendo uma experiência incrível para mim, pois estou tendo desafios bem diferentes dos ja tive antes em outras aplicações. nas aplicações.  Até escrevi no blog do [shipit](http://shipit.resultadosdigitais.com.br) sobre algumas [dicas para migrações eficientes com ActiveRecord](http://shipit.resultadosdigitais.com.br/blog/dicas-para-migracoes-eficientes-com-active-record/).
+Dentro dos times, faço parte de uma equipe que fica mais focada nos problemas de performance e escalabilidade do produto. Está sendo uma experiência incrível para mim, pois estou tendo desafios bem diferentes dos que tive antes em outras aplicações. Até escrevi no blog do [shipit](http://shipit.resultadosdigitais.com.br) sobre algumas [dicas para migrações eficientes com ActiveRecord](http://shipit.resultadosdigitais.com.br/blog/dicas-para-migracoes-eficientes-com-active-record/).
 
 ## Out teach
 
-Outra coisa muito massa aqui na RD é o incentivo para aprender e ensinar. [Out teach](http://www.slideshare.net/resultadosdigitais/culture-code-resultados-digitais/43) é um valor do [código de cultura da RD](http://resultadosdigitais.com.br/blog/culture-code-rd/), e isso possibilita várias coisas _ficou meio vago esse `varias coisas`_. Toda semana alguém compartilha algo novo através de mini-palestras/workshops.
+Outra coisa muito massa aqui na RD é o incentivo para aprender e ensinar. [Out teach](http://www.slideshare.net/resultadosdigitais/culture-code-resultados-digitais/43) é um valor do [código de cultura da RD](http://resultadosdigitais.com.br/blog/culture-code-rd/), e isso possibilita estar sempre aprendendo em workshops e palestras internas.
 
 Também somos muito incentivados a participar de eventos e compartilhar nossos conhecimentos publicamente. Eu tive o prazer de palestrar com o [@andrehjr](https://twitter.com/andrehjr) no [TDC aqui em floripa](http://www.thedevelopersconference.com.br/tdc/2015/florianopolis/trilha-cloud-computing). Foi muito legal, pois, além de nós, os [RDevs](http://shipit.resultadosdigitais.com.br/time/) deram [7 palestras em 5 trilhas](http://shipit.resultadosdigitais.com.br/blog/resultados-digitais-no-tdc-floripa-2015/) além de participar do evento.
 
@@ -50,16 +50,14 @@ Estou pareando bastante nos últimos dias. Isso me deixa muito feliz pois gosto 
 
 Dentre as principais mudanças que aconteceram no meu flow de desenvolvimento depois que entrei na RD, as mais legais que aprendi com a galera da empresa ou fui inspirado por eles foram:
 
-_que tal se colocars um link pro source dessas ferramentas?_
-
-* Me adaptar a usar tmux
-* Migrar definitivamente para o iTerm
-* Sair do screen e ir pro byobu
-* Abandonar de vez o sh e só usar zsh para terminal shell
-* Organizar VM's com vagrant
-* Usar uns plugins mais decentes pro VIM
-* Migrar pro vim com janus
-* Usar boxen/vagrant
+* Me adaptar a usar [tmux](http://tmux.sourceforge.net/)
+* Migrar definitivamente para o [iTerm](https://www.iterm2.com/)
+* Sair do [screen](http://linux.die.net/man/1/screen) e ir pro [byobu](http://byobu.co/)
+* Abandonar de vez o [sh](http://www.gnu.org/software/bash/) e só usar [zsh](http://www.zsh.org/) para terminal shell
+* Organizar VM's com [vagrant](https://vagrantup.com)
+* Usar uns [plugins mais decentes pro VIM](https://github.com/astrails/dotvim)
+* Migrar pro vim com [janus](https://github.com/carlhuda/janus)
+* Usar [boxen](https://boxen.github.com/) / [vagrant](https://www.vagrantup.com/) ao invés de gambiarrar a máquina
 
 ## BDD e CI
 
