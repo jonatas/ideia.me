@@ -61,10 +61,10 @@ Dentre as principais mudanças que aconteceram no meu flow de desenvolvimento de
 
 ## BDD e CI
 
-O desenvolvimento orientado a testes ou __Behaviour Driven Development__ (BDD) é uma das técnicas de programação que mais tranquilizam os
-finais de semana e as noites de sono de um programador. Na [Resultados Digitais](http://resultadosdigitais.com.br) fiquei muito feliz com o capricho e a seriedade que é levado o branch master.  Também fizemos [integração contínua](http://en.wikipedia.org/wiki/Continuous_integration) (CI) e isso significa que várias pessoas mechem no mesmo código e diariamente criam e compartilham novas funcionalidades e alterações.
+O desenvolvimento orientado a testes ou __Behaviour Driven Development__ (BDD) é uma das técnicas de programação que mais tranquilizam os finais de semana e as noites de sono de um programador. Na [Resultados Digitais](http://resultadosdigitais.com.br) fiquei muito feliz com o capricho e a seriedade que é levado o branch master no git do [rdstation](http://rdstation.com.br). Também fizemos [integração contínua](http://en.wikipedia.org/wiki/Continuous_integration) (CI) e isso significa que várias pessoas compartilham o mesmo código e diariamente criam e compartilham novas funcionalidades e alterações.
 
-Dessa forma, construímos uma bateria de testes que verifica se o funcionamento está conforme o esperado em cada parte do código até a funcionalidade como um todo. Quando uma nova parte é integrada, todos os testes são verificados e se nenhum código quebrou ou teste falhou, podemos saber que o código que está sendo criado está consistente e não corrompe as funcionalidades atuais.
+Dessa forma, para compartilhar e progredir com segurança, existe uma bateria de testes que verifica se o funcionamento está conforme o esperado em cada parte do código até a funcionalidade como um todo. Quando uma nova parte é integrada, todos os testes são verificados e se nenhum código quebrou ou teste falhou, podemos saber que o código que está sendo criado está consistente e não corrompe as funcionalidades atuais.
 
-Parece fácil, mas não é. Na prática esta é a primeira equipe que trabalho que consegue levar o processo contínuo de forma integrada e é sempre umd esafio para toda a equipe.
+Parece fácil, mas não é. Na prática esta é a primeira equipe que eu trabalho que consegue levar o processo contínuo de forma integrada.
 
+Isso tudo é muito inspirador e só tenho a dizer muito obrigado :)
