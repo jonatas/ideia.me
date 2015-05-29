@@ -4,6 +4,8 @@
   categories: [pense,sou-pai]
 ---
 
+O meu filho Lorenzo está numa fase linda de muitas perguntas engraçadas, esquisitas e tudo mais.  Sempre me deparo com as mais diversas perguntas e resolvi anotar algumas para ir registrando pois provavelmente não lembrarei nem da metade daqui uns anos.
+
 - O que é trabalho?
 - Por que as pessoas tem que trabalhar?
 - Eu trabalho?
@@ -15,8 +17,6 @@
 - Por que que na praia tem areia?
 - Por que tem polícia pai?
 - Mãe, eu dou água pro moranguinho mas por que que só cresce matinho?
-
-O meu filho Lorenzo está numa fase linda de muitas perguntas engraçadas, esquisitas e tudo mais.  Sempre me deparo com as mais diversas perguntas e resolvi anotar algumas para ir registrando pois provavelmente não lembrarei nem da metade daqui uns anos.
 
 {% instagram 18bjSyHfZO %}
 
