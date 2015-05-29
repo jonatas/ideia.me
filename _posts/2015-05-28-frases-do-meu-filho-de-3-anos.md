@@ -12,6 +12,7 @@
 - Mãe, tu só usa essa sandália?
 - De novo nessa padaria mãe?
 - Onde que tá o bombeiro?
+- Por que que na praia tem areia?
 - Por que tem polícia pai?
 - Mãe, eu dou água pro moranguinho mas por que que só cresce matinho?
 
@@ -104,6 +105,10 @@ Estavamos para sair para praia e o Lorenzo tava ansioso para ver o mar.
 
 Papo encerrado. Ele nunca mais falou no assunto. E também sabe outros palavrões mas não fala pois sabe que não é a sua hora.
 
-Estamos ao máximo tentando evitar falar na frente dele mas sempre existem outros meios então como pais conscientes precisamos instruir.
+Estamos ao máximo tentando evitar falar na frente dele mas sempre existem outros meios então como pais conscientes precisamos instruir, conversar e jogar aberto sobre qualquer assunto.
 
-Não existem atitudes ideais, precisamos improvisar e melhorar e sentir o feedback deles o tempo todo. A experiência de ser pai supera todos os limites em termos de emoção e também razão pois exige.
+Não existem atitudes ideais, precisamos improvisar, melhorar e sentir o feedback deles o tempo todo. A experiência de ser pai é isso: exige aprender, ensinar, ter paciência e jogar limpo. Sem dogmas.
+
+Ter filho pra mim superou todas as experiência de vida anteriores. Ensinam o que é o amor e relembram a reflexão de por que estamos aqui.
+
+- Por que estamos aqui?
