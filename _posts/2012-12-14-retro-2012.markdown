@@ -1,9 +1,8 @@
 ---
   layout: post
   title: Retrospectiva 2012
-  categories: [pense]
+  categories: [retrospectiva,pense,sou-pai]
 ---
-
 
 
 ## Coisas que eu fiz

@@ -1,7 +1,7 @@
 ---
   title: Meu primeiro filho e seu primeiro ano
   layout: post
-  categories: [pense]
+  categories: [pense,sou-pai]
 ---
 
 Faltam 53 min para ser dia 12/11/2012 e a exatamente 1 ano atrás, lá estavamos nós no hospital anciosos esperando pela chegada do herdeiro - Lorenzo Mascarello Paganini.

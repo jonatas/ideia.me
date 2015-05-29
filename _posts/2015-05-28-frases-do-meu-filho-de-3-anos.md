@@ -1,6 +1,7 @@
 ---
   title: Perguntas do meu filho de 3 anos
   layout: post
+  categories: [pense,sou-pai]
 ---
 
 - O que é trabalho?
