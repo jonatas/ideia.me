@@ -111,4 +111,4 @@ Não existem atitudes ideais, precisamos improvisar, melhorar e sentir o feedbac
 
 Ter filho pra mim superou todas as experiência de vida anteriores. Ensinam o que é o amor e relembram a reflexão de por que estamos aqui.
 
-- Por que estamos aqui?
+E afinal, por que estamos aqui?
