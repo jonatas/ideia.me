@@ -13,7 +13,7 @@ Vou ter 3 participações: [Cloud computing](http://www.thedevelopersconference.
 
 Vou falar rápidamente sobre `ø downtime migrations` e minha experiência na [Resultados Digitais](http://resultadosdigitais.com.br) com migrações de dados sem interrupção da aplicação ou agendamentos.
 
-Essa experiência gerou até [algumas](http://shipit.resultadosdigitais.com.br/blog/dicas-para-migracoes-eficientes-com-active-record/) [reflexões](http://shipit.resultadosdigitais.com.br/blog/migrando-com-zero-downtime/). Compartilhamos um pouco disso no blog do [shipit](http://shipit.resultadosdigitais.com.br) e agora vamos falar pessoalmente sobre o assunto.
+Essa experiência gerou até [algumas](http://shipit.resultadosdigitais.com.br/blog/dicas-para-migracoes-eficientes-com-active-record/) [reflexões](http://shipit.resultadosdigitais.com.br/blog/migrando-com-zero-downtime/). Compartilhamos um pouco disso no blog do [shipit](http://shipit.resultadosdigitais.com.br) e agora vou falar pessoalmente sobre o assunto.
 
 Também palestrei na trilha de [Cloud computing](http://www.thedevelopersconference.com.br/tdc/2015/saopaulo/trilha-cloud-computing) aqui em Florianópolis junto com o [@andrehjr](http://ndr.io) e essa será a segunda vez. Esta é uma oportunidade de participar no meio da semana veio com o meu trabalho na [Resultados Digitais](http://resultadosdigitais.com.br) que têm o valor de ser out-teach e também é patrocinadora oficial do evento :) Valeu RD!!!
 
