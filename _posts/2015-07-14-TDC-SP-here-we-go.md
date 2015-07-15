@@ -36,7 +36,7 @@ Saindo das indústrias para dentro dos nossos lares temos a oportunidade de visl
 
 # [TDC4Kids](http://www.thedevelopersconference.com.br/tdc/2015/saopaulo/tdc4kids) - Sábado
 
-Essa é inspirada no Lorenzo, meu filho, que sempre brincamos de construir pequenas coisas com meus hardwares. Vamos fazer uma máquina de bolhas no TDC4Kids. Infelizmente ele ainda não vai comigo nesta vez mas na próxima quem sabe vamos fazer a máquina de bolhas em conjunto.
+Essa é inspirada no Lorenzo, meu filho, que sempre brincamos de construir pequenas coisas com meus hardwares. Vou fazer uma máquina de bolhas no TDC4Kids. Infelizmente ele ainda não vai comigo nesta vez mas na próxima quem sabe vamos fazer a máquina de bolhas em conjunto.
 
 {% instagram wfMkyYJzj2 %}
 
