@@ -48,6 +48,4 @@ Eu fiquei muito empolgado por ele gostar e se entusiasmar tanto com a brincadeir
 
 # Nos vemos por lá
 
-Então nos encontramos lá! Vou chegar na quinta e fico até o final do evento!
-
-Não deixe de me procurar para bater um papo!
+Então nos encontramos lá! Vou chegar na quinta e fico até o final do evento! Não deixe de me procurar para bater um papo! Enquanto eu não estiver nas trilhas vou ficar pelo stand da Resultados Digitais com os outros RDevs.
