@@ -119,6 +119,8 @@ A função difference aceita múltiplos objetos, então é possível construir u
 
 Bom, nosso primeiro objeto está disponível opensource. Baixe, altere, compartilhe, imprima! Crie e distribua!
 
+https://github.com/jonatas/3d-scad
+
 Ficou curioso?
 
 Acesse o [manual do usuário do OpenSCad](https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/) que tem exemplos muito mais ricos e fantásticos do que os apresentados aqui :)
