@@ -3,10 +3,14 @@
   title: "Programação 3D com OpenSCad"
 ---
 
-Estou impressionado com o OpenScad. Conheci essa ferramenta na Trilha de
+Estou impressionado com o [OpenScad](http://openscad.org). Conheci essa ferramenta na Trilha de
 Impressão 3D no TDC de São Paulo esse ano. Com certeza posso dizer que foi um
 presente para mim pois até agora não havia conseguido me apegar em nenhuma
 ferramenta visual para criar objetos em 3D.
+
+Durante os próximos passos vou mostrar a criação do pião da imagem abaixo:
+
+{% instagram 7FmZ-mnfRw %}
 
 Já estou com meu syntax highlight rolando para programar em 3D no VIM e agora
 posso desenvolver minhas ideias com uma ferramenta simples e intuitiva.
