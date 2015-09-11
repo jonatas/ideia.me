@@ -1,6 +1,7 @@
 ---
   layout: post
   title: Migrando do linux para o Mac OS X
+  categories: ['mac','linux']
 ---
 
 Ontem o [Wellington Mitrut](http://wmitrut.com) veio super empolgado para mim
