@@ -1,12 +1,12 @@
 ---
-  layout: pot
-  title: Programando no Mac/OsX - o que muda?
+  layout: post
+  title: Migrando do linux para o Mac OS X
 ---
 
 Ontem o [Wellington Mitrut](http://wmitrut.com) veio super empolgado para mim
 pedindo dicas do que instalar e o que vai mudar agora que ele vai comprar um Mac.
 
-Então aqui vai algumas dicas para quem vivê no Linux e vai migrar para o OsX:
+Então aqui vai algumas dicas para quem vive no Linux e vai migrar para o OS X da Apple:
 
 # brew = apt-get
 
@@ -30,7 +30,7 @@ Com o brew cask você instala coisas como:
 
 # Terminal -> iTerm2
 
-No OsX por default vem o `Terminal.app`. Porém aconselho a dar uma olhada no
+No OS X por default vem o `Terminal.app`. Porém aconselho a dar uma olhada no
 [iTerm2](https://iterm2.com).
 
     brew cask install iterm2
