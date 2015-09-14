@@ -1,6 +1,7 @@
 ---
   layout: post
   title: Três meses na Resultados Digitais
+  categories: [Resultados Digitais]
 ---
 
 Dia 23 completei três meses na Resultados Digitais.

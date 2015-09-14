@@ -1,6 +1,7 @@
 ---
   layout: post
   title: Primeira semana na Resultados Digitais
+  categories: [Resultados Digitais]
 ---
 
 Hoje completo uma semana morando em Florianópolis. Agora tenho uma vida e rotina relativamente diferente. Após passar alguns meses sem estabilidade nas demandas nem fechar novos negócios pela [Invent.to](http://invent.to) decidi encontrar um local para mudar e trabalhar alocado. Partindo por buscar um local, decidi que queria morar em Joinville ou Floripa, e me encontrei com a indicação do Jack (@mauriciokj) para trabalhar com ele numa empresa rocks! a [Resultados Digitais (RD)][rd].

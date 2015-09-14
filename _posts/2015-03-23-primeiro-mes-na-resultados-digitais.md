@@ -1,6 +1,7 @@
 ---
   layout: post
   title: Primeiro mês na Resultados Digitais
+  categories: [Resultados Digitais]
 ---
 
 Seguindo minha experiência [da primeira semana](/primeira-semana-na-resultados-digitais/), decidi escrever sobre o primeiro mês que completo exatamente hoje!
