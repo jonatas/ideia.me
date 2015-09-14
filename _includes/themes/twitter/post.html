@@ -1,7 +1,7 @@
 <div class="page-header">
     <h1>
        <img class="thumb img-circle" src="{{ site.author.avatar }}" title="{{ site.author.name}}" alt="{{ site.author.name}} profile pic"></img>
-       {{ page.title }} <small>{{ page.date |  | date: "%d/%m/%Y" }}
+       {{ page.title }} <small><br/>{{ page.date | date: "%d/%m/%Y" }}
     {% if page.categories %}
       <span class="categories">
         {% for _category in page.categories %}
@@ -12,47 +12,37 @@
             {% endif %}
           {% endfor %}
           </a>
-         </span>
          {% endfor %}
        </span>
      {% endif %}
-  </small></h1>
+     </small>
+  </h1>
 </div>
 <div class="content">
     {{ content }}
 </div>
-  {% unless page.categories == empty %}
-    <ul class="tag_box inline">
-      <li><i class="icon-folder-open"></i></li>
-      {% assign categories_list = page.categories %}
-      {% include JB/categories_list %}
-    </ul>
-  {% endunless %}  
-  {% unless page.tags == empty %}
-    <ul class="tag_box inline">
-      <li><i class="icon-tags"></i></li>
-      {% assign tags_list = page.tags %}
-      {% include JB/tags_list %}
-    </ul>
-  {% endunless %}  
-
-    <hr>
-    <div class="pagination">
-      <ul>
-      {% if page.previous %}
-        <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&larr; Anterior</a></li>
-      {% else %}
-        <li class="prev disabled"><a>&larr; Anterior</a></li>
-      {% endif %}
-        <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Arquivo</a></li>
-      {% if page.next %}
-        <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">Próximo &rarr;</a></li>
-      {% else %}
-        <li class="next disabled"><a>Próximo &rarr;</a>
-      {% endif %}
-      </ul>
-    </div>
-    <hr>
-    {% include JB/comments %}
-  </div>
+<hr>
+{% include JB/comments %}
+<div class="share-page">
+  Compartilhar &rarr;
+  <a href="https://twitter.com/intent/tweet?text={{ page.title }}&url={{ site.production_url }}{{ page.url }}&via={{ site.author.twitter }}&related={{ site.author.twitter }}" rel="nofollow"title="Compartilhar on twitter">Twitter</a>
+  <a href="https://facebook.com/sharer.php?u={{ site.production_url }}{{ page.url }}" rel="nofollow" target="_blank" title="Compartilhar no Facebook">Facebook</a>
+  <a href="https://plus.google.com/share?url={{ site.production_url }}{{ page.url }}" rel="nofollow" target="_blank" title="Compartilhar no Google+">Google+</a>
 </div>
+<hr>
+<div class="pagination">
+  <ul>
+    {% if page.previous %}
+    <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&larr; Anterior</a></li>
+    {% else %}
+    <li class="prev disabled"><a>&larr; Anterior</a></li>
+    {% endif %}
+    <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Arquivo</a></li>
+    {% if page.next %}
+    <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">Próximo &rarr;</a></li>
+    {% else %}
+    <li class="next disabled"><a>Próximo &rarr;</a>
+    {% endif %}
+  </ul>
+</div>
+<hr>
