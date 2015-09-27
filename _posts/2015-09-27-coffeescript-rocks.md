@@ -252,7 +252,7 @@ Um bom conselho que posso dar é: mantenha-se sempre olhando o código javascrip
 gerado pois você está compilando javascript e no final não pode gerar
 incompatibilidades da linguagem.
 
-O `@` é o `this.` do coffeescript. Então, ao se referir a uma propriedade você
+O `@` é o `this.` do javascript. Então, ao se referir a uma propriedade você
 naturalmente usa `@`. Supomos o exemplo:
 
 <pre class="prettyprint coffeescript">
