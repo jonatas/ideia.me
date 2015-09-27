@@ -88,24 +88,6 @@
           {% assign pages_list = site.pages %}
           {% assign group = 'navigation' %}
           {% include JB/pages_list %}
-
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tema<b class="caret"></b></a>
-            <ul class="dropdown-menu" id="swatch-menu">
-              <li><a href="#" onclick="changeStyleTo('amelia')">Amelia</a></li>
-              <li><a href="#" onclick="changeStyleTo('cerulean')">Cerulean</a></li>
-              <li><a href="#" onclick="changeStyleTo('cosmo')">Cosmo</a></li>
-              <li><a href="#" onclick="changeStyleTo('cyborg')">Cyborg</a></li>
-              <li><a href="#" onclick="changeStyleTo('journal')">Journal</a></li>
-              <li><a href="#" onclick="changeStyleTo('readable')">Readable</a></li>
-              <li><a href="#" onclick="changeStyleTo('simplex')">Simplex</a></li>
-              <li><a href="#" onclick="changeStyleTo('slate')">Slate</a></li>
-              <li><a href="#" onclick="changeStyleTo('spacelab')">Spacelab</a></li>
-              <li><a href="#" onclick="changeStyleTo('spruce')">Spruce</a></li>
-              <li><a href="#" onclick="changeStyleTo('superhero')">Superhero</a></li>
-              <li><a href="#" onclick="changeStyleTo('united')">United</a></li>
-            </ul>
-          </li>
           </ul>
         </div>
       </div>
@@ -116,10 +98,6 @@
     </div>
   </body>
   <script type='text/javascript'>
-    function changeStyleTo(style) {
-     document.getElementById('bootstrap').href = "http://bootswatch.com/"+style+"/bootstrap.min.css";
-    }
-
     var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
     document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
     </script>
