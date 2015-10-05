@@ -7,7 +7,7 @@ Senior developer remote or allocated. 27 years. In a stable relationship, with o
 
 # Contact
 
-**City/State/Country**: Francisco Beltrão/PR/Brazil
+**City/State/Country**: Florianópolis/SC/Brazil
 
 **Phone**: [+55 (48) 9637 8119](tel:554896378119)
 
