@@ -5,11 +5,10 @@ tagline: estou aqui!
 ---
 {% include JB/setup %}
 
-Olá, eu sou o Jônatas, sou sócio da [invent.to][inventto] e sou [dev rails][wwr] na [Resultados Digitais][rd].
+Olá, eu sou o Jônatas, sou sócio da [invent.to][inventto] e sou full stack developer na [Resultados Digitais][rd].
 
 ps: Sinta-se livre para conversar comigo por email ou gtalk: <jonatasdp@gmail.com>.
 
-[wwr]:http://www.workingwithrails.com/person/9816-j-natas-davi-paganini
 [rd]: http://resultadosdigitais.com.br
 [inventto]: http://invent.to
 
@@ -20,7 +19,7 @@ ps: Sinta-se livre para conversar comigo por email ou gtalk: <jonatasdp@gmail.co
  <hr />
 {% endfor %}
 <ul class="posts">
- {% for post in site.posts offset: 3 %}
+ {% for post in site.posts offset: 10 %}
   <li><span class="post_date">{{ post.date | date_to_string }}</span> &raquo;<a class="post" href="{{ post.url }}">{{ post.title }}</a></li>
  {% endfor %}
 </ul>

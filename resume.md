@@ -18,7 +18,8 @@ Senior developer remote or allocated. 27 years. In a stable relationship, with o
 # Developer
 
 * Passionated developer has 11+ years of experience working on software development, applying agile methods in the last 8 years.
-* Autodidact and researcher in the last 5 years has worked with research/development of automated trading strategies for financial markets
+* Actually working on performance/operation team at Resultados Digitais
+* Self taught and researcher in the last 5 years has worked with research/development of automated trading strategies for financial markets
 * Responsible and committed working 7+ years from home for various customers and companies.
 * Entrepreneur and independent has working without supervision since 2010. Being partner of two different business from there. [Executive](http://executive.com.br) (2010-2012) and [Invent.to](htto://invent.to)(2012-actual).
 * Hacker e activist created Beltrão Hacker Club - a hacker/maker group in Francisco Beltrão with regular meetings to hack software and hardware.
@@ -39,6 +40,8 @@ Other characteristics:
 
 # Interesting activities on career
 
+* Computer vision for biometrics
+* Performance benchmarking, development and research
 * Distributed architecture and parallel processing
 * debugging and performance tuning on
   * High frequency algorithms - JVM (Java Virtual Machine).
@@ -59,9 +62,9 @@ Other characteristics:
 * Research and development of trading strategies for financial markets: from quantitative indicators to fully automated trading strategies experiencing CME, Forex, BMF and Bovespa markets.
 * BigData manipulation
 
-Familiar with frameworks like: AngularJS, HandleBars, Backbone, HighCharts, JQuery, Undercore, d3.  Adopted coffeescript instead of javascript in all the projects as possible.
+Familiar with frameworks like: AngularJS, HandleBars, Backbone, HighCharts, JQuery, Underscore, d3.  Adopted coffeescript instead of javascript in all the projects as possible.
 
-Uses Test driven development (TestUnit, JUnit) and Behavior driven development (RSpec, cucumber) to develop since 2007.
+Uses Test driven development (TestUnit, JUnit) and Behavior driven development RSpec, cucumber) to develop since 2007.
 
 # Technologies summary
 
@@ -77,25 +80,27 @@ PureData, R, Elixir | JQuery                 |                      |         | 
 
 # Professional Experience
 
- From | To    | Position            | Company                                       | Experiences
- -----|-------|---------------------|-----------------------------------------------|--------------------------------
- 2004 | 2006  | Software developer  | TJ Sistemas                                   | Clipper/FlagShip, Linux, PostgreSQL
- 2006 | 2009  | Software developer  | Leosoft                                       | Java, Ruby, Javascript, Linux Servers, PostgreSQL, JBoss, Tomcat
- 2009 | 2010  | Freelancer          | http://ideia.me                               | Ruby, Javascript, Java, Node, PostgreSQL, MySQL
- 2010 | 2012  | Partner / CTO       | Executive Inteligência Tecnológica.           | Java, jRuby, Statistics, SOA, CEP, FIX Protocol
- 2012 | actual| Partner / Developer | Invent.to Soluções em Sistemas Computacionais | Ruby, jRuby, Java, Javascript, Node, C
- 2013 | 2013  | Emergency Teacher   | UNOESC - Universidade do Extremo Oeste        | Distributed computing and parallel processing classes
+ From | To    | Position            | Company                                | Experiences
+ -----|-------|---------------------|----------------------------------------|--------------------------------
+ 2004 | 2006  | Software developer  | TJ Sistemas                            | Clipper/FlagShip, Linux, PostgreSQL
+ 2006 | 2009  | Software developer  | Leosoft                                | Java, Ruby, Javascript, Linux Servers, PostgreSQL, JBoss, Tomcat
+ 2009 | 2010  | Freelancer          | http://ideia.me                        | Ruby, Javascript, Java, Node, PostgreSQL, MySQL
+ 2010 | 2012  | Partner / CTO       | Executive Inteligência Tecnológica.    | Java, jRuby, Statistics, SOA, CEP, FIX Protocol
+ 2012 | actual| Partner / Developer | Invent.to Pesquisa e Desenvolvimento   | Ruby, jRuby, Java, Javascript, Node, C
+ 2013 | 2013  | Emergency Teacher   | UNOESC - Universidade do Extremo Oeste | Distributed computing and parallel processing classes
+ 2015 | actual | Full stack developer | Resultados Digitais                  | Performance and Operation team. Benchmark, research and improve actual infrastructure to scaling up RDStation digital marketing platform.
 
 # Interests
 
-* Internet of Things
-* 3D Print
+* Performance issues
+* Scalability strategies
+* Internet of Things 
+* 3D Printing
 * Sonification and art-technology
 * Startups
 * Statistics and Data Science
 * Functional Languages
 * Computational Intelligence and autonomous systems
-
 
 # Academic experience
 
@@ -104,12 +109,19 @@ From | To    | Title                                                | University
 2006 | 2011  | Bachelor of Computer Information Systems             | UNIPAR
 2012 | 2014  | Graduate School in Art-therapy, education and health | UNOESC
 
+I really enjoy and learn so much more on http://coursera.org and a lot of other
+open source online courses than from my academic experiences.
+
+My favorites actually is coursera and udacity.
+
+
 # Voluntarism
 
 * Bliss Symbols International Community - Created [bliss.ideia.me](http://bliss.ideia.me) - a tool for work with bliss symbols. Create interactive content to learn blisssymbolics language.
 * Open-source evangelist - spreading the open-source on regional events
 * Activist on local hacker/maker culture
-* Active Rails Rumble competidor
+* Active Rails Rumble competitor
+* Active Speaker on Tech Events. See my [slideshare](www.slideshare.net/jonataspaganini/) ans [speackerdeck](https://speakerdeck.com/jonatas)
 * Active apoiador on startup/entrepreneurship regional events
 
 # Links
