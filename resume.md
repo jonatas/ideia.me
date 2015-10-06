@@ -112,17 +112,17 @@ From | To    | Title                                                | University
 I really enjoy and learn so much more on http://coursera.org and a lot of other
 open source online courses than from my academic experiences.
 
-My favorites actually is coursera and udacity.
+My favorites actually are coursera and udacity.
 
 
 # Voluntarism
 
 * Bliss Symbols International Community - Created [bliss.ideia.me](http://bliss.ideia.me) - a tool for work with bliss symbols. Create interactive content to learn blisssymbolics language.
-* Open-source evangelist - spreading the open-source on regional events
 * Activist on local hacker/maker culture
 * Active Rails Rumble competitor
-* Active Speaker on Tech Events. See my [slideshare](www.slideshare.net/jonataspaganini/) ans [speackerdeck](https://speakerdeck.com/jonatas)
-* Active apoiador on startup/entrepreneurship regional events
+* Active Speaker at tech conferences - Find my presentations at [slideshare](http://www.slideshare.net/jonataspaganini/) or [speackerdeck](https://speakerdeck.com/jonatas)
+* Active participant on local tech events. Find me on a [meetup](http://www.meetup.com/members/185190193/) near from me.
+* Active apoiador on startup/entrepreneurship events
 
 # Links
 
