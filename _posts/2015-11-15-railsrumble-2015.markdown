@@ -1,0 +1,63 @@
+---
+  layout: post
+  title: Rails Rumble 2015
+  categories: [railsrumble, rails, pense]
+---
+
+Este ano participei novamente do [Rails Rumble](http://railsrumble.com) e foi
+muito legal! Minha terceira participação!
+
+{% instagram 9z9zfgnfRY %}
+
+Estava solo até na quinta-feira um dia antes do evento e consegui converter o
+[@efmiglioranza](https://github.com/efmiglioranza) para o time na RailsRumble :]
+
+Não trabalhamos nem próximo das 48 horas mas deu pra marcar presença e
+apresentar a ideia.
+
+Trata-se de um jogo de verdadeiro ou falso com 5 segundos para o
+jogador "compilar" pequenas expressões de programação.
+
+![torf](/images/torf-ruby.png)
+
+Inicialmente tinha focado apenas nas questões em Ruby, mas depois como já estava usando o
+[therubyracer](https://rubygems.org/gems/therubyracer/versions/0.12.2) e
+tava fácil pra compilar em js então resolvi seguir na mesma linha criando uns
+desafios em javascript.
+
+Usei bastante as ideias do vídeo [Wat by Gary Bernhardt](https://www.youtube.com/watch?v=20BySC_6HyY):
+
+{% youtube 20BySC_6HyY %}
+
+E me empolguei nas gambiarras inusitadas do JS, no meio da competição acabei esbarrando no 
+[WTFJS by Brian Leroux](https://www.youtube.com/watch?v=et8xNAc2ic8) e tive que fazer pra javascript também.
+
+{% youtube et8xNAc2ic8 %}
+
+Então foi bem legal usar a mesma lógica do jogo de pequenas expressões para js e ruby.
+
+![torf js](/images/torf-js.png)
+
+Jogue com algumas das [piadas js](http://torf.r15.railsrumble.com/challenges/4) que a gente coletou por ae.
+
+Ou desafie-se em 5 minutos de [ruby easy](http://torf.r15.railsrumble.com/challenges/1) :)
+
+Fiquei chateado por não termos um designer e colocar uma interface mais interessante e atrativa.
+
+![torf](/images/torf.png)
+
+O que foi mais legal foi que consegui fazer o deploy ainda no sábado de tarde
+com as primeiras fazer logo na tela principal então tivemos mais de 170 acessos com um engajamento de 6 minutos.
+
+Se você não jogou ou não viu acesse: http://torf.r15.railsrumble.com/ ou http://torf.ideia.me.
+
+Deixe seu feedback sobre o game na thread da competição:
+
+http://railsrumble.com/entries/136-true-or-false-are-you-really-a-compiler
+
+Sinta-se livre para contribuir com novas fases ou criar seu game a partir da
+estrutura. O código opensource está aqui:
+
+https://github.com/railsrumble/r15-team-136
+
+E você participou? Não? Gostou? Deixe seus comentários sobre o evento!
