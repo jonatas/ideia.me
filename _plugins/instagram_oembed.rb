@@ -9,7 +9,7 @@ module Jekyll
     end
 
     def render(context)
-      %{<iframe src="//instagram.com/p/#{@text}/embed/" width="445px" height="500px" frameborder="0" scrolling="no" allowtransparency="true">        </iframe>}
+      %{<iframe src="//instagram.com/p/#{@text}/embed/" width="445px" height="535px" frameborder="0" scrolling="no" allowtransparency="true"></iframe>}
     end
   end
 end
