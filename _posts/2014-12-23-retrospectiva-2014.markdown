@@ -1,6 +1,7 @@
 ---
   layout: post
   title: Retrospectiva 2014
+  categories: ['retrospectiva']
 ---
 
 Fim de ano chegando e cá estou refletindo sobre as tantas coisas que se acontecem em um ano apenas.
