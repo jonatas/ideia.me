@@ -21,4 +21,8 @@ desde que ele era pequeno.
 
 Nesse episódeo ele conta sobre o jogo de [abrir a porteira](https://www.youtube.com/watch?v=KftW79L-_x8) que ele inventou.
 
+
+A url do site é: http://boanoitelorenzo.podbean.com/ e se você quiser assinar
+no seu iTunes é só usar: `http://boanoitelorenzo.podbean.com/feed/`.
+
 Enjoy!
