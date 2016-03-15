@@ -1,9 +1,7 @@
 ---
   layout: post
-  title: Recursos úteis para desenvolvimento na linha de comando
+  title: Vida no terminal
 ---
-
-
 
 Existe uma gama de comandos muito forte para se tornar mais ágil no linux e também no msysgit e eu me sinto feliz em compartilhar aqui meus preferidos:
 
