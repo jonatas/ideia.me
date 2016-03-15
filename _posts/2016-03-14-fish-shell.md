@@ -1,6 +1,7 @@
 ---
   layout: post
   title: Fish shell
+  categories: ['fish','shell','unix','terminal']
 ---
 
 O [fish shell](https://fishshell.com) é uma linha de comando como [shell](https://pt.wikipedia.org/wiki/Shell_script) ou [zsh](http://www.zsh.org/).
@@ -104,5 +105,4 @@ O fish cria um servidor web para você customizar a interface dele.
 
 Digite `fish_config` em um terminal fish e ele vai abrir o browser pra você
 configurar os detalhes do seu terminal.
-
 
