@@ -15,7 +15,7 @@ caramba no meu setup e workflow do dia a dia.
 
 Eu tenho um [fork](https://github.com/jonatas/dotvim) do [dotvim do astrails](https://github.com/astrails/dotvim) que tem vários atalhos inspiradores que estou sempre tentando incluir no meu workflow.
 Esse set de plugins que fiz o fork foi uma dica do
-[@nandosouzafr](https://twitter.com/nandosouzafr) que me apresentou logo que comecei a trabalhar na [Resultados Digitais](http://resultadosdigitais.com.br).
+[@nandosousafr](https://twitter.com/nandosousafr) que me apresentou logo que comecei a trabalhar na [Resultados Digitais](http://resultadosdigitais.com.br).
 
 ## `,` como mapleader
 
