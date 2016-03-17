@@ -14,7 +14,7 @@ algum erro mas depois que comecei a entender e pegar o jeito, me senti livre e
 confiante.
 
 O Go é simples. Chega a ser bizarro e as vezes até se torna um pouco verboso
-até você conhecer os massetes da sintaxe.
+até você conhecer os macetes da sintaxe.
 
 ## go run
 
