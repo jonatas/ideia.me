@@ -15,7 +15,7 @@ fazendo. Automatizo tudo logo que o primeiro comando 'funciona'!
 Comecei a navegar no terminal, precisei criar um arquivo, ou um banco de dados
 ou configurar alguma coisa.
 
-Logo que inicio crio uma pasta `script` com um arquivo `setup-alguma-coisa` dentro e adiciono ao README.
+Logo que inicio crio uma pasta `script` com um arquivo `setup-alguma-coisa` dentro e adiciono ao README como usar meu novo `script/setup-alguma-coisa`.
 
 O processo é mais simples do que simplesmente eu lembrar depois. Então,
 conforme vou fazendo testes e chegando a exemplos que funcionam, migro os
