@@ -3,7 +3,7 @@
   title: Google Cloud Platform
 ---
 
-Após começar a me [interessar mais por Go Lang](comecando-com-go-lang),
+Após começar a me [interessar mais por Go Lang](/comecando-com-go-lang),
 estou iniciando minha história com o [Google Cloud Platform](http://cloud.google.com).
 
 E as primeiras impressões foram muito boas! Exatamente como a 6 anos atrás quando brincava no [google code playground](/google-code-playground/).
