@@ -8,8 +8,6 @@ estou iniciando minha história com o [Google Cloud Platform](http://cloud.googl
 
 E as primeiras impressões foram muito boas! Exatamente como a 6 anos atrás quando brincava no [google code playground](/google-code-playground/).
 
-    Esse google não brinca em serviço :) 
-
 Eu sempre gostei muito dos produtos mas a parte de clouds ainda não tinha testado.
 
 Inicialmente me atraí pois curti o terminal de acesso via web deles é bem descente e integrado. Estou
