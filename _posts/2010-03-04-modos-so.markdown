@@ -3,6 +3,7 @@
  title: Aula de Sistemas Operacionais - Modos do Kernel
 ---
 
+
 O sistema operacional é dividido em dois modos básicos, sendo estes o modo Kernel e o modo Usuário. Esta divisão permite que os aplicativos sejam executados com segurança.
 
 ![Kernel - imagem do wikipedia](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Kernel_Layout.svg/382px-Kernel_Layout.svg.png)
@@ -32,7 +33,8 @@ As rotinas do sistema operacional, podem fazer chamadas a respeito de x comandos
 
 Veja como é [a definição do kernel do linux](http://www.linfo.org/kernel_mode.html).
 
----
+{% include adsense.html %}
+{% include ads_lateral.html %}
 
 # Questões sobre a arquitetura do Sistema Operacional
 

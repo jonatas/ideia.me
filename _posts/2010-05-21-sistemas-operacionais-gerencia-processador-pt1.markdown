@@ -3,7 +3,7 @@
  layout: post
 ---
 
-
+{% include ads_lateral.html %}
 
 ## O que é política de escalonamento de um sistema operacional?
 
@@ -150,4 +150,6 @@ Processo | Segundos
       P2 | 51
       P3 | 37
       P4 | 59
+
+{% include adsense.html %}
 
