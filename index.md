@@ -5,12 +5,15 @@ tagline: estou aqui!
 ---
 {% include JB/setup %}
 
-Olá, eu sou o Jônatas, sou sócio da [invent.to][inventto] e sou full stack developer na [Resultados Digitais][rd].
+Olá, meu nome é Jônatas Davi Paganini e esse é meu blog. Sou programador, tenho alguns projetos no [github](https://github.com/jonatas) e escrevo
+livremente [aqui no ideia.me](/) mas tenho posts mais técnicos no [Ship It](http://shipit.resultadosdigitais.com.br)!
 
-ps: Sinta-se livre para conversar comigo por email ou gtalk: <jonatasdp@gmail.com>.
+- Sou [ciclista](https://www.strava.com/athletes/12104550) e levo uma [vida de bike](/vida-de-bike) indo e voltando pro meu trabalho na [Resultados Digitais](http://resultadosdigitais.com.br).
+- Tenho um [podcast com meu filho de 4 anos](http://lorenzo.ideia.me) e também organizo um [podcast técnico](http://soundcloud.com/shipit-rd) na [RD](http://resultadosdigitais.com.br).
+- Meu twitter e gmail é o mesmo: [@jonatasdp](https://twitter.com/jonatasdp).
+- Encontre-me em algum [meetup](http://www.meetup.com/members/185190193/) em Floripa! ou conecte-se via [linkedin](https://br.linkedin.com/in/jonatasdp)/[instagram](https://instagram.com/jonatasdp)/[facebook](https://fb.com/jonatas.paganini)/[soundcloud](http://soundcloud.com/jonatasdp).
 
-[rd]: http://resultadosdigitais.com.br
-[inventto]: http://invent.to
+--------------
 
 {% for post in site.posts limit: 3 %}
    <h1 class="post"><a class="post" href="{{ post.url }}"> {{ post.title }}</a></h1>
