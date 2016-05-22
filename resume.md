@@ -18,10 +18,10 @@ Senior developer remote or allocated. 27 years. In a stable relationship, with o
 # Developer
 
 * Passionated developer has 11+ years of experience working on software development, applying agile methods in the last 8 years.
-* Actually working on performance/operation team at Resultados Digitais
+* Actually working on onboarding process at Resultados Digitais as a Full Stack Trainer
 * Self taught and researcher in the last 5 years has worked with research/development of automated trading strategies for financial markets
 * Responsible and committed working 7+ years from home for various customers and companies.
-* Entrepreneur and independent has working without supervision since 2010. Being partner of two different business from there. [Executive](http://executive.com.br) (2010-2012) and [Invent.to](htto://invent.to)(2012-actual).
+* Entrepreneur and independent has working without supervision since 2010. Being partner of two different business from there. [Executive](http://executive.com.br) (2010-2012) and [Invent.to](htto://invent.to)(2012-2016).
 * Hacker e activist created Beltrão Hacker Club - a hacker/maker group in Francisco Beltrão with regular meetings to hack software and hardware.
 
 Abilities:
@@ -66,7 +66,7 @@ Familiar with frameworks like: AngularJS, HandleBars, Backbone, HighCharts, JQue
 
 Uses Test driven development (TestUnit, JUnit) and Behavior driven development RSpec, cucumber) to develop since 2007.
 
-# Technologies summary
+## Technologies summary
 
  Languages          | Tools                  | Methodologies        |  OS     | Databases, Persistence and Prevalence
 --------------------+------------------------+----------------------+---------+--------------------------------------
@@ -78,7 +78,7 @@ Shell               | Bower + Grunt          |                      | Tizen OS| 
 SQL/PlPgSql         | AngularJS              |                      |         | Prevayler
 PureData, R, Elixir | JQuery                 |                      |         | Madeleine
 
-# Professional Experience
+## Professional Experience
 
  From | To    | Position            | Company                                | Experiences
  -----|-------|---------------------|----------------------------------------|--------------------------------
@@ -86,11 +86,13 @@ PureData, R, Elixir | JQuery                 |                      |         | 
  2006 | 2009  | Software developer  | Leosoft                                | Java, Ruby, Javascript, Linux Servers, PostgreSQL, JBoss, Tomcat
  2009 | 2010  | Freelancer          | http://ideia.me                        | Ruby, Javascript, Java, Node, PostgreSQL, MySQL
  2010 | 2012  | Partner / CTO       | Executive Inteligência Tecnológica.    | Java, jRuby, Statistics, SOA, CEP, FIX Protocol
- 2012 | actual| Partner / Developer | Invent.to Pesquisa e Desenvolvimento   | Ruby, jRuby, Java, Javascript, Node, C
- 2013 | 2013  | Emergency Teacher   | UNOESC - Universidade do Extremo Oeste | Distributed computing and parallel processing classes
- 2015 | actual | Full stack developer | Resultados Digitais                  | Performance and Operation team. Benchmark, research and improve actual infrastructure to scaling up RDStation digital marketing platform.
+ 2012 | 2016 | Partner / Developer  | Invent.to Pesquisa e Desenvolvimento   | Ruby, jRuby, Java, Javascript, Node, C
+ 2013 | 2013  | Teacher             | UNOESC - Universidade do Extremo Oeste | Distributed computing and parallel processing classes
+ 2015 | 2016 | Full stack developer | Resultados Digitais                  | Performance and Operation team. Benchmark, research and improve actual infrastructure to scaling up RDStation digital marketing platform.
+ 2016 | actual | Full stack trainer | Resultados Digitais                  | Out teach guy. Help people to code using the best practices: TDD/BDD, code quality, metrics and monitoring. |
 
-# Interests
+
+## Interests
 
 * Performance issues
 * Scalability strategies
@@ -102,7 +104,7 @@ PureData, R, Elixir | JQuery                 |                      |         | 
 * Functional Languages
 * Computational Intelligence and autonomous systems
 
-# Academic experience
+## Academic experience
 
 From | To    | Title                                                | University
 -----|-------|------------------------------------------------------|----------
@@ -115,7 +117,7 @@ open source online courses than from my academic experiences.
 My favorites actually are coursera and udacity.
 
 
-# Voluntarism
+## Voluntarism
 
 * Bliss Symbols International Community - Created [bliss.ideia.me](http://bliss.ideia.me) - a tool for work with bliss symbols. Create interactive content to learn blisssymbolics language.
 * Activist on local hacker/maker culture
@@ -124,10 +126,25 @@ My favorites actually are coursera and udacity.
 * Active participant on local tech events. Find me on a [meetup](http://www.meetup.com/members/185190193/) near from me.
 * Active apoiador on startup/entrepreneurship events
 
-# Links
+## Links
 
 * [github.com/jonatas](http://github.com/jonatas) is where I put my open-source code.
-* [LinkedIn](http://in.linkedin.com/pub/j%C3%B4natas-paganini/2/667/b78) exists but is not up to date.
+* [LinkedIn](http://in.linkedin.com/in/jonatasdp) exists but is not up to date.
 * [ideia.me](http://ideia.me) is my personal website
-* [invent.to](http://invent.to) is the company I'm partner.
+* [invent.to](http://invent.to) is the company I was partner focused on maker world.
+* [Executive](http://executive.com.br) is another company I was partner focused
+  on automated trading for financial markets.
 
+## Talks
+
+I like to talk so much at events and be part of the tech communities.
+
+See some of my [talks](/talks) in portuguese.
+
+## Pet Projects
+
+* [bliss.ideia.me](http://bliss.ideia.me) is a tool to learn and teach bliss symbols.
+* [pixel.ideia.me](http://pixel.ideia.me) is a place to draw with other people
+* [churumelas.ideia.me](http://churumelas.ideia.me) is a ruby challenges in one line of code
+* [torf.ideia.me](http://torf.ideia.me) is a true or false game
+* [i.ideia.me](http://i.ideia.me) is a fast instagram navigator
