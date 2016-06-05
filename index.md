@@ -1,21 +1,18 @@
 ---
 layout: page
 title:  Ideia-me!
-tagline: estou aqui!
 ---
 {% include JB/setup %}
-{% include about_me.md %}
+{% include about_me.html %}
 
---------------
-
-{% for post in site.posts limit: 3 %}
+<hr />
+{% for post in site.posts limit: 1 %}
    <h1 class="post"><a class="post" href="{{ post.url }}"> {{ post.title }}</a></h1>
  {{ post.content }}
- <hr />
- <hr />
 {% endfor %}
+<hr />
 <ul class="posts">
- {% for post in site.posts offset: 10 %}
+ {% for post in site.posts %}
   <li><span class="post_date">{{ post.date | date_to_string }}</span> &raquo;<a class="post" href="{{ post.url }}">{{ post.title }}</a></li>
  {% endfor %}
 </ul>
