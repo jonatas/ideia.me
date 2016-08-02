@@ -1,0 +1,55 @@
+
+==================================================================
+https://keybase.io/jonatasdp
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://ideia.me
+  * I am jonatasdp (https://keybase.io/jonatasdp) on keybase.
+  * I have a public key ASA0IjuX2QS_MIRbcNmEuvwK5lshViHwMnV3aVTucFxiiAo
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "eldest_kid": "012034223b97d904bf30845b70d984bafc0ae65b215621f03275776954ee705c62880a",
+            "host": "keybase.io",
+            "kid": "012034223b97d904bf30845b70d984bafc0ae65b215621f03275776954ee705c62880a",
+            "uid": "84a125c7c37b5d0db95d7fc6dea33e19",
+            "username": "jonatasdp"
+        },
+        "service": {
+            "hostname": "ideia.me",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "client": {
+        "name": "keybase.io go client",
+        "version": "1.0.16"
+    },
+    "ctime": 1470105025,
+    "expire_in": 504576000,
+    "merkle_root": {
+        "ctime": 1470104867,
+        "hash": "f949bb68ddff4bb6edb1afeede25bd59d44b5ecfd4611985343ec2668df230a4368d96bf40b0f04861ccb0ae5e51efacf3bf393ace6b77a95c868dbb25ad5e79",
+        "seqno": 553361
+    },
+    "prev": "57fc271b81440170bdcb0b8d3192e9675e10813be6b4c679a4ead84afaca4763",
+    "seqno": 7,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgNCI7l9kEvzCEW3DZhLr8CuZbIVYh8DJ1d2lU7nBcYogKp3BheWxvYWTFAvB7ImJvZHkiOnsia2V5Ijp7ImVsZGVzdF9raWQiOiIwMTIwMzQyMjNiOTdkOTA0YmYzMDg0NWI3MGQ5ODRiYWZjMGFlNjViMjE1NjIxZjAzMjc1Nzc2OTU0ZWU3MDVjNjI4ODBhIiwiaG9zdCI6ImtleWJhc2UuaW8iLCJraWQiOiIwMTIwMzQyMjNiOTdkOTA0YmYzMDg0NWI3MGQ5ODRiYWZjMGFlNjViMjE1NjIxZjAzMjc1Nzc2OTU0ZWU3MDVjNjI4ODBhIiwidWlkIjoiODRhMTI1YzdjMzdiNWQwZGI5NWQ3ZmM2ZGVhMzNlMTkiLCJ1c2VybmFtZSI6ImpvbmF0YXNkcCJ9LCJzZXJ2aWNlIjp7Imhvc3RuYW1lIjoiaWRlaWEubWUiLCJwcm90b2NvbCI6Imh0dHA6In0sInR5cGUiOiJ3ZWJfc2VydmljZV9iaW5kaW5nIiwidmVyc2lvbiI6MX0sImNsaWVudCI6eyJuYW1lIjoia2V5YmFzZS5pbyBnbyBjbGllbnQiLCJ2ZXJzaW9uIjoiMS4wLjE2In0sImN0aW1lIjoxNDcwMTA1MDI1LCJleHBpcmVfaW4iOjUwNDU3NjAwMCwibWVya2xlX3Jvb3QiOnsiY3RpbWUiOjE0NzAxMDQ4NjcsImhhc2giOiJmOTQ5YmI2OGRkZmY0YmI2ZWRiMWFmZWVkZTI1YmQ1OWQ0NGI1ZWNmZDQ2MTE5ODUzNDNlYzI2NjhkZjIzMGE0MzY4ZDk2YmY0MGIwZjA0ODYxY2NiMGFlNWU1MWVmYWNmM2JmMzkzYWNlNmI3N2E5NWM4NjhkYmIyNWFkNWU3OSIsInNlcW5vIjo1NTMzNjF9LCJwcmV2IjoiNTdmYzI3MWI4MTQ0MDE3MGJkY2IwYjhkMzE5MmU5Njc1ZTEwODEzYmU2YjRjNjc5YTRlYWQ4NGFmYWNhNDc2MyIsInNlcW5vIjo3LCJ0YWciOiJzaWduYXR1cmUifaNzaWfEQG1/Qmvl+MYp1pnsZZD6HZ+/rzQvqD4842b1QQRYgN25Om3eJLB1b1/npqdGZITAvjSuUjBR2GXT7kSGP+mvbgyoc2lnX3R5cGUgpGhhc2iCpHR5cGUIpXZhbHVlxCARV+2FFYS5T1T93l/W7KOkJhvwPwvGyehgX3d/7q/SnqN0YWfNAgKndmVyc2lvbgE=
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/jonatasdp
+
+==================================================================
