@@ -48,8 +48,12 @@ I extended the challenge to [Floripa On Rails](http://floripaonrails.com.br) mee
 
 Feel free to [join us](http://www.meetup.com/Floripa-on-Rails) and help us to implement a better solver ;)
 
-# First post in English
+-------
 
-So, it was my first post in English!
+### First post in English
 
-I recently joined to the [Toptal LLC](https://toptal.com) core team. Now I'm part of a global company! It's time to start blogging in English too :)
+So, it was my first post in English \o/
+
+I recently joined to the [Toptal LLC](https://toptal.com) core team.
+
+Now I'm part of a global company! It's time to be global and start blogging in English too :)
