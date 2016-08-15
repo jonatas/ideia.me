@@ -15,7 +15,7 @@ The game is from [Lorenzo](http://lorenzo.ideia.me), my 4 years old my son. I re
 
 ## Current implementation
 
-My idea was code the game. But after code the board, I tried to start building a solver
+My idea was code the board, but after code it, I tried to start building a solver
 for it. It was pretty hard for me. My current implementation was a "go horse"
 with no sense and no concerns. Just a foo implementation that:
 
