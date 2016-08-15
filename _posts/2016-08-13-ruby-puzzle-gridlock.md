@@ -26,6 +26,8 @@ with no sense and no concerns. Just a foo implementation that:
 
 <script type="text/javascript" src="https://asciinema.org/a/79433.js" id="asciicast-79433" async></script>
 
+So, it was an old version and as you see it does not accomplish with the mission.
+
 ## The current solver problems
 
 So, Ruby is one of my favorite language and I put it down in a little time but when I
