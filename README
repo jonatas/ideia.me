@@ -2,6 +2,3 @@ My personal website: Take a look at http://ideia.me
 
 It uses jekyll to generate the static website.
 
-## autodeploy at deploy origin
-
-    git push deploy master
