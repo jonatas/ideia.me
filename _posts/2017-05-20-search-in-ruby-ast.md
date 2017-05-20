@@ -30,7 +30,7 @@ end
 
 Looking the AST representation with the `ruby-parse` utility:
 
-    $ ruby-parse simple_class.rb                                                                                                                                                             10:03:52
+    $ ruby-parse simple_class.rb
 
 ```
 (class
