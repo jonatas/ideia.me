@@ -336,30 +336,16 @@ RuboCop dependency. The idea is just starting: https://github.com/jonatas/fast
 You can do similar things with plain ruby code and arrays to build the matcher:
 
 ```ruby
-  it 'navigates deeply' do
-    ast =
-      s(:send,
-        s(:send,
-          s(:send,
-            s(:send, nil, :a),
-            :b),
-          :c),
-        :d)
-
-     expect(Fast.match?(ast, [:send, '...'])).to be_truthy
-     expect(Fast.match?(ast, [:send, [:send, '...'], :d])).to be_truthy
-     expect(Fast.match?(ast, [:send, [:send, '...'], :c])).to be_falsy
-     expect(Fast.match?(ast, [:send, [:send, [:send, '...'], :c], :d])).to be_truthy
-     expect(Fast.match?(ast, [:send, [:send, [:send, [:send, nil, :a], :b], :c], :d])).to be_truthy
-     expect(Fast.match?(ast, [:send, [:send, [:send, [:send, nil, '_'], '_'], :c], '_'])).to be_truthy
-  end
+Fast.match?(s(:send, s(:send, nil, :a), :b), [:send, '...'])) # => true
 ```
+
+Checkout the [current specs](https://github.com/jonatas/fast/blob/master/spec/fast_spec.rb#L48).
 
 In the next step, I'm thinking about do a `f()` for find and `c()` to capture things. Not sure
 exactly how to proceed but the idea is something like:
 
 ```ruby
-Fast.match?(ast, f(:send, f(:send, f(:send, c(:send, nil, '_'), '_'), :c), '_'))) => s(:send, nil, :a)
+Fast.match?(ast, f(:send, f(:send, f(:send, c(:send, nil, '_'), '_'), :c), '_'))) # => s(:send, nil, :a)
 ```
 
 Any thoughts or ideas about how to be expressive in this search?
