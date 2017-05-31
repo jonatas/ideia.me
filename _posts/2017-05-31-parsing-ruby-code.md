@@ -5,7 +5,8 @@
 ---
 
 After start my saga on [Ruby AST Search](./)
-I build some tools to help me to understand the AST and inspecting it.
+I built a [few](https://github.com/jonatas/rubocopular) [tools](https://github.com/jonatas/fast) to
+help me to understand the AST and inspecting it.
 
 After a few days around I discover everything I needed was already build in and
 I just need to learn about.
