@@ -3,13 +3,13 @@ layout: page
 title: Jônatas Davi Paganini
 ---
 
-Senior developer remote or allocated. 27 years. In a stable relationship, with one child (3 years old).
+Senior developer remote only.
 
 # Contact
 
 **City/State/Country**: Florianópolis/SC/Brazil
 
-**Phone**: [+55 (48) 9637 8119](tel:554896378119)
+**Phone**: [+55 (48) 99150 1012](tel:5548991501012)
 
 **Mail**: jonatasdp@gmail.com
 

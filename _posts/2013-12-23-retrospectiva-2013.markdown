@@ -1,7 +1,7 @@
 ---
   layout: post
   title: Retrospectiva 2013
-  categories: [retrospectiva,pense,sou-pai]
+  categories: [pense,sou-pai,retrospective]
 ---
 
 Impossível lembrar de tantas coisas que acontecem em apenas um ano. Completei 27 a poucos dias e refletir sobre o passado nos ajuda a estabelecer perspectivas melhores para os próximos anos. Ver meus erros e acertos me ajuda a buscar alternativas diferentes mais e mais.
