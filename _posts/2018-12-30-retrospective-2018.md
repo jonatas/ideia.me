@@ -104,12 +104,12 @@ friend Fagner and ran 50+ KM in the first week until I hurt my Achilles tendon.
 
 Fagner is a great entrepreneur, and I had a great conversation with him about business, life, and future. Fagner is a dreamer, I always have great times with him.
 
-We also spend our vacations together :)
+We also spent our vacations together :)
 
 {% instagram BlWBk4rFJAK %}
 
 I also lived in Willian's house, and we have a great friendship. He is psychologist
-and we spend our evenings talking about childhood mindset, talks, job,
+and we spent our evenings talking about childhood mindset, talks, job,
 career, future and so on.
 
 He is a great friend, and I met him through Fagner as well. 
