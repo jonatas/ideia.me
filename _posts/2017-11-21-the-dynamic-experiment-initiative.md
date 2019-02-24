@@ -1,7 +1,7 @@
 ---
 layout: post
 title: The dynamic experiment initiative
-tags: [fast, dynamic-experiments]
+tags: [fast, dynamic-experiments, ruby, ast]
 ---
 
 I'm having a lot of fun with automated code rewrite.

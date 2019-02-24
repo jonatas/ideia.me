@@ -1,6 +1,6 @@
 ---
   title: Parsing Ruby Code
-  categories: [ruby]
+  categories: [ruby, ast]
   layout: post
 ---
 

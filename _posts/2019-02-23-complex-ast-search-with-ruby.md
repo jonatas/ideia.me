@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Complex search on AST with Ruby
-categories: [ruby, ast]
+categories: [ruby, ast, fast]
 ---
 
 I previously wrote a post about [search in ruby ast](/search-in-ruby-ast) and I

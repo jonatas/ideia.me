@@ -1,6 +1,6 @@
 ---
   title: Search in Ruby AST
-  categories: [ruby]
+  categories: [ruby, ast]
   layout: post
 ---
 
