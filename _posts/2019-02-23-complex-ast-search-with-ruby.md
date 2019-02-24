@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Complex search on AST with Ruby
+title: Complex AST search with Ruby
 categories: [ruby, ast, fast]
 ---
 
