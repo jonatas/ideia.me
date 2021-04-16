@@ -31,18 +31,18 @@
 </div>
 <hr>
 <div class="pagination">
-  <ul>
     {% if page.previous %}
-    <li class="prev"><a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{ page.previous.title }}">&larr; Anterior</a></li>
+      <span class="prev">
+        <a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{page.previous.title }}">&larr; Before</a>
+      </span>
     {% else %}
-    <li class="prev disabled"><a>&larr; Anterior</a></li>
+    <span class="prev disabled"><a>&larr; Before</a></span>
     {% endif %}
-    <li><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Arquivo</a></li>
+    | <span><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Archive</a></span> |
     {% if page.next %}
-    <li class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">Próximo &rarr;</a></li>
+    <span class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">Next &rarr;</a></span>
     {% else %}
-    <li class="next disabled"><a>Próximo &rarr;</a>
+    <span class="next disabled"><a>Next &rarr;</a>
     {% endif %}
-  </ul>
 </div>
 <hr>
