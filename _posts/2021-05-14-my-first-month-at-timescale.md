@@ -45,8 +45,7 @@ for specific optimizations. I'm a bit far from understanding the code itself but
 
 A few days ago, I started my data nerd project to "save the internet in my pocket", intrigued to explore how people are writing in the engineering blogs. I also use it as a playground to feed my curiosity and get up-to-date with Postgresql's text searches. My research still in progress, but all results are available. Feel free to contribute with ideas or feedback! 
 
-https://github.com/jonatas/blog-sniffer
+[github.com/jonatas/blog-sniffer](https://github.com/jonatas/blog-sniffer).
 
 Scrapping is power! Data is power! You can find both code and research results so you can try it yourself ;)
-
 
