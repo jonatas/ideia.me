@@ -95,7 +95,6 @@ kbd,
 pre,
 samp {
   font-family: monospace, serif;
-  font-size: 1em;
 }
 
 pre {
@@ -300,13 +299,12 @@ th, td {
 }
 
 html {
-  font-size: 62.5%;
+  font-size: 26px;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 body {
   font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
   line-height: 1.428571429;
   color: #2c3e50;
   background-color: #ffffff;
@@ -455,100 +453,6 @@ cite {
   text-align: center;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6 {
-  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 500;
-  line-height: 1.1;
-}
-
-h1 small,
-h2 small,
-h3 small,
-h4 small,
-h5 small,
-h6 small,
-.h1 small,
-.h2 small,
-.h3 small,
-.h4 small,
-.h5 small,
-.h6 small {
-  font-weight: normal;
-  line-height: 1;
-  color: #b4bcc2;
-}
-
-h1,
-h2,
-h3 {
-  margin-top: 21px;
-  margin-bottom: 10.5px;
-}
-
-h4,
-h5,
-h6 {
-  margin-top: 10.5px;
-  margin-bottom: 10.5px;
-}
-
-h1,
-.h1 {
-  font-size: 39px;
-}
-
-h2,
-.h2 {
-  font-size: 32px;
-}
-
-h3,
-.h3 {
-  font-size: 26px;
-}
-
-h4,
-.h4 {
-  font-size: 19px;
-}
-
-h5,
-.h5 {
-  font-size: 15px;
-}
-
-h6,
-.h6 {
-  font-size: 13px;
-}
-
-h1 small,
-.h1 small {
-  font-size: 26px;
-}
-
-h2 small,
-.h2 small {
-  font-size: 19px;
-}
-
-h3 small,
-.h3 small,
-h4 small,
-.h4 small {
-  font-size: 15px;
-}
 
 .page-header {
   padding-bottom: 9.5px;
@@ -746,7 +650,7 @@ pre {
   display: block;
   padding: 10px;
   margin: 0 0 10.5px;
-  font-size: 14px;
+  font-size: 90%;
   line-height: 1.428571429;
   color: #7b8a8b;
   word-break: break-all;
@@ -6164,7 +6068,7 @@ body.modal-open,
   position: absolute;
   z-index: 1030;
   display: block;
-  font-size: 13px;
+  font-size: 33px;
   line-height: 1.4;
   opacity: 0;
   filter: alpha(opacity=0);
@@ -6312,7 +6216,7 @@ body.modal-open,
 .popover-title {
   padding: 8px 14px;
   margin: 0;
-  font-size: 15px;
+  font-size: 25px;
   font-weight: normal;
   line-height: 18px;
   background-color: #f7f7f7;
