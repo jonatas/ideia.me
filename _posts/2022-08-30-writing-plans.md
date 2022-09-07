@@ -107,7 +107,7 @@ I still edit the stuff on vim and use shell scripts for my automation. So I'll b
 
 Planned posts here are:
 * psql tips and tricks
-* How to use Timescale
+* [How to use Timescale](/using-the-timescale-gem-with-ruby)
 
 #### Programming Researches and Projects
 
