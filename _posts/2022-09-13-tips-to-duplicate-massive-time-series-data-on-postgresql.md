@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Tips to duplicate massive time series data on Postgresql
-categories: postgresql
+categories: postgresql time-series
 ---
 
 A few days ago, I was testing the [lttb][2] function from the [timescaledb_toolkit][1] extension to downsample data into fewer points.
