@@ -194,6 +194,7 @@ ActiveRecord::Base.connection.instance_exec do
 end
 ```
 
+The `create_continuous_aggregates` method is available in the connection scope that is the same of the Rails Migrations.
 In the background, the following query is being executed:
 
 ```sql
