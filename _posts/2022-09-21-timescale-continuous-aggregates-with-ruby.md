@@ -8,7 +8,7 @@ I created the [timescale gem][1] and wrote an introductory post on how [using th
 
 Now, it's time to learn more about the [continuous aggregates][3] feature. Accordingly, the Timescale website says:
 
-    Continuous aggregates are designed to make queries on very large datasets run faster. TimescaleDB continuous aggregates use PostgreSQL materialized views to continuously and incrementally refresh a query in the background, so that when you run the query, only the data that has changed needs to be computed, not the entire dataset.
+> Continuous aggregates are designed to make queries on very large datasets run faster. TimescaleDB continuous aggregates use PostgreSQL materialized views to continuously and incrementally refresh a query in the background, so that when you run the query, only the data that has changed needs to be computed, not the entire dataset.
 
 This feature is a core feature of the TimescaleDB. If you're already using TimescaleDB probably, you'll find an excellent opportunity to use this.
 
