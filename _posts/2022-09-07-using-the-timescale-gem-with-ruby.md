@@ -291,6 +291,8 @@ Event
 ]
 ```
 
+If you're interested in materializing the time_bucket grouped results to faster access to the processed data, take a look in the [Creating continous aggregates with Ruby and Timescale][21] post.
+
 ### Querying metadata
 
 The gem also contains several methods to inspect the Timescale metadata. So let's start diving into the methods and how they can be helpful.
@@ -444,4 +446,5 @@ I hope you enjoyed this first post about the gem. If you have any feedback, don'
 [18]: https://docs.timescale.com/api/latest/hyperfunctions/time_bucket/
 [19]: https://docs.timescale.com/api/latest/hypertable/hypertable_detailed_size/
 [20]: https://docs.timescale.com/api/latest/compression/hypertable_compression_stats/
+[21]: /timescale-continuous-aggregates-with-ruby
 
