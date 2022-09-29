@@ -9,7 +9,7 @@ As I've been working with Ruby since 2007, I created a live streaming series abo
 
 I'd like to teach you how to use the gem with Ruby. Not Rails. Only plain Ruby and some ActiveRecord flavor that turns it more interesting.
 
-In this post, I will cover the basics of inserting, querying, looking at some timescale metadata, and the compression system. Soon, I'll cover more features like compression policies, continuous aggregates, and more advanced features.
+In this post, I will cover the basics of inserting, querying, looking at some timescale metadata, and the compression system. Soon, I'll cover more features like compression policies, [continuous aggregates][21], and more advanced features.
 
 
 If you want to run the complete example yourself, it's [alive][1] and belongs to the official [docs][2]. If you find any bugs or want to improve the example, feel free to [submit a PR][3].

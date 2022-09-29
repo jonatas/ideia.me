@@ -106,8 +106,10 @@ I love terminal; years pass, and the shell is still very present in my life.
 I still edit the stuff on vim and use shell scripts for my automation. So I'll be sharing short posts about my time-saver tools'.
 
 Planned posts here are:
+
 * psql tips and tricks
 * [How to use Timescale](/using-the-timescale-gem-with-ruby)
+* [How to use Timescale continuous aggregates](/timescale-continuous-aggregates-with-ruby).
 
 #### Programming Researches and Projects
 
