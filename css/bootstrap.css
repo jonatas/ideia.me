@@ -344,6 +344,7 @@ a:focus {
 
 img {
   vertical-align: middle;
+  max-width: 98%;
 }
 
 .img-responsive {

@@ -8,6 +8,8 @@ I have been participating in the [How of Happy][1] classes for the last few mont
 
 We all have needs and feelings, but sometimes it cannot be easy to express them. It can be especially true regarding needs and feelings we deem "negative," such as anger, sadness, or insecurity. However, it's important to remember that all needs and feelings are valid and that we all have a right to express them. Additionally, when we don't express our needs and feelings, they can manifest in negative ways, such as through aggression or self-harm. This blog post will explore the importance of non-violent communication and how to identify and express your needs and feelings. We'll also offer some tips for self-expression. By the end of this post, you should better understand your needs and feelings and how to communicate them effectively.
 
+![AI generated image: a monk on the top of a mountain appreciating the sunset and deeply thinking about his feelings and needs. oil paint by salvador dali](/images/monk-thinking-ai.png)
+
 ## Expressing your needs and feelings
 
 Self-expression is an essential aspect of human development and is crucial for personal growth and social interaction. Without self-expression, we may not be able to fully understand our own needs and feelings, which can lead to frustration and conflict.
