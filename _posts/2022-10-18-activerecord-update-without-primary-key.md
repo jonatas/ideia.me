@@ -3,11 +3,6 @@ layout: post
 categories: ruby postgresql activerecord timescale
 title: ActiveRecord update without primary key
 ---
----
-layout: post
-categories: ruby postgresql activerecord timescale
-title: ActiveRecord update without primary key
----
 
 This weekend I [crossed a Twitter thread][1] that ended up motivating me to write this blog post.
 
