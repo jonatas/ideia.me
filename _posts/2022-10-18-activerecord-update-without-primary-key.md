@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: ruby postgresql activerecord timescale
+categories: ruby postgresql timescaledb
 title: ActiveRecord update without primary key
 ---
 
