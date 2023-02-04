@@ -34,11 +34,9 @@ Pandemic year. Only online events.
 
 ## Extract Summit - From code to data: live-coding a small blog scraper
 
-{% youtube GTMHGlfJsFg %}
+{% youtube bFBXkNIY4hE %}
 
 ## Hasura Con - Visualizing TimescaleDB compression status in real-time with Hasura
-
-
 
 <div class="video-container">
   <iframe loading="lazy" title="Visualizing TimescaleDB compression status in real-time with Hasura" src="https://player.vimeo.com/video/569408772" frameBorder="0" allowfullscreen=""></iframe>
