@@ -30,7 +30,7 @@ I published originally this content originally on the
 [candlestick tutorial][toolkit-candlestick], and I decide to post it here as
 it's all my content and I'm very excited about this new feature. The content
 there is more complete and goes beyond even exploring a simple sinatra app to
-[plot the candlesticks][plot-tutorial] in a web application.
+[plot the candlesticks][plotting-tutorial] in a web application.
 
 In this tutorial, we're going to collect tick data from financial markets using
 timescaledb hypertables and aggregate the data into candlesticks, being able to
@@ -706,3 +706,4 @@ If you liked it, you can see more content like this in my [talks](/talks).
 [toolkit-repo]: https://github.com/timescale/timescaledb-toolkit
 [docs-url]: https://jonatas.github.io/timescaledb
 [toolkit-candlestick]: https://jonatas.github.io/timescaledb/toolkit_candlestick/
+[plotting-tutorial]: https://jonatas.github.io/timescaledb/toolkit_candlestick/#plotting-data
