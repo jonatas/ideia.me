@@ -3,10 +3,56 @@ layout: page
 title: "Talks @jonatasdp"
 ---
 
-Tenho feito algumas talks de tecnologia. Veja, comente, compartilhe ;)
+Here are a few of my talks future to past.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/QEKBvWgK0Fo"  frameborder="0" allowfullscreen></iframe>
-2019 - Grepping Ruby code like a boss: [RubyConf Brazil 2019 (Portuguese)](https://www.eventials.com/locaweb/jonatas-paganini-live-coding-grepping-ruby-code-like-a-boss/#_=_)
+# 2023
+
+Confirmed talks for 2023.
+
+* June - [LambdaDays](https://www.lambdadays.org/lambdadays2023) - Functional Programming with SQL. 
+* May - [JOnTheBeach2023](https://www.jonthebeach.com) - Time Series data modeling.
+* February - [PGConf India](https://pgconf.in) - Data Science training.
+* January - [Ruby Global Data Summit](https://events.geekle.us/ruby/) - Data processing with Ruby and Timescaledb.
+
+# 2022
+
+## Ruby Conf Thailand - Ruby or SQL? Where to process your data?
+
+{% youtube MXAtSZ5Szgk %}
+
+## Ada.rb - Processando dados temporais com Ruby e TimescaleDB
+
+{% youtube BeysighX6jY?start=6206 %}
+
+## PGConf Brazil - Zen Life with Psql - In Portuguese
+
+{% youtube MzV6S_72E2g %}
+
+# 2021
+
+Pandemic year. Only online events.
+
+## Extract Summit - From code to data: live-coding a small blog scraper
+
+{% youtube GTMHGlfJsFg %}
+
+## Hasura Con - Visualizing TimescaleDB compression status in real-time with Hasura
+
+
+
+<div class="video-container">
+  <iframe loading="lazy" title="Visualizing TimescaleDB compression status in real-time with Hasura" src="https://player.vimeo.com/video/569408772" frameBorder="0" allowfullscreen=""></iframe>
+</div>
+
+### Ruby Kaigi 2020 - Grepping Ruby Code like a boss
+
+{% youtube YczrZQC9aP8 %}
+
+Same talk, but from 2019 and in Portuguese: [RubyConf Brazil 2019 (Portuguese)](https://www.eventials.com/locaweb/jonatas-paganini-live-coding-grepping-ruby-code-like-a-boss/#_=_)
+
+### [StayAtHomeConf] 2020 - Remote Onboarding Guidelines
+
+{% youtube https://www.youtube.com/watch?v=Hyu82ZCKLCk %}
 
 ## Slides
 
