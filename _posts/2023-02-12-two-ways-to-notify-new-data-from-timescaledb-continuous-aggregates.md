@@ -30,6 +30,21 @@ CREATE TABLE "ticks" (
   "volume" float
 );
 ```
+
+### Creating a hypertable
+
+To create a hypertable in TimescaleDB, we use the create_hypertable function. This function takes the name of the table we want to convert to a hypertable, the name of the time column, and an optional argument chunk_time_interval that specifies the duration of each chunk.
+
+```sql
+SELECT create_hypertable('ticks', 'time', chunk_time_interval => INTERVAL '1 day');
+```
+
+In the above code, we create a hypertable named ticks using the create_hypertable function. The hypertable is created based on the ticks table and is partitioned on the time column. We set the chunk_time_interval parameter to INTERVAL '1 day' to specify that each chunk should contain data for a single day.
+
+By using hypertables, we can improve the performance of our time-series data queries, as TimescaleDB can efficiently index and manage large volumes of time-series data.
+
+### Creating the continuous aggregate
+
 Now, let's create a continuous aggregate materialized view that aggregates the tick data on a 10 second time interval:
 
 ```sql
