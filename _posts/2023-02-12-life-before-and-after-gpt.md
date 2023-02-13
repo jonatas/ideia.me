@@ -8,6 +8,10 @@ categories: ai think chat-gpt
 
 As a Developer Advocate, I have to create high-quality content quickly and efficiently. However, before I started using Chat GPT, my workflow was often slow and cumbersome. Coming up with the right words and phrases to convey my ideas was a time-consuming and sometimes challenging process.
 
+I'm not adopting it as a content generator, but as a tool that can boost my
+productivity by helping to setup good structure to my content and also provide
+me very minimal code examples to use in my content.
+
 ## How it has helped me speed up my workflow as a Developer Advocate
 
 Since using Chat GPT, my life has changed dramatically. With Chat GPT's language capabilities, I can generate high-quality content in a matter of seconds, allowing me to focus on the bigger picture and achieve my goals with ease. In this blog post, I'll share my experience of life before and after Chat GPT and how it has helped me speed up my workflow as a Developer Advocate.
