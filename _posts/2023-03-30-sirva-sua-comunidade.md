@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: public speaking, conferences
+categories: ['public speaking', 'conferences']
 ---
 
 Nos últimos anos, me sinto muito "sortudo" com todas as aprovações que recebi

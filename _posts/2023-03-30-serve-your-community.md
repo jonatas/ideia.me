@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: public speaking, conferences
+categories: ['public speaking', 'conferences']
 ---
 
 
