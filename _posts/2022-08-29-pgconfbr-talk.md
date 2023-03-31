@@ -4,10 +4,14 @@
   categories: terminal shell unix opensource postgresql
 ---
 
-Na minha palestra da [PGConf Brazil 2022](https://www.pgconf.com.br/2022/).
+Na minha palestra da [PGConf Brasil 2022](https://www.pgconf.com.br/2022/).
 falei sobre a "Vida Zen no Terminal". Então resolvi compartilhar aqui um pouco
 dos aprendizados que compartilhei pois são dicas práticas que podem ser úteis
 para quem adora o terminal, ou gostaria de iniciar.
+
+Aqui vai a gravação da palestra:
+
+{% youtube MzV6S_72E2g %}
 
 Bom, eu trabalho com programação desde que meus 17 anos de idade.
 
@@ -680,6 +684,7 @@ Então se você executou uma query como:
 ```sql
 select * from tabela order by id desc limit 10;
 ```
+
 Este comando irá mostrar os últimos dez registros da tabela.
 
 Muitas vezes você quer ficar assistindo o comando e vendo novos registros, então
