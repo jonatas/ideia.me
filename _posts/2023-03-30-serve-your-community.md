@@ -2,53 +2,48 @@
 layout: post
 categories: public speaking, conferences
 ---
-Over the past few years, I've been fortunate to receive numerous approvals to speak at conferences and actively participate in various tech communities. However, I often encounter people who struggle to get their speaking proposals accepted. Drawing from my 8 years of experience in submitting proposals, I want to share some insights on how to improve your chances of getting approved.
 
-The key to a successful speaking proposal is to focus on providing value to the community rather than simply sharing what interests you. To accomplish this, consider the following questions as you craft your proposals:
 
-## Assess your reputation and expertise
+In the last few years, I've felt incredibly fortunate to have received so many approvals to speak at conferences and actively participate in various tech communities. I often talk to people who are disappointed about not getting approvals to speak. After observing their concerns, I decided to write about the lessons I've learned from submitting proposals over the last eight years.
 
-Before proposing a talk, ask yourself whether you have the necessary expertise and reputation to discuss the topic. Start by giving talks within your workplace, then progress to smaller meetups and eventually larger conferences.
+The main resource you have to get approved is your own experience and reputation, but often your reputation doesn't match the actual community needs. In short, my advice is to **serve your community**. Try to propose value to the community, not just what you want to share with them. If you're invited to lead a keynote session, you may already be a step ahead and able to share more inspiring thoughts. Otherwise, focus on being of service to your community.
 
-## Understand your community's needs
+Now, let's dive deeper into a few questions to better serve your community and secure more approvals for public speaking engagements.
 
-To create a talk that resonates with your community, you need to understand their needs and preferences. One way to do this is by participating in the proposal review process for conferences. This will help you see firsthand the challenges faced by reviewers in selecting talks that provide a mix of inclusivity, instruction, and inspiration.
+## Do I have any real reputation to talk about this topic?
 
-## Cater to different skill levels
+I estimate that I've drafted more than 50 proposals for conferences, submitted dozens, and got approved for a few of them. My public speaking journey began with internal talks at my workplace, followed by small meetups, and eventually progressed to real conferences with hundreds of people.
 
-An inclusive talk should cater to all skill levels, from beginners to experts. Beginners often need the most support, making them an ideal audience for speakers who are new to public speaking.
+## How do I serve my community?
 
-## Share valuable knowledge
+Talks are not about you. They're about meeting the community's needs. If you're not getting approved, it's not because your topic isn't good enough or you lack expertise; it's about proposing a topic that doesn't fit the audience.
 
-Aim to provide new knowledge that your audience can apply in their own lives. Consider sharing personal experiences, tips, and tricks that have brought you excitement and success.
+One of the best ways to understand community needs is to find a community you genuinely enjoy and participate in their review process. By helping to review conference proposals, you'll see firsthand that selecting proposals is hard work.
 
-## Inspire and energize your audience
+Tech events aim to be **inclusive**, **instructive**, and **inspiring**. Every conference needs this mix to welcome people of all skill levels and ensure everyone benefits from the triple "I."
 
-Keynote speakers typically set the tone for a conference, so focus on bringing energy and inspiration to your presentation. The more you rehearse and refine your communication objectives, the better equipped you'll be to inspire your audience.
+Being **inclusive** means offering topics for all levels. Beginners, who need the most support as they start their careers, are the perfect audience for those with less public speaking experience.
 
-## Ask yourself key questions
+Being **instructive** means attendees will leave with new knowledge that you share. Reflect on what you've learned that could potentially benefit others. It doesn't need to be complex or heavy. Focus on sharing experiences, tips, and tricks that excite and engage you.
 
-Reflect on the following questions to validate your proposal:
+Being **inspiring** is especially important for keynote speakers. These talks typically set the tone for a conference, so bring energy and inspiration to your presentation. The more you rehearse and refine your communication objectives, the better equipped you'll be to inspire your audience.
+
+In my talks, I've found that combining my personal experiences with a motivational message and valuable information has a positive impact on the audience. Sometimes, people approach me after a talk to thank me or ask questions, and that's incredibly rewarding.
+
+## Questions to validate your proposal
+
+Some important questions to ask yourself when crafting your talk proposal include:
 
 - Does the audience need my talk?
 - Is my topic relevant to the audience?
-- Who am I hoping to inspire with my proposal?
+- Who do I hope to inspire with my proposal?
 - What is the outcome for the community?
 - What will the audience be able to do after my presentation?
 
-Developing your own questions can also help ensure your talk is relevant and meaningful.
+These questions can help you ensure your talk is relevant and meaningful to the community you want to serve. Over time, I've developed my own questions to ensure my talks provide value to my audience.
 
-## Refine your objectives
+In summary, focusing on serving the community and keeping the goals of inclusiveness, instruction, and inspiration in mind when proposing a talk are essential to increasing your chances of being approved at conferences and events. Your unique personal experience and presentation style will also contribute to the success of your talks.
 
-Be clear about why you want to speak and what you hope to achieve. Creating strong arguments to support your speaking goals will help you maintain focus and excitement.
+Are you curious about what I'm talking, you can check a few of my [talks](/talks) and next conferences.
 
-## Develop a preparation framework
-
-Preparing a new talk can take around 60 hours of work, spread over several weeks. Rehearse your talk multiple times, focusing on areas that need improvement, and build an outline to help guide your presentation.
-
-## Be authentic
-
-Remember that public speaking is about connecting with your audience on a human level. Be genuine in your delivery, and avoid trying to be perfect or adhering too strictly to a script.
-
-The most important thing is to keep trying and find what works best for you. Whether you enjoy public speaking or not, remember that giving and receiving are the foundation of a thriving tech community. Embrace the spirit of open source and continue to share your knowledge and experiences with others. Good luck!
-
+[Portuguese Version](/sirva-sua-comunidade).

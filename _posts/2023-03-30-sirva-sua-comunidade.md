@@ -59,7 +59,7 @@ Ser inspirador é especialmente importante quando você está dando uma palestra
 
 Nas minhas palestras, percebi que combinar minha experiência pessoal com uma mensagem motivadora e informações valiosas tem um impacto positivo no público. Às vezes, as pessoas vêm até mim após uma palestra para agradecer ou fazer perguntas, e isso é uma grande satisfação.
 
-Perguntas para validar sua proposta
+## Perguntas para validar sua proposta
 
 Algumas perguntas importantes que você deve se fazer ao elaborar sua proposta de palestra são:
 
@@ -76,3 +76,4 @@ aumentar suas chances de ser aprovado em conferências e eventos. Sua experiênc
 pessoal e estilo de apresentação únicos também contribuirão para o sucesso de
 suas palestras.
 
+[Versão em inglês](/serve-your-community).
