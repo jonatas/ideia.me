@@ -102,18 +102,18 @@ no processo de receber o comando, o sistema identifica o aplicativo que fez a ch
 
 ### unix
 
-* ps: lista processos do sistema operacional
-* ls: lista conteúdos e diretórios
-* rm: remove algum arquivo, passando o parâmetro -r é possível remover um diretório
-* cat: concatena e imprime arquivos
-* \>\: aponta a saída de um programa para outro dispositivo ou arquivo
-* |: concatena um comando a outro
-* touch: altera a data de modificação de um arquivo
+* `ps`: lista processos do sistema operacional
+* `ls`: lista conteúdos e diretórios
+* `rm`: remove algum arquivo, passando o parâmetro -r é possível remover um diretório
+* `cat`: concatena e imprime arquivos
+* `>`: aponta a saída de um programa para outro dispositivo ou arquivo
+* `|`: concatena um comando a outro
+* `touch`: altera a data de modificação de um arquivo
 
 ### ms-dos
 
-* md: cria uma pasta
-* del: remove algum arquivo
+* `md`: cria uma pasta
+* `del`: remove algum arquivo
 
 ### Um pouco mais sobre comandos
 
