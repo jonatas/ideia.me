@@ -1,6 +1,6 @@
 ---
 layout: post
-title: O Som dos Dados: Revelando um Revolucionário Dispositivo de Sonificação
+title: Dispositivo de Sonificação
 categories: [sonificação, inovação]
 ---
 
