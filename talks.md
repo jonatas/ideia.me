@@ -13,9 +13,19 @@ Confirmed talks for 2023.
 * June 10 - [Walkthrough the Timescaledb Gem at Rzeszów Ruby User Group](http://rrug.pl)
 * May 30 - [Data Science workshop at PGCon Ottawa](https://www.pgcon.org/2023/)
 * May 10 - [Data Science workshop at J On The Beach 2023](https://www.jonthebeach.com/workshops/Reality-of-global-warming.-Data-Science-with-Postgres-and-TimescaleDB)
-* May 11 - [Data Modeling at J On The Beach 2023](https://www.jonthebeach.com/schedule)
-* March 9 - [Scale 20x](https://www.socallinuxexpo.org/scale/20x/)
-* March 28 - [Making Noise with your Time Series Data at Ada.rb](https://www.youtube.com/live/Vfxp718OMtI?feature=share&t=590)
+
+## May 11 - [Data Modeling at J On The Beach 2023](https://www.jonthebeach.com/schedule)
+
+{% youtube qd6w10Z2YYc %}
+
+## March 9 - Practical psql [Scale 20x](https://www.socallinuxexpo.org/scale/20x/)
+
+{% youtube 4Q4jOmHbDvU %}
+
+## March 28 - Making Noise with your Time Series Data at [Ada.rb](https://www.youtube.com/live/Vfxp718OMtI?feature=share&t=590)
+
+{% youtube Vfxp718OMtI %}
+
 * February - [Data Science workshop at PGConf India](https://pgconf.in)
 * January - [Ruby Global Data Summit](https://events.geekle.us/ruby/) - Data processing with Ruby and Timescaledb.
 
