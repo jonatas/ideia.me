@@ -10,7 +10,7 @@ Here are a few of my talks future to past.
 Confirmed talks for 2023.
 
 * June 7- [Functional in SQL at LambdaDays](https://www.lambdadays.org/lambdadays2023)
-* June 10 - [Walkthrough the Timescaledb Gem at Rzeszów Ruby User Group](http://rrug.pl)
+* June 12 - [Walkthrough the Timescaledb Gem at Rzeszów Ruby User Group](http://rrug.pl/meetup/2023/05/15/spotkanie35.html)
 * May 30 - [Data Science workshop at PGCon Ottawa](https://www.pgcon.org/2023/)
 * May 10 - [Data Science workshop at J On The Beach 2023](https://www.jonthebeach.com/workshops/Reality-of-global-warming.-Data-Science-with-Postgres-and-TimescaleDB)
 
