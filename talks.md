@@ -7,7 +7,13 @@ Here are a few of my talks future to past.
 
 # 2023
 
-Confirmed talks for 2023.
+So proud to see too many [PG Days in Brazil](https://pgday.com.br)! I'll be in a
+few of them:
+
+* August 11 - [PG Day Porto Alegre](https://www.sympla.com.br/evento/pgday-porto-alegre-2023/2057620
+* September 16 - [PG Day XAP - Chapecó](https://pgdayxap.com.br/2023)
+
+Previous talks in Europe/North America:
 
 * June 7- [Functional in SQL at LambdaDays](https://www.lambdadays.org/lambdadays2023)
 * June 12 - [Walkthrough the Timescaledb Gem at Rzeszów Ruby User Group](http://rrug.pl/meetup/2023/05/15/spotkanie35.html)
