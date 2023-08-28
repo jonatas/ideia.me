@@ -12,8 +12,9 @@ few of them:
 
 ### September
 
+* 2nd - [PG Day Florianopolis](https://www.sympla.com.br/evento/pgday-floripa/2071983)
 * 16th - [PG Day XAP - Chapecó](https://pgdayxap.com.br/2023)
-* 23rd - [PG Day BSB](https://discord.com/invite/SZqPf7mHB5)
+* 23rd - [PG Day BSB](https://pgdaybsb.com.br)
 
 ### August
 
