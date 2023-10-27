@@ -7,6 +7,8 @@ Here are a few of my talks future to past.
 
 # 2023
 
+* November 25th - [Code Island](https://summit.codeisland.com.br/)
+
 So proud to see too many [PG Days in Brazil](https://pgday.com.br)! I'll be in a
 few of them:
 
