@@ -107,15 +107,16 @@ several syntax styles and refactor them at once.
 Here's what the latest update brings to the table:
 
 - **SQL Rewrite Interface**: A new way to handle SQL queries within Ruby projects. This interface is designed to be intuitive and user-friendly, making SQL interactions seamless.
-- **Enhanced Documentation**: To ensure everyone can make the most of this new feature, I've put together comprehensive documentation. It's detailed, yet easy to follow – your guide to mastering SQL handling in Fast: https://jonatas.github.io/fast/sql-support/
+- **Enhanced Documentation**: To ensure everyone can make the most of this new feature, I've put together [comprehensive documentation][docs]. It's detailed, yet easy to follow – your guide to mastering SQL handling in Fast:
 - **A Fresh Look**: Along with functional upgrades, the Fast gem also got a visual facelift with an updated logo. It's all about keeping things fresh and modern.
 
 ## Conclusion
 
 I hope this update to the Fast gem is more than just a new feature; it's a testament to the power of community and open-source collaboration. I'm so happy to be able to just use projects like [pg_query](https://github.com/pganalyze/pg_query) and I can't wait to see what people will do with it!
 
-Your feedback is not just welcome, it's essential for continuous improvement. If you use fast of anything and want to share, feel free to reach out via [linkedin](!https://www.linkedin.com/in/jonatasdp) or open an issue on [fast][fast]
+Your feedback is not just welcome, it's essential for continuous improvement. If you use fast of anything and want to share, feel free to reach out via [linkedin](!https://www.linkedin.com/in/jonatasdp) or open an issue on [fast][fast].
 
 Happy coding!
 
 [fast]: https://github.com/jonatas/fast
+[docs]: https://jonatas.github.io/fast/sql-support/
