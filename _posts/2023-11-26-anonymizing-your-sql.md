@@ -88,12 +88,9 @@ view names and other scenarios could also reveal business information.
 This script presents a complex scenario with hierarchical views referencing in
 cascade.
 
-<!--
 If you want to go deep, watch my live coding session exploring this topic.
 
-{% youtube FIXME %}
-
--->
+<div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/dd9e9e18be564907afe518024110502e?sid=dabb247f-a567-4128-b74e-a83783722322" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
 
 The short steps to cover this small scenario anonymizing table and view names are:
 
