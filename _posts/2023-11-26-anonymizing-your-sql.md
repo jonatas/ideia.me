@@ -12,13 +12,13 @@ In the realm of data management and privacy, anonymizing SQL data is an essentia
 Let's take a basic SQL query as an example:
 
 ```sql
-select name from weather_data order by 1 asc
+SELECT name FROM weather_data ORDER BY 1 ASC
 ```
 
 Our goal is to transform it into:
 
 ```sql
-SELECT name FROM x1 ORDER BY 1 ASC
+SELECT something FROM somewhere ORDER BY 1 ASC
 ```
 
 The anonymize here is very basic, but it can go further, replacing not just table names, but column names and all identifiers.
@@ -405,3 +405,5 @@ Small shortcuts can also be introduced into your security culture and enables sa
 The power and flexibility of using AST and Fast for anonymizing SQL data open up new horizons in data privacy and security 🫶
 
 I encourage you to experiment with the code and adapt it to your specific needs. If you have questions or insights, feel free to reach out. For more insights into manipulating SQL with Fast, revisit my [previous post on building a SQL formatter](https://ideia.me/building-a-sql-formatter-with-fast).
+
+
