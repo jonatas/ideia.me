@@ -393,6 +393,8 @@ end
 puts Fast.highlight(content, sql: true)
 ```
 
+The complete `Fastfile` is [here](https://github.com/jonatas/fast/blob/ccde22cdfa7f7fa910fcfec54d4691250b18d48b/Fastfile#L118-L137).
+
 Transform sensitive SQL data into anonymized & shareable code allow community to
 bring more complex scenarios closer to production using such idea.
 
