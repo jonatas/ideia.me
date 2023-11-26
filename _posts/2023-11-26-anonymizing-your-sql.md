@@ -88,19 +88,25 @@ view names and other scenarios could also reveal business information.
 This script presents a complex scenario with hierarchical views referencing in
 cascade.
 
+<!--
 If you want to go deep, watch my live coding session exploring this topic.
 
 {% youtube FIXME %}
 
+-->
+
 The short steps to cover this small scenario anonymizing table and view names are:
 
-1. **Parsing SQL with AST**: Using Fast, we begin by parsing the SQL file into an AST, providing us with a structured format for manipulation.
+1. **Parsing SQL with AST**: Using Fast, we begin by parsing the SQL file into an AST,
+providing us with a structured format for manipulation.
+
+In this example, we use "gemfile inline" to fetch the library dynamicaly.
 
 ```ruby
 require 'bundler/inline'
 
 gemfile(true) do
-  gem 'ffast', path: '../fast'
+  gem 'ffast' # , path: "../fast"
   gem 'pry'
 end
 
