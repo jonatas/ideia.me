@@ -9,9 +9,7 @@ TimescaleDB, an open-source time-series database optimized for fast ingest and c
 
 Imagine you have a `metrics` hypertable in TimescaleDB and you're aggregating this data over different time intervals: hourly, daily, and weekly. Managing these aggregations can get complex, especially when you want to refresh them in a specific sequence. 
 
-## Step-by-Step Solution
-
-### 1: Setting up the hypertable
+### Setting up the hypertable
 
 ```sql
 CREATE TABLE metrics (
@@ -22,7 +20,7 @@ CREATE TABLE metrics (
 SELECT create_hypertable('metrics', 'time');
 ```
 
-### 2: Setting up CAGGS
+### Setting up CAGGS
 
 Now, it's time to set up our continuous aggregates. We create three materialized views for our `metrics` table: `metrics_by_hour`, `metrics_by_day`, and `metrics_by_week`. These views will aggregate data over their respective time intervals.
 
@@ -54,7 +52,7 @@ CREATE MATERIALIZED VIEW metrics_by_week WITH (timescaledb.continuous) AS
 SELECT time_bucket('1 week', bucket) AS bucket, sum(count) AS count FROM metrics_by_day GROUP BY 1;
 ```
 
-## The Power of RECURSIVE in SQL
+## The power of RECURSIVE in SQL
 
 Before we dive into the practical application, let's understand a critical piece of the puzzle: the use of `RECURSIVE` in SQL. This concept might be new to some, so I'll walk through an example to shed light on its functionality.
 
@@ -96,7 +94,7 @@ The result is a neatly organized list of continuous aggregates along with their 
 With the recursive CTE in place, we can now proceed to the next step: implementing a custom refresh policy for our continuous aggregates. This policy ensures that each aggregate is refreshed in the correct sequence, respecting their hierarchical dependencies.
 
 
-### Step 2: Building a cascading refresh policy
+### Building a cascading refresh policy
 
 To ensure our aggregates are refreshed in the right order, we'll write a procedure that refreshes each aggregate in sequence. This is crucial because our daily aggregate depends on the hourly one, and the weekly aggregate depends on the daily one.
 
@@ -135,8 +133,7 @@ SELECT add_job('refresh_all_caggs', '5 seconds');
 
 With our functions ready, we use TimescaleDB's job scheduling feature to run these functions at regular intervals. This step is where the "magic happens" - our database is now self-managing, continuously updating our aggregate views and inserting new data.
 
-### Step 3: Automated data insertion for testing
-
+### Automated data insertion for testing
 
 [Actions][actions] are amazing to develop small POCs and can be handy to detach long processing to a background worker. 
 
@@ -181,11 +178,11 @@ We've also made this function flexible, allowing us to specify the interval betw
 
 All of this can be explored using `psql`, PostgreSQL's interactive terminal. I'm a big fan of the simplicity and power of single-file SQL scripts for learning and experimentation. You can easily run these scripts in `psql` to see how TimescaleDB handles continuous aggregates and background jobs.
 
-### The Power of Continuous Aggregates
+### The power of Continuous Aggregates (CAGGs)
 
 Continuous aggregates in TimescaleDB offer incredible flexibility. You can rewrite the rules for how and when your data is aggregated, making it fit your specific use case. They're a testament to the power of open-source databases in handling time-series data effectively.
 
-### See It in Action
+### See it in action
 
 You can find the complete SQL script for this procedure [here](https://github.com/jonatas/sql-snippets/blob/master/cagg-refresh-cascade.sql). Note, the last line has a `\watch` which assumes you'll run it using `psql`.
 
