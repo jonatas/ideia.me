@@ -84,11 +84,9 @@ Pandemic year. Only online events.
 
 Same talk, but from 2019 and in Portuguese: [RubyConf Brazil 2019 (Portuguese)](https://www.eventials.com/locaweb/jonatas-paganini-live-coding-grepping-ruby-code-like-a-boss/#_=_)
 
-### [StayAtHomeConf] 2020 - Remote Onboarding Guidelines
-
-{% youtube https://www.youtube.com/watch?v=Hyu82ZCKLCk %}
-
 ## Slides
+
+I don't use slides but just build markdown files for my talks.
 
 <iframe src="http://www.slideshare.net/jonataspaganini/slideshelf" width="760px" height="570px" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:none;" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>
 

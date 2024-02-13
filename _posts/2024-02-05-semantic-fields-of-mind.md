@@ -1,15 +1,15 @@
 ---
 layout: post
 title: Semantic fields of the mind
-tags: [semantic fields]
+categories: ['semantic fields', 'think']
 ---
 
 Thursday night, I arrived from Athens and past weekend I had the most insightful
 update in my mindset until now. I'll refer here as semantic fields.
 
 The main idea of semantic fields rules important aspects of our brain, and mixed
-with a group of words that can floats to different directions but still share
-the same space. Our beliefs are clustered by some key aspect of the communication,
+with a group of words floating on a multi-dimensional space.
+Our beliefs are clustered by some key aspect of the communication,
 given understanding of what each word means on a context.
 
 Let's dive into some practical examples. What cold means? If you ask it for a
