@@ -19,26 +19,25 @@ Vim editor user and enthusiast. I'm a software developer since 2004.
 Nerd, ciclista e blogueiro. Sou um evangelista de pair programming.
 Usuário e entusiasta do editor Vim. Sou programador desde 2004.
 
-# Jônatas Davi Paganini - Profile Picture
+# Profile Picture
 
-Option 1:
+### Option 1
 ![Jônatas Davi Paganini](/images/jonatasdp-2023.jpeg)
 
-Option 2:
+### Option 2
 ![Jônatas Davi Paganini](/images/jonatasdp-2023-smiling.jpg)
 
-Option 3:
+### Option 3
 ![Jônatas Davi Paganini](/images/jonatasdp-speaking.jpg)
 
 # Contact
 
-**City/State/Country**: São Miguel do Oeste, SC, Brazil
-
-**Phone**: [+55 (48) 99150 1012](tel:5548991501012)
-**Mail**: jonatasdp@gmail.com
-**Work Mail**: jonatas@timescale.com
-**Web-Site**: https://ideia.me
-**Company**: [timescale.com](https://timescale.com).
+* **City/State/Country**: São Miguel do Oeste, SC, Brazil
+* **Phone**: [+55 (48) 99150 1012](tel:5548991501012)
+* **Mail**: jonatasdp@gmail.com
+* **Work Mail**: jonatas@timescale.com
+* **Web-Site**: https://ideia.me
+* **Company**: [timescale.com](https://timescale.com).
 
 ## Social
 
