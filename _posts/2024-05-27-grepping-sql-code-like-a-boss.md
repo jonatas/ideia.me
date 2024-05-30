@@ -3,49 +3,46 @@ layout: post
 title: Grepping SQL Code like a boss
 ---
 
-This month I'm traveling to Poland to present at Lambda Days 2024.
+Here's the outline of the content of my talk in Poland I presented at the
+[Lambda Days 2024](https://lambdadays.com/2024).
 
-The talk is about how to grep SQL code like a boss. I will show you how to 
-build your own tools to search and refactor SQL code.
+My talk is a research which I call "grepping SQL code like a boss".
+Introducing a set of tooling that can not only search but also refactor SQL code like a boss.
 
-The talk is a mix of Ruby and SQL code examples. I will show you how to use the
+This is most of the talk outline for those folks that want to learn more about the topic.
+
+It will be a mix of Ruby and SQL code examples. I will show you how to use the
 `fast` gem to build your own tools to search and refactor SQL code.
 
 The `fast` gem is a tool that leverages ASTs to provide advanced search and
 refactoring capabilities. It already supports Ruby and recently I introduced
 support for SQL code.
 
-# 2 decades in the terminal
+My main intent is not "sell" my library but the idea behind it. You can easily
+build something similar in your language or even to your SQL dialect.
+
+## 2 decades in the terminal
 
 Yes, not only the presentation was made in the terminal, but I build my entire
-carreer in the terminal.
-
-IO is simple and easy. I can focus on the content and not the tools.
+carreer in the terminal. IO is simple and easy. I can focus on the content and not the tools.
 
 I'm already familiar with this toolset and I can build my own tools to help me
 and enhance my productivity.
 
-# Learn simple tools with single proposal
+## Learn simple tools with single proposal
 
 I love how unix tools are simple and have a single proposal. My favorite minimalist
-examples from unix:
+examples from unix like `cat head wc sort uniq grep sed echo`.
 
-* cat
-* head
-* wc
-* sort
-* uniq
-* grep
-* sed
-* echo
-
-Let's navigate into count the topics of talk in the terminal
+Markdown is a great example of simplification. Look how easy it to navigate into
+count the topics of talk in the terminal:
 
 ```bash
 grep '^# ' talk-sql.md | wc -l # => 60
 ```
 
-Let's count the examples of Ruby and SQL code in the talk:
+Now, going deep in regular expressions we can also count the examples of Ruby, SQL
+and so on...
 
 ```bash
 grep '```ruby' talk-sql.md | wc -l # => 29
@@ -53,12 +50,17 @@ grep '```sql' talk-sql.md | wc -l # => 5
 grep '```bash' talk-sql.md | wc -l # => 9
 ```
 
+Now, let me share a past project that encouraged me to follow and continue
+investing on this idea.
+
 ## TODO: kill PR review checklist
 
-Now, let me talk about my experience onboarding developers. I onboarded 300+
+I had a very extensive experience onboarding developers. I onboarded 300+
 backend developers in 5 years.
 
-One of the most boring things is the PR review checklist.
+One of the most boring things on onboarding is align the quality expectations,
+and that's why the review process involves CI with lots of linters plus a huge
+PR review checklist. You can expect things like:
 
 * [ ] Check the code style
 * [ ] Check the usage of the framework components
@@ -70,9 +72,13 @@ One of the most boring things is the PR review checklist.
 * [ ] Check the business logic
 * [ ] Check the requirements
 
-So, I decided to kill the PR review checklist and introduce a new way to onboard
-developers. Introducing a set of custom linters related to our business domain
-and guide developers to use the right framework components.
+So, I was eager to reduce the friction of introducing newcomers by helping them
+to have less things to get ready for the first Pull Request. The plan started
+automating item by item, so the newcomer does not have to face "Don't use A
+insted of B" while they're not even familiar with the codebase.
+
+Introducing a set of custom linters related to the business domain was the way to
+properly guide developers to use the right framework components.
 
 ### Automate the education
 
@@ -83,10 +89,10 @@ developers taking into personal consideration the feedback.
 It also allows the developers to have more interesting conversations during the
 review instead of few drawn by the checklist and other bureaucracies.
 
-# Build smart stuff with simple tools
+## Build smart stuff with simple tools
 
-AST brings the most primitive stage of compilers into scene. Tagging word/token by
-token, it simply structures code into tree format.
+AST brings the most primitive stage of compilers into scene. Tagging word by word
+or token by token, it simply structures code into tree format.
 
 You really don't need advanced tools to build smart stuff. You can build most of
 it with simple tools.
@@ -94,17 +100,22 @@ it with simple tools.
 ## I'm a Rubyist
 
 Yes, I'm a Rubyist. I love Ruby. I love the community. I love the language.
-I started the fast gem to grep Ruby code like a boss. Now I'm extending it to
+I started the fast gem to grep Ruby code like a boss. Recently, I extended it to
 SQL.
 
-> Youtube: "Grepping Ruby code like a boss" talk in Ruby Kaigi 2020
+You can check my previous talk on [youtube](https://youtube.com/watch?v=YczrZQC9aP8)
+which I was grepping Ruby code like a boss. This was for Ruby Kaigi 2020 which I
+couldn't come because of the lock down but I was able to record and participate
+remotely.
 
-I also maintain the timescaledb ruby gem: github.com/jonatas/timescaledb
+I also maintain the timescaledb ruby gem which wraps all TimescaleDB SQL
+features into simple macros: github.com/jonatas/timescaledb
 
 ## I'm becoming a Postgrist
 
 I'm a Rubyist, I'm not sure this word exists, but I'm coining the term Postgrist.
 I'm learning a lot about PostgreSQL and TimescaleDB.
+
 I split my time between community management and developer advocacy.
 
 ## Adventures with fast
@@ -117,20 +128,26 @@ a base prototype for SQL linters or refactoring tools.
 
     $ gem install ffast
 
+You can just use exactly the same syntax for building node patterns both on sql
+and Ruby. The trees are different but follow the same structure, so it's a
+matter of learning the new node types and you're ready to go.
 
-# The Value of Trying
+## The Value of Trying
 
-### Experimenting = growth
+I really believe in the value of trying. I'm a researcher, trying new things. I'm always
+scratching my own itch.
+
+> Experimenting = growth
 
 > Growth only happens when you learn from your experiments.
 
-I built a tool to grep Ruby & SQL code like a boss.
+I built a tool named fast to grep Ruby & SQL code like a boss.
 
 * My journey with "compilers", ASTs, and code analysis
 * My journey with SQL
 * Advanced search and refactoring
 
-# The Power of Regex
+## The Power of Regex
 
 > Regular expressions are a powerful tool for searching and manipulating text.
 > They are widely used in text editors, programming languages, and other tools.
@@ -139,7 +156,7 @@ I built a tool to grep Ruby & SQL code like a boss.
 "1 + 2".scan(/\d+/) # => ["1", "2"]
 ```
 
-# Regex operators
+## Regex operators
 
 A few operators to remind how it works:
 
@@ -152,26 +169,29 @@ A few operators to remind how it works:
 * `[]` - character class
 * `{}` - quantifier
 
-# Limitations of Regex
+## Limitations of Regex
 
 > Regex can be difficult to use for complex searches and refactoring tasks.
 
-* Include/exclude context
-* Nested contexts and scenarios
-* Capture groups
+If you need to build a "search and fix" scenario, example, if you find the
+target code, maybe it's in the wrong context. So, several times, the Regular
+Expressions cannot be the silver bullet for targetting text.
 
-# When Regex is not enough
+Capturing and reusing previous information, ignoring other undesired scenarios.
+Nested contexts and scenarios plays a big role on refactoring, several times
+needing to capture groups of information.
 
 Sometimes, regex is not enough to solve complex problems. If you're trying to
 parse a programming language, you need to deal with nested structures.
 
-Now, it's time to start exploring how to build your own Regular Expression Engine for the AST.
+Now, it's time to start exploring on how to build a micro-engine for a derived
+Regular Expression language that can match elements directly from the AST.
 
-# The AST Advantage
+## The AST Advantage
 
 Abstract Syntax Trees are made for programming language internals. It provides a
 more powerful and flexible way to search and manipulate code. In this example,
-I'm using the `fast` gem which uses `ruby-parser` to parse the Ruby code.
+I'm using the `ffast` gem which uses `ruby-parser` to parse the Ruby code.
 
 ```ruby
 Fast.ast("1").type # => :int
@@ -182,8 +202,8 @@ Every node in the AST has a type and children. The type is a symbol and the chil
 
 ## The AST in Ruby
 
-There's an interesting way to represent the AST in Ruby. It's called S-Expression.
-It's a simple way to represent the AST in a human-readable format.
+There's an interesting way to represent the AST in Ruby. It's called S-Expression
+AKA string expression. It's a simple way to represent the AST in a human-readable format.
 
 ```ruby
 puts Fast.ast("1")
@@ -214,10 +234,10 @@ Outputs the String Expression aka sexp in Ruby:
   (int 2))
 ```
 
-## The AST unify code
+## Search in the AST
 
-The AST unifies the code syntax. It's a common way to represent the code in a
-structured format. It's like a JSON for the code. It's a tree structure.
+The Abstract part of the Syntax Tree unifies the code syntax. It's a common way
+to represent the code in a structured format.
 
 ```ruby
 Fast.ast("1 + 2.0").search("int")        # => [s(:int, 1)]
@@ -232,7 +252,7 @@ Example of search combining **or** expressions with the `{}` operator.
 ```ruby
 Fast.ast("1 + 2.0").search("{int float}")  # => [s(:int, 1), s(:float, 2.0)]
 ```
-# Combine patterns in the expression
+## Combining node patterns
 
 Example matches integer or float, both should be positive values.
 
@@ -243,7 +263,7 @@ Fast.ast("1 + 2.0").search("({int float} .positive?)")
 
 > Note that `.positive?` comes from the attempt to verify the method from the AST values.
 
-# Fast - Like regex but for the AST
+## Fast - Like regex but for the AST
 
 So, the node pattern expressions can be composed with:
 
@@ -255,10 +275,11 @@ So, the node pattern expressions can be composed with:
 - '_' and '...' for something or a node with children
 _ '$' for captures
 _ '!' to negate
+_ '#method' to call a `method` with the node as param
 
 > Try fast .finders
 
-# SQL Support in 'fast'
+## SQL Support in 'fast'
 
 Fast now can also [parse SQL](https://jonatas.github.io/fast/sql-support/)
 from PostgreSQL. The AST conversion is very similar to what you have in the Ruby AST.
@@ -305,7 +326,7 @@ The hard work I had was more on going in the most common queries and create a
 good `clean_structure` for it to allow us to have a very easy to comprehend AST
 to build simple node patterns.
 
-# Fastfile
+## Fastfile
 
 The `Fastfile` can help to organize the dictionary of patterns in shortcuts.
 
@@ -321,7 +342,7 @@ Fast.shortcut :sql_parser, "(def parse)", "lib/fast/sql.rb"
 So, if I want to repeat such search, I just need to say `fast .sql_parser` and
 it will reuse the shortcut name to output the matching results.
 
-# Refactoring operations
+## Refactoring operations
 
 The most complex part of the AST is rewriting it. Allowing you to refactor code
 from the AST just with a simple method call.
@@ -332,13 +353,13 @@ Here's an example of a simple replace on a `relname` which is a node type.
 Fast
   .parse_sql("SELECT * FROM customers")
   .replace("relname", "other_table")
-# => "SELECT * FROM other_table"
+  # => "SELECT * FROM other_table"
 ```
 
 The replace method can also receive a block and build a much more complex
 scenario. The next example explores how to build a SQL formatter.
 
-# Format SQL
+## Format SQL
 
 I wrote a full blog post on [building a SQL formatter with fast](/building-a-sql-formatter-with-fast)
 and the final shorcut looks like this:
@@ -367,7 +388,7 @@ Fast.shortcut :format_sql do
 end
 ```
 
-# Anonymize SQL
+## Anonymize SQL
 
 Another cool example on manipulating SQL via AST is [anonymize it](/anonymizing-your-sql).
 
@@ -394,7 +415,7 @@ Fast.shortcut :anonymize_sql do
 end
 ```
 
-# My latest experiments with SQL AST
+## My latest experiments with SQL AST
 
 Now, let's talk about my latest exciting project that is about
 [TimescaleDB](https://github.com/timescale/timescaledb)
@@ -526,7 +547,7 @@ Now, you can see I'm introducing `#method_match` to allow to build more readable
 patterns and delegate part of it to my favorite programming language. So, let's
 specify the methods:
 
-# The `call_time_bucket` pattern will just pick the first result of the
+The `#call_time_bucket` pattern will just pick the first result of the
 expression given:
 
 ```ruby
@@ -554,7 +575,7 @@ Now, we can say, well, we have a query that matches. This query can be running
 standalone or be the implementation of a materialized view. So, next step is
 track what are the queries and what is the materialized views already available.
 
-# Track `@query` and `@materialized`
+## Track `@query` and `@materialized`
 
 ```ruby
     # Previous pattern
@@ -643,7 +664,7 @@ I love building this type of primitive tools 🫶.
 
 Playing with toys from compiler level is fun and very powerful!
 
-# The future
+## The future
 
 My plan for the future is try to help the query planner in the ORM level.
 Integrate with the [timescaledb gem](https://github.com/jonatas/timescaledb) to
