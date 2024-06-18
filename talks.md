@@ -3,7 +3,21 @@ layout: page
 title: "Talks @jonatasdp"
 ---
 
-Here are a few of my talks future to past.
+Here are a few of my talks, future to past.
+
+# Upcoming
+
+### 2024
+
+* July 27th, Florianópolis - SC [Ruby Floripa](https://www.meetup.com/pt-BR/rubyfloripa/events/301590038)
+* July 28th, Maringá - PR [Dev Paraná](https://devpr.org/)
+* August 3, Blumenau - SC [PG Day Blumenau](https://www.sympla.com.br/evento/pgday-blumenau/2385178)
+
+# Older
+
+* Lambda Days 2024 - [Functional Programming in SQL](https://www.lambdadays.org/lambdadays2024)
+
+{% youtube hGWXBg4Hkn0 %}
 
 # 2023
 

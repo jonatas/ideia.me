@@ -6,6 +6,8 @@ title: Grepping SQL Code like a boss
 Here's the outline of the content of my talk in Poland I presented at the
 [Lambda Days 2024](https://lambdadays.com/2024).
 
+{% youtube hGWXBg4Hkn0 %}
+
 My talk is a research which I call "grepping SQL code like a boss".
 Introducing a set of tooling that can not only search but also refactor SQL code like a boss.
 
