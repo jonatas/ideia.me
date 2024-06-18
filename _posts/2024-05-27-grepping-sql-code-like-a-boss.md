@@ -677,14 +677,14 @@ but I can build a small prototype that proves the concept.
 
 Here are a few sources if you want to go deeper:
 
-* https://github.com/jonatas/fast
-* https://ideia.me/fast-supports-sql
-* https://ideia.me/building-a-sql-formatter-with-fast
-* https://ideia.me/anonymizing-your-sql
+* <https://github.com/jonatas/fast>
+* <https://ideia.me/fast-supports-sql>
+* <https://ideia.me/building-a-sql-formatter-with-fast>
+* <https://ideia.me/anonymizing-your-sql>
 
 I build this article as a way to document my talk "Grepping SQL like a boss"
 at [Lambda Days 2024](https://www.lambdadays.org/lambdadays2024/jonatas-paganini)
 and you can find the gist to all talk files and sources to run the example here:
 
-https://gist.github.com/jonatas/6ba56014185855b7f2efae74d6250016
+<https://gist.github.com/jonatas/6ba56014185855b7f2efae74d6250016>
 
