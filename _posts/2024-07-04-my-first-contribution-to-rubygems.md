@@ -4,7 +4,7 @@ categories: [time-series, timescaledb, opensource, performance, ruby]
 ---
 
 With my sense of utility to the world, I had my first contribution to RubyGems
-[merged](new_pr) 🎉
+[merged][new_pr] 🎉
 
 It's effectively just adding [timescaledb gem][ts-gem] to the RubyGems server and
 it's the beginning of a journey.
@@ -12,7 +12,7 @@ it's the beginning of a journey.
 It's not just about adding a gem to the server, but opening a commitment path to
 maintain the work and keep it up-to-date.
 
-I created the [timescaledb](ts-gem) gem to help Ruby developers to interact with
+I created the [timescaledb][ts-gem] gem to help Ruby developers to interact with
 TimescaleDB, a time-series database built on top of PostgreSQL. As I work as a
 Developer Advocate at Timescale, I created the library but never used it on a
 production case. Now, let's take a look on what we have and how it will look
@@ -51,7 +51,7 @@ Rubygem.find_by(name: "ffast").gem_download
 ```
 
 The version: 0 is used to store the total number of downloads for a gem.
-Let's check the timescaledb gem downloads:
+Let's check the timescaledb gem downloads version by version:
 
 ```ruby
 GemDownload.where rubygem: Rubygem.where(name: "timescaledb")
@@ -70,7 +70,7 @@ GemDownload.where rubygem: Rubygem.where(name: "timescaledb")
  "..."]
 ```
 
-You can also check the counter version by version:
+You can also combine the counter version by version in a single query:
 
 ```ruby
 Rubygem
