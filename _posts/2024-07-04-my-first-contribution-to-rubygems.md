@@ -3,32 +3,31 @@ layout: post
 categories: [time-series, timescaledb, opensource, performance, ruby]
 ---
 
-With my sense of utility to the world, I had my first contribution to RubyGems
+Adding to my goal of being helpful in the software world, I had my first contribution to RubyGems
 [merged][new_pr] 🎉
 
-It's effectively just adding [timescaledb gem][ts-gem] to the RubyGems server and
-it's the beginning of a journey.
+It effectively just adds [timescaledb gem][ts-gem] to the RubyGems server and
+it marks the beginning of a journey.
 
-It's not just about adding a gem to the server, but opening a commitment path to
-maintain the work and keep it up-to-date.
+This merge is not just about adding the gem to the server, but also about opening
+a commitment path to maintain the work and keep it up-to-date.
 
-I created the [timescaledb][ts-gem] gem to help Ruby developers to interact with
+I created the [timescaledb][ts-gem] gem to help Ruby developers interact with
 TimescaleDB, a time-series database built on top of PostgreSQL. As I work as a
-Developer Advocate at Timescale, I created the library but never used it on a
-production case. Now, let's take a look on what we have and how it will look
-like.
+Developer Advocate at Timescale, I created the library but never used it in a
+production case. Now, let's take a look at what we have and what it will look like.
 
-If you're curious about the full example, check out the [POC of downloads][gist] I made
-which parses a sample log file and build the ingest pipeline to track and built
+If you're curious about the full example, check out the [PoC of downloads][gist] I made,
+which parses a sample log file and builds the ingest pipeline to track and build
 statistics around the downloads.
 
-## How downloads are tracked Today?
+## How are downloads tracked today?
 
-The RubyGems dump is available for download. You can run it locally quite easy
-to fetch the [latest data](https://rubygems.org/pages/data) and run it locally.
+The RubyGems dump is available for download. You can run it locally quite easily
+to fetch [latest data](https://rubygems.org/pages/data).
 
-The main model that stores the gems is the `Rubygem` model. It has a `name` field
-which tracks the name and it's also the unique name. Let's use [ffast](https://rubygems.org/gems/ffast) as an example,
+The main model storing the gems is the `Rubygem` model. It has a `name` field
+that tracks the name and is also unique. Let's use [ffast](https://rubygems.org/gems/ffast) as an example,
 a gem that I created for another purpose.
 
 ```ruby
@@ -50,7 +49,7 @@ Rubygem.find_by(name: "ffast").gem_download
 # => #<GemDownload:0x000000012ba18bb0 id: 1040717, rubygem_id: 162483, version_id: 0, count: 61240>
 ```
 
-The version: 0 is used to store the total number of downloads for a gem.
+The version 0 is used to store the total number of downloads for a gem.
 Let's check the timescaledb gem downloads version by version:
 
 ```ruby
@@ -98,7 +97,7 @@ Rubygem
  ["0.2.9", 1128]]
 ```
 
-And, probably as you're learning and excited about the numbers, let's watch the
+And, probably as you're learning and getting excited about the numbers, let's watch the
 amazing growth of the rails gem only on stable releases:
 
 ```ruby
@@ -123,7 +122,7 @@ As you can see almost 3M downloads on the Rails 4.0.0 version. It's a huge numbe
 Moving on, the download counts are updated by the `FastlyLogProcessor` job that
 runs every 5 minutes. A new log file is generated every few minutes. The files
 are around 2 MB and are stored in the S3 bucket. I don't have access to the logs
-yet, but a core tem member gave me a sample anonymized log to work on the POC.
+yet, but a core tem member gave me a sample anonymized log to work on the PoC.
 
 The job reads the logs from the S3 bucket and processes the logs to update the
 download counts.
@@ -157,28 +156,28 @@ data is only the final counters being incremented every 5 minutes.
 With the [timescaledb extension][tsdb_extension], we can store the raw data as events and build
 materialized views to track the downloads per gem, version, and day.
 
-The `timescaledb` extension will help to ingest the data into the database and build
+The `timescaledb` extension will help ingest the data into the database and build
 the materialized views to track the downloads.
 
 
 ## Advantages of using TimescaleDB
 
 While the actual solution is very lean and works well, it's not optimized for
-time-series data. It's not exploring the full potential of the data because the
+timeseries data. It's not exploring the full potential of the data because of the
 way the data is being saved.
 
-Time series data is about events that happen over time. The data is stored in
-a way that allows to query and aggregate the data efficiently. It allows you to
-understand user behavior and track the growth of the downloads, the rush hours,
+Timeseries data is about events that happen over time. The data is stored in
+a way that allows querying and aggregating data efficiently. It allows you to
+understand user behavior and track the growth of downloads, the rush hours,
 and the most popular gems.
 
 We'll also be able to detect anomalies and build a dashboard to track the downloads
-in real-time.
+in real time.
 
 The main advantage of using TimescaleDB is that it's PostgreSQL. You just speak
-SQL and that's it. You can use the same tools and libraries you're used to.
+SQL, and that's it. You can use the same tools and libraries you're used to.
 
-Now, let's break down the POC and build the ingest pipeline to track and build
+Now, let's break down the PoC and build the ingest pipeline to track and build
 statistics around the downloads.
 
 Let's start with the plain logs we have:
@@ -231,7 +230,7 @@ def parse_file(file)
 end
 ```
 
-As you can see, we hardcoded 5k batches to insert the data. It's a good practice
+As you can see, we hardcoded 5k batches to insert the data. This is a good practice
 to avoid memory issues and to keep the data flowing.
 
 For inserting the data, we can use the `timescaledb` along with the `bulk_insert`
@@ -266,10 +265,10 @@ So, you can imagine a migration with the following content:
 ```
 
 Then you can build the materialized views to track the downloads per gem, version,
-and day. Now, let's build the materialized views to track the downloads per gem,
+and day. Now, let's build the materialized views to track the downloads per gem.
 
-Interestingly, this hierarchical continuous aggregates are quite a few and I believe it's
-a good idea to keep them in a separate migration.
+Interestingly, there are quite a few hierarchical continuous aggregates, and I
+believe it’s a good idea to keep them in a separate migration.
 
 Now, let me try to break down all the cyclomatic complexity and build a simple
 model to track the downloads per gem, version, and day.
@@ -297,13 +296,13 @@ class Download < ActiveRecord::Base
 end
 ```
 
-Now, think about rolling up this statistics per hour, day, week, month, and year.
+Now, think about rolling up these statistics per hour, day, week, month, and year.
 
 I believe it's a good idea to keep them in a separate module and use the `cagg`
 as a factory to build the models for each view.
 
 This way, you can keep the code for each continuous aggregate in a separate
-module but nested to the hypertable model which I think it's a good convention.
+module but nested to the hypertable model, which I think is a good convention.
 
 
 ```ruby
@@ -357,7 +356,7 @@ module but nested to the hypertable model which I think it's a good convention.
 In the end, you can use the `cagg` to build the models for each continuous aggregate
 and keep the code clean and organized.
 
-In this way, we keep the most important metadata as part of the code and then
+In this way, we keep the most important metadata in the code and then
 make it easy to build the materialized views and keep them up-to-date.
 
 ```ruby
@@ -500,30 +499,35 @@ version, by minute, hour, and day.
 
 ## Next steps
 
-The POC is complete and my next step is migrate all the important pieces as a
-production-ready code. But as a production code, we need to keep the code clean
-and make it step by step.
+The PoC is complete, and my next step is to migrate all the important pieces as
+production-ready code. But as production code, we need to keep it clean and make
+it step by step.
 
 1. Introduce the migration to build the tables and the continuous aggregates.
-2. Introduce a new [FastlyLogProcessor][processor] that uses the parser already implemented
-3. Add a call to start populating downloads from [SQS][sqs_worker] the logs when a new log is
+2. Introduce a new [FastlyLogProcessor][processor] that uses the already-implemented parser.
+3. Schedule a Job that uses the processor to get new files from the [SQS][sqs_worker] the logs when a new log is
    available.
 4. Create a refresh policy to keep the materialized views up-to-date.
 5. Create a maintenance task to migrate all previous logs available.
 6. Create a dashboard to track the downloads and offer more insights to gem
-   creators and users
+   creators and users.
 
 I hope you enjoyed this journey and I'm going to be implementing the next steps.
-
-Keep an eye on the [open issue][issue] to check the new updates.
+Keep an eye on the [open issue][issue] to check for new updates.
 
 If you want to know more about TimescaleDB, check out the [timescaledb gem][ts-gem]
 and the [timescaledb extension][tsdb_extension].
 
 ## Thanks RubyGems team
 
+I just want to say thanks to the RubyGems team for the opportunity, especially
+[@simi][simi] and [@colby-swandale][colby] for their support and guidance in
+helping me merge this contribution.
+
+I’m looking forward to the next steps, and I’m excited to keep contributing to the RubyGems project.
+
 I just want to say thanks to the RubyGems team for the opportunity and
-especially the support and guidance from [@simi][simi] and [@colby-swandale][colby]
+especially the support and guidance from 
 to help me to get this contribution merged.
 
 I'm looking forward to the next steps and I'm excited to keep contributing to the
