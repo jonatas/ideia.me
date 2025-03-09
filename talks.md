@@ -8,7 +8,7 @@ title: "Speaking @jonatasdp"
 
 <div class="talks-container">
   <div class="talks-header">
-    <h1>Global Speaker, SQL Enthusiast, Ruby Advocate</h1>
+    <h1>Global Speaker, SQL Enthusiast, Developer Advocate</h1>
   </div>
   
   <div class="talks-intro">
@@ -26,9 +26,7 @@ title: "Speaking @jonatasdp"
             <div class="carousel-caption">
               <h3>{{ talk.event }}</h3>
               <p>{{ image.caption }}</p>
-              {% if talk.url %}
-                <a href="{{ talk.url }}" class="carousel-link" target="_blank">View Event Details</a>
-              {% endif %}
+              <a href="#{{ talk.title | slugify }}" class="carousel-link">View Event Details</a>
             </div>
           </div>
         {% endfor %}
@@ -74,9 +72,8 @@ title: "Speaking @jonatasdp"
   
   <div class="booking-section">
     <h2 class="booking-heading">Invite Me to Speak at Your Event</h2>
-    <p class="booking-text">Looking for a speaker on PostgreSQL, Ruby, TimescaleDB, or Data Science? I'm available for conferences, workshops, and meetups worldwide. Let's create an engaging experience for your audience!</p>
-
-    <a href="javascript:openBookingForm()" class="booking-button">Book Me for Your Event</a>
+    <p class="booking-text">
+    I'm sharing my speaking journey to connect with event organizers and communities. Are you looking for a speaker on PostgreSQL, Ruby, TimescaleDB, or Data Science? I'm available for conferences, workshops, and meetups worldwide, especially if I'm already visiting your region. Let's create an engaging experience for your audience! Connect with me on <a href="https://www.linkedin.com/in/jonatasdp" target="_blank" rel="noopener">LinkedIn <i class="fab fa-linkedin"></i></a> to discuss speaking opportunities.</p>
   </div>
   
   <h2 class="section-heading">Chronological Talk History</h2>
@@ -113,7 +110,10 @@ title: "Speaking @jonatasdp"
         <!-- Display each conference talk separately -->
         {% for talk in group.items %}
           {% assign talk_year = talk.date | slice: 0,4 %}
-          <div class="talk-card {% if talk.date < today_date %}past-event{% endif %}" data-topics="{{ talk.topic | replace: ', ', ',' }}" data-year="{{ talk_year }}">
+          <div class="talk-card {% if talk.date < today_date %}past-event{% endif %}" 
+               data-topics="{{ talk.topic | replace: ', ', ',' }}" 
+               data-year="{{ talk_year }}"
+               id="{{ talk.title | slugify }}">
             <div class="talk-card-header">
               {% if talk.media.youtube %}
                 <img src="https://img.youtube.com/vi/{{ talk.media.youtube }}/mqdefault.jpg" alt="{{ talk.title }}" class="talk-card-thumbnail">
@@ -233,7 +233,10 @@ title: "Speaking @jonatasdp"
         {% endfor %}
       {% elsif group.items.size > 1 %}
         <!-- This is a regular talk series with multiple instances -->
-        <div class="talk-card talk-series" data-topics="{{ first_talk.topic | replace: ', ', ',' }}" data-year="{{ talk_year }}">
+        <div class="talk-card talk-series" 
+             data-topics="{{ first_talk.topic | replace: ', ', ',' }}" 
+             data-year="{{ talk_year }}"
+             id="{{ first_talk.title | slugify }}">
           <div class="talk-card-header">
             {% if first_talk.media.youtube %}
               <img src="https://img.youtube.com/vi/{{ first_talk.media.youtube }}/mqdefault.jpg" alt="{{ first_talk.title }}" class="talk-card-thumbnail">
@@ -375,7 +378,10 @@ title: "Speaking @jonatasdp"
         </div>
       {% else %}
         <!-- Regular single talk -->
-        <div class="talk-card {% if first_talk.date < today_date %}past-event{% endif %}" data-topics="{{ first_talk.topic | replace: ', ', ',' }}" data-year="{{ talk_year }}">
+        <div class="talk-card {% if first_talk.date < today_date %}past-event{% endif %}" 
+             data-topics="{{ first_talk.topic | replace: ', ', ',' }}" 
+             data-year="{{ talk_year }}"
+             id="{{ first_talk.title | slugify }}">
           <div class="talk-card-header">
             {% if first_talk.media.youtube %}
               <img src="https://img.youtube.com/vi/{{ first_talk.media.youtube }}/mqdefault.jpg" alt="{{ first_talk.title }}" class="talk-card-thumbnail">
@@ -495,50 +501,6 @@ title: "Speaking @jonatasdp"
       {% endif %}
     {% endfor %}
   </div>
-  
-  <div class="booking-modal" id="booking-modal">
-    <div class="booking-form">
-      <div class="close-modal" onclick="closeBookingForm()">&times;</div>
-      <h2>Book Me for Your Event</h2>
-      <form id="speaking-request">
-        <div class="form-group">
-          <label for="name" class="form-label">Your Name</label>
-          <input type="text" id="name" name="name" class="form-input" required>
-        </div>
-        <div class="form-group">
-          <label for="email" class="form-label">Email Address</label>
-          <input type="email" id="email" name="email" class="form-input" required>
-        </div>
-        <div class="form-group">
-          <label for="event" class="form-label">Event Name</label>
-          <input type="text" id="event" name="event" class="form-input" required>
-        </div>
-        <div class="form-group">
-          <label for="date" class="form-label">Event Date</label>
-          <input type="date" id="date" name="date" class="form-input" required>
-        </div>
-        <div class="form-group">
-          <label for="location" class="form-label">Event Location</label>
-          <input type="text" id="location" name="location" class="form-input" required>
-        </div>
-        <div class="form-group">
-          <label for="topic" class="form-label">Preferred Topic</label>
-          <select id="topic" name="topic" class="form-input" required>
-            <option value="">Select a topic</option>
-            {% for topic in site.data.talks.topics %}
-              <option value="{{ topic.name }}">{{ topic.name }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="message" class="form-label">Additional Information</label>
-          <textarea id="message" name="message" class="form-input" rows="4"></textarea>
-        </div>
-        <button type="submit" class="form-submit">Submit Request</button>
-      </form>
-    </div>
-  </div>
-</div>
   <!-- End of the page -->
 
 <!-- Preload talks data for JavaScript calculations -->

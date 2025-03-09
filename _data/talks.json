@@ -12,14 +12,7 @@
       "github": "https://github.com/timescale/timescaledb-ruby",
       "media": {
         "slides": "2PACX-1vQ_WAHS3AWurvv9_9xcAsVd64hI-h6h_6H6TUb3N9F3LfkS3adKswI_H8KZueGzMbPkz8CjMCnNmpFn",
-        "youtube": "9KtsHQCECgM",
-        "images": [
-          {
-            "src": "/images/krug-2025-timescaledb.jpg",
-            "alt": "Presenting TimescaleDB at Krakow Ruby User Group",
-            "caption": "Sharing TimescaleDB insights with the Ruby community"
-          }
-        ]
+        "youtube": "9KtsHQCECgM"
       }
     },
     {
@@ -37,22 +30,17 @@
         "slides": "2PACX-1vTcncQivyEhJ8oUwsLVFFWFEaIhvvUcI-20zVK9EwNdj7udCToetUHxCyK_sEOmOl1nkrvVjOMYmWWj",
         "images": [
           {
-            "src": "/images/devpr-toledo-2025.jpg",
-            "alt": "Speaking at Dev Paraná Toledo",
-            "caption": "Discussing real-time analytics with PostgreSQL"
-          },
-          {
             "src": "/images/Krakow_Ruby_User_Group_Jonatas_Speaking.jpg",
             "alt": "Speaking at Krakow Ruby User Group",
             "caption": "Introducing TimescaleDB to the Ruby community"
           },
           {
-            "src": "/images/Krakow_Ruby_User_Group_Jonatas_Speaking-profile-half-body.JPG",
+            "src": "/images/Krakow_Ruby_User_Group_Jonatas_Speaking-profile-half-body.jpg",
             "alt": "Presenting at KRUG",
             "caption": "Sharing insights about time-series data in Ruby"
           },
           {
-            "src": "/images/Krakow_Ruby_User_Group_Jonatas_Networking.JPG",
+            "src": "/images/Krakow_Ruby_User_Group_Jonatas_Networking.jpg",
             "alt": "Networking at KRUG",
             "caption": "Engaging with the Ruby community in Krakow"
           }
@@ -109,6 +97,30 @@
       "topic": "PostgreSQL, Ruby, Performance",
       "status": "Delivered",
       "international": true,
+      "media": {
+        "images": [
+          {
+            "src": "/images/Krakow_Ruby_Community_Conference_Performance_workshop.jpg",
+            "alt": "Leading the Performance Workshop",
+            "caption": "Teaching PostgreSQL optimization techniques to Ruby developers"
+          },
+          {
+            "src": "/images/Krakow_Ruby_Community_Conference_Performance_workshop-full-room.jpg",
+            "alt": "Full workshop room",
+            "caption": "Engaging with a packed room of Ruby developers"
+          },
+          {
+            "src": "/images/Krakow_Ruby_Community_Conference_Jonatas_networking.jpg",
+            "alt": "Networking at the conference",
+            "caption": "Building connections in the Ruby community"
+          },
+          {
+            "src": "/images/Krakow_Ruby_Community_Conference_Jonatas_Scarf_Gift.jpg",
+            "alt": "Receiving a gift from the community",
+            "caption": "Heartwarming moment with the Krakow Ruby community"
+          }
+        ]
+      },
       "github": "https://github.com/timescale/postgresql-performance-for-rubyists/"
     },
     {
@@ -143,7 +155,19 @@
       "topic": "PostgreSQL, TimescaleDB",
       "status": "Delivered",
       "media": {
-        "slides": "2PACX-1vQo71hgMkjjvbeYypz0oqpXJTqAi-TWSGLdNSN20apKQ4FXMZFI9-5M1TkHhv1x3x3r1hNeCKLFyNIQ"
+        "slides": "2PACX-1vQo71hgMkjjvbeYypz0oqpXJTqAi-TWSGLdNSN20apKQ4FXMZFI9-5M1TkHhv1x3x3r1hNeCKLFyNIQ",
+        "images": [
+          {
+            "src": "/images/pgday-blumenau-2024-jonatas-speaking.jpg",
+            "alt": "Speaking at PG Day Blumenau 2024",
+            "caption": "Sharing insights about TimescaleDB optimization"
+          },
+          {
+            "src": "/images/pgconf-brazil-2024-audience.jpg",
+            "alt": "PostgreSQL Conference Brazil Audience",
+            "caption": "Engaging with the Brazilian PostgreSQL community"
+          }
+        ]
       }
     },
     {
@@ -155,7 +179,21 @@
       "type": "conference",
       "topic": "SQL, Command Line",
       "status": "Delivered",
-      "international": true
+      "international": true,
+      "media": {
+        "images": [
+          {
+            "src": "/images/lambda-days-2023-jonatas-speaking.jpeg",
+            "alt": "Speaking at Lambda Days 2024",
+            "caption": "Sharing command-line techniques for SQL exploration"
+          },
+          {
+            "src": "/images/jonatasdp-michal-marcin.jpeg",
+            "alt": "With Michal and Marcin walking in Krakow",
+            "caption": "Great discussions with my great ruby friends"
+          }
+        ]
+      }
     },
     {
       "date": "2024-02-15",
@@ -165,7 +203,16 @@
       "url": "https://www.lambdadays.org/lambdadays2024",
       "type": "panel",
       "topic": "Mentoring",
-      "status": "Delivered"
+      "status": "Delivered",
+      "media": {
+        "images": [
+          {
+            "src": "/images/Krakow_Ruby_Community_Conference_Performance_Michal_Mariuz_conf_organizers.jpg",
+            "alt": "With conference organizers in Krakow",
+            "caption": "Great discussions with the conference organizers"
+          }
+        ]
+      }
     },
     {
       "date": "2023-11-25",
@@ -235,7 +282,16 @@
       "url": "https://pgdayxap.com.br/2023",
       "type": "conference",
       "topic": "PostgreSQL, TimescaleDB, Time Series",
-      "status": "Delivered"
+      "status": "Delivered",
+      "media": {
+        "images": [
+          {
+            "src": "/images/pgday-xap-jonatas-speaking.jpg",
+            "alt": "Speaking at PG Day XAP",
+            "caption": "Sharing TimescaleDB insights with the PostgreSQL community"
+          }
+        ]
+      }
     },
     {
       "date": "2023-09-02",
@@ -345,6 +401,16 @@
             "src": "/images/jonatas-timescale-friends-pgcon-ottawa-2023.jpeg",
             "alt": "With Timescale team at PGCon Ottawa",
             "caption": "Great times with the Timescale team in Ottawa"
+          },
+          {
+            "src": "/images/pgcon-2023-tshirt.jpeg",
+            "alt": "PGCon 2023 T-shirt",
+            "caption": "Memorable swag from PGCon 2023"
+          },
+          {
+            "src": "/images/pgcon-toronto-2023-timescale-folks.jpeg",
+            "alt": "With Timescale team in Toronto",
+            "caption": "More great moments with the Timescale team"
           }
         ]
       }
@@ -384,6 +450,11 @@
             "src": "/images/running-malaga.jpeg",
             "alt": "Running in Malaga",
             "caption": "Enjoying the beautiful Malaga coastline during the conference"
+          },
+          {
+            "src": "/images/jonatasdp-2023.jpeg",
+            "alt": "Portrait at J On The Beach 2023",
+            "caption": "Capturing moments at the conference"
           }
         ]
       }
@@ -410,14 +481,7 @@
       "topic": "Ruby, TimescaleDB, Audio, Data Visualization",
       "status": "Delivered",
       "media": {
-        "youtube": "Vfxp718OMtI",
-        "images": [
-          {
-            "src": "/images/ada-ruby-meetup.jpg",
-            "alt": "Speaking at Ada Ruby Meetup",
-            "caption": "Demonstrating data sonification with Ruby and TimescaleDB"
-          }
-        ]
+        "youtube": "Vfxp718OMtI"
       },
       "github": "https://gist.github.com/jonatas/63fddb570842b022c949d84c7291648d"
     },
@@ -438,6 +502,11 @@
             "src": "/images/jonatasdp-cliff-scale20x.jpeg",
             "alt": "At Scale 20x in Pasadena",
             "caption": "Exploring Pasadena during Scale 20x"
+          },
+          {
+            "src": "/images/jonatasdp-bubba-gump.jpeg",
+            "alt": "At Bubba Gump in California",
+            "caption": "Enjoying local cuisine during the conference"
           }
         ]
       }
@@ -468,6 +537,11 @@
             "src": "/images/pgconf-india-2023-jonatas-and-friends.jpg",
             "alt": "With friends at PGConf India",
             "caption": "Building connections in the PostgreSQL community"
+          },
+          {
+            "src": "/images/pgconf-india-2023-dinner-with-timescale-folks.jpg",
+            "alt": "Dinner with Timescale team in India",
+            "caption": "Enjoying dinner with the Timescale team in Bengaluru"
           }
         ]
       }
@@ -512,6 +586,11 @@
             "src": "/images/jonatas-paganini-birthday-cake-rubyconf-thailand.jpeg",
             "alt": "Birthday celebration at RubyConf Thailand",
             "caption": "Celebrating my birthday with the Ruby community in Thailand"
+          },
+          {
+            "src": "/images/jonatasdp-birthday-thailand-2022.jpg",
+            "alt": "Birthday celebration in Thailand",
+            "caption": "Another memorable moment from the birthday celebration"
           }
         ]
       }
@@ -623,5 +702,9 @@
     "Accepted": "#2196F3",
     "Submitted": "#9E9E9E",
     "Rejected": "#F44336"
+  },
+  "contact": {
+    "email": "jonatas@timescale.com",
+    "message": "Want me to speak at your conference? Drop me a line!"
   }
 } 

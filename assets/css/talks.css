@@ -28,12 +28,12 @@
 
 .global-impact {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
   margin: 2rem 0;
   padding: 1.5rem;
-  background: white;
-  border-radius: 8px;
+  background: var(--bg-white);
+  border-radius: var(--border-radius-md);
   border: 1px solid var(--border-color);
 }
 
@@ -45,9 +45,7 @@
   font-size: 2.5rem;
   font-weight: 700;
   color: var(--primary-color);
-  margin-bottom: 0.5rem;
   opacity: 0;
-  transform: translateY(20px);
   animation: fadeInUp 0.6s ease forwards;
 }
 
@@ -61,10 +59,9 @@
 .topic-filters {
   display: flex;
   flex-wrap: wrap;
+  gap: 0.5rem;
   justify-content: center;
-  gap: 0.75em;
-  margin: 2em 0;
-  padding: 1em;
+  margin: 1rem 0;
 }
 
 .topic-filters h3 {
@@ -74,14 +71,10 @@
 }
 
 .topic-filter {
-  padding: 0.5em 1.2em;
-  margin: 0.3em;
-  border-radius: 4px;
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--border-radius-sm);
   font-size: 0.9rem;
   cursor: pointer;
-  background-color: var(--bg-white);
-  font-weight: 500;
-  color: var(--text-color);
 }
 
 .topic-filter.active {
@@ -113,9 +106,9 @@
 
 .talks-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2em;
-  margin: 2em 0;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
 }
 
 .talk-card {
@@ -123,9 +116,9 @@
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius-md);
   overflow: hidden;
-  height: 100%;
   display: flex;
   flex-direction: column;
+  height: auto;
 }
 
 .talk-card:hover {
@@ -134,22 +127,19 @@
 
 .talk-card-header {
   position: relative;
-  height: 160px;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
   overflow: hidden;
 }
 
 .talk-card-thumbnail {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 200px;
+  height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: none;
-  filter: brightness(0.9);
-}
-
-.talk-card:hover .talk-card-thumbnail {
-  transform: none;
-  filter: brightness(1);
 }
 
 .talk-card-overlay {
@@ -158,12 +148,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 100%);
+  background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 1.25em;
-  box-sizing: border-box;
+  padding: 1rem;
 }
 
 .talk-card-title-top {
@@ -219,16 +208,16 @@
 }
 
 .talk-card-body {
-  padding: 1.5em;
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  gap: 1em;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  flex: 1;
 }
 
 .talk-card-title {
-  font-size: 1.3rem;
-  margin: 0 0 0.75rem 0;
+  font-size: 1.2rem;
+  margin: 0;
   line-height: 1.3;
   font-weight: 600;
   color: var(--text-color);
@@ -244,7 +233,7 @@
 }
 
 .talk-card-topics {
-  margin: 0.5em 0 1.25em 0;
+  margin: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 0.4em;
@@ -263,13 +252,13 @@
 }
 
 .talk-card-footer {
-  padding: 1em 1.5em;
+  margin-top: auto;
+  padding: 0.75rem 1rem;
   border-top: 1px solid var(--border-color);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   flex-wrap: wrap;
-  gap: 0.75em;
+  gap: 0.5rem;
+  align-items: center;
   background-color: var(--bg-light);
 }
 
@@ -338,20 +327,25 @@
 }
 
 .series-locations {
-  margin-top: 1em;
-  border-top: 1px solid var(--border-color);
-  padding-top: 1.5em;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  padding-top: 0.5rem;
 }
 
 .series-location-item {
   display: flex;
-  align-items: center;
-  padding: 0.75rem 0;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid rgba(0,0,0,0.08);
-  gap: 1rem;
+}
+
+.series-location-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .series-date {
@@ -615,19 +609,20 @@
 
 .highlight-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1rem;
   width: 100%;
   margin: 0;
 }
 
 .highlight-card {
-  width: 100%;
-  margin-bottom: 1rem;
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
+  background-color: var(--bg-white);
   border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .highlight-card-header {
@@ -685,8 +680,8 @@
 }
 
 .series-location-item {
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid rgba(0,0,0,0.08);
   display: flex;
   flex-direction: column;
@@ -872,7 +867,7 @@
 /* Improved grid layout */
 .highlight-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1rem;
   width: 100%;
   margin: 0;
@@ -1346,13 +1341,10 @@ textarea,
 
 /* Fix slides container */
 .slides-container {
-  width: 100%;
   position: relative;
-  min-height: 300px;
-  background-color: #f8f8f8;
-  border-radius: 4px;
-  overflow: hidden;
-  margin: 1em 0;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  margin: 0.5rem 0;
 }
 
 .slides-container iframe {
@@ -1361,7 +1353,6 @@ textarea,
   left: 0;
   width: 100%;
   height: 100%;
-  border: none;
 }
 
 /* Fix the loading indicator styles */
@@ -1404,7 +1395,12 @@ textarea,
   }
   
   .slides-container {
-    min-height: 250px;
+    padding-bottom: 75%; /* 4:3 aspect ratio for mobile */
+  }
+  
+  .carousel-slide img {
+    width: 100%;
+    height: auto;
   }
 }
 
@@ -1625,10 +1621,9 @@ textarea,
 
 /* Container for multiple date chips */
 .series-dates-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 0.5rem;
-  margin-bottom: 0.75rem;
   width: 100%;
 }
 
@@ -1636,13 +1631,10 @@ textarea,
 .series-date-chip {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
-  background-color: #f7f7f7;
-  border-radius: 4px;
-  padding: 0.4rem 0.65rem;
-  flex-wrap: nowrap;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  transition: background-color 0.2s;
+  gap: 0.5rem;
+  background-color: var(--bg-light);
+  padding: 0.5rem;
+  border-radius: var(--border-radius-sm);
 }
 
 .series-date-chip:hover {
@@ -1681,8 +1673,7 @@ textarea,
 /* Mobile optimization */
 @media (max-width: 767px) {
   .series-dates-container {
-    flex-direction: column;
-    gap: 0.35rem;
+    grid-template-columns: 1fr;
   }
   
   .series-date-chip {
@@ -1693,10 +1684,10 @@ textarea,
 
 /* Conference Carousel */
 .conference-carousel {
-  margin: 2rem 0;
+  margin: 1rem 0;
   position: relative;
+  border-radius: var(--border-radius-md);
   overflow: hidden;
-  border-radius: 8px;
 }
 
 .carousel-container {
@@ -1707,11 +1698,16 @@ textarea,
 .carousel-slide {
   flex: 0 0 100%;
   position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
 }
 
 .carousel-slide img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 400px;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -1720,9 +1716,8 @@ textarea,
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.6), transparent);
-  color: white;
-  padding: 2rem 1.5rem 1.5rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.5), transparent);
+  padding: 2rem 1rem 1rem;
   text-align: center;
 }
 
@@ -1806,8 +1801,8 @@ textarea,
     gap: 0.5rem;
   }
   
-  .carousel-slide img {
-    height: 300px;
+  .carousel-slide {
+    padding-bottom: 75%; /* 4:3 aspect ratio for mobile */
   }
   
   .carousel-caption {
