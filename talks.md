@@ -46,48 +46,54 @@ title: "Speaking @jonatasdp"
               {% endfor %}
               
               <div class="highlight-title-top">{{ first_talk.title }}</div>
-              
-              {% if future_talks.size > 1 %}
-                <div class="series-badge"><i class="fas fa-sync"></i> {{ future_talks.size }} Events</div>
-              {% endif %}
-              
-              {% if first_talk.international %}
-                <div class="international-badge"><i class="fas fa-globe"></i> International</div>
-              {% endif %}
             </div>
             
             <div class="highlight-card-body">
-              <h3 class="highlight-title">{{ first_talk.title }}</h3>
               <div class="highlight-event">{{ first_talk.event }}</div>
-              <div class="talk-card-topics">
-                {% assign topic_list = first_talk.topic | split: ", " %}
-                {% for topic in topic_list %}
-                  <div class="talk-card-topic topic-{{ topic | replace: ' ', '-' }}">{{ topic }}</div>
-                {% endfor %}
-              </div>
               
               <div class="series-locations">
                 {% assign sorted_future_talks = future_talks | sort: "date" %}
                 {% for talk in sorted_future_talks %}
                   <div class="series-location-item">
                     <div class="series-date">{{ talk.date | date: "%B %d, %Y" }}</div>
-                    <div class="series-location"><i class="fas fa-map-marker-alt"></i> {{ talk.location }}</div>
-                    {% assign talk_year = talk.date | slice: 0,4 %}
-                    {% if talk.url != "" %}
-                      {% if talk.event contains "Lambda Days" or talk.event contains "RubyConf" %}
-                        <div class="series-event"><i class="fas fa-calendar-alt"></i> <a href="{{ talk.url }}" class="event-link" target="_blank">{{ talk.event }} {{ talk_year }}</a></div>
+                    <div class="location-event-grid">
+                      <div class="series-location" 
+                        {% if talk.location contains "Madrid" %}
+                          data-emoji="🇪🇸"
+                        {% elsif talk.location contains "Krakow" %}
+                          data-emoji="🇵🇱"
+                        {% elsif talk.location contains "Latvia" or talk.location contains "Riga" %}
+                          data-emoji="🇱🇻"
+                        {% elsif talk.location contains "Online" %}
+                          data-emoji="🌐"
+                        {% elsif talk.location contains "PR" or talk.location contains "Brazil" %}
+                          data-emoji="🇧🇷"
+                        {% elsif talk.international %}
+                          data-emoji="🌐"
+                        {% else %}
+                          data-emoji="🏳️"
+                        {% endif %}>
+                        {{ talk.location }}
+                      </div>
+                      {% assign talk_year = talk.date | slice: 0,4 %}
+                      {% if talk.url != "" %}
+                        {% if talk.event contains "Lambda Days" or talk.event contains "RubyConf" %}
+                          <div class="series-event"><i class="fas fa-calendar-alt"></i> <a href="{{ talk.url }}" class="event-link" target="_blank">{{ talk.event }} {{ talk_year }}</a></div>
+                        {% else %}
+                          <div class="series-event"><i class="fas fa-calendar-alt"></i> <a href="{{ talk.url }}" class="event-link" target="_blank">{{ talk.event }}</a></div>
+                        {% endif %}
                       {% else %}
-                        <div class="series-event"><i class="fas fa-calendar-alt"></i> <a href="{{ talk.url }}" class="event-link" target="_blank">{{ talk.event }}</a></div>
+                        {% if talk.event contains "Lambda Days" or talk.event contains "RubyConf" %}
+                          <div class="series-event"><i class="fas fa-calendar-alt"></i> {{ talk.event }} {{ talk_year }}</div>
+                        {% else %}
+                          <div class="series-event"><i class="fas fa-calendar-alt"></i> {{ talk.event }}</div>
+                        {% endif %}
                       {% endif %}
-                    {% else %}
-                      {% if talk.event contains "Lambda Days" or talk.event contains "RubyConf" %}
-                        <div class="series-event"><i class="fas fa-calendar-alt"></i> {{ talk.event }} {{ talk_year }}</div>
-                      {% else %}
-                        <div class="series-event"><i class="fas fa-calendar-alt"></i> {{ talk.event }}</div>
-                      {% endif %}
-                    {% endif %}
+                    </div>
                     {% if talk.url and talk.url != "" %}
-                      <a href="{{ talk.url }}" class="series-date-cta">Register <i class="fas fa-arrow-right"></i></a>
+                      <div class="register-button-container">
+                        <a href="{{ talk.url }}" class="series-date-cta">Register <i class="fas fa-arrow-right"></i></a>
+                      </div>
                     {% endif %}
                   </div>
                 {% endfor %}
@@ -185,9 +191,6 @@ title: "Speaking @jonatasdp"
                 {% else %}
                   <div class="talk-card-event">{{ talk.event }}</div>
                 {% endif %}
-                {% if talk.international %}
-                  <div class="international-badge"><i class="fas fa-globe"></i> International</div>
-                {% endif %}
               </div>
             </div>
             <div class="talk-card-body">
@@ -197,7 +200,26 @@ title: "Speaking @jonatasdp"
                 <h3 class="talk-card-title">{{ talk.title }}</h3>
               {% endif %}
               <div class="series-date">{{ talk.date | date: "%B %d, %Y" }}</div>
-              <div class="series-location"><i class="fas fa-map-marker-alt"></i> {{ talk.location }}</div>
+              <div class="series-location" 
+                {% if talk.location contains "Madrid" %}
+                  data-emoji="🇪🇸"
+                {% elsif talk.location contains "São Paulo" or talk.location contains "Sao Paulo" %}
+                  data-emoji="🇧🇷"
+                {% elsif talk.location contains "Krakow" %}
+                  data-emoji="🇵🇱"
+                {% elsif talk.location contains "Latvia" or talk.location contains "Riga" %}
+                  data-emoji="🇱🇻"
+                {% elsif talk.location contains "Online" %}
+                  data-emoji="🌐"
+                {% elsif talk.location contains "PR" or talk.location contains "Brazil" %}
+                  data-emoji="🇧🇷"
+                {% elsif talk.international %}
+                  data-emoji="🌐"
+                {% else %}
+                  data-emoji="🏳️"
+                {% endif %}>
+                {{ talk.location }}
+              </div>
               <div class="talk-card-topics">
                 {% assign topic_list = talk.topic | split: ", " %}
                 {% for topic in topic_list %}
@@ -289,10 +311,6 @@ title: "Speaking @jonatasdp"
               {% else %}
                 <div class="talk-card-event">{{ first_talk.event }}</div>
               {% endif %}
-              <div class="series-badge"><i class="fas fa-sync"></i> {{ group.items.size }} Events</div>
-              {% if first_talk.international %}
-                <div class="international-badge"><i class="fas fa-globe"></i> International</div>
-              {% endif %}
             </div>
           </div>
           <div class="talk-card-body">
@@ -313,7 +331,26 @@ title: "Speaking @jonatasdp"
               {% for talk in sorted_items %}
                 <div class="series-location-item {% if talk.date < today_date %}past-event{% endif %}">
                   <div class="series-date">{{ talk.date | date: "%B %d, %Y" }}</div>
-                  <div class="series-location"><i class="fas fa-map-marker-alt"></i> {{ talk.location }}</div>
+                  <div class="series-location" 
+                    {% if talk.location contains "Madrid" %}
+                      data-emoji="🇪🇸"
+                    {% elsif talk.location contains "São Paulo" or talk.location contains "Sao Paulo" %}
+                      data-emoji="🇧🇷"
+                    {% elsif talk.location contains "Krakow" %}
+                      data-emoji="🇵🇱"
+                    {% elsif talk.location contains "Latvia" or talk.location contains "Riga" %}
+                      data-emoji="🇱🇻"
+                    {% elsif talk.location contains "Online" %}
+                      data-emoji="🌐"
+                    {% elsif talk.location contains "PR" or talk.location contains "Brazil" %}
+                      data-emoji="🇧🇷"
+                    {% elsif talk.international %}
+                      data-emoji="🌐"
+                    {% else %}
+                      data-emoji="🏳️"
+                    {% endif %}>
+                    {{ talk.location }}
+                  </div>
                   {% assign talk_year = talk.date | slice: 0,4 %}
                   {% if talk.url != "" %}
                     {% if talk.event contains "Lambda Days" or talk.event contains "RubyConf" %}
@@ -416,9 +453,6 @@ title: "Speaking @jonatasdp"
               {% else %}
                 <div class="talk-card-event">{{ first_talk.event }}</div>
               {% endif %}
-              {% if first_talk.international %}
-                <div class="international-badge"><i class="fas fa-globe"></i> International</div>
-              {% endif %}
             </div>
           </div>
           <div class="talk-card-body">
@@ -428,7 +462,26 @@ title: "Speaking @jonatasdp"
               <h3 class="talk-card-title">{{ first_talk.title }}</h3>
             {% endif %}
             <div class="series-date">{{ first_talk.date | date: "%B %d, %Y" }}</div>
-            <div class="series-location"><i class="fas fa-map-marker-alt"></i> {{ first_talk.location }}</div>
+            <div class="series-location" 
+              {% if first_talk.location contains "Madrid" %}
+                data-emoji="🇪🇸"
+              {% elsif first_talk.location contains "São Paulo" or first_talk.location contains "Sao Paulo" %}
+                data-emoji="🇧🇷"
+              {% elsif first_talk.location contains "Krakow" %}
+                data-emoji="🇵🇱"
+              {% elsif first_talk.location contains "Latvia" or first_talk.location contains "Riga" %}
+                data-emoji="🇱🇻"
+              {% elsif first_talk.location contains "Online" %}
+                data-emoji="🌐"
+              {% elsif first_talk.location contains "PR" or first_talk.location contains "Brazil" %}
+                data-emoji="🇧🇷"
+              {% elsif first_talk.international %}
+                data-emoji="🌐"
+              {% else %}
+                data-emoji="🏳️"
+              {% endif %}>
+              {{ first_talk.location }}
+            </div>
             <div class="talk-card-topics">
               {% assign topic_list = first_talk.topic | split: ", " %}
               {% for topic in topic_list %}

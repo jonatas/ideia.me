@@ -616,9 +616,13 @@ document.addEventListener('DOMContentLoaded', function() {
   setupTopicFilters();
   setupYearFilters();
   markPastAndUpcomingEvents();
+  enhanceSlidesContainers();
+  equalizeCardHeights();
   
-  // Initialize slides containers with slight delay to ensure DOM is ready
-  setTimeout(enhanceSlidesContainers, 1000);
+  // Add resize listener for responsive adjustments
+  window.addEventListener('resize', debounce(function() {
+    equalizeCardHeights();
+  }, 250));
 });
 
 // Migrate any legacy media format to the new simpler format for backward compatibility
@@ -677,4 +681,91 @@ function openBookingForm() {
 function closeBookingForm() {
   const modal = document.getElementById('booking-modal');
   if (modal) modal.classList.remove('active');
+}
+
+// Equalize card heights for consistent rows
+function equalizeCardHeights() {
+  const equalizeRows = (selector) => {
+    const cards = document.querySelectorAll(selector);
+    if (!cards.length) return;
+    
+    // Reset heights first
+    cards.forEach(card => card.style.height = 'auto');
+    
+    // Group cards by rows based on their position
+    const viewportWidth = window.innerWidth;
+    let cardsPerRow = 1;
+    
+    if (viewportWidth >= 1200) {
+      cardsPerRow = selector.includes('highlight') ? 3 : 4;
+    } else if (viewportWidth >= 992) {
+      cardsPerRow = selector.includes('highlight') ? 3 : 3;
+    } else if (viewportWidth >= 768) {
+      cardsPerRow = 2;
+    } else {
+      // On mobile, don't equalize heights
+      return;
+    }
+    
+    // Process cards in row groups
+    for (let i = 0; i < cards.length; i += cardsPerRow) {
+      const rowCards = Array.from(cards).slice(i, i + cardsPerRow);
+      if (!rowCards.length) continue;
+      
+      // Find tallest card in the row
+      const tallestCard = Math.max(...rowCards.map(card => card.offsetHeight));
+      
+      // Set all cards in row to tallest height
+      rowCards.forEach(card => {
+        card.style.height = `${tallestCard}px`;
+      });
+    }
+  };
+  
+  // Apply to both grids
+  equalizeRows('.talks-grid .talk-card');
+  equalizeRows('.highlight-grid .highlight-card');
+}
+
+// Debounce function to limit frequent calls
+function debounce(func, wait) {
+  let timeout;
+  return function() {
+    const context = this, args = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func.apply(context, args);
+    }, wait);
+  };
+}
+
+// Lazy load images for better performance
+function lazyLoadImages() {
+  if ('IntersectionObserver' in window) {
+    const imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          const src = img.getAttribute('data-src');
+          
+          if (src) {
+            img.src = src;
+            img.removeAttribute('data-src');
+          }
+          
+          observer.unobserve(img);
+        }
+      });
+    });
+    
+    const imgs = document.querySelectorAll('img[data-src]');
+    imgs.forEach(img => imageObserver.observe(img));
+  } else {
+    // Fallback for browsers without IntersectionObserver
+    const imgs = document.querySelectorAll('img[data-src]');
+    imgs.forEach(img => {
+      img.src = img.getAttribute('data-src');
+      img.removeAttribute('data-src');
+    });
+  }
 } 
