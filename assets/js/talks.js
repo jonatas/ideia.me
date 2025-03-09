@@ -528,76 +528,40 @@ function formatDate(dateString) {
   }
 }
 
-// Enhance slides containers with loading indicators and error handling
-// This function improves user experience when slides are loading
-function enhanceSlidesContainers() {
-  const slidesContainers = document.querySelectorAll('.slides-container');
-  if (slidesContainers.length === 0) {
-    console.log('No slides containers found on page');
-    return;
-  }
-  
-  console.log(`Found ${slidesContainers.length} slides containers to enhance`);
-  
-  slidesContainers.forEach((container, index) => {
-    // Add loading indicator
-    const loadingIndicator = document.createElement('div');
-    loadingIndicator.className = 'slides-loading-indicator';
-    loadingIndicator.innerHTML = `
-      <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(255,255,255,0.8); 
-                 display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2;">
-        <div style="width:40px; height:40px; border:4px solid #f3f3f3; border-top:4px solid #3498db; 
-                    border-radius:50%; animation:slides-spin 1s linear infinite;"></div>
-        <div style="margin-top:10px; font-size:14px;">Loading slides...</div>
-      </div>
-      <style>
-        @keyframes slides-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-      </style>
-    `;
-    container.appendChild(loadingIndicator);
-    
-    // Find the iframe
-    const iframe = container.querySelector('iframe');
-    if (!iframe) {
-      console.error(`Slides container ${index} does not have an iframe`);
-      loadingIndicator.innerHTML = `
-        <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(255,255,255,0.9); 
-                   display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; color:#e74c3c;">
-          <i class="fas fa-exclamation-triangle" style="font-size:24px; margin-bottom:10px;"></i>
-          <div>Error: No iframe found</div>
-        </div>
-      `;
-      return;
-    }
-    
-    // Add debug info
-    console.log(`Slide ${index} iframe src:`, iframe.src);
-    
-    // Handle iframe events
-    iframe.addEventListener('load', function() {
-      console.log(`Slides iframe ${index} loaded successfully`);
-      loadingIndicator.remove();
-    });
-    
-    iframe.addEventListener('error', function(e) {
-      console.error(`Slides iframe ${index} failed to load:`, e);
-      loadingIndicator.innerHTML = `
-        <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(255,255,255,0.9); 
-                   display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; color:#e74c3c;">
-          <i class="fas fa-exclamation-triangle" style="font-size:24px; margin-bottom:10px;"></i>
-          <div>Error loading slides</div>
-          <div style="font-size:12px; margin-top:5px;">Check browser console for details</div>
-        </div>
-      `;
-    });
-    
-    // Set a timeout for loading
-    setTimeout(() => {
-      if (document.body.contains(loadingIndicator)) {
-        console.warn(`Slides iframe ${index} taking too long to load`);
-        loadingIndicator.querySelector('div > div:last-child').textContent = 'Loading slides... (taking longer than expected)';
+// Calculate and display days until events
+function addDaysUntilEvents() {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  // Find all date elements in the upcoming talks section
+  document.querySelectorAll('.series-date').forEach(dateElement => {
+    try {
+      // Extract the date text (excluding the icon)
+      const dateText = dateElement.textContent.replace(/^\s*[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]\s*/, '').trim();
+      const eventDate = new Date(dateText);
+      
+      // Skip if the date is invalid
+      if (isNaN(eventDate.getTime())) return;
+      
+      // Calculate days until the event
+      const diffTime = eventDate.getTime() - today.getTime();
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      
+      // Create and add the countdown element
+      if (diffDays > 0) {
+        const countdownSpan = document.createElement('span');
+        countdownSpan.className = 'days-until';
+        countdownSpan.textContent = diffDays === 1 ? ' (Tomorrow)' : ` (In ${diffDays} days)`;
+        dateElement.appendChild(countdownSpan);
+      } else if (diffDays === 0) {
+        const countdownSpan = document.createElement('span');
+        countdownSpan.className = 'days-until today';
+        countdownSpan.textContent = ' (Today)';
+        dateElement.appendChild(countdownSpan);
       }
-    }, 5000);
+    } catch (error) {
+      console.warn('Error calculating days until event:', error);
+    }
   });
 }
 
@@ -616,7 +580,13 @@ document.addEventListener('DOMContentLoaded', function() {
   setupTopicFilters();
   setupYearFilters();
   markPastAndUpcomingEvents();
-  enhanceSlidesContainers();
+  
+  // Initialize lazy loading for slides
+  initLazySlidesContainers();
+  
+  // Add days until calculation
+  addDaysUntilEvents();
+  
   equalizeCardHeights();
   
   // Add resize listener for responsive adjustments
@@ -624,6 +594,163 @@ document.addEventListener('DOMContentLoaded', function() {
     equalizeCardHeights();
   }, 250));
 });
+
+// Function to initialize lazy-loading slides containers
+function initLazySlidesContainers() {
+  const slidesContainers = document.querySelectorAll('.slides-container');
+  if (slidesContainers.length === 0) {
+    console.log('No slides containers found on page');
+    return;
+  }
+  
+  console.log(`Found ${slidesContainers.length} slides containers to prepare for lazy loading`);
+  
+  // Set up intersection observer with better thresholds
+  const slidesObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const container = entry.target;
+        const iframe = container.querySelector('iframe');
+        const loadingIndicator = container.querySelector('.slides-loading-indicator');
+        const index = Array.from(slidesContainers).indexOf(container);
+        
+        if (iframe && iframe.hasAttribute('data-src')) {
+          const src = iframe.getAttribute('data-src');
+          console.log(`Slide container ${index} is now visible, loading iframe:`, src);
+          loadSlide(iframe, src, loadingIndicator, index);
+          
+          // Stop observing after loading
+          observer.unobserve(container);
+        }
+      }
+    });
+  }, {
+    root: null, // viewport
+    rootMargin: '200px', // load earlier when scrolling near
+    threshold: 0.05 // trigger when just 5% visible
+  });
+  
+  slidesContainers.forEach((container, index) => {
+    // Create a cleaner loading indicator
+    const loadingIndicator = document.createElement('div');
+    loadingIndicator.className = 'slides-loading-indicator';
+    loadingIndicator.innerHTML = `
+      <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(255,255,255,0.9); 
+                 display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:5;">
+        <div style="width:40px; height:40px; border:4px solid #f3f3f3; border-top:4px solid #3498db; 
+                    border-radius:50%; animation:slides-spin 1s linear infinite;"></div>
+        <div style="margin-top:15px; font-size:16px; color:#333; font-weight:500;">Slides will load when visible</div>
+        <button id="load-now-${index}" style="margin-top:15px; padding:6px 12px; background:#3498db; color:white; 
+                border:none; border-radius:4px; cursor:pointer; font-weight:500;">Load Now</button>
+      </div>
+      <style>
+        @keyframes slides-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+      </style>
+    `;
+    container.appendChild(loadingIndicator);
+    
+    // Find the iframe
+    const iframe = container.querySelector('iframe');
+    if (!iframe) {
+      console.error(`Slides container ${index} does not have an iframe`);
+      loadingIndicator.innerHTML = `
+        <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(255,255,255,0.9); 
+                   display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:5; color:#e74c3c;">
+          <i class="fas fa-exclamation-triangle" style="font-size:24px; margin-bottom:10px;"></i>
+          <div style="font-weight:500; font-size:16px;">Error: No iframe found</div>
+        </div>
+      `;
+      return;
+    }
+    
+    // Store the original src in a data attribute
+    const originalSrc = iframe.src;
+    iframe.setAttribute('data-src', originalSrc);
+    iframe.removeAttribute('src');
+    
+    // Add debug info
+    console.log(`Stored slide ${index} iframe src for lazy loading:`, originalSrc);
+
+    // Add event listener to the "Load Now" button
+    const loadNowButton = loadingIndicator.querySelector(`#load-now-${index}`);
+    if (loadNowButton) {
+      loadNowButton.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent event bubbling
+        console.log(`Loading slide ${index} immediately on user request`);
+        loadSlide(iframe, originalSrc, loadingIndicator, index);
+        
+        // Stop observing this container
+        slidesObserver.unobserve(container);
+      });
+    }
+    
+    // Start observing this container
+    slidesObserver.observe(container);
+  });
+}
+
+// Function to load a specific slide
+function loadSlide(iframe, src, loadingIndicator, index) {
+  if (!iframe || !src) return;
+  
+  // Set the src to begin loading
+  iframe.src = src;
+  
+  // Update the loading message
+  const loadingMessage = loadingIndicator.querySelector('div > div:nth-child(2)');
+  if (loadingMessage) {
+    loadingMessage.textContent = 'Loading slides...';
+  }
+  
+  // Remove the Load Now button if it exists
+  const loadNowButton = loadingIndicator.querySelector(`#load-now-${index}`);
+  if (loadNowButton) {
+    loadNowButton.remove();
+  }
+  
+  // Handle iframe events
+  iframe.addEventListener('load', function() {
+    console.log(`Slides iframe ${index} loaded successfully`);
+    loadingIndicator.remove();
+  });
+  
+  iframe.addEventListener('error', function(e) {
+    console.error(`Slides iframe ${index} failed to load:`, e);
+    loadingIndicator.innerHTML = `
+      <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(255,255,255,0.9); 
+                 display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; color:#e74c3c;">
+        <i class="fas fa-exclamation-triangle" style="font-size:24px; margin-bottom:10px;"></i>
+        <div>Error loading slides</div>
+        <div style="font-size:12px; margin-top:5px;">Check browser console for details</div>
+      </div>
+    `;
+  });
+  
+  // Set a timeout for loading
+  setTimeout(() => {
+    if (document.body.contains(loadingIndicator)) {
+      console.warn(`Slides iframe ${index} taking too long to load`);
+      loadingIndicator.querySelector('div > div:nth-child(2)').textContent = 'Loading slides... (taking longer than expected)';
+    }
+  }, 5000);
+}
+
+// Function to load all slides at once (if needed)
+function loadAllSlides() {
+  const iframes = document.querySelectorAll('iframe[data-src]');
+  console.log(`Forcing load of all ${iframes.length} remaining slides`);
+  
+  iframes.forEach((iframe, index) => {
+    const src = iframe.getAttribute('data-src');
+    if (!src) return;
+    
+    const container = iframe.closest('.slides-container');
+    if (!container) return;
+    
+    const loadingIndicator = container.querySelector('.slides-loading-indicator');
+    loadSlide(iframe, src, loadingIndicator, index);
+  });
+}
 
 // Migrate any legacy media format to the new simpler format for backward compatibility
 function migrateLegacyMediaFormats(talks) {
@@ -669,8 +796,23 @@ function migrateLegacyMediaFormats(talks) {
   console.log(`Migration complete. ${migratedCount} items migrated.`);
 }
 
-// Make the function available globally
+// For backward compatibility
+function initSlidesContainers() {
+  console.warn('initSlidesContainers is deprecated. Use initLazySlidesContainers instead.');
+  initLazySlidesContainers();
+}
+
+// Enhance slides containers with loading indicators and error handling
+// This function improves user experience when slides are loading
+function enhanceSlidesContainers() {
+  console.warn('enhanceSlidesContainers is deprecated. Use initLazySlidesContainers instead.');
+  initLazySlidesContainers();
+}
+
+// Make the functions available globally
 window.enhanceSlidesContainers = enhanceSlidesContainers;
+window.loadAllSlides = loadAllSlides;
+window.initLazySlidesContainers = initLazySlidesContainers;
 
 // Booking form functions
 function openBookingForm() {

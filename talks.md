@@ -29,75 +29,127 @@ title: "Speaking @jonatasdp"
         {% for talk in group.items %}
           {% if talk.date > today_date %}
             {% assign has_future_talk = true %}
-            {% break %}
+            {% assign first_talk = talk %}
+            {% assign talk_date_parts = talk.date | split: "-" %}
+            {% assign talk_year = talk_date_parts[0] %}
+            {% assign talk_month = talk_date_parts[1] | plus: 0 %}
+            {% assign talk_day = talk_date_parts[2] | plus: 0 %}
+            {% assign talk_month_name = site.data.months[talk_month] %}
           {% endif %}
         {% endfor %}
         
         {% if has_future_talk %}
           <div class="highlight-card">
             <div class="highlight-card-header">
-              <!-- Use the first talk for common details -->
-              {% assign first_talk = group.items | first %}
-              {% assign future_talks = "" | split: "" %}
-              {% for talk in group.items %}
-                {% if talk.date > today_date %}
-                  {% assign future_talks = future_talks | push: talk %}
-                {% endif %}
-              {% endfor %}
-              
-              <div class="highlight-title-top">{{ first_talk.title }}</div>
+              <h3 class="highlight-title">{{ first_talk.title }}</h3>
             </div>
-            
             <div class="highlight-card-body">
-              <div class="highlight-event">{{ first_talk.event }}</div>
-              
-              <div class="series-locations">
-                {% assign sorted_future_talks = future_talks | sort: "date" %}
-                {% for talk in sorted_future_talks %}
+              {% if first_talk.series %}
+                <div class="series-locations">
+                  {% assign sorted_series = first_talk.series | sort: "date" %}
                   <div class="series-location-item">
-                    <div class="series-date">{{ talk.date | date: "%B %d, %Y" }}</div>
-                    <div class="location-event-grid">
-                      <div class="series-location" 
-                        {% if talk.location contains "Madrid" %}
-                          data-emoji="🇪🇸"
-                        {% elsif talk.location contains "Krakow" %}
-                          data-emoji="🇵🇱"
-                        {% elsif talk.location contains "Latvia" or talk.location contains "Riga" %}
-                          data-emoji="🇱🇻"
-                        {% elsif talk.location contains "Online" %}
-                          data-emoji="🌐"
-                        {% elsif talk.location contains "PR" or talk.location contains "Brazil" %}
-                          data-emoji="🇧🇷"
-                        {% elsif talk.international %}
-                          data-emoji="🌐"
-                        {% else %}
-                          data-emoji="🏳️"
-                        {% endif %}>
-                        {{ talk.location }}
+                    <div class="talk-info-line">
+                      <div class="series-dates-container">
+                        {% for talk in sorted_series %}
+                          {% if talk.date >= today_date %}
+                            {% assign event_date_parts = talk.date | split: "-" %}
+                            {% assign event_year = event_date_parts[0] %}
+                            {% assign event_month = event_date_parts[1] | plus: 0 %}
+                            {% assign event_day = event_date_parts[2] | plus: 0 %}
+                            {% assign event_month_name = site.data.months[event_month] %}
+                            
+                            <div class="series-date-chip">
+                              <span class="series-date">
+                                <i class="far fa-calendar-alt"></i> {{ event_month_name }} {{ event_day }}, {{ event_year }}
+                              </span>
+                              <span class="series-location">
+                                {% if talk.location contains "Spain" %}
+                                  🇪🇸
+                                {% elsif talk.location contains "Brazil" %}
+                                  🇧🇷
+                                {% elsif talk.location contains "Latvia" %}
+                                  🇱🇻
+                                {% elsif talk.location contains "Poland" %}
+                                  🇵🇱
+                                {% elsif talk.location contains "online" or talk.location contains "Online" %}
+                                  🌐
+                                {% else %}
+                                  🏳️
+                                {% endif %}
+                                {{ talk.location }}
+                              </span>
+                              
+                              {% if talk.url and talk.url != "" and talk.registration_open %}
+                                <a href="{{ talk.url }}" class="series-date-cta">Register <i class="fas fa-arrow-right"></i></a>
+                              {% endif %}
+                            </div>
+                          {% endif %}
+                        {% endfor %}
                       </div>
-                      {% assign talk_year = talk.date | slice: 0,4 %}
-                      {% if talk.url != "" %}
-                        {% if talk.event contains "Lambda Days" or talk.event contains "RubyConf" %}
-                          <div class="series-event"><i class="fas fa-calendar-alt"></i> <a href="{{ talk.url }}" class="event-link" target="_blank">{{ talk.event }} {{ talk_year }}</a></div>
-                        {% else %}
-                          <div class="series-event"><i class="fas fa-calendar-alt"></i> <a href="{{ talk.url }}" class="event-link" target="_blank">{{ talk.event }}</a></div>
-                        {% endif %}
-                      {% else %}
-                        {% if talk.event contains "Lambda Days" or talk.event contains "RubyConf" %}
-                          <div class="series-event"><i class="fas fa-calendar-alt"></i> {{ talk.event }} {{ talk_year }}</div>
-                        {% else %}
-                          <div class="series-event"><i class="fas fa-calendar-alt"></i> {{ talk.event }}</div>
-                        {% endif %}
+                      
+                      {% assign first_series_talk = sorted_series | where_exp: "item", "item.date >= today_date" | first %}
+                      {% if first_series_talk %}
+                        <div class="series-event">
+                          <i class="fas fa-users"></i> 
+                          {% if first_series_talk.url and first_series_talk.url != "" %}
+                            <a href="{{ first_series_talk.url }}" class="event-link" target="_blank">{{ first_series_talk.event }}</a>
+                          {% else %}
+                            {{ first_series_talk.event }}
+                          {% endif %}
+                        </div>
                       {% endif %}
                     </div>
-                    {% if talk.url and talk.url != "" %}
-                      <div class="register-button-container">
-                        <a href="{{ talk.url }}" class="series-date-cta">Register <i class="fas fa-arrow-right"></i></a>
-                      </div>
-                    {% endif %}
                   </div>
-                {% endfor %}
-              </div>
+                </div>
+              {% else %}
+                <!-- Single event (not a series) - same structure -->
+                <div class="series-locations">
+                  <div class="series-location-item">
+                    <!-- Consolidated single line with all information -->
+                    <div class="talk-info-line">
+                      <div class="series-date">
+                        <i class="far fa-calendar-alt"></i> {{ talk_month_name }} {{ talk_day }}, {{ talk_year }}
+                      </div>
+                      
+                      <div class="info-divider">•</div>
+                      
+                      <div class="series-location">
+                        {% if first_talk.location contains "Spain" %}
+                          🇪🇸
+                        {% elsif first_talk.location contains "Brazil" %}
+                          🇧🇷
+                        {% elsif first_talk.location contains "Latvia" %}
+                          🇱🇻
+                        {% elsif first_talk.location contains "Poland" %}
+                          🇵🇱
+                        {% elsif first_talk.location contains "online" or first_talk.location contains "Online" %}
+                          🌐
+                        {% else %}
+                          🏳️
+                        {% endif %}
+                        {{ first_talk.location }}
+                      </div>
+                      
+                      <div class="info-divider">•</div>
+                      
+                      <div class="series-event">
+                        <i class="fas fa-users"></i> 
+                        {% if first_talk.url and first_talk.url != "" %}
+                          <a href="{{ first_talk.url }}" class="event-link" target="_blank">{{ first_talk.event }}</a>
+                        {% else %}
+                          {{ first_talk.event }}
+                        {% endif %}
+                      </div>
+                      
+                      {% if first_talk.url and first_talk.url != "" and first_talk.registration_open %}
+                        <div class="register-button-container">
+                          <a href="{{ first_talk.url }}" class="series-date-cta">Register <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
             </div>
           </div>
         {% endif %}
@@ -140,6 +192,7 @@ title: "Speaking @jonatasdp"
   <div class="booking-section">
     <h2 class="booking-heading">Invite Me to Speak at Your Event</h2>
     <p class="booking-text">Looking for a speaker on PostgreSQL, Ruby, TimescaleDB, or Data Science? I'm available for conferences, workshops, and meetups worldwide. Let's create an engaging experience for your audience!</p>
+
     <a href="javascript:openBookingForm()" class="booking-button">Book Me for Your Event</a>
   </div>
   
