@@ -34,6 +34,86 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('booking-modal');
     if (modal) modal.classList.remove('active');
   };
+
+  // Carousel functionality
+  const carousel = document.querySelector('.carousel-container');
+  const slides = document.querySelectorAll('.carousel-slide');
+  const prevButton = document.querySelector('.prev-button');
+  const nextButton = document.querySelector('.next-button');
+  let currentSlide = 0;
+  
+  function updateCarousel() {
+    carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+  }
+  
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % slides.length;
+    updateCarousel();
+  }
+  
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+    updateCarousel();
+  }
+  
+  // Auto advance slides every 5 seconds
+  let autoAdvance = setInterval(nextSlide, 5000);
+  
+  // Pause auto-advance on hover
+  carousel.addEventListener('mouseenter', () => clearInterval(autoAdvance));
+  carousel.addEventListener('mouseleave', () => {
+    autoAdvance = setInterval(nextSlide, 5000);
+  });
+  
+  nextButton.addEventListener('click', () => {
+    clearInterval(autoAdvance);
+    nextSlide();
+  });
+  
+  prevButton.addEventListener('click', () => {
+    clearInterval(autoAdvance);
+    prevSlide();
+  });
+  
+  // Statistics Animation
+  const stats = document.querySelectorAll('.stat-number');
+  
+  function animateStats() {
+    stats.forEach(stat => {
+      const target = parseInt(stat.getAttribute('data-count'));
+      let current = 0;
+      const increment = target / 50; // Divide animation into 50 steps
+      const duration = 1500; // Animation duration in milliseconds
+      const stepTime = duration / 50;
+      
+      function updateCount() {
+        current += increment;
+        if (current < target) {
+          stat.textContent = Math.round(current);
+          setTimeout(updateCount, stepTime);
+        } else {
+          stat.textContent = target;
+        }
+      }
+      
+      updateCount();
+    });
+  }
+  
+  // Start animation when stats are in view
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateStats();
+        observer.unobserve(entry.target);
+      }
+    });
+  });
+  
+  const statsSection = document.querySelector('.global-impact');
+  if (statsSection) {
+    observer.observe(statsSection);
+  }
 });
 
 // Get site data from the window object - populated by Jekyll

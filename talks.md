@@ -15,168 +15,51 @@ title: "Speaking @jonatasdp"
     <p>From international conferences to local meetups, I share my passion for PostgreSQL, Ruby, TimescaleDB, and data science across the globe. Join me for practical insights, live coding, and real-world problem solving.</p>
   </div>
   
-  <div class="upcoming-talks-highlight">
-    <h2 class="highlight-heading">Upcoming Talks <i class="fas fa-calendar-alt"></i></h2>
-    <div class="highlight-grid">
-      {% assign today_date = 'now' | date: '%Y-%m-%d' %}
-      {% assign upcoming_talks = site.data.talks.talks | sort: "date" %}
-      
-      <!-- Group talks by title to find series -->
-      {% assign grouped_talks = upcoming_talks | group_by: "title" %}
-      
-      {% for group in grouped_talks %}
-        {% assign has_future_talk = false %}
-        {% for talk in group.items %}
-          {% if talk.date > today_date %}
-            {% assign has_future_talk = true %}
-            {% assign first_talk = talk %}
-            {% assign talk_date_parts = talk.date | split: "-" %}
-            {% assign talk_year = talk_date_parts[0] %}
-            {% assign talk_month = talk_date_parts[1] | plus: 0 %}
-            {% assign talk_day = talk_date_parts[2] | plus: 0 %}
-            {% assign talk_month_name = site.data.months[talk_month] %}
-          {% endif %}
-        {% endfor %}
-        
-        {% if has_future_talk %}
-          <div class="highlight-card">
-            <div class="highlight-card-header">
-              <h3 class="highlight-title">{{ first_talk.title }}</h3>
-            </div>
-            <div class="highlight-card-body">
-              {% if first_talk.series %}
-                <div class="series-locations">
-                  {% assign sorted_series = first_talk.series | sort: "date" %}
-                  <div class="series-location-item">
-                    <div class="talk-info-line">
-                      <div class="series-dates-container">
-                        {% for talk in sorted_series %}
-                          {% if talk.date >= today_date %}
-                            {% assign event_date_parts = talk.date | split: "-" %}
-                            {% assign event_year = event_date_parts[0] %}
-                            {% assign event_month = event_date_parts[1] | plus: 0 %}
-                            {% assign event_day = event_date_parts[2] | plus: 0 %}
-                            {% assign event_month_name = site.data.months[event_month] %}
-                            
-                            <div class="series-date-chip">
-                              <span class="series-date">
-                                <i class="far fa-calendar-alt"></i> {{ event_month_name }} {{ event_day }}, {{ event_year }}
-                              </span>
-                              <span class="series-location">
-                                {% if talk.location contains "Spain" %}
-                                  🇪🇸
-                                {% elsif talk.location contains "Brazil" %}
-                                  🇧🇷
-                                {% elsif talk.location contains "Latvia" %}
-                                  🇱🇻
-                                {% elsif talk.location contains "Poland" %}
-                                  🇵🇱
-                                {% elsif talk.location contains "online" or talk.location contains "Online" %}
-                                  🌐
-                                {% else %}
-                                  🏳️
-                                {% endif %}
-                                {{ talk.location }}
-                              </span>
-                              
-                              {% if talk.url and talk.url != "" and talk.registration_open %}
-                                <a href="{{ talk.url }}" class="series-date-cta">Register <i class="fas fa-arrow-right"></i></a>
-                              {% endif %}
-                            </div>
-                          {% endif %}
-                        {% endfor %}
-                      </div>
-                      
-                      {% assign first_series_talk = sorted_series | where_exp: "item", "item.date >= today_date" | first %}
-                      {% if first_series_talk %}
-                        <div class="series-event">
-                          <i class="fas fa-users"></i> 
-                          {% if first_series_talk.url and first_series_talk.url != "" %}
-                            <a href="{{ first_series_talk.url }}" class="event-link" target="_blank">{{ first_series_talk.event }}</a>
-                          {% else %}
-                            {{ first_series_talk.event }}
-                          {% endif %}
-                        </div>
-                      {% endif %}
-                    </div>
-                  </div>
-                </div>
-              {% else %}
-                <!-- Single event (not a series) - same structure -->
-                <div class="series-locations">
-                  <div class="series-location-item">
-                    <!-- Consolidated single line with all information -->
-                    <div class="talk-info-line">
-                      <div class="series-date">
-                        <i class="far fa-calendar-alt"></i> {{ talk_month_name }} {{ talk_day }}, {{ talk_year }}
-                      </div>
-                      
-                      <div class="info-divider">•</div>
-                      
-                      <div class="series-location">
-                        {% if first_talk.location contains "Spain" %}
-                          🇪🇸
-                        {% elsif first_talk.location contains "Brazil" %}
-                          🇧🇷
-                        {% elsif first_talk.location contains "Latvia" %}
-                          🇱🇻
-                        {% elsif first_talk.location contains "Poland" %}
-                          🇵🇱
-                        {% elsif first_talk.location contains "online" or first_talk.location contains "Online" %}
-                          🌐
-                        {% else %}
-                          🏳️
-                        {% endif %}
-                        {{ first_talk.location }}
-                      </div>
-                      
-                      <div class="info-divider">•</div>
-                      
-                      <div class="series-event">
-                        <i class="fas fa-users"></i> 
-                        {% if first_talk.url and first_talk.url != "" %}
-                          <a href="{{ first_talk.url }}" class="event-link" target="_blank">{{ first_talk.event }}</a>
-                        {% else %}
-                          {{ first_talk.event }}
-                        {% endif %}
-                      </div>
-                      
-                      {% if first_talk.url and first_talk.url != "" and first_talk.registration_open %}
-                        <div class="register-button-container">
-                          <a href="{{ first_talk.url }}" class="series-date-cta">Register <i class="fas fa-arrow-right"></i></a>
-                        </div>
-                      {% endif %}
-                    </div>
-                  </div>
-                </div>
+  <div class="conference-carousel">
+    <div class="carousel-container">
+      {% assign talks_with_images = site.data.talks.talks | where_exp: "talk", "talk.media.images" %}
+      {% assign featured_talks = talks_with_images | sort: "date" | reverse | slice: 0, 6 %}
+      {% for talk in featured_talks %}
+        {% for image in talk.media.images %}
+          <div class="carousel-slide" data-talk-date="{{ talk.date }}">
+            <img src="{{ image.src }}" alt="{{ image.alt }}">
+            <div class="carousel-caption">
+              <h3>{{ talk.event }}</h3>
+              <p>{{ image.caption }}</p>
+              {% if talk.url %}
+                <a href="{{ talk.url }}" class="carousel-link" target="_blank">View Event Details</a>
               {% endif %}
             </div>
           </div>
-        {% endif %}
+        {% endfor %}
       {% endfor %}
+    </div>
+    <div class="carousel-nav">
+      <button class="carousel-button prev-button">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <button class="carousel-button next-button">
+        <i class="fas fa-chevron-right"></i>
+      </button>
     </div>
   </div>
   
   <div class="global-impact">
     <div class="stat-box">
-      <div class="stat-number counter" data-count="0">0</div>
+      <div class="stat-number" data-count="44">0</div>
       <div class="stat-label">Total Talks</div>
     </div>
     <div class="stat-box">
-      <div class="stat-number counter" data-count="0">0</div>
+      <div class="stat-number" data-count="37">0</div>
       <div class="stat-label">Delivered</div>
     </div>
     <div class="stat-box">
-      <div class="stat-number counter" data-count="0">0</div>
+      <div class="stat-number" data-count="9">0</div>
       <div class="stat-label">Countries</div>
     </div>
     <div class="stat-box">
-      <div class="stat-number counter" data-count="0">0</div>
+      <div class="stat-number" data-count="4">0</div>
       <div class="stat-label">Continents</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-number counter" data-count="0">0</div>
-      <div class="stat-label">International</div>
     </div>
   </div>
   
