@@ -11,19 +11,157 @@
     <!-- Enable responsive viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <!-- Le styles -->
-    <link id="bootstrap" href="/css/bootstrap.css" rel="stylesheet">
-    <link id="bootstrap" href="/css/bootswatch.min.css" rel="stylesheet">
+    <!-- Modern stylesheet links -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&family=Poppins:wght@400;500;600&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet">
     <link href="/css/nimbus-pygments.css" rel="stylesheet">
+    <link href="/css/custom.css" rel="stylesheet">
+    <link href="/css/code-highlighting.css" rel="stylesheet">
 
-    <script src="/js/jquery.js"></script>
-    <script type="text/javascript" src="/js/bootstrap-dropdown.js"></script>
+    <!-- Style overrides for Prism -->
+    <style>
+      /* Override Prism default styles to fix text shadow issues */
+      code[class*="language-"],
+      pre[class*="language-"],
+      pre code,
+      .token {
+        text-shadow: none !important;
+        -webkit-text-shadow: none !important;
+        border: none !important;
+        background: none;
+      }
+      
+      /* Ensure proper background only on container elements */
+      pre[class*="language-"] {
+        background: var(--prism-background);
+      }
+      
+      .dark-mode pre[class*="language-"] {
+        background: var(--prism-background);
+      }
+    </style>
+
+    <!-- Modern JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-ruby.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-sql.min.js"></script>
     <div id="fb-root"></div>
+
+    <!-- Dark Mode Script -->
+    <script>
+      function detectColorScheme() {
+        const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        
+        if (isDarkMode) {
+          document.body.classList.add('dark-mode');
+          if (darkModeToggle) darkModeToggle.checked = true;
+        }
+        
+        // Listen for changes in the OS color scheme
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+          const newColorScheme = e.matches ? 'dark' : 'light';
+          if (newColorScheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            if (darkModeToggle) darkModeToggle.checked = true;
+          } else {
+            document.body.classList.remove('dark-mode');
+            if (darkModeToggle) darkModeToggle.checked = false;
+          }
+        });
+      }
+
+      // Add code block enhancements
+      function enhanceCodeBlocks() {
+        document.querySelectorAll('pre code').forEach((codeBlock, index) => {
+          // Get the parent pre element
+          const preElement = codeBlock.parentElement;
+          if (!preElement.classList.contains('enhanced')) {
+            preElement.classList.add('enhanced');
+            
+            // Create a wrapper div with the highlight class
+            const highlightDiv = document.createElement('div');
+            highlightDiv.className = 'highlight';
+            
+            // Insert the wrapper before the pre element
+            preElement.parentNode.insertBefore(highlightDiv, preElement);
+            
+            // Move the pre element inside the wrapper
+            highlightDiv.appendChild(preElement);
+            
+            // Get language class from code element
+            let language = '';
+            codeBlock.classList.forEach(className => {
+              if (className.startsWith('language-')) {
+                language = className.substring(9);
+              }
+            });
+            
+            // Auto-detect language if none is specified
+            if (!language) {
+              // Check for Ruby
+              if (codeBlock.textContent.includes('require') || 
+                  codeBlock.textContent.includes('def ') ||
+                  codeBlock.textContent.includes('class ') ||
+                  codeBlock.textContent.includes('module ') ||
+                  codeBlock.textContent.match(/\w+\s*=\s*\w+/g)) {
+                language = 'ruby';
+                codeBlock.classList.add('language-ruby');
+              }
+              // Check for SQL
+              else if (codeBlock.textContent.includes('SELECT') || 
+                       codeBlock.textContent.includes('FROM') ||
+                       codeBlock.textContent.includes('WHERE') ||
+                       codeBlock.textContent.includes('CREATE TABLE')) {
+                language = 'sql';
+                codeBlock.classList.add('language-sql');
+              }
+            }
+            
+            // If language is found, add it as a data attribute
+            if (language) {
+              highlightDiv.setAttribute('data-language', language);
+            }
+            
+            // Create copy button
+            const copyButton = document.createElement('button');
+            copyButton.className = 'copy-button';
+            copyButton.textContent = 'Copy';
+            copyButton.setAttribute('aria-label', 'Copy code to clipboard');
+            copyButton.onclick = function() {
+              navigator.clipboard.writeText(codeBlock.textContent)
+                .then(() => {
+                  copyButton.textContent = 'Copied!';
+                  copyButton.classList.add('copied');
+                  setTimeout(() => {
+                    copyButton.textContent = 'Copy';
+                    copyButton.classList.remove('copied');
+                  }, 2000);
+                })
+                .catch(err => {
+                  console.error('Could not copy text: ', err);
+                });
+            };
+            
+            // Add copy button to the highlight div
+            highlightDiv.appendChild(copyButton);
+          }
+        });
+      }
+      
+      // Initialize when DOM is loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        detectColorScheme();
+        enhanceCodeBlocks();
+      });
+    </script>
 
     <!-- Le fav and touch icons -->
   <!-- Update these with your own images
@@ -63,49 +201,88 @@
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
 
-    <div class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <div class="navbar-header">
-          <a href="/">
-            <img class="img-circle" alt="ideiame logo" style="padding-top: 6px" src="/images/ideiame.png"></a>
-            <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-           </button>
-       </div>
-   <div class="navbar-collapse collapse" id="navbar-main">
-     <ul class="nav navbar-nav">
-      <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Social<b class="caret"></b></a>
-            <ul class="dropdown-menu" id="swatch-menu">
-              <li><a href="https://github.com/jonatas">Github</a></li>
-              <li><a href="https://twitter.com/jonatasdp">Twitter</a></li>
-              <li><a href="https://instagram.com/jonatasdp">Instagram</a></li>
-              <li><a href="https://www.meetup.com/Floripa-on-Rails/members/185190193/">Meetup</a></li>
-              <li><a href="https://www.slideshare.net/jonataspaganini/">SlideShare</a></li>
-              <li><a href="https://facebook.com/jonatas.paganini">Facebook</a></li>
-              <li><a href="https://www.youtube.com/user/jonatasdp">Youtube</a></li>
-           </ul>
-          </li>
-          <li class="dropdown">
-            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Projects<b class="caret"></b></a>
-            <ul class="dropdown-menu">
-            <li><a href="https://github.com/jonatas/fast">Fast</a></li>
-            <li><a href="http://torf.ideia.me">2015: True Or False Game</a></li>
-            <li><a href="http://github.com/jonatas/pixel.ideia.me">2013: Pixel art (collaborative) </a></li>
-            <li><a href="http://github.com/jonatas/trybliss">2013: Try Bliss</a</li>
-            <li><a href="http://github.com/jonatas/churumelas">2012: Regexp challenges</a></li>
-            <li><a href="/camera-overlay">2012: Camera Overlay </a></li>
-           </ul>
-          </li>
-          {% assign pages_list = site.pages %}
-          {% assign group = 'navigation' %}
-          {% include JB/pages_list %}
+        <a class="navbar-brand py-0" href="/">
+          <img class="rounded-circle" alt="ideiame logo" src="/images/ideiame.png">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarMain">
+          <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle py-1" href="#" id="pagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+               Ideia.me 
+              </a>
+              <ul class="dropdown-menu shadow-sm" aria-labelledby="pagesDropdown">
+                <li><a class="dropdown-item" href="/archive">Archive</a></li>
+                <li><a class="dropdown-item" href="/talks">Talks</a></li>
+                <li><a class="dropdown-item" href="/categories">Categories</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="https://www.linkedin.com/in/jonatasdp"><i class="bi bi-linkedin"></i> Linkedin</a></li>
+                <li><a class="dropdown-item" href="https://github.com/jonatas"><i class="bi bi-github"></i> Github</a></li>
+                <li><a class="dropdown-item" href="https://twitter.com/jonatasdp"><i class="bi bi-twitter"></i> Twitter</a></li>
+                <li><a class="dropdown-item" href="https://instagram.com/jonatasdp"><i class="bi bi-instagram"></i> Instagram</a></li>
+                <li><a class="dropdown-item" href="https://www.youtube.com/user/jonatasdp"><i class="bi bi-youtube"></i> Youtube</a></li>
+              </ul>
+            </li>
           </ul>
+          {% if page.title %}
+          <div class="d-none d-md-block page-title-nav me-auto ms-2">
+            {{ page.title }}
+          </div>
+          {% endif %}
+          <div class="form-check form-switch d-flex align-items-center ms-auto">
+            <input class="form-check-input me-1" type="checkbox" id="darkModeToggle">
+            <label class="form-check-label text-light" for="darkModeToggle">
+              <i class="bi bi-moon-stars"></i>
+            </label>
+          </div>
         </div>
       </div>
-     </div>
-    </div>
-    <div class="container">
+    </nav>
+    
+    <div class="container content-container mt-5 pt-5">
       {{ content }}
     </div>
+    
+    <footer class="footer bg-light py-4 mt-5">
+      <div class="container text-center">
+        <p class="text-muted mb-0">© {{ site.time | date: '%Y' }} {{ site.author.name }}. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Additional scripts for code highlighting and dark mode toggle -->
+    <script>
+      // Toggle dark mode manually
+      document.getElementById('darkModeToggle').addEventListener('change', function() {
+        if (this.checked) {
+          document.body.classList.add('dark-mode');
+        } else {
+          document.body.classList.remove('dark-mode');
+        }
+      });
+      
+      // Apply highlighting to code blocks after content loads
+      document.addEventListener('DOMContentLoaded', function() {
+        enhanceCodeBlocks();
+        if (window.Prism) {
+          setTimeout(function() {
+            Prism.highlightAll();
+          }, 100);
+        }
+      });
+      
+      // Reapply highlighting after any AJAX content loads
+      document.addEventListener('ajaxComplete', function() {
+        enhanceCodeBlocks();
+        if (window.Prism) {
+          setTimeout(function() {
+            Prism.highlightAll();
+          }, 100);
+        }
+      });
+    </script>
   </body>
 </html>

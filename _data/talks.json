@@ -1,0 +1,493 @@
+{
+  "talks": [
+    {
+      "date": "2025-03-27",
+      "title": "Intro to the TimescaleDB gem",
+      "location": "Madrid, Spain",
+      "event": "Madrid.rb Ruby User Group",
+      "url": "https://madridrb.com",
+      "type": "meetup",
+      "topic": "Ruby, TimescaleDB",
+      "status": "Accepted",
+      "github": "https://github.com/timescale/timescaledb-ruby"
+    },
+    {
+      "date": "2025-02-27",
+      "title": "Intro to the TimescaleDB gem",
+      "location": "Krakow, Poland",
+      "event": "Krakow Ruby User Group",
+      "url": "https://krug.org.pl/events/1111",
+      "type": "meetup",
+      "topic": "Ruby, TimescaleDB",
+      "status": "Delivered",
+      "international": true,
+      "language": "English",
+      "media": {
+        "slides": "2PACX-1vQ_WAHS3AWurvv9_9xcAsVd64hI-h6h_6H6TUb3N9F3LfkS3adKswI_H8KZueGzMbPkz8CjMCnNmpFn",
+        "youtube": "9KtsHQCECgM"
+      },
+      "github": "https://github.com/timescale/timescaledb-ruby"
+    },
+    {
+      "date": "2025-03-12",
+      "title": "Real Time Analytics with PostgreSQL and TimescaleDB",
+      "location": "Toledo, PR, Brazil",
+      "event": "Dev Paraná",
+      "url": "https://www.sympla.com.br/evento/devpr-na-estrada-toledo/2830488?",
+      "type": "conference",
+      "topic": "PostgreSQL, TimescaleDB, Analytics",
+      "media": {
+        "slides": "2PACX-1vTcncQivyEhJ8oUwsLVFFWFEaIhvvUcI-20zVK9EwNdj7udCToetUHxCyK_sEOmOl1nkrvVjOMYmWWj"
+      },
+      "status": "Accepted"
+    },
+    {
+      "date": "2025-03-11",
+      "title": "Real Time Analytics with PostgreSQL and TimescaleDB",
+      "location": "Foz do Iguaçu, PR, Brazil",
+      "event": "Dev Paraná",
+      "url": "https://www.sympla.com.br/evento/devpr-na-estrada-foz-do-iguacu/2832078?",
+      "type": "conference",
+      "topic": "PostgreSQL, TimescaleDB, Analytics",
+      "media": {
+        "slides": "2PACX-1vQq60_oaZDs1jnwZQ7CjpKeb_Uctp0x8uFOBiA2_-3c7RRrxsluj-Phbtx1HRBfaFKrTMSIl7FP-yVJ"
+      },
+      "status": "Accepted"
+    },
+    {
+      "date": "2025-03-10",
+      "title": "Real Time Analytics with PostgreSQL and TimescaleDB",
+      "location": "Cascavel, PR, Brazil",
+      "event": "Dev Paraná",
+      "url": "https://www.sympla.com.br/evento/devpr-na-estrada-cascavel/2830476",
+      "type": "conference",
+      "topic": "PostgreSQL, TimescaleDB, Analytics",
+      "media": {
+        "slides": "2PACX-1vQq60_oaZDs1jnwZQ7CjpKeb_Uctp0x8uFOBiA2_-3c7RRrxsluj-Phbtx1HRBfaFKrTMSIl7FP-yVJ"
+      },
+      "status": "Accepted"
+    },
+    {
+      "date": "2025-02-28",
+      "title": "PostgreSQL Performance Workshop for Ruby Developers",
+      "location": "Krakow, Poland",
+      "event": "Ruby Community Conference",
+      "url": "",
+      "type": "workshop",
+      "topic": "PostgreSQL, Ruby, Performance",
+      "status": "Delivered",
+      "international": true,
+      "github": "https://github.com/timescale/postgresql-performance-for-rubyists/"
+    },
+    {
+      "date": "2025-04-02",
+      "title": "PostgreSQL Performance Workshop for Ruby Developers",
+      "location": "São Paulo, Brazil",
+      "event": "Tropical on Rails",
+      "url": "https://www.sympla.com.br/evento/workshop-tropical-2025-jonatas-paganini-postgresql-performance-workshop-for-ruby-developers/2838577?referrer=jonatas",
+      "type": "workshop",
+      "topic": "PostgreSQL, Ruby, Performance",
+      "status": "Accepted",
+      "github": "https://github.com/timescale/postgresql-performance-for-rubyists/"
+    },
+    {
+      "date": "2025-06-12",
+      "title": "Intro to the TimescaleDB gem",
+      "location": "Latvia, Riga",
+      "event": "Baltic Ruby",
+      "url": "https://balticruby.org/",
+      "type": "conference",
+      "topic": "Ruby, TimescaleDB",
+      "status": "Accepted",
+      "international": true
+    },
+    {
+      "date": "2024-08-03",
+      "title": "High-speed data: Optimizing PostgreSQL with TimescaleDB",
+      "location": "Blumenau, SC, Brazil",
+      "event": "PG Day Blumenau",
+      "url": "https://www.sympla.com.br/evento/pgday-blumenau/2385178?",
+      "type": "conference",
+      "topic": "PostgreSQL, TimescaleDB",
+      "status": "Delivered",
+      "media": {
+        "slides": "2PACX-1vQo71hgMkjjvbeYypz0oqpXJTqAi-TWSGLdNSN20apKQ4FXMZFI9-5M1TkHhv1x3x3r1hNeCKLFyNIQ"
+      }
+    },
+    {
+      "date": "2024-02-15",
+      "title": "Grepping SQL code like a boss",
+      "location": "Krakow, Poland",
+      "event": "Lambda Days 2024",
+      "url": "https://www.lambdadays.org/lambdadays2024",
+      "type": "conference",
+      "topic": "SQL, Command Line",
+      "status": "Delivered",
+      "international": true
+    },
+    {
+      "date": "2024-02-15",
+      "title": "The Power of Mentoring: Nurturing Growth in the IT Industry - panel discussion",
+      "location": "Krakow, Poland",
+      "event": "Lambda Days 2024",
+      "url": "https://www.lambdadays.org/lambdadays2024",
+      "type": "panel",
+      "topic": "Mentoring",
+      "status": "Delivered"
+    },
+    {
+      "date": "2023-11-25",
+      "title": "Introduction to TimescaleDB extensions",
+      "location": "Brazil",
+      "event": "Code Island Summit",
+      "url": "https://summit.codeisland.com.br/",
+      "type": "conference",
+      "topic": "PostgreSQL, TimescaleDB, Extensions",
+      "status": "Delivered"
+    },
+    {
+      "date": "2024-07-28",
+      "title": "Vectorization of information and the Future of models - free models for a more open and sustainable future",
+      "location": "Maringá, PR, Brazil",
+      "event": "Dev Paraná",
+      "url": "https://devpr.org/",
+      "type": "conference",
+      "topic": "PostgreSQL, PGVector",
+      "status": "Delivered",
+      "media": {
+        "slides": "2PACX-1vSJcN9wVdw9HeAOdm1br8aSaPtbb4riTKzPiwfb8TGtM197OLPaA0g7nknWLW3969EtMWedKBZpGMRq"
+      }
+    },
+    {
+      "date": "2024-09-07",
+      "title": "Introduction to PGVector",
+      "location": "São Paulo, SP, Brazil",
+      "event": "PGConf Brasil 2024",
+      "url": "https://pgconf.com.br/2024",
+      "type": "conference",
+      "topic": "PostgreSQL, PGVector",
+      "status": "Delivered",
+      "media": {
+        "slides": "2PACX-1vQq60_oaZDs1jnwZQ7CjpKeb_Uctp0x8uFOBiA2_-3c7RRrxsluj-Phbtx1HRBfaFKrTMSIl7FP-yVJ"
+      }
+    },
+    {
+      "date": "2023-09-23",
+      "title": "Intro to timeseries data with PostgreSQL and TimescaleDB",
+      "location": "Brasília, DF, Brazil",
+      "event": "PG Day BSB",
+      "url": "https://pgdaybsb.com.br",
+      "type": "conference",
+      "topic": "PostgreSQL, TimescaleDB, Time Series",
+      "status": "Delivered"
+    },
+    {
+      "date": "2023-09-16",
+      "title": "Intro to timeseries data with PostgreSQL and TimescaleDB",
+      "location": "Chapecó, SC, Brazil",
+      "event": "PG Day XAP",
+      "url": "https://pgdayxap.com.br/2023",
+      "type": "conference",
+      "topic": "PostgreSQL, TimescaleDB, Time Series",
+      "status": "Delivered"
+    },
+    {
+      "date": "2023-09-02",
+      "title": "Panel about PostgreSQL",
+      "location": "Florianópolis, SC, Brazil",
+      "event": "PG Day Floripa",
+      "url": "https://www.sympla.com.br/evento/pgday-floripa/2071983",
+      "type": "panel",
+      "topic": "PostgreSQL",
+      "status": "Delivered"
+    },
+    {
+      "date": "2023-08-16",
+      "title": "Intro to timeseries data with PostgreSQL and TimescaleDB",
+      "location": "Belo Horizonte, MG, Brazil",
+      "event": "PG Day BH",
+      "url": "https://www.sympla.com.br/evento/pgday-2023-bh-puc-coreu-manha-predio-43-auditorio-3/1996398",
+      "type": "conference",
+      "topic": "PostgreSQL, TimescaleDB, Time Series",
+      "status": "Delivered"
+    },
+    {
+      "date": "2023-08-16",
+      "title": "Panel about PostgreSQL and Database Careers",
+      "location": "Belo Horizonte, MG, Brazil",
+      "event": "PG Day BH",
+      "url": "https://www.sympla.com.br/evento/pgday-2023-bh-puc-coreu-manha-predio-43-auditorio-3/1996398",
+      "type": "panel",
+      "topic": "PostgreSQL, Career",
+      "status": "Delivered"
+    },
+    {
+      "date": "2023-08-14",
+      "title": "Intro to timeseries data with PostgreSQL and TimescaleDB",
+      "location": "São Paulo, SP, Brazil",
+      "event": "PG Day São Paulo",
+      "url": "https://www.sympla.com.br/evento/pgday-sao-paulo-2023/2044774",
+      "type": "conference",
+      "topic": "PostgreSQL, TimescaleDB, Time Series",
+      "status": "Delivered"
+    },
+    {
+      "date": "2023-08-11",
+      "title": "Intro to timeseries data with PostgreSQL and TimescaleDB",
+      "location": "Porto Alegre, RS, Brazil",
+      "event": "PG Day POA",
+      "url": "https://www.sympla.com.br/evento/pgday-porto-alegre-2023/2057620",
+      "type": "conference",
+      "topic": "PostgreSQL, TimescaleDB, Time Series",
+      "status": "Delivered"
+    },
+    {
+      "date": "2023-06-12",
+      "title": "Time-series data processing with Ruby and TimescaleDB",
+      "location": "Rzeszów, Poland",
+      "event": "Rzeszów Ruby User Group",
+      "url": "http://rrug.pl/meetup/2023/05/15/spotkanie35.html",
+      "type": "meetup",
+      "topic": "Ruby, TimescaleDB, Time Series",
+      "status": "Delivered",
+      "international": true
+    },
+    {
+      "date": "2023-06-05",
+      "title": "Functional Programming in PostgreSQL",
+      "location": "Krakow, Poland",
+      "event": "Lambda Days 2023",
+      "url": "https://www.lambdadays.org/lambdadays2023",
+      "type": "conference",
+      "topic": "SQL, Functional Programming",
+      "status": "Delivered",
+      "international": true,
+      "media": {
+        "youtube": "vX8i0Bcb08I"
+      }
+    },
+    {
+      "date": "2023-05-30",
+      "title": "Data Science with PostgreSQL and TimescaleDB",
+      "location": "Ottawa, Canada",
+      "event": "PGCon Ottawa",
+      "url": "https://www.pgcon.org/2023/",
+      "type": "workshop",
+      "topic": "PostgreSQL, Data Science, TimescaleDB",
+      "status": "Delivered",
+      "international": true,
+      "github": "https://github.com/jonatas/sql-data-science-training"
+    },
+    {
+      "date": "2023-05-10",
+      "title": "How to model a Time Series database with TimescaleDB",
+      "location": "Krakow, Poland",
+      "event": "Krakow Ruby User Group",
+      "url": "https://krug.org.pl/events/1111",
+      "type": "meetup",
+      "topic": "TimescaleDB, Time Series, Data Modeling",
+      "status": "Delivered",
+      "media": {
+        "slides": "2PACX-1vQ_WAHS3AWurvv9_9xcAsVd64hI-h6h_6H6TUb3N9F3LfkS3adKswI_H8KZueGzMbPkz8CjMCnNmpFn"
+      },
+      "github": "https://github.com/jonatas/sql-data-science-training"
+    },
+    {
+      "date": "2023-05-10",
+      "title": "Making noise with TimescaleDB and Sonic PI",
+      "location": "Málaga, Spain",
+      "event": "J On The Beach 2023",
+      "url": "https://www.jonthebeach.com/workshops/Reality-of-global-warming.-Data-Science-with-Postgres-and-TimescaleDB",
+      "type": "workshop",
+      "topic": "TimescaleDB, Audio, Data Visualization",
+      "status": "Delivered",
+      "international": true
+    },
+    {
+      "date": "2023-05-10",
+      "title": "Training: Data Science with PostgreSQL",
+      "location": "Málaga, Spain",
+      "event": "J On The Beach 2023",
+      "url": "https://2023.jonthebeach.com/workshops/Introductory-Workshop-for-Sonification-Process.-Creating-noise-with-Time-Series-data",
+      "type": "workshop",
+      "topic": "PostgreSQL, Data Science",
+      "status": "Delivered",
+      "international": true,
+      "github": "https://github.com/jonatas/sql-data-science-training"
+    },
+    {
+      "date": "2023-03-29",
+      "title": "Making noise with TimescaleDB and Sonic PI",
+      "location": "Online",
+      "event": "Ada Ruby Meetup",
+      "url": "https://www.youtube.com/live/Vfxp718OMtI?feature=share&t=590",
+      "type": "meetup",
+      "topic": "Ruby, TimescaleDB, Audio, Data Visualization",
+      "status": "Delivered",
+      "media": {
+        "youtube": "Vfxp718OMtI"
+      },
+      "github": "https://gist.github.com/jonatas/63fddb570842b022c949d84c7291648d"
+    },
+    {
+      "date": "2023-03-09",
+      "title": "Psql in 2023",
+      "location": "Pasadena, California, USA",
+      "event": "Scale 20x",
+      "url": "https://www.socallinuxexpo.org/scale/20x/",
+      "type": "conference",
+      "topic": "PostgreSQL, Command Line",
+      "status": "Delivered",
+      "international": true,
+      "media": {
+        "youtube": "4Q4jOmHbDvU"
+      }
+    },
+    {
+      "date": "2023-02-22",
+      "title": "Training: Data Science with PostgreSQL",
+      "location": "Bengaluru, India",
+      "event": "PGConf India",
+      "url": "https://pgconf.in",
+      "type": "workshop",
+      "topic": "PostgreSQL, Data Science",
+      "status": "Delivered",
+      "international": true,
+      "github": "https://github.com/jonatas/sql-data-science-training"
+    },
+    {
+      "date": "2023-01-24",
+      "title": "Time-series data processing with Ruby and TimescaleDB",
+      "location": "Online",
+      "event": "Ruby On Rails Global Summit",
+      "url": "https://events.geekle.us/ruby/",
+      "type": "conference",
+      "topic": "Ruby, TimescaleDB, Data Processing, Time Series",
+      "status": "Delivered",
+      "international": true,
+      "github": "https://github.com/timescale/timescaledb-ruby"
+    },
+    {
+      "date": "2022-10-20",
+      "title": "Ruby or SQL? Where to process your data?",
+      "location": "Bangkok, Thailand",
+      "event": "Ruby Conf Thailand",
+      "url": "https://rubyconfth.com",
+      "type": "conference",
+      "topic": "Ruby, SQL, Data Processing",
+      "status": "Delivered",
+      "international": true,
+      "media": {
+        "youtube": "MXAtSZ5Szgk",
+        "slides": "2PACX-1vST6o2xxkIuNddKwWeXgNENN2-Fcpwe2m9Ax-Z4j6q0V7vjX-GUISxAt6Oj75OFUZ7KQbSI3CLbKI3l"
+      }
+    },
+    {
+      "date": "2022-08-15",
+      "title": "Processando dados temporais com Ruby e TimescaleDB",
+      "location": "Online",
+      "event": "Ada.rb",
+      "url": "",
+      "type": "meetup",
+      "topic": "Ruby, TimescaleDB, Time Series",
+      "status": "Delivered",
+      "language": "Portuguese",
+      "media": {
+        "youtube": "BeysighX6jY?start=6206"
+      }
+    },
+    {
+      "date": "2022-03-24",
+      "title": "Zen Life with Psql",
+      "location": "Brazil",
+      "event": "PGConf Brazil",
+      "url": "",
+      "type": "conference",
+      "topic": "PostgreSQL, Command Line",
+      "status": "Delivered",
+      "language": "Portuguese",
+      "media": {
+        "youtube": "MzV6S_72E2g"
+      }
+    },
+    {
+      "date": "2021-09-08",
+      "title": "Grepping Ruby Code like a boss",
+      "location": "Online",
+      "event": "Ruby Kaigi 2020 Takeout",
+      "url": "https://rubykaigi.org/2020",
+      "type": "conference",
+      "topic": "Ruby, Command Line, Code Search",
+      "status": "Delivered",
+      "international": true,
+      "media": {
+        "youtube": "YczrZQC9aP8"
+      }
+    },
+    {
+      "date": "2021-06-23",
+      "title": "Visualizing TimescaleDB compression status in real-time with Hasura",
+      "location": "Online",
+      "event": "Hasura Con",
+      "url": "",
+      "type": "conference",
+      "topic": "TimescaleDB, Hasura, Visualization",
+      "status": "Delivered",
+      "international": true,
+      "media": {
+        "vimeo": "569408772",
+        "slides": "2PACX-1vQjFu7tCQtePB_1ZyU482W9O4myJWT7AG8pClC-0bpvbe4FFSmEGF-6DQvuRyA1ZHfsiIbb94ybrJMW"
+      }
+    },
+    {
+      "date": "2021-05-12",
+      "title": "From code to data: live-coding a small blog scraper",
+      "location": "Online",
+      "event": "Extract Summit",
+      "url": "",
+      "type": "conference",
+      "topic": "Data, Web Scraping",
+      "status": "Delivered",
+      "international": true,
+      "media": {
+        "youtube": "bFBXkNIY4hE"
+      }
+    }
+  ],
+  "topics": [
+    {"name": "PostgreSQL", "color": "#336791"},
+    {"name": "Ruby", "color": "#CC342D"},
+    {"name": "SQL", "color": "#F29111"},
+    {"name": "TimescaleDB", "color": "#FF9E00"},
+    {"name": "Data Science", "color": "#4D77CF"},
+    {"name": "Functional Programming", "color": "#5C21D4"},
+    {"name": "Data Modeling", "color": "#8BC34A"},
+    {"name": "Data Processing", "color": "#2196F3"},
+    {"name": "Time Series", "color": "#E91E63"},
+    {"name": "Command Line", "color": "#795548"},
+    {"name": "Performance", "color": "#FF5722"},
+    {"name": "Audio", "color": "#9C27B0"},
+    {"name": "Data Visualization", "color": "#009688"},
+    {"name": "AI", "color": "#673AB7"},
+    {"name": "Analytics", "color": "#FFC107"},
+    {"name": "Career", "color": "#607D8B"}
+  ],
+  "locations": [
+    {"country": "Brazil"},
+    {"country": "Poland"},
+    {"country": "Canada"},
+    {"country": "Spain"},
+    {"country": "USA"},
+    {"country": "Thailand"},
+    {"country": "India"},
+    {"country": "Online"},
+    {"country": "Singapore"},
+    {"country": "Latvia"}
+  ],
+  "status_colors": {
+    "Delivered": "#4CAF50",
+    "Accepted": "#2196F3",
+    "Submitted": "#9E9E9E",
+    "Rejected": "#F44336"
+  }
+} 

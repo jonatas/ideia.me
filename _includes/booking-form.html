@@ -1,0 +1,42 @@
+<div class="booking-modal" id="booking-modal">
+  <div class="booking-form">
+    <div class="close-modal" onclick="closeBookingForm()">&times;</div>
+    <h2>Book Me for Your Event</h2>
+    <form id="speaking-request" action="https://formspree.io/your-email@example.com" method="POST">
+      <div class="form-group">
+        <label for="name" class="form-label">Your Name</label>
+        <input type="text" id="name" name="name" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label for="email" class="form-label">Email Address</label>
+        <input type="email" id="email" name="email" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label for="event" class="form-label">Event Name</label>
+        <input type="text" id="event" name="event" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label for="date" class="form-label">Event Date</label>
+        <input type="date" id="date" name="date" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label for="location" class="form-label">Event Location</label>
+        <input type="text" id="location" name="location" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label for="topic" class="form-label">Preferred Topic</label>
+        <select id="topic" name="topic" class="form-input" required>
+          <option value="">Select a topic</option>
+          {% for topic in site.data.talks.topics %}
+            <option value="{{ topic.name }}">{{ topic.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="message" class="form-label">Additional Information</label>
+        <textarea id="message" name="message" class="form-input" rows="4"></textarea>
+      </div>
+      <button type="submit" class="form-submit">Submit Request</button>
+    </form>
+  </div>
+</div> 

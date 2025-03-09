@@ -1,0 +1,11 @@
+<div class="video-container">
+  <iframe 
+    src="https://player.vimeo.com/video/{{ include.id }}" 
+    width="560" 
+    height="420" 
+    frameborder="0" 
+    loading="lazy" 
+    title="{{ include.title | default: 'Vimeo Video' }}"
+    allowfullscreen>
+  </iframe>
+</div> 

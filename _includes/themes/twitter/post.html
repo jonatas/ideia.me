@@ -1,48 +1,77 @@
-<div class="page-header">
-    <h1>
-       <img class="thumb img-circle" src="{{ site.author.avatar }}" title="{{ site.author.name}}" alt="{{ site.author.name}} profile pic"></img>
-       {{ page.title }} <small><br/>{{ page.date | date: "%d/%m/%Y" }}
-    {% if page.categories %}
-      <span class="categories">
-        {% for _category in page.categories %}
-          <a  class="btn btn-primary" href=/categories.html#{{_category}}-ref>{{ _category }}
-          {% for category in site.categories %}
-            {% if _category == category[0] %}
-            <span class="badge">{{ category | last | size }}</span>
+<div class="container post-container">
+  <article class="blog-post">
+    <header class="post-header mb-4">
+      <div class="d-flex align-items-center mb-3">
+        <img class="rounded-circle me-3" src="{{ site.author.avatar }}" width="60" height="60" title="{{ site.author.name}}" alt="{{ site.author.name}} profile pic">
+        <div>
+          <h1 class="post-title display-5 fw-bold">{{ page.title }}</h1>
+          <div class="text-muted">
+            <i class="bi bi-calendar3"></i> {{ page.date | date: "%B %d, %Y" }}
+            {% if page.categories %}
+            <span class="ms-3">
+              {% for _category in page.categories %}
+              <a class="badge bg-primary text-decoration-none" href=/categories.html#{{_category}}-ref>
+                <i class="bi bi-tag"></i> {{ _category }}
+              </a>
+              {% endfor %}
+            </span>
             {% endif %}
-          {% endfor %}
-          </a>
-         {% endfor %}
-       </span>
-     {% endif %}
-     </small>
-  </h1>
+          </div>
+        </div>
+      </div>
+    </header>
+    
+    <div class="post-content">
+      {{ content }}
+    </div>
+    
+    <hr class="my-5">
+    
+    <div class="share-page mb-4">
+      <div class="d-flex align-items-center">
+        <span class="fw-bold me-3">Share this post:</span>
+        <a class="btn btn-outline-primary btn-sm me-2" href="https://twitter.com/intent/tweet?text={{ page.title }}&url={{ site.production_url }}{{ page.url }}&via={{ site.author.twitter }}&related={{ site.author.twitter }}" rel="nofollow" target="_blank" title="Share on Twitter">
+          <i class="bi bi-twitter"></i> Twitter
+        </a>
+        <a class="btn btn-outline-primary btn-sm me-2" href="https://facebook.com/sharer.php?u={{ site.production_url }}{{ page.url }}" rel="nofollow" target="_blank" title="Share on Facebook">
+          <i class="bi bi-facebook"></i> Facebook
+        </a>
+        <a class="btn btn-outline-primary btn-sm" href="https://www.linkedin.com/sharing/share-offsite/?url={{site.production_url}}{{ page.url }}" rel="nofollow" target="_blank" title="Share on LinkedIn">
+          <i class="bi bi-linkedin"></i> LinkedIn
+        </a>
+      </div>
+    </div>
+    
+    <div class="card mb-5">
+      <div class="card-body">
+        {% include JB/comments %}
+      </div>
+    </div>
+    
+    <nav class="blog-pagination d-flex justify-content-between mb-5" aria-label="Pagination">
+      {% if page.previous %}
+      <a class="btn btn-outline-primary rounded-pill" href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{page.previous.title }}">
+        <i class="bi bi-arrow-left"></i> Previous: {{ page.previous.title | truncate: 30 }}
+      </a>
+      {% else %}
+      <a class="btn btn-outline-secondary rounded-pill disabled" href="#" tabindex="-1" aria-disabled="true">
+        <i class="bi bi-arrow-left"></i> Previous
+      </a>
+      {% endif %}
+      
+      <a class="btn btn-outline-primary rounded-pill" href="{{ BASE_PATH }}{{ site.JB.archive_path }}">
+        <i class="bi bi-archive"></i> Archive
+      </a>
+      
+      {% if page.next %}
+      <a class="btn btn-outline-primary rounded-pill" href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">
+        Next: {{ page.next.title | truncate: 30 }} <i class="bi bi-arrow-right"></i>
+      </a>
+      {% else %}
+      <a class="btn btn-outline-secondary rounded-pill disabled" href="#" tabindex="-1" aria-disabled="true">
+        Next <i class="bi bi-arrow-right"></i>
+      </a>
+      {% endif %}
+    </nav>
+  </article>
 </div>
-<div class="content">
-    {{ content }}
-</div>
-<hr>
-{% include JB/comments %}
-<div class="share-page">
-  Share &rarr;
-  <a href="https://twitter.com/intent/tweet?text={{ page.title }}&url={{ site.production_url }}{{ page.url }}&via={{ site.author.twitter }}&related={{ site.author.twitter }}" rel="nofollow"title="Share on twitter">Twitter</a>
-  <a href="https://facebook.com/sharer.php?u={{ site.production_url }}{{ page.url }}" rel="nofollow" target="_blank" title="Share on Facebook">Facebook</a>
-  <a href="https://www.linkedin.com/sharing/share-offsite/?url={{site.production_url}}{{ page.url }}" rel="nofollow" target="_blank" title="Share on Linkedin">Linkedin</a>
-</div>
-<hr>
-<div class="pagination">
-    {% if page.previous %}
-      <span class="prev">
-        <a href="{{ BASE_PATH }}{{ page.previous.url }}" title="{{page.previous.title }}">&larr; Before</a>
-      </span>
-    {% else %}
-    <span class="prev disabled"><a>&larr; Before</a></span>
-    {% endif %}
-    | <span><a href="{{ BASE_PATH }}{{ site.JB.archive_path }}">Archive</a></span> |
-    {% if page.next %}
-    <span class="next"><a href="{{ BASE_PATH }}{{ page.next.url }}" title="{{ page.next.title }}">Next &rarr;</a></span>
-    {% else %}
-    <span class="next disabled"><a>Next &rarr;</a>
-    {% endif %}
-</div>
-<hr>
