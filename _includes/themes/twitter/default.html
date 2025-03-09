@@ -20,6 +20,7 @@
     <link href="/css/nimbus-pygments.css" rel="stylesheet">
     <link href="/css/custom.css" rel="stylesheet">
     <link href="/css/code-highlighting.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <!-- Style overrides for Prism -->
     <style>
@@ -255,13 +256,21 @@
 
     <!-- Additional scripts for code highlighting and dark mode toggle -->
     <script>
-      // Toggle dark mode manually
+      // Toggle dark mode manually with smoother transition
       document.getElementById('darkModeToggle').addEventListener('change', function() {
+        // Add transition class before changing mode
+        document.body.classList.add('theme-transition');
+        
         if (this.checked) {
           document.body.classList.add('dark-mode');
         } else {
           document.body.classList.remove('dark-mode');
         }
+        
+        // Remove transition class after transition completes
+        setTimeout(() => {
+          document.body.classList.remove('theme-transition');
+        }, 500);
       });
       
       // Apply highlighting to code blocks after content loads
@@ -282,6 +291,111 @@
             Prism.highlightAll();
           }, 100);
         }
+      });
+    </script>
+
+    <!-- SEO and content improvement scripts -->
+    <script src="/assets/js/seo-helper.js"></script>
+    <script src="/assets/js/category-standardizer.js"></script>
+    <script src="/assets/js/link-validator.js"></script>
+
+    <!-- Add this at the end of the body, just before closing body tag -->
+    <script>
+      // Scroll animation for fade-in elements - modified to be more selective
+      document.addEventListener('DOMContentLoaded', function() {
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+            }
+          });
+        }, {
+          threshold: 0.1
+        });
+        
+        fadeElements.forEach(element => {
+          observer.observe(element);
+        });
+        
+        // Only apply fade-in to non-critical UI elements
+        // Avoid applying to main content or navigation elements
+        const animateElements = document.querySelectorAll('.card:not(.latest-post-card):not(.post-content), .featured-content .card, .post-list-group .list-group-item');
+        animateElements.forEach((element, index) => {
+          // Add minimal delay to reduce blinking effect
+          element.classList.add('fade-in');
+          element.style.transitionDelay = `${index * 0.02}s`; // Reduced delay
+        });
+        
+        // Copy code button functionality
+        const codeBlocks = document.querySelectorAll('pre');
+        codeBlocks.forEach((block) => {
+          if (!block.querySelector('.copy-button')) {
+            const button = document.createElement('button');
+            button.className = 'copy-button';
+            button.textContent = 'Copy';
+            
+            button.addEventListener('click', () => {
+              const code = block.querySelector('code').textContent;
+              navigator.clipboard.writeText(code).then(() => {
+                button.textContent = 'Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                  button.textContent = 'Copy';
+                  button.classList.remove('copied');
+                }, 2000);
+              });
+            });
+            
+            block.appendChild(button);
+          }
+        });
+      });
+    </script>
+
+    <!-- Ensure smooth page transitions -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Add fade-in class to the main content container
+        const contentContainer = document.querySelector('.content-container');
+        if (contentContainer) {
+          // Set initial opacity
+          contentContainer.style.opacity = '0';
+          
+          // Fade in the content
+          setTimeout(() => {
+            contentContainer.style.transition = 'opacity 0.3s ease';
+            contentContainer.style.opacity = '1';
+          }, 50);
+        }
+        
+        // Handle page navigation with smooth transitions
+        document.querySelectorAll('a').forEach(link => {
+          // Only apply to internal links
+          if (link.hostname === window.location.hostname && !link.hasAttribute('target')) {
+            link.addEventListener('click', function(e) {
+              // Don't apply to download links or anchor links
+              if (link.hasAttribute('download') || link.getAttribute('href').startsWith('#')) {
+                return;
+              }
+              
+              e.preventDefault();
+              const destination = link.href;
+              
+              // Fade out
+              if (contentContainer) {
+                contentContainer.style.opacity = '0';
+              }
+              
+              // Navigate after a short delay
+              setTimeout(() => {
+                window.location.href = destination;
+              }, 300);
+            });
+          }
+        });
       });
     </script>
   </body>

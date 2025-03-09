@@ -115,10 +115,14 @@ title: "Speaking @jonatasdp"
                data-year="{{ talk_year }}"
                id="{{ talk.title | slugify }}">
             <div class="talk-card-header">
-              {% if talk.media.youtube %}
+              {% if talk.media.images %}
+                <img src="{{ talk.media.images[0].src }}" alt="{{ talk.media.images[0].alt }}" class="talk-card-thumbnail">
+              {% elsif talk.media.youtube %}
                 <img src="https://img.youtube.com/vi/{{ talk.media.youtube }}/mqdefault.jpg" alt="{{ talk.title }}" class="talk-card-thumbnail">
               {% else %}
-                <img src="https://picsum.photos/seed/{{ talk.event | slugify }}/600/400" alt="{{ talk.title }}" class="talk-card-thumbnail">
+                <div class="talk-card-thumbnail-placeholder">
+                  <i class="fas fa-chalkboard-teacher"></i>
+                </div>
               {% endif %}
               <div class="talk-card-overlay">
                 <div class="talk-card-title-top">{{ talk.title }}</div>
@@ -238,10 +242,14 @@ title: "Speaking @jonatasdp"
              data-year="{{ talk_year }}"
              id="{{ first_talk.title | slugify }}">
           <div class="talk-card-header">
-            {% if first_talk.media.youtube %}
+            {% if first_talk.media.images %}
+              <img src="{{ first_talk.media.images[0].src }}" alt="{{ first_talk.media.images[0].alt }}" class="talk-card-thumbnail">
+            {% elsif first_talk.media.youtube %}
               <img src="https://img.youtube.com/vi/{{ first_talk.media.youtube }}/mqdefault.jpg" alt="{{ first_talk.title }}" class="talk-card-thumbnail">
             {% else %}
-              <img src="https://picsum.photos/seed/{{ first_talk.event | slugify }}/600/400" alt="{{ first_talk.title }}" class="talk-card-thumbnail">
+              <div class="talk-card-thumbnail-placeholder">
+                <i class="fas fa-chalkboard-teacher"></i>
+              </div>
             {% endif %}
             <div class="talk-card-overlay">
               <div class="talk-card-title-top">{{ first_talk.title }}</div>
@@ -383,10 +391,14 @@ title: "Speaking @jonatasdp"
              data-year="{{ talk_year }}"
              id="{{ first_talk.title | slugify }}">
           <div class="talk-card-header">
-            {% if first_talk.media.youtube %}
+            {% if first_talk.media.images %}
+              <img src="{{ first_talk.media.images[0].src }}" alt="{{ first_talk.media.images[0].alt }}" class="talk-card-thumbnail">
+            {% elsif first_talk.media.youtube %}
               <img src="https://img.youtube.com/vi/{{ first_talk.media.youtube }}/mqdefault.jpg" alt="{{ first_talk.title }}" class="talk-card-thumbnail">
             {% else %}
-              <img src="https://picsum.photos/seed/{{ first_talk.event | slugify }}/600/400" alt="{{ first_talk.title }}" class="talk-card-thumbnail">
+              <div class="talk-card-thumbnail-placeholder">
+                <i class="fas fa-chalkboard-teacher"></i>
+              </div>
             {% endif %}
             <div class="talk-card-overlay">
               <div class="talk-card-title-top">{{ first_talk.title }}</div>

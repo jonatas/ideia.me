@@ -1,10 +1,113 @@
 ---
 layout: page
-title : Arquivo
-header : Posts antigos
+title : Archive
+header : Post Archive
 group: navigation
 ---
 {% include JB/setup %}
 
-{% assign posts_collate = site.posts %}
-{% include JB/posts_collate %}
+<div class="archive-container">
+  <div class="row">
+    <div class="col-md-3 mb-4">
+      <div class="archive-sidebar sticky-top" style="top: 20px;">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Years</h5>
+          </div>
+          <div class="list-group list-group-flush">
+            {% assign posts_by_year = site.posts | group_by_exp:"post", "post.date | date: '%Y'" %}
+            {% for year in posts_by_year %}
+              <a href="#{{ year.name }}-ref" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center year-link">
+                {{ year.name }}
+                <span class="badge bg-primary rounded-pill">{{ year.items.size }}</span>
+              </a>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-9">
+      <div class="archive-content">
+        {% for year in posts_by_year %}
+          <div class="year-section mb-5" id="{{ year.name }}-ref">
+            <div class="card">
+              <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">{{ year.name }}</h3>
+              </div>
+              <div class="card-body">
+                {% assign posts_by_month = year.items | group_by_exp:"post", "post.date | date: '%B'" %}
+                {% for month in posts_by_month %}
+                  <h4 class="month-heading mt-3 mb-3 border-bottom pb-2">{{ month.name }}</h4>
+                  <div class="list-group mb-4">
+                    {% for post in month.items %}
+                      <a href="{{ post.url }}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                          <h5 class="mb-1">{{ post.title }}</h5>
+                          <small class="text-muted">{{ post.date | date: "%b %d" }}</small>
+                        </div>
+                        {% if post.description %}
+                          <p class="mb-1">{{ post.description }}</p>
+                        {% endif %}
+                        <small>
+                          {% for category in post.categories %}
+                            <span class="badge bg-primary me-1">{{ category }}</span>
+                          {% endfor %}
+                          {% for tag in post.tags %}
+                            <span class="badge bg-secondary me-1">{{ tag }}</span>
+                          {% endfor %}
+                        </small>
+                      </a>
+                    {% endfor %}
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Smooth scrolling for year links
+  document.addEventListener('DOMContentLoaded', function() {
+    const yearLinks = document.querySelectorAll('.year-link');
+    
+    yearLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        window.scrollTo({
+          top: targetElement.offsetTop - 20,
+          behavior: 'smooth'
+        });
+        
+        // Add active class to clicked link
+        yearLinks.forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+    
+    // Highlight active year based on scroll position
+    window.addEventListener('scroll', function() {
+      const scrollPosition = window.scrollY;
+      
+      document.querySelectorAll('.year-section').forEach(section => {
+        if (section.offsetTop <= scrollPosition + 100) {
+          const id = section.getAttribute('id');
+          yearLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${id}`) {
+              link.classList.add('active');
+            }
+          });
+        }
+      });
+    });
+  });
+</script>
