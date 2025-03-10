@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Automatize primeiro
-  categories: ['pense','dev']
+title: "Automatize primeiro"
+layout: post
+categories: ['pense', 'dev']
+description: "!"Robot image""
 ---
-
 !["Robot image"](https://res.cloudinary.com/robolike/image/upload/v1417674434/blue-robolike-robot_cujcxi.jpg)
 
 Essa semana iniciei um projetinho na [Resultados Digitais](http://resultadosdigitais.com.br) com Ruby, uma

@@ -1,8 +1,8 @@
 ---
-  layout: post
-  title: Produto ou serviço?
+title: "Produto ou serviço?"
+layout: post
+description: "Depois de muito defender a vida de freelancer prestando serviço, venho aqui confessar que estou mudando."
 ---
-
 Depois de muito defender a vida de freelancer prestando serviço, venho aqui confessar que estou mudando.
 
 Trabalhei de freelancer e prestando serviço nos últimos anos e tive uma vida muito confortável e agradável. Tive uma boa estabilidade financeira na maior parte do tempo e teria demandas para viver nesse modelo para o resto da vida se quisesse.

@@ -1,10 +1,8 @@
 ---
-  title: Problemas no software e hardware
-  layout: post
+title: "Problemas no software e hardware"
+layout: post
+description: "Esta semana consegui me machucar sozinho. Torci o meu pé e tive uma luxação nos nervos e estou preso dentro de meu home office. Não sou acostumado a sentir d..."
 ---
-
-
-
 Esta semana consegui me machucar sozinho. Torci o meu pé e tive uma luxação nos nervos e estou preso dentro de meu home office. Não sou acostumado a sentir dor e como isso consegue corromper com várias outras coisas da rotina diária.
 
 Eu acabei fazendo uma relação deste problema que estou vivendo, como usuário final do meu próprio corpo, carcaça terrestre como um hardware de um computador. 

@@ -1,9 +1,9 @@
 ---
-title: Jekyll e Twitter Bootstrap
+title: "Jekyll e Twitter Bootstrap"
 layout: post
-categories: [css, bootstrap, twitter, jekyll, regexp]
+categories: ['css', 'bootstrap', 'twitter', 'jekyll', 'regexp']
+description: "Sempre usei o jekyll para construir o site, mas resolvi migrar o estilo do site para o [twitter bootstrap][tb] pois estava um pouco cansado daquele leiaute q..."
 ---
-
 Sempre usei o jekyll para construir o site, mas resolvi migrar o estilo do site para o [twitter bootstrap][tb] pois estava um pouco cansado daquele leiaute que eu fiz. Acabei usando o [jekyll bootstrap][jb] para acelerar a  migração. A organização do code é um tanto quanto melhor que a minha e então tive que substituir alguns detalhes em todos os posts ao mesmo tempo. Para não passar arquivo por arquivo, utilizei uma expressão regular com perl:
 
 ### Para trocar o nome do leiaute

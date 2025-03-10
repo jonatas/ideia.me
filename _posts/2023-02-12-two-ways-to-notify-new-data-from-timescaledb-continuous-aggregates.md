@@ -1,9 +1,9 @@
 ---
+title: "Two ways to notify new data from Timescaledb Continuous Aggregates"
 layout: post
-title: Two ways to notify new data from Timescaledb Continuous Aggregates
 categories: time-series timescaledb postgresql
+description: "As a Developer Advocate at Timescale, I have a unique opportunity to work with the community and teach people how to use TimescaleDB. Recently, a community m..."
 ---
-
 As a Developer Advocate at Timescale, I have a unique opportunity to work with the community and teach people how to use TimescaleDB. Recently, a community member asked about a way to publish the results of the continuous aggregate to a messaging system. This sparked my interest, and I challenged myself to come up with a solution.
 
 In this article, I will share my approach to the problem. First, I will introduce the basics of materialized views with continuous aggregates in TimescaleDB. Then, I will show how to use a trigger-based solution to publish the results to a messaging system. Finally, I will demonstrate how to use background jobs to achieve the same result.

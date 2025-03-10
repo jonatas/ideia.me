@@ -1,9 +1,10 @@
 ---
-  layout: post
-  title: Migrando do linux para o Mac OS X
-  categories: ['mac','linux']
+title: "Migrando do linux para o Mac OS X"
+layout: post
+categories: ['mac', 'linux']
+description: "Ontem o Wellington Mitrut veio super empolgado para mim
+pedindo dicas do que instalar e o que vai mudar agora que ele vai comprar um Mac."
 ---
-
 Ontem o [Wellington Mitrut](http://wmitrut.com) veio super empolgado para mim
 pedindo dicas do que instalar e o que vai mudar agora que ele vai comprar um Mac.
 

@@ -1,11 +1,9 @@
 ---
-  title: Efetivamente....
-  layout: post
-  categories: [pense]
+title: "Efetivamente...."
+layout: post
+categories: ['pense']
+description: "Ontem o [Vinícius Teles] escreveu um post com uma reflexão muito interessante sobre o "efetivamente". Este cara está viajando o mundo com sua mulher já faz u..."
 ---
-
-
-
 Ontem o [Vinícius Teles] escreveu um post com uma reflexão muito interessante sobre o "efetivamente". Este cara está viajando o mundo com sua mulher já faz um tempo e [vale a pena ler a história] para entender bem do que estamos falando em ser efetivos.
 
 Durante os últimos anos não tive mais chefe e sou totalmente gestor do meu tempo e horário. Trabalho de freelancer programando em vários segmentos diferentes e percebo o quanto é difícil realmente terminar algo.

@@ -1,11 +1,9 @@
 ---
-  layout: post
-  title: Chave Dicotômica
-  categories: [ruby, android, dsl]
+title: "Chave Dicotômica"
+layout: post
+categories: ['ruby', 'android', 'dsl']
+description: "Hoje, inspirado pelo [post de ontem][post] decidi começar a [abrir alguns exemplos][github] que venho produzindo. Este primeiro trata-se de um aplicativo que..."
 ---
-
-
-
 Hoje, inspirado pelo [post de ontem][post] decidi começar a [abrir alguns exemplos][github] que venho produzindo. Este primeiro trata-se de um aplicativo que estou criando com minha namorada Tânia que é bióloga para identificação de espécies de árvores. Estamos criando uma árvore de navegação apartir de um mecanismo árduo de leitura traduzido no livro que ela usava como base. O nome do mecanismo é [Chave Dicotômica][wikipedia]. A necessidade surgiu que o trabalho de procurar e navegar no livro é chato e lento, pois é necessário entender as especificações técnicas de cada parte da árvore e saber o que é cada particularidade de cada parte do contexto. Além de folhar várias vezes pra frente e pra trás. Veja meia página das menores chaves do livro.
 
 ![fotolivro]

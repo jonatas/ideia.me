@@ -1,8 +1,9 @@
 ---
+title: "Fast supports SQL from Postgresql!"
 layout: post
-title: Fast supports SQL from Postgresql!
+description: "Hey, I'm thrilled to share my recent work on the [Fast gem][fast] - an update that's close to my heart.
+I've just merged a pull request that's all about brin..."
 ---
-
 Hey, I'm thrilled to share my recent work on the [Fast gem][fast] - an update that's close to my heart.
 I've just merged a pull request that's all about bringing SQL support.
 This journey wasn't just about coding; it was about creating something that could

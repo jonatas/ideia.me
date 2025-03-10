@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Três meses na Resultados Digitais
-  categories: [Resultados Digitais]
+title: "Três meses na Resultados Digitais"
+layout: post
+categories: ['Resultados Digitais']
+description: "Dia 23 completei três meses na Resultados Digitais."
 ---
-
 Dia 23 completei três meses na Resultados Digitais.
 
 Três meses que moro em floripa. Três meses que aprendi a adorar o clima litorâneo.

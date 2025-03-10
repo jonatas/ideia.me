@@ -1,10 +1,10 @@
 ---
-  layout: post
-  title: Retrospectiva 2012
-  categories: [retrospectiva,pense,sou-pai]
+title: "Retrospectiva 2012"
+layout: post
+categories: ['retrospectiva', 'pense', 'sou-pai']
+description: "Comprei uma bicicleta velha e ainda não consegui consertar
+ Começei a praticar slackline"
 ---
-
-
 ## Coisas que eu fiz
 
 * Comprei uma bicicleta velha e ainda não consegui consertar

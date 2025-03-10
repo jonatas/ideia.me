@@ -1,9 +1,9 @@
 ---
+title: "Trabalhar sozinho ou contribuir?"
 layout: post
-title: Trabalhar sozinho ou contribuir?
-categories: [pense, opensource]
+categories: ['pense', 'opensource']
+description: "Eu gosto muito de desenvolver meus projetos pessoais. Estou sempre viajando na maionese e tentando inventar alguma coisa para me manter programando e me dive..."
 ---
-
 Eu gosto muito de desenvolver meus projetos pessoais. Estou sempre viajando na maionese e tentando inventar alguma coisa para me manter programando e me divertindo com programação.
 
 Mas observei que a maioria deles não levo adiante.

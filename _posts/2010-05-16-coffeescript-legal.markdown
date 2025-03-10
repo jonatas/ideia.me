@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Coffeescript Legal
-  categories: [coffeescript, ruby, javascript, linguagem]
+title: "Coffeescript Legal"
+layout: post
+categories: ['coffeescript', 'ruby', 'javascript', 'linguagem']
+description: "Comecei a olhar para mais uma linguagem que está mudando a minha forma de pensar. Coffescript é uma pequena linguagem que compila para javascript e é muito s..."
 ---
-
 Comecei a olhar para mais uma linguagem que está mudando a minha forma de pensar. Coffescript é uma pequena linguagem que compila para javascript e é muito simples para usar. Você pode compilar o código para javascript ou incluir o javascript do compilador coffescript na sua página. Por enquanto estou apenas fazendo isso no meu local, por isso este serviço ainda não está disponível em meu site. 
 
 Um exemplo muito bacana que inicia a explicação do coffescript é a criação de uma função que eleva ao quadrado (em inglês square):

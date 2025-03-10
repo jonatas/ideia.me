@@ -1,11 +1,9 @@
 ---
-  layout: post
-  title: Diário de um feriado
-  categories: latex xp
---- 
-
-
-
+title: "Diário de um feriado"
+layout: post
+categories: latex xp
+description: "Hoje, como é feriado resolvi me dedicar a outras atividades além do desenvolvimento. Como fui convidado pelo professor Eder Gasparin para ministrar uma aula ..."
+---
 Hoje, como é feriado resolvi me dedicar a outras atividades além do desenvolvimento. Como fui convidado pelo professor Eder Gasparin para ministrar uma aula sobre [Extremme Programming][pdf], então resolvi [preparar o material][pdf]. 
 
 Para preparar a [apresentação][pdf], concerteza tive que dar uma passada no [site da Improve It][improveit]. Quando participei de uma imersão ágil feita por eles, concerteza foi um dos eventos que mudou a minha vida.

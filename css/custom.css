@@ -1,9 +1,9 @@
 /* Modern custom styling for ideia.me */
 
 :root {
-  --primary-color: #3a86ff;
-  --secondary-color: #8338ec;
-  --accent-color: #ff006e;
+  --primary-color: #4361ee;
+  --secondary-color: #7209b7;
+  --accent-color: #f72585;
   --light-color: #f8f9fa;
   --dark-color: #212529;
   --gray-color: #6c757d;
@@ -12,16 +12,19 @@
   --text-color: #212529;
   --border-color: rgba(0, 0, 0, 0.1);
   --code-bg-color: #f8f9fa;
-  --blockquote-bg-color: rgba(58, 134, 255, 0.05);
-  --hover-bg-color: rgba(58, 134, 255, 0.05);
+  --blockquote-bg-color: rgba(67, 97, 238, 0.05);
+  --hover-bg-color: rgba(67, 97, 238, 0.05);
+  --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  --card-hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --transition-speed: 0.3s;
 }
 
 /* Dark mode styles */
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary-color: #5c97ff;
-    --secondary-color: #9c62fc;
-    --accent-color: #ff4b93;
+    --primary-color: #4cc9f0;
+    --secondary-color: #9d4edd;
+    --accent-color: #f72585;
     --light-color: #2c3034;
     --dark-color: #f8f9fa;
     --gray-color: #adb5bd;
@@ -30,8 +33,10 @@
     --text-color: #e9ecef;
     --border-color: rgba(255, 255, 255, 0.1);
     --code-bg-color: #2c3034;
-    --blockquote-bg-color: rgba(92, 151, 255, 0.1);
-    --hover-bg-color: rgba(92, 151, 255, 0.1);
+    --blockquote-bg-color: rgba(76, 201, 240, 0.1);
+    --hover-bg-color: rgba(76, 201, 240, 0.1);
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    --card-hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -40,7 +45,16 @@ body {
   line-height: 1.6;
   color: var(--text-color);
   background-color: var(--bg-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+/* Theme transition class for smoother dark mode toggle */
+.theme-transition {
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.theme-transition * {
+  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -48,12 +62,13 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 600;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
-  color: var(--text-color);
 }
 
+/* Content container with smooth transitions */
 .content-container {
-  min-height: calc(100vh - 180px);
-  padding-bottom: 2rem;
+  padding-top: 2rem;
+  min-height: 70vh; /* Ensure minimum height for short pages */
+  will-change: opacity; /* Optimize for animations */
 }
 
 /* Fix content container spacing */
@@ -174,17 +189,18 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Card styling for posts and content */
 .card {
-  border: none;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  margin-bottom: 2rem;
   background-color: var(--card-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--card-hover-shadow);
 }
 
 .card-title {
@@ -207,26 +223,24 @@ h1, h2, h3, h4, h5, h6 {
 .btn-primary {
   background-color: var(--primary-color);
   border-color: var(--primary-color);
+  transition: all var(--transition-speed) ease;
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-color);
-  filter: brightness(0.9);
-  border-color: var(--primary-color);
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(58, 134, 255, 0.3);
 }
 
 /* Links styling */
 a {
   color: var(--primary-color);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color var(--transition-speed) ease;
 }
 
 a:hover {
-  color: var(--primary-color);
-  filter: brightness(0.9);
+  color: var(--secondary-color);
   text-decoration: underline;
 }
 
@@ -290,6 +304,7 @@ pre {
   background-color: var(--code-bg-color);
   border: 1px solid var(--border-color);
   overflow-x: auto;
+  box-shadow: var(--card-shadow);
 }
 
 code {
@@ -305,6 +320,7 @@ code {
   border-radius: 8px;
   margin: 1.5rem 0;
   position: relative;
+  margin-bottom: 1rem;
 }
 
 .highlight pre {
@@ -332,29 +348,32 @@ code {
   font-family: 'Open Sans', sans-serif;
 }
 
-/* Copy button for code blocks */
+/* Copy button styling - modified to be less intrusive */
 .copy-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 0.3rem 0.7rem;
-  background-color: var(--primary-color);
-  color: white;
+  top: 0.5rem;
+  right: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--text-color);
   border: none;
   border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
   cursor: pointer;
-  font-size: 0.8rem;
-  transition: background-color 0.2s;
-  z-index: 2;
+  opacity: 0.6;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
+  z-index: 10;
 }
 
 .copy-button:hover {
-  background-color: var(--primary-color);
-  filter: brightness(0.9);
+  opacity: 1;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 .copy-button.copied {
-  background-color: #43a047;
+  background-color: var(--primary-color);
+  color: white;
+  opacity: 1;
 }
 
 /* Blockquote styling */
@@ -364,7 +383,7 @@ blockquote {
   margin: 1.5rem 0;
   background-color: var(--blockquote-bg-color);
   border-radius: 0 8px 8px 0;
-  color: var(--text-color);
+  font-style: italic;
 }
 
 /* Images styling */
@@ -470,4 +489,103 @@ article p + pre {
 .page-content pre + p,
 article pre + p {
   margin-top: 0.75rem;
+}
+
+/* Category badges */
+.badge {
+  font-weight: 500;
+  padding: 0.35em 0.65em;
+  border-radius: 4px;
+  transition: all var(--transition-speed) ease;
+}
+
+.badge:hover {
+  transform: translateY(-2px);
+}
+
+.badge.bg-primary {
+  background-color: var(--primary-color) !important;
+}
+
+/* Featured content section */
+.featured-content {
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  color: white;
+}
+
+.featured-content h2 {
+  color: white;
+}
+
+/* Animated underline for links - modified to be more subtle */
+.animated-link {
+  position: relative;
+  display: inline-block;
+  text-decoration: none; /* Ensure no default underline */
+}
+
+.animated-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 1px; /* Thinner line */
+  bottom: 0;
+  left: 0;
+  background-color: var(--accent-color);
+  transition: width 0.3s ease; /* Slightly faster */
+  opacity: 0.7; /* Semi-transparent */
+}
+
+.animated-link:hover::after {
+  width: 100%;
+}
+
+/* Improved post list */
+.post-list-group .list-group-item {
+  border-left: 3px solid transparent;
+  transition: all var(--transition-speed) ease;
+}
+
+.post-list-group .list-group-item:hover {
+  border-left: 3px solid var(--primary-color);
+  transform: translateX(5px);
+}
+
+/* Scroll animations - modified to be more subtle */
+.fade-in {
+  opacity: 0.9; /* Start with higher opacity so content is still visible */
+  transform: translateY(10px); /* Reduced movement */
+  transition: opacity 0.4s ease, transform 0.4s ease; /* Faster transition */
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  margin-bottom: 1rem;
+  border-collapse: collapse;
+}
+
+table th,
+table td {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+}
+
+table th {
+  background-color: var(--light-color);
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  table th {
+    background-color: var(--card-bg-color);
+  }
 } 

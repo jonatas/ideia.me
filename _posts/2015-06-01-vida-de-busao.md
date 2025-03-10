@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Vida de busão
-  categories: [pense]
+title: "Vida de busão"
+layout: post
+categories: ['pense']
+description: "Já completei três meses na Resultados Digitais e me tornei literalmente um cliente da Consórcio Fenix aqui de Florianópolis. Vou e volto todo dia do trabalho..."
 ---
-
 Já completei [três meses na Resultados Digitais](/tres-meses-na-resultados-digitais) e me tornei literalmente um cliente da Consórcio Fenix aqui de Florianópolis. Vou e volto todo dia do trabalho somando 54 km ida e volta. Moro no Ingleses e trabalho no Itacorubi então pego em média 2,5 horas de trânsito por dia. Logo, com uma matemática básica é possível saber que temos 20 dias úteis mês eu significa 50 horas de ônibus por mês. Isso é simplesmente uma QUINTA SEMANA DO MEU MÊS que fico dentro do ônibus.
 
 No começo ficava meio triste de ver as pessoas zombiziando no busão, mas agora não acho que elas estão infelizes ou que aquilo é ruim pra elas só acho que estão aproveitando para dormir mais. Eu ainda não consigo dormir no ônibus. Mas em conta disso já li praticamente 3 livros somente no busão e também estou ouvindo muitos podcasts.

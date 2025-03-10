@@ -1,9 +1,9 @@
 ---
+title: "Programar é uma droga"
 layout: post
-title: Programar é uma droga
-categories: [pense]
+categories: ['pense']
+description: "Sim, uma das mais pesadas que já usei."
 ---
-
 Sim, uma das mais pesadas que já usei.
 
 Tenho que admitir: Sou viciado em programar.

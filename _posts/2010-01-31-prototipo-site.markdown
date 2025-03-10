@@ -1,9 +1,9 @@
 ---
-  layout: post 
-  title: Protótipo do site
-  categories: [jekyll, prettify, javascript]
+title: "Protótipo do site"
+layout: post
+categories: ['jekyll', 'prettify', 'javascript']
+description: "Confira a primeira tentativa de leiaute do site."
 ---
-
 Confira a primeira tentativa de leiaute do site.
 
 ![prototipo]
@@ -26,5 +26,5 @@ Apenas usando o simples código do [prettify][prettify-code].
 </pre>
 </div>
 
-[prototipo]: /images/prototipo_site.jpg
+[prototipo]: /images/prototipo-site.jpg
 [prettify-code]:http://code.google.com/p/google-code-prettify/

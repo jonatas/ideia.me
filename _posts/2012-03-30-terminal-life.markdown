@@ -1,8 +1,8 @@
 ---
-  layout: post
-  title: Vida no terminal
+title: "Vida no terminal"
+layout: post
+description: "Existe uma gama de comandos muito forte para se tornar mais ágil no linux e também no msysgit e eu me sinto feliz em compartilhar aqui meus preferidos:"
 ---
-
 Existe uma gama de comandos muito forte para se tornar mais ágil no linux e também no msysgit e eu me sinto feliz em compartilhar aqui meus preferidos:
 
 ##  $!

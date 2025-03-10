@@ -1,9 +1,9 @@
 ---
-  title: Arteterapia o início
-  layout: post
-  categories: [pense, arteterapia]
+title: "Arteterapia o início"
+layout: post
+categories: ['pense', 'arteterapia']
+description: "Jônatas Davi Paganini, o que você está fazendo na pós de arteterapia. É isso mesmo? ARTETERAPIA? Mas você não é programador?"
 ---
-
 # Rá! meu primeiro fim de semana na pós graduação
 
 Jônatas Davi Paganini, o que você está fazendo na pós de *arteterapia*. É isso mesmo? ARTETERAPIA? Mas você não é programador?

@@ -1,8 +1,9 @@
 ---
+title: "Grepping SQL Code like a boss"
 layout: post
-title: Grepping SQL Code like a boss
+description: "Here's the outline of the content of my talk in Poland I presented at the
+Lambda Days 2024."
 ---
-
 Here's the outline of the content of my talk in Poland I presented at the
 [Lambda Days 2024](https://lambdadays.com/2024).
 

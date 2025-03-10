@@ -1,9 +1,9 @@
 ---
-title: Community is not for Sale
+title: "Community is not for Sale"
 layout: post
 categories: ['community']
+description: "You Cannot Buy a Community"
 ---
-
 **You Cannot Buy a Community**
 
 In an era of instant gratification and the commodification of every aspect of life, community stands as one of the last bastions of human connection that is not — or at least should not be — for sale. Our world is often painted with political and social brushstrokes, seen through the lens of economics. Yet, when it comes to true human connection, the exchange of currency matters little. In this opinion piece, we're leaving politics at the door and instead focusing on the intrinsic value of communities and the priceless nature of belonging in something truly organic. 

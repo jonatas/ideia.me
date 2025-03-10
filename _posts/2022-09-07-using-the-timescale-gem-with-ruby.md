@@ -1,9 +1,10 @@
 ---
+title: "Using the Timescale gem with Ruby"
 layout: post
 categories: time-series postgresql ruby
-title: Using the Timescale gem with Ruby
+description: "I joined Timescale as a developer advocate. One of my creative tasks there was live streaming.
+As I've been working with Ruby since 2007, I created a live st..."
 ---
-
 I joined Timescale as a developer advocate. One of my creative tasks there was live streaming.
 As I've been working with Ruby since 2007, I created a live streaming series about how to use Timescale with Ruby.
 

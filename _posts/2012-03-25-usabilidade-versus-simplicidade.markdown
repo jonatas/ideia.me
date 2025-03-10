@@ -1,9 +1,9 @@
 ---
-  title: Usabilidade versus simplicidade
-  layout: post
-  categories: [pense, usabilidade, simplicidade]
+title: "Usabilidade versus simplicidade"
+layout: post
+categories: ['pense', 'usabilidade', 'simplicidade']
+description: "Desde dezembro de 2011 troquei meu iPhone primeira geração (comprei em dezembro de 2007) por um celular com Android. Peguei um Galaxy Ace que é um modelo com..."
 ---
-
 Desde dezembro de 2011 troquei meu iPhone primeira geração (comprei em dezembro de 2007) por um celular com Android. Peguei um Galaxy Ace que é um modelo com hardware bem mais fraco do que meu iPhone antigo, e mesmo assim gostei muito do famoso robozinho.
 
 Comecei a desenvolver algumas brincadeiras e a algumas semanas atrás acabei trocando o Galaxy Ace por um Galaxy Note. Resultado: abandonei o iPhone e o iPad. Ontem fui dar uma "navegada no do facebook" com meu iPad, e simplesmente não consegui. Faltava o "Back button".

@@ -1,9 +1,8 @@
 ---
-  layout: post 
-  title: Google code playground 
-
+title: "Google code playground"
+layout: post
+description: "Esta semana vi uma twittada sobre o [google code playground][playground], e como mostra o printscreen abaixo, funciona mesmo! Acredito que esta plataforma po..."
 ---
-
 # Diverta-se no google code playground
 
 Esta semana vi uma twittada sobre o [google code playground][playground], e como mostra o printscreen abaixo, funciona mesmo! Acredito que esta plataforma pode ser realmente útil, e apartir dos exemplos prontos e rodando, se torna mais fácil das pessoas começarem a usar. Na imagem abaixo, estou [consultando o blog][blog-ange] da minha noiva Angela Maria Meili, veja o site dela em [www.consultoria-lingua.com][blog-ange].
@@ -60,4 +59,4 @@ Com poucas linhas de javascript puro, foi possível usufruir dos serviços do bl
 [playground]: http://code.google.com/apis/ajax/playground
 [blog-ange]: http://www.consultoria-lingua.com
 [pagina-html-usando-servico]: http://savedbythegoog.appspot.com/?id=3ccfc6e0bc3ed8159f3869fd773001b3551370c3
-[playground-printscreen]: /images/google_code_playground.jpg
+[playground-printscreen]: /images/google-code-playground.jpg

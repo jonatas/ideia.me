@@ -1,9 +1,9 @@
 ---
-layout: post
 title: "TimescaleDB Gem Continuous Aggregates Updates"
+layout: post
+description: "TimescaleDB is a popular open-source time-series database that extends PostgreSQL. It is designed to handle time-series data efficiently, making it an excell..."
 date: 2024-10-07
 ---
-
 TimescaleDB is a popular open-source time-series database that extends PostgreSQL. It is designed to handle time-series data efficiently, making it an excellent choice for IoT, finance, and other domains that require high-performance time-series storage and querying.
 
 Continuous Aggregates are a key feature of TimescaleDB that allow for efficient data aggregation and compression. They are materialized views that pre-compute and store the results of complex queries, which can significantly improve query performance and reduce resource usage.

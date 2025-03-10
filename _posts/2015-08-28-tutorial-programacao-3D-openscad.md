@@ -1,8 +1,10 @@
 ---
-  layout: post
-  title: "Programação 3D com OpenSCad"
+title: "Programação 3D com OpenSCad"
+layout: post
+description: "Estou impressionado com o OpenScad. Conheci essa ferramenta na Trilha de
+Impressão 3D no TDC de São Paulo esse ano. Com certeza posso dizer que foi um
+presen..."
 ---
-
 Estou impressionado com o [OpenScad](http://openscad.org). Conheci essa ferramenta na Trilha de
 Impressão 3D no TDC de São Paulo esse ano. Com certeza posso dizer que foi um
 presente para mim pois até agora não havia conseguido me apegar em nenhuma
@@ -87,7 +89,7 @@ for (i = [5:1]){
 }
 ```
 
-![Criando 5 esferas e transladando com um for repetitivo](/images/sphere_for_1_5.png)
+![Criando 5 esferas e transladando com um for repetitivo](/images/sphere-for-1-5.png)
 
 Uau, veja que a peça acima parece uma gota, mas também lembra um pião. Então
 vamos tentar produzir um peão.
@@ -99,11 +101,11 @@ um tamanho parecido com da [moeda de 25
 centavos](https://pt.wikipedia.org/wiki/Moeda_de_vinte_e_cinco_centavos_do_real),
 , com 24 mm.
 
-![Esfera transladando e 1 a 24 milímetros](/images/sphere_translated_24mm.png)
+![Esfera transladando e 1 a 24 milímetros](/images/sphere-translated-24mm.png)
 
 Adicionando um cilíndro na ponta para poder girar o pião na mão.
 
-![Esfera transladando e 1 a 24 milímetros com cilíndro](/images/sphere_translated_24mm_2.png)
+![Esfera transladando e 1 a 24 milímetros com cilíndro](/images/sphere-translated-24mm-2.png)
 
 ## Usando subtração de formas
 
@@ -119,7 +121,7 @@ Então é só aplicar a função `difference` para obter o objeto com a diferen�
 
 A função difference aceita múltiplos objetos, então é possível construir um objeto complexo e remover algo dentro dele. Apenas a última expressão é entendida como o objeto que será removido.
 
-![Esfera com difference abrindo um espaço para passar o prego com cilíndro](/images/piao_final.png)
+![Esfera com difference abrindo um espaço para passar o prego com cilíndro](/images/piao-final.png)
 
 Bom, nosso primeiro objeto está disponível opensource. Baixe, altere, compartilhe, imprima! Crie e distribua!
 

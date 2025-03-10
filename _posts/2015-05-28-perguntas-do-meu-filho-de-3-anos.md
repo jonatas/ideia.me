@@ -1,9 +1,9 @@
 ---
-  title: Perguntas do meu filho de 3 anos
-  layout: post
-  categories: [pense,sou-pai]
+title: "Perguntas do meu filho de 3 anos"
+layout: post
+categories: ['pense', 'sou-pai']
+description: "O meu filho Lorenzo está numa fase linda de muitas perguntas engraçadas, esquisitas e tudo mais.  Sempre me deparo com as mais diversas perguntas e resolvi a..."
 ---
-
 O meu filho Lorenzo está numa fase linda de muitas perguntas engraçadas, esquisitas e tudo mais.  Sempre me deparo com as mais diversas perguntas e resolvi anotar algumas para ir registrando pois provavelmente não lembrarei nem da metade daqui uns anos.
 
 - O que é trabalho?

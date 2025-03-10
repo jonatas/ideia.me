@@ -1,9 +1,9 @@
 ---
- layout: post 
- title: Currículo
- categories: curriculo
+title: "Currículo"
+layout: post
+categories: curriculo
+description: "Seguindo a [linha de pensamento da 37 signals][37signals-post], um currículo não deve ser cheio de fatos e anos irrelevantes. Precisando me contratar, [ligue..."
 ---
-
 ## Um estilo diferente de se escrever um currículo
 
 Seguindo a [linha de pensamento da 37 signals][37signals-post], um currículo não deve ser cheio de fatos e anos irrelevantes. Precisando me contratar, [ligue pra mim no número +55 46 9911 7879][cel] ou envie um email para <jonatasdp@gmail.com> e vamos descobrir se eu posso te ajudar.

@@ -1,11 +1,9 @@
 ---
- layout: post
- title: Disciplina no home office
- categories: [pense, homeoffice, produtividade]
+title: "Disciplina no home office"
+layout: post
+categories: ['pense', 'homeoffice', 'produtividade']
+description: "Já estou trabalhando em casa a mais de 3 anos e a satisfação por conseguir manter o trabalho em casa é muito grande. Hoje meu objetivo é comentar sobre a dis..."
 ---
-
- 
-
 Já estou trabalhando em casa a mais de 3 anos e a satisfação por conseguir manter o trabalho em casa é muito grande. Hoje meu objetivo é comentar sobre a disciplina, fator chave  para conquistar habilidade, confiança e profissionalismo no trabalho.
 
 Durante a maior parte deste período sempre trabalhei com programação em par e realmente existe um universo entre trabalhar em casa *sozinho* e *acompanhado*. O trabalho sozinho atinge o ápice da liberdade e facilmente pode se tornar uma pura libertinagem.

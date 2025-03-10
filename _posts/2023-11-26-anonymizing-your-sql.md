@@ -1,8 +1,8 @@
 ---
+title: "Anonymize your SQL statements"
 layout: post
-title: Anonymize your SQL statements
+description: "As a community manager at Timescale, I frequently engage with our vibrant community, helping members tackle a variety of SQL-related challenges. One common c..."
 ---
-
 As a community manager at Timescale, I frequently engage with our vibrant community, helping members tackle a variety of SQL-related challenges. One common concern that arises is the need to share SQL queries for collaboration or troubleshooting, without exposing sensitive data. Recognizing this need, I've embarked on developing a tool to anonymize SQL data effectively.
 
 Following my previous work on a SQL formatter, this new venture focuses on SQL anonymization - transforming sensitive database identifiers into non-sensitive equivalents while retaining the query's structure and logic.

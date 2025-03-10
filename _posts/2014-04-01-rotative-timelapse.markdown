@@ -1,9 +1,9 @@
 ---
-  layout: post
-  categories: [python, raspberry pi]
-  title: Timelapse girando no Raspberry PI
+title: "Timelapse girando no Raspberry PI"
+layout: post
+categories: ['python', 'raspberry pi']
+description: "A internet das coisas está aí! Então também decidi entrar para o mundo dos embarcados e conectar algumas dessas coisas :)"
 ---
-
 A [internet das coisas](http://pt.wikipedia.org/wiki/Internet_das_Coisas) está aí! Então também decidi entrar para o mundo dos embarcados e conectar algumas dessas coisas :)
 
 Inicialmente comprei um beaglebone e agora um raspberry pi.

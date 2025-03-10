@@ -1,9 +1,9 @@
 ---
-  title: Como foi a Rails Rumble 2012
-  layout: post
-  categories: [churumelas, railsrumble, rails, pense]
+title: "Como foi a Rails Rumble 2012"
+layout: post
+categories: ['churumelas', 'railsrumble', 'rails', 'pense']
+description: "Como postei [minhas ideias sobre rails rumble] a alguns dias atrás, agora realmente podemos falar do [churumelas], pois assim foi batizado. Após pouco tempo ..."
 ---
-
 Como postei [minhas ideias sobre rails rumble] a alguns dias atrás, agora realmente podemos falar do [churumelas], pois assim foi batizado. Após pouco tempo pensando no nome lembrei desta expressão que pra mim sempre tem um sotaque nordestino de ser.
 
 

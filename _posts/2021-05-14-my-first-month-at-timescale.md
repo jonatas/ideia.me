@@ -1,8 +1,8 @@
 ---
+title: "My first month at Timescale"
 layout: post
-title: My first month at Timescale
+description: "Time flies! and here I am to share a bit more about my first-month adventures working on a genuinely open source company."
 ---
-
 Time flies! and here I am to share a bit more about my first-month adventures working on a genuinely open source company.
 
 I'm so excited that sometimes, I can't resist. It's midnight yet, and here I am on my iTerm full screen alone with my thoughts... and my Vim. What a mind-blowing month!

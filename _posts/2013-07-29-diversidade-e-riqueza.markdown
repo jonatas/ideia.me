@@ -1,8 +1,8 @@
 ---
-  layout: post
-  title: A diversidade é a riqueza
+title: "A diversidade é a riqueza"
+layout: post
+description: "Durante as minhas últimas aulas de arteterapia tenho acompanhado uma série de pessoas muito diferentes de mim. Estou facinado pela quantidade de opiniões e m..."
 ---
-
 Durante as minhas últimas aulas de [arteterapia](http://arteterapia.ideia.me "Veja algumas coisas que pensei a respeito aqui") tenho acompanhado uma série de pessoas muito diferentes de mim. Estou facinado pela quantidade de opiniões e mundos diferentes e ao mesmo tempo tão próximos.
 
 Na turma eu sim que me pergundo o que estou fazendo lá, e lá mesmo eu encontro a resposta: **buscando riqueza no conhecimento**. Estou muito ciente de como encarei está pós graduação como uma ferramenta de autoreflexão e com esta consegui iniciar uma série de pequenas mudanças de perspectivas de vida e do futuro.

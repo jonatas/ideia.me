@@ -1,10 +1,9 @@
 ---
- layout: post
- title: PostgreSql Tricks
- categories: postgresql
-
+title: "PostgreSql Tricks"
+layout: post
+categories: postgresql
+description: "Não sabe o tamanho dos seus bancos de dados no PostgreSql? Este BD opensource maravilhoso possuí uma série de tabelas informativas, que são reflexivas a situ..."
 ---
-
 # Quanto espaço seu banco PostgreSql usa?
 
 Não sabe o tamanho dos seus bancos de dados no PostgreSql? Este BD opensource maravilhoso possuí uma série de tabelas informativas, que são reflexivas a situação atual SGBD. Em outras palavras, ele possuí tabelas que guardam informações sobre toda estrutura do próprio banco de dados. 

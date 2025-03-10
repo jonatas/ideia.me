@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Raspibian sem mouse
-  categories: [raspberry pi, linux, debian, interface]
+title: "Raspibian sem mouse"
+layout: post
+categories: ['raspberry pi', 'linux', 'debian', 'interface']
+description: "Durante os últimos dias venho me desafiando a não comprar um mouse para utilizar no Raspberry PI. Está rodando o Raspibian original mas acabo utilizando a in..."
 ---
-
 Durante os últimos dias venho me desafiando a não comprar um mouse para utilizar no Raspberry PI. Está rodando o Raspibian original mas acabo utilizando a interface gráfica poucas vezes.
 
 No entanto precisei aprender um pouco sobre esta interface pois instalei o puredata e não dá pra fazer muita coisa sem mouse nele.

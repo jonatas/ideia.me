@@ -1,9 +1,10 @@
 ---
+title: "Semantic fields of the mind"
 layout: post
-title: Semantic fields of the mind
 categories: ['semantic fields', 'think']
+description: "Thursday night, I arrived from Athens and past weekend I had the most insightful
+update in my mindset until now. I'll refer here as semantic fields."
 ---
-
 Thursday night, I arrived from Athens and past weekend I had the most insightful
 update in my mindset until now. I'll refer here as semantic fields.
 

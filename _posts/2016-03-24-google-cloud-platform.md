@@ -1,8 +1,9 @@
 ---
-  layout: post
-  title: Google Cloud Platform
+title: "Google Cloud Platform"
+layout: post
+description: "Após começar a me interessar mais por Go Lang,
+estou iniciando minha história com o Google Cloud Platform."
 ---
-
 Após começar a me [interessar mais por Go Lang](/comecando-com-go-lang),
 estou iniciando minha história com o [Google Cloud Platform](http://cloud.google.com).
 

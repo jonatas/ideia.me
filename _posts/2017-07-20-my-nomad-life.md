@@ -1,9 +1,9 @@
 ---
+title: "My nomad life"
 layout: post
-title: My nomad life
 tags: ['travel', 'bike', 'nomad life']
+description: "Two months ago I left Florianópolis with my family to start our nomad journey."
 ---
-
 Two months ago I left Florianópolis with my family to start our nomad journey.
 
 {% instagram BVLJF6gBfpg %}

@@ -1,9 +1,9 @@
 ---
+title: "Life before and after Chat GPT"
 layout: post
-title: Life before and after Chat GPT
 categories: ai think chat-gpt
+description: "As a Developer Advocate, I have to create high-quality content quickly and efficiently. However, before I started using Chat GPT, my workflow was often slow ..."
 ---
-
 # Life Before and After Chat GPT
 
 As a Developer Advocate, I have to create high-quality content quickly and efficiently. However, before I started using Chat GPT, my workflow was often slow and cumbersome. Coming up with the right words and phrases to convey my ideas was a time-consuming and sometimes challenging process.

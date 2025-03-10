@@ -1,8 +1,9 @@
 ---
 layout: post
-categories: [time-series, timescaledb, opensource, performance, ruby]
+categories: ['time-series', 'timescaledb', 'opensource', 'performance', 'ruby']
+description: "Adding to my goal of being helpful in the software world, I had my first contribution to RubyGems
+[merged][new_pr] 🎉"
 ---
-
 Adding to my goal of being helpful in the software world, I had my first contribution to RubyGems
 [merged][new_pr] 🎉
 

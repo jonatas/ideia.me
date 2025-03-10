@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Meu iPad Chegou!
-  categories: [pense, iPad, brinquedos]
+title: "Meu iPad Chegou!"
+layout: post
+categories: ['pense', 'iPad', 'brinquedos']
+description: "Comprei meu iPad! que legal ele chegou! Já faz uns 15 dias e simplesmente depois disso o meu blog se desativou para dar total atenção a este novo brinquedo."
 ---
-
 Comprei meu iPad! que legal ele chegou! Já faz uns 15 dias e simplesmente depois disso o meu blog se desativou para dar total atenção a este novo brinquedo.
 
 As impressões iniciais são realmente impactantes. Tudo feito com muita simplicidade, é fácil e rápido. Em comparação com meu iPhone que têm quase 3 anos, parece uma carrocinha que não anda. Comprei alguns softwares para o iPad e instalei também no iPhone, simplesmente demora umas 5 vezes o tempo para realizar a mesma tarefa.

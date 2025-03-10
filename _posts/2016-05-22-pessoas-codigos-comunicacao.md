@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Pessoas, códigos, comunicação
-  categories: [pense]
+title: "Pessoas, códigos, comunicação"
+layout: post
+categories: ['pense']
+description: "Estou muito feliz por aprender a usar a minha mente de programador para outras coisas que não são programar. Que a mesma clareza que preciso ter para program..."
 ---
-
 Estou muito feliz por aprender a usar a minha mente de programador para outras coisas que não são programar. Que a mesma clareza que preciso ter para programar posso usar para compor um discurso ou ensinar as pessoas a compreender alguma coisa em específico.
 
 Que com uma boa comunicação e boas analogias é possível trazer compreensão mesmo que superficial para as pessoas mais leigas sobre os assuntos mais complexos.

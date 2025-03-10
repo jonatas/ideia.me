@@ -1,9 +1,10 @@
 ---
+title: "Adventures on automated code replacement"
 layout: post
-title: Adventures on automated code replacement
 tags: ['ruby', 'ast', 'fast']
+description: "A few months ago I started working on fast.
+The tool is a kind of mini-language focused in find code by abstract syntax tree representation."
 ---
-
 A few months ago I started working on [fast](https://github.com/jonatas/fast).
 The tool is a kind of mini-language focused in find code by abstract syntax tree representation.
 

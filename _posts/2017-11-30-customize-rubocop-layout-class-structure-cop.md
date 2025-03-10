@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Customize RuboCop Layout/ClassStructure cop
-  tags: [ruby RuboCop]
+title: "Customize RuboCop Layout/ClassStructure cop"
+layout: post
+tags: ['ruby RuboCop']
+description: "I'm really proud to announce my new contribuition to RuboCop."
 ---
-
 I'm really proud to announce my new contribuition to RuboCop.
 
 Some days ago I contributed improving the

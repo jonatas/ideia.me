@@ -1,12 +1,9 @@
 ---
-  layout: post
-  title: Cognitividade da Interface
-  categories: cognitividade ux interface
-
+title: "Cognitividade da Interface"
+layout: post
+categories: cognitividade ux interface
+description: "Nos últimos dias tenho observado muito sobre a cognitividade da interface. Trata-se de fazer menos e criar mais resultados. Como os sistemas podem impedir o ..."
 ---
-
-
-
 Nos últimos dias tenho observado muito sobre a cognitividade da interface. Trata-se de fazer menos e criar mais resultados. Como os sistemas podem impedir o usuário de realizar a sua tarefa impondo um processo árduo e nada cognitivo. A busca dos 80/20 têm sido muito forte agora que sou freelancer e consultor. Tenho conversado muito com meus clientes sobre fazer o mínimo de esforço render o máximo de resultados.
 
 Um aspecto difícil de inovar é manter a cognitividade da interface enquanto trazer uma nova experiência com o usuário. Atualmente não uso o Numbers da Apple para nada, mas me obriguei a comprar pela curiosidade de simplificar uma ferramenta tão abrangente como uma planilha para um dispositívo como o iPad.

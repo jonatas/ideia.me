@@ -1,12 +1,9 @@
 ---
-  layout: post
-  title: Expressões Regulares + Ruby = \*maravilhas 
-  categories: ['ruby', 'regexp']
-
+title: "Expressões Regulares + Ruby = \*maravilhas"
+layout: post
+categories: ['ruby', 'regexp']
+description: "Sempre falo, que depois que conheci as expressões regulares, minha vida mudou! Semana passada, tive que converter um backup de um banco de dados do Oracle pa..."
 ---
-
-
-
 Sempre falo, que depois que conheci as expressões regulares, minha vida mudou! Semana passada, tive que converter um backup de um banco de dados do Oracle para o PostgreSql, então, reparei algumas diferenças na sintaxe.
 
 A ideia para solucionar a diferença, foi criar uma método simples que conseguia manipular o código sql do Oracle e transformar no código PostgreSql. Cada um dos casos acima não passa de:

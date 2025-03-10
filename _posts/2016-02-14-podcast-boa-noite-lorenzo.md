@@ -1,9 +1,11 @@
 ---
-  title: Podcast Boa Noite Lorenzo
-  layout: post
-  tags: [podcast, pense]
+title: "Podcast Boa Noite Lorenzo"
+layout: post
+tags: ['podcast', 'pense']
+description: "Estou gravando uma série de conversas aleatórias com meu filho Lorenzo que está
+com 4 anos. Faz um tempo que eu venho gravando e decidi que vou começar a
+com..."
 ---
-
 Estou gravando uma série de conversas aleatórias com meu filho Lorenzo que está
 com 4 anos. Faz um tempo que eu venho gravando e decidi que vou começar a
 compartilhar.

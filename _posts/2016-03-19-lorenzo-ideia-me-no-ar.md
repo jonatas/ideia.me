@@ -1,9 +1,9 @@
 ---
-  title: lorenzo.ideia.me no ar!
-  layout: post
-  tags: [podcast]
+title: "lorenzo.ideia.me no ar!"
+layout: post
+tags: ['podcast']
+description: "http://lorenzo.ideia.me está no ar!"
 ---
-
 http://lorenzo.ideia.me está no ar!
 
 Estive meio decepcionado com a qualidade do [podbean](http://podbean.com) e resolvi fazer meu próprio site.

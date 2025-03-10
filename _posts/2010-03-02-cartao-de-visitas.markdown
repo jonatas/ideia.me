@@ -1,12 +1,9 @@
 ---
-  layout: post
-  title: Cartão de visitas
-  categories: ['terminal']
-
+title: "Cartão de visitas"
+layout: post
+categories: ['terminal']
+description: "A versão original do meu cartão de visitas, foi feita assim:"
 ---
-
-
-
 A versão original do meu cartão de visitas, foi feita assim:
 
 <div><pre class="prettyprint">
@@ -36,5 +33,5 @@ E depois fiz o verso:
 
 Agora vou passar para a arte ser criada, e depois impressão!
 
-[frente]: /images/cartao_frente.jpg
-[verso]: /images/cartao_verso.jpg
+[frente]: /images/cartao-frente.jpg
+[verso]: /images/cartao-verso.jpg

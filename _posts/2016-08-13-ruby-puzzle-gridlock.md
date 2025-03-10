@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Gridlock game - solving with Ruby
-  categories: ['ruby']
+title: "Gridlock game - solving with Ruby"
+layout: post
+categories: ['ruby']
+description: "I really love game challenges and everytime I get a new game I think about how can I solve it via code or represent the game idea."
 ---
-
 I really love game challenges and everytime I get a new game I think about how can I solve it via code or represent the game idea.
 
 # The Gridlock Game

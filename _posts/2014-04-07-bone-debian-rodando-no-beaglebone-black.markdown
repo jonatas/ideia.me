@@ -1,9 +1,9 @@
 ---
-  layout: post
-  categories: [beaglebone debian]
-  title: Bone Debian rodando no BeagleBone Black
+title: "Bone Debian rodando no BeagleBone Black"
+layout: post
+categories: ['beaglebone debian']
+description: "Após alguns dias me adaptando ao Angstrom, aqui estou eu tentando instalar o Debian no meu Beaglebone."
 ---
-
 Após alguns dias me adaptando ao Angstrom, aqui estou eu tentando instalar o Debian no meu Beaglebone.
 
 Comprei a alguns dias e o Angstrom está com um problema relacionado ao Hot Plugging e não consigo acessar todas as vezes que ligo ele via usb.

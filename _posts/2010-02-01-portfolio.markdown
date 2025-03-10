@@ -1,10 +1,20 @@
 ---
- layout: post 
- title: Portfolio::Base 
- categories: portfolio
-
+title: "Portfolio::Base"
+layout: post
+categories: portfolio
+description: "<style>
+  #projetos_comerciais, #outros_projetos {
+    color:orange;
+  }
+  #coopnet {
+    color: 6C9C2C;
+  }
+  #agecel {
+    color: 5EC2C7;
+  } 
+  #site {
+  ..."
 ---
-
 <style>
   #projetos_comerciais, #outros_projetos {
     color:orange;

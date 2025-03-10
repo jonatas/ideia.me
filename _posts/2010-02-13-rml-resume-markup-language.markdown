@@ -1,9 +1,9 @@
 ---
- layout: post
- title: RML - Resume Markup Language
- categories: [code for fun, dsl, linguagem]
+title: "RML - Resume Markup Language"
+layout: post
+categories: ['code for fun', 'dsl', 'linguagem']
+description: "Como não queria escrever um currículo, então criei este RML - Resume Markup Language, que se trata apenas de uma sintaxe inspirada em JSON."
 ---
-
 # RML - Resume Markup Language
 
 Como não queria escrever um currículo, então criei este RML - Resume Markup Language, que se trata apenas de uma sintaxe inspirada em JSON.

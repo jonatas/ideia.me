@@ -30,17 +30,17 @@
         "slides": "2PACX-1vTcncQivyEhJ8oUwsLVFFWFEaIhvvUcI-20zVK9EwNdj7udCToetUHxCyK_sEOmOl1nkrvVjOMYmWWj",
         "images": [
           {
-            "src": "/images/Krakow_Ruby_User_Group_Jonatas_Speaking.jpg",
+            "src": "/images/krakow-ruby-user-group-jonatas-speaking.jpg",
             "alt": "Speaking at Krakow Ruby User Group",
             "caption": "Introducing TimescaleDB to the Ruby community"
           },
           {
-            "src": "/images/Krakow_Ruby_User_Group_Jonatas_Speaking-profile-half-body.jpg",
+            "src": "/images/krakow-ruby-user-group-jonatas-speaking-profile-half-body.jpg",
             "alt": "Presenting at KRUG",
             "caption": "Sharing insights about time-series data in Ruby"
           },
           {
-            "src": "/images/Krakow_Ruby_User_Group_Jonatas_Networking.jpg",
+            "src": "/images/krakow-ruby-user-group-jonatas-networking.jpg",
             "alt": "Networking at KRUG",
             "caption": "Engaging with the Ruby community in Krakow"
           }
@@ -100,22 +100,22 @@
       "media": {
         "images": [
           {
-            "src": "/images/Krakow_Ruby_Community_Conference_Performance_workshop.jpg",
+            "src": "/images/krakow-ruby-community-conference-performance-workshop.jpg",
             "alt": "Leading the Performance Workshop",
             "caption": "Teaching PostgreSQL optimization techniques to Ruby developers"
           },
           {
-            "src": "/images/Krakow_Ruby_Community_Conference_Performance_workshop-full-room.jpg",
+            "src": "/images/krakow-ruby-community-conference-performance-workshop-full-room.jpg",
             "alt": "Full workshop room",
             "caption": "Engaging with a packed room of Ruby developers"
           },
           {
-            "src": "/images/Krakow_Ruby_Community_Conference_Jonatas_networking.jpg",
+            "src": "/images/krakow-ruby-community-conference-jonatas-networking.jpg",
             "alt": "Networking at the conference",
             "caption": "Building connections in the Ruby community"
           },
           {
-            "src": "/images/Krakow_Ruby_Community_Conference_Jonatas_Scarf_Gift.jpg",
+            "src": "/images/krakow-ruby-community-conference-jonatas-scarf-gift.jpg",
             "alt": "Receiving a gift from the community",
             "caption": "Heartwarming moment with the Krakow Ruby community"
           }
@@ -207,7 +207,7 @@
       "media": {
         "images": [
           {
-            "src": "/images/Krakow_Ruby_Community_Conference_Performance_Michal_Mariuz_conf_organizers.jpg",
+            "src": "/images/krakow-ruby-community-conference-performance-michal-mariuz-conf-organizers.jpg",
             "alt": "With conference organizers in Krakow",
             "caption": "Great discussions with the conference organizers"
           }

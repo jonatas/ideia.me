@@ -1,8 +1,8 @@
 ---
+title: "Load error - libpq no such file"
 layout: post
-title: Load error - libpq no such file
+description: "This week I was updating my [TimescaleDB extension][1] locally on my Macbook M1, and it seems I broke other stuff as I ended up in a recursive upgrade of ext..."
 ---
-
 This week I was updating my [TimescaleDB extension][1] locally on my Macbook M1, and it seems I broke other stuff as I ended up in a recursive upgrade of extra tools.
 
 I end up facing the following error:

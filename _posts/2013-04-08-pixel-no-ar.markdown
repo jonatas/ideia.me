@@ -1,11 +1,9 @@
 ---
-  layout: post
-  title: Pixel no ar!
-  categories: [javascript, meteor js, pixel, opensource, heroku]
+title: "Pixel no ar!"
+layout: post
+categories: ['javascript', 'meteor js', 'pixel', 'opensource', 'heroku']
+description: "Essa semana foi [incrivelmente positiva][pixel] em minha vida. Terça feira estive analisando o [meteor] e foi amor a primeira vista."
 ---
-
-
-
 Essa semana foi [incrivelmente positiva][pixel] em minha vida. Terça feira estive analisando o [meteor] e foi amor a primeira vista.
 
 ## Meteor JS é realtime

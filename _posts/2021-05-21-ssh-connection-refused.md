@@ -1,8 +1,8 @@
 ---
+title: "SSH connection refused"
 layout: post
-title: SSH connection refused
+description: "When I'm playing with my Raspberry Pi, I install a new version of the system, and then ssh does not work. I'm constantly googling around this, and here are m..."
 ---
-
 When I'm playing with my Raspberry Pi, I install a new version of the system, and then ssh does not work. I'm constantly googling around this, and here are my steps to check it. Look at the error:
 
 ```

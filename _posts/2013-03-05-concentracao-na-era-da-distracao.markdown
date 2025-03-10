@@ -1,11 +1,9 @@
 ---
-  title: Concentração na era da distração
-  layout: post
-  categories: [pense]
+title: "Concentração na era da distração"
+layout: post
+categories: ['pense']
+description: "Este mês iniciei como professor na UNOESC, aqui em São Miguel do Oeste, SC. Apenas com uma turma estou pasmo com o poder da internet sobre as aulas. Mesmo du..."
 ---
-
-
-
 Este mês iniciei como professor na UNOESC, aqui em São Miguel do Oeste, SC. Apenas com uma turma estou pasmo com o poder da internet sobre as aulas. Mesmo durante a pós graduação observei que a internet deixou de ser uma ferramenta, tem sido uma arma destruidora na mão dos alunos, tomados de libertinagem.
 
 Na minha concepção o principal problema é relacionado ao 'costume' de abrir o computador e não saber o que fazer. Isso é por que o computador tem muitas coisas pra você fazer, e a falta de habilidade de usar o computador (mesmo o celular) para as coisas certas nas horas certas torna as pessoas distraídas.

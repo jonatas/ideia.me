@@ -1,9 +1,9 @@
 ---
+title: "Vida de bike"
 layout: post
-title: Vida de bike
-categories: ['pense','bike','mobilidade']
+categories: ['pense', 'bike', 'mobilidade']
+description: "Felizmente não estou escrevendo mais um capítulo da minha vida de busão pois comprei uma bike :)"
 ---
-
 Felizmente não estou escrevendo mais um capítulo da minha [vida de busão](/vida-de-busao) pois comprei uma bike :)
 
 {% instagram 992O1xHfex %}

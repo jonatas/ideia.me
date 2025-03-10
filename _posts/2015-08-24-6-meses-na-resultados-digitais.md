@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: 6 meses na Resultados Digitais
-  categories: [Resultados Digitais]
+title: "6 meses na Resultados Digitais"
+layout: post
+categories: ['Resultados Digitais']
+description: "Essa semana completei 6 meses na Resultados Digitais. Durante esse meio ano de vida tenho certeza que a palavra que mais levo é aprendizado."
 ---
-
 Essa semana completei 6 meses na Resultados Digitais. Durante esse meio ano de vida tenho certeza que a palavra que mais levo é aprendizado.
 
 Estive participando ativamente da equipe e estou me sentindo muito mais a vontade.

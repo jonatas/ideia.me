@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: WebOrb + ActiveRecord
-  categories: [weborb, flex, rails]
+title: "WebOrb + ActiveRecord"
+layout: post
+categories: ['weborb', 'flex', 'rails']
+description: "WebOrb tem se demonstrado muito bom no seu trabalho, estou gostando de desenvolver com ele, após descobrir que qualquer classe do ruby, não apenas as classes..."
 ---
-
 WebOrb tem se demonstrado muito bom no seu trabalho, estou gostando de desenvolver com ele, após descobrir que qualquer classe do ruby, não apenas as classes Service podem ser usadas como objetos remotos, fiquei muito feliz e logo tive boas experiências.
 
 Boas experiências é poder chamar um ActiveRecord puramente apartir do flex:

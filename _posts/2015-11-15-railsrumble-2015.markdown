@@ -1,9 +1,10 @@
 ---
-  layout: post
-  title: Rails Rumble 2015
-  categories: [railsrumble, rails, pense]
+title: "Rails Rumble 2015"
+layout: post
+categories: ['railsrumble', 'rails', 'pense']
+description: "Este ano participei novamente do Rails Rumble e foi
+muito legal! Minha terceira participação!"
 ---
-
 Este ano participei novamente do [Rails Rumble](http://railsrumble.com) e foi
 muito legal! Minha terceira participação!
 

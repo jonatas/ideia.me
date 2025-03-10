@@ -1,8 +1,9 @@
 ---
-  title: Rails Rumble vem aí
-  layout: post
+title: "Rails Rumble vem aí"
+layout: post
+description: "Já se passou um ano que eu e a [Eliége Jachini][0] trabalhamos no [churumelas][1] e aí vamos
+nós novamente para [railsrumble][2]!"
 ---
-
 Já se passou um ano que eu e a [Eliége Jachini][0] trabalhamos no [churumelas][1] e aí vamos
 nós novamente para [railsrumble][2]!
 

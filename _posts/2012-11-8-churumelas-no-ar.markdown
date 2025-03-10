@@ -1,9 +1,9 @@
 ---
-  title: Não me venha com churumelas!
-  layout: post
-  categories: [ruby, rails, churumelas, railsrumble]
+title: "Não me venha com churumelas!"
+layout: post
+categories: ['ruby', 'rails', 'churumelas', 'railsrumble']
+description: "Após quase um mês do [Rails Rumble] consegui migrar e fazer [algumas modificações][meu_fork] da [versão original] do Churumelas. [FINALMENTE está no AR!][chu..."
 ---
-
 Após quase um mês do [Rails Rumble] consegui migrar e fazer [algumas modificações][meu_fork] da [versão original] do Churumelas. [FINALMENTE está no AR!][churumelas]!
 
 Fiquei realmente empolgado com a ideia do evento e também do meu software. Então agora também está rodando com o sistema de pontuação e sobre o sandbox do jruby para ficar mais seguro.

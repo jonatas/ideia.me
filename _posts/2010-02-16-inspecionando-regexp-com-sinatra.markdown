@@ -1,10 +1,9 @@
 ---
-  layout: post 
-  title: Inspecionando expressões regulares com Sinatra! 
-
-  categories: ['ruby', 'sinatra', 'regexp']
+title: "Inspecionando expressões regulares com Sinatra!"
+layout: post
+categories: ['ruby', 'sinatra', 'regexp']
+description: "Expressões regulares, muitas vezes são difíceis de compreender e também de testar. Uma boa alternativa, é inspecionar os resultados enquanto estiver construi..."
 ---
-
 # Inspecionando expressões regulares com Sinatra
 
 Expressões regulares, muitas vezes são difíceis de compreender e também de testar. Uma boa alternativa, é inspecionar os resultados enquanto estiver construindo a expressão.

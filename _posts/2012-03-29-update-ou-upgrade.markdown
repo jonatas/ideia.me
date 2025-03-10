@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Update ou upgrade
-  categories: [decisoes, pense]
+title: "Update ou upgrade"
+layout: post
+categories: ['decisoes', 'pense']
+description: "Esta semana estou pensando muito em como irei me apresentar para o mundo no meu modelo de freelancer. Percebi que o site está desatualizado pois enquanto fui..."
 ---
-
 Esta semana estou pensando muito em como irei me apresentar para o mundo no meu modelo de freelancer. Percebi que o site está desatualizado pois enquanto fui sócio da [Executive] me dediquei totalmente ao negócio e acabei deixando de lado a atualização do meu trabalho e curriculo.
 
 Comecei a navegar novamente e ver tantos posts e tantas outras ideias que desenvolvi até 2010 e quanta coisa eu tinha feito de lá pra cá para adicionar a este portfolio e como eu já penso diferente de lá pra cá. Tanto na forma de exposição das ideias e distribuição do conteúdo quanto na maneira de fazer o próprio site.

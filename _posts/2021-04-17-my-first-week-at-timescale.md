@@ -1,10 +1,9 @@
 ---
-title: My first week at Timescale
+title: "My first week at Timescale"
 layout: post
+description: "I'm thrilled to announce that I joined [Timescale] as a developer advocate. My first week ended with a lot of excitement about what comes next."
 date: 2021-04-17
 ---
-
-
 I'm thrilled to announce that I joined [Timescale] as a developer advocate. My first week ended with a lot of excitement about what comes next.
 
 I love working with Postgresql. It was always my brainless choice for any backend project I worked on that needs a relational database.

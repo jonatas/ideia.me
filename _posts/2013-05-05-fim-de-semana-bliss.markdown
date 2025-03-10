@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Fim de semana bliss
-  categories: [Bliss, linguagem, acessibilidade]
+title: "Fim de semana bliss"
+layout: post
+categories: ['Bliss', 'linguagem', 'acessibilidade']
+description: "Este fim de semana estive na minha pós graduação estudando sobre educação especial e arte. Então assisti um vídeo falando sobre a integração entre alunos esp..."
 ---
-
 Este fim de semana estive na minha pós graduação estudando sobre educação especial e arte. Então assisti um vídeo falando sobre a integração entre alunos especiais e sistemas de educação mais híbridos e multi-disciplinares com sistemas de inclusão e acessibilidade muito evoluídos. Então havia uma mãe falando o quanto havia mudado sua vida conhecer a linguagem ["bliss"][1]. Não bastassem as 15 horas de pós graduação me internei em [uma][2] [série][3] [de][4] [links][5] [para][6] [aprender][7] essa [linguagem][1], mas desta vez não era de programação.
 
 

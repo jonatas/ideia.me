@@ -1,9 +1,10 @@
 ---
-  layout: post
-  title: Começando com GO Lang
-  categories: ['pense', 'linguagens', 'golang']
+title: "Começando com GO Lang"
+layout: post
+categories: ['pense', 'linguagens', 'golang']
+description: "Estou a alguns meses trabalhando com  o Go e estou muito empolgado com esta
+linguagem."
 ---
-
 Estou a alguns meses trabalhando com  o Go e estou muito empolgado com esta
 linguagem.
 

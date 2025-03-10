@@ -1,10 +1,9 @@
 ---
- layout: post
- title: A linguagem SQL
- categories: postgresql
-
+title: "A linguagem SQL"
+layout: post
+categories: postgresql
+description: "Apesar de não ser um fã de desenvolvimento orientado a banco de dados, à dois anos atrás [trabalhei em um ensaio do TCC][appointme], em cima de um projeto se..."
 ---
-
 # Um projeto de SQL comentado
 
 Apesar de não ser um fã de desenvolvimento orientado a banco de dados, à dois anos atrás [trabalhei em um ensaio do TCC][appointme], em cima de um projeto sem BD.
@@ -274,5 +273,5 @@ INSERT INTO conversas (menina_id, menino_id, mesa_id) VALUES (9,2,2);
 
 Bom, apesar do exemplo ser simples, foi possível mostrar algumas funcionalidades do banco PostgreSql, que muitas vezes, estes pequenos códigos se tornam úteis e interessantes!
 
-[der-bd]: /images/der_ponto_de_encontro.jpg
+[der-bd]: /images/der-ponto-de-encontro.jpg
 [appointme]: http://github.com/jonatas/appointme

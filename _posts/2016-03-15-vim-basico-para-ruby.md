@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Vim básico para trabalhar com Ruby
-  categories: ['vim','unix']
+title: "Vim básico para trabalhar com Ruby"
+layout: post
+categories: ['vim', 'unix']
+description: "Estou usando o vim a 10 anos e não consigo migrar deste editor."
 ---
-
 Estou usando o vim a 10 anos e não consigo migrar deste editor.
 
 Durante os últimos anos parece que nada mudou e minha produtividade parece

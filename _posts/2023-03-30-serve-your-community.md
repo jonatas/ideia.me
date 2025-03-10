@@ -1,9 +1,8 @@
 ---
 layout: post
 categories: ['public speaking', 'conferences', 'community']
+description: "In the last few years, I've felt incredibly fortunate to have received so many approvals to speak at conferences and actively participate in various tech com..."
 ---
-
-
 In the last few years, I've felt incredibly fortunate to have received so many approvals to speak at conferences and actively participate in various tech communities. I often talk to people who are disappointed about not getting approvals to speak. After observing their concerns, I decided to write about the lessons I've learned from submitting proposals over the last eight years.
 
 The main resource you have to get approved is your own experience and reputation, but often your reputation doesn't match the actual community needs. In short, my advice is to **serve your community**. Try to propose value to the community, not just what you want to share with them. If you're invited to lead a keynote session, you may already be a step ahead and able to share more inspiring thoughts. Otherwise, focus on being of service to your community.

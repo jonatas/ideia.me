@@ -1,10 +1,9 @@
 ---
-  layout: post
-  title: De volta as aulas
-  categories: ['unipar', 'artigo', 'estatistica', 'ruby']
-
+title: "De volta as aulas"
+layout: post
+categories: ['unipar', 'artigo', 'estatistica', 'ruby']
+description: "Este é meu 5 de 4 anos na Unipar, fazendo o curso de sistemas de informação.  Após desistir da matéria de estatística o ano passado, estou voltando a todo va..."
 ---
-
 # De volta a Unipar
 
 Este é meu 5 de 4 anos na Unipar, fazendo o curso de sistemas de informação.  Após desistir da matéria de estatística o ano passado, estou voltando a todo vapor, apenas para terminar três matérias. O ano passado, desisti desta matéria por passar [algumas aulas programando os exemplos abordados][url-df] em aula, então este ano, a minha pretensão é levar este conteúdo mais a sério.

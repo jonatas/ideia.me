@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Retrospectiva 2013
-  categories: [pense,sou-pai,retrospective]
+title: "Retrospectiva 2013"
+layout: post
+categories: ['pense', 'sou-pai', 'retrospective']
+description: "Impossível lembrar de tantas coisas que acontecem em apenas um ano. Completei 27 a poucos dias e refletir sobre o passado nos ajuda a estabelecer perspectiva..."
 ---
-
 Impossível lembrar de tantas coisas que acontecem em apenas um ano. Completei 27 a poucos dias e refletir sobre o passado nos ajuda a estabelecer perspectivas melhores para os próximos anos. Ver meus erros e acertos me ajuda a buscar alternativas diferentes mais e mais.
 
 Trabalhei muito em meus projetos pessoais e ideias que inicialmente não tem fins lucrativos. Essas noitadas de programação que não me dão renda são as ideias que me sinto mais orgulhoso de ter feito. E são nessas noites que saem as coisas que literalmente me movem a aprender e explorar novas ferramentas e novas ideias. E que inicialmente não perecem a uma finalidade financeira, mas agregam bagagem de experiência que estão constantemente mudando os rumos da minha vida. Sinto isso e vibro todo dia aprendendo coisas novas, vendo as tecnologias e comunidades acontecendo e o conhecimento expandindo para outros níveis.

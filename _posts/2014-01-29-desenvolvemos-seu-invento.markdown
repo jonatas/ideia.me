@@ -1,9 +1,8 @@
 ---
-  layout: post
-  title: Desenvolvemos seu invento!
+title: "Desenvolvemos seu invento!"
+layout: post
+description: "Este mês completamos 1 ano de [invent.to][1]. Estou muito feliz por estar trabalhando de forma independente com o meu sócio Marlon Scalabrin."
 ---
-
-
 Este mês completamos 1 ano de [invent.to][1]. Estou muito feliz por estar trabalhando de forma independente com o meu sócio Marlon Scalabrin.
 
 ![inventto_loggo]
@@ -88,4 +87,4 @@ Envie-nos um email em <falecom@invent.to> e entraremos em contato!
 [1]: http://invent.to
 [2]: http://academi.as
 [3]: http://instagram.com/inventtores
-[inventto_loggo]: /images/logo_inventto.png
+[inventto_loggo]: /images/logo-inventto.png

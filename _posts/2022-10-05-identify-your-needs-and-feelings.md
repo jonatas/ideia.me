@@ -1,9 +1,9 @@
 ---
-  title: Identify Your Needs And Feelings
-  layout: post
-  categories: nvc
+title: "Identify Your Needs And Feelings"
+layout: post
+categories: nvc
+description: "I have been participating in the [How of Happy][1] classes for the last few months. In this course, I'm learning and practicing identifying my needs and feel..."
 ---
-
 I have been participating in the [How of Happy][1] classes for the last few months. In this course, I'm learning and practicing identifying my needs and feelings. The method extensively allows me to recur to practical daily life issues and use them to self-awareness and find the correct vocabulary for my feelings and needs.
 
 We all have needs and feelings, but sometimes it cannot be easy to express them. It can be especially true regarding needs and feelings we deem "negative," such as anger, sadness, or insecurity. However, it's important to remember that all needs and feelings are valid and that we all have a right to express them. Additionally, when we don't express our needs and feelings, they can manifest in negative ways, such as through aggression or self-harm. This blog post will explore the importance of non-violent communication and how to identify and express your needs and feelings. We'll also offer some tips for self-expression. By the end of this post, you should better understand your needs and feelings and how to communicate them effectively.

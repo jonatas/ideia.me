@@ -1,9 +1,9 @@
 ---
+title: "ActiveRecord update without primary key"
 layout: post
 categories: ruby postgresql timescaledb
-title: ActiveRecord update without primary key
+description: "This weekend I [crossed a Twitter thread][1] that ended up motivating me to write this blog post."
 ---
-
 This weekend I [crossed a Twitter thread][1] that ended up motivating me to write this blog post.
 
 > Thanks, find_by works perfectly, but IIRC, ActiveRecord needs an ID field to save/modify data. I'll try out composite_primary_keys with an ID+Timestamp combo, then. I've got a use case where I want to change a record in a hypertable to add metadata info.

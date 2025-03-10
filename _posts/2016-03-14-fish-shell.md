@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Fish shell
-  categories: ['fish','shell','unix','terminal']
+title: "Fish shell"
+layout: post
+categories: ['fish', 'shell', 'unix', 'terminal']
+description: "O fish shell é uma linha de comando como shell ou zsh."
 ---
-
 O [fish shell](https://fishshell.com) é uma linha de comando como [shell](https://pt.wikipedia.org/wiki/Shell_script) ou [zsh](http://www.zsh.org/).
 
 A um tempo conheci e estou gostando bastante da experiência. Finalmente um

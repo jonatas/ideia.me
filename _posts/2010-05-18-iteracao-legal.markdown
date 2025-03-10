@@ -1,12 +1,9 @@
 ---
-  layout: post
-  title: Iteração legal
-  categories: balsamiq mockups prototipo xp usesms iteracao cucumber
-
+title: "Iteração legal"
+layout: post
+categories: balsamiq mockups prototipo xp usesms iteracao cucumber
+description: "Estou muito satisfeito em meu novo projeto de freelancer.  Trata-se de um sistema de Envio de SMS direcionado para pequenas empresas do comércio e relacionam..."
 ---
-
-
-
 Estou muito satisfeito em meu novo projeto de freelancer.  Trata-se de um sistema de Envio de SMS direcionado para pequenas empresas do comércio e relacionamento com o cliente. O sistema está com o background totalmente pronto, assim como API para integração com software de terceiros. Estou trabalhando apenas na interface e em algumas novas funcionalidades.
 
 Estamos utilizando o Balsamiq Mockups para colaborar nas decisões da interface. Prototipamos várias telas do projeto e tivemos várias ideias interessantes. 
@@ -95,5 +92,5 @@ Muito interessante trabalhar com feedback. Passei um tempo sem este feedback e �
 Estamos usando o Pivotal Tracker para controlar as estórias e o GitHub como repositório oficial. Assim tenho sempre qualquer notificação do Edson por email quando faz algum comentário ou adiciona novas informações ao projeto, ou seja: feedback automático.
 
 
-[enviarsms]: /images/enviar_sms.png
+[enviarsms]: /images/enviar-sms.png
 [busca]: /images/busca.png

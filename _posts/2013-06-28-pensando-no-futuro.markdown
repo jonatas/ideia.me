@@ -1,8 +1,8 @@
 ---
-  layout: post
-  categories: ['pense','futuro','tecnologia']
+layout: post
+categories: ['pense', 'futuro', 'tecnologia']
+description: "Pensando no futuro eu fui estudar ruby, e então estudando e persistindo deu certo."
 ---
-  
 Pensando no futuro eu fui estudar ruby, e então estudando e persistindo deu certo.
 
     Hoje programo em ruby a maior parte do tempo :D

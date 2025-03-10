@@ -1,11 +1,9 @@
 ---
-  title: Flu.ideia.me no ar!
-  layout: post
-  categories: [pense, artigo, opensource, arteterapia]
+title: "Flu.ideia.me no ar!"
+layout: post
+categories: ['pense', 'artigo', 'opensource', 'arteterapia']
+description: "[Está online][noar], finalmente!"
 ---
-
-
-
 [Está online][noar], finalmente!
 
 Depois de algum tempo pensando no assunto, decidi aproveitar o tema livre de uma [resenha crítica][gist] da minha [pós graduação][arteterapia]. Como é em arteterapia resolvi fazer alguns desenhos dentro de um tema para refletir. Escrevi uns vários tópicos na inspiração e acabou ficando por eles mesmos. Veja as versões que trabalhei no [gist].

@@ -1,8 +1,10 @@
 ---
-  layout: post 
-  title: Bom dia a dia do desenvolvimento 
-  categories: ['decisoes', 'oraclexe', 'postgresql', 'java', 'ferramentas', 'linux', 'mac'] 
-
+title: "Bom dia a dia do desenvolvimento"
+layout: post
+categories: ['decisoes', 'oraclexe', 'postgresql', 'java', 'ferramentas', 'linux', 'mac']
+description: "<style>
+ table, tr, td { border: 1px solid gray}
+</style>"
 ---
 <style>
  table, tr, td { border: 1px solid gray}

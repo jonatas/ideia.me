@@ -1,9 +1,10 @@
 ---
+title: "Complex AST search with Ruby"
 layout: post
-title: Complex AST search with Ruby
-categories: [ruby, ast, fast]
+categories: ['ruby', 'ast', 'fast']
+description: "I previously wrote a post about search in ruby ast and I
+was showing the RuboCop node pattern in action."
 ---
-
 I previously wrote a post about [search in ruby ast](/search-in-ruby-ast) and I
 was showing the RuboCop node pattern in action.
 

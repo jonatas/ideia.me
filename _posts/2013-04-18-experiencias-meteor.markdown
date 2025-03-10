@@ -1,11 +1,9 @@
 ---
-  title: Experiências com o Meteor js
-  layout: post
-  categories: [javascript, meteor js, pixel, opensource]
+title: "Experiências com o Meteor js"
+layout: post
+categories: ['javascript', 'meteor js', 'pixel', 'opensource']
+description: "Este mês conhecemos o [Meteor] e desenvolvemos o [Pixel]. Tudo começou muito bem e até que não tinhamos mais de mil pixels na tela ainda era possível entrar ..."
 ---
-
-
-
 Este mês conhecemos o [Meteor] e desenvolvemos o [Pixel]. Tudo começou muito bem e até que não tinhamos mais de mil pixels na tela ainda era possível entrar no [Pixel]. Conforme o desenho ia crescendo demorava mais e mais pra entrar na página e dava muito a impressão de que nunca mais ia carregar. Então foi um tanto quanto desmotivador ver o sistema travando logo nas primeiras super aquecidas com ele.
 
 ## Melhoria das templates

@@ -1,8 +1,8 @@
 ---
+title: "Building a SQL formatter with Fast"
 layout: post
-title: Building a SQL formatter with Fast
+description: "Now that fast supports SQL, I will share a few of my exploring toys."
 ---
-
 Now that [fast supports SQL](/fast-supports-sql), I will share a few of my exploring toys.
 
 The first is a SQL formatter where you can get some keywords upcased.

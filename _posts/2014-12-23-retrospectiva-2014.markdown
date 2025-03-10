@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Retrospectiva 2014
-  categories: [retrospective]
+title: "Retrospectiva 2014"
+layout: post
+categories: ['retrospective']
+description: "Fim de ano chegando e cá estou refletindo sobre as tantas coisas que se acontecem em um ano apenas."
 ---
-
 Fim de ano chegando e cá estou refletindo sobre as tantas coisas que se acontecem em um ano apenas.
 
 # Lorenzo

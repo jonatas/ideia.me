@@ -1,8 +1,8 @@
 ---
-  layout: post
-  title: O que tira o meu tempo?
+title: "O que tira o meu tempo?"
+layout: post
+description: "Hoje estou pensando em porquê não consigo escrever tantas coisas quanto desejo em meu blog. O que tira meu tempo que eu não consigo vir aqui e me dedicar esc..."
 ---
-
 Hoje estou pensando em porquê não consigo escrever tantas coisas quanto desejo em meu blog. O que tira meu tempo que eu não consigo vir aqui e me dedicar escrevendo sobre meus pensamentos....
 O que é ter tempo e como tiramos ele? O que faz o tempo esvaiair e as semanas passar tão depressa?
 

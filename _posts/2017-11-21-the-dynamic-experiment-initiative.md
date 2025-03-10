@@ -1,9 +1,9 @@
 ---
+title: "The dynamic experiment initiative"
 layout: post
-title: The dynamic experiment initiative
-tags: [fast, dynamic-experiments, ruby, ast]
+tags: ['fast', 'dynamic-experiments', 'ruby', 'ast']
+description: "I'm having a lot of fun with automated code rewrite."
 ---
-
 I'm having a lot of fun with automated code rewrite.
 
 I'd like to create something that I can implement an experiment,

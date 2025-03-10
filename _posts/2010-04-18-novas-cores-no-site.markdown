@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Novas cores no site
-  categories: [css]
+title: "Novas cores no site"
+layout: post
+categories: ['css']
+description: "Após muito tempo sem publicar nada, resolvi de mudar algumas cores no site para se tornar mais "vivo". Acompanhe a mudança:"
 ---
-
 # Renovação das cores do site
 
 Após muito tempo sem publicar nada, resolvi de mudar algumas cores no site para se tornar mais "vivo". Acompanhe a mudança:

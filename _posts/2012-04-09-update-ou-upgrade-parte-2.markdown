@@ -1,11 +1,9 @@
 ---
-  layout: post
-  title: Update ou upgrade parte 2
-  categories: [pense, decisoes]
+title: "Update ou upgrade parte 2"
+layout: post
+categories: ['pense', 'decisoes']
+description: "Seguindo a linha de raciocíonio do [post] anterior, tenho pensado muito em oque escrever e postar e é realmente pensar em quantos tipos de pessoas diferentes..."
 ---
-
-
-
 Seguindo a linha de raciocíonio do [post] anterior, tenho pensado muito em oque escrever e postar e é realmente pensar em quantos tipos de pessoas diferentes caem no meu site pelas suas diversas postagens. Me sinto totalmente indignado de um dos posts mais acessados são as respostas de umas questões de gerências de projetos que são acessados por um bando de alunos desinteressados googlando a respeito.
 
 ## Mais ou melhor ?

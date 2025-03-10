@@ -1,8 +1,8 @@
 ---
- title: Sistemas Operacionais - Gerência do processador - parte 1
- layout: post
+title: "Sistemas Operacionais - Gerência do processador - parte 1"
+layout: post
+description: "{% include ads_lateral.html %}"
 ---
-
 {% include ads_lateral.html %}
 
 ## O que é política de escalonamento de um sistema operacional?

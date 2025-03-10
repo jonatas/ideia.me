@@ -1,9 +1,9 @@
 ---
+title: "PostgreSQL for Everything!"
 layout: post
-title: PostgreSQL for Everything!
-tags: [postgresql, databases, think]
+tags: ['postgresql', 'databases', 'think']
+description: "When starting a new project, my mind always gravitates towards my favorite programming language and database."
 ---
-
 When starting a new project, my mind always gravitates towards my favorite programming language and database. 
 
 > "For those who only know a hammer, everything looks like a nail."

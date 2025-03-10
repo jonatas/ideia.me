@@ -1,9 +1,10 @@
 ---
-  title: Search in Ruby AST
-  categories: [ruby, ast]
-  layout: post
+title: "Search in Ruby AST"
+layout: post
+categories: ['ruby', 'ast']
+description: "Some months ago I started coding some cops for
+RuboCop."
 ---
-
 Some months ago I started coding some cops for
 [RuboCop](https://github.com/bbatsov/rubocop).
 

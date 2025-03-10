@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: "Buscando com silver searcher"
-  categories: ['terminal','unix','grep']
+title: "Buscando com silver searcher"
+layout: post
+categories: ['terminal', 'unix', 'grep']
+description: "Sempre fui viciadão em fazer buscas com o grep."
 ---
-
 Sempre fui viciadão em fazer buscas com o grep.
 
 Porém um dia o [@brodock](https://twitter.com/brodock) me mostrou o `ag`.

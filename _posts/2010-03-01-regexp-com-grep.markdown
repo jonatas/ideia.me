@@ -1,12 +1,9 @@
 ---
-  layout: post
-  title: Expressões Regulares com grep
-  categories: ['shell', 'regexp', 'unix', 'grep', 'rails', 'migrations', 'vim']
-
+title: "Expressões Regulares com grep"
+layout: post
+categories: ['shell', 'regexp', 'unix', 'grep', 'rails', 'migrations', 'vim']
+description: "Expressões regulares são úteis para muitas situações no coditiano linux. Hoje mesmo me deparei com a situação em que toda vez que altero uma migração, desejo..."
 ---
-
-
-
 Expressões regulares são úteis para muitas situações no coditiano linux. Hoje mesmo me deparei com a situação em que toda vez que altero uma migração, desejo refazer a migração do rails e para isso é necessário pegar a versão da migração. Encontrei um [exemplo no stackoverflow][stackoverflow] que caiu bem.
 
 No caso, será usado um arquivo chamado:

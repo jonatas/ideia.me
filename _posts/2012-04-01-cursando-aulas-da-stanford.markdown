@@ -1,9 +1,9 @@
 ---
-  title: Cursando aulas da Stanford University
-  layout: post
-  categories: [linguagem, pense, coursera]
+title: "Cursando aulas da Stanford University"
+layout: post
+categories: ['linguagem', 'pense', 'coursera']
+description: "Um belo título para o dia da mentira mas não é. A distância, é possível estudar [muitos][coursera] cursos direto da [Stanford University][stanford]."
 ---
-
 Um belo título para o dia da mentira mas não é. A distância, é possível estudar [muitos][coursera] cursos direto da [Stanford University][stanford].
 
 Eu começei com [Natural Language Processing][nlp] que é um assunto que muito me interessa e simplesmente estou perplexo após assistir as primeiras aulas.

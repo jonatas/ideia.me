@@ -1,9 +1,10 @@
 ---
-  layout: post
-  title: Introdução a linguagem Ruby
-  categories: ['ruby']
+title: "Introdução a linguagem Ruby"
+layout: post
+categories: ['ruby']
+description: "Hoje estive dando uma treinada para o live coding amanhã sobre quais coisas
+posso mostrar em 30 minutos."
 ---
-
 Hoje estive dando uma treinada para o [live coding amanhã](http://www.meetup.com/Floripa-on-Rails/events/230349469/) sobre quais coisas
 posso mostrar em 30 minutos.
 

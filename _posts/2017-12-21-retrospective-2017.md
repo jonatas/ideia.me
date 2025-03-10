@@ -1,9 +1,11 @@
 ---
+title: "Retrospective 2017"
 layout: post
 categories: ['retrospective', 'think']
-title: Retrospective 2017
+description: "It was an excellent year for me.
+I love my life. I love my work, and I'm pretty
+happy looking forward my future and my next challenges."
 ---
-
 It was an excellent year for me.
 I love my life. I love my work, and I'm pretty
 happy looking forward my future and my next challenges.

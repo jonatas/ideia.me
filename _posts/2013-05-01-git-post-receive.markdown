@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Git Post Receive
-  categories: [git, jekyll, sh]
+title: "Git Post Receive"
+layout: post
+categories: ['git', 'jekyll', 'sh']
+description: "Hoje estive querendo transformar a [página de categorias][categories] para ficar mais estilo 'tag cloud' com cada categoria com um tamanho diferente dependen..."
 ---
-
 Hoje estive querendo transformar a [página de categorias][categories] para ficar mais estilo 'tag cloud' com cada categoria com um tamanho diferente dependendo do número de posts que houvesse. Então tive uma série de problemas para adaptar um tamanho legal via css e resolvi procurar por um [plugin para o jekyll][plugin]. Após encontrar um plugin para o liquid templates, descobri que o jekyll do github está em modo safe e não aceita plugin algum, então como gostei da nova forma resolvi migrar meu site do github para minha VPS. E aí precisava automatizar o processo de deploy do site a cada novo post.
 
 ## Como funciona

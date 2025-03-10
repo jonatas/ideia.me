@@ -1,11 +1,9 @@
 ---
-  layout: post
-  title: Camera Overlay
-  categories: [android, camera overlay, open-source]
+title: "Camera Overlay"
+layout: post
+categories: ['android', 'camera overlay', 'open-source']
+description: "![logo]"
 ---
-
- 
-
 ![logo]
 
 ## A ideia

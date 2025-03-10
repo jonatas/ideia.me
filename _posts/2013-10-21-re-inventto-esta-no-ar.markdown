@@ -1,8 +1,8 @@
 ---
-  title: ReInvent.to está no ar!
-  layout: post
+title: "ReInvent.to está no ar!"
+layout: post
+description: "Estou muito orgulhoso de falar do nosso trabalho no [Re.Invent.to][1]!."
 ---
-
 Estou muito orgulhoso de falar do nosso trabalho no [Re.Invent.to][1]!.
 
 ### Tudo começou assim:
@@ -108,4 +108,4 @@ Fizemos o último deploy da aplicação uns 7 minutos antes do horário oficial 
 [7]: http://railsrumble.com/entries/113-reinventto
 [testando]: /images/reinventto-testando.png
 [sketch]: /images/reinventto-sketch.png
-[primeirooverlay]: /images/reinventto_primeiro_overlay.png
+[primeirooverlay]: /images/reinventto-primeiro-overlay.png

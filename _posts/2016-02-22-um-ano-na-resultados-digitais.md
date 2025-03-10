@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Primeiro Ano na RD
-  tags: [Resultados Digitais, pense]
+title: "Primeiro Ano na RD"
+layout: post
+tags: ['Resultados Digitais', 'pense']
+description: "Completando um ano de RD e aqui estou eu a refletir :)"
 ---
-
 # Um ano na Resultados Digitais
 
 Completando um ano de RD e aqui estou eu a refletir :)

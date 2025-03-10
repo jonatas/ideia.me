@@ -1,10 +1,8 @@
 ---
-  title: Pequenas mudanças e grandes decisões
-  layout: post
+title: "Pequenas mudanças e grandes decisões"
+layout: post
+description: "Como desenvolvedor, me sinto sedento pela busca mais rápida de colocar os sistemas pra funcionar de forma automática, simples e fácil de se construir."
 ---
-
- 
-
 Como desenvolvedor, me sinto sedento pela busca mais rápida de colocar os sistemas pra funcionar de forma automática, simples e fácil de se construir.
 
 Sem demora busco no google e lá encontro pessoas em todos os lugares do mundo com um erro exatamente igual o meu. E lá encontra-se a resposta com aquele maravilhoso título alterado para _FIXED_.

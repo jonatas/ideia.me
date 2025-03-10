@@ -1,10 +1,9 @@
 ---
-  layout: post
-  title: Inspecionando fórmulas em ruby
-  categories: ['ruby', 'regexp', 'gerencia de projetos']
-
+title: "Inspecionando fórmulas em ruby"
+layout: post
+categories: ['ruby', 'regexp', 'gerencia de projetos']
+description: "Em 2009, criei um projeto no github com as [fórmulas basicas][github-sl-for-gp] de "gerência de projetos", o qual condecorei com o nome [Sopa de Letrinhas pa..."
 ---
-
 # Inspecionando fórmulas no ruby
 
 Em 2009, criei um projeto no github com as [fórmulas basicas][github-sl-for-gp] de "gerência de projetos", o qual condecorei com o nome [Sopa de Letrinhas para gerência de projetos][github-sl-for-gp]. O objetivo deste [repositório][github-sl-for-gp] era reunir as fórmulas que me atormentavam ao serem cálculadas manualmente.

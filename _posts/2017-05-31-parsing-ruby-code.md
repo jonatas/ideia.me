@@ -1,9 +1,11 @@
 ---
-  title: Parsing Ruby Code
-  categories: [ruby, ast]
-  layout: post
+title: "Parsing Ruby Code"
+layout: post
+categories: ['ruby', 'ast']
+description: "After start my saga on Ruby AST Search
+I built a few tools to
+help me to understand the AST and to inspect it."
 ---
-
 After start my saga on [Ruby AST Search](./)
 I built a [few](https://github.com/jonatas/rubocopular) [tools](https://github.com/jonatas/fast) to
 help me to understand the AST and to inspect it.

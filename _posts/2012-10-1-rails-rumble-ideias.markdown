@@ -1,11 +1,9 @@
 ---
-  title: Ideias sobre o Rails Rumble
-  layout: post
-  categories: [pense, rails, ruby, railsrumble, churumelas]
+title: "Ideias sobre o Rails Rumble"
+layout: post
+categories: ['pense', 'rails', 'ruby', 'railsrumble', 'churumelas']
+description: "Estou muito empolgado com a ideia de participar do [Rails Rumble]. Desde que vi o tweet de que iria ter esta competição pensei: este ano não posso perder! E ..."
 ---
-
- 
-
 Estou muito empolgado com a ideia de participar do [Rails Rumble]. Desde que vi o tweet de que iria ter esta competição pensei: este ano não posso perder! E hoje estou aqui a organizar minhas ideias para o projeto. 
 
 

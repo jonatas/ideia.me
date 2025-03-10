@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Primeiro mês na Resultados Digitais
-  categories: [Resultados Digitais]
+title: "Primeiro mês na Resultados Digitais"
+layout: post
+categories: ['Resultados Digitais']
+description: "Seguindo minha experiência da primeira semana, decidi escrever sobre o primeiro mês que completo exatamente hoje!"
 ---
-
 Seguindo minha experiência [da primeira semana](/primeira-semana-na-resultados-digitais/), decidi escrever sobre o primeiro mês que completo exatamente hoje!
 
 __Primeiro__ por que no dia que publiquei o meu [post](/primeira-semana-na-resultados-digitais/), foi o dia que tive minha imersão com os gestores de cada setor da RD mostrando a visão e estratégia de crescimento da empresa. E isso explodiu minha cabeça, abriu para mais coisas novas e interessantes para pensar e compartilhar.

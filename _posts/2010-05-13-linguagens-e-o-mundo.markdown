@@ -1,11 +1,9 @@
 ---
- layout: post
- title:  As linguagens e o mundo
- categories: linguagem
+title: "As linguagens e o mundo"
+layout: post
+categories: linguagem
+description: "Hoje estava navegando entre sites e pesquisando coisas legais e aprendi muita coisa. Não apenas lendo tutoriais mas também lendo código aberto. Javascript da..."
 ---
-
-
-
 Hoje estava navegando entre sites e pesquisando coisas legais e aprendi muita coisa. Não apenas lendo tutoriais mas também lendo código aberto. Javascript das páginas, baixando projetos legais no github. Tudo isso é muito bacana e incrívelmente existe apenas uma casquinha de material e códigos em português.
 
 ## Limite de recursos

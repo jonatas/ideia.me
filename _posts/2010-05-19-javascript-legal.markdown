@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Javascript Ninja Legal
-  categories: [javascript,ideiame]
+title: "Javascript Ninja Legal"
+layout: post
+categories: ['javascript', 'ideiame']
+description: "Hoje estou aprendendo algumas coisas bacanas com o [John Resig] e logo percebi uma falha no meu Javascript que animava o link do [Feed-me]. Observe o código ..."
 ---
-
 # Javascript Ninja Legal
 
 Hoje estou aprendendo algumas coisas bacanas com o [John Resig] e logo percebi uma falha no meu Javascript que animava o link do [Feed-me]. Observe o código antigo que anima o link do [Feed-me] é feito assim:

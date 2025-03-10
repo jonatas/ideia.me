@@ -1,9 +1,9 @@
 ---
-  layout: post
-  categories: [raspberry pi, raspicam]
-  title: Coisas legais para fazer com o Raspberry PI
+title: "Coisas legais para fazer com o Raspberry PI"
+layout: post
+categories: ['raspberry pi', 'raspicam']
+description: "Viva o opensource! Estou fazendo uma série de testes e experimentos com o Raspberry PI e hoje resolvi compartilhar algumas delas aqui."
 ---
-
 Viva o opensource! Estou fazendo uma série de testes e experimentos com o Raspberry PI e hoje resolvi compartilhar algumas delas aqui.
 
 Diferente do Beaglebone, o Raspberry já tem um caminho mais longo e logo com muito mais projetos.

@@ -1,9 +1,9 @@
 ---
-  layout: post
-  title: Creating continuous aggregates with Ruby and Timescale
-  categories: time-series PostgreSQL ruby
+title: "Creating continuous aggregates with Ruby and Timescale"
+layout: post
+categories: time-series PostgreSQL ruby
+description: "I created the [timescale gem][1] and wrote an introductory post on how [using the timescale gem with ruby][2]."
 ---
-
 I created the [timescale gem][1] and wrote an introductory post on how [using the timescale gem with ruby][2].
 
 Now, it's time to learn more about the [continuous aggregates][3] feature. Accordingly, the Timescale website says:

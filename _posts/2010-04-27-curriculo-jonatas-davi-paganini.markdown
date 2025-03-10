@@ -1,9 +1,9 @@
 ---
- layout: post
- title: Jônatas Davi Paganini
- categories: [opensource ruby dsl curriculo]
+title: "Jônatas Davi Paganini"
+layout: post
+categories: ['opensource ruby dsl curriculo']
+description: "Iniciei na programação para web em 2006. Passei os primeiros dois anos trabalhando somente com Java e seus diversos frameworks e ferramentas, tais como jUnit..."
 ---
-
 Iniciei na programação para web em 2006. Passei os primeiros dois anos trabalhando somente com Java e seus diversos frameworks e ferramentas, tais como jUnit, ANT, TomCat e jBoss, Hibernate, Struts, entre outros.
 
 Sempre atento às novidades do mundo ágil, começei a estudar Ruby e ferramentas que pudessem me ajudar a tornar o desenvolvimento de software mais simples e objetivo. Empolgado nos estudos, aprendi sobre estratégias de orientação a objetos, padrões de arquitetura, desenvolvimento orientado a testes e comportamento, modelagem ágil, metaprogramação e outras práticas ágeis.

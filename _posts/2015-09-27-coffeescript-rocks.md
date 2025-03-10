@@ -1,9 +1,10 @@
 ---
+title: "Coffeescript rocks"
 layout: post
-title: Coffeescript rocks
-categories: ['pense', 'linguagem','coffeescript']
+categories: ['pense', 'linguagem', 'coffeescript']
+description: "Eu sou um fã de CoffeeScript e gostaria de mostrar alguns exemplos que me fazem
+lembrar que nunca mais vou escrever nenhuma linha de javascript puro."
 ---
-
 Eu sou um fã de CoffeeScript e gostaria de mostrar alguns exemplos que me fazem
 lembrar que nunca mais vou escrever nenhuma linha de javascript puro.
 

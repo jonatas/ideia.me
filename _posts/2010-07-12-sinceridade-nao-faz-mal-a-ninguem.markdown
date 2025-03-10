@@ -1,12 +1,9 @@
 ---
-  layout: post
-  title: Sinceridade não faz mal a ninguém
-  categories: sinceridade xp freelancer pensamentos
-
+title: "Sinceridade não faz mal a ninguém"
+layout: post
+categories: sinceridade xp freelancer pensamentos
+description: "Estou aqui pensando sobre minha vida e sobre o quanto estou satisfeito com a minha forma de trabalhar."
 ---
-
-
-
 Estou aqui pensando sobre minha vida e sobre o quanto estou satisfeito com a minha forma de trabalhar. 
 
 Atualmente estou utilizando a técnica Pomodoro para desenvolver focado em apenas tarefa. Têm sido um desafio em tanto pois tomei a decisão de trabalhar apenas 4 horas por dia e usar o resto do tempo para fazer outros empreendimentos pessoais e estudar.

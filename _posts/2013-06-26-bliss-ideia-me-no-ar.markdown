@@ -1,9 +1,10 @@
 ---
-  title: Bliss ideia.me está no ar!
-  layout: post 
-  categories: ['bliss','linguagem','pense']
+title: "Bliss ideia.me está no ar!"
+layout: post
+categories: ['bliss', 'linguagem', 'pense']
+description: "Estou feliz em apresentar esta linguagem que se tornou um grande hobby para mim. Venho trabalhando em um site nas minhas madrugadas
+que trata-se de um aplica..."
 ---
-
 Estou feliz em apresentar esta linguagem que se tornou um grande hobby para mim. Venho trabalhando em um site nas minhas madrugadas
 que trata-se de um aplicativo para permitir as pessoas adicionarem novos conteúdos e jogos de adivinhação na [linguagem bliss][2].
 

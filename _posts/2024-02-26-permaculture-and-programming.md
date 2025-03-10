@@ -1,8 +1,8 @@
 ---
+title: "Permaculture and Programming"
 layout: post
-title: Permaculture and Programming
+description: "My experiments in permaculture, spanning a decade, have been a profound understanding and applying the principles of natural ecosystems to cultivate a sustai..."
 ---
-
 # The Confluence of Permaculture and Code
 
 My experiments in permaculture, spanning a decade, have been a profound understanding and applying the principles of natural ecosystems to cultivate a sustainable environment. Only in the past five years have I truly immersed myself in practicing these principles, leveraging every nearby resource to conserve energy and repurpose everything within my grasp.

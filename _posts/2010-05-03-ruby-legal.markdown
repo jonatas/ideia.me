@@ -1,10 +1,8 @@
 ---
- layout: post
- title: Ruby Legal
+title: "Ruby Legal"
+layout: post
+description: "Hoje fiquei vendo um exercício de probabilidade na aula de estatística, o exercício dizia o seguinte:"
 ---
-
-
-
 Hoje fiquei vendo um exercício de probabilidade na aula de estatística, o exercício dizia o seguinte:
 
     Uma moeda é lançada 10 vezes. Qual a probabilidade de:

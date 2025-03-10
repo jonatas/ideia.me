@@ -1,8 +1,9 @@
 ---
+title: "Hierarchical continuous aggregates with Ruby and Timescaledb"
 layout: post
-title: Hierarchical continuous aggregates with Ruby and Timescaledb
+description: "Today I'm very happy to share that a new version of the [timescaledb gem][gem-repo]
+is available. It's compatible with TimescaleDB 2.9 and the objective of t..."
 ---
-
 Today I'm very happy to share that a new version of the [timescaledb gem][gem-repo]
 is available. It's compatible with TimescaleDB 2.9 and the objective of this
 post is exemplify how to use [hierarchical continuous aggregates][hcaggs].

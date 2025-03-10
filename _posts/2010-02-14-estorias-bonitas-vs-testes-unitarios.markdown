@@ -1,9 +1,9 @@
 ---
- layout: post
- title: Estórias Bonitas vs Testes Unitários
- categories: [coding for fun,tdd,bdd]
+title: "Estórias Bonitas vs Testes Unitários"
+layout: post
+categories: ['coding for fun', 'tdd', 'bdd']
+description: "Após ter saído da Leosoft, dia 11 voltei lá pela primeira vez, e foi para se reunir com o pessoal e fazermos um [coding dojo][coding-dojo] sobre TDD e BDD. S..."
 ---
-
 # Estórias Bonitas vs Testes Unitários
 
 Após ter saído da Leosoft, dia 11 voltei lá pela primeira vez, e foi para se reunir com o pessoal e fazermos um [coding dojo][coding-dojo] sobre TDD e BDD. Seguindo a idéia da [url anterior][coding-dojo], como exemplo para o evento, usamos um problema que implica em converter uma sintaxe de sql do Access para o padrão do Postgresql.

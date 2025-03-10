@@ -1,9 +1,10 @@
 ---
-  layout: post 
-  title: O que ando fazendo nos últimos dias
-  categories: [javascript, bliss, code, pense, editor]
+title: "O que ando fazendo nos últimos dias"
+layout: post
+categories: ['javascript', 'bliss', 'code', 'pense', 'editor']
+description: "Estou em uma maratona de estudos e pesquisa muito legal. Este mês estive pegando forte em 
+várias coisas que gostaria de fazer e começei a realiza-las."
 ---
-
 Estou em uma maratona de estudos e pesquisa muito legal. Este mês estive pegando forte em 
 várias coisas que gostaria de fazer e começei a realiza-las.
 

@@ -1,9 +1,8 @@
 ---
-  layout: post 
-  title: Google Api
-
+title: "Google Api"
+layout: post
+description: "Hoje encarei a necessidade de uma busca específica para o meu site. Então mapeei o google para fazer buscas. Foi extremamente simples de encontrar as informa..."
 ---
-
 # Integrando Google Api no Ideia.me
 
 Hoje encarei a necessidade de uma busca específica para o meu site. Então mapeei o google para fazer buscas. Foi extremamente simples de encontrar as informações e usando os métodos específicos, refinar para busca refletir apenas nos conteúdos postados aqui.

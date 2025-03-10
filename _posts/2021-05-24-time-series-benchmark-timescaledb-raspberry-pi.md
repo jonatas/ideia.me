@@ -1,8 +1,9 @@
 ---
 layout: post
+description: "I started supporting tsbs project, and
+this weekend I decided to try to run it on my Raspberry Pi version 3."
 date: 2021-05-24
 ---
-
 I started supporting [tsbs](https://github.com/timescale/tsbs) project, and
 this weekend I decided to try to run it on my Raspberry Pi version 3.
 

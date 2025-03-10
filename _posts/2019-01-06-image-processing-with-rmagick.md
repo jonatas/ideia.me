@@ -1,9 +1,10 @@
 ---
+title: "Image processing with Ruby"
 layout: post
-title: Image processing with Ruby
-categories: [ruby]
+categories: ['ruby']
+description: "During my vacations, I decide to play in a different project. I'd like to make
+some hashi art with packs of used chopsticks my girlfriend is collecting from ..."
 ---
-
 During my vacations, I decide to play in a different project. I'd like to make
 some hashi art with packs of used chopsticks my girlfriend is collecting from the Japanese restaurant that she works.
 

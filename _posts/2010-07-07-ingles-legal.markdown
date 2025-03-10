@@ -1,9 +1,9 @@
 ---
- layout: post
- title: Inglês Legal
- categories: [pense, linguagem]
+title: "Inglês Legal"
+layout: post
+categories: ['pense', 'linguagem']
+description: "Hoje, após mais de 15 meses retomei às aulas de inglês. Apesar de estar pensando bastante em inglês sei que não estou praticando suficiente para falar. Como ..."
 ---
-
 Hoje, após mais de 15 meses retomei às aulas de inglês. Apesar de estar pensando bastante em inglês sei que não estou praticando suficiente para falar. Como minha rotina não tem imposto nada do gênero não tenho falado muito. Apesar de estar ligado em muitos screencasts e materiais em inglês percebo que a iteração é completamente diferente. Quando parte do princípio de falar e pensar em uma outra língua muda totalmente a forma de pensar.
 
 Tenho percebido que a minha estrutura mental para raciocinar em inglês têm se adaptado rapidamente para novas situações e isso é muito legal pois este é o momento em que eu deixei de traduzir tudo e simplesmente estou aprendendo inglês em inglês.
