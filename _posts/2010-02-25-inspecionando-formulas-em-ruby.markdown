@@ -2,7 +2,7 @@
 title: "Inspecionando fórmulas em ruby"
 layout: post
 categories: ['ruby', 'regexp', 'gerencia de projetos']
-description: "Em 2009, criei um projeto no github com as [fórmulas basicas][github-sl-for-gp] de "gerência de projetos", o qual condecorei com o nome [Sopa de Letrinhas pa..."
+description: "Em 2009, criei um projeto no github com as [fórmulas basicas][github-sl-for-gp] de \"gerência de projetos\", o qual condecorei com o nome [Sopa de Letrinhas pa..."
 ---
 # Inspecionando fórmulas no ruby
 

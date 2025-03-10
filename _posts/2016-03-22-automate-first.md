@@ -2,7 +2,7 @@
 title: "Automatize primeiro"
 layout: post
 categories: ['pense', 'dev']
-description: "!"Robot image""
+description: "Automatize tarefas repetitivas para aumentar a produtividade"
 ---
 !["Robot image"](https://res.cloudinary.com/robolike/image/upload/v1417674434/blue-robolike-robot_cujcxi.jpg)
 
