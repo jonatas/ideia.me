@@ -17,19 +17,17 @@ title: "Speaking @jonatasdp"
   
   <div class="conference-carousel">
     <div class="carousel-container">
-      {% assign talks_with_images = site.data.talks.talks | where_exp: "talk", "talk.media.images" %}
-      {% assign featured_talks = talks_with_images | sort: "date" | reverse | slice: 0, 6 %}
-      {% for talk in featured_talks %}
-        {% for image in talk.media.images %}
-          <div class="carousel-slide" data-talk-date="{{ talk.date }}">
-            <img src="{{ image.src }}" alt="{{ image.alt }}">
-            <div class="carousel-caption">
-              <h3>{{ talk.event }}</h3>
-              <p>{{ image.caption }}</p>
-              <a href="#{{ talk.title | slugify }}" class="carousel-link">View Event Details</a>
-            </div>
+      {% assign talks_with_banners = site.data.talks.talks | where_exp: "talk", "talk.media.banner" %}
+      {% assign sorted_talks = talks_with_banners | sort: "date" | reverse | slice: 0, 6 %}
+      {% for talk in sorted_talks %}
+        <div class="carousel-slide" data-talk-date="{{ talk.date }}">
+          <img src="{{ talk.media.banner.src }}" alt="{{ talk.media.banner.alt }}">
+          <div class="carousel-caption">
+            <h3>{{ talk.event }}</h3>
+            <p>{{ talk.title }}</p>
+            <a href="#{{ talk.title | slugify }}" class="carousel-link">View Event Details</a>
           </div>
-        {% endfor %}
+        </div>
       {% endfor %}
     </div>
     <div class="carousel-nav">
@@ -58,6 +56,23 @@ title: "Speaking @jonatasdp"
     <div class="stat-box">
       <div class="stat-number" data-count="4">0</div>
       <div class="stat-label">Continents</div>
+    </div>
+  </div>
+  
+  <!-- New Chronological Image Gallery Section -->
+  <div class="image-gallery-section">
+    <h2 class="section-heading">Conference Moments</h2>
+    <p class="gallery-intro">A visual journey through my speaking engagements around the world, from the most recent to past events.</p>
+    
+    <div class="image-gallery-container">
+      <div class="image-gallery" id="chronological-gallery">
+        <!-- Images will be loaded here via JavaScript -->
+      </div>
+      <div class="load-more-container">
+        <button id="load-more-images" class="load-more-button">
+          <i class="fas fa-images"></i> Load More Images
+        </button>
+      </div>
     </div>
   </div>
   
@@ -110,28 +125,49 @@ title: "Speaking @jonatasdp"
         <!-- Display each conference talk separately -->
         {% for talk in group.items %}
           {% assign talk_year = talk.date | slice: 0,4 %}
-          <div class="talk-card {% if talk.date < today_date %}past-event{% endif %}" 
+          <div class="talk-card {% if talk.date < today_date %}past-event{% endif %} {% if talk.media.banner %}talk-card-banner{% endif %}" 
                data-topics="{{ talk.topic | replace: ', ', ',' }}" 
                data-year="{{ talk_year }}"
                id="{{ talk.title | slugify }}">
             <div class="talk-card-header">
-              {% if talk.media.images %}
+              {% if talk.media.banner %}
+                <img src="{{ talk.media.banner.src }}" alt="{{ talk.media.banner.alt }}" class="talk-card-thumbnail">
+                <div class="talk-card-overlay">
+                  <div class="talk-card-title-top">{{ talk.title }}</div>
+                </div>
+              {% elsif talk.media.images %}
                 <img src="{{ talk.media.images[0].src }}" alt="{{ talk.media.images[0].alt }}" class="talk-card-thumbnail">
+                <div class="talk-card-overlay">
+                  <div class="talk-card-title-top">{{ talk.title }}</div>
+                  {% if talk.event contains "Lambda Days" or talk.event contains "RubyConf" %}
+                    <div class="talk-card-event">{{ talk.event }} {{ talk_year }}</div>
+                  {% else %}
+                    <div class="talk-card-event">{{ talk.event }}</div>
+                  {% endif %}
+                </div>
               {% elsif talk.media.youtube %}
                 <img src="https://img.youtube.com/vi/{{ talk.media.youtube }}/mqdefault.jpg" alt="{{ talk.title }}" class="talk-card-thumbnail">
+                <div class="talk-card-overlay">
+                  <div class="talk-card-title-top">{{ talk.title }}</div>
+                  {% if talk.event contains "Lambda Days" or talk.event contains "RubyConf" %}
+                    <div class="talk-card-event">{{ talk.event }} {{ talk_year }}</div>
+                  {% else %}
+                    <div class="talk-card-event">{{ talk.event }}</div>
+                  {% endif %}
+                </div>
               {% else %}
                 <div class="talk-card-thumbnail-placeholder">
                   <i class="fas fa-chalkboard-teacher"></i>
                 </div>
+                <div class="talk-card-overlay">
+                  <div class="talk-card-title-top">{{ talk.title }}</div>
+                  {% if talk.event contains "Lambda Days" or talk.event contains "RubyConf" %}
+                    <div class="talk-card-event">{{ talk.event }} {{ talk_year }}</div>
+                  {% else %}
+                    <div class="talk-card-event">{{ talk.event }}</div>
+                  {% endif %}
+                </div>
               {% endif %}
-              <div class="talk-card-overlay">
-                <div class="talk-card-title-top">{{ talk.title }}</div>
-                {% if talk.event contains "Lambda Days" or talk.event contains "RubyConf" %}
-                  <div class="talk-card-event">{{ talk.event }} {{ talk_year }}</div>
-                {% else %}
-                  <div class="talk-card-event">{{ talk.event }}</div>
-                {% endif %}
-              </div>
             </div>
             <div class="talk-card-body">
               {% if talk.github %}
@@ -237,28 +273,49 @@ title: "Speaking @jonatasdp"
         {% endfor %}
       {% elsif group.items.size > 1 %}
         <!-- This is a regular talk series with multiple instances -->
-        <div class="talk-card talk-series" 
+        <div class="talk-card talk-series {% if first_talk.media.banner %}talk-card-banner{% endif %}" 
              data-topics="{{ first_talk.topic | replace: ', ', ',' }}" 
              data-year="{{ talk_year }}"
              id="{{ first_talk.title | slugify }}">
           <div class="talk-card-header">
-            {% if first_talk.media.images %}
+            {% if first_talk.media.banner %}
+              <img src="{{ first_talk.media.banner.src }}" alt="{{ first_talk.media.banner.alt }}" class="talk-card-thumbnail">
+              <div class="talk-card-overlay">
+                <div class="talk-card-title-top">{{ first_talk.title }}</div>
+              </div>
+            {% elsif first_talk.media.images %}
               <img src="{{ first_talk.media.images[0].src }}" alt="{{ first_talk.media.images[0].alt }}" class="talk-card-thumbnail">
+              <div class="talk-card-overlay">
+                <div class="talk-card-title-top">{{ first_talk.title }}</div>
+                {% if first_talk.event contains "Lambda Days" or first_talk.event contains "RubyConf" %}
+                  <div class="talk-card-event">{{ first_talk.event }} {{ talk_year }}</div>
+                {% else %}
+                  <div class="talk-card-event">{{ first_talk.event }}</div>
+                {% endif %}
+              </div>
             {% elsif first_talk.media.youtube %}
               <img src="https://img.youtube.com/vi/{{ first_talk.media.youtube }}/mqdefault.jpg" alt="{{ first_talk.title }}" class="talk-card-thumbnail">
+              <div class="talk-card-overlay">
+                <div class="talk-card-title-top">{{ first_talk.title }}</div>
+                {% if first_talk.event contains "Lambda Days" or first_talk.event contains "RubyConf" %}
+                  <div class="talk-card-event">{{ first_talk.event }} {{ talk_year }}</div>
+                {% else %}
+                  <div class="talk-card-event">{{ first_talk.event }}</div>
+                {% endif %}
+              </div>
             {% else %}
               <div class="talk-card-thumbnail-placeholder">
                 <i class="fas fa-chalkboard-teacher"></i>
               </div>
+              <div class="talk-card-overlay">
+                <div class="talk-card-title-top">{{ first_talk.title }}</div>
+                {% if first_talk.event contains "Lambda Days" or first_talk.event contains "RubyConf" %}
+                  <div class="talk-card-event">{{ first_talk.event }} {{ talk_year }}</div>
+                {% else %}
+                  <div class="talk-card-event">{{ first_talk.event }}</div>
+                {% endif %}
+              </div>
             {% endif %}
-            <div class="talk-card-overlay">
-              <div class="talk-card-title-top">{{ first_talk.title }}</div>
-              {% if first_talk.event contains "Lambda Days" or first_talk.event contains "RubyConf" %}
-                <div class="talk-card-event">{{ first_talk.event }} {{ talk_year }}</div>
-              {% else %}
-                <div class="talk-card-event">{{ first_talk.event }}</div>
-              {% endif %}
-            </div>
           </div>
           <div class="talk-card-body">
             {% if first_talk.github %}
@@ -386,28 +443,49 @@ title: "Speaking @jonatasdp"
         </div>
       {% else %}
         <!-- Regular single talk -->
-        <div class="talk-card {% if first_talk.date < today_date %}past-event{% endif %}" 
+        <div class="talk-card {% if first_talk.date < today_date %}past-event{% endif %} {% if first_talk.media.banner %}talk-card-banner{% endif %}" 
              data-topics="{{ first_talk.topic | replace: ', ', ',' }}" 
              data-year="{{ talk_year }}"
              id="{{ first_talk.title | slugify }}">
           <div class="talk-card-header">
-            {% if first_talk.media.images %}
+            {% if first_talk.media.banner %}
+              <img src="{{ first_talk.media.banner.src }}" alt="{{ first_talk.media.banner.alt }}" class="talk-card-thumbnail">
+              <div class="talk-card-overlay">
+                <div class="talk-card-title-top">{{ first_talk.title }}</div>
+              </div>
+            {% elsif first_talk.media.images %}
               <img src="{{ first_talk.media.images[0].src }}" alt="{{ first_talk.media.images[0].alt }}" class="talk-card-thumbnail">
+              <div class="talk-card-overlay">
+                <div class="talk-card-title-top">{{ first_talk.title }}</div>
+                {% if first_talk.event contains "Lambda Days" or first_talk.event contains "RubyConf" %}
+                  <div class="talk-card-event">{{ first_talk.event }} {{ talk_year }}</div>
+                {% else %}
+                  <div class="talk-card-event">{{ first_talk.event }}</div>
+                {% endif %}
+              </div>
             {% elsif first_talk.media.youtube %}
               <img src="https://img.youtube.com/vi/{{ first_talk.media.youtube }}/mqdefault.jpg" alt="{{ first_talk.title }}" class="talk-card-thumbnail">
+              <div class="talk-card-overlay">
+                <div class="talk-card-title-top">{{ first_talk.title }}</div>
+                {% if first_talk.event contains "Lambda Days" or first_talk.event contains "RubyConf" %}
+                  <div class="talk-card-event">{{ first_talk.event }} {{ talk_year }}</div>
+                {% else %}
+                  <div class="talk-card-event">{{ first_talk.event }}</div>
+                {% endif %}
+              </div>
             {% else %}
               <div class="talk-card-thumbnail-placeholder">
                 <i class="fas fa-chalkboard-teacher"></i>
               </div>
+              <div class="talk-card-overlay">
+                <div class="talk-card-title-top">{{ first_talk.title }}</div>
+                {% if first_talk.event contains "Lambda Days" or first_talk.event contains "RubyConf" %}
+                  <div class="talk-card-event">{{ first_talk.event }} {{ talk_year }}</div>
+                {% else %}
+                  <div class="talk-card-event">{{ first_talk.event }}</div>
+                {% endif %}
+              </div>
             {% endif %}
-            <div class="talk-card-overlay">
-              <div class="talk-card-title-top">{{ first_talk.title }}</div>
-              {% if first_talk.event contains "Lambda Days" or first_talk.event contains "RubyConf" %}
-                <div class="talk-card-event">{{ first_talk.event }} {{ talk_year }}</div>
-              {% else %}
-                <div class="talk-card-event">{{ first_talk.event }}</div>
-              {% endif %}
-            </div>
           </div>
           <div class="talk-card-body">
             {% if first_talk.github %}
@@ -519,6 +597,29 @@ title: "Speaking @jonatasdp"
 <script id="talks-data" type="application/json">
 {{ site.data.talks.talks | jsonify }}
 </script>
+
+<!-- Full-screen Image Viewer -->
+<div id="fullscreen-viewer" class="fullscreen-viewer">
+  <div class="fullscreen-viewer-content">
+    <button class="close-viewer-btn"><i class="fas fa-times"></i></button>
+    <button class="prev-image-btn"><i class="fas fa-chevron-left"></i></button>
+    <button class="next-image-btn"><i class="fas fa-chevron-right"></i></button>
+    <div class="fullscreen-image-container">
+      <div class="fullscreen-loading">
+        <i class="fas fa-spinner fa-spin"></i>
+      </div>
+      <img id="fullscreen-image" src="" alt="Conference image">
+    </div>
+    <div class="fullscreen-image-caption">
+      <h3 id="fullscreen-event"></h3>
+      <p id="fullscreen-caption"></p>
+      <div class="fullscreen-image-details">
+        <span id="fullscreen-date"></span> | <span id="fullscreen-location"></span>
+      </div>
+      <a id="fullscreen-event-link" href="#" class="view-event-btn">View Event Details <i class="fas fa-arrow-right"></i></a>
+    </div>
+  </div>
+</div>
 
 <script src="/assets/js/talks.js"></script>
 

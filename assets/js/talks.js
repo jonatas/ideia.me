@@ -9,20 +9,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Count topics and update the filter display
     updateTopicCounts(talksData);
     
-    // Animation for stat counters
-    animateCounters();
-    
-    // Topic filtering
+    // Initialize all functionality
     setupTopicFilters();
-    
-    // Year filtering
     setupYearFilters();
-    
-    // Add time-based classes for visual styling
     markPastAndUpcomingEvents();
+    addDaysUntilEvents();
+    animateCounters();
+    initLazySlidesContainers();
+    enhanceSlidesContainers();
+    lazyLoadImages();
+    
+    // Initialize the chronological image gallery
+    initChronologicalGallery();
+    
+    // Inject talks data for calculations
+    injectTalksData();
 
     // Add smooth scrolling for internal links
-    document.querySelectorAll('.carousel-link').forEach(link => {
+    document.querySelectorAll('.carousel-link, .gallery-image-link').forEach(link => {
       link.addEventListener('click', function(e) {
         e.preventDefault();
         const targetId = this.getAttribute('href').substring(1);
@@ -952,4 +956,316 @@ function lazyLoadImages() {
       img.removeAttribute('data-src');
     });
   }
+}
+
+// Chronological Image Gallery
+function initChronologicalGallery() {
+  const gallery = document.getElementById('chronological-gallery');
+  const loadMoreButton = document.getElementById('load-more-images');
+  
+  if (!gallery || !loadMoreButton) return;
+  
+  // Get all talks data
+  const talksData = window.talksJson || [];
+  
+  // Extract all images with their dates
+  const allImages = [];
+  talksData.forEach(talk => {
+    if (talk.media && talk.media.images && talk.media.images.length > 0) {
+      talk.media.images.forEach(image => {
+        // Skip banner images as they're used in the carousel
+        if (image.type === 'banner') return;
+        
+        allImages.push({
+          src: image.src,
+          alt: image.alt || talk.title,
+          caption: image.caption || '',
+          date: talk.date,
+          event: talk.event,
+          location: talk.location,
+          title: talk.title,
+          talkId: talk.title.toLowerCase().replace(/[^\w]+/g, '-')
+        });
+      });
+    }
+  });
+  
+  // Sort images by date (newest first)
+  allImages.sort((a, b) => new Date(b.date) - new Date(a.date));
+  
+  // Initial number of images to show
+  const initialImages = 12;
+  // Number of images to load each time
+  const loadIncrement = 12;
+  // Current number of images shown
+  let currentImagesShown = 0;
+  
+  // Function to load more images
+  function loadMoreImages() {
+    // Show loading indicator
+    loadMoreButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+    loadMoreButton.disabled = true;
+    
+    // Use setTimeout to allow the browser to render the loading state
+    setTimeout(() => {
+      const startIndex = currentImagesShown;
+      const endIndex = Math.min(currentImagesShown + loadIncrement, allImages.length);
+      
+      for (let i = startIndex; i < endIndex; i++) {
+        const image = allImages[i];
+        const imageElement = document.createElement('div');
+        imageElement.className = 'gallery-item';
+        imageElement.setAttribute('data-image-index', i);
+        
+        // Format date for display
+        const imageDate = new Date(image.date);
+        const formattedDate = imageDate.toLocaleDateString('en-US', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric' 
+        });
+        
+        imageElement.innerHTML = `
+          <div class="gallery-image-container">
+            <img src="${image.src}" alt="${image.alt}" loading="lazy" class="gallery-image">
+            <div class="gallery-image-overlay">
+              <div class="gallery-image-info">
+                <div class="gallery-image-date">${formattedDate}</div>
+                <div class="gallery-image-event">${image.event}</div>
+                <div class="gallery-image-location">${image.location}</div>
+              </div>
+            </div>
+          </div>
+          <div class="gallery-image-caption">${image.caption}</div>
+        `;
+        
+        // Add click event to open fullscreen viewer
+        imageElement.addEventListener('click', (e) => {
+          e.preventDefault();
+          openFullscreenViewer(i);
+        });
+        
+        gallery.appendChild(imageElement);
+      }
+      
+      currentImagesShown = endIndex;
+      
+      // Reset button state
+      loadMoreButton.innerHTML = '<i class="fas fa-images"></i> Load More Images';
+      loadMoreButton.disabled = false;
+      
+      // Hide load more button if all images are shown
+      if (currentImagesShown >= allImages.length) {
+        loadMoreButton.style.display = 'none';
+      }
+    }, 300); // Small delay to show loading indicator
+  }
+  
+  // Load initial images
+  loadMoreImages();
+  
+  // Add event listener to load more button
+  loadMoreButton.addEventListener('click', loadMoreImages);
+  
+  // Show total image count
+  const totalImagesElement = document.createElement('div');
+  totalImagesElement.className = 'total-images-count';
+  totalImagesElement.textContent = `${allImages.length} images from ${new Set(allImages.map(img => img.event)).size} events`;
+  gallery.parentNode.insertBefore(totalImagesElement, gallery);
+  
+  // Fullscreen viewer functionality
+  const viewer = document.getElementById('fullscreen-viewer');
+  const fullscreenImage = document.getElementById('fullscreen-image');
+  const fullscreenEvent = document.getElementById('fullscreen-event');
+  const fullscreenCaption = document.getElementById('fullscreen-caption');
+  const fullscreenDate = document.getElementById('fullscreen-date');
+  const fullscreenLocation = document.getElementById('fullscreen-location');
+  const fullscreenEventLink = document.getElementById('fullscreen-event-link');
+  const closeBtn = document.querySelector('.close-viewer-btn');
+  const prevBtn = document.querySelector('.prev-image-btn');
+  const nextBtn = document.querySelector('.next-image-btn');
+  const loadingIndicator = document.querySelector('.fullscreen-loading');
+  const fullscreenContent = viewer.querySelector('.fullscreen-viewer-content');
+  
+  // Add keyboard navigation hint
+  const keyboardHint = document.createElement('div');
+  keyboardHint.className = 'keyboard-nav-hint';
+  keyboardHint.innerHTML = `
+    <span><span class="key">←</span> Previous</span>
+    <span><span class="key">→</span> Next</span>
+    <span><span class="key">Esc</span> Close</span>
+    <span class="mobile-only"><span class="key"><i class="fas fa-hand-pointer"></i></span> Double-tap to close</span>
+  `;
+  fullscreenContent.appendChild(keyboardHint);
+  
+  let currentImageIndex = 0;
+  
+  // Function to open fullscreen viewer
+  function openFullscreenViewer(index) {
+    currentImageIndex = index;
+    updateFullscreenImage();
+    viewer.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent scrolling
+  }
+  
+  // Function to close fullscreen viewer
+  function closeFullscreenViewer() {
+    viewer.classList.remove('active');
+    document.body.style.overflow = ''; // Restore scrolling
+  }
+  
+  // Function to update fullscreen image
+  function updateFullscreenImage() {
+    const image = allImages[currentImageIndex];
+    
+    // Format date for display
+    const imageDate = new Date(image.date);
+    const formattedDate = imageDate.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+    
+    // Show loading state
+    fullscreenImage.style.opacity = '0.3';
+    loadingIndicator.classList.add('active');
+    
+    // Create a new image object to preload
+    const preloadImg = new Image();
+    preloadImg.onload = function() {
+      // Once loaded, update the src and restore opacity
+      fullscreenImage.src = image.src;
+      fullscreenImage.style.opacity = '1';
+      loadingIndicator.classList.remove('active');
+    };
+    preloadImg.src = image.src;
+    
+    fullscreenImage.alt = image.alt;
+    fullscreenEvent.textContent = image.event;
+    fullscreenCaption.textContent = image.caption;
+    fullscreenDate.textContent = formattedDate;
+    fullscreenLocation.textContent = image.location;
+    fullscreenEventLink.href = `#${image.talkId}`;
+    
+    // Update navigation buttons visibility
+    prevBtn.style.display = currentImageIndex > 0 ? 'flex' : 'none';
+    nextBtn.style.display = currentImageIndex < allImages.length - 1 ? 'flex' : 'none';
+    
+    // Preload adjacent images for smoother navigation
+    if (currentImageIndex > 0) {
+      const prevImg = new Image();
+      prevImg.src = allImages[currentImageIndex - 1].src;
+    }
+    
+    if (currentImageIndex < allImages.length - 1) {
+      const nextImg = new Image();
+      nextImg.src = allImages[currentImageIndex + 1].src;
+    }
+  }
+  
+  // Function to show previous image
+  function showPrevImage() {
+    if (currentImageIndex > 0) {
+      currentImageIndex--;
+      updateFullscreenImage();
+    }
+  }
+  
+  // Function to show next image
+  function showNextImage() {
+    if (currentImageIndex < allImages.length - 1) {
+      currentImageIndex++;
+      updateFullscreenImage();
+    }
+  }
+  
+  // Event listeners for fullscreen viewer
+  closeBtn.addEventListener('click', closeFullscreenViewer);
+  prevBtn.addEventListener('click', showPrevImage);
+  nextBtn.addEventListener('click', showNextImage);
+  
+  // Event listener for "View Event Details" button
+  fullscreenEventLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = fullscreenEventLink.getAttribute('href').substring(1);
+    const targetElement = document.getElementById(targetId);
+    
+    closeFullscreenViewer();
+    
+    // Small delay to ensure the viewer is closed before scrolling
+    setTimeout(() => {
+      if (targetElement) {
+        targetElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+        // Add a temporary highlight effect
+        targetElement.classList.add('highlight-card');
+        setTimeout(() => {
+          targetElement.classList.remove('highlight-card');
+        }, 2000);
+      }
+    }, 300);
+  });
+  
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!viewer.classList.contains('active')) return;
+    
+    if (e.key === 'Escape') {
+      closeFullscreenViewer();
+    } else if (e.key === 'ArrowLeft') {
+      showPrevImage();
+    } else if (e.key === 'ArrowRight') {
+      showNextImage();
+    }
+  });
+  
+  // Close on click outside the image
+  viewer.addEventListener('click', (e) => {
+    if (e.target === viewer) {
+      closeFullscreenViewer();
+    }
+  });
+  
+  // Add swipe gesture support for mobile devices
+  let touchStartX = 0;
+  let touchEndX = 0;
+  let lastTap = 0;
+  
+  function handleSwipeGesture() {
+    const swipeThreshold = 50; // Minimum distance required for a swipe
+    const swipeDistance = touchEndX - touchStartX;
+    
+    if (swipeDistance > swipeThreshold) {
+      // Swiped right, show previous image
+      showPrevImage();
+    } else if (swipeDistance < -swipeThreshold) {
+      // Swiped left, show next image
+      showNextImage();
+    }
+  }
+  
+  fullscreenContent.addEventListener('touchstart', (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+  
+  fullscreenContent.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipeGesture();
+  });
+  
+  // Add double-tap to close
+  fullscreenContent.addEventListener('click', (e) => {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+    
+    if (tapLength < 300 && tapLength > 0) {
+      // Double tap detected
+      closeFullscreenViewer();
+      e.preventDefault();
+    }
+    
+    lastTap = currentTime;
+  });
 } 

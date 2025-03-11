@@ -132,7 +132,14 @@
       "type": "workshop",
       "topic": "PostgreSQL, Ruby, Performance",
       "status": "Accepted",
-      "github": "https://github.com/timescale/postgresql-performance-for-rubyists/"
+      "github": "https://github.com/timescale/postgresql-performance-for-rubyists/",
+      "media": {
+        "banner": {
+          "src": "/images/banners/tropicalonrails-2025-banner.png",
+          "alt": "Tropical on Rails 2025 Official Banner",
+          "url": "https://www.tropicalonrails.com/en/"
+        }
+      }
     },
     {
       "date": "2025-06-12",
@@ -143,7 +150,14 @@
       "type": "conference",
       "topic": "Ruby, TimescaleDB",
       "status": "Accepted",
-      "international": true
+      "international": true,
+      "media": {
+        "banner": {
+          "src": "/images/banners/baltic-ruby-2025-banner.png",
+          "alt": "Baltic Ruby 2025 Official Banner",
+          "url": "https://balticruby.org/"
+        }
+      }
     },
     {
       "date": "2024-08-03",
@@ -165,7 +179,8 @@
           {
             "src": "/images/pgconf-brazil-2024-audience.jpg",
             "alt": "PostgreSQL Conference Brazil Audience",
-            "caption": "Engaging with the Brazilian PostgreSQL community"
+            "caption": "Engaging with the Brazilian PostgreSQL community",
+            "type": "banner"
           }
         ]
       }
@@ -186,13 +201,13 @@
             "src": "/images/lambda-days-2023-jonatas-speaking.jpeg",
             "alt": "Speaking at Lambda Days 2024",
             "caption": "Sharing command-line techniques for SQL exploration"
-          },
-          {
-            "src": "/images/jonatasdp-michal-marcin.jpeg",
-            "alt": "With Michal and Marcin walking in Krakow",
-            "caption": "Great discussions with my great ruby friends"
           }
-        ]
+        ],
+        "banner": {
+          "src": "/images/banners/lambda-days-banner.png",
+          "alt": "Lambda Days Official Banner",
+          "url": "https://www.lambdadays.org/lambdadays2024"
+        }
       }
     },
     {
@@ -247,7 +262,12 @@
       "topic": "PostgreSQL, PGVector",
       "status": "Delivered",
       "media": {
-        "slides": "2PACX-1vQq60_oaZDs1jnwZQ7CjpKeb_Uctp0x8uFOBiA2_-3c7RRrxsluj-Phbtx1HRBfaFKrTMSIl7FP-yVJ"
+        "slides": "2PACX-1vQq60_oaZDs1jnwZQ7CjpKeb_Uctp0x8uFOBiA2_-3c7RRrxsluj-Phbtx1HRBfaFKrTMSIl7FP-yVJ",
+        "banner": {
+          "src": "/images/banners/pgconf-brazil-banner.png",
+          "alt": "PGConf Brazil Official Banner",
+          "url": "https://pgconf.com.br/2024"
+        }
       }
     },
     {
@@ -406,11 +426,6 @@
             "src": "/images/pgcon-2023-tshirt.jpeg",
             "alt": "PGCon 2023 T-shirt",
             "caption": "Memorable swag from PGCon 2023"
-          },
-          {
-            "src": "/images/pgcon-toronto-2023-timescale-folks.jpeg",
-            "alt": "With Timescale team in Toronto",
-            "caption": "More great moments with the Timescale team"
           }
         ]
       }
@@ -501,12 +516,7 @@
           {
             "src": "/images/jonatasdp-cliff-scale20x.jpeg",
             "alt": "At Scale 20x in Pasadena",
-            "caption": "Exploring Pasadena during Scale 20x"
-          },
-          {
-            "src": "/images/jonatasdp-bubba-gump.jpeg",
-            "alt": "At Bubba Gump in California",
-            "caption": "Enjoying local cuisine during the conference"
+            "caption": "Meeting folks at Scale 20x in Pasadena"
           }
         ]
       }
@@ -543,7 +553,12 @@
             "alt": "Dinner with Timescale team in India",
             "caption": "Enjoying dinner with the Timescale team in Bengaluru"
           }
-        ]
+        ],
+        "banner": {
+          "src": "/images/banners/pgconf-india-banner.png",
+          "alt": "PGConf India Official Banner",
+          "url": "https://pgconf.in"
+        }
       }
     },
     {
@@ -573,7 +588,7 @@
         "slides": "2PACX-1vST6o2xxkIuNddKwWeXgNENN2-Fcpwe2m9Ax-Z4j6q0V7vjX-GUISxAt6Oj75OFUZ7KQbSI3CLbKI3l",
         "images": [
           {
-            "src": "/images/rubyconf-thailand-2023-jonatas-speaking.jpg",
+            "src": "/images/rubyconf-thailand-2023-jonatas-speaking.png",
             "alt": "Speaking at RubyConf Thailand",
             "caption": "Discussing data processing strategies in Ruby and SQL"
           },
@@ -586,13 +601,13 @@
             "src": "/images/jonatas-paganini-birthday-cake-rubyconf-thailand.jpeg",
             "alt": "Birthday celebration at RubyConf Thailand",
             "caption": "Celebrating my birthday with the Ruby community in Thailand"
-          },
-          {
-            "src": "/images/jonatasdp-birthday-thailand-2022.jpg",
-            "alt": "Birthday celebration in Thailand",
-            "caption": "Another memorable moment from the birthday celebration"
           }
-        ]
+        ],
+        "banner": {
+          "src": "/images/banners/rubyconf-thailand-banner.png",
+          "alt": "RubyConf Thailand Official Banner",
+          "url": "https://rubyconfth.com"
+        }
       }
     },
     {
@@ -614,7 +629,7 @@
       "title": "Zen Life with Psql",
       "location": "Brazil",
       "event": "PGConf Brazil",
-      "url": "",
+      "url": "https://ideia.me/pgconfbr-talk",
       "type": "conference",
       "topic": "PostgreSQL, Command Line",
       "status": "Delivered",
