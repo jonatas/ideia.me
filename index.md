@@ -10,7 +10,7 @@ title:  Ideia-me!
       {% include about_me.html %}
     </div>
     <div class="col-md-4 text-center">
-      <img src="{{ site.author.avatar }}" alt="{{ site.author.name }}" class="rounded-circle img-fluid mb-3" style="max-width: 200px;">
+      <img src="{{ site.author.avatar }}" alt="{{ site.author.name }}" class="profile-image img-fluid mb-3" style="max-width: 250px; border-radius: 10px; cursor: pointer;" title="Click me or hover for 3 seconds!">
       <div class="social-links">
         <a href="https://github.com/{{ site.author.github }}" class="btn btn-outline-primary btn-sm me-2" target="_blank"><i class="bi bi-github"></i> GitHub</a>
         <a href="https://twitter.com/{{ site.author.twitter }}" class="btn btn-outline-primary btn-sm me-2" target="_blank"><i class="bi bi-twitter"></i> Twitter</a>
