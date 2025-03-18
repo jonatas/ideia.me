@@ -2,6 +2,7 @@
 title: "My nomad life"
 layout: post
 tags: ['travel', 'bike', 'nomad life']
+categories: talk
 description: "Two months ago I left Florianópolis with my family to start our nomad journey."
 ---
 Two months ago I left Florianópolis with my family to start our nomad journey.

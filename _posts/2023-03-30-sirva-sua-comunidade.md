@@ -1,7 +1,7 @@
 ---
 title: "Sirva sua comunidade"
 layout: post
-categories: ['public speaking', 'conferences']
+categories: ['public speaking', 'conferences', 'talk']
 description: "Nos últimos anos, me sinto muito \"sortudo\" com todas as aprovações que recebi para falar em conferências e participar ativamente de diferentes comunidades de..."
 ---
 Nos últimos anos, me sinto muito "sortudo" com todas as aprovações que recebi

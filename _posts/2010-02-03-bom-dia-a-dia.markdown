@@ -1,7 +1,7 @@
 ---
 title: "Bom dia a dia do desenvolvimento"
 layout: post
-categories: ['decisoes', 'oraclexe', 'postgresql', 'java', 'ferramentas', 'linux', 'mac']
+categories: ['technical', 'tools', 'postgresql']
 description: "<style>
  table, tr, td { border: 1px solid gray}
 </style>"

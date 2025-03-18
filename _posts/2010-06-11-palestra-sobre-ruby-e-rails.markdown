@@ -1,7 +1,7 @@
 ---
 title: "Palestra na Vizivali"
 layout: post
-categories: rails ruby palestra vizivali
+categories: rails ruby palestra vizivali talk
 description: "Hoje estarei palestrando as 21:15 na [ViziVali] para o curso de Tecnologia em Sistemas para Internet. O tema será [Rails][palestra], e a apresentação pode se..."
 ---
 Hoje estarei palestrando as 21:15 na [ViziVali] para o curso de Tecnologia em Sistemas para Internet. O tema será [Rails][palestra], e a apresentação pode ser baixada [aqui][palestra].

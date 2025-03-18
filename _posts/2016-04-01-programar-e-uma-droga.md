@@ -1,7 +1,7 @@
 ---
 title: "Programar é uma droga"
 layout: post
-categories: ['pense']
+categories: ['personal', 'technical']
 description: "Sim, uma das mais pesadas que já usei."
 ---
 Sim, uma das mais pesadas que já usei.

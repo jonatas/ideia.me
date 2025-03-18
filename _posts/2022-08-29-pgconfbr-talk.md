@@ -1,7 +1,7 @@
 ---
 title: "PGConf Brasil"
 layout: post
-categories: ['terminal', 'shell', 'unix', 'opensource', 'postgresql']
+categories: ['terminal', 'shell', 'unix', 'opensource', 'postgresql', 'talk']
 description: "Na minha palestra da PGConf Brasil 2022 falei sobre a \"Vida Zen no Terminal\". Então resolvi compartilhar aqui um pouco dos aprendizados que compartilhei poi..."
 ---
 Na minha palestra da [PGConf Brasil 2022](https://www.pgconf.com.br/2022/).

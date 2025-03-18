@@ -1,6 +1,7 @@
 ---
 title: "TDC SP here we go :)"
 layout: post
+categories: talk
 description: "Estou muito feliz pois vou participar do The Developers Conference pela terceira vez. Participei da última edição aqui em Florianópolis e agora vou participa..."
 ---
 Estou muito feliz pois vou participar do [The Developers Conference](http://thedevelopersconference.com.br) pela terceira vez. Participei da última edição aqui em Florianópolis e agora vou participar em SP.

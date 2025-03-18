@@ -1,7 +1,7 @@
 ---
 title: "Coffeescript rocks"
 layout: post
-categories: ['pense', 'linguagem', 'coffeescript']
+categories: ['technical', 'web']
 description: "Eu sou um fã de CoffeeScript e gostaria de mostrar alguns exemplos que me fazem
 lembrar que nunca mais vou escrever nenhuma linha de javascript puro."
 ---
@@ -380,7 +380,7 @@ Pessoa = (function() {
 })();
 </pre>
 
-E aí gostou? <a href=http://js2.coffee/#coffee/try:euclidean%20%3D%20(p1%2C%20p2)%20-%3E%0A%20%20%5Ba%2C%20b%5D%20%3D%20%5Bp1.x%20-%20p2.x%2C%20p1.y%20-%20p2.y%5D%0A%20%20Math.sqrt%20Math.pow(a%2C%202)%20%2B%20Math.pow(b%2C%202)%0Aclass%20Pessoa%0A%20%20distancia%3A%20(outro)%20-%3E%20euclidean(%40%2Coutro)%0A%20%20amigosProximos%3A%20(raioEsperado%20%3D%2050)%20-%3E%0A%20%20%20%20pessoa.nome%20for%20pessoa%20in%20%40relacionamentos%20when%20%40distancia(pessoa)%20%3C%20raioEsperado%0Aeu%20%3D%20new%20Pessoa()%0Aeu.x%20%3D%2010%0Aeu.y%20%3D%2020%0Aeu.relacionamentos%20%3D%20%5B%0A%20%20%7B%20nome%3A%20%22maria%22%2C%20x%3A%205%2C%20y%3A%2010%20%20%20%20%7D%0A%20%20%7B%20nome%3A%20%22joao%22%2C%20%20x%3A%2020%2C%20y%3A%2040%20%20%20%7D%0A%20%20%7B%20nome%3A%20%22z%C3%A9zin%22%2C%20x%3A%20200%2C%20y%3A%20500%20%7D%0A%5D%0Aconsole.log%20eu.amigosProximos()">Tenta rodar na prática</a> esse exemplo e não deixe de comentar!
+E aí gostou? <a href=http://js2.coffee/#coffee/try:euclidean%20%3D%20(p1%2C%20p2)%20-%3E%0A%20%20%5Ba%2C%20b%5D%20%3D%20%5Bp1.x%20-%20p2.x%2C%20p1.y%20-%20p2.y%5D%0A%20%20Math.sqrt%20Math.pow(a%2C%202)%20%2B%20Math.pow(b%2C%202)%0Aclass%20Pessoa%0A%20%20distancia%3A%20(outro)%20-%3E%20euclidean(%40%2Coutro)%0A%20%20amigosProximos%3A%20(raioEsperado%20%3D%2050)%20-%3E%0A%20%20%20%20pessoa.nome%20for%20pessoa%20in%20%40relacionamentos%20when%20%40distancia(pessoa)%20%3C%20raioEsperado%0Aeu%20%3D%20new%20Pessoa()%0Aeu.x%20%3D%2010%0Aeu.y%20%3D%2020%0Aeu.relacionamentos%20%3D%20%5B%0A%20%20%7B%20nome%3A%20%22maria%22%2C%20x%3A%205%2C%20y%3A%2010%20%20%20%20%7D%0A%20%20%7B%20nome%3A%20%22joao%22%2C%20%20x%3A%2020%2C%20y%3A%2040%20%20%207D%0A%20%20%7B%20nome%3A%20%22z%C3%A9zin%22%2C%20x%3A%20200%2C%20y%3A%20500%207D%0A%5D%0Aconsole.log%20eu.amigosProximos()">Tenta rodar na prática</a> esse exemplo e não deixe de comentar!
 
 Quais são suas principais dificuldades com coffeescript?
 

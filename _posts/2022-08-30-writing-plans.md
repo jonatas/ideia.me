@@ -1,7 +1,7 @@
 ---
 title: "Writing plans"
 layout: post
-categories: ['think', 'write']
+categories: ['personal', 'tutorial']
 description: "I'm starting this \"writing plan\" as a way to encourage myself to write more at my blog and keep practicing putting my thoughts out there."
 ---
 I'm starting this "writing plan" as a way to encourage myself to write more

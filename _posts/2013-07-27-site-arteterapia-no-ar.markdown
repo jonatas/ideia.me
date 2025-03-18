@@ -1,7 +1,7 @@
 ---
 title: "Arteterapia no ar!"
 layout: post
-categories: ['pense', 'arteterapia']
+categories: ['personal', 'web', 'projects']
 description: "Estou muito orgulhoso de anunciar mais uma de minhas produções pessoais independentes: [arteterapia.ideia.me][1]. Estou [trabalhando][3] com muita dedicação ..."
 ---
 Estou muito orgulhoso de anunciar mais uma de minhas produções pessoais independentes: [arteterapia.ideia.me][1]. Estou [trabalhando][3] com muita dedicação nos artigos da pós graduação e então pensei: Vou fazer o mesmo que com o [flu.ideia.me][2] e [aqui está][1].

@@ -1,6 +1,6 @@
 ---
 layout: post
-categories: ['public speaking', 'conferences', 'community']
+categories: ['public speaking', 'conferences', 'community', 'talk']
 description: "In the last few years, I've felt incredibly fortunate to have received so many approvals to speak at conferences and actively participate in various tech com..."
 ---
 In the last few years, I've felt incredibly fortunate to have received so many approvals to speak at conferences and actively participate in various tech communities. I often talk to people who are disappointed about not getting approvals to speak. After observing their concerns, I decided to write about the lessons I've learned from submitting proposals over the last eight years.

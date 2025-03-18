@@ -1,7 +1,7 @@
 ---
 title: "Meu iPad Chegou!"
 layout: post
-categories: ['pense', 'iPad', 'brinquedos']
+categories: ['personal', 'tools']
 description: "Comprei meu iPad! que legal ele chegou! Já faz uns 15 dias e simplesmente depois disso o meu blog se desativou para dar total atenção a este novo brinquedo."
 ---
 Comprei meu iPad! que legal ele chegou! Já faz uns 15 dias e simplesmente depois disso o meu blog se desativou para dar total atenção a este novo brinquedo.

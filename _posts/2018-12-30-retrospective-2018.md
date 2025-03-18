@@ -1,7 +1,7 @@
 ---
 title: "Retrospective 2018"
 layout: post
-categories: ['retrospective', 'think']
+categories: ['retrospective', 'personal', 'talk']
 description: "Every year I spend some time in my retrospective and this year I'm feeling a bit ashamed to say that my plans didn't end up as I originally planned and I nee..."
 ---
 Every year I spend some time in my [retrospective](/categories.html#retrospective-ref) and this year I'm feeling a bit ashamed to say that my plans didn't end up as I originally planned and I needed to start a new life plan. In another hand, I'd like to start with a positive note, and I can guarantee I'm living the happiest days of my life.  

@@ -1,7 +1,7 @@
 ---
 title: "Iteração legal"
 layout: post
-categories: balsamiq mockups prototipo xp usesms iteracao cucumber
+categories: ['technical', 'web', 'tools']
 description: "Estou muito satisfeito em meu novo projeto de freelancer.  Trata-se de um sistema de Envio de SMS direcionado para pequenas empresas do comércio e relacionam..."
 ---
 Estou muito satisfeito em meu novo projeto de freelancer.  Trata-se de um sistema de Envio de SMS direcionado para pequenas empresas do comércio e relacionamento com o cliente. O sistema está com o background totalmente pronto, assim como API para integração com software de terceiros. Estou trabalhando apenas na interface e em algumas novas funcionalidades.

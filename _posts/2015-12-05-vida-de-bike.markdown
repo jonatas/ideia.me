@@ -1,7 +1,7 @@
 ---
 title: "Vida de bike"
 layout: post
-categories: ['pense', 'bike', 'mobilidade']
+categories: ['personal', 'lifestyle', 'health']
 description: "Felizmente não estou escrevendo mais um capítulo da minha vida de busão pois comprei uma bike :)"
 ---
 Felizmente não estou escrevendo mais um capítulo da minha [vida de busão](/vida-de-busao) pois comprei uma bike :)

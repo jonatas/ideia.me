@@ -1,7 +1,7 @@
 ---
 title: "Cursando aulas da Stanford University"
 layout: post
-categories: ['linguagem', 'pense', 'coursera']
+categories: ['education', 'personal', 'technical']
 description: "Um belo título para o dia da mentira mas não é. A distância, é possível estudar [muitos][coursera] cursos direto da [Stanford University][stanford]."
 ---
 Um belo título para o dia da mentira mas não é. A distância, é possível estudar [muitos][coursera] cursos direto da [Stanford University][stanford].

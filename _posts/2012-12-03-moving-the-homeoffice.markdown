@@ -1,7 +1,7 @@
 ---
 title: "Home office de mudança"
 layout: post
-categories: ['homeoffice', 'pense']
+categories: ['personal', 'lifestyle']
 description: "A hora chegou e estou de mudança em 3 semanas. Decidi mudar meu Home Office para São Miguel do Oeste - SC aonde mora a família da minha namorada. Apesar de s..."
 ---
 A hora chegou e estou de mudança em 3 semanas. Decidi mudar meu Home Office para São Miguel do Oeste - SC aonde mora a família da minha namorada. Apesar de ser uma cidade menor que Francisco Beltrão - PR estou empolgado com a ideia. Acredito nessa pequena cidade. Estou fechado no meu `ap[ae]rtamento` de 60 metros quadrados a um bom tempo e agora meu filho já tem um ano e merecemos uma casa espaçosa.

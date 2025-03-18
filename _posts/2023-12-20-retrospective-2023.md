@@ -1,6 +1,7 @@
 ---
 title: "Retrospective 2023"
 layout: post
+categories: talk
 description: "I tried to have a restrospective moment every year and it always happen in the
 last few days of December."
 ---

@@ -1,7 +1,7 @@
 ---
 title: "Update ou upgrade"
 layout: post
-categories: ['decisoes', 'pense']
+categories: ['career', 'personal', 'business']
 description: "Esta semana estou pensando muito em como irei me apresentar para o mundo no meu modelo de freelancer. Percebi que o site está desatualizado pois enquanto fui..."
 ---
 Esta semana estou pensando muito em como irei me apresentar para o mundo no meu modelo de freelancer. Percebi que o site está desatualizado pois enquanto fui sócio da [Executive] me dediquei totalmente ao negócio e acabei deixando de lado a atualização do meu trabalho e curriculo.

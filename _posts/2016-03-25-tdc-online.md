@@ -1,6 +1,7 @@
 ---
 title: "TDC Online! Here we go!"
 layout: post
+categories: talk
 description: "Esse ano minha palestra sobre Zero Downtime Migrations vai estar no TDC Online!"
 ---
 Esse ano minha palestra sobre Zero Downtime Migrations vai estar no [TDC Online](http://goo.gl/YKCWMc)!
