@@ -1,10 +1,11 @@
 ---
-title: "Sistemas Operacionais - Gerência do processador - parte 1"
 layout: post
-description: "Entenda como os sistemas operacionais gerenciam o processador, aplicam políticas de escalonamento e garantem a multiprogramação para maximizar a eficiência do sistema."
-categories: ['sistemas-operacionais', 'technical', 'aulas', 'processador']
-toc: true
+title: Gerência de Processador - Parte 1
+description: Primeira parte sobre gerência de processador em sistemas operacionais
+categories: sistemas-operacionais
 ---
+
+{% include JB/setup %}
 
 # Gerência do Processador em Sistemas Operacionais
 
@@ -41,50 +42,7 @@ O dispatcher é responsável por realizar a troca de contexto entre os processos
 
 A eficiência do dispatcher é crítica para o desempenho do sistema, pois a troca de contexto representa um overhead que não contribui diretamente para o processamento útil.
 
-<pre class="process-diagram">
- +------------+
- | Created/New|
- +------------+
-        |
-        | admitted
-        v
-  +------------+             +------------+
-  |   Ready    |<------------|   Waiting  |
-  +------------+    I/O or   +------------+
-        |          event           ^
-        | dispatch  complete       |
-        |                          | I/O or
-        v                          | event wait
-  +------------+             |     |
-  |  Running   |-------------+     |
-  +------------+                   |
-        |                          |
-        | exit                     |
-        v                          |
-  +------------+                   |
-  | Terminated |                   |
-  +------------+                   |
-        
-        +---------------+          |
-        |  CPU Scheduler|----------+
-        |  +-----------+|   time slice
-        |  |Dispatcher |<----expired---+
-        |  +-----------+|              |
-        +---------------+              |
-               |                       |
-               | context switch        |
-               v                       |
-        +---------------+              |
-        |  Process      |--------------+
-        +---------------+
-          
-  Scheduling Algorithms:
-  - FCFS (First-Come, First-Served)
-  - SJF (Shortest Job First)
-  - Priority Scheduling  
-  - Round Robin
-  - Multilevel Feedback Queue
-</pre>
+![Process Scheduling Diagram](/images/process-scheduling.png)
 
 ## Critérios de Avaliação das Políticas de Escalonamento
 

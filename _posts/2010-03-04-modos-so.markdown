@@ -1,10 +1,11 @@
 ---
-title: "Aula de Sistemas Operacionais - Modos do Kernel"
 layout: post
-description: "O sistema operacional é dividido em dois modos básicos: modo Kernel e modo Usuário. Esta divisão permite que os aplicativos sejam executados com segurança, mantendo a integridade do sistema."
-categories: ['sistemas-operacionais', 'technical', 'aulas', 'kernel']
-toc: true
+title: Modos de Acesso
+description: Modos de Acesso do SO
+categories: sistemas-operacionais
 ---
+
+{% include JB/setup %}
 # Entendendo os Modos de Acesso do Sistema Operacional
 
 O sistema operacional é dividido em dois modos básicos, sendo estes o modo Kernel e o modo Usuário. Esta divisão permite que os aplicativos sejam executados com segurança.
@@ -90,60 +91,7 @@ System call é uma chamada do sistema, como sua própria tradução indica. Em u
 
 No processo de receber o comando, o sistema identifica o aplicativo que fez a chamada e verifica a sua permissão para execução do comando. Dada a permissão executa e retorna o resultado.
 
-<pre class="system-diagram">
-+------------------+     +------------------+
-|   User Space     |     |                  |
-|   +----------+   |     |   +----------+   |
-|   |Application|  |     |   |Application|  |
-|   |Process A  |  |     |   |Process B  |  |
-|   +----------+   |     |   +----------+   |
-|        |         |     |        |         |
-+--------|---------|-----+--------|---------|
-         |                        |
-         v                        v
-+--------------------------------------------+
-|         System Calls Interface             |
-+--------------------------------------------+
-                   |
-                   v
-+--------------------------------------------+
-|                Kernel Space                |
-|   +------------+                           |
-|   |System Call |                           |
-|   |Handler     |                           |
-|   +------------+                           |
-|         |                                  |
-|         v                                  |
-|   +---------------------------+            |
-|   |Kernel Services & Functions|            |
-|   |  +--------------+        |            |
-|   |  |Process       |        |            |
-|   |  |Management    |        |            |
-|   |  +--------------+        |            |
-|   |  +--------------+        |            |
-|   |  |Memory        |        |            |
-|   |  |Management    |        |            |
-|   |  +--------------+        |            |
-|   |  +--------------+        |            |
-|   |  |File System   |        |            |
-|   |  +--------------+        |            |
-|   |  +--------------+        |            |
-|   |  |Device Drivers|        |            |
-|   |  +--------------+        |            |
-|   |  +--------------+        |            |
-|   |  |Network Stack |        |            |
-|   |  +--------------+        |            |
-|   +---------------------------+            |
-+--------------------------------------------+
-          |       |       |       |
-          v       v       v       v
-+--------------------------------------------+
-|                Hardware                    |
-|  +-----+  +------+  +-----+  +-------+    |
-|  | CPU |  |Memory|  |Disks|  |Network|    |
-|  +-----+  +------+  +-----+  +-------+    |
-+--------------------------------------------+
-</pre>
+![System Calls Diagram](/images/system-calls-diagram.png)
 
 ## Proteção do Kernel
 

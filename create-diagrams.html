@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ASCII to PNG Converter</title>
+    <style>
+        body {
+            font-family: monospace;
+            margin: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 300px;
+            font-family: monospace;
+            margin-bottom: 20px;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        .button-container {
+            margin-bottom: 20px;
+        }
+        .diagram-container {
+            margin-bottom: 40px;
+        }
+        h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>ASCII Diagram to PNG Converter</h1>
+    
+    <div class="diagram-container">
+        <h2>System Calls Diagram</h2>
+        <textarea id="systemCallsText">+------------------+     +------------------+
+|   User Space     |     |                  |
+|   +----------+   |     |   +----------+   |
+|   |Application|  |     |   |Application|  |
+|   |Process A  |  |     |   |Process B  |  |
+|   +----------+   |     |   +----------+   |
+|        |         |     |        |         |
++--------|---------|-----+--------|---------|
+         |                        |
+         v                        v
++--------------------------------------------+
+|         System Calls Interface             |
++--------------------------------------------+
+                   |
+                   v
++--------------------------------------------+
+|                Kernel Space                |
+|   +------------+                           |
+|   |System Call |                           |
+|   |Handler     |                           |
+|   +------------+                           |
+|         |                                  |
+|         v                                  |
+|   +---------------------------+            |
+|   |Kernel Services & Functions|            |
+|   |  +--------------+        |            |
+|   |  |Process       |        |            |
+|   |  |Management    |        |            |
+|   |  +--------------+        |            |
+|   |  +--------------+        |            |
+|   |  |Memory        |        |            |
+|   |  |Management    |        |            |
+|   |  +--------------+        |            |
+|   |  +--------------+        |            |
+|   |  |File System   |        |            |
+|   |  +--------------+        |            |
+|   |  +--------------+        |            |
+|   |  |Device Drivers|        |            |
+|   |  +--------------+        |            |
+|   |  +--------------+        |            |
+|   |  |Network Stack |        |            |
+|   |  +--------------+        |            |
+|   +---------------------------+            |
++--------------------------------------------+
+          |       |       |       |
+          v       v       v       v
++--------------------------------------------+
+|                Hardware                    |
+|  +-----+  +------+  +-----+  +-------+    |
+|  | CPU |  |Memory|  |Disks|  |Network|    |
+|  +-----+  +------+  +-----+  +-------+    |
++--------------------------------------------+</textarea>
+        <div class="button-container">
+            <button onclick="renderDiagram('systemCallsText', 'systemCallsCanvas', 'images/system-calls-diagram.png')">Render Diagram</button>
+            <a id="systemCallsDownload" download="system-calls-diagram.png" href="#">Download PNG</a>
+        </div>
+        <canvas id="systemCallsCanvas" width="700" height="600"></canvas>
+    </div>
+    
+    <div class="diagram-container">
+        <h2>Process Scheduling Diagram</h2>
+        <textarea id="processSchedulingText"> +------------+
+ | Created/New|
+ +------------+
+        |
+        | admitted
+        v
+  +------------+             +------------+
+  |   Ready    |<------------|   Waiting  |
+  +------------+    I/O or   +------------+
+        |          event           ^
+        | dispatch  complete       |
+        |                          | I/O or
+        v                          | event wait
+  +------------+             |     |
+  |  Running   |-------------+     |
+  +------------+                   |
+        |                          |
+        | exit                     |
+        v                          |
+  +------------+                   |
+  | Terminated |                   |
+  +------------+                   |
+        
+        +---------------+          |
+        |  CPU Scheduler|----------+
+        |  +-----------+|   time slice
+        |  |Dispatcher |<----expired---+
+        |  +-----------+|              |
+        +---------------+              |
+               |                       |
+               | context switch        |
+               v                       |
+        +---------------+              |
+        |  Process      |--------------+
+        +---------------+
+          
+  Scheduling Algorithms:
+  - FCFS (First-Come, First-Served)
+  - SJF (Shortest Job First)
+  - Priority Scheduling  
+  - Round Robin
+  - Multilevel Feedback Queue</textarea>
+        <div class="button-container">
+            <button onclick="renderDiagram('processSchedulingText', 'processSchedulingCanvas', 'images/process-scheduling.png')">Render Diagram</button>
+            <a id="processSchedulingDownload" download="process-scheduling.png" href="#">Download PNG</a>
+        </div>
+        <canvas id="processSchedulingCanvas" width="700" height="600"></canvas>
+    </div>
+
+    <script>
+        function renderDiagram(textareaId, canvasId, filename) {
+            const text = document.getElementById(textareaId).value;
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Set text properties
+            ctx.font = '14px monospace';
+            ctx.fillStyle = 'black';
+            
+            // Measure line height
+            const lineHeight = 16;
+            
+            // Split text into lines
+            const lines = text.split('\n');
+            
+            // Calculate diagram dimensions
+            const maxLineLength = Math.max(...lines.map(line => line.length));
+            const diagramWidth = maxLineLength * 8;
+            const diagramHeight = lines.length * lineHeight;
+            
+            // Adjust canvas size if needed
+            if (diagramWidth > canvas.width) {
+                canvas.width = diagramWidth + 40;
+            }
+            if (diagramHeight > canvas.height) {
+                canvas.height = diagramHeight + 40;
+            }
+            
+            // Clear canvas again with new dimensions
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'black';
+            ctx.font = '14px monospace';
+            
+            // Draw text
+            for (let i = 0; i < lines.length; i++) {
+                ctx.fillText(lines[i], 20, 20 + (i * lineHeight));
+            }
+            
+            // Create downloadable link
+            const downloadLink = document.getElementById(textareaId === 'systemCallsText' ? 'systemCallsDownload' : 'processSchedulingDownload');
+            downloadLink.href = canvas.toDataURL('image/png');
+            
+            // Save to file
+            saveCanvasToFile(canvas, filename);
+        }
+        
+        function saveCanvasToFile(canvas, filename) {
+            // Convert canvas to blob
+            canvas.toBlob(function(blob) {
+                // Create form data
+                const formData = new FormData();
+                formData.append('image', blob, filename);
+                formData.append('path', filename);
+                
+                // Send to server
+                fetch('/save-image', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`Image saved as ${filename}`);
+                    } else {
+                        alert('Error saving image: ' + data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Download as fallback
+                    const link = document.createElement('a');
+                    link.download = filename.split('/').pop();
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                });
+            });
+        }
+    </script>
+</body>
+</html> 
