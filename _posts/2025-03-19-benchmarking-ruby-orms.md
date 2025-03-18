@@ -1,9 +1,7 @@
 ---
 layout: post
 title: "Benchmarking Ruby ORMs: ActiveRecord vs Sequel Performance with TimescaleDB"
-date: 2025-03-19 09:00:00 -0300
 categories: ruby postgresql performance
-author: Jonatas Davi Paganini
 image: /images/posts/2025/orm-benchmarks.png
 ---
 
@@ -415,22 +413,6 @@ Register today to secure your spot and take your Ruby database performance skill
 4. [ActiveRecord Query Interface](https://guides.rubyonrails.org/active_record_querying.html)
 5. [OccamsRecord](https://github.com/jhollinger/occams-record)
 
-## Real-World Experiences: Developers on the ORM Frontlines
-
-We reached out to several experienced Ruby developers who have worked extensively with both ActiveRecord and Sequel in production environments. Here's what they shared:
-
-> "After switching from ActiveRecord to Sequel for our reporting service, query execution time dropped by 84% and memory usage was cut in half. For data-intensive operations where we don't need complex model relationships, Sequel has been transformative."
-> 
-> — Maria Santos, Lead Developer at FinTech Solutions
-
-> "We use both ORMs in our application. ActiveRecord powers our primary web app where we benefit from Rails integration, while Sequel handles our data processing pipeline where raw performance is critical. This hybrid approach gives us the best of both worlds."
-> 
-> — Jake Thornton, CTO at DataMetrics
-
-> "OccamsRecord was a game-changer for our large-scale data exports. What used to crash with out-of-memory errors now runs smoothly, using just a fraction of the resources. If you're dealing with large result sets, it's definitely worth considering."
-> 
-> — Priya Sharma, Senior Backend Engineer at LogisticsPlus
-
 ### Practical Insights from Community Experience
 
 From community discussions and survey responses, several patterns emerged regarding real-world usage:
@@ -451,3 +433,11 @@ From community discussions and survey responses, several patterns emerged regard
    Tools like OccamsRecord, BatchLoader, and ar_lazy_preload are frequently mentioned as solutions for specific performance challenges while remaining in the ActiveRecord ecosystem.
 
 These real-world experiences highlight the importance of benchmarking your specific use cases rather than relying solely on general recommendations. Join us at the workshop to learn how to effectively benchmark and optimize for your unique requirements!
+
+## Take Your PostgreSQL Performance to the Next Level!
+
+Looking for even more dramatic performance improvements in your Ruby + PostgreSQL applications? Check out the [timescaledb gem](https://github.com/timescale/timescaledb-ruby) that I maintain! This powerful extension enables time-series data optimization, hypertables, and advanced query capabilities that can deliver 10-100x performance gains for time-series workloads. 
+
+As a maintainer, I've seen teams transform their application performance with minimal code changes. Drop me a message if you have questions or need implementation advice!
+
+👉 **[Get started with TimescaleDB for Ruby today!](https://github.com/timescale/timescaledb-ruby)**
