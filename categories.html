@@ -250,9 +250,21 @@ group: navigation
           
           if (posts.length > 0) {
             posts.forEach(post => {
-              const postClone = post.cloneNode(true);
+              const postUrl = post.getAttribute('href');
+              const postDate = post.getAttribute('data-date');
+              const postYear = post.getAttribute('data-year');
+              
+              // Create column div
               const colDiv = document.createElement('div');
               colDiv.className = 'col-md-6 mb-4';
+              colDiv.setAttribute('data-date', postDate);
+              colDiv.setAttribute('data-year', postYear);
+              
+              // Create an anchor wrapper to make the entire card clickable
+              const linkWrapper = document.createElement('a');
+              linkWrapper.href = postUrl;
+              linkWrapper.className = 'text-decoration-none';
+              linkWrapper.style.display = 'block';
               
               // Create a card for the post
               const cardDiv = document.createElement('div');
@@ -262,12 +274,14 @@ group: navigation
               const cardBody = document.createElement('div');
               cardBody.className = 'card-body';
               
-              // Move post content to card body
+              // Clone and append the post content
+              const postClone = post.cloneNode(true);
               cardBody.innerHTML = postClone.innerHTML;
               
               // Add to DOM
               cardDiv.appendChild(cardBody);
-              colDiv.appendChild(cardDiv);
+              linkWrapper.appendChild(cardDiv);
+              colDiv.appendChild(linkWrapper);
               filteredPostsContainer.appendChild(colDiv);
             });
             
@@ -348,12 +362,11 @@ group: navigation
       const posts = filteredPostsContainer.querySelectorAll('.col-md-6');
       
       posts.forEach(postCol => {
-        const post = postCol.querySelector('.card-body');
-        const title = post.querySelector('h5').textContent.toLowerCase();
-        const description = post.querySelector('.post-description')?.textContent.toLowerCase() || '';
-        const tags = Array.from(post.querySelectorAll('.post-tag')).map(tag => tag.textContent.toLowerCase());
-        const date = postCol.getAttribute('data-date');
-        const year = date ? date.substring(0, 4) : '';
+        const year = postCol.getAttribute('data-year');
+        const cardBody = postCol.querySelector('.card-body');
+        const title = cardBody.querySelector('h5').textContent.toLowerCase();
+        const description = cardBody.querySelector('.post-description')?.textContent.toLowerCase() || '';
+        const tags = Array.from(cardBody.querySelectorAll('.post-tag')).map(tag => tag.textContent.toLowerCase());
         
         const matchesSearch = searchTerm === '' || 
                              title.includes(searchTerm) || 
@@ -496,6 +509,24 @@ group: navigation
   #no-results {
     padding: 2rem;
     font-size: 1.2rem;
+  }
+  
+  /* Clickable filtered post styles */
+  #filtered-posts .card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  #filtered-posts a:hover .card {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  
+  #filtered-posts a {
+    color: var(--text-color);
+  }
+  
+  #filtered-posts a:hover h5 {
+    color: var(--primary-color);
   }
   
   @media (max-width: 768px) {
