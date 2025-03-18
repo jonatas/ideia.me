@@ -8,6 +8,20 @@
     {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
     <meta name="author" content="{{ site.author.name }}">
 
+    <!-- Immediate dark mode application to prevent flash -->
+    <script>
+      (function() {
+        // Force dark mode for testing purposes
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (savedTheme === 'dark' || (savedTheme === null && prefersDarkMode)) {
+          document.documentElement.classList.add('dark-mode');
+          document.write('<style>body,html{background-color:#121212!important;color:#f0f2f5!important;}div{background-color:transparent!important;}</style>');
+        }
+      })();
+    </script>
+
     <!-- Enable responsive viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -20,6 +34,7 @@
     <link href="/css/nimbus-pygments.css" rel="stylesheet">
     <link href="/css/custom.css" rel="stylesheet">
     <link href="/css/code-highlighting.css" rel="stylesheet">
+    <link href="/css/disqus-dark.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <!-- Style overrides for Prism -->
@@ -58,26 +73,46 @@
     <!-- Dark Mode Script -->
     <script>
       function detectColorScheme() {
-        const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        // Check saved preference first
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         const darkModeToggle = document.getElementById('darkModeToggle');
         
-        if (isDarkMode) {
+        // Apply theme based on saved preference or system preference
+        if (savedTheme === 'dark' || (savedTheme === null && prefersDarkMode)) {
           document.body.classList.add('dark-mode');
+          document.documentElement.classList.add('dark-mode');
           if (darkModeToggle) darkModeToggle.checked = true;
+          console.log('Dark mode applied on initial load');
+        } else {
+          document.body.classList.remove('dark-mode');
+          document.documentElement.classList.remove('dark-mode');
+          if (darkModeToggle) darkModeToggle.checked = false;
+          console.log('Light mode applied on initial load');
         }
         
-        // Listen for changes in the OS color scheme
+        // Listen for changes in the OS color scheme only if no saved preference
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-          const newColorScheme = e.matches ? 'dark' : 'light';
-          if (newColorScheme === 'dark') {
-            document.body.classList.add('dark-mode');
-            if (darkModeToggle) darkModeToggle.checked = true;
-          } else {
-            document.body.classList.remove('dark-mode');
-            if (darkModeToggle) darkModeToggle.checked = false;
+          // Only apply system preference if user hasn't manually chosen a theme
+          if (localStorage.getItem('theme') === null) {
+            const newColorScheme = e.matches ? 'dark' : 'light';
+            if (newColorScheme === 'dark') {
+              document.body.classList.add('dark-mode');
+              document.documentElement.classList.add('dark-mode');
+              if (darkModeToggle) darkModeToggle.checked = true;
+              console.log('Dark mode applied from system preference change');
+            } else {
+              document.body.classList.remove('dark-mode');
+              document.documentElement.classList.remove('dark-mode');
+              if (darkModeToggle) darkModeToggle.checked = false;
+              console.log('Light mode applied from system preference change');
+            }
           }
         });
       }
+
+      // Initialize dark mode immediately before DOM content is fully loaded
+      detectColorScheme();
 
       // Add code block enhancements
       function enhanceCodeBlocks() {
@@ -257,29 +292,108 @@
     <!-- Additional scripts for code highlighting and dark mode toggle -->
     <script>
       // Toggle dark mode manually with smoother transition
-      document.getElementById('darkModeToggle').addEventListener('change', function() {
-        // Add transition class before changing mode
-        document.body.classList.add('theme-transition');
-        
-        if (this.checked) {
-          document.body.classList.add('dark-mode');
-        } else {
-          document.body.classList.remove('dark-mode');
+      document.addEventListener('DOMContentLoaded', function() {
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        if (darkModeToggle) {
+          darkModeToggle.addEventListener('change', function() {
+            if (this.checked) {
+              document.documentElement.classList.add('dark-mode');
+              document.body.classList.add('dark-mode');
+              localStorage.setItem('theme', 'dark');
+              console.log('Dark mode enabled via toggle');
+              
+              // Update Disqus theme if it exists
+              if (window.DISQUS) {
+                try {
+                  DISQUS.reset({
+                    reload: true,
+                    config: function () {
+                      this.page.identifier = window.disqus_identifier;
+                      this.page.url = window.disqus_url;
+                      this.page.title = window.disqus_title;
+                      this.forum = window.disqus_shortname;
+                    }
+                  });
+                } catch (e) {
+                  console.log('Error resetting Disqus:', e);
+                }
+              }
+            } else {
+              document.documentElement.classList.remove('dark-mode');
+              document.body.classList.remove('dark-mode');
+              localStorage.setItem('theme', 'light');
+              console.log('Light mode enabled via toggle');
+              
+              // Update Disqus theme if it exists
+              if (window.DISQUS) {
+                try {
+                  DISQUS.reset({
+                    reload: true,
+                    config: function () {
+                      this.page.identifier = window.disqus_identifier;
+                      this.page.url = window.disqus_url;
+                      this.page.title = window.disqus_title;
+                      this.forum = window.disqus_shortname;
+                    }
+                  });
+                } catch (e) {
+                  console.log('Error resetting Disqus:', e);
+                }
+              }
+            }
+            
+            // Force reload the page to ensure all styles are applied correctly
+            setTimeout(() => {
+              window.location.reload();
+            }, 100);
+          });
         }
         
-        // Remove transition class after transition completes
-        setTimeout(() => {
-          document.body.classList.remove('theme-transition');
-        }, 500);
-      });
-      
-      // Apply highlighting to code blocks after content loads
-      document.addEventListener('DOMContentLoaded', function() {
+        // Apply highlighting to code blocks after content loads
         enhanceCodeBlocks();
         if (window.Prism) {
           setTimeout(function() {
             Prism.highlightAll();
           }, 100);
+        }
+        
+        // Configure Disqus for dark mode if needed
+        const isDarkMode = document.documentElement.classList.contains('dark-mode');
+        if (isDarkMode) {
+          // Insert dark mode CSS for Disqus
+          const style = document.createElement('style');
+          style.innerHTML = `
+            #disqus_thread {
+              background-color: #1e1e1e !important;
+              color: #f0f2f5 !important;
+              padding: 20px;
+              border-radius: 8px;
+              border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+          `;
+          document.head.appendChild(style);
+          
+          // Set Disqus config variable for dark mode
+          window.disqus_config = function() {
+            this.page.identifier = window.location.pathname;
+            this.page.url = window.location.href;
+            this.language = 'en';
+            this.sso = {
+              name: 'SiteName',
+            };
+            this.callbacks.onReady = [function() {
+              const interval = setInterval(function() {
+                if (document.getElementById('dsq-app2')) {
+                  clearInterval(interval);
+                  const disqusIframe = document.getElementById('dsq-app2');
+                  disqusIframe.contentWindow.postMessage({
+                    name: 'setTheme',
+                    data: 'dark',
+                  }, '*');
+                }
+              }, 100);
+            }];
+          };
         }
       });
       
@@ -400,5 +514,97 @@
     </script>
     <!-- Profile image swap functionality -->
     <script src="/js/profile-image-swap.js"></script>
+    
+    <!-- Disqus Dark Mode Handler -->
+    <script>
+      // Function to handle Disqus dark mode
+      function setupDisqusDarkMode() {
+        const isDarkMode = document.documentElement.classList.contains('dark-mode');
+        
+        // Add a style element to target the Disqus iframe
+        const disqusStyle = document.createElement('style');
+        disqusStyle.innerHTML = `
+          html.dark-mode iframe, body.dark-mode iframe {
+            color-scheme: dark !important;
+          }
+          
+          html.dark-mode #disqus_thread, body.dark-mode #disqus_thread {
+            background-color: #1e1e1e !important;
+            color: #f0f2f5 !important;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+          }
+        `;
+        document.head.appendChild(disqusStyle);
+        
+        // Check for Disqus iframe and inject dark styles if needed
+        const checkForDisqus = setInterval(() => {
+          const disqusThread = document.getElementById('disqus_thread');
+          const disqusIframes = document.querySelectorAll('iframe[src*="disqus.com"]');
+          
+          if (disqusThread || disqusIframes.length > 0) {
+            clearInterval(checkForDisqus);
+            
+            if (isDarkMode) {
+              // Try to signal Disqus to use dark theme
+              if (window.DISQUS) {
+                try {
+                  window.DISQUS.host._loadEmbed({
+                    color: 'dark',
+                  });
+                } catch (e) {
+                  console.log('Could not set Disqus theme via API');
+                }
+              }
+              
+              // Direct CSS approach to all iframes
+              disqusIframes.forEach(iframe => {
+                try {
+                  // Try to access the iframe document
+                  const iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+                  
+                  // Add dark mode classes and styles
+                  if (iframeDocument.body) {
+                    iframeDocument.body.classList.add('dark-mode');
+                    
+                    const darkStyle = iframeDocument.createElement('style');
+                    darkStyle.textContent = `
+                      body { background-color: #1e1e1e !important; color: #f0f2f5 !important; }
+                      .textarea-wrapper, .post-actions, .alert { background-color: #2a2d31 !important; }
+                      .wysiwyg__placeholder, input, textarea { color: #f0f2f5 !important; }
+                      .publisher-background-color { background-color: #1e1e1e !important; }
+                      .publisher-border-color { border-color: rgba(255, 255, 255, 0.1) !important; }
+                      .publisher-anchor-color, a { color: #5c9eff !important; }
+                    `;
+                    iframeDocument.head.appendChild(darkStyle);
+                  }
+                } catch (e) {
+                  console.log('Could not modify Disqus iframe due to CORS policy');
+                  
+                  // Add a fallback with filter approach
+                  if (isDarkMode) {
+                    // Apply a CSS filter to invert the colors
+                    iframe.style.filter = 'invert(92%) hue-rotate(180deg)';
+                  }
+                }
+              });
+            }
+          }
+        }, 500);
+      }
+      
+      // Run setup when DOM is loaded and after any content changes
+      document.addEventListener('DOMContentLoaded', setupDisqusDarkMode);
+      document.addEventListener('ajaxComplete', setupDisqusDarkMode);
+      
+      // Also run after a delay in case Disqus loads later
+      setTimeout(setupDisqusDarkMode, 2000);
+      setTimeout(setupDisqusDarkMode, 5000);
+    </script>
+    
+    <!-- Dedicated Disqus dark mode handler -->
+    <script src="/js/disqus-dark.js"></script>
   </body>
 </html>

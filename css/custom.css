@@ -22,21 +22,64 @@
 /* Dark mode styles */
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary-color: #4cc9f0;
-    --secondary-color: #9d4edd;
-    --accent-color: #f72585;
+    --primary-color: #5c9eff;
+    --secondary-color: #b158fc;
+    --accent-color: #ff5a9d;
     --light-color: #2c3034;
     --dark-color: #f8f9fa;
-    --gray-color: #adb5bd;
+    --gray-color: #c5cfd9;
     --bg-color: #121212;
     --card-bg-color: #1e1e1e;
-    --text-color: #e9ecef;
-    --border-color: rgba(255, 255, 255, 0.1);
-    --code-bg-color: #2c3034;
-    --blockquote-bg-color: rgba(76, 201, 240, 0.1);
-    --hover-bg-color: rgba(76, 201, 240, 0.1);
-    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-    --card-hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.3);
+    --text-color: #f0f2f5;
+    --border-color: rgba(255, 255, 255, 0.15);
+    --code-bg-color: #2a2d31;
+    --blockquote-bg-color: rgba(92, 158, 255, 0.15);
+    --hover-bg-color: rgba(92, 158, 255, 0.15);
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --card-hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* Force application of dark mode styles for all key elements */
+  body {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
+  }
+  
+  .navbar {
+    background-color: #1a1a1a !important;
+  }
+  
+  .content-container, .container {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: #ffffff !important;
+  }
+  
+  p, li, blockquote {
+    color: var(--text-color) !important;
+  }
+  
+  .card, .list-group-item {
+    background-color: var(--card-bg-color) !important;
+    color: var(--text-color) !important;
+  }
+  
+  /* Apply dark mode to footer */
+  .footer {
+    background-color: #1a1a1a !important;
+    color: var(--gray-color) !important;
+  }
+  
+  /* Override bootstrap bg-light and bg-dark classes */
+  .bg-light {
+    background-color: var(--card-bg-color) !important;
+  }
+  
+  .bg-dark {
+    background-color: #1a1a1a !important;
   }
 }
 
@@ -122,7 +165,7 @@ h1, h2, h3, h4, h5, h6 {
 @media (prefers-color-scheme: dark) {
   .navbar-dark {
     background-color: #1a1a1a !important;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
   }
   
   .bg-light {
@@ -134,7 +177,7 @@ h1, h2, h3, h4, h5, h6 {
   }
   
   .text-muted {
-    color: #9da9b5 !important;
+    color: #b0bcc8 !important;
   }
   
   .dropdown-menu {
@@ -175,6 +218,24 @@ h1, h2, h3, h4, h5, h6 {
   .btn-outline-secondary {
     color: var(--gray-color);
     border-color: var(--gray-color);
+  }
+
+  /* Additional specific overrides for dark mode */
+  a.post {
+    color: var(--text-color);
+  }
+  
+  a.post:hover {
+    color: var(--primary-color);
+  }
+  
+  pre, code {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Ensure post content has good contrast */
+  .post-content {
+    color: var(--text-color);
   }
 }
 
@@ -588,4 +649,629 @@ table th {
   table th {
     background-color: var(--card-bg-color);
   }
+}
+
+/* Dark mode improvements for specific elements */
+body.dark-mode {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Improve dark mode for specific content elements */
+body.dark-mode .post-content h1,
+body.dark-mode .post-content h2,
+body.dark-mode .post-content h3,
+body.dark-mode .post-content h4,
+body.dark-mode .post-content h5,
+body.dark-mode .post-content h6 {
+  color: #ffffff;
+}
+
+body.dark-mode .post-content p,
+body.dark-mode .post-content li,
+body.dark-mode .post-content blockquote {
+  color: var(--text-color);
+}
+
+body.dark-mode blockquote {
+  background-color: rgba(92, 158, 255, 0.1);
+  border-left-color: var(--primary-color);
+}
+
+body.dark-mode .post-meta,
+body.dark-mode .post-date,
+body.dark-mode .post-author {
+  color: var(--gray-color);
+}
+
+/* Improve dark mode for code elements */
+body.dark-mode pre,
+body.dark-mode code {
+  background-color: #2a2d31 !important;
+  color: #e6e6e6 !important;
+}
+
+body.dark-mode .highlight {
+  background-color: transparent;
+}
+
+/* Ensure links have proper contrast in dark mode */
+body.dark-mode a {
+  color: var(--primary-color);
+}
+
+body.dark-mode a:hover {
+  color: var(--accent-color);
+}
+
+/* Increase contrast for UI elements in dark mode */
+body.dark-mode .navbar-brand,
+body.dark-mode .nav-link {
+  color: #ffffff !important;
+}
+
+body.dark-mode .navbar-toggler-icon {
+  filter: brightness(2);
+}
+
+body.dark-mode .dropdown-item {
+  color: var(--text-color);
+}
+
+body.dark-mode .dropdown-item:hover {
+  background-color: var(--hover-bg-color);
+  color: var(--primary-color);
+}
+
+/* Card improvements for dark mode */
+body.dark-mode .card {
+  background-color: var(--card-bg-color);
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Latest post styling improvements */
+body.dark-mode .latest-post h2 {
+  color: #ffffff;
+}
+
+body.dark-mode .latest-post p {
+  color: var(--text-color);
+}
+
+/* Latest post card dark mode improvements */
+body.dark-mode .latest-post-card {
+  background-color: #1e1e1e;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .latest-post-card h2,
+body.dark-mode .latest-post-card h3 {
+  color: #ffffff;
+}
+
+body.dark-mode .latest-post-card p {
+  color: var(--text-color);
+}
+
+body.dark-mode .latest-post-card .post-date {
+  color: #b0bcc8;
+}
+
+/* Code blocks in dark mode - especially for the special characters like \oo\ */
+body.dark-mode .post-content code,
+body.dark-mode .code {
+  color: #ff79c6 !important;
+  background-color: rgba(42, 45, 49, 0.7) !important;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+}
+
+/* Special character highlighting in dark mode */
+body.dark-mode .post-content code[class*="language-"],
+body.dark-mode .post-content pre[class*="language-"] {
+  color: #f8f8f2 !important;
+  text-shadow: none !important;
+}
+
+body.dark-mode .token.comment,
+body.dark-mode .token.prolog,
+body.dark-mode .token.doctype,
+body.dark-mode .token.cdata {
+  color: #6272a4 !important;
+}
+
+body.dark-mode .token.punctuation {
+  color: #f8f8f2 !important;
+}
+
+body.dark-mode .token.property,
+body.dark-mode .token.tag,
+body.dark-mode .token.constant,
+body.dark-mode .token.symbol,
+body.dark-mode .token.deleted {
+  color: #ff79c6 !important;
+}
+
+body.dark-mode .token.boolean,
+body.dark-mode .token.number {
+  color: #bd93f9 !important;
+}
+
+body.dark-mode .token.selector,
+body.dark-mode .token.attr-name,
+body.dark-mode .token.string,
+body.dark-mode .token.char,
+body.dark-mode .token.builtin,
+body.dark-mode .token.inserted {
+  color: #50fa7b !important;
+}
+
+/* Cookie policy panel dark mode improvements */
+body.dark-mode .cookie-policy,
+body.dark-mode #cookie-policy {
+  background-color: #2d3748 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .cookie-policy button,
+body.dark-mode #cookie-policy button {
+  background-color: var(--primary-color) !important;
+  color: #ffffff !important;
+  border: none;
+}
+
+body.dark-mode .cookie-policy a,
+body.dark-mode #cookie-policy a {
+  color: var(--primary-color) !important;
+}
+
+/* Footer improvements for dark mode */
+body.dark-mode .footer {
+  background-color: #1a1a1a !important;
+  color: #b0bcc8 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .footer a {
+  color: var(--primary-color) !important;
+}
+
+/* Fix for specific contrast issues in image captions */
+body.dark-mode figcaption {
+  color: #b0bcc8 !important;
+}
+
+/* Ensure good contrast for all buttons in dark mode */
+body.dark-mode .btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #ffffff;
+}
+
+body.dark-mode .btn-secondary {
+  background-color: #4a5568;
+  border-color: #4a5568;
+  color: #ffffff;
+}
+
+body.dark-mode .btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+body.dark-mode .btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+/* Standalone dark mode class styling - will apply regardless of media query */
+html.dark-mode,
+body.dark-mode {
+  background-color: #121212 !important;
+  color: #f0f2f5 !important;
+}
+
+html.dark-mode h1, 
+html.dark-mode h2, 
+html.dark-mode h3, 
+html.dark-mode h4, 
+html.dark-mode h5, 
+html.dark-mode h6,
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode h4, 
+body.dark-mode h5, 
+body.dark-mode h6 {
+  color: #ffffff !important;
+}
+
+html.dark-mode p, 
+html.dark-mode li, 
+html.dark-mode blockquote,
+body.dark-mode p, 
+body.dark-mode li, 
+body.dark-mode blockquote {
+  color: #f0f2f5 !important;
+}
+
+html.dark-mode .navbar-dark,
+body.dark-mode .navbar-dark {
+  background-color: #1a1a1a !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+html.dark-mode .bg-dark,
+body.dark-mode .bg-dark {
+  background-color: #1a1a1a !important;
+}
+
+html.dark-mode .bg-light,
+body.dark-mode .bg-light,
+html.dark-mode .footer,
+body.dark-mode .footer {
+  background-color: #1a1a1a !important;
+  color: var(--gray-color) !important;
+}
+
+html.dark-mode .card,
+body.dark-mode .card,
+html.dark-mode .list-group-item,
+body.dark-mode .list-group-item,
+html.dark-mode [class*="social-sharing"],
+body.dark-mode [class*="social-sharing"],
+html.dark-mode [class*="author-bio"],
+body.dark-mode [class*="author-bio"],
+html.dark-mode [class*="share-buttons"],
+body.dark-mode [class*="share-buttons"],
+html.dark-mode [class*="comments-section"],
+body.dark-mode [class*="comments-section"] {
+  background-color: #1e1e1e !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: #f0f2f5 !important;
+}
+
+html.dark-mode .content-container,
+body.dark-mode .content-container,
+html.dark-mode .container,
+body.dark-mode .container {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+html.dark-mode .text-muted,
+body.dark-mode .text-muted {
+  color: #b0bcc8 !important;
+}
+
+html.dark-mode a,
+body.dark-mode a {
+  color: var(--primary-color) !important;
+}
+
+html.dark-mode a:hover,
+body.dark-mode a:hover {
+  color: var(--accent-color) !important;
+}
+
+html.dark-mode .nav-link,
+body.dark-mode .nav-link,
+html.dark-mode .navbar-brand,
+body.dark-mode .navbar-brand,
+html.dark-mode .form-check-label,
+body.dark-mode .form-check-label {
+  color: #ffffff !important;
+}
+
+html.dark-mode pre,
+body.dark-mode pre,
+html.dark-mode code,
+body.dark-mode code {
+  background-color: #2a2d31 !important;
+  color: #e6e6e6 !important;
+}
+
+/* Specific fix for the author profile cards */
+html.dark-mode .author-bio,
+body.dark-mode .author-bio,
+html.dark-mode .profile-container,
+body.dark-mode .profile-container,
+html.dark-mode .author-card,
+body.dark-mode .author-card {
+  background-color: #1e1e1e !important;
+  color: #f0f2f5 !important;
+}
+
+/* Fix for navigation buttons at the bottom */
+html.dark-mode .pagination,
+body.dark-mode .pagination,
+html.dark-mode .previous-next-links,
+body.dark-mode .previous-next-links,
+html.dark-mode .navigation-links,
+body.dark-mode .navigation-links {
+  background-color: #1e1e1e !important;
+  color: #f0f2f5 !important;
+}
+
+/* Force all backgrounds to be dark */
+html.dark-mode div,
+body.dark-mode div {
+  background-color: transparent !important;
+}
+
+/* Override white backgrounds for specific elements */
+html.dark-mode div[class*="card"],
+body.dark-mode div[class*="card"],
+html.dark-mode div[class*="author"],
+body.dark-mode div[class*="author"],
+html.dark-mode div[class*="share"],
+body.dark-mode div[class*="share"],
+html.dark-mode div[class*="social"],
+body.dark-mode div[class*="social"] {
+  background-color: #1e1e1e !important;
+}
+
+/* Make all containers transparent */
+html.dark-mode .container,
+body.dark-mode .container,
+html.dark-mode .content-container,
+body.dark-mode .content-container,
+html.dark-mode main,
+body.dark-mode main,
+html.dark-mode article,
+body.dark-mode article {
+  background-color: transparent !important;
+}
+
+/* Set dark backgrounds for specific containers */
+html.dark-mode .footer,
+body.dark-mode .footer {
+  background-color: #1a1a1a !important;
+  color: #b0bcc8 !important;
+}
+
+/* Ensure all text is visible on dark backgrounds */
+html.dark-mode *,
+body.dark-mode * {
+  color: #f0f2f5;
+}
+
+/* Override default styles for social sharing buttons */
+html.dark-mode .share-buttons,
+body.dark-mode .share-buttons {
+  background-color: #1e1e1e !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Fix for all buttons in the social sharing section */
+html.dark-mode .share-buttons a,
+body.dark-mode .share-buttons a,
+html.dark-mode .social-sharing a,
+body.dark-mode .social-sharing a,
+html.dark-mode a.btn-social,
+body.dark-mode a.btn-social {
+  color: #ffffff !important;
+  border-color: transparent !important;
+}
+
+/* Remove all shadows and add dark borders */
+html.dark-mode *,
+body.dark-mode * {
+  box-shadow: none !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Fix for the content area */
+html.dark-mode .content-container,
+body.dark-mode .content-container {
+  background-color: #121212 !important;
+}
+
+/* Fix for existing links */
+html.dark-mode a,
+body.dark-mode a {
+  color: #5c9eff !important;
+}
+
+html.dark-mode a:hover,
+body.dark-mode a:hover {
+  color: #ff5a9d !important;
+}
+
+/* Fix for icons */
+html.dark-mode .bi,
+body.dark-mode .bi,
+html.dark-mode i,
+body.dark-mode i {
+  color: #f0f2f5 !important;
+}
+
+/* Fix for cards and containers */
+html.dark-mode .bg-light,
+body.dark-mode .bg-light,
+html.dark-mode .text-muted,
+body.dark-mode .text-muted {
+  background-color: #1e1e1e !important;
+  color: #b0bcc8 !important;
+}
+
+/* Fix for social media sharing buttons */
+html.dark-mode .btn-twitter,
+body.dark-mode .btn-twitter,
+html.dark-mode a[class*="twitter"],
+body.dark-mode a[class*="twitter"] {
+  background-color: #1DA1F2 !important;
+  color: white !important;
+}
+
+html.dark-mode .btn-facebook,
+body.dark-mode .btn-facebook,
+html.dark-mode a[class*="facebook"],
+body.dark-mode a[class*="facebook"] {
+  background-color: #1877F2 !important;
+  color: white !important;
+}
+
+html.dark-mode .btn-linkedin,
+body.dark-mode .btn-linkedin,
+html.dark-mode a[class*="linkedin"],
+body.dark-mode a[class*="linkedin"] {
+  background-color: #0A66C2 !important;
+  color: white !important;
+}
+
+html.dark-mode .btn-reddit,
+body.dark-mode .btn-reddit,
+html.dark-mode a[class*="reddit"],
+body.dark-mode a[class*="reddit"] {
+  background-color: #FF4500 !important;
+  color: white !important;
+}
+
+/* Extra selector for share widgets */
+html.dark-mode .share-post,
+body.dark-mode .share-post,
+html.dark-mode .share-this-post,
+body.dark-mode .share-this-post,
+html.dark-mode [id*="share"],
+body.dark-mode [id*="share"] {
+  background-color: #1e1e1e !important;
+  color: #f0f2f5 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 15px !important;
+  border-radius: 8px !important;
+}
+
+/* Fix for profile image */
+html.dark-mode img.rounded-circle,
+body.dark-mode img.rounded-circle,
+html.dark-mode img.profile-image,
+body.dark-mode img.profile-image,
+html.dark-mode .avatar,
+body.dark-mode .avatar {
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Fix for Disqus comments in dark mode */
+html.dark-mode #disqus_thread,
+body.dark-mode #disqus_thread,
+html.dark-mode .disqus-container,
+body.dark-mode .disqus-container,
+html.dark-mode [id*="disqus"],
+body.dark-mode [id*="disqus"] {
+  background-color: #1e1e1e !important;
+  color: #f0f2f5 !important;
+  border-radius: 8px;
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Disqus iframe container */
+html.dark-mode iframe[src*="disqus.com"],
+body.dark-mode iframe[src*="disqus.com"] {
+  color-scheme: dark !important;
+}
+
+/* Fix for comment sections and reaction widgets */
+html.dark-mode .comments-section,
+body.dark-mode .comments-section,
+html.dark-mode .reactions,
+body.dark-mode .reactions,
+html.dark-mode [class*="comment"],
+body.dark-mode [class*="comment"] {
+  background-color: #1e1e1e !important;
+  color: #f0f2f5 !important;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Fix for all inputs in dark mode */
+html.dark-mode input,
+body.dark-mode input,
+html.dark-mode textarea,
+body.dark-mode textarea,
+html.dark-mode .form-control,
+body.dark-mode .form-control {
+  background-color: #2a2d31 !important;
+  color: #f0f2f5 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Input placeholder color */
+html.dark-mode ::placeholder,
+body.dark-mode ::placeholder {
+  color: #8e9399 !important;
+}
+
+/* Fix for emoji reactions */
+html.dark-mode .emoji,
+body.dark-mode .emoji,
+html.dark-mode img[alt*="emoji"],
+body.dark-mode img[alt*="emoji"] {
+  background-color: transparent !important;
+}
+
+/* More comprehensive styling for comment widgets and Disqus */
+html.dark-mode .comment,
+body.dark-mode .comment,
+html.dark-mode .comment-box,
+body.dark-mode .comment-box,
+html.dark-mode .dsq-comment,
+body.dark-mode .dsq-comment,
+html.dark-mode .post-comment,
+body.dark-mode .post-comment,
+html.dark-mode .comment-container,
+body.dark-mode .comment-container {
+  background-color: #1e1e1e !important;
+  color: #f0f2f5 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Override third-party comment systems */
+html.dark-mode div[id^="disqus"],
+body.dark-mode div[id^="disqus"],
+html.dark-mode div[id^="comment"],
+body.dark-mode div[id^="comment"],
+html.dark-mode section[id^="comment"],
+body.dark-mode section[id^="comment"],
+html.dark-mode .comments-area,
+body.dark-mode .comments-area {
+  background-color: #1e1e1e !important;
+  color: #f0f2f5 !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 30px;
+}
+
+/* Ensure all form inputs in dark mode have proper contrast */
+html.dark-mode button,
+body.dark-mode button,
+html.dark-mode .btn,
+body.dark-mode .btn,
+html.dark-mode input[type="submit"],
+body.dark-mode input[type="submit"] {
+  background-color: #2a2d31 !important;
+  color: #f0f2f5 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+/* Ensure proper styling for reaction buttons */
+html.dark-mode .reaction,
+body.dark-mode .reaction,
+html.dark-mode .reactions-wrapper,
+body.dark-mode .reactions-wrapper,
+html.dark-mode [class*="reaction"],
+body.dark-mode [class*="reaction"] {
+  background-color: transparent !important;
+}
+
+/* Special handling for iframes to ensure dark backgrounds */
+html.dark-mode iframe,
+body.dark-mode iframe {
+  background-color: #1e1e1e !important;
 } 

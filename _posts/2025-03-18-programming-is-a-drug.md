@@ -16,7 +16,7 @@ Even worse is when things don't work as expected. That's when it becomes most ad
 
 ## The Arrival of New Substances
 
-In 2016, when I wrote the original version of this post, it was already difficult to stop coding. But now, in March 2025, with the arrival of AI tools, it's as if we've discovered a new class of intoxicants.
+In 2016, when I wrote the [original version](/programar-e-uma-droga) of this post, it was already difficult to stop coding. But now, in March 2025, with the arrival of AI tools, it's as if we've discovered a new class of engagement.
 
 **The Cursor editor and its AI assistants make me feel like I have superpowers.**
 

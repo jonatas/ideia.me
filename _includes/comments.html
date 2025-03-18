@@ -1,26 +1,84 @@
-<div class="comments-section card mb-4">
-  <div class="card-header">
-    <h4>Comments</h4>
-  </div>
-  <div class="card-body">
-    <div id="disqus_thread"></div>
-    <script>
-      /**
-      *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-      *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-      
-      var disqus_config = function () {
-        this.page.url = "{{ site.production_url }}{{ page.url }}";
-        this.page.identifier = "{{ page.url }}";
+{% if site.disqus %}
+<div id="disqus_thread" class="comments-section"></div>
+<script>
+  var disqus_config = function () {
+    this.page.url = '{{ site.url }}{{ page.url }}';
+    this.page.identifier = '{{ page.url }}';
+    
+    // Handle dark mode for Disqus
+    const isDarkMode = document.documentElement.classList.contains('dark-mode') || 
+                        document.body.classList.contains('dark-mode') || 
+                        window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (isDarkMode) {
+      // Enable dark mode for Disqus
+      this.page.functions = [];
+      this.callbacks = {
+        onReady: [function() {
+          // Message the iframe to apply dark theme once loaded
+          const message = {
+            name: 'theme',
+            data: {
+              theme: 'dark'
+            }
+          };
+          
+          // Try to send the message multiple times as Disqus can load slowly
+          setTimeout(function() {
+            const iframe = document.querySelector('iframe[title="Disqus"]');
+            if (iframe && iframe.contentWindow) {
+              iframe.contentWindow.postMessage(message, '*');
+            }
+          }, 2000);
+          
+          setTimeout(function() {
+            const iframe = document.querySelector('iframe[title="Disqus"]');
+            if (iframe && iframe.contentWindow) {
+              iframe.contentWindow.postMessage(message, '*');
+            }
+          }, 4000);
+        }]
       };
-      
-      (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = 'https://ideiame.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-  </div>
-</div> 
+    }
+  };
+
+  (function() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://{{ site.disqus }}.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    
+    // Add dark styling for container
+    if (document.documentElement.classList.contains('dark-mode') || 
+        document.body.classList.contains('dark-mode') || 
+        window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // Style the container immediately
+      const style = document.createElement('style');
+      style.textContent = `
+        #disqus_thread {
+          background-color: #1e1e1e !important;
+          color: #f0f2f5 !important;
+          padding: 20px;
+          border-radius: 8px;
+          border: 1px solid rgba(255, 255, 255, 0.1) !important;
+          margin-top: 30px;
+          margin-bottom: 30px;
+        }
+        
+        iframe {
+          background-color: #1e1e1e !important;
+          color-scheme: dark !important;
+        }
+        
+        /* Force the iframe document to use dark mode */
+        iframe[src*="disqus.com"] {
+          color-scheme: dark !important;
+          filter: invert(90%) hue-rotate(180deg) !important;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+{% endif %} 

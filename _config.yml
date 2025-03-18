@@ -19,6 +19,9 @@ words_per_minute: 200
 related_posts: true
 related_posts_max: 5
 
+# Disqus comments configuration
+disqus: ideiame
+
 # Themes are encouraged to use these universal variables
 # so be sure to set them if your theme uses them.
 #
