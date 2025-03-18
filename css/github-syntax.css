@@ -1,0 +1,223 @@
+/* GitHub-style syntax highlighting theme */
+:root {
+  /* Light theme (default) */
+  --gh-code-background: #f6f8fa;
+  --gh-code-text: #24292e;
+  --gh-code-border: #ddd;
+  --gh-code-comment: #6a737d;
+  --gh-code-punctuation: #24292e;
+  --gh-code-property: #005cc5;
+  --gh-code-selector: #22863a;
+  --gh-code-operator: #d73a49;
+  --gh-code-keyword: #d73a49;
+  --gh-code-function: #6f42c1;
+  --gh-code-regex: #032f62;
+  --gh-code-string: #032f62;
+  --gh-code-variable: #e36209;
+  --gh-code-number: #005cc5;
+  --gh-code-important: #b31d28;
+  --gh-code-class-name: #6f42c1;
+  --gh-code-tag: #22863a;
+  --gh-code-attr-name: #6f42c1;
+  --gh-code-attr-value: #032f62;
+}
+
+/* Dark theme */
+.dark-mode {
+  --gh-code-background: #0d1117;
+  --gh-code-text: #c9d1d9;
+  --gh-code-border: #30363d;
+  --gh-code-comment: #8b949e;
+  --gh-code-punctuation: #c9d1d9;
+  --gh-code-property: #79c0ff;
+  --gh-code-selector: #7ee787;
+  --gh-code-operator: #ff7b72;
+  --gh-code-keyword: #ff7b72;
+  --gh-code-function: #d2a8ff;
+  --gh-code-regex: #a5d6ff;
+  --gh-code-string: #a5d6ff;
+  --gh-code-variable: #ffa657;
+  --gh-code-number: #79c0ff;
+  --gh-code-important: #f85149;
+  --gh-code-class-name: #d2a8ff;
+  --gh-code-tag: #7ee787;
+  --gh-code-attr-name: #d2a8ff;
+  --gh-code-attr-value: #a5d6ff;
+}
+
+/* Base code block styling */
+pre {
+  background-color: var(--gh-code-background);
+  border: 1px solid var(--gh-code-border);
+  border-radius: 6px;
+  color: var(--gh-code-text);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 14px;
+  line-height: 1.45;
+  overflow: auto;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+code {
+  background-color: var(--gh-code-background);
+  border-radius: 3px;
+  color: var(--gh-code-text);
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 13.6px;
+  padding: 0.2em 0.4em;
+}
+
+pre code {
+  background-color: transparent;
+  border: 0;
+  display: block;
+  font-size: 14px;
+  padding: 0;
+}
+
+/* Syntax highlighting colors */
+.hljs-comment,
+.hljs-quote {
+  color: var(--gh-code-comment);
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+  color: var(--gh-code-keyword);
+}
+
+.hljs-string,
+.hljs-doctag,
+.hljs-template-string {
+  color: var(--gh-code-string);
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-type {
+  color: var(--gh-code-function);
+}
+
+.hljs-literal,
+.hljs-symbol,
+.hljs-number,
+.hljs-tag .hljs-attr {
+  color: var(--gh-code-number);
+}
+
+.hljs-attr,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+  color: var(--gh-code-variable);
+}
+
+.hljs-regexp,
+.hljs-link {
+  color: var(--gh-code-regex);
+}
+
+.hljs-built_in,
+.hljs-builtin-name {
+  color: var(--gh-code-function);
+}
+
+.hljs-meta {
+  color: var(--gh-code-property);
+}
+
+.hljs-tag {
+  color: var(--gh-code-tag);
+}
+
+.hljs-deletion {
+  background-color: #ffeef0;
+  color: #b31d28;
+}
+
+.dark-mode .hljs-deletion {
+  background-color: rgba(248, 81, 73, 0.15);
+  color: #f85149;
+}
+
+.hljs-addition {
+  background-color: #f0fff4;
+  color: #22863a;
+}
+
+.dark-mode .hljs-addition {
+  background-color: rgba(126, 231, 135, 0.15);
+  color: #7ee787;
+}
+
+/* GitHub-style code block header */
+.highlight {
+  position: relative;
+}
+
+.highlight::before {
+  content: "";
+  height: 36px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--gh-code-border);
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  border-bottom: 1px solid var(--gh-code-border);
+  opacity: 0.6;
+}
+
+.highlight[data-language]::before {
+  content: attr(data-language);
+  display: block;
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gh-code-text);
+  z-index: 1;
+  opacity: 0.7;
+}
+
+.highlight[data-language] pre {
+  margin-top: 0;
+  padding-top: 52px;
+}
+
+/* Copy button styling */
+.highlight .copy-button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 10;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  color: var(--gh-code-text);
+  background-color: var(--gh-code-background);
+  border: 1px solid var(--gh-code-border);
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.highlight .copy-button:hover {
+  opacity: 1;
+}
+
+.highlight .copy-button.copied {
+  color: #22863a;
+}
+
+.dark-mode .highlight .copy-button.copied {
+  color: #7ee787;
+} 
