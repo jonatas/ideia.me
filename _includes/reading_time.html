@@ -1,0 +1,12 @@
+{% if site.reading_time %}
+  {% assign words = content | number_of_words %}
+  {% if words < 360 %}
+    <span class="reading-time" title="Estimated read time">
+      <i class="bi bi-clock"></i> 1 min read
+    </span>
+  {% else %}
+    <span class="reading-time" title="Estimated read time">
+      <i class="bi bi-clock"></i> {{ words | divided_by:site.words_per_minute }} min read
+    </span>
+  {% endif %}
+{% endif %} 

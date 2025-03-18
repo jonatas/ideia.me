@@ -1,0 +1,42 @@
+{% if site.JB.sharing.provider %}
+<div class="social-sharing mb-4">
+  <h5>Share this article</h5>
+  <div class="sharing-buttons">
+    {% if site.JB.sharing.twitter %}
+    <a href="https://twitter.com/intent/tweet?text={{ page.title | url_encode }}&url={{ site.production_url | append: page.url | url_encode }}&via={{ site.author.twitter }}" 
+       class="btn btn-twitter btn-sm" 
+       target="_blank"
+       rel="noopener noreferrer">
+      <i class="bi bi-twitter"></i> Twitter
+    </a>
+    {% endif %}
+    
+    {% if site.JB.sharing.facebook %}
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.production_url | append: page.url | url_encode }}" 
+       class="btn btn-facebook btn-sm" 
+       target="_blank"
+       rel="noopener noreferrer">
+      <i class="bi bi-facebook"></i> Facebook
+    </a>
+    {% endif %}
+    
+    {% if site.JB.sharing.linkedin %}
+    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.production_url | append: page.url | url_encode }}&title={{ page.title | url_encode }}" 
+       class="btn btn-linkedin btn-sm" 
+       target="_blank"
+       rel="noopener noreferrer">
+      <i class="bi bi-linkedin"></i> LinkedIn
+    </a>
+    {% endif %}
+    
+    {% if site.JB.sharing.reddit %}
+    <a href="https://reddit.com/submit?url={{ site.production_url | append: page.url | url_encode }}&title={{ page.title | url_encode }}" 
+       class="btn btn-reddit btn-sm" 
+       target="_blank"
+       rel="noopener noreferrer">
+      <i class="bi bi-reddit"></i> Reddit
+    </a>
+    {% endif %}
+  </div>
+</div>
+{% endif %} 

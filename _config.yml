@@ -3,10 +3,21 @@
 permalink: /:title
 
 markdown: kramdown
+kramdown:
+  toc_levels: 1..3
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    block:
+      line_numbers: true
 exclude: [".rvmrc", ".rbenv-version", "README.md", "Rakefile", "changelog.md"]
 auto: true
 highlighter: rouge
 
+# Content enhancement features
+reading_time: true
+words_per_minute: 200
+related_posts: true
+related_posts_max: 5
 
 # Themes are encouraged to use these universal variables
 # so be sure to set them if your theme uses them.
@@ -22,7 +33,7 @@ author :
   instagram: jonatasdp
   feedburner : ideiame
   avatar: "/images/jonatas-davi-paganini-profile-2025.png"
-
+  bio: "Developer and writer passionate about PostgreSQL, TimescaleDB, and building better systems. Currently sharing knowledge about time series databases and system architecture."
 
 # The production_url is only used when full-domain names are needed
 # such as sitemap.txt
@@ -98,7 +109,11 @@ JB :
   # Set 'provider' to false to turn sharing off globally.
   #
   sharing :
-    provider : false
+    provider : true
+    twitter : true
+    facebook : true
+    linkedin : true
+    reddit : true
 
   # Settings for all other include helpers can be defined by creating
   # a hash with key named for the given helper. ex:

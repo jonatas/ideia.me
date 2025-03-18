@@ -1,0 +1,15 @@
+<div class="author-bio">
+  <img src="{{ site.author.avatar }}" alt="{{ site.author.name }}">
+  <div class="author-bio-content">
+    <h4>{{ site.author.name }}</h4>
+    <p>{{ site.author.bio }}</p>
+    <div class="author-social">
+      <a href="https://github.com/{{ site.author.github }}" target="_blank" title="GitHub"><i class="bi bi-github"></i></a>
+      <a href="https://twitter.com/{{ site.author.twitter }}" target="_blank" title="Twitter"><i class="bi bi-twitter"></i></a>
+      <a href="https://linkedin.com/in/{{ site.author.linkedin }}" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+      {% if site.author.instagram %}
+      <a href="https://instagram.com/{{ site.author.instagram }}" target="_blank" title="Instagram"><i class="bi bi-instagram"></i></a>
+      {% endif %}
+    </div>
+  </div>
+</div> 
