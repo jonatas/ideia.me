@@ -17,11 +17,11 @@ In this post, I'll dive into the latest performance differences I found between 
 
 ## The ORM Performance Benchmark Challenge
 
-My no-brain choice is always ActiveRecord but for the Performance workshop, I started collecting also information in reddit and I decided to also build comparison between different ORMs. Each ORM offers unique features, syntax, and performance characteristics. The benchmarks I'm sharing aim to provide insights into these performance differences to help you make informed decisions for your projects.
+My no-brain choice is always ActiveRecord but for the Performance workshop, I started collecting also information in reddit and I decided to also build comparison between different ORMs for the workshop. Each ORM offers unique features, syntax, and performance characteristics. The benchmarks I'm sharing aim to provide insights into these performance differences to help you make informed decisions for your projects.
 
 It's important to note that these benchmarks focus purely on execution time and memory usage - they don't account for developer productivity, which is a crucial factor when choosing an ORM. While Sequel may outperform ActiveRecord in raw speed for certain operations, ActiveRecord's integration with Rails and familiar syntax can significantly reduce development time. The true cost of an ORM includes both execution performance and the time developers spend writing and maintaining code.
 
-Let's check out the results from my comprehensive benchmarking tests:
+Let's check out the results from my benchmarking tests:
 
 ### Query Types Performance (operations per second)
 
@@ -42,9 +42,9 @@ Let's check out the results from my comprehensive benchmarking tests:
 | JSON Processing | 80 | 50 | 45 | JSONB is more memory-efficient than standard JSON |
 | Aggregations | 40 | 35 | 30 | Memory patterns are similar for aggregation operations |
 
-## Key Findings from My Benchmarks
+## Key Findings from the Benchmark
 
-Before diving into the detailed results, I want to share some key insights from my comprehensive benchmarking study. These findings represent patterns I observed across multiple test scenarios and real-world applications I've worked on.
+Before diving into the detailed results, I want to share some key insights from my benchmarking study. These findings represent patterns I observed across multiple test scenarios and real-world applications I've worked on.
 
 ![Jeremy Evans and I discussing Ruby performance at RubyConf Thailand](/images/jonatas-paganini-jeremy-evans-polished-ruby-book-rubyconf-thailand-2023.jpeg "Meeting with Jeremy Evans, the creator of Sequel, at RubyConf Thailand 2023")
 
@@ -314,7 +314,7 @@ users_data = OccamsRecord
 
 Want to dive deeper into these concepts and learn how to optimize your Ruby applications with PostgreSQL? Come hang out with me at my upcoming **PostgreSQL Performance for Ruby Developers** workshop at Tropical on Rails 2025!
 
-The workshop is based on our comprehensive PostgreSQL Performance course, which has helped hundreds of developers optimize their database interactions and improve application performance. I've refined it based on feedback from previous sessions.
+The workshop is based on our PostgreSQL Performance course, which has helped hundreds of developers optimize their database interactions and improve application performance. I've refined it based on feedback from previous sessions.
 
 ### Workshop Details:
 - **When**: April 2nd, 2025 -  2 PM to 6 PM
@@ -423,7 +423,7 @@ end
 
 ### Practical Insights from Community Experience
 
-From discussions I've had and community survey responses, several patterns emerged regarding real-world usage:
+From discussions I've had on reddit, several patterns emerged regarding real-world usage:
 
 1. **Sequel shines for raw data operations**  
    Developers consistently report to me 3-10x performance improvements when using Sequel for data-intensive operations, especially with large datasets.
