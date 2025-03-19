@@ -340,7 +340,7 @@ Remember that the best ORM for your application depends on your specific require
 
 What's your experience with ORM performance? I'd love to hear your thoughts in the comments. And if you're interested in diving deeper, join me at Tropical on Rails 2025 to continue the conversation!
 
-## Advanced Benchmarking Techniques You'll Learn at My Workshop
+## More Benchmarking Techniques
 
 During our **PostgreSQL Performance for Ruby Developers** workshop, I'll dive deeper into advanced benchmarking techniques that go beyond simple comparisons. Here's a preview of what you'll learn:
 
@@ -413,16 +413,10 @@ Benchmark.ips do |x|
 end
 ```
 
-### 4. Custom Performance Solutions for Your Specific Needs
-
-During my workshop, you'll have the opportunity to discuss your specific performance challenges, and I'll help you get personalized recommendations. Whether you're dealing with large datasets, complex queries, or high-traffic applications, you'll leave with actionable strategies tailored to your needs.
-
-Register today to secure your spot and take your Ruby database performance skills to the next level!
-
 ## Resources
 
 1. [TimescaleDB Ruby Gem](https://github.com/timescale/timescaledb-ruby)
-2. [PostgreSQL Performance Workshop](https://github.com/timescale/postgresql-performance-for-rubyists)
+2. [PostgreSQL Performance Workshop for Rubyists](https://github.com/timescale/postgresql-performance-for-rubyists)
 3. [Sequel Documentation](https://github.com/jeremyevans/sequel)
 4. [ActiveRecord Query Interface](https://guides.rubyonrails.org/active_record_querying.html)
 5. [OccamsRecord](https://github.com/jhollinger/occams-record)
