@@ -124,6 +124,7 @@ end
 ```
 
 **Results:**
+
 | Implementation | Performance (i/s) | Comparison |
 |----------------|-------------------|------------|
 | Sequel | 2,774.5 i/s | baseline |
@@ -162,6 +163,7 @@ end
 ```
 
 **Results:**
+
 | Implementation | Performance (i/s) | Comparison |
 |----------------|-------------------|------------|
 | Sequel | 62.9 i/s | baseline |
@@ -197,6 +199,7 @@ end
 ```
 
 **Results:**
+
 | Implementation | Performance (i/s) | Comparison |
 |----------------|-------------------|------------|
 | Sequel | 211.7 i/s | baseline |
@@ -236,6 +239,7 @@ end
 ```
 
 **Results from previous run:**
+
 | Implementation | Performance (i/s) | Comparison |
 |----------------|-------------------|------------|
 | ActiveRecord | 1,643.7 i/s | baseline |
@@ -459,8 +463,6 @@ Here's what I consider when choosing an ORM:
 3. Sometimes I use both in the same application where appropriate (yes, this works!)
 4. I always profile my specific use case with equivalent queries before committing to an ORM
 5. I use bulk operations whenever possible for better performance
-6. I pay special attention to query patterns (like index-friendly LIKE clauses) that affect performance regardless of ORM choice
-7. I ensure my benchmarks use proper warmup times and multiple runs for stable results
 
 Remember that the best ORM for your application depends on your specific requirements and constraints. My updated benchmarks provide a more realistic starting point for your decision-making process, but your mileage may vary based on your specific architecture and usage patterns.
 
