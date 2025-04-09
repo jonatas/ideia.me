@@ -450,8 +450,10 @@ blockquote {
 /* Images styling */
 img {
   max-width: 100%;
+  max-height: 80vh; /* Limit height to 80% of viewport height */
   height: auto;
   border-radius: 8px;
+  object-fit: contain; /* Ensure image maintains aspect ratio */
 }
 
 /* Horizontal rule */

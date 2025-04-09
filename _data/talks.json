@@ -5,7 +5,7 @@
       "title": "Intro to the TimescaleDB gem",
       "location": "Madrid, Spain",
       "event": "Madrid.rb Ruby User Group",
-      "url": "https://madridrb.com",
+      "url": "https://www.madridrb.com/events/march-2025-intro-to-the-timescaledb-gem-1376",
       "type": "meetup",
       "topic": "Ruby, TimescaleDB",
       "status": "Accepted",
@@ -138,7 +138,44 @@
           "src": "/images/banners/tropicalonrails-2025-banner.png",
           "alt": "Tropical on Rails 2025 Official Banner",
           "url": "https://www.tropicalonrails.com/en/"
-        }
+        },
+        "images": [
+          {
+            "src": "/images/tropicalonrails-2025-workshop-postgresql-performance.jpg",
+            "alt": "Workshop audience at Tropical on Rails 2025",
+            "caption": "Engaged audience during the PostgreSQL Performance Workshop"
+          },
+          {
+            "src": "/images/tropicalonrails-2025-audience.jpg",
+            "alt": "Audience at Tropical on Rails 2025",
+            "caption": "Engaged audience during the conference"
+          },
+          {
+            "src": "/images/tropicalonrails-2025-jonatas-e-cirdes.jpeg",
+            "alt": "With Cirdes at Tropical on Rails 2025",
+            "caption": "Happy selfies with Cirdes the main organizer of the event"
+          },
+          {
+            "src": "/images/tropicalonrails-2025-jonatas-e-rafael-franca.jpg",
+            "alt": "With Rafael França at Tropical on Rails 2025",
+            "caption": "Meeting Rafael França the Rails core team member at the conference"
+          },
+          {
+            "src": "/images/tropicalonrails-2025-jonatas-e-rosa-e-tim.jpg",
+            "alt": "With Rosa and Tim at Tropical on Rails 2025",
+            "caption": "Great real life podcast conversations with Rosa and Tim"
+          },
+          {
+            "src": "/images/tropicalonrails-2025-jonatas-e-vinicius-stock.jpg",
+            "alt": "With Vinicius Stock at Tropical on Rails 2025",
+            "caption": "Validating some crazy ideas with Vinicius Stock at the event"
+          },
+          {
+            "src": "/images/tropicalonrails-2025-jonatasdp-e-rodrigo-serradura.jpeg",
+            "alt": "With Rodrigo Serradura at Tropical on Rails 2025",
+            "caption": "Having a great chat about PostgreSQL and Ruby with Rodrigo Serradura"
+          }
+        ]
       }
     },
     {
