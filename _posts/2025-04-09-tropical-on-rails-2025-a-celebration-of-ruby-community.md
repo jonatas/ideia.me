@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Tropical on Rails 2025: A Celebration of Ruby and PostgreSQL"
+title: "Tropical on Rails 2025: A Celebration of the Ruby Community"
 categories: ruby rails conference postgresql
 image: /images/banners/tropicalonrails-2025-banner.png
 ---
