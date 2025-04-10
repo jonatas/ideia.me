@@ -1,6 +1,8 @@
 ---
 title: "Permaculture and Programming"
 layout: post
+categories: ['personal']
+tags: ['best-practices', 'community-building', 'architecture']
 description: "My experiments in permaculture, spanning a decade, have been a profound understanding and applying the principles of natural ecosystems to cultivate a sustai..."
 ---
 # The Confluence of Permaculture and Code

@@ -1,6 +1,8 @@
 ---
 title: "Customize multiple refreshes for continuous aggregates"
 layout: post
+categories: ['databases', 'programming', 'technology']
+tags: ['postgresql', 'sql', 'tutorials']
 description: "TimescaleDB, an open-source time-series database optimized for fast ingest and complex queries, offers a unique feature called Continuous Aggregates (CAGGs)...."
 ---
 TimescaleDB, an open-source time-series database optimized for fast ingest and complex queries, offers a unique feature called Continuous Aggregates (CAGGs). These CAGGs are game-changers in how we handle time-series data, allowing for real-time aggregate views that are automatically refreshed. In this post, we'll explore how to create a custom refresh policy for hierarchical continuous aggregates and delve into the flexibility and simplicity TimescaleDB offers.

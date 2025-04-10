@@ -1,7 +1,9 @@
 ---
 title: "TimescaleDB Gem Continuous Aggregates Updates"
 layout: post
-description: "TimescaleDB is a popular open-source time-series database that extends PostgreSQL. It is designed to handle time-series data efficiently, making it an excell..."
+categories: ['programming']
+tags: ['postgresql', 'ruby', 'automation', 'best-practices']
+description: "Exploring the latest updates to the TimescaleDB gem's continuous aggregates functionality."
 date: 2024-10-07
 ---
 TimescaleDB is a popular open-source time-series database that extends PostgreSQL. It is designed to handle time-series data efficiently, making it an excellent choice for IoT, finance, and other domains that require high-performance time-series storage and querying.

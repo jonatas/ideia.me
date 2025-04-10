@@ -2,6 +2,7 @@
 title: "Community is not for Sale"
 layout: post
 categories: ['community']
+tags: ['community-building', 'best-practices']
 description: "You Cannot Buy a Community"
 ---
 **You Cannot Buy a Community**

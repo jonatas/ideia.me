@@ -1,7 +1,9 @@
 ---
-title: "The Souless Economy - How AI Agents will change our economy completely"
+title: "The Soulless Economy"
 layout: post
-description: "We're reaching a new point in our society with new beings. The AI Agents."
+categories: ['technology']
+tags: ['ai', 'automation', 'future-tech']
+description: "Reflections on the impact of AI and automation on human connections and community building."
 ---
 We're reaching a new point in our society with new beings. The AI Agents.
 

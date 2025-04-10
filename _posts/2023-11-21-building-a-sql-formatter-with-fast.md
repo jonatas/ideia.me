@@ -1,6 +1,8 @@
 ---
 title: "Building a SQL formatter with Fast"
 layout: post
+categories: ['programming', 'technology']
+tags: ['sql', 'ruby', 'automation', 'tutorials']
 description: "Now that fast supports SQL, I will share a few of my exploring toys."
 ---
 Now that [fast supports SQL](/fast-supports-sql), I will share a few of my exploring toys.

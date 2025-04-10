@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "Benchmarking Ruby ORMs: ActiveRecord vs Sequel Performance with TimescaleDB"
-categories: ruby postgresql performance
+categories: ['programming']
+tags: ['ruby', 'postgresql', 'best-practices']
 image: /images/postgresql-performance-workshop.webp
 ---
 

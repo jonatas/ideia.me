@@ -1,7 +1,8 @@
 ---
 title: "Retrospective 2023"
 layout: post
-categories: talk
+categories: ['personal']
+tags: ['community-building', 'best-practices']
 description: "I tried to have a restrospective moment every year and it always happen in the
 last few days of December."
 ---

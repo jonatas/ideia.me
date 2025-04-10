@@ -1,7 +1,8 @@
 ---
 title: "Sonification Device"
 layout: post
-categories: ['ideas', 'sonification']
+categories: ['technology']
+tags: ['architecture', 'automation', 'best-practices', 'data']
 description: "Fasten your seatbelts, fellow tech enthusiasts! Today, I'm thrilled to unveil a groundbreaking innovation that promises to redefine data analysis, particular..."
 ---
 Fasten your seatbelts, fellow tech enthusiasts! Today, I'm thrilled to unveil a groundbreaking innovation that promises to redefine data analysis, particularly for those visually impaired: The **Data Synthesizer**. 

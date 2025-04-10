@@ -1,7 +1,8 @@
 ---
 title: "Semantic fields of the mind"
 layout: post
-categories: ['personal', 'technical']
+categories: ['personal']
+tags: ['best-practices']
 description: "Thursday night, I arrived from Athens and past weekend I had the most insightful
 update in my mindset until now. I'll refer here as semantic fields."
 ---

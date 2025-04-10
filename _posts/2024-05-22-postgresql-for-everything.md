@@ -1,7 +1,8 @@
 ---
 title: "PostgreSQL for Everything!"
 layout: post
-tags: ['postgresql', 'databases', 'think']
+categories: ['programming']
+tags: ['postgresql', 'sql', 'best-practices', 'architecture']
 description: "When starting a new project, my mind always gravitates towards my favorite programming language and database."
 ---
 When starting a new project, my mind always gravitates towards my favorite programming language and database. 

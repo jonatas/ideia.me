@@ -1,7 +1,8 @@
 ---
 title: "Grepping SQL Code like a boss"
 layout: post
-categories: talk sql
+categories: ['programming']
+tags: ['sql', 'ruby', 'automation', 'best-practices']
 description: "Here's the outline of the content of my talk in Poland I presented at the
 Lambda Days 2024."
 ---

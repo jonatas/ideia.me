@@ -1,7 +1,8 @@
 ---
 title: "Semantic Fields through Ages - A Journey in Words"
 layout: post
-categories: ['personal', 'technical']
+categories: ['personal']
+tags: ['best-practices']
 description: "Late at night, with sleep eluding me, my mind wandered through the labyrinth of semantic fields and the power of words at different stages of life. A chat wi..."
 ---
 Late at night, with sleep eluding me, my mind wandered through the labyrinth of semantic fields and the power of words at different stages of life. A chat with ChatGPT became an exploration into the depths of language, each word a stepping stone towards understanding how we can adapt our vocabulary for different ages. Today, I invite you on an adventure through the landscape of words, where we traverse the minds of a 9-year-old child, a 15-year-old teenager, and a 35-year-old adult.

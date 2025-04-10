@@ -1,7 +1,10 @@
 ---
 title: "Authentic Tech Communities"
-description: "A developer's perspective on building authentic tech communities, moving beyond synthetic interactions and focusing on real value."
-tags: ["community", "tech", "culture", "leadership"]
+layout: post
+categories: ['community']
+tags: ['community-building', 'best-practices', 'architecture']
+description: "Building authentic tech communities that focus on real interactions and value."
+
 ---
 
 # Authentic Tech Communities

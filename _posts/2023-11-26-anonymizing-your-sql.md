@@ -1,6 +1,8 @@
 ---
 title: "Anonymize your SQL statements"
 layout: post
+categories: ['databases', 'programming', 'technology']
+tags: ['postgresql', 'sql', 'ruby', 'tutorials', 'security']
 description: "As a community manager at Timescale, I frequently engage with our vibrant community, helping members tackle a variety of SQL-related challenges. One common c..."
 ---
 As a community manager at Timescale, I frequently engage with our vibrant community, helping members tackle a variety of SQL-related challenges. One common concern that arises is the need to share SQL queries for collaboration or troubleshooting, without exposing sensitive data. Recognizing this need, I've embarked on developing a tool to anonymize SQL data effectively.
@@ -272,7 +274,8 @@ ast
             s(:ival, 1))),
         s(:a_const,
           s(:ival,
-            s(:ival, 2)))),
+            s(:ival,
+              s(:ival, 2)))),
       s(:sort_clause,
         s(:sort_by,
           s(:node,

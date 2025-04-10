@@ -1,8 +1,9 @@
 ---
+title: "My First Contribution to RubyGems"
 layout: post
-categories: ['time-series', 'timescaledb', 'opensource', 'performance', 'ruby']
-description: "Adding to my goal of being helpful in the software world, I had my first contribution to RubyGems
-[merged][new_pr] 🎉"
+categories: ['programming']
+tags: ['ruby', 'open-source', 'best-practices']
+description: "A journey through my first contribution to the RubyGems ecosystem."
 ---
 Adding to my goal of being helpful in the software world, I had my first contribution to RubyGems
 [merged][new_pr] 🎉
@@ -269,7 +270,7 @@ Then you can build the materialized views to track the downloads per gem, versio
 and day. Now, let's build the materialized views to track the downloads per gem.
 
 Interestingly, there are quite a few hierarchical continuous aggregates, and I
-believe it’s a good idea to keep them in a separate migration.
+believe it's a good idea to keep them in a separate migration.
 
 Now, let me try to break down all the cyclomatic complexity and build a simple
 model to track the downloads per gem, version, and day.
@@ -525,7 +526,7 @@ I just want to say thanks to the RubyGems team for the opportunity, especially
 [@simi][simi] and [@colby-swandale][colby] for their support and guidance in
 helping me merge this contribution.
 
-I’m looking forward to the next steps, and I’m excited to keep contributing to the RubyGems project.
+I'm looking forward to the next steps, and I'm excited to keep contributing to the RubyGems project.
 
 I just want to say thanks to the RubyGems team for the opportunity and
 especially the support and guidance from 

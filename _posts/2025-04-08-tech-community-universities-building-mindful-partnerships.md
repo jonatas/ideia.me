@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "Tech Community and Universities: Building Mindful Partnerships"
-categories: ['community', 'partnerships', 'leadership', 'tech-events']
+categories: ['community']
+tags: ['community-building', 'best-practices']
 ---
 
 A few weeks ago I participated in a series of events in the local community in
