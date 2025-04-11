@@ -21,7 +21,7 @@
   --code-bg-color: #1a1a1a;
   
   /* Shadows and effects */
-  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --card-shadow: 0 4px 20px rgba(15, 120, 146, 0.5);
   --hover-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
   --transition-speed: 0.3s;
 }
@@ -175,8 +175,6 @@ ul.posts li:hover {
 pre, code {
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace !important;
   background-color: var(--code-bg-color) !important;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
   font-size: 0.9rem;
 }
 
@@ -322,4 +320,31 @@ table th {
   h2 {
     font-size: 1.5rem;
   }
+}
+
+/* Month heading styling */
+.month-heading {
+  color: var(--primary-light-blue);
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Year heading styling */
+.year-heading {
+  color: var(--primary-light-blue);
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Year label styling */
+.year-label {
+  color: var(--primary-light-blue);
+  font-weight: bold;
+  font-size: 1.5rem;
+  background-color: var(--card-bg-color);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: inline-block;
 } 

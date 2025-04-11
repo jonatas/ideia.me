@@ -1252,4 +1252,8 @@ body.dark-mode [class*="reaction"] {
 html.dark-mode iframe,
 body.dark-mode iframe {
   background-color: #1e1e1e !important;
+}
+
+.month-heading {
+  color: var(--text-color);
 } 

@@ -12,12 +12,12 @@ group: navigation
       <div class="archive-sidebar sticky-top" style="top: 20px;">
         <div class="card">
           <div class="card-header bg-primary text-white">
-            <h5 class="mb-0">Years</h5>
+            <h5 class="mb-0 year-label">Years</h5>
           </div>
           <div class="list-group list-group-flush">
             {% assign posts_by_year = site.posts | group_by_exp:"post", "post.date | date: '%Y'" %}
             {% for year in posts_by_year %}
-              <a href="#{{ year.name }}-ref" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center year-link">
+              <a href="#{{ year.name }}-ref" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center year-link year-label">
                 {{ year.name }}
                 <span class="badge bg-primary rounded-pill">{{ year.items.size }}</span>
               </a>
@@ -33,7 +33,7 @@ group: navigation
           <div class="year-section mb-5" id="{{ year.name }}-ref">
             <div class="card">
               <div class="card-header bg-primary text-white">
-                <h3 class="mb-0">{{ year.name }}</h3>
+                <h3 class="mb-0 year-label">{{ year.name }}</h3>
               </div>
               <div class="card-body">
                 {% assign posts_by_month = year.items | group_by_exp:"post", "post.date | date: '%B'" %}
