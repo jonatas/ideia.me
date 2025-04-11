@@ -1,3 +1,2 @@
 <div id="disqus_thread"></div>
-<!-- Disqus will be loaded by our dedicated dark mode handler in /js/disqus-dark.js -->
-<!-- This prevents reloading embed.js and infinite loop issues -->
+<!-- Disqus will be loaded by the standard embed.js -->

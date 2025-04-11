@@ -1158,26 +1158,6 @@ body.dark-mode .avatar {
   border: 2px solid rgba(255, 255, 255, 0.2) !important;
 }
 
-/* Fix for Disqus comments in dark mode */
-html.dark-mode #disqus_thread,
-body.dark-mode #disqus_thread,
-html.dark-mode .disqus-container,
-body.dark-mode .disqus-container,
-html.dark-mode [id*="disqus"],
-body.dark-mode [id*="disqus"] {
-  background-color: #1e1e1e !important;
-  color: #f0f2f5 !important;
-  border-radius: 8px;
-  padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Disqus iframe container */
-html.dark-mode iframe[src*="disqus.com"],
-body.dark-mode iframe[src*="disqus.com"] {
-  color-scheme: dark !important;
-}
-
 /* Fix for comment sections and reaction widgets */
 html.dark-mode .comments-section,
 body.dark-mode .comments-section,
@@ -1217,13 +1197,11 @@ body.dark-mode img[alt*="emoji"] {
   background-color: transparent !important;
 }
 
-/* More comprehensive styling for comment widgets and Disqus */
+/* More comprehensive styling for comment widgets */
 html.dark-mode .comment,
 body.dark-mode .comment,
 html.dark-mode .comment-box,
 body.dark-mode .comment-box,
-html.dark-mode .dsq-comment,
-body.dark-mode .dsq-comment,
 html.dark-mode .post-comment,
 body.dark-mode .post-comment,
 html.dark-mode .comment-container,
@@ -1234,8 +1212,6 @@ body.dark-mode .comment-container {
 }
 
 /* Override third-party comment systems */
-html.dark-mode div[id^="disqus"],
-body.dark-mode div[id^="disqus"],
 html.dark-mode div[id^="comment"],
 body.dark-mode div[id^="comment"],
 html.dark-mode section[id^="comment"],

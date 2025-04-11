@@ -3,26 +3,26 @@ layout: page
 title: Jônatas Davi Paganini
 ---
 
-Senior developer remote only.
+Developer Advocate @ Timescale | Real Time Analytics, Software Development, Architecture Development
 
 # Contact
 
-**City/State/Country**: Florianópolis/SC/Brazil
-
+**City/State/Country**: Santa Catarina/Brazil
 **Phone**: [+55 (48) 99150 1012](tel:5548991501012)
-
 **Mail**: jonatasdp@gmail.com
-
 **Site**: http://ideia.me
 
 # Developer
 
-* Passionated developer has 11+ years of experience working on software development, applying agile methods in the last 8 years.
-* Actually working on onboarding process at Resultados Digitais as a Full Stack Trainer
-* Self taught and researcher in the last 5 years has worked with research/development of automated trading strategies for financial markets
-* Responsible and committed working 7+ years from home for various customers and companies.
-* Entrepreneur and independent has working without supervision since 2010. Being partner of two different business from there. [Executive](http://executive.com.br) (2010-2012) and [Invent.to](htto://invent.to)(2012-2016).
-* Hacker e activist created Beltrão Hacker Club - a hacker/maker group in Francisco Beltrão with regular meetings to hack software and hardware.
+* Developer Advocate at Timescale, empowering developers to build better time-series applications
+* 20+ years of experience crafting software with a focus on autonomy and collaboration
+* Passionate about enabling teams through better tools, practices, and knowledge sharing
+* Built tools and processes that helped hundreds of developers transition from monoliths to microservices
+* Mentored and onboarded over 300 backend developers, fostering autonomous and confident engineers
+* Created custom RuboCop cops and tools to improve code quality and meaningful PR discussions
+* Self-taught researcher with experience in automated trading strategies and performance optimization
+* Entrepreneur who values autonomy and independence, working remotely since 2010
+* Advocate for sustainable development and continuous learning
 
 Abilities:
 
@@ -30,116 +30,68 @@ Abilities:
 * intermediate people to get focused in some objective
 * excellent verbal and written communication skills
 * resilient on troubleshooting
+* building autonomous teams
+* creating tools that empower developers
 
 Other characteristics:
 
 * Self-motivated to work and live
 * Diligent and interest on our sustainable planet
-* Living a nerd life
 
+# Personal Lifestyle
 
-# Interesting activities on career
+* Cyclist aspiring to become a hiker, exploring nature and challenging myself
+* Living a nerd life in the countryside, practicing yoga 3 times per week
+* DIY enthusiast: building musical instruments and crafting wooden furniture
+* Applying permaculture techniques at my countryside house, living sustainably
+* Balancing technology with hands-on craftsmanship and sustainable living
 
-* Computer vision for biometrics
-* Performance benchmarking, development and research
-* Distributed architecture and parallel processing
-* debugging and performance tuning on
-  * High frequency algorithms - JVM (Java Virtual Machine).
-  * Event driven systems - CEP (Complex Event Processing)
-  * Complex SQL, big queries and indices optimization.
-* Design and deployment of various web/mobile apps
-* Ruby on Rails web and friendly mobile applications
-* Native Android applications
-  * Integrated and offline/sync applications.
-  * Musical apps
-  * Bluetooth integrated applications
-* Designing Object Oriented applications
-* Backend linux - process and services integrations
-* Integration between hardware and software - Internet Of Things
-* Managing clouds, linux environment: Shell scripts, Puppet, Vagrant.
-* International markets and integrated markets - FIX Protocol
-* Image processing with Java and Javascript
-* Research and development of trading strategies for financial markets: from quantitative indicators to fully automated trading strategies experiencing CME, Forex, BMF and Bovespa markets.
-* BigData manipulation
-
-Familiar with frameworks like: AngularJS, HandleBars, Backbone, HighCharts, JQuery, Underscore, d3.  Adopted coffeescript instead of javascript in all the projects as possible.
-
-Uses Test driven development (TestUnit, JUnit) and Behavior driven development RSpec, cucumber) to develop since 2007.
-
-## Technologies summary
-
- Languages          | Tools                  | Methodologies        |  OS     | Databases, Persistence and Prevalence
---------------------+------------------------+----------------------+---------+--------------------------------------
-Ruby                | VIM, Eclipse           | Extremme Programming | OS X    | PostgreSQL
-Coffee / JavaScript | Sinatra, Rails, Yeoman | Scrum                | Linux   | MySQL
-Java                | Bundler, npm, gradle   | Kanban               | iOS     | CouchDB
-Python              | RSpec, JUnit, jasmine  | Business Model Canvas| Android | MongoDB
-Shell               | Bower + Grunt          |                      | Tizen OS| Redis
-SQL/PlPgSql         | AngularJS              |                      |         | Prevayler
-PureData, R, Elixir | JQuery                 |                      |         | Madeleine
-
-## Professional Experience
+# Professional Experience
 
  From | To    | Position            | Company                                | Experiences
  -----|-------|---------------------|----------------------------------------|--------------------------------
- 2004 | 2006  | Software developer  | TJ Sistemas                            | Clipper/FlagShip, Linux, PostgreSQL
- 2006 | 2009  | Software developer  | Leosoft                                | Java, Ruby, Javascript, Linux Servers, PostgreSQL, JBoss, Tomcat
- 2009 | 2010  | Freelancer          | http://ideia.me                        | Ruby, Javascript, Java, Node, PostgreSQL, MySQL
- 2010 | 2012  | Partner / CTO       | Executive Inteligência Tecnológica.    | Java, jRuby, Statistics, SOA, CEP, FIX Protocol
- 2012 | 2016 | Partner / Developer  | Invent.to Pesquisa e Desenvolvimento   | Ruby, jRuby, Java, Javascript, Node, C
- 2013 | 2013  | Teacher             | UNOESC - Universidade do Extremo Oeste | Distributed computing and parallel processing classes
- 2015 | 2016 | Full stack developer | Resultados Digitais                  | Performance and Operation team. Benchmark, research and improve actual infrastructure to scaling up RDStation digital marketing platform.
- 2016 | actual | Full stack trainer | Resultados Digitais                  | Out teach guy. Help people to code using the best practices: TDD/BDD, code quality, metrics and monitoring. |
-
-
-## Interests
-
-* Performance issues
-* Scalability strategies
-* Internet of Things 
-* 3D Printing
-* Sonification and art-technology
-* Startups
-* Statistics and Data Science
-* Functional Languages
-* Computational Intelligence and autonomous systems
+ 2022 | actual | Developer Advocate | Timescale                              | Community Manager for TimescaleDB, creating content and tools for time-series data. Speaking at conferences, live-streaming code projects, writing blogs and tutorials. Working with community to expand the ecosystem support.
+ 2021 | 2022  | Onboarding lead    | Timescale                              | Built engineering onboarding initiatives, facilitated cross-team collaboration through documentation and sharing sessions.
+ 2021 | 2021  | Developer Advocate | Timescale                              | Created content about time-series databases, Developed the timescale gem for Ruby/Rails integration.
+ 2020 | 2021  | Senior Back-end Engineer | Toptal                          | Created tools to preview microservices extracted from monoliths using Ruby, Rails engines, and Docker. Developed custom RuboCop cops for code quality. Helped hundreds of developers in their decoupling journey.
+ 2018 | 2020  | Onboarding Team Lead | Toptal                            | Mentored 300+ backend developers in Ruby, Rails, and microservices. Created tools for autonomous onboarding using Git, Docker, and CI/CD. Simplified contribution policies through automated tooling.
+ 2016 | 2018  | Back end Mentor    | Toptal                                | Developed custom RuboCop cops and testing frameworks. Promoted TDD/BDD practices with RSpec. Facilitated knowledge sharing through pair programming and code reviews.
+ 2015 | 2016  | Back End Developer | Resultados Digitais                    | Worked on scalability issues using Ruby, Rails, and PostgreSQL. Implemented caching strategies with Redis. Created engineering blog and technical content.
+ 2012 | 2016  | Chief Technology Officer | Invent.to                         | R&D of inventions using Python & Javascript, computer vision, and hardware integration. Developed Bluetooth communication protocols and sound synthesizers. Worked with 3D printing and IoT.
+ 2010 | 2015  | Chief Technology Officer | Executive Inteligência Tecnológica | Built automated trading platform using Java, high-frequency algorithms, and complex event processing. Integrated with financial markets through FIX Protocol.
+ 2010 | 2010  | Freelancer         | Ideia.me                              | Full-stack development with Ruby, Rails, JavaScript, and PostgreSQL. Developed Android apps using Java.
+ 2006 | 2010  | Software Engineer  | Leosoft                               | Java, Struts, Linux, PostgreSQL development. Introduced Ruby and Rails to the team. Trained developers in agile practices and TDD.
 
 ## Academic experience
 
 From | To    | Title                                                | University
 -----|-------|------------------------------------------------------|----------
-2006 | 2011  | Bachelor of Computer Information Systems             | UNIPAR
+2004 | 2005  | Bachelor of Computer Information Systems             | UNIPAR
 2012 | 2014  | Graduate School in Art-therapy, education and health | UNOESC
 
-I really enjoy and learn so much more on http://coursera.org and a lot of other
+I really enjoy and learn so much more on https://coursera.org and a lot of other
 open source online courses than from my academic experiences.
 
-My favorites actually are coursera and udacity.
-
+My favorites actually are coursera and udacity. Last few years I prefer learning through Audiobooks.
 
 ## Voluntarism
 
-* Bliss Symbols International Community - Created [bliss.ideia.me](http://bliss.ideia.me) - a tool for work with bliss symbols. Create interactive content to learn blisssymbolics language.
+* Bliss Symbols International Community - Created [bliss.ideia.me](http://bliss.ideia.me) - a tool for work with bliss symbols
 * Activist on local hacker/maker culture
-* Active Rails Rumble competitor
-* Active Speaker at tech conferences - Find my presentations at [slideshare](http://www.slideshare.net/jonataspaganini/) or [speackerdeck](https://speakerdeck.com/jonatas)
+* Active Speaker at tech conferences - check my [/talks](/talks)
 * Active participant on local tech events. Find me on a [meetup](http://www.meetup.com/members/185190193/) near from me.
-* Active apoiador on startup/entrepreneurship events
+* Active supporter speaker on dev/startup/entrepreneurship events
 
 ## Links
 
 * [github.com/jonatas](http://github.com/jonatas) is where I put my open-source code.
 * [LinkedIn](http://in.linkedin.com/in/jonatasdp) exists but is not up to date.
-* [ideia.me](http://ideia.me) is my personal website
-* [invent.to](http://invent.to) is the company I was partner focused on maker world.
-* [Executive](http://executive.com.br) is another company I was partner focused
-  on automated trading for financial markets.
 
 ## Talks
 
 I like to talk so much at events and be part of the tech communities.
 
-See some of my [talks](/talks) in portuguese.
+See some of my latest [talks](/talks).
 
 ## Pet Projects
 

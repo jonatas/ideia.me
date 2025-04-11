@@ -12,22 +12,25 @@
     <script>
       (function() {
         document.documentElement.classList.add('dark-mode');
-        document.write('<style>body,html{background-color:#000000!important;color:#f0f2f5!important;}div{background-color:transparent!important;}</style>');
+        document.write('<style>body,html{background-color:#0c0c0c!important;color:#f0f2f5!important;}div{background-color:transparent!important;}</style>');
       })();
     </script>
 
     <!-- Enable responsive viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- JetBrains Mono and other developer fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
     <!-- Modern stylesheet links -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-    <!-- GitHub-style syntax highlighting -->
+    
+    <!-- Site styles -->
     <link href="/css/nimbus-pygments.css" rel="stylesheet">
-    <link href="/css/custom.css" rel="stylesheet">
     <link href="/css/modern-theme.css" rel="stylesheet">
-    <link href="/css/disqus-dark.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <!-- Modern JavaScript -->
@@ -39,14 +42,6 @@
     <script src="/js/github-code-blocks.js"></script>
     
     <div id="fb-root"></div>
-
-    <!-- Le fav and touch icons -->
-  <!-- Update these with your own images
-    <link rel="shortcut icon" href="images/favicon.ico">
-    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-  -->
 
     <!-- atom & rss feed -->
     <link href="{{ BASE_PATH }}{{ site.JB.atom_path }}" type="application/atom+xml" rel="alternate" title="Sitewide ATOM Feed">
@@ -127,38 +122,21 @@
       </div>
     </footer>
 
-    <!-- Additional scripts for code highlighting -->
+    <!-- Consolidated JS -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         // Apply highlighting to code blocks after content loads
-        enhanceCodeBlocks();
+        if (typeof enhanceCodeBlocks === 'function') {
+          enhanceCodeBlocks();
+        }
+        
         if (window.Prism) {
           setTimeout(function() {
             Prism.highlightAll();
           }, 100);
         }
-      });
-      
-      // Reapply highlighting after any AJAX content loads
-      document.addEventListener('ajaxComplete', function() {
-        enhanceCodeBlocks();
-        if (window.Prism) {
-          setTimeout(function() {
-            Prism.highlightAll();
-          }, 100);
-        }
-      });
-    </script>
-
-    <!-- SEO and content improvement scripts -->
-    <script src="/assets/js/seo-helper.js"></script>
-    <script src="/assets/js/category-standardizer.js"></script>
-    <script src="/assets/js/link-validator.js"></script>
-
-    <!-- Add this at the end of the body, just before closing body tag -->
-    <script>
-      // Scroll animation for fade-in elements - modified to be more selective
-      document.addEventListener('DOMContentLoaded', function() {
+        
+        // Add fade-in animations
         const fadeElements = document.querySelectorAll('.fade-in');
         
         const observer = new IntersectionObserver((entries) => {
@@ -175,13 +153,11 @@
           observer.observe(element);
         });
         
-        // Only apply fade-in to non-critical UI elements
-        // Avoid applying to main content or navigation elements
-        const animateElements = document.querySelectorAll('.card:not(.latest-post-card):not(.post-content), .featured-content .card, .post-list-group .list-group-item');
+        // Apply fade-in to cards and other elements
+        const animateElements = document.querySelectorAll('.card:not(.latest-post-card):not(.post-content), .glass-card, .post-list-group .list-group-item');
         animateElements.forEach((element, index) => {
-          // Add minimal delay to reduce blinking effect
           element.classList.add('fade-in');
-          element.style.transitionDelay = `${index * 0.02}s`; // Reduced delay
+          element.style.transitionDelay = `${index * 0.02}s`; // Minimal delay
         });
         
         // Copy code button functionality
@@ -208,13 +184,8 @@
             block.appendChild(button);
           }
         });
-      });
-    </script>
-
-    <!-- Ensure smooth page transitions -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        // Add fade-in class to the main content container
+        
+        // Smooth page transitions
         const contentContainer = document.querySelector('.content-container');
         if (contentContainer) {
           // Set initial opacity
@@ -227,7 +198,7 @@
           }, 50);
         }
         
-        // Handle page navigation with smooth transitions
+        // Handle page navigation transitions
         document.querySelectorAll('a').forEach(link => {
           // Only apply to internal links
           if (link.hostname === window.location.hostname && !link.hasAttribute('target')) {
@@ -254,10 +225,7 @@
         });
       });
     </script>
-    <!-- Profile image swap functionality -->
-    <script src="/js/profile-image-swap.js"></script>
     
-    <!-- Dedicated Disqus dark mode handler -->
-    <script src="/js/disqus-dark.js"></script>
+    <!-- Dedicated scripts -->
   </body>
 </html>
