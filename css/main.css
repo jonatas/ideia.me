@@ -118,6 +118,7 @@ img {
   max-width: 80%;
   max-height: 80vh; /* 80% of viewport height */
   height: auto;
+  width: auto;
   border-radius: 6px;
   display: block;
   margin: 2rem auto;
@@ -240,4 +241,21 @@ footer {
   ::-webkit-scrollbar-thumb:hover {
     background: #718096;
   }
+}
+
+/* Logo styling with official colors */
+.logo .i, .logo .d, .logo .a {
+  color: #FBBF24; /* Yellow */
+}
+
+.logo .e, .logo .i2 {
+  color: #0EA5E9; /* Light Blue */
+}
+
+.logo .m, .logo .e2 {
+  color: #1E3A8A; /* Dark Blue */
+}
+
+.logo .dot {
+  color: #EF4444; /* Red */
 } 

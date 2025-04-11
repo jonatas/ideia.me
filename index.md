@@ -1,6 +1,5 @@
 ---
 layout: page
-title:  Ideia-me!
 ---
 {% include JB/setup %}
 

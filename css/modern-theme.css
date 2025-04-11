@@ -127,6 +127,7 @@ p, li, blockquote {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1rem;
 }
 
 /* Button styling */
@@ -348,3 +349,9 @@ table th {
   border-radius: 8px;
   display: inline-block;
 } 
+
+/* Category label styling */
+.category-label {
+  color: var(--primary-light-blue);
+  font-weight: bold;
+  font-size: 1.5rem;

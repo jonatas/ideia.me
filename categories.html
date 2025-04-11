@@ -23,15 +23,6 @@ group: navigation
           <button class="btn btn-primary" id="search-clear"><i class="fas fa-times"></i></button>
         </div>
       </div>
-      <div class="col-md-6">
-        <select id="year-filter" class="form-select">
-          <option value="all">All Years</option>
-          {% assign post_years = site.posts | map: "date" | map: "year" | uniq | sort | reverse %}
-          {% for year in post_years %}
-            <option value="{{ year }}">{{ year }}</option>
-          {% endfor %}
-        </select>
-      </div>
     </div>
   </div>
 
@@ -127,7 +118,7 @@ group: navigation
               <div class="category-section mb-5" id="{{ category[0] }}-ref" data-category="{{ category[0] }}">
                 <div class="card">
                   <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0">{{ category[0] | capitalize }}</h3>
+                    <h3 class="mb-0 category-label">{{ category[0] | capitalize }}</h3>
                     <span class="badge bg-light text-primary rounded-pill">{{ category[1].size }} posts</span>
                   </div>
                   <div class="card-body">
@@ -184,9 +175,6 @@ group: navigation
     
     // Setup search functionality
     setupSearch();
-    
-    // Setup year filter
-    setupYearFilter();
     
     // Setup smooth scrolling
     setupSmoothScrolling();
@@ -311,17 +299,8 @@ group: navigation
     });
   }
   
-  function setupYearFilter() {
-    const yearFilter = document.getElementById('year-filter');
-    
-    yearFilter.addEventListener('change', function() {
-      applyFilters();
-    });
-  }
-  
   function applyFilters() {
     const searchTerm = document.getElementById('post-search').value.toLowerCase();
-    const selectedYear = document.getElementById('year-filter').value;
     const activeCategory = document.querySelector('.category-filter-btn.active').getAttribute('data-category');
     const filteredPostsContainer = document.getElementById('filtered-posts');
     const categorySections = document.getElementById('category-sections');
@@ -335,16 +314,13 @@ group: navigation
         const title = post.getAttribute('data-title');
         const description = post.querySelector('.post-description')?.textContent.toLowerCase() || '';
         const tags = Array.from(post.querySelectorAll('.post-tag')).map(tag => tag.textContent.toLowerCase());
-        const year = post.getAttribute('data-year');
         
         const matchesSearch = searchTerm === '' || 
                              title.includes(searchTerm) || 
                              description.includes(searchTerm) || 
                              tags.some(tag => tag.includes(searchTerm));
         
-        const matchesYear = selectedYear === 'all' || year === selectedYear;
-        
-        if (matchesSearch && matchesYear) {
+        if (matchesSearch) {
           post.style.display = 'block';
           visiblePosts++;
         } else {
