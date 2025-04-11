@@ -1,0 +1,253 @@
+/* Modern theme with gradient designs inspired by the provided image */
+
+:root {
+  /* Primary color palette based on the blue/purple gradients in the image */
+  --primary-blue: #3b82f6;
+  --primary-purple: #8b5cf6;
+  --primary-teal: #14b8a6;
+  --primary-light-blue: #7dd3fc;
+  
+  /* Gradient definitions */
+  --gradient-blue-purple: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+  --gradient-blue-teal: linear-gradient(135deg, var(--primary-blue), var(--primary-teal));
+  --gradient-purple-blue: linear-gradient(135deg, var(--primary-purple), var(--primary-light-blue));
+  
+  /* Dark UI elements */
+  --bg-color: #000000;
+  --card-bg-color: #111111;
+  --text-color: #ffffff;
+  --muted-text: #a0aec0;
+  --border-color: rgba(255, 255, 255, 0.1);
+  
+  /* Shadows and effects */
+  --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --hover-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+  --transition-speed: 0.3s;
+}
+
+/* Base styles */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: 'Inter', 'Segoe UI', Roboto, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Geometric patterns and shapes */
+.geometric-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.05;
+  background-image: 
+    repeating-linear-gradient(45deg, rgba(59, 130, 246, 0.1) 0px, rgba(59, 130, 246, 0.1) 2px, transparent 2px, transparent 10px),
+    repeating-linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0px, rgba(139, 92, 246, 0.1) 2px, transparent 2px, transparent 10px);
+}
+
+/* Navbar styling */
+.navbar {
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.navbar-brand {
+  font-weight: 700;
+  background: var(--gradient-blue-purple);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;
+}
+
+.nav-link {
+  color: var(--text-color) !important;
+  transition: color var(--transition-speed) ease;
+}
+
+.nav-link:hover {
+  color: var(--primary-light-blue) !important;
+}
+
+/* Card styling with gradient borders */
+.card {
+  background-color: var(--card-bg-color);
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  position: relative;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-blue-purple);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--hover-shadow);
+}
+
+/* Gradient text for headings */
+h1, h2, h3 {
+  background: var(--gradient-blue-purple);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 700;
+}
+
+/* Button styling */
+.btn-primary {
+  background: var(--gradient-blue-purple);
+  border: none;
+  border-radius: 6px;
+  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+}
+
+/* Circle elements like in the image */
+.circle-decoration {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--gradient-blue-teal);
+  position: absolute;
+  opacity: 0.1;
+  z-index: -1;
+}
+
+/* Posts list with gradient hover effect */
+ul.posts li {
+  background-color: var(--card-bg-color);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  transition: all var(--transition-speed) ease;
+  border-left: 3px solid transparent;
+}
+
+ul.posts li:hover {
+  border-left: 3px solid;
+  border-image: var(--gradient-blue-purple) 1;
+  transform: translateX(5px);
+}
+
+/* Code blocks with modern styling */
+pre, code {
+  background-color: #1a1a1a !important;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.highlight {
+  background-color: #1a1a1a !important;
+  border-radius: 8px;
+  margin: 1.5rem 0;
+  position: relative;
+}
+
+/* Footer styling */
+.footer {
+  background-color: rgba(0, 0, 0, 0.9) !important;
+  border-top: 1px solid var(--border-color);
+  padding: 2rem 0;
+}
+
+/* Neon glow effect for active elements */
+.active-item {
+  position: relative;
+}
+
+.active-item::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--gradient-blue-purple);
+  box-shadow: 0 0 10px var(--primary-blue), 0 0 20px var(--primary-purple);
+}
+
+/* Glassmorphism cards option */
+.glass-card {
+  background: rgba(17, 17, 17, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+}
+
+/* Page transition animations */
+.content-container {
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Gradients for post tags and categories */
+.badge {
+  background: var(--gradient-purple-blue);
+  color: white;
+  font-weight: 500;
+  border-radius: 4px;
+  padding: 0.35em 0.65em;
+  transition: transform var(--transition-speed);
+}
+
+.badge:hover {
+  transform: translateY(-2px);
+}
+
+/* Text colors and overrides */
+.text-muted {
+  color: var(--muted-text) !important;
+}
+
+.dropdown-menu {
+  background-color: var(--card-bg-color);
+  border-color: var(--border-color);
+}
+
+.dropdown-item {
+  color: var(--text-color);
+}
+
+.dropdown-item:hover {
+  background-color: rgba(92, 158, 255, 0.15);
+  color: var(--primary-blue);
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+  .content-container {
+    padding-top: 1rem;
+  }
+  
+  .card {
+    margin-bottom: 1.5rem;
+  }
+} 

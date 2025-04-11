@@ -2,7 +2,7 @@
 <div class="post-container">
   <div class="post-header mb-4">
     <h1 class="post-title display-4">{{ page.title }}</h1>
-    <div class="post-meta d-flex flex-wrap align-items-center text-muted mb-3">
+    <div class="post-meta d-flex flex-wrap align-items-center mb-3">
       <span class="me-3">
         <i class="bi bi-calendar3"></i> {{ page.date | date: "%B %d, %Y" }}
       </span>
@@ -10,7 +10,7 @@
       <span class="me-3">
         <i class="bi bi-folder"></i>
         {% for category in page.categories %}
-          <a href="/categories.html#{{ category }}-ref" class="badge bg-primary text-decoration-none me-1">{{ category }}</a>
+          <a href="/categories.html#{{ category }}-ref" class="badge me-1">{{ category }}</a>
         {% endfor %}
       </span>
       {% endif %}
@@ -18,31 +18,31 @@
       <span>
         <i class="bi bi-tags"></i>
         {% for tag in page.tags %}
-          <a href="/tags.html#{{ tag }}-ref" class="badge bg-secondary text-decoration-none me-1">{{ tag }}</a>
+          <a href="/tags.html#{{ tag }}-ref" class="badge me-1">{{ tag }}</a>
         {% endfor %}
       </span>
       {% endif %}
     </div>
     
     <div class="post-share d-flex align-items-center mb-4">
-      <span class="me-2 text-muted">Share:</span>
+      <span class="me-2">Share:</span>
       <a href="https://twitter.com/intent/tweet?text={{ page.title | url_encode }}&url={{ site.production_url }}{{ page.url | url_encode }}&via={{ site.author.twitter }}" 
-         class="btn btn-sm btn-outline-primary me-2" target="_blank">
+         class="btn btn-sm btn-primary me-2" target="_blank">
         <i class="bi bi-twitter"></i>
       </a>
       <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ site.production_url }}{{ page.url | url_encode }}&title={{ page.title | url_encode }}" 
-         class="btn btn-sm btn-outline-primary me-2" target="_blank">
+         class="btn btn-sm btn-primary me-2" target="_blank">
         <i class="bi bi-linkedin"></i>
       </a>
       <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.production_url }}{{ page.url | url_encode }}" 
-         class="btn btn-sm btn-outline-primary" target="_blank">
+         class="btn btn-sm btn-primary" target="_blank">
         <i class="bi bi-facebook"></i>
       </a>
     </div>
   </div>
 
-  <div class="post-content card mb-5">
-    <div class="card-body">
+  <div class="post-content glass-card mb-5">
+    <div class="card-body p-4">
       {{ content }}
     </div>
   </div>
@@ -51,9 +51,9 @@
     <div class="row">
       <div class="col-md-6 mb-3 mb-md-0">
         {% if page.previous %}
-        <div class="card h-100">
+        <div class="glass-card h-100">
           <div class="card-body">
-            <span class="text-muted d-block mb-2"><i class="bi bi-arrow-left"></i> Previous Post</span>
+            <span class="d-block mb-2"><i class="bi bi-arrow-left"></i> Previous Post</span>
             <h5 class="card-title mb-0">
               <a href="{{ BASE_PATH }}{{ page.previous.url }}" class="stretched-link">{{ page.previous.title }}</a>
             </h5>
@@ -63,9 +63,9 @@
       </div>
       <div class="col-md-6">
         {% if page.next %}
-        <div class="card h-100">
+        <div class="glass-card h-100">
           <div class="card-body text-md-end">
-            <span class="text-muted d-block mb-2">Next Post <i class="bi bi-arrow-right"></i></span>
+            <span class="d-block mb-2">Next Post <i class="bi bi-arrow-right"></i></span>
             <h5 class="card-title mb-0">
               <a href="{{ BASE_PATH }}{{ page.next.url }}" class="stretched-link">{{ page.next.title }}</a>
             </h5>
@@ -76,8 +76,8 @@
     </div>
   </div>
 
-  <div class="post-author card mb-5">
-    <div class="card-body">
+  <div class="post-author glass-card mb-5">
+    <div class="card-body p-4">
       <div class="row align-items-center">
         <div class="col-md-2 text-center mb-3 mb-md-0">
           <img src="{{ site.author.avatar }}" alt="{{ site.author.name }}" class="rounded-circle img-fluid" style="max-width: 100px;">
@@ -86,13 +86,13 @@
           <h4>About {{ site.author.name }}</h4>
           <p>Developer Advocate at TimescaleDB, Ruby enthusiast, and PostgreSQL expert. Sharing knowledge through writing and speaking at conferences worldwide.</p>
           <div class="social-links">
-            <a href="https://github.com/{{ site.author.github }}" class="btn btn-sm btn-outline-dark me-2" target="_blank">
+            <a href="https://github.com/{{ site.author.github }}" class="btn btn-sm btn-primary me-2" target="_blank">
               <i class="bi bi-github"></i> GitHub
             </a>
-            <a href="https://twitter.com/{{ site.author.twitter }}" class="btn btn-sm btn-outline-primary me-2" target="_blank">
+            <a href="https://twitter.com/{{ site.author.twitter }}" class="btn btn-sm btn-primary me-2" target="_blank">
               <i class="bi bi-twitter"></i> Twitter
             </a>
-            <a href="https://linkedin.com/in/{{ site.author.linkedin }}" class="btn btn-sm btn-outline-primary" target="_blank">
+            <a href="https://linkedin.com/in/{{ site.author.linkedin }}" class="btn btn-sm btn-primary" target="_blank">
               <i class="bi bi-linkedin"></i> LinkedIn
             </a>
           </div>
@@ -120,12 +120,12 @@
         
         {% if sameTagCount >= minCommonTags %}
           <div class="col-md-4 mb-3">
-            <div class="card h-100">
+            <div class="glass-card h-100">
               <div class="card-body">
                 <h5 class="card-title">
                   <a href="{{ post.url }}" class="stretched-link">{{ post.title }}</a>
                 </h5>
-                <p class="card-text text-muted small">
+                <p class="card-text small">
                   <i class="bi bi-calendar3"></i> {{ post.date | date: "%B %d, %Y" }}
                 </p>
               </div>
@@ -142,12 +142,12 @@
         {% for post in site.posts limit:3 %}
           {% if post.url != page.url %}
             <div class="col-md-4 mb-3">
-              <div class="card h-100">
+              <div class="glass-card h-100">
                 <div class="card-body">
                   <h5 class="card-title">
                     <a href="{{ post.url }}" class="stretched-link">{{ post.title }}</a>
                   </h5>
-                  <p class="card-text text-muted small">
+                  <p class="card-text small">
                     <i class="bi bi-calendar3"></i> {{ post.date | date: "%B %d, %Y" }}
                   </p>
                 </div>
@@ -159,5 +159,7 @@
     </div>
   </div>
 
-  {% include JB/comments %}
+  <div class="comments-section glass-card p-4 mb-5">
+    {% include JB/comments %}
+  </div>
 </div>
