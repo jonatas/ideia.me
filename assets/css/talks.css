@@ -105,20 +105,12 @@
 }
 
 .talks-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin: 1.5rem 0;
+  display: block;
 }
 
 .talk-card {
-  background-color: var(--bg-white);
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius-md);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  height: auto;
+  width: 100%;
+  margin-bottom: 1rem;
 }
 
 .talk-card:hover {
@@ -128,7 +120,7 @@
 .talk-card-header {
   position: relative;
   width: 100%;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  #padding-bottom: 25%; 
   overflow: hidden;
   background-color: var(--bg-light);
 }
@@ -1429,10 +1421,13 @@ textarea,
     padding-bottom: 75%; /* 4:3 aspect ratio for mobile */
   }
   
-  .carousel-slide img {
-    width: 100%;
-    height: auto;
-  }
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: auto;
+  min-width: 100%;
+  min-height: auto;
 }
 
 /* Date-location row styling */
