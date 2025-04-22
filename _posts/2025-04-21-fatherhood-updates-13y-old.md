@@ -1,7 +1,9 @@
 ---
 layout: post
-categories: ['reflections']
-title: fatherhood-updates-13y-old: Unexpected System Changes After Child Process Independence
+categories: ['personal']
+tags: ['life', 'parenting', 'reflections', 'personal-growth']
+title: "Fatherhood Updates: Unexpected System Changes After Child Process Independence"
+description: "Reflections on the experience of parenting a teenager and adapting to their growing independence, written through the lens of a developer's mindset."
 ---
 
 After my son became a teenager, I experienced what can only be described as a critical system resource reallocation. My scheduler suddenly displayed vast empty blocks where child.sh previously consumed CPU cycles. What my system documentation failed to warn me about was the unexpected neurochemical dependency issues: dopamine and oxytocin levels dropped to concerning levels in the absence of regular parent-child interactions (v13.0). 

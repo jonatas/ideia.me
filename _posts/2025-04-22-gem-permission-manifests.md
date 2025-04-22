@@ -1,8 +1,8 @@
 ---
 title: "Gem Permission Manifests: Enhancing Security in Ruby Ecosystem"
 layout: post
-categories: ['programming', 'ruby', 'security']
-tags: ['ruby', 'bundler', 'security', 'permissions', 'manifests']
+categories: ['ruby', 'technical', 'security']
+tags: ['ruby', 'gems', 'bundler', 'security', 'permissions']
 description: "A proposal for tracking what permissions Ruby gems require, bringing more transparency and security to the ecosystem."
 ---
 
