@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Four Years at Timescale: My Journey in Marketing"
+title: "Four Years at Timescale: My Journey as Dev 🥑"
 categories: [career, timescale, postgresql]
 tags: [timescale, postgresql, ruby, community, career]
 ---
