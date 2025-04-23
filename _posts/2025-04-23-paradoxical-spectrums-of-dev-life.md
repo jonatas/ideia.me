@@ -150,6 +150,18 @@ This spectrum balances the value of individual brilliance against the need for c
 
 **Inner Meter Reading:** The appropriate balance shifts based on team composition, project lifespan, and business criticality. A lone-wolf startup founder might prioritize individual efficiency, while a team supporting mission-critical systems needs consistency above all.
 
+### Query Speed vs. Ingest Rate
+
+This paradox represents the ongoing tension in database design between optimizing for fast queries (reads) versus fast data ingestion (writes). Indexes, denormalization, and certain schema designs that speed up queries often slow down data insertion, updating, and deletion.
+
+**Inner Meter Reading:** Your position on this spectrum should align with your application's read/write patterns. Analytics systems might favor query speed at the expense of ingest rate, while high-volume logging systems might do the opposite. The key is recognizing that every index and optimization choice involves a trade-off.
+
+**Real-World Application:**
+
+- A time-series database for IoT sensors might prioritize write speed to handle millions of data points per minute, accepting slower analytical queries.
+- An e-commerce product catalog might optimize heavily for read performance with extensive indexing and materialized views, knowing that product updates happen infrequently.
+- A social media application might implement different database strategies for different features: optimizing for write speed in activity logging while prioritizing read speed for user profiles.
+
 ## Developing Your Developer Inner Meter
 
 While navigating these paradoxical spectrums requires intuition, metrics provide the empirical foundation that guides our inner meter. Think of metrics as the instrumentation panel for your development practice—they quantify the otherwise subjective experience of technical decision-making.
