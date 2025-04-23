@@ -258,4 +258,55 @@ footer {
 
 .logo .dot {
   color: #EF4444; /* Red */
+}
+
+/* Emoji Navigation Links */
+.nav-item .nav-link[href="/talks"],
+.nav-item .nav-link[href="/videos"] {
+  font-size: 1.4rem;
+  padding: 0.2rem 0.6rem;
+  transition: transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-item .nav-link[href="/talks"]:hover,
+.nav-item .nav-link[href="/videos"]:hover {
+  transform: scale(1.2);
+}
+
+/* Videos Page Link on Talks Page */
+.videos-link, .talks-link {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.videos-link .btn, .talks-link .btn {
+  padding: 0.5rem 1.5rem;
+  font-size: 1.1rem;
+  border-radius: 25px;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.videos-link .btn {
+  background-color: rgba(255, 99, 71, 0.8);
+}
+
+.talks-link .btn {
+  background-color: rgba(75, 192, 192, 0.8);
+}
+
+.videos-link .btn:hover, .talks-link .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.videos-link .btn:hover {
+  background-color: rgba(255, 99, 71, 1);
+}
+
+.talks-link .btn:hover {
+  background-color: rgba(75, 192, 192, 1);
 } 

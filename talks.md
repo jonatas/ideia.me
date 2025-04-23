@@ -11,6 +11,7 @@ title: "Speaking @jonatasdp"
   
   <div class="talks-intro">
     <p>From international conferences to local meetups, I share my passion for PostgreSQL, Ruby, TimescaleDB, and data science across the globe. Join me for practical insights, live coding, and real-world problem solving.</p>
+    <p class="videos-link"><a href="/videos" class="btn btn-primary">🍿 Watch My Tech Videos</a></p>
   </div>
   
   <div class="conference-carousel">
