@@ -46,24 +46,24 @@ The most fundamental tension in our field lies between shipping quickly and buil
 **Inner Meter Reading:** Your position on this spectrum should vary based on project phase, not personal preference. Early prototypes and MVPs can lean toward speed, while critical infrastructure should prioritize quality. The key is making this placement conscious rather than defaulting to one end.
 
 **Code Example:**
-```javascript
-// Speed-oriented approach
-function quickSearch(items, term) {
-  return items.filter(item => item.includes(term));
-}
+```ruby
+# Speed-oriented approach
+def quick_search(items, term)
+  items.select { |item| item.include?(term) }
+end
 
-// Quality-oriented approach
-function robustSearch(items, searchTerm) {
-  // Input validation
-  if (!Array.isArray(items)) throw new TypeError('Expected array of items');
-  if (typeof searchTerm !== 'string') throw new TypeError('Search term must be string');
+# Quality-oriented approach
+def robust_search(items, search_term)
+  # Input validation
+  raise TypeError, 'Expected array of items' unless items.is_a?(Array)
+  raise TypeError, 'Search term must be string' unless search_term.is_a?(String)
   
-  const term = searchTerm.toLowerCase();
-  return items.filter(item => {
-    if (typeof item !== 'string') return false;
-    return item.toLowerCase().includes(term);
-  });
-}
+  term = search_term.downcase
+  items.select do |item|
+    next false unless item.is_a?(String)
+    item.downcase.include?(term)
+  end
+end
 ```
 
 ### Abstraction vs. Specificity
@@ -73,33 +73,63 @@ This paradox challenges us to balance reusable, abstract approaches against cont
 **Inner Meter Reading:** Junior developers often default to specificity (copying and pasting), while experienced developers might over-abstract. The sweet spot depends on how likely the pattern is to be reused and how much variability exists across instances.
 
 **Code Example:**
-```typescript
-// Over-abstracted
-class EntityManager<T extends BaseEntity> {
-  async create(entity: T): Promise<T> { /* generic implementation */ }
-  async findById(id: string): Promise<T | null> { /* generic implementation */ }
-  async update(id: string, data: Partial<T>): Promise<T> { /* generic implementation */ }
-  async delete(id: string): Promise<void> { /* generic implementation */ }
-}
+```ruby
+# Over-abstracted
+class EntityManager
+  def create(entity)
+    # generic implementation
+  end
+  
+  def find_by_id(id)
+    # generic implementation
+  end
+  
+  def update(id, data)
+    # generic implementation
+  end
+  
+  def delete(id)
+    # generic implementation
+  end
+end
 
-// Over-specific
-async function createUser(userData) { /* User-specific implementation */ }
-async function findUserById(id) { /* User-specific implementation */ }
-async function updateUser(id, data) { /* User-specific implementation */ }
-async function deleteUser(id) { /* User-specific implementation */ }
-async function createProduct(productData) { /* Product-specific implementation */ }
-async function findProductById(id) { /* Product-specific implementation */ }
-// And so on for every entity...
+# Over-specific
+def create_user(user_data)
+  # User-specific implementation
+end
 
-// Balanced approach
-class BaseRepository<T> {
-  // Common CRUD operations
-}
+def find_user_by_id(id)
+  # User-specific implementation
+end
 
-class UserRepository extends BaseRepository<User> {
-  // User-specific methods that don't fit the generic pattern
-  async findByEmail(email: string): Promise<User | null> { /* implementation */ }
-}
+def update_user(id, data)
+  # User-specific implementation
+end
+
+def delete_user(id)
+  # User-specific implementation
+end
+
+def create_product(product_data)
+  # Product-specific implementation
+end
+
+def find_product_by_id(id)
+  # Product-specific implementation
+end
+# And so on for every entity...
+
+# Balanced approach
+class BaseRepository
+  # Common CRUD operations
+end
+
+class UserRepository < BaseRepository
+  # User-specific methods that don't fit the generic pattern
+  def find_by_email(email)
+    # implementation
+  end
+end
 ```
 
 ### Technical Debt vs. Feature Delivery
