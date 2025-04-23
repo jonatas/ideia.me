@@ -1,9 +1,10 @@
 ---
 layout: page
-title: "Videos @jonatasdp"
+title: "Videos by @jonatasdp"
 ---
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <link rel="stylesheet" href="/assets/css/talks.css">
+<link rel="stylesheet" href="/assets/css/topic-colors.css">
 
 <div class="videos-container">
   <div class="videos-header">
@@ -16,21 +17,8 @@ title: "Videos @jonatasdp"
   </div>
   
   <div class="category-filters">
-    <div class="filter-button active" data-filter="all" style="background-color: #333; color: #fff;">🎬 All Videos</div>
-    {% for topic in site.data.talks.topics %}
-      {% if topic.name == "PostgreSQL" or topic.name == "Ruby" or topic.name == "TimescaleDB" or topic.name == "Command Line" or topic.name == "Data Science" or topic.name == "Functional Programming" %}
-        <div class="filter-button" data-filter="{{ topic.name }}" style="background-color: {{ topic.color }}; color: {% if topic.name == 'Ruby' or topic.name == 'TimescaleDB' %}#000{% else %}#fff{% endif %};">
-          {% if topic.name == "PostgreSQL" %}🐘
-          {% elsif topic.name == "Ruby" %}💎
-          {% elsif topic.name == "TimescaleDB" %}⏱️
-          {% elsif topic.name == "Command Line" %}🖥️
-          {% elsif topic.name == "Data Science" %}📊
-          {% elsif topic.name == "Functional Programming" %}λ
-          {% endif %}
-          {{ topic.name }}
-        </div>
-      {% endif %}
-    {% endfor %}
+    <div class="filter-button active topic-all-videos" data-filter="all">All Videos</div>
+    <!-- Topics will be populated by JavaScript -->
   </div>
   
   <div class="videos-list">
@@ -61,165 +49,18 @@ title: "Videos @jonatasdp"
   </div>
 </template>
 
+<!-- Pass data to JavaScript -->
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Get talks data from the JSON embedded in the page
-  const talksJson = {{ site.data.talks.talks | jsonify }};
-  
-  // Filter talks with YouTube videos
-  const videosData = talksJson.filter(talk => talk.media && talk.media.youtube);
-  
-  // Get topic colors
-  const topicColors = {};
-  {% for topic in site.data.talks.topics %}
-  topicColors["{{ topic.name }}"] = "{{ topic.color }}";
-  {% endfor %}
-  
-  // Render videos
-  renderVideos(videosData);
-  
-  // Set up category filtering
-  setupFilters();
-  
-  function renderVideos(videos) {
-    const videosList = document.querySelector('.videos-list');
-    const template = document.getElementById('video-template');
-    
-    // Clear existing videos
-    videosList.innerHTML = '';
-    
-    // Display message if no videos found
-    if (!videos || videos.length === 0) {
-      const noVideosMsg = document.createElement('div');
-      noVideosMsg.className = 'no-videos-message';
-      noVideosMsg.innerHTML = `
-        <i class="fas fa-video-slash"></i>
-        <p>No videos found. Check back later for new content!</p>
-      `;
-      videosList.appendChild(noVideosMsg);
-      return;
-    }
-    
-    // Loop through videos and create elements
-    videos.forEach(video => {
-      const videoElement = template.content.cloneNode(true);
-      
-      // Set video details
-      videoElement.querySelector('.video-title').textContent = video.title;
-      videoElement.querySelector('.video-event').textContent = video.event;
-      videoElement.querySelector('.video-date').textContent = new Date(video.date).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      });
-      videoElement.querySelector('.video-location').textContent = video.location;
-      
-      // Create YouTube embed
-      const embedDiv = videoElement.querySelector('.video-embed');
-      embedDiv.innerHTML = `
-        <div class="video-container">
-          <iframe width="560" height="420" 
-            src="https://www.youtube.com/embed/${video.media.youtube}" 
-            frameborder="0" 
-            allowfullscreen 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            color="white"
-            theme="light">
-          </iframe>
-        </div>
-      `;
-      
-      // Set up topics
-      const topicsContainer = videoElement.querySelector('.video-topics');
-      let topics = [];
-      
-      if (video.topic && typeof video.topic === 'string') {
-        topics = video.topic.split(', ');
-      }
-      
-      topics.forEach(topic => {
-        const topicElement = document.createElement('div');
-        topicElement.className = 'video-topic';
-        topicElement.textContent = topic;
-        topicElement.dataset.topic = topic;
-        
-        // Apply color from topics if available
-        if (topicColors[topic]) {
-          topicElement.style.backgroundColor = topicColors[topic];
-          
-          // Calculate text color (white for dark backgrounds, black for light)
-          const color = topicColors[topic].replace('#', '');
-          const r = parseInt(color.substr(0, 2), 16);
-          const g = parseInt(color.substr(2, 2), 16);
-          const b = parseInt(color.substr(4, 2), 16);
-          const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-          topicElement.style.color = brightness > 128 ? '#000' : '#fff';
-        }
-        
-        topicsContainer.appendChild(topicElement);
-      });
-      
-      // Set up links (only show if available)
-      const eventLink = videoElement.querySelector('.event-link');
-      if (video.url && video.url !== "") {
-        eventLink.href = video.url;
-      } else {
-        eventLink.style.display = 'none';
-      }
-      
-      const slidesLink = videoElement.querySelector('.slides-link');
-      if (video.media && video.media.slides) {
-        slidesLink.href = `https://docs.google.com/presentation/d/e/${video.media.slides}/pub?start=false&loop=false&delayms=3000`;
-      } else {
-        slidesLink.style.display = 'none';
-      }
-      
-      const githubLink = videoElement.querySelector('.github-link');
-      if (video.github) {
-        githubLink.href = video.github;
-      } else {
-        githubLink.style.display = 'none';
-      }
-      
-      // Add data attributes for filtering
-      const videoCard = videoElement.querySelector('.video-card');
-      videoCard.dataset.topics = video.topic;
-      
-      // Add to the list
-      videosList.appendChild(videoElement);
-    });
-  }
-  
-  function setupFilters() {
-    const filterButtons = document.querySelectorAll('.filter-button');
-    
-    filterButtons.forEach(button => {
-      button.addEventListener('click', function() {
-        // Set active class
-        filterButtons.forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-        
-        const filter = this.dataset.filter;
-        const videos = document.querySelectorAll('.video-card');
-        
-        if (filter === 'all') {
-          videos.forEach(video => {
-            video.style.display = 'flex';
-          });
-        } else {
-          videos.forEach(video => {
-            if (video.dataset.topics.includes(filter)) {
-              video.style.display = 'flex';
-            } else {
-              video.style.display = 'none';
-            }
-          });
-        }
-      });
-    });
-  }
-});
+// Make data available globally
+window.talksJson = {{ site.data.talks.talks | jsonify }};
+window.topicColors = {};
+{% for topic in site.data.talks.topics %}
+window.topicColors["{{ topic.name }}"] = "{{ topic.color }}";
+{% endfor %}
 </script>
+
+<!-- Load the external JavaScript file -->
+<script src="/assets/js/videos.js"></script>
 
 <style>
 .videos-container {
@@ -245,23 +86,6 @@ document.addEventListener('DOMContentLoaded', function() {
   justify-content: center;
   gap: 10px;
   margin-bottom: 30px;
-}
-
-.filter-button {
-  padding: 8px 16px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin: 5px;
-}
-
-.filter-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.filter-button.active {
-  box-shadow: 0 0 0 2px white;
 }
 
 .videos-list {
@@ -323,13 +147,6 @@ document.addEventListener('DOMContentLoaded', function() {
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 15px;
-}
-
-.video-topic {
-  background: rgba(80, 80, 80, 0.5);
-  padding: 4px 10px;
-  border-radius: 15px;
-  font-size: 0.8rem;
 }
 
 .video-links {

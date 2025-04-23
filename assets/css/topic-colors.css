@@ -1,0 +1,108 @@
+/**
+ * Topic-specific styling for videos page
+ */
+
+/* Topic button base styles */
+.filter-button {
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 5px;
+}
+
+.filter-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.filter-button.active {
+  box-shadow: 0 0 0 2px white;
+}
+
+/* Video topic tag base styles */
+.video-topic {
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  margin: 2px;
+}
+
+/* Topic-specific styling */
+.filter-button.topic-all-videos,
+.video-topic.topic-all-videos {
+  background-color: #333;
+  color: #fff;
+}
+
+.filter-button.topic-postgresql,
+.video-topic.topic-postgresql {
+  background-color: #336791;
+  color: #fff;
+}
+
+.filter-button.topic-ruby,
+.video-topic.topic-ruby {
+  background-color: #CC342D;
+  color: #fff;
+}
+
+.filter-button.topic-command-line,
+.video-topic.topic-command-line {
+  background-color: #795548;
+  color: #fff;
+}
+
+.filter-button.topic-data-science,
+.video-topic.topic-data-science {
+  background-color: #4D77CF;
+  color: #fff;
+}
+
+.filter-button.topic-functional-programming,
+.video-topic.topic-functional-programming {
+  background-color: #5C21D4;
+  color: #fff;
+}
+
+.filter-button.topic-time-series,
+.video-topic.topic-time-series {
+  background-color: #E91E63;
+  color: #fff;
+}
+
+.filter-button.topic-analytics,
+.video-topic.topic-analytics {
+  background-color: #FFC107;
+  color: #000;
+}
+
+.filter-button.topic-data-processing,
+.video-topic.topic-data-processing {
+  background-color: #2196F3;
+  color: #fff;
+}
+
+.filter-button.topic-data-modeling,
+.video-topic.topic-data-modeling {
+  background-color: #8BC34A;
+  color: #000;
+}
+
+.filter-button.topic-data-visualization,
+.video-topic.topic-data-visualization {
+  background-color: #009688;
+  color: #fff;
+}
+
+.filter-button.topic-performance,
+.video-topic.topic-performance {
+  background-color: #FF5722;
+  color: #fff;
+}
+
+.filter-button.topic-career,
+.video-topic.topic-career {
+  background-color: #607D8B;
+  color: #fff;
+} 
