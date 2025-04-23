@@ -1,0 +1,107 @@
+{
+  "rules": [
+    {
+      "name": "Jekyll Website Development Rules",
+      "description": "Rules for working with this Jekyll website codebase",
+      "patterns": ["**/*"],
+      "actions": [
+        {
+          "name": "Use fish shell",
+          "description": "Always use fish shell when working on this project",
+          "example": "fish"
+        },
+        {
+          "name": "Start Jekyll with watch mode",
+          "description": "Always start Jekyll with watch mode to automatically rebuild on changes",
+          "example": "jekyll serve -w"
+        }
+      ]
+    },
+    {
+      "name": "Markdown Content Rules",
+      "description": "Rules for working with Markdown content files",
+      "patterns": ["**/*.md"],
+      "actions": [
+        {
+          "name": "Format front matter correctly",
+          "description": "Ensure front matter has correct format with triple dashes",
+          "example": "---\nlayout: post\ntitle: Title Here\ndate: YYYY-MM-DD\ncategories: category\n---"
+        },
+        {
+          "name": "Use correct image paths",
+          "description": "When adding images, use the correct relative path",
+          "example": "![Alt text](/images/image-name.jpg)"
+        }
+      ]
+    },
+    {
+      "name": "Jekyll Layout Rules",
+      "description": "Rules for working with Jekyll layouts",
+      "patterns": ["_layouts/**/*.html"],
+      "actions": [
+        {
+          "name": "Use liquid tags correctly",
+          "description": "Follow Jekyll liquid tag syntax",
+          "example": "{% include header.html %}"
+        }
+      ]
+    },
+    {
+      "name": "Include rules",
+      "description": "Rules for working with Jekyll includes",
+      "patterns": ["_includes/**/*.html"],
+      "actions": [
+        {
+          "name": "Use parameters correctly",
+          "description": "Pass parameters to includes with the correct syntax",
+          "example": "{% include component.html param='value' %}"
+        }
+      ]
+    },
+    {
+      "name": "CSS Rules",
+      "description": "Rules for CSS files",
+      "patterns": ["css/**/*.css"],
+      "actions": [
+        {
+          "name": "Follow existing style conventions",
+          "description": "Follow the existing CSS formatting and naming conventions"
+        }
+      ]
+    },
+    {
+      "name": "JavaScript Rules",
+      "description": "Rules for JavaScript files",
+      "patterns": ["js/**/*.js"],
+      "actions": [
+        {
+          "name": "Use consistent formatting",
+          "description": "Maintain consistent JS formatting throughout the codebase"
+        }
+      ]
+    },
+    {
+      "name": "Jekyll Configuration",
+      "description": "Rules for the Jekyll configuration file",
+      "patterns": ["_config.yml"],
+      "actions": [
+        {
+          "name": "Be careful with configuration changes",
+          "description": "Changes to _config.yml require a server restart to take effect"
+        }
+      ]
+    },
+    {
+      "name": "Blog Post Rules",
+      "description": "Rules for blog posts",
+      "patterns": ["_posts/**/*.md"],
+      "actions": [
+        {
+          "name": "Use correct file naming",
+          "description": "Posts should be named YYYY-MM-DD-title.md",
+          "example": "2023-05-15-my-blog-post.md"
+        }
+      ]
+    }
+  ]
+} 
