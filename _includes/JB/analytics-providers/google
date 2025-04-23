@@ -16,7 +16,23 @@
       dataLayer.push(arguments);
     }
     gtag('js', new Date());
-    gtag('config', '{{ site.JB.analytics.google.tracking_id }}');
+    gtag('config', '{{ site.JB.analytics.google.tracking_id }}', {
+      'page_path': location.pathname,
+      'page_title': document.title,
+      'send_page_view': true
+    });
+    
+    // Add event to track outbound links
+    document.addEventListener('click', function(e) {
+      var target = e.target.closest('a');
+      if (target && target.hostname !== window.location.hostname && target.href) {
+        gtag('event', 'click', {
+          'event_category': 'outbound',
+          'event_label': target.href,
+          'transport_type': 'beacon'
+        });
+      }
+    });
   }
 
   // Waiting for the load event
@@ -50,7 +66,12 @@
         policy: "Cookie Policy"
       },
       onStatusChange: function (status, chosenBefore) {
-        location.reload();
+        if (status === 'allow') {
+          addAnalytics();
+        }
+        else {
+          location.reload();
+        }
       }
     });
   });
