@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Community Buddy Notes: What I've Learned About Welcoming Newcomers
+title: Community Buddy Notes - What I've Learned About Welcoming Newcomers
 categories: ['community', 'career', 'leadership']
 tags: ['community-building', 'mentorship', 'onboarding', 'newcomers', 'empathy', 'best-practices']
 description: "Insights and practical advice for welcoming newcomers to technical communities, based on a decade of experience onboarding developers across different organizations."
