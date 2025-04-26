@@ -1,20 +1,30 @@
 <!-- Google tag (gtag.js) -->
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css">
 <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
 <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.JB.analytics.google.tracking_id }}"></script>
-<script>
+<script type="text/javascript">
   // Reads the value of a cookie by name or returns empty string
   function getCookie(name) {
     var b = document.cookie.match('(^|[^;]+)\\s*' + name + '\\s*=\\s*([^;]+)');
     return b ? b.pop() : '';
   }
 
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+
+  // Set default consent state (required for consent mode v2)
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'analytics_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
+    'wait_for_update': 500
+  });
+
   // Actually starting analytics up
   function addAnalytics() {
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-      dataLayer.push(arguments);
-    }
     gtag('js', new Date());
     gtag('config', '{{ site.JB.analytics.google.tracking_id }}', {
       'page_path': location.pathname,
@@ -35,14 +45,34 @@
     });
   }
 
+  // Update consent status based on user choice
+  function updateConsentStatus(status) {
+    if (status === 'allow') {
+      gtag('consent', 'update', {
+        'ad_storage': 'granted',
+        'analytics_storage': 'granted',
+        'ad_user_data': 'granted',
+        'ad_personalization': 'granted'
+      });
+      addAnalytics();
+    } else {
+      gtag('consent', 'update', {
+        'ad_storage': 'denied',
+        'analytics_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied'
+      });
+    }
+  }
+
   // Waiting for the load event
-  window.addEventListener("load", function () {
+  window.addEventListener("load", function() {
     // Reading "cookieconsent_status" cookie
     const cookieConsent = getCookie('cookieconsent_status');
 
-    // Start analytics ONLY if user explicitly consented
+    // Update consent status based on existing cookie
     if (cookieConsent === 'allow') {
-      addAnalytics();
+      updateConsentStatus('allow');
     }
 
     // Initialise cookie consent banner
@@ -65,11 +95,9 @@
         link: "Learn more",
         policy: "Cookie Policy"
       },
-      onStatusChange: function (status, chosenBefore) {
-        if (status === 'allow') {
-          addAnalytics();
-        }
-        else {
+      onStatusChange: function(status, chosenBefore) {
+        updateConsentStatus(status);
+        if (status !== 'allow') {
           location.reload();
         }
       }
