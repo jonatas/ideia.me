@@ -49,6 +49,15 @@ We discovered we prefer endurance over adrenaline. This translates perfectly to 
 3. **Sustainable Pace**: Focus on long-term sustainability rather than short-term adrenaline rushes.
 4. **Knowing When to Stop**: Recognize when a technical direction isn't working and have the courage to pivot.
 
+## Trail Details
+
+The hike was in the [Conjunto Marumbi](https://pt.wikipedia.org/wiki/Conjunto_Marumbi) and
+here is my Strava activity recorded on my iPhone.
+
+<div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id="14369801126" data-style="standard" data-from-embed="false"></div><script src="https://strava-embeds.com/embed.js"></script>
+
+We tried the white track, which goes to the Olimpo view.
+
 ## Conclusion
 
 The mountains taught us that true leadership isn't about pushing through at all costs. It's about making informed decisions, communicating openly, and knowing when to change course. These lessons are just as valuable in the boardroom as they are on the mountain trail.
