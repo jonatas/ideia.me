@@ -3,7 +3,7 @@ layout: page
 title: Jônatas Davi Paganini
 ---
 
-Developer Advocate @ Timescale | Real Time Analytics, Software Development, Architecture Development
+Staff/Architect Software Engineer | Database Performance & Architecture Consultant | Real Time Analytics, Software Development
 
 # Contact
 
@@ -14,8 +14,8 @@ Developer Advocate @ Timescale | Real Time Analytics, Software Development, Arch
 
 # Developer
 
-* Developer Advocate at Timescale, empowering developers to build better time-series applications
-* 20+ years of experience crafting software with a focus on autonomy and collaboration
+* Staff/Architect Software Engineer with 20+ years of experience crafting software with a focus on autonomy and collaboration
+* Available for consultancy in database performance optimization and architecture design
 * Passionate about enabling teams through better tools, practices, and knowledge sharing
 * Built tools and processes that helped hundreds of developers transition from monoliths to microservices
 * Mentored and onboarded over 300 backend developers, fostering autonomous and confident engineers
@@ -50,7 +50,7 @@ Other characteristics:
 
  From | To    | Position            | Company                                | Experiences
  -----|-------|---------------------|----------------------------------------|--------------------------------
- 2022 | actual | Developer Advocate | Timescale                              | Community Manager for TimescaleDB, creating content and tools for time-series data. Speaking at conferences, live-streaming code projects, writing blogs and tutorials. Working with community to expand the ecosystem support.
+ 2022 | 2025  | Developer Advocate | Timescale                              | Community Manager for TimescaleDB, creating content and tools for time-series data. Speaking at conferences, live-streaming code projects, writing blogs and tutorials. Working with community to expand the ecosystem support.
  2021 | 2022  | Onboarding lead    | Timescale                              | Built engineering onboarding initiatives, facilitated cross-team collaboration through documentation and sharing sessions.
  2021 | 2021  | Developer Advocate | Timescale                              | Created content about time-series databases, Developed the timescale gem for Ruby/Rails integration.
  2020 | 2021  | Senior Back-end Engineer | Toptal                          | Created tools to preview microservices extracted from monoliths using Ruby, Rails engines, and Docker. Developed custom RuboCop cops for code quality. Helped hundreds of developers in their decoupling journey.
