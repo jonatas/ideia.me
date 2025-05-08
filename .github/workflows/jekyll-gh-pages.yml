@@ -4,6 +4,7 @@
 # documentation.
 
 # Sample workflow for building and deploying a Jekyll site to GitHub Pages
+# Triggering a new build after unpublishing the previous site
 name: Deploy Jekyll site to Pages
 
 on:
