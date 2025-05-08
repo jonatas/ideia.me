@@ -1,12 +1,12 @@
 source "https://rubygems.org"
 
-gem "jekyll", "~> 3.9.0"
-gem "webrick", "~> 1.8"
-gem "oembed", "~> 0.1.0"
+gem "jekyll"
+gem "webrick"
+gem "oembed"
 
 group :jekyll_plugins do
-  gem "jekyll-feed", "~> 0.12"
-  gem "jekyll-seo-tag", "~> 2.8"
+  gem "jekyll-feed"
+  gem "jekyll-seo-tag"
   gem "jekyll-reading-time"
   gem "jekyll-related-posts"
   gem "jekyll-sitemap"
