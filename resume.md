@@ -1,102 +1,68 @@
 ---
 layout: page
-title: Jônatas Davi Paganini
+title: {{ site.author.name }}
 ---
 
-Staff/Architect Software Engineer | Database Performance & Architecture Consultant | Real Time Analytics, Software Development
+# {{ site.author.title }}
 
-# Contact
+{{ site.author.bio }}
 
-**City/State/Country**: Santa Catarina/Brazil
-**Phone**: [+55 (48) 99150 1012](tel:5548991501012)
-**Mail**: jonatasdp@gmail.com
-**Site**: https://ideia.me
+## Available for Consulting & Contract Work
 
-# Developer
+I help teams optimize their database performance, scale their applications, and implement best practices in software architecture. With 20+ years of experience, I specialize in:
 
-* Staff/Architect Software Engineer with 20+ years of experience crafting software with a focus on autonomy and collaboration
-* Available for consultancy in database performance optimization and architecture design
-* Passionate about enabling teams through better tools, practices, and knowledge sharing
-* Built tools and processes that helped hundreds of developers transition from monoliths to microservices
-* Mentored and onboarded over 300 backend developers, fostering autonomous and confident engineers
-* Created custom RuboCop cops and tools to improve code quality and meaningful PR discussions
-* Self-taught researcher with experience in automated trading strategies and performance optimization
-* Entrepreneur who values autonomy and independence, working remotely since 2010
-* Advocate for sustainable development and continuous learning
+* Database Performance Optimization & Architecture Design
+* Microservices Migration & System Modernization
+* Team Enablement & Knowledge Transfer
+* Real-time Analytics & Time-series Data Solutions
+* Technical Advisory & Architecture Consulting
+* Team Training & Performance Workshops
+* Conference Speaking & Community Building
 
-Abilities:
+## Why Work With Me?
 
-* analytical thinking
-* intermediate people to get focused in some objective
-* excellent verbal and written communication skills
-* resilient on troubleshooting
-* building autonomous teams
-* creating tools that empower developers
+* **Proven Track Record**: Successfully helped hundreds of developers transition from monoliths to microservices
+* **Deep Technical Expertise**: Extensive experience with PostgreSQL, TimescaleDB, Ruby, and distributed systems
+* **Team Empowerment**: Mentored 300+ developers, fostering autonomous and confident engineering teams
+* **Practical Solutions**: Built custom tools and processes that significantly improve development workflows
+* **Global Experience**: Worked with teams worldwide, delivering results across different time zones and cultures
 
-Other characteristics:
+## Contact
 
-* Self-motivated to work and live
-* Diligent and interest on our sustainable planet
+* **Email**: {{ site.author.email }}
+* **Website**: {{ site.production_url }}
+* **GitHub**: [github.com/{{ site.author.github }}](https://github.com/{{ site.author.github }})
+* **LinkedIn**: [linkedin.com/in/{{ site.author.linkedin }}](https://linkedin.com/in/{{ site.author.linkedin }})
+* **Twitter**: [twitter.com/{{ site.author.twitter }}](https://twitter.com/{{ site.author.twitter }})
 
-# Personal Lifestyle
+## Featured Projects
 
-* Cyclist aspiring to become a hiker, exploring nature and challenging myself
-* Living a nerd life in the countryside, practicing yoga 3 times per week
-* DIY enthusiast: building musical instruments and crafting wooden furniture
-* Applying permaculture techniques at my countryside house, living sustainably
-* Balancing technology with hands-on craftsmanship and sustainable living
+### [Fast](https://github.com/jonatas/fast)
+A Ruby tool for advanced code search and refactoring that treats code as data. Successfully processed 100k+ lines of production code, enabling confident refactoring at scale.
 
-# Professional Experience
+### [TimescaleDB Ruby](https://github.com/timescale/timescaledb-ruby)
+The official Ruby gem for TimescaleDB, providing seamless integration with ActiveRecord. Started as a personal project and evolved into a widely adopted community solution.
 
- From | To    | Position            | Company                                | Experiences
- -----|-------|---------------------|----------------------------------------|--------------------------------
- 2022 | 2025  | Developer Advocate | Timescale                              | Community Manager for TimescaleDB, creating content and tools for time-series data. Speaking at conferences, live-streaming code projects, writing blogs and tutorials. Working with community to expand the ecosystem support.
- 2021 | 2022  | Onboarding lead    | Timescale                              | Built engineering onboarding initiatives, facilitated cross-team collaboration through documentation and sharing sessions.
- 2021 | 2021  | Developer Advocate | Timescale                              | Created content about time-series databases, Developed the timescale gem for Ruby/Rails integration.
- 2020 | 2021  | Senior Back-end Engineer | Toptal                          | Created tools to preview microservices extracted from monoliths using Ruby, Rails engines, and Docker. Developed custom RuboCop cops for code quality. Helped hundreds of developers in their decoupling journey.
- 2018 | 2020  | Onboarding Team Lead | Toptal                            | Mentored 300+ backend developers in Ruby, Rails, and microservices. Created tools for autonomous onboarding using Git, Docker, and CI/CD. Simplified contribution policies through automated tooling.
- 2016 | 2018  | Back end Mentor    | Toptal                                | Developed custom RuboCop cops and testing frameworks. Promoted TDD/BDD practices with RSpec. Facilitated knowledge sharing through pair programming and code reviews.
- 2015 | 2016  | Back End Developer | Resultados Digitais                    | Worked on scalability issues using Ruby, Rails, and PostgreSQL. Implemented caching strategies with Redis. Created engineering blog and technical content.
- 2012 | 2016  | Chief Technology Officer | Invent.to                         | R&D of inventions using Python & Javascript, computer vision, and hardware integration. Developed Bluetooth communication protocols and sound synthesizers. Worked with 3D printing and IoT.
- 2010 | 2015  | Chief Technology Officer | Executive Inteligência Tecnológica | Built automated trading platform using Java, high-frequency algorithms, and complex event processing. Integrated with financial markets through FIX Protocol.
- 2010 | 2010  | Freelancer         | Ideia.me                              | Full-stack development with Ruby, Rails, JavaScript, and PostgreSQL. Developed Android apps using Java.
- 2006 | 2010  | Software Engineer  | Leosoft                               | Java, Struts, Linux, PostgreSQL development. Introduced Ruby and Rails to the team. Trained developers in agile practices and TDD.
+### [Blog Sniffer](https://github.com/jonatas/blog-sniffer)
+An intelligent web crawler and data analysis tool that revolutionizes content discovery for engineering blogs through parallel processing and advanced text analysis.
 
-## Academic experience
+## Fun Projects
 
-From | To    | Title                                                | University
------|-------|------------------------------------------------------|----------
-2004 | 2005  | Bachelor of Computer Information Systems             | UNIPAR
-2012 | 2014  | Graduate School in Art-therapy, education and health | UNOESC
+### [Mandala](https://github.com/jonatas/mandala)
+A creative coding project that combines art and technology, generating interactive mandalas using CoffeeScript and HTML5 Canvas.
 
-I really enjoy and learn so much more on https://coursera.org and a lot of other
-open source online courses than from my academic experiences.
+### [HP12C](https://github.com/jonatas/hp12c)
+A Ruby implementation of the legendary HP-12C financial calculator in just 45 lines of elegant Ruby code.
 
-My favorites actually are coursera and udacity. Last few years I prefer learning through Audiobooks.
+## Benchmarks
 
-## Voluntarism
+### [Ruby ORM Performance](/benchmarking-ruby-orms)
+Comprehensive benchmark comparing ActiveRecord vs Sequel performance with TimescaleDB, showing up to 7.46x faster simple queries with Sequel.
 
-* Bliss Symbols International Community - Created [bliss.ideia.me](http://bliss.ideia.me) - a tool for work with bliss symbols
-* Activist on local hacker/maker culture
-* Active Speaker at tech conferences - check my [/talks](/talks)
-* Active participant on local tech events. Find me on a [meetup](http://www.meetup.com/members/185190193/) near from me.
-* Active supporter speaker on dev/startup/entrepreneurship events
+### [TimescaleDB on Raspberry Pi](/time-series-benchmark-timescaledb-raspberry-pi)
+Performance testing of TimescaleDB on Raspberry Pi hardware, demonstrating impressive capabilities for time-series data processing on low-power devices.
 
-## Links
+### [Ruby Memory Optimization](/observando-a-memoria-ruby)
+Deep dive into Ruby memory optimization techniques, achieving up to 12% memory reduction using optimized object models.
 
-* [github.com/jonatas](http://github.com/jonatas) is where I put my open-source code.
-* [LinkedIn](http://in.linkedin.com/in/jonatasdp) exists but is not up to date.
-
-## Talks
-
-I like to talk so much at events and be part of the tech communities.
-
-See some of my latest [talks](/talks).
-
-## Pet Projects
-
-* [bliss.ideia.me](http://bliss.ideia.me) is a tool to learn and teach bliss symbols.
-* [pixel.ideia.me](http://pixel.ideia.me) is a place to draw with other people
-* [churumelas.ideia.me](http://churumelas.ideia.me) is a ruby challenges in one line of code
-* [torf.ideia.me](http://torf.ideia.me) is a true or false game
-* [i.ideia.me](http://i.ideia.me) is a fast instagram navigator
+Contact me on [linkedin](https://www.linkedin.com/in/{{ site.author.linkedin }}/) to discuss how I can help your team achieve their goals.
