@@ -178,6 +178,15 @@ group: navigation
     
     // Setup smooth scrolling
     setupSmoothScrolling();
+
+    // Check for hash in URL and apply filter if present
+    const hash = window.location.hash.substring(1); // Remove the # symbol
+    if (hash) {
+      const categoryButton = document.querySelector(`.category-filter-btn[data-category="${hash}"]`);
+      if (categoryButton) {
+        categoryButton.click();
+      }
+    }
   });
   
   function animateCounters() {
@@ -213,6 +222,13 @@ group: navigation
     filterButtons.forEach(button => {
       button.addEventListener('click', function() {
         const category = this.getAttribute('data-category');
+        
+        // Update URL hash without triggering page reload
+        if (category === 'all') {
+          history.pushState(null, '', window.location.pathname);
+        } else {
+          history.pushState(null, '', `#${category}`);
+        }
         
         // Update active button
         filterButtons.forEach(btn => btn.classList.remove('active'));
