@@ -1,9 +1,8 @@
 ---
 layout: page
-title: {{ site.author.name }}
+title: Jônatas Davi Paganini - Resume
 ---
 
-# {{ site.author.title }}
 
 {{ site.author.bio }}
 
@@ -54,7 +53,9 @@ A creative coding project that combines art and technology, generating interacti
 ### [HP12C](https://github.com/jonatas/hp12c)
 A Ruby implementation of the legendary HP-12C financial calculator in just 45 lines of elegant Ruby code.
 
-## Benchmarks
+## Performance Benchmarks & Research
+
+I'm passionate about performance optimization and system predictability. Through extensive benchmarking and research, I've published several detailed analyses that help teams make informed decisions about their technology choices:
 
 ### [Ruby ORM Performance](/benchmarking-ruby-orms)
 Comprehensive benchmark comparing ActiveRecord vs Sequel performance with TimescaleDB, showing up to 7.46x faster simple queries with Sequel.
