@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Joining Bax Energy as Staff Engineer
-date: 2024-06-05
+date: 2025-06-05
 categories: [career, announcement]
 tags: [career, staff-engineer, bax-energy, new-role]
 ---
