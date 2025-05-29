@@ -178,24 +178,6 @@
       }
     },
     {
-      "date": "2025-06-12",
-      "title": "Intro to the TimescaleDB gem",
-      "location": "Latvia, Riga",
-      "event": "Baltic Ruby",
-      "url": "https://balticruby.org/",
-      "type": "conference",
-      "topic": "Ruby, TimescaleDB",
-      "status": "Accepted",
-      "international": true,
-      "media": {
-        "banner": {
-          "src": "/images/banners/baltic-ruby-2025-banner.png",
-          "alt": "Baltic Ruby 2025 Official Banner",
-          "url": "https://balticruby.org/"
-        }
-      }
-    },
-    {
       "date": "2024-08-03",
       "title": "High-speed data: Optimizing PostgreSQL with TimescaleDB",
       "location": "Blumenau, SC, Brazil",

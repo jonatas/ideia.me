@@ -3,28 +3,26 @@ layout: page
 title: Jônatas Davi Paganini - Resume
 ---
 
-
 {{ site.author.bio }}
 
-## Available for Consulting & Contract Work
+## Staff Engineer at Bax Energy
 
-I help teams optimize their database performance, scale their applications, and implement best practices in software architecture. With 20+ years of experience, I specialize in:
+Currently working as Staff Engineer at Bax Energy, focusing on database performance optimization and system architecture. With 20+ years of experience, I specialize in:
 
 * Database Performance Optimization & Architecture Design
 * Microservices Migration & System Modernization
-* Team Enablement & Knowledge Transfer
 * Real-time Analytics & Time-series Data Solutions
-* Technical Advisory & Architecture Consulting
-* Team Training & Performance Workshops
+* Technical Leadership & Architecture Design
+* Team Mentorship & Knowledge Sharing
 * Conference Speaking & Community Building
 
-## Why Work With Me?
+## Professional Highlights
 
-* **Proven Track Record**: Successfully helped hundreds of developers transition from monoliths to microservices
+* **Technical Leadership**: Successfully led teams in transitioning from monoliths to microservices
 * **Deep Technical Expertise**: Extensive experience with PostgreSQL, TimescaleDB, Ruby, and distributed systems
 * **Team Empowerment**: Mentored 300+ developers, fostering autonomous and confident engineering teams
-* **Practical Solutions**: Built custom tools and processes that significantly improve development workflows
-* **Global Experience**: Worked with teams worldwide, delivering results across different time zones and cultures
+* **Innovation**: Built custom tools and processes that significantly improve development workflows
+* **Global Impact**: Collaborated with teams worldwide, delivering results across different time zones and cultures
 
 ## Contact
 
@@ -53,9 +51,9 @@ A creative coding project that combines art and technology, generating interacti
 ### [HP12C](https://github.com/jonatas/hp12c)
 A Ruby implementation of the legendary HP-12C financial calculator in just 45 lines of elegant Ruby code.
 
-## Performance Benchmarks & Research
+## Technical Research & Publications
 
-I'm passionate about performance optimization and system predictability. Through extensive benchmarking and research, I've published several detailed analyses that help teams make informed decisions about their technology choices:
+I'm passionate about performance optimization and system predictability. Through extensive research and practical implementation, I've published several detailed analyses:
 
 ### [Ruby ORM Performance](/benchmarking-ruby-orms)
 Comprehensive benchmark comparing ActiveRecord vs Sequel performance with TimescaleDB, showing up to 7.46x faster simple queries with Sequel.
@@ -66,4 +64,4 @@ Performance testing of TimescaleDB on Raspberry Pi hardware, demonstrating impre
 ### [Ruby Memory Optimization](/observando-a-memoria-ruby)
 Deep dive into Ruby memory optimization techniques, achieving up to 12% memory reduction using optimized object models.
 
-Contact me on [linkedin](https://www.linkedin.com/in/{{ site.author.linkedin }}/) to discuss how I can help your team achieve their goals.
+Connect with me on [LinkedIn](https://www.linkedin.com/in/{{ site.author.linkedin }}/) to discuss technical challenges and innovations in database performance and system architecture.
