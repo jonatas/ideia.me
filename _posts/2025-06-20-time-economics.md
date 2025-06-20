@@ -11,6 +11,8 @@ mermaid: true
 
 I was checking old notes from my phone this week and found a little note about how I nurture my relationship with my time and how I create satisfying meaningful moments. This simple note brought me to a long AI conversation and reflections on how we can apply economic thinking to our most finite resource: **time**.
 
+> Time is money? Nope.
+
 Unlike money, which can be earned back, or energy, which can be restored through rest, time moves in only one direction. Once spent, it's gone forever. Yet most of us treat time more carelessly than we treat money, making decisions without considering the true cost or return on our temporal investments.
 
 ## The Time Economics Framework
