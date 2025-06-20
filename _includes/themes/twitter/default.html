@@ -32,6 +32,7 @@
     <link href="/css/nimbus-pygments.css" rel="stylesheet">
     <link href="/css/modern-theme.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/callouts.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
     <!-- Modern JavaScript -->
@@ -41,6 +42,11 @@
     
     <!-- GitHub-style code block enhancement -->
     <script src="/js/github-code-blocks.js"></script>
+    
+    <!-- Mermaid diagrams (only load if page has mermaid: true) -->
+    {% if page.mermaid or layout.mermaid %}
+      {% include mermaid.html %}
+    {% endif %}
     
     <div id="fb-root"></div>
 

@@ -1,0 +1,284 @@
+<!-- Mermaid.js Support -->
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script>
+  // Initialize Mermaid with configuration based on color scheme
+  const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ||
+                     document.documentElement.classList.contains('dark-mode') ||
+                     document.body.classList.contains('dark-mode');
+  
+  mermaid.initialize({ 
+    startOnLoad: false,
+    theme: 'base',
+    securityLevel: 'loose',
+    flowchart: {
+      useMaxWidth: true,
+      htmlLabels: true,
+      curve: 'basis',
+      nodeSpacing: 40,
+      rankSpacing: 60,
+      padding: 20
+    },
+    themeVariables: {
+      primaryColor: isDarkMode ? '#5c9eff' : '#4361ee',
+      primaryTextColor: isDarkMode ? '#f0f2f5' : '#000000',
+      primaryBorderColor: isDarkMode ? '#5c9eff' : '#4361ee',
+      lineColor: isDarkMode ? '#FBBF24' : '#000000',
+      sectionBkgColor: isDarkMode ? '#1e1e1e' : '#ffffff',
+      altSectionBkgColor: isDarkMode ? '#2a2d31' : '#f8f9fa',
+      gridColor: isDarkMode ? '#FBBF24' : '#000000',
+      tertiaryColor: isDarkMode ? '#2a2d31' : '#f8f9fa',
+      background: isDarkMode ? '#1e1e1e' : '#ffffff',
+      mainBkg: isDarkMode ? '#1e1e1e' : '#ffffff',
+      secondBkg: isDarkMode ? '#2a2d31' : '#f8f9fa',
+      tertiaryBkg: isDarkMode ? '#1e1e1e' : '#ffffff',
+      edgeLabelBackground: isDarkMode ? '#1e1e1e' : '#ffffff'
+    }
+  });
+  
+  // Convert code blocks with language-mermaid to mermaid diagrams
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('pre > code.language-mermaid').forEach((codeBlock) => {
+      const mermaidCode = codeBlock.textContent;
+      const mermaidDiv = document.createElement('div');
+      mermaidDiv.className = 'mermaid';
+      mermaidDiv.textContent = mermaidCode;
+      codeBlock.parentElement.replaceWith(mermaidDiv);
+    });
+    
+    // Initialize and render all mermaid diagrams
+    mermaid.run();
+  });
+</script>
+
+<!-- Mermaid diagram styling -->
+<style>
+  .mermaid {
+    text-align: center;
+    margin: 2rem 0;
+    padding: 0.8rem;
+    background-color: var(--card-bg-color, #ffffff);
+    border-radius: 8px;
+    border: 1px solid var(--border-color, rgba(0, 0, 0, 0.1));
+    box-shadow: var(--card-shadow, 0 4px 6px rgba(0, 0, 0, 0.05));
+    transition: all var(--transition-speed, 0.3s) ease;
+    overflow-x: auto;
+    max-width: 100%;
+  }
+  
+  .mermaid svg {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Enhanced font sizing for better readability */
+  .mermaid text {
+    font-size: 18px !important;
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+  }
+  
+  .mermaid .nodeLabel,
+  .mermaid .edgeLabel {
+    font-size: 17px !important;
+    font-weight: 500 !important;
+    line-height: 1.3 !important;
+  }
+  
+  .mermaid .cluster .nodeLabel {
+    font-size: 19px !important;
+    font-weight: 600 !important;
+    line-height: 1.3 !important;
+  }
+  
+  /* Responsive design for mobile devices */
+  @media (max-width: 768px) {
+    .mermaid {
+      padding: 0.5rem;
+      margin: 1.5rem 0;
+    }
+    
+
+    
+    .mermaid text {
+      font-size: 14px !important;
+    }
+    
+    .mermaid .cluster .nodeLabel {
+      font-size: 15px !important;
+    }
+  }
+  
+  /* Optimize for vertical layouts */
+  .mermaid .node rect,
+  .mermaid .node circle,
+  .mermaid .node ellipse,
+  .mermaid .node polygon {
+    min-width: 120px !important;
+    min-height: 40px !important;
+  }
+  
+  /* Dark mode support using your CSS variables */
+  @media (prefers-color-scheme: dark) {
+    .mermaid {
+      background-color: var(--card-bg-color, #1e1e1e);
+      border-color: var(--border-color, rgba(255, 255, 255, 0.15));
+      box-shadow: var(--card-shadow, 0 4px 6px rgba(0, 0, 0, 0.3));
+    }
+    
+    /* Override Mermaid's default colors for dark mode */
+    .mermaid .node rect,
+    .mermaid .node circle,
+    .mermaid .node ellipse,
+    .mermaid .node polygon {
+      fill: var(--card-bg-color, #1e1e1e) !important;
+      stroke: var(--primary-color, #5c9eff) !important;
+      stroke-width: 2px !important;
+    }
+    
+    .mermaid .edgePath .path {
+      stroke: #FBBF24 !important;
+      stroke-width: 3px !important;
+    }
+    
+    .mermaid .flowchart-link {
+      stroke: #FBBF24 !important;
+      stroke-width: 3px !important;
+    }
+    
+    .mermaid .marker {
+      fill: #FBBF24 !important;
+      stroke: #FBBF24 !important;
+    }
+    
+    .mermaid .edgeLabel {
+      background-color: var(--card-bg-color, #1e1e1e) !important;
+      color: var(--text-color, #f0f2f5) !important;
+    }
+    
+    .mermaid text {
+      fill: var(--text-color, #f0f2f5) !important;
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+      font-size: 16px !important;
+      font-weight: 500 !important;
+    }
+    
+    /* Subgraph styling for dark mode */
+    .mermaid .cluster rect {
+      fill: rgba(92, 158, 255, 0.1) !important;
+      stroke: var(--primary-color, #5c9eff) !important;
+      stroke-width: 1px !important;
+    }
+    
+    .mermaid .cluster text {
+      fill: var(--primary-color, #5c9eff) !important;
+      font-weight: 600 !important;
+    }
+  }
+  
+  /* Light mode styling */
+  @media (prefers-color-scheme: light) {
+    .mermaid .node rect,
+    .mermaid .node circle,
+    .mermaid .node ellipse,
+    .mermaid .node polygon {
+      fill: var(--card-bg-color, #ffffff) !important;
+      stroke: var(--primary-color, #4361ee) !important;
+      stroke-width: 2px !important;
+    }
+    
+    .mermaid .edgePath .path {
+      stroke: #000000 !important;
+      stroke-width: 3px !important;
+    }
+    
+    .mermaid .edgeLabel {
+      background-color: var(--card-bg-color, #ffffff) !important;
+      color: var(--text-color, #212529) !important;
+    }
+    
+    .mermaid text {
+      fill: var(--text-color, #212529) !important;
+      font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+      font-size: 16px !important;
+      font-weight: 500 !important;
+    }
+    
+    .mermaid .cluster rect {
+      fill: rgba(67, 97, 238, 0.05) !important;
+      stroke: var(--primary-color, #4361ee) !important;
+      stroke-width: 1px !important;
+    }
+    
+    .mermaid .cluster text {
+      fill: var(--primary-color, #4361ee) !important;
+      font-weight: 600 !important;
+    }
+  }
+  
+  /* Manual dark mode class support */
+  html.dark-mode .mermaid,
+  body.dark-mode .mermaid {
+    background-color: var(--card-bg-color, #1e1e1e);
+    border-color: var(--border-color, rgba(255, 255, 255, 0.15));
+    box-shadow: var(--card-shadow, 0 4px 6px rgba(0, 0, 0, 0.3));
+  }
+  
+  html.dark-mode .mermaid .node rect,
+  html.dark-mode .mermaid .node circle,
+  html.dark-mode .mermaid .node ellipse,
+  html.dark-mode .mermaid .node polygon,
+  body.dark-mode .mermaid .node rect,
+  body.dark-mode .mermaid .node circle,
+  body.dark-mode .mermaid .node ellipse,
+  body.dark-mode .mermaid .node polygon {
+    fill: var(--card-bg-color, #1e1e1e) !important;
+    stroke: var(--primary-color, #5c9eff) !important;
+    stroke-width: 2px !important;
+  }
+  
+  html.dark-mode .mermaid .edgePath .path,
+  body.dark-mode .mermaid .edgePath .path {
+    stroke: #FBBF24 !important;
+    stroke-width: 3px !important;
+  }
+  
+  html.dark-mode .mermaid .flowchart-link,
+  body.dark-mode .mermaid .flowchart-link {
+    stroke: #FBBF24 !important;
+    stroke-width: 3px !important;
+  }
+  
+  html.dark-mode .mermaid .marker,
+  body.dark-mode .mermaid .marker {
+    fill: #FBBF24 !important;
+    stroke: #FBBF24 !important;
+  }
+  
+  html.dark-mode .mermaid .edgeLabel,
+  body.dark-mode .mermaid .edgeLabel {
+    background-color: var(--card-bg-color, #1e1e1e) !important;
+    color: var(--text-color, #f0f2f5) !important;
+  }
+  
+  html.dark-mode .mermaid text,
+  body.dark-mode .mermaid text {
+    fill: var(--text-color, #f0f2f5) !important;
+    font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+  }
+  
+  html.dark-mode .mermaid .cluster rect,
+  body.dark-mode .mermaid .cluster rect {
+    fill: rgba(92, 158, 255, 0.1) !important;
+    stroke: var(--primary-color, #5c9eff) !important;
+    stroke-width: 1px !important;
+  }
+  
+  html.dark-mode .mermaid .cluster text,
+  body.dark-mode .mermaid .cluster text {
+    fill: var(--primary-color, #5c9eff) !important;
+    font-weight: 600 !important;
+  }
+</style> 

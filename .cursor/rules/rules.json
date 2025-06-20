@@ -107,6 +107,60 @@
           "example": "my-blog-post"
         }
       ]
+    },
+    {
+      "name": "Callout Components",
+      "description": "Rules for using callout blocks in markdown content",
+      "patterns": ["**/*.md"],
+      "actions": [
+        {
+          "name": "Basic callouts",
+          "description": "Use callout tags for highlighted content blocks",
+          "example": "{% callout note \"Title\" %}\nYour content here with **markdown** support\n{% endcallout %}"
+        },
+        {
+          "name": "Collapsible callouts",
+          "description": "Add 'collapsible' parameter for expandable content",
+          "example": "{% callout tip collapsible \"Click to expand\" %}\nHidden content here\n{% endcallout %}"
+        },
+        {
+          "name": "Open by default",
+          "description": "Use 'collapsible open' for content that starts expanded",
+          "example": "{% callout warning collapsible open \"Important Info\" %}\nVisible by default but collapsible\n{% endcallout %}"
+        },
+        {
+          "name": "Available callout types",
+          "description": "Supported callout types with their colors and icons",
+          "example": "note (blue), tip (green), warning (orange), danger (red), info (cyan), success (green), question (light green), example (purple), quote (gray)"
+        }
+      ]
+    },
+    {
+      "name": "Mermaid Diagrams",
+      "description": "Rules for creating diagrams using Mermaid.js in posts",
+      "patterns": ["**/*.md"],
+      "actions": [
+        {
+          "name": "Enable Mermaid in front matter",
+          "description": "Add 'mermaid: true' to front matter to load Mermaid.js",
+          "example": "---\nlayout: post\ntitle: My Post\nmermaid: true\n---"
+        },
+        {
+          "name": "Markdown code blocks",
+          "description": "Use ```mermaid code blocks for diagrams",
+          "example": "```mermaid\ngraph TD\n    A[Square] --> B[Circle]\n```"
+        },
+        {
+          "name": "Mermaid liquid tag",
+          "description": "Use {% mermaid %} tag for more control",
+          "example": "{% mermaid %}\ngraph LR\n    A --> B\n{% endmermaid %}"
+        },
+        {
+          "name": "Mermaid with configuration",
+          "description": "Pass configuration to mermaid tag",
+          "example": "{% mermaid theme: forest, layout: elk %}\ngraph TD\n    A --> B\n{% endmermaid %}"
+        }
+      ]
     }
   ]
 } 

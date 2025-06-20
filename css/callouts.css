@@ -1,0 +1,215 @@
+/* Callout Blocks (mkdocs-material style) */
+.admonition {
+  margin: 1.5625em 0;
+  padding: 0;
+  overflow: hidden;
+  page-break-inside: avoid;
+  border-left: 0.25rem solid var(--admonition-color, #2196f3);
+  border-radius: 0.125rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  background-color: #fff;
+  font-size: 0.8rem;
+}
+
+.admonition-title {
+  position: relative;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--admonition-color, #2196f3);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+}
+
+.admonition-collapsible .admonition-title {
+  cursor: pointer;
+}
+
+.admonition-collapsible .admonition-title::after {
+  content: "";
+  position: absolute;
+  right: 0.75rem;
+  width: 0;
+  height: 0;
+  margin-left: auto;
+  border-left: 0.25rem solid transparent;
+  border-right: 0.25rem solid transparent;
+  border-top: 0.375rem solid currentColor;
+  transition: transform 0.25s ease;
+}
+
+.admonition-collapsible[open] .admonition-title::after {
+  transform: rotate(180deg);
+}
+
+.admonition-icon {
+  font-style: normal;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.admonition-content {
+  padding: 0.75rem;
+  line-height: 1.6;
+}
+
+.admonition-content > :first-child {
+  margin-top: 0;
+}
+
+.admonition-content > :last-child {
+  margin-bottom: 0;
+}
+
+.admonition-content p {
+  margin: 0.5rem 0;
+}
+
+.admonition-content ul,
+.admonition-content ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.admonition-content li {
+  margin: 0.25rem 0;
+}
+
+.admonition-content code {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.125rem;
+  font-size: 0.85em;
+}
+
+.admonition-content pre {
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  background-color: #f6f8fa;
+  border-radius: 0.25rem;
+  overflow-x: auto;
+}
+
+.admonition-content pre code {
+  background: none;
+  padding: 0;
+}
+
+/* Specific admonition type styles */
+.admonition-note {
+  --admonition-color: #448aff;
+}
+
+.admonition-abstract,
+.admonition-summary,
+.admonition-tldr {
+  --admonition-color: #00b0ff;
+}
+
+.admonition-info {
+  --admonition-color: #00b8d4;
+}
+
+.admonition-todo,
+.admonition-tip,
+.admonition-hint,
+.admonition-success,
+.admonition-check,
+.admonition-done {
+  --admonition-color: #00c853;
+}
+
+.admonition-question,
+.admonition-help,
+.admonition-faq {
+  --admonition-color: #64dd17;
+}
+
+.admonition-warning,
+.admonition-caution,
+.admonition-attention,
+.admonition-important {
+  --admonition-color: #ff9100;
+}
+
+.admonition-failure,
+.admonition-fail,
+.admonition-missing {
+  --admonition-color: #ff5252;
+}
+
+.admonition-danger,
+.admonition-error {
+  --admonition-color: #ff1744;
+}
+
+.admonition-bug {
+  --admonition-color: #f50057;
+}
+
+.admonition-example,
+.admonition-snippet {
+  --admonition-color: #651fff;
+}
+
+.admonition-quote,
+.admonition-cite {
+  --admonition-color: #9e9e9e;
+}
+
+/* Dark mode support */
+.dark-mode .admonition {
+  background-color: #1e1e1e;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .admonition-content {
+  color: #f0f2f5;
+}
+
+.dark-mode .admonition-content code {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #f0f2f5;
+}
+
+.dark-mode .admonition-content pre {
+  background-color: #0d1117;
+  color: #f0f2f5;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .admonition {
+    margin: 1rem 0;
+    font-size: 0.75rem;
+  }
+  
+  .admonition-title {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.75rem;
+  }
+  
+  .admonition-content {
+    padding: 0.6rem;
+  }
+}
+
+/* Print styles */
+@media print {
+  .admonition {
+    border: 1px solid var(--admonition-color, #2196f3);
+    box-shadow: none;
+  }
+  
+  .admonition-collapsible .admonition-title::after {
+    display: none;
+  }
+  
+  .admonition-collapsible[open] .admonition-content {
+    display: block !important;
+  }
+} 

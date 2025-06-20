@@ -1,0 +1,9 @@
+{% assign summary_content = include.summary | markdownify | remove: '<p>' | remove: '</p>' %}
+{% assign details_content = include.content | markdownify %}
+
+<details{% if include.open %} open{% endif %}{% if include.class %} class="{{ include.class }}"{% endif %}>
+    <summary>{{ summary_content }}</summary>
+    <div class="details-content">
+        {{ details_content }}
+    </div>
+</details> 
