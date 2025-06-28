@@ -14,39 +14,13 @@ Since I joined [Bax Energy](/joining-bax-energy-as-staff-engineer), I've been di
 
 This journey has been incredible. I've been "vibe coding" with an insane amount of help from AI, both for development and learning .NET fundamentals. What's mind-blowing is how AI has accelerated the learning curve. I probably spent at least 200 hours building and debugging AST patterns for the Ruby version, but now I'm making rapid progress with intelligent assistance.
 
-As someone who spent the last few years at Timescale in a role where programming wasn't the main activity, I'm incredibly excited about how much progress I've made building this .NET tool from scratch.
+As someone who spent the last few years at Timescale in a role where programming wasn't the main activity, I'm incredibly excited about how much progress I've made building this .NET tool from scratch. If you're interested in the broader concepts behind SQL AST pattern matching, check out my previous post on [grepping SQL code like a boss](/grepping-sql-code-like-a-boss).
 
 ## What is GrepSQL?
 
 GrepSQL is a .NET wrapper for libpg_query that provides PostgreSQL query parsing and advanced SQL pattern matching capabilities. Think of it as "grep for SQL" but with the power of Abstract Syntax Tree (AST) navigation.
 
 Instead of simple string matching, GrepSQL understands the structure of your SQL queries and lets you search for patterns at the semantic level. Want to find all SELECT statements that query a specific table? Or locate hardcoded passwords in your SQL files? GrepSQL makes these tasks trivial.
-
-## Quick Start: Installation
-
-### Pre-built Binaries (Recommended)
-
-The easiest way to get started is downloading the ready-to-use binaries from [GitHub Releases](https://github.com/jonatas/grepsql/releases):
-
-```bash
-# Download and extract (Linux example)
-wget https://github.com/jonatas/grepsql/releases/latest/download/grepsql-linux-x64.tar.gz
-tar -xzf grepsql-linux-x64.tar.gz
-chmod +x GrepSQL
-
-# Use immediately
-./GrepSQL "SelectStmt" *.sql --highlight
-```
-
-Available for Linux x64, macOS (Intel & Apple Silicon), and Windows x64. The binaries are automatically built and released via GitHub Actions.
-
-### NuGet Package (.NET Library)
-
-For integration into your .NET projects:
-
-```bash
-dotnet add package GrepSQL
-```
 
 ## Core Features
 
@@ -302,7 +276,7 @@ I encourage you to download GrepSQL and experiment with your own SQL files. Whet
 
 The intersection of AST parsing, pattern matching, and modern tooling creates powerful possibilities for code analysis. As AI continues to accelerate development workflows, tools like GrepSQL become even more valuable for understanding and maintaining large codebases.
 
-Ready to grep your SQL like a boss? Check out the [releases page](https://github.com/jonatas/grepsql/releases) and give it a try!
+Ready to grep your SQL like a boss? Check out the [project](https://github.com/jonatas/grepsql/) and give it a try!
 
 Happy coding! 🚀
 
