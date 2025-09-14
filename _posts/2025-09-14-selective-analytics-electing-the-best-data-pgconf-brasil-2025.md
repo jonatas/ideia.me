@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Selective Analytics: Electing the Best Data for Long-term Storage"
-date: 2025-09-15 10:00:00 -0300
+date: 2025-09-14
 categories: postgresql timescaledb conferences analytics
 tags: pgconf-brasil timescaledb postgresql analytics real-time-data storage-optimization
 image: /images/pgconf-brazil-2025-jonatas-on-stage-with-sql.jpg
