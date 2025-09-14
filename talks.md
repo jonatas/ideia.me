@@ -41,19 +41,19 @@ title: "Speaking @jonatasdp"
   
   <div class="global-impact">
     <div class="stat-box">
-      <div class="stat-number" data-count="44">0</div>
+      <div class="stat-number counter" data-count="0">0</div>
       <div class="stat-label">Total Talks</div>
     </div>
     <div class="stat-box">
-      <div class="stat-number" data-count="37">0</div>
-      <div class="stat-label">Delivered</div>
+      <div class="stat-number counter" data-count="0">0</div>
+      <div class="stat-label">International</div>
     </div>
     <div class="stat-box">
-      <div class="stat-number" data-count="9">0</div>
+      <div class="stat-number counter" data-count="0">0</div>
       <div class="stat-label">Countries</div>
     </div>
     <div class="stat-box">
-      <div class="stat-number" data-count="4">0</div>
+      <div class="stat-number counter" data-count="0">0</div>
       <div class="stat-label">Continents</div>
     </div>
   </div>
@@ -200,10 +200,24 @@ title: "Speaking @jonatasdp"
   
   // This script will be rendered in the Jekyll site
   document.addEventListener('DOMContentLoaded', function() {
+    // Force recalculation of statistics from the JSON data
+    console.log('Forcing recalculation of statistics with', window.talksJson.length, 'talks');
+    
+    if (typeof calculateAndDisplayStats === 'function') {
+      calculateAndDisplayStats(window.talksJson);
+    }
+    
     // Force recalculation of topic counts
     if (typeof updateTopicCounts === 'function') {
-      updateTopicCounts();
+      updateTopicCounts(window.talksJson);
     }
+    
+    // Animate the counters after stats are updated
+    setTimeout(function() {
+      if (typeof animateCounters === 'function') {
+        animateCounters();
+      }
+    }, 100);
     
     // Form submission handling
     const form = document.getElementById('speaking-request');

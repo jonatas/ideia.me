@@ -1,6 +1,88 @@
 {
   "talks": [
     {
+      "date": "2025-09-03",
+      "title": "PostgreSQL Performance Workshop for Developers",
+      "location": "João Pessoa, PB, Brazil",
+      "event": "PGConf Brasil, 2025",
+      "url": "https://2025.pgconf.com.br",
+      "type": "workshop",
+      "topic": "PostgreSQL, SQL, Performance",
+      "github": "https://github.com/jonatas/postgresql-performance-workshops",
+      "media": {
+        "banner": {
+          "src": "/images/banners/pgconf-brazil-banner.png",
+          "alt": "PGConf Brazil Official Banner",
+          "url": "https://2025.pgconf.com.br"
+        },
+        "images": [
+          {
+            "src": "/images/pgconf-brazil-2025-jonatas-workshop-selfie.jpg",
+            "alt": "Workshop selfie at PGConf Brasil 2025",
+            "caption": "Workshop group selfie during the PostgreSQL Performance Workshop"
+          },
+          {
+            "src": "/images/pgconf-brazil-2025-jonatas-workshop-smiling-far-distance.jpg",
+            "alt": "Leading the workshop at PGConf Brasil 2025",
+            "caption": "Teaching PostgreSQL performance optimization techniques"
+          }
+        ]
+      }
+    },
+    {
+      "date": "2025-09-04",
+      "title": "500GB challenge with TimescaleDB",
+      "location": "João Pessoa, PB, Brazil",
+      "event": "PGConf Brasil, 2025",
+      "url": "https://2025.pgconf.com.br",
+      "type": "conference",
+      "topic": "PostgreSQL, TimescaleDB, Analytics",
+      "github": "https://github.com/jonatas/timescaledb-templates/blob/main/webtop/pgconfbr-2025.md",
+      "media": {
+        "images": [
+          {
+            "src": "/images/pgconf-brazil-2025-jonatas-on-stage-with-sql.jpg",
+            "alt": "On stage presenting SQL at PGConf Brasil 2025",
+            "caption": "Demonstrating real-time analytics with PostgreSQL and TimescaleDB"
+          },
+          {
+            "src": "/images/pgconf-brazil-2025-jonatas-speaking-with-hands.jpg",
+            "alt": "Animated speaking at PGConf Brasil 2025",
+            "caption": "Engaging the audience with hands-on PostgreSQL examples"
+          },
+          {
+            "src": "/images/pgconf-brazil-2025-jonatas-seba.jpeg",
+            "alt": "With Seba at PGConf Brasil 2025",
+            "caption": "Great moments with Seba at PGConf Brasil 2025"
+          }
+        ]
+      }
+    },
+    {
+        "date": "2025-09-16",
+        "title": "500GB challenge with TimescaleDB",
+        "location": "Chapecó, SC, Brazil",
+        "event": "PGDay XAP, 2025",
+        "url": "https://www.sympla.com.br/evento/pgday-xap/2015473",
+        "type": "conference",
+        "topic": "PostgreSQL, TimescaleDB, Analytics",
+        "github": "https://github.com/jonatas/timescaledb-templates/blob/main/webtop/PGDay_Xap_2025.md",
+        "media": {
+          "images": [
+            {
+              "src": "/images/pgday-xap-2025-audience.jpeg",
+              "alt": "Audience at PGDay XAP 2025",
+              "caption": "at PGDay XAP 2025"
+            },
+            {
+              "src": "/images/pgday-xap-2025-tshirt-back-will.jpeg",
+              "alt": "T-shirt back at PGDay XAP 2025",
+              "caption": "T-shirt back at PGDay XAP 2025"
+            }
+          ]
+        }
+    },
+    {
       "date": "2025-03-27",
       "title": "Intro to the TimescaleDB gem",
       "location": "Madrid, Spain",
@@ -8,7 +90,6 @@
       "url": "https://www.madridrb.com/events/march-2025-intro-to-the-timescaledb-gem-1376",
       "type": "meetup",
       "topic": "Ruby, TimescaleDB",
-      "status": "Accepted",
       "github": "https://github.com/timescale/timescaledb-ruby",
       "media": {
         "slides": "2PACX-1vQ_WAHS3AWurvv9_9xcAsVd64hI-h6h_6H6TUb3N9F3LfkS3adKswI_H8KZueGzMbPkz8CjMCnNmpFn"
@@ -22,7 +103,6 @@
       "url": "https://krug.org.pl/events/1111",
       "type": "meetup",
       "topic": "Ruby, TimescaleDB",
-      "status": "Delivered",
       "international": true,
       "language": "English",
       "media": {
@@ -57,8 +137,7 @@
       "topic": "PostgreSQL, TimescaleDB, Analytics",
       "media": {
         "slides": "2PACX-1vTcncQivyEhJ8oUwsLVFFWFEaIhvvUcI-20zVK9EwNdj7udCToetUHxCyK_sEOmOl1nkrvVjOMYmWWj"
-      },
-      "status": "Accepted"
+      }
     },
     {
       "date": "2025-03-11",
@@ -70,8 +149,7 @@
       "topic": "PostgreSQL, TimescaleDB, Analytics",
       "media": {
         "slides": "2PACX-1vQq60_oaZDs1jnwZQ7CjpKeb_Uctp0x8uFOBiA2_-3c7RRrxsluj-Phbtx1HRBfaFKrTMSIl7FP-yVJ"
-      },
-      "status": "Accepted"
+      }
     },
     {
       "date": "2025-03-10",
@@ -83,8 +161,7 @@
       "topic": "PostgreSQL, TimescaleDB, Analytics",
       "media": {
         "slides": "2PACX-1vQq60_oaZDs1jnwZQ7CjpKeb_Uctp0x8uFOBiA2_-3c7RRrxsluj-Phbtx1HRBfaFKrTMSIl7FP-yVJ"
-      },
-      "status": "Accepted"
+      }
     },
     {
       "date": "2025-02-28",
@@ -94,7 +171,6 @@
       "url": "",
       "type": "workshop",
       "topic": "PostgreSQL, Ruby, Performance",
-      "status": "Delivered",
       "international": true,
       "media": {
         "images": [
@@ -130,7 +206,6 @@
       "url": "https://www.sympla.com.br/evento/workshop-tropical-2025-jonatas-paganini-postgresql-performance-workshop-for-ruby-developers/2838577?referrer=jonatas",
       "type": "workshop",
       "topic": "PostgreSQL, Ruby, Performance",
-      "status": "Accepted",
       "github": "https://github.com/timescale/postgresql-performance-for-rubyists/",
       "media": {
         "banner": {
@@ -185,7 +260,6 @@
       "url": "https://www.sympla.com.br/evento/pgday-blumenau/2385178?",
       "type": "conference",
       "topic": "PostgreSQL, TimescaleDB",
-      "status": "Delivered",
       "media": {
         "slides": "2PACX-1vQo71hgMkjjvbeYypz0oqpXJTqAi-TWSGLdNSN20apKQ4FXMZFI9-5M1TkHhv1x3x3r1hNeCKLFyNIQ",
         "images": [
@@ -211,7 +285,6 @@
       "url": "https://ideia.me/grepping-sql-code-like-a-boss",
       "type": "conference",
       "topic": "SQL, Command Line",
-      "status": "Delivered",
       "international": true,
       "media": {
         "youtube": "hGWXBg4Hkn0",
@@ -237,7 +310,6 @@
       "url": "https://www.lambdadays.org/lambdadays2024",
       "type": "panel",
       "topic": "Mentoring",
-      "status": "Delivered",
       "media": {
         "images": [
           {
@@ -256,8 +328,7 @@
       "event": "Code Island Summit",
       "url": "https://summit.codeisland.com.br/",
       "type": "conference",
-      "topic": "PostgreSQL, TimescaleDB, Extensions",
-      "status": "Delivered"
+      "topic": "PostgreSQL, TimescaleDB, Extensions"
     },
     {
       "date": "2024-07-28",
@@ -267,7 +338,6 @@
       "url": "https://devpr.org/",
       "type": "conference",
       "topic": "PostgreSQL, PGVector",
-      "status": "Delivered",
       "media": {
         "slides": "2PACX-1vSJcN9wVdw9HeAOdm1br8aSaPtbb4riTKzPiwfb8TGtM197OLPaA0g7nknWLW3969EtMWedKBZpGMRq"
       }
@@ -280,14 +350,8 @@
       "url": "https://pgconf.com.br/2024",
       "type": "conference",
       "topic": "PostgreSQL, PGVector",
-      "status": "Delivered",
       "media": {
-        "slides": "2PACX-1vQq60_oaZDs1jnwZQ7CjpKeb_Uctp0x8uFOBiA2_-3c7RRrxsluj-Phbtx1HRBfaFKrTMSIl7FP-yVJ",
-        "banner": {
-          "src": "/images/banners/pgconf-brazil-banner.png",
-          "alt": "PGConf Brazil Official Banner",
-          "url": "https://pgconf.com.br/2024"
-        }
+        "slides": "2PACX-1vQq60_oaZDs1jnwZQ7CjpKeb_Uctp0x8uFOBiA2_-3c7RRrxsluj-Phbtx1HRBfaFKrTMSIl7FP-yVJ"
       }
     },
     {
@@ -298,7 +362,6 @@
       "url": "https://www.sympla.com.br/evento/pgday-2023-bh-puc-coreu-manha-predio-43-auditorio-3/1996398",
       "type": "conference",
       "topic": "PostgreSQL, TimescaleDB, Analytics",
-      "status": "Delivered",
       "media": {
         "images": [
           {
@@ -322,7 +385,6 @@
       "url": "https://pgdayxap.com.br/2023",
       "type": "conference",
       "topic": "PostgreSQL, TimescaleDB, Time Series",
-      "status": "Delivered",
       "media": {
         "images": [
           {
@@ -340,8 +402,7 @@
       "event": "PG Day Floripa",
       "url": "https://www.sympla.com.br/evento/pgday-floripa/2071983",
       "type": "panel",
-      "topic": "PostgreSQL",
-      "status": "Delivered"
+      "topic": "PostgreSQL"
     },
     {
       "date": "2023-08-16",
@@ -350,8 +411,7 @@
       "event": "PG Day BH",
       "url": "https://www.sympla.com.br/evento/pgday-2023-bh-puc-coreu-manha-predio-43-auditorio-3/1996398",
       "type": "conference",
-      "topic": "PostgreSQL, TimescaleDB, Time Series",
-      "status": "Delivered"
+      "topic": "PostgreSQL, TimescaleDB, Time Series"
     },
     {
       "date": "2023-08-16",
@@ -360,8 +420,7 @@
       "event": "PG Day BH",
       "url": "https://www.sympla.com.br/evento/pgday-2023-bh-puc-coreu-manha-predio-43-auditorio-3/1996398",
       "type": "panel",
-      "topic": "PostgreSQL, Career",
-      "status": "Delivered"
+      "topic": "PostgreSQL, Career"
     },
     {
       "date": "2023-08-14",
@@ -370,8 +429,7 @@
       "event": "PG Day São Paulo",
       "url": "https://www.sympla.com.br/evento/pgday-sao-paulo-2023/2044774",
       "type": "conference",
-      "topic": "PostgreSQL, TimescaleDB, Time Series",
-      "status": "Delivered"
+      "topic": "PostgreSQL, TimescaleDB, Time Series"
     },
     {
       "date": "2023-08-11",
@@ -380,8 +438,7 @@
       "event": "PG Day POA",
       "url": "https://www.sympla.com.br/evento/pgday-porto-alegre-2023/2057620",
       "type": "conference",
-      "topic": "PostgreSQL, TimescaleDB, Time Series",
-      "status": "Delivered"
+      "topic": "PostgreSQL, TimescaleDB, Time Series"
     },
     {
       "date": "2023-06-12",
@@ -391,7 +448,6 @@
       "url": "http://rrug.pl/meetup/2023/05/15/spotkanie35.html",
       "type": "meetup",
       "topic": "Ruby, TimescaleDB, Time Series",
-      "status": "Delivered",
       "international": true
     },
     {
@@ -402,7 +458,6 @@
       "url": "https://www.lambdadays.org/lambdadays2023",
       "type": "conference",
       "topic": "SQL, Functional Programming",
-      "status": "Delivered",
       "international": true,
       "media": {
         "youtube": "vX8i0Bcb08I",
@@ -428,7 +483,6 @@
       "url": "https://www.pgcon.org/2023/",
       "type": "workshop",
       "topic": "PostgreSQL, Data Science, TimescaleDB",
-      "status": "Delivered",
       "international": true,
       "media": {
         "images": [
@@ -458,7 +512,6 @@
       "url": "https://krug.org.pl/events/1111",
       "type": "meetup",
       "topic": "TimescaleDB, Time Series, Data Modeling",
-      "status": "Delivered",
       "media": {
         "slides": "2PACX-1vQ_WAHS3AWurvv9_9xcAsVd64hI-h6h_6H6TUb3N9F3LfkS3adKswI_H8KZueGzMbPkz8CjMCnNmpFn"
       },
@@ -472,7 +525,6 @@
       "url": "https://www.jonthebeach.com/workshops/Reality-of-global-warming.-Data-Science-with-Postgres-and-TimescaleDB",
       "type": "workshop",
       "topic": "TimescaleDB, Audio, Data Visualization",
-      "status": "Delivered",
       "international": true,
       "media": {
         "images": [
@@ -502,7 +554,6 @@
       "url": "https://2023.jonthebeach.com/workshops/Introductory-Workshop-for-Sonification-Process.-Creating-noise-with-Time-Series-data",
       "type": "workshop",
       "topic": "PostgreSQL, Data Science",
-      "status": "Delivered",
       "international": true,
       "github": "https://github.com/jonatas/sql-data-science-training"
     },
@@ -514,7 +565,6 @@
       "url": "https://www.youtube.com/live/Vfxp718OMtI?feature=share&t=590",
       "type": "meetup",
       "topic": "Ruby, TimescaleDB, Audio, Data Visualization",
-      "status": "Delivered",
       "media": {
         "youtube": "Vfxp718OMtI"
       },
@@ -528,7 +578,6 @@
       "url": "https://www.socallinuxexpo.org/scale/20x/",
       "type": "conference",
       "topic": "PostgreSQL, Command Line",
-      "status": "Delivered",
       "international": true,
       "media": {
         "youtube": "4Q4jOmHbDvU",
@@ -549,7 +598,6 @@
       "url": "https://pgconf.in",
       "type": "workshop",
       "topic": "PostgreSQL, Data Science",
-      "status": "Delivered",
       "international": true,
       "media": {
         "images": [
@@ -589,7 +637,6 @@
       "url": "https://events.geekle.us/ruby/",
       "type": "conference",
       "topic": "Ruby, TimescaleDB, Data Processing, Time Series",
-      "status": "Delivered",
       "international": true,
       "github": "https://github.com/timescale/timescaledb-ruby"
     },
@@ -601,7 +648,6 @@
       "url": "https://rubyconfth.com",
       "type": "conference",
       "topic": "Ruby, SQL, Data Processing",
-      "status": "Delivered",
       "international": true,
       "media": {
         "youtube": "MXAtSZ5Szgk",
@@ -638,7 +684,6 @@
       "url": "",
       "type": "meetup",
       "topic": "Ruby, TimescaleDB, Time Series",
-      "status": "Delivered",
       "language": "Portuguese",
       "media": {
         "youtube": "BeysighX6jY?start=6206"
@@ -652,7 +697,6 @@
       "url": "https://ideia.me/pgconfbr-talk",
       "type": "conference",
       "topic": "PostgreSQL, Command Line",
-      "status": "Delivered",
       "language": "Portuguese",
       "media": {
         "youtube": "MzV6S_72E2g"
@@ -666,7 +710,6 @@
       "url": "https://rubykaigi.org/2020",
       "type": "conference",
       "topic": "Ruby, Command Line, Code Search",
-      "status": "Delivered",
       "international": true,
       "media": {
         "youtube": "YczrZQC9aP8"
@@ -680,7 +723,6 @@
       "url": "",
       "type": "conference",
       "topic": "TimescaleDB, Hasura, Visualization",
-      "status": "Delivered",
       "international": true,
       "media": {
         "vimeo": "569408772",
@@ -695,7 +737,6 @@
       "url": "",
       "type": "conference",
       "topic": "Data, Web Scraping",
-      "status": "Delivered",
       "international": true,
       "media": {
         "youtube": "bFBXkNIY4hE"
@@ -729,15 +770,8 @@
     {"country": "Thailand"},
     {"country": "India"},
     {"country": "Online"},
-    {"country": "Singapore"},
-    {"country": "Latvia"}
+    {"country": "Singapore"}
   ],
-  "status_colors": {
-    "Delivered": "#4CAF50",
-    "Accepted": "#2196F3",
-    "Submitted": "#9E9E9E",
-    "Rejected": "#F44336"
-  },
   "contact": {
     "email": "jonatas@timescale.com",
     "message": "Want me to speak at your conference? Drop me a line!"

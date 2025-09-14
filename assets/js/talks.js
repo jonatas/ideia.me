@@ -166,9 +166,6 @@ function getAllTalksData() {
   const talkCards = document.querySelectorAll('.talk-card');
   if (!talkCards || talkCards.length === 0) return [];
   
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  
   let talks = [];
   
   talkCards.forEach(card => {
@@ -192,7 +189,7 @@ function getAllTalksData() {
       const infoElement = card.querySelector('.talk-card-info');
       const type = infoElement ? infoElement.textContent.trim().toLowerCase() : '';
       
-      // Parse date string to determine if delivered or upcoming
+      // Parse date string
       let date = null;
       try {
         date = new Date(dateStr);
@@ -200,7 +197,8 @@ function getAllTalksData() {
         console.warn('Could not parse date:', dateStr);
       }
       
-      const isDelivered = date && date < today;
+      // All talks in our data are delivered since we only track delivered talks
+      const isDelivered = true;
       
       talks.push({
         title,
@@ -234,7 +232,8 @@ function getAllTalksData() {
               console.warn('Could not parse date:', itemDateStr);
             }
             
-            const itemIsDelivered = itemDate && itemDate < today;
+            // All talks in our data are delivered since we only track delivered talks
+            const itemIsDelivered = true;
             
             talks.push({
               title,
@@ -264,61 +263,32 @@ function getAllTalksData() {
 
 // Calculate and display statistics
 function calculateAndDisplayStats(talks) {
+  // If talks are passed directly (from Jekyll/JSON), use them first
+  let talksData = talks;
+  
   // If the talks array is empty or undefined, get data directly from JSON
-  if (!talks || !talks.length) {
+  if (!talksData || !talksData.length) {
     // Get direct data from the JSON
-    const talksJson = window.talksJson || [];
+    talksData = window.talksJson || [];
     
-    if (!talksJson.length) {
+    if (!talksData.length) {
       console.warn('No talks data available for statistics calculation');
       return;
     }
-    
-    // Extract basic stats
-    const stats = {
-      total_talks: talksJson.length || 0,
-      international_talks: talksJson.filter(talk => talk.international).length || 0,
-      delivered: talksJson.filter(talk => talk.status === "Delivered").length || 0,
-      upcoming: talksJson.filter(talk => talk.status !== "Delivered").length || 0
-    };
-    
-    // Extract unique countries
-    const countries = new Set();
-    talksJson.forEach(talk => {
-      if (talk.location) {
-        const country = talk.location.split(',').pop().trim();
-        if (country) countries.add(country);
-      }
-    });
-    stats.countries = countries.size;
-    
-    // Very simplified continent detection
-    const continents = detectContinents(countries);
-    stats.continents = continents.size;
-    
-    // Now update the stats display
-    updateStatsDisplay(stats);
-    return;
   }
-
-  // Remove duplicate series items for certain statistics
-  const uniqueTalks = talks.filter(talk => !talk.isSeriesItem);
   
-  // Calculate statistics
+  console.log('Calculating stats from data. Total talks:', talksData.length);
+  
+  // Extract basic stats (all talks are delivered since we only track delivered talks)
   const stats = {
-    total_talks: talks.length,
-    international_talks: talks.filter(talk => talk.isInternational).length,
-    delivered: talks.filter(talk => talk.isDelivered).length,
-    upcoming: talks.filter(talk => !talk.isDelivered).length,
-    workshops: talks.filter(talk => talk.type === 'workshop').length,
-    conferences: talks.filter(talk => talk.type === 'conference').length,
-    meetups: talks.filter(talk => talk.type === 'meetup').length,
-    panels: talks.filter(talk => talk.type === 'panel').length
+    total_talks: talksData.length || 0,
+    international_talks: talksData.filter(talk => talk.international).length || 0,
+    delivered: talksData.length || 0 // All talks are delivered
   };
   
-  // Calculate unique countries
+  // Extract unique countries
   const countries = new Set();
-  talks.forEach(talk => {
+  talksData.forEach(talk => {
     if (talk.location) {
       const country = talk.location.split(',').pop().trim();
       if (country) countries.add(country);
@@ -326,11 +296,13 @@ function calculateAndDisplayStats(talks) {
   });
   stats.countries = countries.size;
   
-  // Detect continents from countries
+  // Very simplified continent detection
   const continents = detectContinents(countries);
   stats.continents = continents.size;
   
-  // Update the display with the calculated stats
+  console.log('Final calculated stats:', stats);
+  
+  // Now update the stats display
   updateStatsDisplay(stats);
 }
 
@@ -344,7 +316,6 @@ function detectContinents(countries) {
     'Canada': 'North America',
     'Poland': 'Europe',
     'Spain': 'Europe',
-    'Latvia': 'Europe',
     'Thailand': 'Asia',
     'India': 'Asia',
     'Singapore': 'Asia'
@@ -362,6 +333,8 @@ function detectContinents(countries) {
 function updateStatsDisplay(stats) {
   if (!stats) return;
   
+  console.log('Updating stats display with:', stats);
+  
   // First approach: use data-count attribute
   document.querySelectorAll('.stat-box .counter').forEach(counter => {
     if (!counter) return;
@@ -376,6 +349,7 @@ function updateStatsDisplay(stats) {
     const key = label.replace(/\s+/g, '_');
     
     if (stats[key] !== undefined) {
+      console.log(`Setting ${key} to ${stats[key]} for counter with label "${label}"`);
       counter.setAttribute('data-count', stats[key]);
     }
   });
@@ -402,6 +376,7 @@ function updateStatsDisplay(stats) {
     const key = labelToKey[label.toLowerCase()];
     
     if (key && stats[key] !== undefined) {
+      console.log(`Second approach: Setting ${key} to ${stats[key]} for label "${label}"`);
       counter.setAttribute('data-count', stats[key]);
     }
   });
@@ -590,30 +565,17 @@ function setupYearFilters() {
   });
 }
 
-// Mark past and upcoming events for visual styling
+// Mark events for visual styling (all events are delivered/past events)
 function markPastAndUpcomingEvents() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  
-  // Convert date strings to highlight upcoming events
+  // Since all events in our data are delivered, mark them all as past events
   document.querySelectorAll('.series-date').forEach(dateElement => {
     if (!dateElement) return;
     
-    try {
-      const dateString = dateElement.textContent.trim();
-      const eventDate = new Date(dateString);
-      
-      const locationItem = dateElement.closest('.series-location-item');
-      if (!locationItem) return;
-      
-      if (eventDate >= today) {
-        locationItem.classList.add('upcoming-event');
-      } else {
-        locationItem.classList.add('past-event');
-      }
-    } catch (error) {
-      console.warn('Error processing date for visual styling:', error);
-    }
+    const locationItem = dateElement.closest('.series-location-item');
+    if (!locationItem) return;
+    
+    // All events are past events since we only track delivered talks
+    locationItem.classList.add('past-event');
   });
 }
 
@@ -632,41 +594,11 @@ function formatDate(dateString) {
   }
 }
 
-// Calculate and display days until events
+// No need to calculate days until events since all talks are delivered
 function addDaysUntilEvents() {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  // Find all date elements in the upcoming talks section
-  document.querySelectorAll('.series-date').forEach(dateElement => {
-    try {
-      // Extract the date text (excluding the icon)
-      const dateText = dateElement.textContent.replace(/^\s*[\u2000-\u206F\u2E00-\u2E7F\\'!"#$%&()*+,\-.\/:;<=>?@\[\]^_`{|}~]\s*/, '').trim();
-      const eventDate = new Date(dateText);
-      
-      // Skip if the date is invalid
-      if (isNaN(eventDate.getTime())) return;
-      
-      // Calculate days until the event
-      const diffTime = eventDate.getTime() - today.getTime();
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      
-      // Create and add the countdown element
-      if (diffDays > 0) {
-        const countdownSpan = document.createElement('span');
-        countdownSpan.className = 'days-until';
-        countdownSpan.textContent = diffDays === 1 ? ' (Tomorrow)' : ` (In ${diffDays} days)`;
-        dateElement.appendChild(countdownSpan);
-      } else if (diffDays === 0) {
-        const countdownSpan = document.createElement('span');
-        countdownSpan.className = 'days-until today';
-        countdownSpan.textContent = ' (Today)';
-        dateElement.appendChild(countdownSpan);
-      }
-    } catch (error) {
-      console.warn('Error calculating days until event:', error);
-    }
-  });
+  // All events in our data are delivered/past events, so no countdown needed
+  // This function is kept for backward compatibility but does nothing
+  console.log('Skipping days until calculation - all talks are delivered');
 }
 
 // Run the enhancement after DOM content is loaded
