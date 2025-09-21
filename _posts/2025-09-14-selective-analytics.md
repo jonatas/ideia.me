@@ -66,7 +66,6 @@ WITH (timescaledb.continuous, timescaledb.materialized_only=true) AS
 WITH NO DATA;
 ```
 
-
 **Hourly Summaries with Statistics**
 
 The hierarchical aggregation allows to use same `timescaledb.continuous` strategy but instead of getting the raw data, you can get minute processed data. In this case, we'll build hourly summaries, expanding the details with the `stats_agg` for statistics like slope, average or standard deviation, and the `percentile_agg` give access to disc distribution using `approx_percentile(0.5,  percentile_agg) as median or `, other types of statistics.
@@ -114,20 +113,21 @@ The [rollup](https://docs.tigerdata.com/api/latest/hyperfunctions/statistical-an
 
 The system runs automatically with these policies:
 
+- Refresh 1-minute aggregates every 30 seconds
+- Refresh hourly aggregates every 5 minutes  
+- Refresh daily aggregates every hour
+
 ```sql
--- Refresh 1-minute aggregates every 30 seconds
 SELECT add_continuous_aggregate_policy('website_stats_1m',
     start_offset => INTERVAL '5 minutes',
     end_offset => INTERVAL '30 seconds',
     schedule_interval => INTERVAL '30 seconds');
 
--- Refresh hourly aggregates every 5 minutes  
 SELECT add_continuous_aggregate_policy('website_stats_1h',
     start_offset => INTERVAL '3 hours',
     end_offset => INTERVAL '5 minutes',
     schedule_interval => INTERVAL '5 minutes');
 
--- Refresh daily aggregates every hour
 SELECT add_continuous_aggregate_policy('website_stats_1d',
     start_offset => INTERVAL '7 days',
     end_offset => INTERVAL '1 hour',
@@ -175,7 +175,7 @@ BEGIN
     FROM website_stats_1m
     WHERE bucket >= NOW() - INTERVAL '30 minutes'  -- Look at recent activity
     GROUP BY domain
-    HAVING SUM(total) >= min_hits  -- Must meet minimum threshold (default: 100 hits)
+    HAVING SUM(total) >= min_hits  -- Must meet minimum threshold configured (default: 100 hits)
     ON CONFLICT (domain, time) DO UPDATE SET hits = EXCLUDED.hits;
 
     GET DIAGNOSTICS candidate_count = ROW_COUNT;
@@ -242,7 +242,7 @@ $$;
 
 #### Scheduling the Democratic Process
 
-The beauty is in the automated scheduling:
+The beauty is in the automated scheduling, which allows you to leverage the timescaledb background workers to regularly execute some task directly in the database machine.
 
 ```sql
 CREATE OR REPLACE PROCEDURE schedule_candidates_election()
@@ -268,9 +268,11 @@ END;
 $$;
 ```
 
-### The Democratic Configuration
+The best part of adopting background jobs is that they will avoid data trips, which means data is not traveling through the network, being serialized and deserialized in your favorite programming language. It's all happening between memory and disk of the same machine.
 
-Everything is configurable through a simple config table:
+### The Configuration
+
+Everything is configurable through a simple config table of a single record:
 
 ```sql
 CREATE TABLE top_websites_config (
@@ -295,9 +297,9 @@ This creates a completely autonomous system where:
 
 **Level 3: Elected Champions (permanent)** - Only the top performers make it here. These domains proved their worth through consistent traffic and earned their permanent seat.
 
-## Generating Realistic Test Data
+## Generating Test Data
 
-One of the most powerful aspects of this system is the ability to test it with realistic data using TimescaleDB's background job scheduler:
+One of the most powerful aspects of this system is the ability to test it with generated data using TimescaleDB's background job scheduler:
 
 ```sql
 -- Procedure to generate synthetic log data every second
@@ -337,10 +339,9 @@ END;
 $$;
 ```
 
-You can simulate realistic traffic patterns:
+Let's simulate traffic patterns for famous websites:
 
 ```sql
--- Schedule data generation for top websites (every 5 seconds)
 CREATE OR REPLACE PROCEDURE schedule_top_websites_generation(avg_hits_per_minute int DEFAULT 30) 
 LANGUAGE plpgsql AS $$
 DECLARE
@@ -351,7 +352,6 @@ BEGIN
     FOREACH website IN ARRAY top_websites LOOP
         amount := avg_hits_per_minute + (random() * avg_hits_per_minute * 0.2)::integer;
         
-        -- Add a background job for each website
         PERFORM add_job(
             'generate_log_data_job', 
             INTERVAL '5 seconds', 
@@ -381,31 +381,32 @@ The numbers speak for themselves:
 - **99.6% storage reduction** (500GB → 20GB)
 - **Real-time analytics** with <5ms query latency
 - **Automatic identification** of top-performing websites
-- **Scalable** regardless of input volume
+- **Scalable** as the input volume will always be controllable
 - **Cost-controlled** storage that doesn't grow exponentially
 
-## Beyond Web Analytics
-
-The beauty of Selective Analytics isn't limited to web traffic. This democratic approach can be applied to any high-volume data scenario:
+Ideas where to use it? The beauty of Selective Analytics isn't limited to web traffic. This democratic approach can be applied to any high-volume data scenario:
 
 ### IoT Sensor Data
+
 - Millions of sensor readings per hour
 - Only anomalies and trend changes get permanent storage
 - Normal readings are aggregated and eventually discarded
 
 ### Financial Transactions
+
 - High-frequency trading data
 - Significant price movements earn long-term storage
 - Routine transactions are summarized and archived
 
 ### Application Logs
+
 - Massive log volumes from distributed systems
 - Error patterns and performance anomalies get preserved
 - Routine debug information is temporary
 
-## The Technical Implementation
+## The timescaledb framework
 
-For those interested in the complete implementation, the system leverages:
+Adopting timescaledb as a framework to design data lifecycle is great because it's just about rely on automation and configuration, both directly in the database. This system example self-manages, automatically identifying what deserves long-term storage while maintaining consistent performance and predictable costs.
 
 - **TimescaleDB hypertables** for automatic partitioning and scalability
 - **Continuous aggregates** for real-time summary generation
@@ -413,9 +414,11 @@ For those interested in the complete implementation, the system leverages:
 - **Background jobs** for the democratic election process
 - **Materialized results** for lightning-fast analytics queries
 
-The elegance lies in the automation - once configured, the system self-manages, automatically identifying what deserves long-term storage while maintaining consistent performance and predictable costs.
+Also remember that Continuous Aggregates are simply hypertables too, and all the same potential can be applied!
 
-## Philosophical Implications
+Compression? I forgot to mention but it could also be possible to compress data and save even more massively in details.
+
+## Adopt a data lifecycles
 
 What excites me most about Selective Analytics isn't just the technical solution, but the paradigm it represents. In our data-driven world, we need democratic approaches to decide what's worth preserving.
 
@@ -435,6 +438,8 @@ You can adapt these concepts to your own data challenges, whether you're dealing
 - Financial time series
 - Application monitoring
 - Social media analytics
+
+I also made it a [PR](https://github.com/timescale/templates/pull/4) for the official templates, but as it never gets merged, I just moved on and worked on my fork.
 
 ## Getting Started
 
