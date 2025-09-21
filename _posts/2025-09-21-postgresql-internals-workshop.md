@@ -156,8 +156,8 @@ Let's get started.
 Let's begin by setting up a PostgreSQL environment using Docker. This approach ensures we have a clean, reproducible environment for our experiments.
 
 ```bash
-# Pull the PostgreSQL 17 image (or use timescale/timescaledb:latest-pg17 for TimescaleDB)
-docker pull postgres:17
+# Pull the TimescaleDB image (includes PostgreSQL 17)
+docker pull timescale/timescaledb:latest-pg17
 
 # Run PostgreSQL container
 docker run -d --rm -it \
@@ -167,7 +167,7 @@ docker run -d --rm -it \
   -e POSTGRES_PASSWORD=password \
   -e POSTGRES_DB=internals_lab \
   -p 5434:5432 \
-  postgres:17
+  timescale/timescaledb:latest-pg17
 
 # Connect to the database
 psql postgres://postgres:password@localhost:5434/internals_lab
@@ -1060,7 +1060,8 @@ FROM pg_stat_checkpointer;
 **Output:**
 ```
  num_timed | num_requested | write_time | sync_time | buffers_written 
------------+---------------+------------+-----------+--------------         0 |             1 |          7 |       236 |            2294
+-----------+---------------+------------+-----------+--------------
+         0 |             1 |          7 |       236 |            2294
 (1 row)
 ```
 
