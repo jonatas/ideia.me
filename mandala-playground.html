@@ -43,7 +43,7 @@ description: "Full-featured mandala sonification playground with real mandala im
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: 100vh;
+  min-height: 40vh;
 }
 
 .slide {
@@ -53,7 +53,7 @@ description: "Full-featured mandala sonification playground with real mandala im
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 1.5rem;
   position: relative;
   scroll-snap-align: start;
 }
@@ -66,52 +66,56 @@ description: "Full-featured mandala sonification playground with real mandala im
 .banner-slide {
   background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
   border-bottom: 3px solid #3b82f6;
-  min-height: 40vh;
-  overflow: hidden;
+  min-height: 50vh;
+  overflow-y: auto;
   position: relative;
+  padding: 1rem;
+  padding-bottom: 120px; /* Space for speed control at bottom */
 }
 
 .banner-content {
   width: 100%;
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   position: relative;
 }
 
 .mandala-banner {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  animation: scroll-mandalas 30s linear infinite;
-  white-space: nowrap;
+  position: relative;
+  max-width: 900px;
+  width: 100%;
+  height: 500px;
+  margin: 0 auto;
 }
 
 .banner-mandala {
-  width: 120px;
-  height: 120px;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
   border: 3px solid rgba(59, 130, 246, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
-  flex-shrink: 0;
-  position: relative;
+  position: absolute;
   overflow: hidden;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.banner-mandala.offset {
+  z-index: 2;
 }
 
 .banner-mandala:hover {
-  transform: scale(1.2);
+  transform: scale(1.1);
+  border-color: rgba(59, 130, 246, 0.6);
 }
 
 .banner-mandala.selected {
-  transform: scale(1.3);
+  transform: scale(1.15);
   border-color: #ffffff;
-}
-
-@keyframes scroll-mandalas {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
 @keyframes rotate-mandala {
@@ -150,9 +154,14 @@ description: "Full-featured mandala sonification playground with real mandala im
 }
 
 .speed-control {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
+  text-align: center;
 }
 
 .speed-slider {
@@ -189,6 +198,13 @@ description: "Full-featured mandala sonification playground with real mandala im
   margin-top: 2rem;
   font-size: 1.5rem;
   color: #1abc9c;
+  font-weight: bold;
+}
+
+.selected-info {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: #3b82f6;
   font-weight: bold;
 }
 
@@ -229,6 +245,19 @@ description: "Full-featured mandala sonification playground with real mandala im
   object-fit: cover;
   transition: transform 0.3s ease;
   background: transparent;
+}
+
+.main-mandala.rotating {
+  animation: rotate linear infinite;
+}
+
+.main-mandala.rotating-reverse {
+  animation: rotate-reverse linear infinite;
+}
+
+@keyframes rotate-reverse {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-360deg); }
 }
 
 /* Color Palette Styles */
@@ -272,18 +301,21 @@ description: "Full-featured mandala sonification playground with real mandala im
 }
 
 .color-note:hover {
-  transform: scale(2.4);
+  transform: scale(1.3);
+  z-index: 10;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
 }
 
 .color-note.playing {
   animation: note-pulse 0.6s ease-out;
-  transform: scale(2.6);
+  transform: scale(1.4);
+  z-index: 15;
 }
 
 @keyframes note-pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(2.8); }
-  100% { transform: scale(2.6); }
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(255, 255, 255, 0); }
+  50% { transform: scale(1.6); box-shadow: 0 0 30px rgba(255, 255, 255, 0.6); }
+  100% { transform: scale(1.4); box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); }
 }
 
 /* Aspiral Reconstruction Slide */
@@ -420,25 +452,26 @@ description: "Full-featured mandala sonification playground with real mandala im
 }
 
 .aspiral-dot:hover {
-  transform: scale(4);
+  transform: scale(2);
   z-index: 1000;
+  filter: brightness(1.5);
 }
 
 .aspiral-dot.highlighted {
-  animation: dot-highlight 0.8s ease-out;
+  animation: dot-highlight 0.5s ease-out;
 }
 
 @keyframes dot-highlight {
-  0% { transform: scale(1); }
-  50% { transform: scale(6); }
-  100% { transform: scale(1); }
+  0% { transform: scale(1); filter: brightness(1); }
+  50% { transform: scale(3); filter: brightness(2); }
+  100% { transform: scale(1); filter: brightness(1); }
 }
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .slide {
-    padding: 1rem;
-    min-height: 90vh;
+    padding: 0.5rem;
+    min-height: 20vh;
   }
   
   .accelerator-title {
@@ -475,12 +508,13 @@ description: "Full-featured mandala sonification playground with real mandala im
   }
   
   .banner-mandala {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
   }
   
   .mandala-banner {
-    gap: 20px;
+    max-width: 600px;
+    height: 400px;
   }
 }
 
@@ -501,8 +535,28 @@ description: "Full-featured mandala sonification playground with real mandala im
   }
   
   .aspiral-canvas {
-    width: 250px;
-    height: 250px;
+    width: 350px;
+    height: 350px;
+  }
+  
+  .banner-mandala {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .mandala-banner {
+    max-width: 400px;
+    height: 300px;
+  }
+  
+  .banner-slide {
+    padding-bottom: 140px; /* More space on small screens */
+  }
+  
+  .speed-control {
+    bottom: 15px;
+    max-width: 350px;
+    padding: 0 15px;
   }
 }
 
@@ -877,60 +931,45 @@ description: "Full-featured mandala sonification playground with real mandala im
 <div id="playground-container" class="playground-container">
   
   <div class="playground-slides">
-    <!-- 1. Mandala Banner Slide -->
     <div class="slide banner-slide">
       <div class="banner-content">
         <div class="mandala-banner" id="mandala-banner">
-          <!-- Animated mandala banner will be populated here -->
+        </div>
+      </div>
+      <div class="speed-control">
+        <input type="range" id="banner-speed" class="speed-slider" min="-300" max="300" value="1" step="1">
+        <div class="speed-display" id="speed-display">Speed: 1.0x</div>
+        <div class="selected-info" id="selected-info">
+          Selected: Mandala #<span id="selected-number">1</span>
         </div>
       </div>
     </div>
-
-    <!-- 2. Accelerator Slide -->
-    <div class="slide accelerator-slide">
-      <div class="accelerator-content">
-        <h1 class="accelerator-title">🚀 Mandala Accelerator</h1>
-        <p class="accelerator-subtitle">Control the speed of the mandala carousel above</p>
-        
-        <div class="speed-control">
-          <input type="range" id="banner-speed" class="speed-slider" min="-3" max="3" value="1" step="0.1">
-          <div class="speed-display" id="speed-display">Speed: 1.0x</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. Mandala Display Slide -->
     <div class="slide mandala-display-slide">
       <div class="mandala-display-content">
         <div class="main-mandala-container">
           <img class="main-mandala" id="selected-mandala" alt="Selected Mandala" crossorigin="anonymous">
         </div>
-        
         <div class="color-palette-container">
           <h2 class="palette-title">🎨 Color Palette - Play the Notes</h2>
           <div class="color-grid" id="color-grid">
-            <!-- 12 color notes will be populated here -->
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 4. Aspiral Reconstruction Slide -->
     <div class="slide aspiral-slide">
       <div class="aspiral-content">
-        <h1 class="aspiral-title">🌀 Aspiral Reconstruction</h1>
-        
         <div class="aspiral-container">
           <div class="aspiral-canvas-container">
-            <canvas id="aspiral-canvas" class="aspiral-canvas" width="350" height="350"></canvas>
+            <canvas id="aspiral-canvas" class="aspiral-canvas" width="500" height="500"></canvas>
           </div>
           
           <div class="aspiral-controls">
             <button id="aspiral-play-btn" class="aspiral-button">🎵 Play Aspiral</button>
             
             <div class="speed-control-aspiral">
-              <label for="aspiral-speed">Animation Speed</label>
-              <input type="range" id="aspiral-speed" class="speed-slider-aspiral" min="0.5" max="5" value="2" step="0.5">
+              <label for="aspiral-speed">Speed (0.005 - 5)</label>
+              <input type="range" id="aspiral-speed" class="speed-slider-aspiral" min="0.005" max="5" value="2" step="0.05">
             </div>
           </div>
         </div>
@@ -971,17 +1010,18 @@ class MandalaPlayground {
     this.sourceImageData = null;
     this.audioEnabled = false;
     this.synth = null;
+    this.currentPlayingColorIndex = -1;
     
     this.setupAudio();
     this.initializeElements();
     this.bindEvents();
     this.createMandalaCarousel();
     this.addAudioNotice();
+    this.setupResizeListener();
     
-    // Initialize speed display
-    const direction = this.bannerSpeed >= 0 ? '→' : '←';
-    const absSpeed = Math.abs(this.bannerSpeed);
-    this.elements.speedDisplay.textContent = `Speed: ${direction} ${absSpeed.toFixed(1)}x`;
+    // Initialize speed display and selected mandala number
+    this.updateSpeedDisplay();
+    this.updateSelectedMandalaNumber();
     
     // Load the initial mandala (this will trigger color extraction and aspiral)
     this.loadSelectedMandala();
@@ -1049,9 +1089,23 @@ class MandalaPlayground {
       aspiralCanvas: document.getElementById('aspiral-canvas'),
       bannerSpeedSlider: document.getElementById('banner-speed'),
       speedDisplay: document.getElementById('speed-display'),
+      selectedNumber: document.getElementById('selected-number'),
       aspiralPlayBtn: document.getElementById('aspiral-play-btn'),
-      aspiralSpeedSlider: document.getElementById('aspiral-speed')
+      aspiralSpeedSlider: document.getElementById('aspiral-speed'),
+      aspiralSpeedLabel: document.querySelector('label[for="aspiral-speed"]')
     };
+  }
+
+  // Setup window resize listener for responsive layout
+  setupResizeListener() {
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        this.createMandalaCarousel();
+        this.updateMandalaRotations();
+      }, 250);
+    });
   }
 
   // Add audio notice for user interaction
@@ -1088,43 +1142,171 @@ class MandalaPlayground {
     document.body.appendChild(notice);
   }
 
-  // Create mandala carousel for the banner
+  // Create overlapping mandala grid panel for the banner
   createMandalaCarousel() {
-    const carousel = this.elements.mandalaCarousel;
-    carousel.innerHTML = '';
+    const panel = this.elements.mandalaCarousel;
+    panel.innerHTML = '';
     
-    // Create multiple sets of mandalas for seamless scrolling
-    for (let set = 0; set < 3; set++) {
-      this.mandalas.forEach((mandala, index) => {
-        const mandalaElement = document.createElement('img');
-        mandalaElement.className = 'banner-mandala';
-        mandalaElement.crossOrigin = 'anonymous';
-        mandalaElement.src = mandala.path;
-        mandalaElement.alt = `Mandala ${mandala.number}`;
+    // Calculate positions for overlapping grid
+    const positions = this.calculateOverlappingPositions();
+    
+    // Create grid of all mandalas with calculated positions
+    this.mandalas.forEach((mandala, index) => {
+      const mandalaElement = document.createElement('img');
+      mandalaElement.className = 'banner-mandala';
+      mandalaElement.crossOrigin = 'anonymous';
+      mandalaElement.src = mandala.path;
+      mandalaElement.alt = `Mandala ${mandala.number}`;
+      
+      // Position the mandala
+      if (positions[index]) {
+        mandalaElement.style.left = positions[index].x + 'px';
+        mandalaElement.style.top = positions[index].y + 'px';
         
-        if (index === this.selectedMandalaIndex && set === 1) {
-          mandalaElement.classList.add('selected');
+        // Add offset class for overlapping mandalas
+        if (positions[index].offset) {
+          mandalaElement.classList.add('offset');
+        }
+      }
+      
+      if (index === this.selectedMandalaIndex) {
+        mandalaElement.classList.add('selected');
+      }
+      
+      mandalaElement.addEventListener('click', () => {
+        this.selectMandala(index);
+      });
+      
+      mandalaElement.addEventListener('error', (error) => {
+        console.error('Failed to load banner mandala:', mandala.path);
+      });
+      
+      panel.appendChild(mandalaElement);
+    });
+  }
+  
+  // Calculate positions for overlapping grid layout
+  calculateOverlappingPositions() {
+    const positions = [];
+    
+    // Responsive sizing based on screen width
+    const screenWidth = window.innerWidth;
+    let containerWidth, containerHeight, mandalaSize, spacing;
+    
+    if (screenWidth <= 480) {
+      containerWidth = 400;
+      containerHeight = 300;
+      mandalaSize = 80;
+      spacing = 70;
+    } else if (screenWidth <= 768) {
+      containerWidth = 600;
+      containerHeight = 400;
+      mandalaSize = 100;
+      spacing = 85;
+    } else {
+      containerWidth = 900;
+      containerHeight = 500;
+      mandalaSize = 130;
+      spacing = 110;
+    }
+    
+    // Calculate how many mandalas fit per row
+    const mandalsPerRow = Math.floor((containerWidth - mandalaSize) / spacing) + 1;
+    const rows = Math.ceil(this.mandalas.length / mandalsPerRow);
+    
+    let mandalaIndex = 0;
+    
+    for (let row = 0; row < rows && mandalaIndex < this.mandalas.length; row++) {
+      const isOffsetRow = row % 2 === 1;
+      const rowY = row * (spacing * 0.7); // Vertical overlap
+      
+      // Calculate starting X position for centering
+      const mandalsInThisRow = Math.min(mandalsPerRow, this.mandalas.length - mandalaIndex);
+      const totalRowWidth = (mandalsInThisRow - 1) * spacing + mandalaSize;
+      const startX = (containerWidth - totalRowWidth) / 2;
+      
+      for (let col = 0; col < mandalsPerRow && mandalaIndex < this.mandalas.length; col++) {
+        let x = startX + col * spacing;
+        let y = rowY;
+        
+        // Offset every other row horizontally for honeycomb effect
+        if (isOffsetRow) {
+          x += spacing / 2;
         }
         
-        mandalaElement.addEventListener('click', () => {
-          this.selectMandala(index);
-        });
+        // Ensure mandalas stay within bounds
+        if (x + mandalaSize > containerWidth) break;
+        if (y + mandalaSize > containerHeight) break;
         
-        mandalaElement.addEventListener('error', (error) => {
-          console.error('Failed to load banner mandala:', mandala.path);
-        });
+        positions[mandalaIndex] = {
+          x: Math.max(0, x),
+          y: Math.max(0, y),
+          offset: isOffsetRow
+        };
         
-        carousel.appendChild(mandalaElement);
-      });
+        mandalaIndex++;
+      }
     }
+    
+    return positions;
   }
   
   // Select a mandala and update all reactive components
   selectMandala(index) {
     this.selectedMandalaIndex = index;
     this.updateMandalaSelection();
+    this.updateSelectedMandalaNumber();
     this.loadSelectedMandala();
     // Aspiral reconstruction will be called after color extraction in createColorPalette
+  }
+  
+  // Update the selected mandala number display
+  updateSelectedMandalaNumber() {
+    if (this.elements.selectedNumber) {
+      this.elements.selectedNumber.textContent = this.selectedMandalaIndex + 1;
+    }
+  }
+
+  // Update speed display with RPM calculation
+  updateSpeedDisplay() {
+    const direction = this.bannerSpeed >= 0 ? '→' : '←';
+    const absSpeed = Math.abs(this.bannerSpeed);
+    
+    // Calculate RPM (assuming base rotation is 1 rotation per 10 seconds)
+    const baseRPM = 6; // 60 seconds / 10 seconds per rotation
+    const currentRPM = baseRPM * absSpeed;
+    
+    this.elements.speedDisplay.textContent = `Speed: ${direction} ${absSpeed.toFixed(1)}x (${currentRPM.toFixed(1)} RPM)`;
+    
+    // Update selected mandala rotation
+    this.updateSelectedMandalaRotation();
+  }
+
+  // Update selected mandala rotation
+  updateSelectedMandalaRotation() {
+    const selectedMandala = this.elements.selectedMandala;
+    if (!selectedMandala) return;
+
+    if (Math.abs(this.bannerSpeed) > 0) {
+      const rotationSpeed = this.bannerSpeed;
+      const duration = Math.abs(10 / rotationSpeed);
+      
+      // Remove existing animation classes
+      selectedMandala.classList.remove('rotating', 'rotating-reverse');
+      
+      // Add appropriate animation class
+      if (rotationSpeed >= 0) {
+        selectedMandala.classList.add('rotating');
+      } else {
+        selectedMandala.classList.add('rotating-reverse');
+      }
+      
+      // Set animation duration
+      selectedMandala.style.animationDuration = `${duration}s`;
+    } else {
+      selectedMandala.classList.remove('rotating', 'rotating-reverse');
+      selectedMandala.style.animation = 'none';
+    }
   }
   
   // Update visual selection across all components
@@ -1132,8 +1314,7 @@ class MandalaPlayground {
     // Update banner selection
     const bannerMandalas = this.elements.mandalaCarousel.querySelectorAll('.banner-mandala');
     bannerMandalas.forEach((mandala, index) => {
-      const originalIndex = index % this.mandalas.length;
-      mandala.classList.toggle('selected', originalIndex === this.selectedMandalaIndex);
+      mandala.classList.toggle('selected', index === this.selectedMandalaIndex);
     });
   }
   
@@ -1146,6 +1327,7 @@ class MandalaPlayground {
     
     mandalaImg.onload = () => {
       console.log('Mandala loaded successfully');
+      this.updateSelectedMandalaRotation(); // Apply rotation when mandala loads
       setTimeout(() => this.extractColors(), 50); // Small delay to ensure image is fully rendered
     };
     
@@ -1367,8 +1549,8 @@ class MandalaPlayground {
   loadMandalaImageData() {
     return new Promise((resolve, reject) => {
       const tempCanvas = document.createElement('canvas');
-      tempCanvas.width = 350;
-      tempCanvas.height = 350;
+      tempCanvas.width = 500;
+      tempCanvas.height = 500;
       const tempCtx = tempCanvas.getContext('2d');
       
       const img = new Image();
@@ -1379,14 +1561,14 @@ class MandalaPlayground {
           console.log('Aspiral mandala loaded:', img.src);
           // Scale and draw image
           const size = Math.min(img.width, img.height);
-          const scale = 300 / size; // Leave some padding
+          const scale = 450 / size; // Leave some padding (50px total)
           const scaledWidth = img.width * scale;
           const scaledHeight = img.height * scale;
-          const offsetX = (350 - scaledWidth) / 2;
-          const offsetY = (350 - scaledHeight) / 2;
+          const offsetX = (500 - scaledWidth) / 2;
+          const offsetY = (500 - scaledHeight) / 2;
           
           tempCtx.drawImage(img, offsetX, offsetY, scaledWidth, scaledHeight);
-          this.sourceImageData = tempCtx.getImageData(0, 0, 350, 350);
+          this.sourceImageData = tempCtx.getImageData(0, 0, 500, 500);
           console.log('Aspiral image data ready');
           resolve();
         } catch (error) {
@@ -1413,10 +1595,10 @@ class MandalaPlayground {
     
     console.log('Creating fallback aspiral with extracted colors');
     
-    const centerX = 175;
-    const centerY = 175;
-    const maxRadius = 150;
-    const totalSteps = 1000;
+    const centerX = 250;
+    const centerY = 250;
+    const maxRadius = 225;
+    const totalSteps = 1500;
     
     this.aspiralDots = [];
     
@@ -1462,10 +1644,10 @@ class MandalaPlayground {
       return;
     }
     
-    const centerX = 175;
-    const centerY = 175;
-    const maxRadius = 150;
-    const totalSteps = 3000;
+    const centerX = 250;
+    const centerY = 250;
+    const maxRadius = 225;
+    const totalSteps = 5000;
     let validPixels = 0;
     
     for (let step = 0; step < totalSteps; step++) {
@@ -1511,11 +1693,11 @@ class MandalaPlayground {
   
   // Sample pixel from source image data
   samplePixel(x, y) {
-    if (!this.sourceImageData || x < 0 || x >= 350 || y < 0 || y >= 350) {
+    if (!this.sourceImageData || x < 0 || x >= 500 || y < 0 || y >= 500) {
       return [0, 0, 0, 0];
     }
     
-    const index = (Math.floor(y) * 350 + Math.floor(x)) * 4;
+    const index = (Math.floor(y) * 500 + Math.floor(x)) * 4;
     return [
       this.sourceImageData.data[index],
       this.sourceImageData.data[index + 1],
@@ -1600,24 +1782,26 @@ class MandalaPlayground {
     
     // Calculate timing based on animation speed
     const baseDelay = 1000 / (this.aspiralAnimationSpeed * 20);
-    const scaleDuration = Math.max(200, Math.min(1000, baseDelay * 0.8)); // 80% of note duration
-    const holdDuration = Math.max(100, Math.min(500, baseDelay * 0.3));   // 30% of note duration
+    const scaleDuration = Math.max(150, Math.min(600, baseDelay * 0.8)); // 80% of note duration
+    const holdDuration = Math.max(50, Math.min(300, baseDelay * 0.3));   // 30% of note duration
     
     // Create a temporary visual element for scaling effect
     const canvas = this.elements.aspiralCanvas;
     const scaleDot = document.createElement('div');
     scaleDot.style.cssText = `
       position: absolute;
-      left: ${dot.x - 5}px;
-      top: ${dot.y - 5}px;
-      width: 10px;
-      height: 10px;
+      left: ${dot.x - 3}px;
+      top: ${dot.y - 3}px;
+      width: 6px;
+      height: 6px;
       background: rgb(${dot.r}, ${dot.g}, ${dot.b});
       border-radius: 50%;
       pointer-events: none;
       z-index: 10;
-      transition: transform ${scaleDuration}ms ease;
-      transform: scale(6);
+      transition: all ${scaleDuration}ms ease;
+      transform: scale(3);
+      box-shadow: 0 0 15px rgba(${dot.r}, ${dot.g}, ${dot.b}, 0.8);
+      filter: brightness(1.5);
     `;
     
     canvas.parentElement.appendChild(scaleDot);
@@ -1625,6 +1809,8 @@ class MandalaPlayground {
     // Remove the scaled dot after animation with timing based on speed
     setTimeout(() => {
       scaleDot.style.transform = 'scale(1)';
+      scaleDot.style.filter = 'brightness(1)';
+      scaleDot.style.boxShadow = 'none';
       setTimeout(() => {
         if (scaleDot.parentElement) {
           scaleDot.parentElement.removeChild(scaleDot);
@@ -1670,8 +1856,8 @@ class MandalaPlayground {
     if (colorNotes[dot.colorIndex]) {
       colorNotes[dot.colorIndex].classList.add('playing');
       
-      // Calculate timeout based on animation speed
-      const notePlayDuration = Math.max(300, 1000 / (this.aspiralAnimationSpeed * 3));
+      // Calculate timeout based on animation speed - reduced duration for subtlety
+      const notePlayDuration = Math.max(200, 600 / (this.aspiralAnimationSpeed * 2));
       setTimeout(() => {
         colorNotes[dot.colorIndex].classList.remove('playing');
       }, notePlayDuration);
@@ -1712,6 +1898,10 @@ class MandalaPlayground {
         return;
       }
       
+      // Update current playing color for button styling
+      this.currentPlayingColorIndex = colorIndex;
+      this.updateAspiralButtonColor();
+      
       const pentatonic = [0, 2, 4, 7, 9]; // C, D, E, G, A
       const baseFreq = 261.63; // C4
       const noteIndex = colorIndex % pentatonic.length;
@@ -1722,16 +1912,33 @@ class MandalaPlayground {
       const now = Tone.now();
       this.synth.triggerAttackRelease(frequency, "8n", now);
       
-      // Visual feedback on color palette with longer duration for manual clicks
+      // Visual feedback on color palette with moderate duration for manual clicks
       const colorNotes = this.elements.colorGrid.querySelectorAll('.color-note');
       if (colorNotes[colorIndex]) {
         colorNotes[colorIndex].classList.add('playing');
         setTimeout(() => {
           colorNotes[colorIndex].classList.remove('playing');
-        }, 600); // Longer duration for manual clicks
+        }, 400); // Moderate duration for manual clicks
       }
     } catch (error) {
       console.error('Error playing color note:', error);
+    }
+  }
+
+  // Update aspiral button color based on currently playing note
+  updateAspiralButtonColor() {
+    const button = this.elements.aspiralPlayBtn;
+    if (this.currentPlayingColorIndex >= 0 && this.extractedColors && this.extractedColors[this.currentPlayingColorIndex]) {
+      const [r, g, b] = this.extractedColors[this.currentPlayingColorIndex];
+      button.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
+      button.style.color = this.getContrastColor(r, g, b);
+      
+      // Reset after a short delay
+      setTimeout(() => {
+        button.style.backgroundColor = '';
+        button.style.color = '';
+        this.currentPlayingColorIndex = -1;
+      }, 300);
     }
   }
   
@@ -1746,10 +1953,8 @@ class MandalaPlayground {
     // Banner speed control
     this.elements.bannerSpeedSlider.addEventListener('input', (e) => {
       this.bannerSpeed = parseFloat(e.target.value);
-      const direction = this.bannerSpeed >= 0 ? '→' : '←';
-      const absSpeed = Math.abs(this.bannerSpeed);
-      this.elements.speedDisplay.textContent = `Speed: ${direction} ${absSpeed.toFixed(1)}x`;
-      this.updateBannerSpeed();
+      this.updateSpeedDisplay();
+      this.updateMandalaRotations();
     });
     
     // Aspiral play button
@@ -1760,24 +1965,26 @@ class MandalaPlayground {
     // Aspiral speed control
     this.elements.aspiralSpeedSlider.addEventListener('input', (e) => {
       this.aspiralAnimationSpeed = parseFloat(e.target.value);
+      this.updateAspiralSpeedLabel();
     });
-  }
-  
-  // Update banner animation speed and mandala rotations
-  updateBannerSpeed() {
-    const banner = this.elements.mandalaCarousel;
-    const absSpeed = Math.abs(this.bannerSpeed);
-    banner.style.animationDuration = `${30 / absSpeed}s`;
     
-    this.updateMandalaRotations();
+    // Initialize aspiral speed label
+    this.updateAspiralSpeedLabel();
+  }
+
+  // Update aspiral speed label dynamically
+  updateAspiralSpeedLabel() {
+    if (this.elements.aspiralSpeedLabel) {
+      this.elements.aspiralSpeedLabel.textContent = `Speed: ${this.aspiralAnimationSpeed.toFixed(2)}`;
+    }
   }
   
-  // Update individual mandala rotations
+  // Update individual mandala rotations in the panel
   updateMandalaRotations() {
     const bannerMandalas = this.elements.mandalaCarousel.querySelectorAll('.banner-mandala');
     bannerMandalas.forEach((mandala, index) => {
       if (Math.abs(this.bannerSpeed) > 0) {
-        const rotationSpeed = this.bannerSpeed * 2; // Make rotation faster than carousel
+        const rotationSpeed = this.bannerSpeed;
         const duration = Math.abs(10 / rotationSpeed);
         const direction = rotationSpeed >= 0 ? 'rotate-mandala' : 'rotate-mandala-reverse';
         
