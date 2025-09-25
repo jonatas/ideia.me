@@ -1,0 +1,1754 @@
+---
+layout: sonification
+title: "Mandala Playground - Interactive Sonification"
+description: "Full-featured mandala sonification playground with real mandala images and advanced audio synthesis capabilities"
+---
+
+<style>
+/* Full-screen playground styles using official ideia.me colors */
+.playground-container {
+  display: block;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: #0c0c0c;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
+  color: #ffffff;
+  margin: -2rem -15px 2rem -15px; /* Negative margins to break out of container */
+  padding: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Animated background grid */
+.playground-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+    linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: -2;
+  opacity: 0.3;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+/* Slide-based layout */
+.playground-slides {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.slide {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  scroll-snap-align: start;
+}
+
+.slide:first-child {
+  min-height: 40vh; /* Banner slide is shorter */
+}
+
+/* Mandala Banner Slide */
+.banner-slide {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+  border-bottom: 3px solid #3b82f6;
+  min-height: 40vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.banner-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.mandala-banner {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  animation: scroll-mandalas 30s linear infinite;
+  white-space: nowrap;
+}
+
+.banner-mandala {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid rgba(59, 130, 246, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-mandala:hover {
+  border-color: #3b82f6;
+  transform: scale(1.1);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+}
+
+.banner-mandala.selected {
+  border-color: #1abc9c;
+  box-shadow: 0 0 30px rgba(26, 188, 156, 0.8);
+  transform: scale(1.15);
+}
+
+@keyframes scroll-mandalas {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes rotate-mandala {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes rotate-mandala-reverse {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
+/* Accelerator Slide */
+.accelerator-slide {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  border-bottom: 3px solid #1abc9c;
+}
+
+.accelerator-content {
+  text-align: center;
+  max-width: 800px;
+}
+
+.accelerator-title {
+  font-size: 2.5rem;
+  color: #1abc9c;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.accelerator-subtitle {
+  font-size: 1.2rem;
+  color: #ecf0f1;
+  margin-bottom: 3rem;
+  opacity: 0.8;
+}
+
+.speed-control {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.speed-slider {
+  width: 100%;
+  height: 15px;
+  -webkit-appearance: none;
+  background: linear-gradient(90deg, #e74c3c 0%, #f39c12 25%, #f1c40f 50%, #2ecc71 75%, #3498db 100%);
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.speed-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 30px;
+  height: 30px;
+  background: #ecf0f1;
+  border: 3px solid #1abc9c;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(26, 188, 156, 0.6);
+  transition: all 0.2s ease;
+}
+
+.speed-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 25px rgba(26, 188, 156, 0.8);
+}
+
+.speed-display {
+  margin-top: 2rem;
+  font-size: 1.5rem;
+  color: #1abc9c;
+  font-weight: bold;
+}
+
+/* Mandala Display Slide */
+.mandala-display-slide {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+  border-bottom: 3px solid #e74c3c;
+}
+
+.mandala-display-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.main-mandala-container {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #e74c3c;
+  box-shadow: 0 0 50px rgba(231, 76, 60, 0.5);
+  transition: all 0.3s ease;
+  background: #1a1a1a;
+}
+
+.main-mandala-container:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 70px rgba(231, 76, 60, 0.7);
+}
+
+.main-mandala {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  background: transparent;
+}
+
+/* Color Palette Styles */
+.color-palette-container {
+  width: 100%;
+  max-width: 800px;
+  text-align: center;
+}
+
+.palette-title {
+  font-size: 1.8rem;
+  color: #e74c3c;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 20px;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.color-note {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+  position: relative;
+  overflow: hidden;
+  /* Remove any default background that might interfere */
+  background-color: transparent;
+}
+
+.color-note:hover {
+  transform: scale(1.2) rotate(5deg);
+  border-color: #1abc9c;
+  box-shadow: 0 0 30px rgba(26, 188, 156, 0.8);
+}
+
+.color-note.playing {
+  animation: note-pulse 0.6s ease-out;
+  transform: scale(1.3);
+  box-shadow: 0 0 40px rgba(26, 188, 156, 1);
+}
+
+@keyframes note-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1.3); }
+}
+
+/* Aspiral Reconstruction Slide */
+.aspiral-slide {
+  background: linear-gradient(135deg, #2c1810 0%, #3d2817 100%);
+  border-bottom: 3px solid #f39c12;
+}
+
+.aspiral-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.aspiral-title {
+  font-size: 2.2rem;
+  color: #f39c12;
+  margin-bottom: 1rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.aspiral-container {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.aspiral-canvas-container {
+  position: relative;
+}
+
+.aspiral-canvas {
+  border: 4px solid #f39c12;
+  border-radius: 50%;
+  background: #1a1a1a;
+  transition: all 0.3s ease;
+  cursor: crosshair;
+}
+
+.aspiral-canvas:hover {
+  box-shadow: 0 0 40px rgba(243, 156, 18, 0.6);
+}
+
+.aspiral-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.aspiral-button {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  padding: 15px 30px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(243, 156, 18, 0.3);
+  font-family: inherit;
+}
+
+.aspiral-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(243, 156, 18, 0.5);
+}
+
+.aspiral-button:active {
+  transform: translateY(0);
+}
+
+.aspiral-button.playing {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  animation: button-pulse 2s ease-in-out infinite;
+}
+
+@keyframes button-pulse {
+  0%, 100% { box-shadow: 0 6px 20px rgba(231, 76, 60, 0.3); }
+  50% { box-shadow: 0 6px 20px rgba(231, 76, 60, 0.8); }
+}
+
+.speed-control-aspiral {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 250px;
+}
+
+.speed-control-aspiral label {
+  color: #f39c12;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.speed-slider-aspiral {
+  width: 100%;
+  height: 8px;
+  -webkit-appearance: none;
+  background: linear-gradient(90deg, #e74c3c 0%, #f39c12 50%, #2ecc71 100%);
+  border-radius: 5px;
+  outline: none;
+}
+
+.speed-slider-aspiral::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #ecf0f1;
+  border: 2px solid #f39c12;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.speed-slider-aspiral::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+  box-shadow: 0 0 15px rgba(243, 156, 18, 0.8);
+}
+
+.aspiral-dot {
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.aspiral-dot:hover {
+  transform: scale(3);
+  z-index: 1000;
+}
+
+.aspiral-dot.highlighted {
+  animation: dot-highlight 0.8s ease-out;
+}
+
+@keyframes dot-highlight {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(4); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .slide {
+    padding: 1rem;
+    min-height: 90vh;
+  }
+  
+  .accelerator-title {
+    font-size: 2rem;
+  }
+  
+  .accelerator-subtitle {
+    font-size: 1rem;
+  }
+  
+  .main-mandala-container {
+    width: 300px;
+    height: 300px;
+  }
+  
+  .color-note {
+    width: 60px;
+    height: 60px;
+    font-size: 12px;
+  }
+  
+  .color-grid {
+    grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    gap: 15px;
+  }
+  
+  .aspiral-container {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .aspiral-title {
+    font-size: 1.8rem;
+  }
+  
+  .banner-mandala {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .mandala-banner {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .accelerator-title {
+    font-size: 1.5rem;
+  }
+  
+  .main-mandala-container {
+    width: 250px;
+    height: 250px;
+  }
+  
+  .color-note {
+    width: 50px;
+    height: 50px;
+    font-size: 10px;
+  }
+  
+  .aspiral-canvas {
+    width: 250px;
+    height: 250px;
+  }
+}
+
+.knob-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.knob {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e293b, #334155);
+  border: 3px solid #3b82f6;
+  position: relative;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(59, 130, 246, 0.2);
+  transition: all 0.2s ease;
+}
+
+.knob:hover {
+  border-color: #60a5fa;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3), inset 0 2px 4px rgba(59, 130, 246, 0.3);
+}
+
+.knob::after {
+  content: '';
+  position: absolute;
+  width: 4px;
+  height: 20px;
+  background: #ffffff;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.knob-label {
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.knob-value {
+  color: #7dd3fc;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+
+/* Left Instrument Panel */
+.instrument-panel {
+  background: #111111;
+  border-right: 3px solid #3b82f6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+  gap: 15px;
+}
+
+.instrument-emoji {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+  background: rgba(17, 17, 17, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.instrument-emoji:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: #3b82f6;
+  transform: scale(1.1);
+}
+
+.instrument-emoji.active {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border-color: #ffffff;
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+}
+
+/* Main Area */
+.main-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  position: relative;
+}
+
+.mandala-container {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.mandala-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.1s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mandala-image:hover {
+  filter: brightness(1.1);
+}
+
+.mandala-image.rotating {
+  animation: rotate linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Magnifier and effects */
+.magnifier {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  border: 4px solid #3b82f6;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(2px);
+  display: none;
+  pointer-events: auto;
+  z-index: 15;
+  cursor: grab;
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: box-shadow 0.2s ease;
+}
+
+.magnifier:active {
+  cursor: grabbing;
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.9);
+}
+
+.magnifier-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80px;
+  height: 80px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+}
+
+.navigation {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.navigation button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(59, 130, 246, 0.8);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
+}
+
+.navigation button:hover {
+  background: rgba(59, 130, 246, 1);
+}
+
+
+/* Piano Keyboard */
+.piano-keyboard {
+  grid-column: 1 / -1;
+  background: #111111;
+  border-top: 3px solid #3b82f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.keyboard {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  background: #1a1a1a;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.key {
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.1s ease;
+}
+
+.white-key {
+  width: 40px;
+  height: 120px;
+  background: linear-gradient(145deg, #e2e8f0, #cbd5e0);
+  border: 2px solid #718096;
+  border-radius: 0 0 5px 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.white-key:hover {
+  background: linear-gradient(145deg, #cbd5e0, #a0a0a0);
+  transform: translateY(2px);
+}
+
+.white-key.active {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6) !important;
+  color: white;
+  transform: translateY(4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.black-key {
+  width: 25px;
+  height: 80px;
+  background: linear-gradient(145deg, #1a1a1a, #000000);
+  border: 2px solid #333333;
+  border-radius: 0 0 3px 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  margin: 0 -12px;
+  z-index: 2;
+  position: relative;
+}
+
+.black-key:hover {
+  background: linear-gradient(145deg, #333333, #1a1a1a);
+  transform: translateY(2px);
+}
+
+.black-key.active {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6) !important;
+  color: white;
+  transform: translateY(4px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Color-based keyboard keys */
+.color-key {
+  width: 60px;
+  height: 100px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: all 0.1s ease;
+  cursor: pointer;
+  user-select: none;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.color-key:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.color-key.active {
+  transform: translateY(2px) scale(0.95);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  filter: brightness(1.3);
+}
+
+.color-key::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.note-label {
+  font-size: 11px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  position: relative;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  margin-top: auto;
+}
+
+/* Touch-friendly styling */
+@media (hover: none) and (pointer: coarse) {
+  .color-key {
+    width: 70px;
+    height: 110px;
+  }
+  
+  .color-key:active {
+    transform: scale(0.9);
+    transition: transform 0.1s ease;
+  }
+}
+
+/* Close button removed - playground is always active */
+
+/* Responsive */
+@media (max-width: 768px) {
+  .playground-container {
+    margin: -1rem -15px 1rem -15px;
+    padding: 1rem 0;
+  }
+  
+  .playground-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto;
+  }
+  
+  .mandala-container {
+    width: 350px;
+    height: 350px;
+  }
+}
+</style>
+
+<div id="playground-container" class="playground-container">
+  
+  <div class="playground-slides">
+    <!-- 1. Mandala Banner Slide -->
+    <div class="slide banner-slide">
+      <div class="banner-content">
+        <div class="mandala-banner" id="mandala-banner">
+          <!-- Animated mandala banner will be populated here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Accelerator Slide -->
+    <div class="slide accelerator-slide">
+      <div class="accelerator-content">
+        <h1 class="accelerator-title">🚀 Mandala Accelerator</h1>
+        <p class="accelerator-subtitle">Control the speed of the mandala carousel above</p>
+        
+        <div class="speed-control">
+          <input type="range" id="banner-speed" class="speed-slider" min="-3" max="3" value="1" step="0.1">
+          <div class="speed-display" id="speed-display">Speed: 1.0x</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Mandala Display Slide -->
+    <div class="slide mandala-display-slide">
+      <div class="mandala-display-content">
+        <div class="main-mandala-container">
+          <img class="main-mandala" id="selected-mandala" alt="Selected Mandala" crossorigin="anonymous">
+        </div>
+        
+        <div class="color-palette-container">
+          <h2 class="palette-title">🎨 Color Palette - Play the Notes</h2>
+          <div class="color-grid" id="color-grid">
+            <!-- 12 color notes will be populated here -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Aspiral Reconstruction Slide -->
+    <div class="slide aspiral-slide">
+      <div class="aspiral-content">
+        <h1 class="aspiral-title">🌀 Aspiral Reconstruction</h1>
+        
+        <div class="aspiral-container">
+          <div class="aspiral-canvas-container">
+            <canvas id="aspiral-canvas" class="aspiral-canvas" width="350" height="350"></canvas>
+          </div>
+          
+          <div class="aspiral-controls">
+            <button id="aspiral-play-btn" class="aspiral-button">🎵 Play Aspiral</button>
+            
+            <div class="speed-control-aspiral">
+              <label for="aspiral-speed">Animation Speed</label>
+              <input type="range" id="aspiral-speed" class="speed-slider-aspiral" min="0.5" max="5" value="2" step="0.5">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Playground is now always active -->
+
+<!-- Required JavaScript libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+
+<script>
+let playgroundApp = null;
+
+// Auto-initialize playground when page loads
+document.addEventListener('DOMContentLoaded', function() {
+  if (!playgroundApp) {
+    playgroundApp = new MandalaPlayground();
+  }
+});
+
+class MandalaPlayground {
+  constructor() {
+    this.mandalaIndex = 0;
+    this.mandalas = this.generateMandalaList();
+    this.colorThief = new ColorThief();
+    this.currentPalette = [];
+    this.extractedColors = [];
+    this.selectedMandalaIndex = 0;
+    this.bannerSpeed = 1;
+    this.isAspiralPlaying = false;
+    this.aspiralDots = [];
+    this.aspiralPlayIndex = 0;
+    this.aspiralAnimationSpeed = 2;
+    this.sourceImageData = null;
+    
+    this.setupAudio();
+    this.initializeElements();
+    this.bindEvents();
+    this.createMandalaCarousel();
+    
+    // Initialize speed display
+    const direction = this.bannerSpeed >= 0 ? '→' : '←';
+    const absSpeed = Math.abs(this.bannerSpeed);
+    this.elements.speedDisplay.textContent = `Speed: ${direction} ${absSpeed.toFixed(1)}x`;
+    
+    // Load the initial mandala (this will trigger color extraction and aspiral)
+    this.loadSelectedMandala();
+  }
+
+  generateMandalaList() {
+    const mandalas = [];
+    // Generate list of actually available mandala files
+    const mandalaFiles = [
+      '01b.png', '02b.png', '03b.png', '04b.png', '05b.png', '06b.png', '07b.png', '08b.png', '09b.png',
+      '010b.png', '011b.png', '012b.png', '013b.png', '014b.png', '015b.png', '016b.png', '017b.png',
+      '018b.png', '019b.png', '020b.png', '021b.png', '022b.png', '023b.png', '024b.png', '025b.png', '026b.png'
+    ];
+    
+    mandalaFiles.forEach((filename, index) => {
+      mandalas.push({
+        number: index + 1,
+        filename: filename,
+        path: `/images/mandalas/${filename}`
+      });
+    });
+    
+    return mandalas;
+  }
+
+  async setupAudio() {
+    this.synth = new Tone.Synth({
+      oscillator: { type: "sine" },
+      envelope: { attack: 0.02, decay: 0.1, sustain: 0.3, release: 0.8 }
+    }).toDestination();
+
+    // Enable audio context on user interaction
+    document.addEventListener('click', async () => {
+      if (Tone.context.state !== 'running') {
+        await Tone.start();
+      }
+    }, { once: true });
+  }
+
+  initializeElements() {
+    this.elements = {
+      mandalaCarousel: document.getElementById('mandala-banner'),
+      selectedMandala: document.getElementById('selected-mandala'),
+      colorGrid: document.getElementById('color-grid'),
+      aspiralCanvas: document.getElementById('aspiral-canvas'),
+      bannerSpeedSlider: document.getElementById('banner-speed'),
+      speedDisplay: document.getElementById('speed-display'),
+      aspiralPlayBtn: document.getElementById('aspiral-play-btn'),
+      aspiralSpeedSlider: document.getElementById('aspiral-speed')
+    };
+  }
+
+  // Create mandala carousel for the banner
+  createMandalaCarousel() {
+    const carousel = this.elements.mandalaCarousel;
+    carousel.innerHTML = '';
+    
+    // Create multiple sets of mandalas for seamless scrolling
+    for (let set = 0; set < 3; set++) {
+      this.mandalas.forEach((mandala, index) => {
+        const mandalaElement = document.createElement('img');
+        mandalaElement.className = 'banner-mandala';
+        mandalaElement.crossOrigin = 'anonymous';
+        mandalaElement.src = mandala.path;
+        mandalaElement.alt = `Mandala ${mandala.number}`;
+        
+        if (index === this.selectedMandalaIndex && set === 1) {
+          mandalaElement.classList.add('selected');
+        }
+        
+        mandalaElement.addEventListener('click', () => {
+          this.selectMandala(index);
+        });
+        
+        mandalaElement.addEventListener('error', (error) => {
+          console.error('Failed to load banner mandala:', mandala.path);
+        });
+        
+        carousel.appendChild(mandalaElement);
+      });
+    }
+  }
+  
+  // Select a mandala and update all reactive components
+  selectMandala(index) {
+    this.selectedMandalaIndex = index;
+    this.updateMandalaSelection();
+    this.loadSelectedMandala();
+    // Aspiral reconstruction will be called after color extraction in createColorPalette
+  }
+  
+  // Update visual selection across all components
+  updateMandalaSelection() {
+    // Update banner selection
+    const bannerMandalas = this.elements.mandalaCarousel.querySelectorAll('.banner-mandala');
+    bannerMandalas.forEach((mandala, index) => {
+      const originalIndex = index % this.mandalas.length;
+      mandala.classList.toggle('selected', originalIndex === this.selectedMandalaIndex);
+    });
+  }
+  
+  // Load and display selected mandala with color extraction
+  loadSelectedMandala() {
+    const selectedMandala = this.mandalas[this.selectedMandalaIndex];
+    const mandalaImg = this.elements.selectedMandala;
+    
+    console.log('Loading mandala:', selectedMandala.path);
+    
+    mandalaImg.onload = () => {
+      console.log('Mandala loaded successfully');
+      setTimeout(() => this.extractColors(), 50); // Small delay to ensure image is fully rendered
+    };
+    
+    mandalaImg.onerror = (error) => {
+      console.error('Failed to load mandala:', selectedMandala.path, error);
+      // Use fallback colors if image fails to load
+      this.extractColorsManually();
+    };
+    
+    mandalaImg.crossOrigin = 'anonymous';
+    mandalaImg.src = selectedMandala.path;
+  }
+
+  // Extract 12 dominant colors from selected mandala
+  extractColors() {
+    try {
+      if (!this.elements.selectedMandala.complete || !this.elements.selectedMandala.naturalWidth) {
+        console.log('Image not ready, retrying in 100ms...');
+        setTimeout(() => this.extractColors(), 100);
+        return;
+      }
+
+      console.log('Attempting to extract colors from:', this.elements.selectedMandala.src);
+      
+      // Use ColorThief to extract colors
+      if (window.ColorThief && this.colorThief) {
+        this.extractedColors = this.colorThief.getPalette(this.elements.selectedMandala, 12);
+        console.log('ColorThief extracted colors:', this.extractedColors);
+        
+        if (this.extractedColors && this.extractedColors.length >= 6) {
+          // Ensure we have 12 colors by duplicating if needed
+          while (this.extractedColors.length < 12) {
+            this.extractedColors.push(this.extractedColors[this.extractedColors.length % 6]);
+          }
+          this.extractedColors = this.extractedColors.slice(0, 12);
+          this.createColorPalette();
+          return;
+        }
+      }
+      
+      // Fallback to manual extraction if ColorThief fails
+      console.log('ColorThief failed, using manual extraction...');
+      this.extractColorsManually();
+      
+    } catch (error) {
+      console.error('Error extracting colors:', error);
+      this.extractColorsManually();
+    }
+  }
+  
+  // Manual color extraction fallback
+  extractColorsManually() {
+    try {
+      console.log('Starting manual color extraction...');
+      
+      // Create canvas to sample colors
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = this.elements.selectedMandala;
+      
+      if (!img || !img.complete || !img.naturalWidth) {
+        console.log('Image not ready for manual extraction, using fallback colors');
+        this.useFallbackColors();
+        return;
+      }
+      
+      canvas.width = 200;
+      canvas.height = 200;
+      ctx.drawImage(img, 0, 0, 200, 200);
+      
+      const imageData = ctx.getImageData(0, 0, 200, 200);
+      const data = imageData.data;
+      const colorCounts = {};
+      
+      // Sample every 8th pixel to get more diverse colors
+      for (let i = 0; i < data.length; i += 32) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const a = data[i + 3];
+        
+        if (a > 100 && (r + g + b) > 60) { // Skip transparent and very dark pixels
+          // Less aggressive quantization for better color fidelity
+          const key = `${Math.round(r/15)*15},${Math.round(g/15)*15},${Math.round(b/15)*15}`;
+          colorCounts[key] = (colorCounts[key] || 0) + 1;
+        }
+      }
+      
+      // Get top 12 colors
+      const sortedColors = Object.entries(colorCounts)
+        .sort(([,a], [,b]) => b - a)
+        .slice(0, 12)
+        .map(([color]) => color.split(',').map(Number));
+      
+      if (sortedColors.length > 0) {
+        this.extractedColors = sortedColors;
+        // Fill with generated colors if not enough
+        while (this.extractedColors.length < 12) {
+          const hue = (this.extractedColors.length * 30) % 360;
+          const [r, g, b] = this.hslToRgb(hue, 70, 60);
+          this.extractedColors.push([r, g, b]);
+        }
+        console.log('Manual extraction successful:', this.extractedColors);
+      } else {
+        console.log('No colors found, using fallback');
+        this.useFallbackColors();
+      }
+      
+      this.createColorPalette();
+      
+    } catch (error) {
+      console.error('Manual extraction failed:', error);
+      this.useFallbackColors();
+    }
+  }
+  
+  // Use fallback colors
+  useFallbackColors() {
+    this.extractedColors = [
+      [255, 107, 107], [78, 205, 196], [69, 183, 209], [150, 206, 180],
+      [254, 202, 87], [255, 159, 243], [84, 160, 255], [95, 39, 205],
+      [0, 210, 211], [255, 159, 67], [16, 172, 132], [238, 90, 36]
+    ];
+    console.log('Using fallback colors:', this.extractedColors);
+    this.createColorPalette();
+  }
+  
+  // HSL to RGB helper
+  hslToRgb(h, s, l) {
+    h /= 360; s /= 100; l /= 100;
+    const a = s * Math.min(l, 1 - l);
+    const f = n => {
+      const k = (n + h * 12) % 12;
+      return l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+    };
+    return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
+  }
+  
+  // Create interactive color palette
+  createColorPalette() {
+    const colorGrid = this.elements.colorGrid;
+    colorGrid.innerHTML = '';
+    
+    console.log('Creating color palette with colors:', this.extractedColors);
+    
+    if (!this.extractedColors || this.extractedColors.length === 0) {
+      console.error('No extracted colors available, using fallback');
+      this.extractedColors = [
+        [255, 107, 107], [78, 205, 196], [69, 183, 209], [150, 206, 180],
+        [254, 202, 87], [255, 159, 243], [84, 160, 255], [95, 39, 205],
+        [0, 210, 211], [255, 159, 67], [16, 172, 132], [238, 90, 36]
+      ];
+    }
+    
+    const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    
+    this.extractedColors.forEach((color, index) => {
+      const [r, g, b] = color;
+      const noteName = noteNames[index];
+      
+      const colorNote = document.createElement('div');
+      colorNote.className = 'color-note';
+      
+      // Force the background color with !important
+      const colorStyle = `rgb(${r}, ${g}, ${b})`;
+      colorNote.style.setProperty('background-color', colorStyle, 'important');
+      colorNote.style.color = this.getContrastColor(r, g, b);
+      colorNote.textContent = noteName;
+      colorNote.title = `${noteName} - rgb(${r}, ${g}, ${b})`;
+      
+      console.log(`Color note ${index}: ${noteName} = rgb(${r}, ${g}, ${b}) -> ${colorStyle}`);
+      
+      colorNote.addEventListener('click', () => {
+        this.playColorNote(index);
+      });
+      
+      colorGrid.appendChild(colorNote);
+    });
+    
+    console.log(`Color palette created with ${this.extractedColors.length} colors`);
+    
+    // Update banner mandala rotation with colors
+    this.updateMandalaRotations();
+    
+    // Now that we have colors, generate aspiral reconstruction
+    this.generateAspiralReconstruction();
+  }
+  
+  // Generate aspiral reconstruction from selected mandala
+  generateAspiralReconstruction() {
+    const canvas = this.elements.aspiralCanvas;
+    const ctx = canvas.getContext('2d');
+    
+    console.log('Starting aspiral reconstruction...');
+    
+    // Clear previous reconstruction
+    ctx.clearRect(0, 0, 350, 350);
+    this.aspiralDots = [];
+    
+    // Ensure we have extracted colors first
+    if (!this.extractedColors || this.extractedColors.length === 0) {
+      console.log('No extracted colors, waiting for color extraction...');
+      setTimeout(() => this.generateAspiralReconstruction(), 500);
+      return;
+    }
+    
+    // Load mandala image data for aspiral algorithm
+    this.loadMandalaImageData().then(() => {
+      console.log('Mandala image data loaded, creating aspiral dots...');
+      this.createAspiralDots();
+    }).catch((error) => {
+      console.error('Failed to load aspiral data:', error);
+      // Create a simple fallback visualization
+      this.createFallbackAspiral();
+    });
+  }
+  
+  // Load mandala image data for pixel sampling
+  loadMandalaImageData() {
+    return new Promise((resolve, reject) => {
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = 350;
+      tempCanvas.height = 350;
+      const tempCtx = tempCanvas.getContext('2d');
+      
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      
+      img.onload = () => {
+        try {
+          console.log('Aspiral mandala loaded:', img.src);
+          // Scale and draw image
+          const size = Math.min(img.width, img.height);
+          const scale = 300 / size; // Leave some padding
+          const scaledWidth = img.width * scale;
+          const scaledHeight = img.height * scale;
+          const offsetX = (350 - scaledWidth) / 2;
+          const offsetY = (350 - scaledHeight) / 2;
+          
+          tempCtx.drawImage(img, offsetX, offsetY, scaledWidth, scaledHeight);
+          this.sourceImageData = tempCtx.getImageData(0, 0, 350, 350);
+          console.log('Aspiral image data ready');
+          resolve();
+        } catch (error) {
+          console.error('Error processing aspiral image:', error);
+          reject(error);
+        }
+      };
+      
+      img.onerror = (error) => {
+        console.error('Failed to load aspiral mandala:', this.mandalas[this.selectedMandalaIndex].path, error);
+        reject(error);
+      };
+      
+      const mandalaPath = this.mandalas[this.selectedMandalaIndex].path;
+      console.log('Loading aspiral mandala:', mandalaPath);
+      img.src = mandalaPath;
+    });
+  }
+
+  // Create fallback aspiral if image loading fails
+  createFallbackAspiral() {
+    const canvas = this.elements.aspiralCanvas;
+    const ctx = canvas.getContext('2d');
+    
+    console.log('Creating fallback aspiral with extracted colors');
+    
+    const centerX = 175;
+    const centerY = 175;
+    const maxRadius = 150;
+    const totalSteps = 1000;
+    
+    this.aspiralDots = [];
+    
+    for (let step = 0; step < totalSteps; step++) {
+      const progress = step / totalSteps;
+      const theta = progress * Math.PI * 20; // 10 rotations
+      const radius = progress * maxRadius;
+      
+      const x = centerX + radius * Math.cos(theta);
+      const y = centerY + radius * Math.sin(theta);
+      
+      // Use extracted colors in sequence
+      const colorIndex = step % this.extractedColors.length;
+      const [r, g, b] = this.extractedColors[colorIndex];
+      
+      // Draw dot
+      ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+      ctx.beginPath();
+      ctx.arc(x, y, 1, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Store dot info for interactive playback
+      this.aspiralDots.push({
+        x, y, r, g, b, step,
+        colorIndex: colorIndex
+      });
+    }
+    
+    // Add hover listeners to canvas
+    this.setupAspiralInteraction();
+  }
+
+  // Create aspiral dots from image data
+  createAspiralDots() {
+    const canvas = this.elements.aspiralCanvas;
+    const ctx = canvas.getContext('2d');
+    
+    console.log('Creating aspiral dots from source image data');
+    
+    if (!this.sourceImageData) {
+      console.error('No source image data available, using fallback');
+      this.createFallbackAspiral();
+      return;
+    }
+    
+    const centerX = 175;
+    const centerY = 175;
+    const maxRadius = 150;
+    const totalSteps = 3000;
+    let validPixels = 0;
+    
+    for (let step = 0; step < totalSteps; step++) {
+      const progress = step / totalSteps;
+      const theta = progress * Math.PI * 60; // 30 rotations
+      const radius = progress * maxRadius;
+      
+      const x = centerX + radius * Math.cos(theta);
+      const y = centerY + radius * Math.sin(theta);
+      
+      // Sample pixel color
+      const [r, g, b, a] = this.samplePixel(x, y);
+      
+      if (a > 50) {
+        validPixels++;
+        // Draw dot
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 1)`;
+        ctx.beginPath();
+        ctx.arc(x, y, 1, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Store dot info for interactive playback
+        this.aspiralDots.push({
+          x, y, r, g, b, step,
+          colorIndex: this.findClosestColorIndex(r, g, b)
+        });
+      }
+    }
+    
+    console.log(`Aspiral created: ${validPixels} valid pixels out of ${totalSteps} steps`);
+    
+    // If very few valid pixels, use fallback
+    if (validPixels < 100) {
+      console.log('Too few valid pixels, using fallback aspiral');
+      ctx.clearRect(0, 0, 350, 350);
+      this.createFallbackAspiral();
+      return;
+    }
+    
+    // Add hover listeners to canvas
+    this.setupAspiralInteraction();
+  }
+  
+  // Sample pixel from source image data
+  samplePixel(x, y) {
+    if (!this.sourceImageData || x < 0 || x >= 350 || y < 0 || y >= 350) {
+      return [0, 0, 0, 0];
+    }
+    
+    const index = (Math.floor(y) * 350 + Math.floor(x)) * 4;
+    return [
+      this.sourceImageData.data[index],
+      this.sourceImageData.data[index + 1],
+      this.sourceImageData.data[index + 2],
+      this.sourceImageData.data[index + 3]
+    ];
+  }
+  
+  // Find closest color in extracted palette
+  findClosestColorIndex(r, g, b) {
+    let minDistance = Infinity;
+    let closestIndex = 0;
+    
+    this.extractedColors.forEach((color, index) => {
+      const [pr, pg, pb] = color;
+      const distance = Math.sqrt((r - pr) ** 2 + (g - pg) ** 2 + (b - pb) ** 2);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = index;
+      }
+    });
+    
+    return closestIndex;
+  }
+  
+  // Setup mouse interaction for aspiral canvas
+  setupAspiralInteraction() {
+    const canvas = this.elements.aspiralCanvas;
+    let lastHighlightedDot = null;
+    let throttleTimeout = null;
+    
+    canvas.addEventListener('mousemove', (e) => {
+      // Throttle mouse events for better performance
+      if (throttleTimeout) return;
+      
+      throttleTimeout = setTimeout(() => {
+        const rect = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
+        
+        // Find closest dot to mouse with smaller radius
+        let closestDot = null;
+        let minDistance = Infinity;
+        
+        this.aspiralDots.forEach(dot => {
+          // Skip already highlighted dots
+          if (dot.highlighted) return;
+          
+          const distance = Math.sqrt((mouseX - dot.x) ** 2 + (mouseY - dot.y) ** 2);
+          if (distance < 5 && distance < minDistance) { // Reduced radius to 5px
+            minDistance = distance;
+            closestDot = dot;
+          }
+        });
+        
+        // Only interact with a new dot (prevent repeated interactions)
+        if (closestDot && closestDot !== lastHighlightedDot) {
+          this.playColorNote(closestDot.colorIndex);
+          this.highlightDot(closestDot);
+          lastHighlightedDot = closestDot;
+        }
+        
+        throttleTimeout = null;
+      }, 50); // 50ms throttle
+    });
+    
+    // Reset last highlighted dot when mouse leaves canvas
+    canvas.addEventListener('mouseleave', () => {
+      lastHighlightedDot = null;
+      if (throttleTimeout) {
+        clearTimeout(throttleTimeout);
+        throttleTimeout = null;
+      }
+    });
+  }
+  
+  // Highlight a dot visually
+  highlightDot(dot) {
+    const canvas = this.elements.aspiralCanvas;
+    const ctx = canvas.getContext('2d');
+    
+    // Draw highlight circle with smaller shadow
+    ctx.strokeStyle = '#1abc9c';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(dot.x, dot.y, 5, 0, Math.PI * 2); // Smaller highlight radius
+    ctx.stroke();
+    
+    // Add a subtle glow
+    ctx.shadowColor = '#1abc9c';
+    ctx.shadowBlur = 5;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    
+    // Mark dot as highlighted and set fade-in timer
+    dot.highlighted = true;
+    dot.highlightTime = Date.now();
+    
+    // Fade back in after 3 seconds
+    setTimeout(() => {
+      if (dot.highlighted) {
+        this.fadeInDot(dot);
+      }
+    }, 3000);
+  }
+  
+  // Fade in a dot after highlight
+  fadeInDot(dot) {
+    dot.highlighted = false;
+    const canvas = this.elements.aspiralCanvas;
+    const ctx = canvas.getContext('2d');
+    
+    // Clear the area around the dot
+    ctx.clearRect(dot.x - 10, dot.y - 10, 20, 20);
+    
+    // Redraw the original dot with fade-in effect
+    let opacity = 0;
+    const fadeStep = () => {
+      if (opacity < 1) {
+        ctx.clearRect(dot.x - 2, dot.y - 2, 4, 4);
+        ctx.globalAlpha = opacity;
+        ctx.fillStyle = `rgb(${dot.r}, ${dot.g}, ${dot.b})`;
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, 1, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 1;
+        
+        opacity += 0.05;
+        requestAnimationFrame(fadeStep);
+      }
+    };
+    fadeStep();
+  }
+  
+  // Play aspiral animation
+  playAspiralAnimation() {
+    if (this.isAspiralPlaying) {
+      this.stopAspiralAnimation();
+      return;
+    }
+    
+    this.isAspiralPlaying = true;
+    this.aspiralPlayIndex = 0;
+    this.elements.aspiralPlayBtn.textContent = '⏹ Stop';
+    this.elements.aspiralPlayBtn.classList.add('playing');
+    
+    this.animateAspiralDots();
+  }
+  
+  // Animate through aspiral dots
+  animateAspiralDots() {
+    if (!this.isAspiralPlaying || this.aspiralPlayIndex >= this.aspiralDots.length) {
+      this.stopAspiralAnimation();
+      return;
+    }
+    
+    const dot = this.aspiralDots[this.aspiralPlayIndex];
+    
+    // Play note and highlight
+    this.playColorNote(dot.colorIndex);
+    this.highlightDot(dot);
+    
+    // Highlight corresponding color in palette
+    const colorNotes = this.elements.colorGrid.querySelectorAll('.color-note');
+    if (colorNotes[dot.colorIndex]) {
+      colorNotes[dot.colorIndex].classList.add('playing');
+      setTimeout(() => {
+        colorNotes[dot.colorIndex].classList.remove('playing');
+      }, 300);
+    }
+    
+    this.aspiralPlayIndex++;
+    
+    // Continue animation with speed control
+    const delay = Math.max(10, 1000 / (this.aspiralAnimationSpeed * 50));
+    setTimeout(() => this.animateAspiralDots(), delay);
+  }
+  
+  // Stop aspiral animation
+  stopAspiralAnimation() {
+    this.isAspiralPlaying = false;
+    this.elements.aspiralPlayBtn.textContent = '🎵 Play Aspiral';
+    this.elements.aspiralPlayBtn.classList.remove('playing');
+  }
+  
+  // Play color note
+  playColorNote(colorIndex) {
+    if (!this.synth) return;
+    
+    const pentatonic = [0, 2, 4, 7, 9]; // C, D, E, G, A
+    const baseFreq = 261.63; // C4
+    const noteIndex = colorIndex % pentatonic.length;
+    const semitones = pentatonic[noteIndex];
+    const frequency = baseFreq * Math.pow(2, semitones / 12);
+    
+    this.synth.triggerAttackRelease(frequency, "8n");
+    
+    // Visual feedback on color palette
+    const colorNotes = this.elements.colorGrid.querySelectorAll('.color-note');
+    if (colorNotes[colorIndex]) {
+      colorNotes[colorIndex].classList.add('playing');
+      setTimeout(() => {
+        colorNotes[colorIndex].classList.remove('playing');
+      }, 300);
+    }
+  }
+  
+  // Get contrast color for text
+  getContrastColor(r, g, b) {
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.5 ? '#000000' : '#ffffff';
+  }
+  
+  // Bind events for all interactive elements
+  bindEvents() {
+    // Banner speed control
+    this.elements.bannerSpeedSlider.addEventListener('input', (e) => {
+      this.bannerSpeed = parseFloat(e.target.value);
+      const direction = this.bannerSpeed >= 0 ? '→' : '←';
+      const absSpeed = Math.abs(this.bannerSpeed);
+      this.elements.speedDisplay.textContent = `Speed: ${direction} ${absSpeed.toFixed(1)}x`;
+      this.updateBannerSpeed();
+    });
+    
+    // Aspiral play button
+    this.elements.aspiralPlayBtn.addEventListener('click', () => {
+      this.playAspiralAnimation();
+    });
+    
+    // Aspiral speed control
+    this.elements.aspiralSpeedSlider.addEventListener('input', (e) => {
+      this.aspiralAnimationSpeed = parseFloat(e.target.value);
+    });
+  }
+  
+  // Update banner animation speed and mandala rotations
+  updateBannerSpeed() {
+    const banner = this.elements.mandalaCarousel;
+    const absSpeed = Math.abs(this.bannerSpeed);
+    banner.style.animationDuration = `${30 / absSpeed}s`;
+    
+    this.updateMandalaRotations();
+  }
+  
+  // Update individual mandala rotations
+  updateMandalaRotations() {
+    const bannerMandalas = this.elements.mandalaCarousel.querySelectorAll('.banner-mandala');
+    bannerMandalas.forEach((mandala, index) => {
+      if (Math.abs(this.bannerSpeed) > 0) {
+        const rotationSpeed = this.bannerSpeed * 2; // Make rotation faster than carousel
+        const duration = Math.abs(10 / rotationSpeed);
+        const direction = rotationSpeed >= 0 ? 'rotate-mandala' : 'rotate-mandala-reverse';
+        
+        mandala.style.animation = `${direction} ${duration}s linear infinite`;
+      } else {
+        mandala.style.animation = 'none';
+      }
+    });
+  }
+  
+  // Stop all animations and cleanup
+  stop() {
+    this.stopAspiralAnimation();
+  }
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', (e) => {
+  if (playgroundApp) {
+    switch(e.key) {
+      case ' ':
+        e.preventDefault();
+        playgroundApp.playAspiralAnimation();
+        break;
+      case 'ArrowLeft':
+        const prevIndex = (playgroundApp.selectedMandalaIndex - 1 + playgroundApp.mandalas.length) % playgroundApp.mandalas.length;
+        playgroundApp.selectMandala(prevIndex);
+        break;
+      case 'ArrowRight':
+        const nextIndex = (playgroundApp.selectedMandalaIndex + 1) % playgroundApp.mandalas.length;
+        playgroundApp.selectMandala(nextIndex);
+        break;
+      case 'r':
+        const randomIndex = Math.floor(Math.random() * playgroundApp.mandalas.length);
+        playgroundApp.selectMandala(randomIndex);
+        break;
+    }
+  }
+});
+</script>
