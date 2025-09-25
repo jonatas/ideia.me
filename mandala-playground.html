@@ -1900,7 +1900,6 @@ class MandalaPlayground {
       
       // Update current playing color for button styling
       this.currentPlayingColorIndex = colorIndex;
-      this.updateAspiralButtonColor();
       
       const pentatonic = [0, 2, 4, 7, 9]; // C, D, E, G, A
       const baseFreq = 261.63; // C4
@@ -1925,23 +1924,6 @@ class MandalaPlayground {
     }
   }
 
-  // Update aspiral button color based on currently playing note
-  updateAspiralButtonColor() {
-    const button = this.elements.aspiralPlayBtn;
-    if (this.currentPlayingColorIndex >= 0 && this.extractedColors && this.extractedColors[this.currentPlayingColorIndex]) {
-      const [r, g, b] = this.extractedColors[this.currentPlayingColorIndex];
-      button.style.backgroundColor = `rgb(${r}, ${g}, ${b})`;
-      button.style.color = this.getContrastColor(r, g, b);
-      
-      // Reset after a short delay
-      setTimeout(() => {
-        button.style.backgroundColor = '';
-        button.style.color = '';
-        this.currentPlayingColorIndex = -1;
-      }, 300);
-    }
-  }
-  
   // Get contrast color for text
   getContrastColor(r, g, b) {
     const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
