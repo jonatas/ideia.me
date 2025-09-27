@@ -1,105 +1,36 @@
-/* Mandala Playground Styles */
-/* Full-screen playground styles using official ideia.me colors */
-.playground-container {
-  display: block;
-  position: relative;
-  width: 100vw; /* Use full viewport width */
-  min-height: 100vh;
-  background: #0c0c0c;
+/* Simple mandala playground styles */
+body {
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
   color: #ffffff;
-  margin: 0; /* Remove all margins */
-  padding: 0; /* Remove all padding */
-  overflow-x: hidden;
-  overflow-y: auto;
-  left: 0;
-  right: 0;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden; /* Prevent horizontal scroll */
 }
 
-/* Animated background grid */
-.playground-container::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px),
-    linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px);
-  background-size: 50px 50px;
-  z-index: -2;
-  opacity: 0.3;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
-}
-
-/* Slide-based layout */
-.playground-slides {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  min-height: 40vh;
-}
-
-.slide {
-  width: 100%;
-  min-height: 50vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0; /* Remove all slide padding */
-  position: relative;
-  scroll-snap-align: start;
-}
-
-.slide:first-child {
-  min-height: 70vh; /* Banner slide is shorter */
-  padding-top: 0;
-}
-
-/* Mandala Banner Slide */
-.banner-slide {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
-  border-bottom: 3px solid #3b82f6;
-  min-height: 60vh;
-  overflow: hidden; /* Remove scrolling */
-  position: relative;
-  padding: 0; /* Remove all padding */
-  padding-bottom: 120px; /* Keep space for speed control at bottom */
-}
-
-.banner-content {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  position: relative;
-}
+/* Remove all complex layouts - keep it simple */
 
 .mandala-banner {
-  position: relative;
-  max-width: 100vw; /* Use full viewport width */
-  width: 100%;
-  height: calc(50vh - 120px); /* Fixed height based on slide height minus controls */
-  margin: 0; /* Remove margin */
-  padding: 10px 0; /* Minimal padding only for breathing room */
-  overflow: hidden; /* Prevent overflow */
+  display: flex;
+  flex-wrap: wrap;
+  width: 100vw;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* Prevent horizontal scroll */
 }
 
 .banner-mandala {
-  width: 130px;
-  height: 130px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
-  border: 3px solid rgba(59, 130, 246, 0.3);
+  border: 2px solid rgba(59, 130, 246, 0.3);
   cursor: pointer;
   transition: all 0.3s ease;
-  position: absolute;
+  position: static; /* Remove absolute positioning */
   overflow: hidden;
   object-fit: cover;
-  z-index: 1;
+  margin: 0; /* No margins */
+  padding: 0; /* No padding */
+  flex-shrink: 0; /* Don't shrink in flexbox */
 }
 
 .banner-mandala.offset {
@@ -154,15 +85,18 @@
 }
 
 .speed-control {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  margin-top: 2rem;
   width: 100%;
-  max-width: 98vw; /* Use 98% of viewport width */
-  margin: 0 auto;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
-  padding: 0 1rem; /* Minimal padding for breathing room */
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
 }
 
 .speed-slider {
@@ -211,29 +145,28 @@
 
 /* Mandala Display Slide */
 .mandala-display-slide {
-  background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
-  border-bottom: 3px solid #e74c3c;
+  background: transparent;
 }
 
 .mandala-display-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3rem;
-  max-width: 95vw; /* Use 95% of viewport width */
+  gap: 2rem;
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
 .main-mandala-container {
-  position: relative;
   width: 400px;
   height: 400px;
   border-radius: 50%;
   overflow: hidden;
-  border: 4px solid #e74c3c;
-  box-shadow: 0 0 50px rgba(231, 76, 60, 0.5);
-  transition: all 0.3s ease;
-  background: #1a1a1a;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  margin: 2rem auto;
+  display: block;
 }
 
 .main-mandala-container:hover {
@@ -261,9 +194,10 @@
 /* Color Palette Styles */
 .color-palette-container {
   width: 100%;
-  max-width: 90vw; /* Use 90% of viewport width */
+  max-width: 600px;
   text-align: center;
-  padding-bottom: 2rem;
+  margin: 2rem auto;
+  padding: 1rem;
 }
 
 .palette-title {
@@ -524,8 +458,8 @@
   }
   
   .banner-mandala {
-    width: 100px;
-    height: 100px;
+    width: 70px;
+    height: 70px;
   }
   
   .mandala-banner {
@@ -561,8 +495,8 @@
   }
   
   .banner-mandala {
-    width: 80px;
-    height: 80px;
+    width: 55px;
+    height: 55px;
   }
   
   .mandala-banner {

@@ -7,51 +7,37 @@ description: "Full-featured mandala sonification playground with real mandala im
 <!-- External stylesheets -->
 <link rel="stylesheet" href="/css/mandala-playground.css">
 
-<div id="playground-container" class="playground-container">
-  
-  <div class="playground-slides">
-    <div class="slide banner-slide">
-      <div class="banner-content">
-        <div class="mandala-banner" id="mandala-banner">
-        </div>
-      </div>
-      <div class="speed-control">
-        <input type="range" id="banner-speed" class="speed-slider" min="-30" max="30" value="1" step="1">
-        <div class="speed-display" id="speed-display">Speed: 1.0x</div>
-        <div class="selected-info" id="selected-info">
-          Selected: Mandala #<span id="selected-number">1</span>
-        </div>
-      </div>
-    </div>
-    <div class="slide mandala-display-slide">
-      <div class="mandala-display-content">
-        <div class="main-mandala-container">
-          <img class="main-mandala" id="selected-mandala" alt="Selected Mandala" crossorigin="anonymous">
-        </div>
-        <div class="color-palette-container">
-          <div class="color-grid" id="color-grid">
-          </div>
-        </div>
-      </div>
-    </div>
+<!-- Mandalas will be inserted dynamically at the top of body -->
 
-    <div class="slide aspiral-slide">
-      <div class="aspiral-content">
-        <div class="aspiral-container">
-          <div class="aspiral-canvas-container">
-            <canvas id="aspiral-canvas" class="aspiral-canvas" width="500" height="500"></canvas>
-          </div>
-          
-          <div class="aspiral-controls">
-            <button id="aspiral-play-btn" class="aspiral-button">🎵 Play Aspiral</button>
-            
-            <div class="speed-control-aspiral">
-              <label for="aspiral-speed">Speed (0.005 - 5)</label>
-              <input type="range" id="aspiral-speed" class="speed-slider-aspiral" min="0.005" max="5" value="2" step="0.05">
-            </div>
-          </div>
-        </div>
-      </div>
+<!-- Selected mandala and controls -->
+<div class="main-mandala-container">
+  <img class="main-mandala" id="selected-mandala" alt="Selected Mandala" crossorigin="anonymous">
+</div>
+
+<div class="color-palette-container">
+  <div class="color-grid" id="color-grid">
+  </div>
+</div>
+
+<div class="speed-control">
+  <input type="range" id="banner-speed" class="speed-slider" min="-30" max="30" value="1" step="1">
+  <div class="speed-display" id="speed-display">Speed: 1.0x</div>
+  <div class="selected-info" id="selected-info">
+    Selected: Mandala #<span id="selected-number">1</span>
+  </div>
+</div>
+
+<div class="aspiral-container">
+  <div class="aspiral-canvas-container">
+    <canvas id="aspiral-canvas" class="aspiral-canvas" width="500" height="500"></canvas>
+  </div>
+  
+  <div class="aspiral-controls">
+    <button id="aspiral-play-btn" class="aspiral-button">🎵 Play Aspiral</button>
+    
+    <div class="speed-control-aspiral">
+      <label for="aspiral-speed">Speed (0.005 - 5)</label>
+      <input type="range" id="aspiral-speed" class="speed-slider-aspiral" min="0.005" max="5" value="2" step="0.05">
     </div>
   </div>
 </div>

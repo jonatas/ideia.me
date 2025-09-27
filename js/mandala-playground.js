@@ -38,17 +38,56 @@ class MandalaPlayground {
     this.updateSpeedDisplay();
     this.updateSelectedMandalaNumber();
     
-    // Auto-select and load the first mandala
-    this.selectMandala(0);
+    // Auto-select and load the first mandala after a short delay to ensure DOM is ready
+    setTimeout(() => {
+      this.selectMandala(0);
+    }, 100);
   }
 
   generateMandalaList() {
     const mandalas = [];
-    // Generate list of actually available mandala files
+    // Normalized list of actually available mandala files (updated and verified)
     const mandalaFiles = [
-      '01b.png', '02b.png', '03b.png', '04b.png', '05b.png', '06b.png', '07b.png', '08b.png', '09b.png',
-      '010b.png', '011b.png', '012b.png', '013b.png', '014b.png', '015b.png', '016b.png', '017b.png',
-      '018b.png', '019b.png', '020b.png', '021b.png', '022b.png', '023b.png', '024b.png', '025b.png', '026b.png'
+      // Folder 1 mandalas (01-41, normalized)
+      '01.png', '02.png', '03.png', '04.png', '05.png', '06.png', '07.png', '08.png', '09.png', '10.png',
+      '11.png', '12.png', '13.png', '14.png', '15.png', '16.png', '17.png', '18.png', '19.png', '20.png',
+      '21.png', '22.png', '23.png', '24.png', '25.png', '26.png', '28.png', '30.png', '31.png', '32.png',
+      '33.png', '34.png', '35.png', '36.png', '37.png', '38.png', '39.png', '40.png', '41.png',
+      
+      // Folder 2 mandalas (curated selection)
+      '201.png', '202.png', '204.png', '205.png', '206.png', '207.png', '208.png', '209.png', '210.png',
+      '211.png', '212.png', '214.png', '215.png', '216.png', '217.png', '218.png', '219.png', '220.png',
+      '221.png', '222.png', '223.png', '224.png', '225.png', '226.png', '227.png', '228.png', '229.png',
+      '230.png', '231.png', '232.png', '233.png', '234.png', '235.png', '236.png',
+      
+      // Folder 3 mandalas (complete set)
+      '301.png', '302.png', '303.png', '304.png', '305.png', '306.png', '307.png', '308.png', '309.png', '310.png',
+      '311.png', '312.png', '313.png', '314.png', '315.png', '316.png', '317.png', '318.png', '319.png', '320.png',
+      '321.png', '322.png', '323.png', '324.png', '325.png', '326.png', '327.png', '328.png', '329.png', '330.png', '331.png',
+      
+      // Folder 4 mandalas (curated selection)
+      '401.png', '402.png', '403.png', '404.png', '405.png', '406.png', '408.png', '410.png', '412.png',
+      '413.png', '414.png', '415.png', '416.png', '417.png', '419.png', '420.png', '422.png', '423.png',
+      '425.png', '426.png', '429.png', '435.png', '441.png', '442.png', '444.png',
+      
+      // Folder 5 mandalas (curated selection)
+      '501.png', '502.png', '503.png', '504.png', '506.png', '507.png', '508.png', '509.png', '510.png',
+      '511.png', '512.png', '513.png', '514.png', '515.png', '516.png', '520.png', '521.png', '523.png', '524.png', '525.png',
+      
+      // Folder 6 mandalas (curated selection)
+      '602.png', '603.png', '604.png', '605.png', '606.png', '607.png', '610.png', '612.png', '613.png',
+      '614.png', '615.png', '616.png', '617.png', '618.png',
+      
+      // Folder 7 mandalas (curated selection)
+      '701.png', '703.png', '704.png', '705.png', '706.png', '707.png', '708.png', '710.png', '711.png',
+      '712.png', '713.png', '714.png', '716.png', '717.png', '718.png', '719.png', '720.png', '721.png',
+      '722.png', '723.png', '724.png', '725.png', '726.png', '727.png', '728.png', '729.png',
+      
+      // Folder 8 mandala
+      '801.png',
+      
+      // Folder 9 mandalas (curated selection)
+      '901.png', '902.png', '903.png', '905.png', '906.png', '907.png', '908.png', '909.png'
     ];
     
     mandalaFiles.forEach((filename, index) => {
@@ -98,7 +137,6 @@ class MandalaPlayground {
 
   initializeElements() {
     this.elements = {
-      mandalaCarousel: document.getElementById('mandala-banner'),
       selectedMandala: document.getElementById('selected-mandala'),
       colorGrid: document.getElementById('color-grid'),
       aspiralCanvas: document.getElementById('aspiral-canvas'),
@@ -202,32 +240,30 @@ class MandalaPlayground {
     console.log('Body children count:', document.body.children.length);
   }
 
-  // Create overlapping mandala grid panel for the banner
+  // Create simple mandala grid - append directly to body
   createMandalaCarousel() {
-    const panel = this.elements.mandalaCarousel;
-    panel.innerHTML = '';
+    // Clear any existing mandalas first
+    const existingMandalas = document.querySelectorAll('.banner-mandala');
+    existingMandalas.forEach(el => el.remove());
     
-    // Calculate positions for overlapping grid
-    const positions = this.calculateOverlappingPositions();
+    // Create a container div for all mandalas
+    const mandalaContainer = document.createElement('div');
+    mandalaContainer.className = 'mandala-grid-container';
+    mandalaContainer.style.cssText = `
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    `;
     
-    // Create grid of all mandalas with calculated positions
+    // Append all mandalas to the container
     this.mandalas.forEach((mandala, index) => {
       const mandalaElement = document.createElement('img');
       mandalaElement.className = 'banner-mandala';
       mandalaElement.crossOrigin = 'anonymous';
-      mandalaElement.src = mandala.path;
+      mandalaElement.src = `/images/mandalas/mini/${mandala.filename}`;
       mandalaElement.alt = `Mandala ${mandala.number}`;
-      
-      // Position the mandala
-      if (positions[index]) {
-        mandalaElement.style.left = positions[index].x + 'px';
-        mandalaElement.style.top = positions[index].y + 'px';
-        
-        // Add offset class for overlapping mandalas
-        if (positions[index].offset) {
-          mandalaElement.classList.add('offset');
-        }
-      }
       
       if (index === this.selectedMandalaIndex) {
         mandalaElement.classList.add('selected');
@@ -241,90 +277,14 @@ class MandalaPlayground {
         console.error('Failed to load banner mandala:', mandala.path);
       });
       
-      panel.appendChild(mandalaElement);
+      mandalaContainer.appendChild(mandalaElement);
     });
     
-    // Height is now controlled by CSS - no dynamic height setting needed
-    // panel.style.height is managed by CSS calc(50vh - 120px)
+    // Insert at the very beginning of the body
+    document.body.insertBefore(mandalaContainer, document.body.firstChild);
   }
   
-  // Calculate positions for overlapping grid layout
-  calculateOverlappingPositions() {
-    const positions = [];
-    
-    // Responsive sizing based on screen width - use more available space
-    const screenWidth = window.innerWidth;
-    let containerWidth, containerHeight, mandalaSize, spacing;
-    
-    // Use the actual available height from CSS calc(50vh - 120px)
-    const availableHeight = window.innerHeight * 0.5 - 120 - 20; // 20px for padding
-    
-    if (screenWidth <= 480) {
-      containerWidth = screenWidth - 10; // Use almost full screen width with 5px margin each side
-      containerHeight = availableHeight;
-      mandalaSize = 70; // Smaller for mobile
-      spacing = 60;
-    } else if (screenWidth <= 768) {
-      containerWidth = screenWidth - 20; // Use almost full screen width with 10px margin each side
-      containerHeight = availableHeight;
-      mandalaSize = 90; // Smaller to fit better
-      spacing = 75;
-    } else if (screenWidth <= 1200) {
-      containerWidth = screenWidth - 30; // Use almost full screen width with 15px margin each side
-      containerHeight = availableHeight;
-      mandalaSize = 110; // Smaller to fit better
-      spacing = 95;
-    } else {
-      containerWidth = screenWidth - 40; // Use almost full screen width with 20px margin each side
-      containerHeight = availableHeight;
-      mandalaSize = 120; // Smaller to fit better
-      spacing = 105;
-    }
-    
-    // Calculate how many mandalas fit per row with better spacing
-    const effectiveSpacing = Math.max(spacing, mandalaSize + 20); // Ensure minimum gap of 20px
-    const mandalsPerRow = Math.floor((containerWidth - mandalaSize) / effectiveSpacing) + 1;
-    const rows = Math.ceil(this.mandalas.length / mandalsPerRow);
-    
-    // Adjust container height based on actual rows needed
-    const actualContainerHeight = Math.max(containerHeight, rows * effectiveSpacing * 0.8 + mandalaSize);
-    
-    let mandalaIndex = 0;
-    
-    for (let row = 0; row < rows && mandalaIndex < this.mandalas.length; row++) {
-      const isOffsetRow = row % 2 === 1;
-      const rowY = row * (effectiveSpacing * 0.75); // Better vertical spacing
-      
-      // Calculate starting X position for centering with improved logic
-      const mandalsInThisRow = Math.min(mandalsPerRow, this.mandalas.length - mandalaIndex);
-      const actualRowWidth = (mandalsInThisRow - 1) * effectiveSpacing + mandalaSize;
-      const startX = Math.max(0, (containerWidth - actualRowWidth) / 2);
-      
-      for (let col = 0; col < mandalsPerRow && mandalaIndex < this.mandalas.length; col++) {
-        let x = startX + col * effectiveSpacing;
-        let y = rowY;
-        
-        // Offset every other row horizontally for honeycomb effect
-        if (isOffsetRow) {
-          x += effectiveSpacing / 2;
-        }
-        
-        // Ensure mandalas stay within bounds with better margin
-        if (x + mandalaSize > containerWidth - 10) break;
-        if (y + mandalaSize > actualContainerHeight - 10) break;
-        
-        positions[mandalaIndex] = {
-          x: Math.max(10, x), // Minimum 10px margin from edge
-          y: Math.max(10, y),
-          offset: isOffsetRow
-        };
-        
-        mandalaIndex++;
-      }
-    }
-    
-    return positions;
-  }
+  // Simple layout - no complex positioning needed
   
   // Select a mandala and update all reactive components
   selectMandala(index) {
@@ -402,8 +362,8 @@ class MandalaPlayground {
   
   // Update visual selection across all components
   updateMandalaSelection() {
-    // Update banner selection
-    const bannerMandalas = this.elements.mandalaCarousel.querySelectorAll('.banner-mandala');
+    // Update banner selection from dynamically created elements
+    const bannerMandalas = document.querySelectorAll('.banner-mandala');
     bannerMandalas.forEach((mandala, index) => {
       mandala.classList.toggle('selected', index === this.selectedMandalaIndex);
     });
@@ -1061,7 +1021,7 @@ class MandalaPlayground {
   
   // Update individual mandala rotations in the panel
   updateMandalaRotations() {
-    const bannerMandalas = this.elements.mandalaCarousel.querySelectorAll('.banner-mandala');
+    const bannerMandalas = document.querySelectorAll('.banner-mandala');
     const normalizedSpeed = this.getNormalizedSpeed();
     
     bannerMandalas.forEach((mandala, index) => {
