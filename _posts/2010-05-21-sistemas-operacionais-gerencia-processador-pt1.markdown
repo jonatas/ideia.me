@@ -317,6 +317,4 @@ A escolha da política de escalonamento deve considerar as características e ob
 
 Os sistemas operacionais modernos tipicamente implementam algoritmos híbridos que combinam características de múltiplas abordagens para atingir um bom desempenho em diversos cenários.
 
-{% include adsense.html %}
-{% include ads_lateral.html %}
 

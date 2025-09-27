@@ -226,6 +226,4 @@ A compreensão dos modos de acesso do sistema operacional é fundamental para en
 
 Através dos mecanismos de proteção, system calls e arquiteturas adequadas, os sistemas operacionais conseguem equilibrar desempenho, segurança e usabilidade, permitindo que usuários executem suas tarefas sem comprometer a estabilidade do sistema.
 
-{% include adsense.html %}
-{% include ads_lateral.html %}
 

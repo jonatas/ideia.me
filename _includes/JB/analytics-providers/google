@@ -14,12 +14,9 @@
     dataLayer.push(arguments);
   }
 
-  // Set default consent state (required for consent mode v2)
+  // Set default consent state (analytics only, no ads)
   gtag('consent', 'default', {
-    'ad_storage': 'denied',
     'analytics_storage': 'denied',
-    'ad_user_data': 'denied',
-    'ad_personalization': 'denied',
     'wait_for_update': 500
   });
 
@@ -45,22 +42,16 @@
     });
   }
 
-  // Update consent status based on user choice
+  // Update consent status based on user choice (analytics only)
   function updateConsentStatus(status) {
     if (status === 'allow') {
       gtag('consent', 'update', {
-        'ad_storage': 'granted',
-        'analytics_storage': 'granted',
-        'ad_user_data': 'granted',
-        'ad_personalization': 'granted'
+        'analytics_storage': 'granted'
       });
       addAnalytics();
     } else {
       gtag('consent', 'update', {
-        'ad_storage': 'denied',
-        'analytics_storage': 'denied',
-        'ad_user_data': 'denied',
-        'ad_personalization': 'denied'
+        'analytics_storage': 'denied'
       });
     }
   }
@@ -89,8 +80,8 @@
       },
       type: "opt-in",
       content: {
-        message: "This website uses cookies to ensure you get the best experience and to enable analytics.",
-        allow: "Accept cookies",
+        message: "This website uses cookies for analytics only (no ads or tracking).",
+        allow: "Accept analytics",
         deny: "Decline",
         link: "Learn more",
         policy: "Cookie Policy"
