@@ -20,7 +20,9 @@ class MobileMandalaPlayground {
   }
   
   detectMobile() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+    const forceIOSMode = window.location.search.includes('debug=ios');
+    return forceIOSMode ||
+           /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
            ('ontouchstart' in window) ||
            (navigator.maxTouchPoints > 0);
   }
@@ -202,17 +204,75 @@ class MobileMandalaPlayground {
   }
   
   setupMobileAudio() {
-    // Mobile browsers require user interaction for audio
-    const enableAudioOnFirstTouch = () => {
-      if (this.playgroundApp && this.playgroundApp.initializeAudioContext) {
-        this.playgroundApp.initializeAudioContext().then(() => {
-          console.log('Mobile audio context initialized');
-        });
+    // Enhanced mobile audio setup for iPhone compatibility
+    let audioInitialized = false;
+    
+    const enableAudioOnFirstTouch = async (e) => {
+      if (audioInitialized) return;
+      
+      try {
+        console.log('Attempting mobile audio initialization on touch...');
+        
+        // For iPhone, we need to be more aggressive about audio context initialization
+        if (window.Tone && Tone.context.state !== 'running') {
+          await Tone.start();
+          console.log('Tone.js context started successfully');
+        }
+        
+        // Initialize playground audio
+        if (this.playgroundApp && this.playgroundApp.initializeAudioContext) {
+          const success = await this.playgroundApp.initializeAudioContext();
+          if (success) {
+            audioInitialized = true;
+            console.log('Mobile audio context initialized successfully');
+            
+            // Test audio with a brief silent note to ensure it's working
+            if (this.playgroundApp.synth) {
+              // Play a very quiet test note to "unlock" audio on iOS
+              this.playgroundApp.synth.triggerAttackRelease(440, "32n", undefined, 0.01);
+              console.log('Audio test note triggered');
+            }
+            
+            // Remove all event listeners after successful initialization
+            document.removeEventListener('touchstart', enableAudioOnFirstTouch);
+            document.removeEventListener('touchend', enableAudioOnFirstTouch);
+            document.removeEventListener('click', enableAudioOnFirstTouch);
+            
+            // Hide audio notice if it exists
+            const audioNotice = document.querySelector('.audio-notice');
+            if (audioNotice) {
+              audioNotice.style.display = 'none';
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Failed to initialize mobile audio:', error);
+        // Try again on next interaction
+        setTimeout(() => {
+          audioInitialized = false;
+        }, 1000);
       }
-      document.removeEventListener('touchstart', enableAudioOnFirstTouch);
     };
     
-    document.addEventListener('touchstart', enableAudioOnFirstTouch, { once: true });
+    // Listen to multiple event types for better iPhone compatibility
+    document.addEventListener('touchstart', enableAudioOnFirstTouch, { passive: false });
+    document.addEventListener('touchend', enableAudioOnFirstTouch, { passive: false });
+    document.addEventListener('click', enableAudioOnFirstTouch);
+    
+    // Add a specific listener for the audio notice
+    const checkAudioNotice = () => {
+      const audioNotice = document.querySelector('.audio-notice');
+      if (audioNotice && !audioNotice.hasAttribute('data-mobile-listener')) {
+        audioNotice.setAttribute('data-mobile-listener', 'true');
+        audioNotice.addEventListener('touchstart', enableAudioOnFirstTouch, { passive: false });
+        audioNotice.addEventListener('click', enableAudioOnFirstTouch);
+      }
+    };
+    
+    // Check immediately and after a delay
+    checkAudioNotice();
+    setTimeout(checkAudioNotice, 500);
+    setTimeout(checkAudioNotice, 1000);
   }
   
   setupMobileGestures() {

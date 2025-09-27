@@ -116,21 +116,85 @@ class MandalaPlayground {
 
   async initializeAudioContext() {
     try {
-      if (window.Tone && Tone.context.state !== 'running') {
-        await Tone.start();
-        console.log('Audio context started');
+      // Debug mode: Force iOS behavior for testing on desktop
+      const forceIOSMode = window.location.search.includes('debug=ios');
+      const actuallyIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const isIOS = actuallyIOS || forceIOSMode;
+      
+      console.log('Initializing audio context...', {
+        toneAvailable: !!window.Tone,
+        contextState: window.Tone ? Tone.context.state : 'N/A',
+        userAgent: navigator.userAgent,
+        actuallyIOS: actuallyIOS,
+        forceIOSMode: forceIOSMode,
+        isIOS: isIOS
+      });
+      
+      if (!window.Tone) {
+        console.error('Tone.js is not loaded');
+        return false;
       }
       
-      // Create synth after audio context is running
-      this.synth = new Tone.Synth({
-        oscillator: { type: "sine" },
-        envelope: { attack: 0.02, decay: 0.1, sustain: 0.3, release: 0.8 }
-      }).toDestination();
+      // Enhanced iOS audio context initialization  
+      // (isIOS already defined above with debug mode support)
+      
+      if (Tone.context.state !== 'running') {
+        console.log('Starting Tone.js context...');
+        await Tone.start();
+        
+        // For iOS, wait a bit longer to ensure context is fully initialized
+        if (isIOS) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        console.log('Tone.js context state after start:', Tone.context.state);
+      }
+      
+      // Ensure context is actually running before proceeding
+      if (Tone.context.state !== 'running') {
+        console.warn('Audio context is not in running state:', Tone.context.state);
+        return false;
+      }
+      
+      // Create synth with iOS-optimized settings
+      if (!this.synth) {
+        console.log('Creating synthesizer...');
+        this.synth = new Tone.Synth({
+          oscillator: { 
+            type: "sine",
+            // iOS optimization: simpler oscillator
+            modulationFrequency: isIOS ? 0 : 0.5
+          },
+          envelope: { 
+            attack: isIOS ? 0.01 : 0.02,  // Faster attack on iOS
+            decay: isIOS ? 0.05 : 0.1,    // Shorter decay on iOS
+            sustain: isIOS ? 0.2 : 0.3,   // Lower sustain on iOS
+            release: isIOS ? 0.4 : 0.8    // Shorter release on iOS
+          }
+        }).toDestination();
+        
+        console.log('Synthesizer created successfully');
+      }
+      
+      // Test the synth with a silent note for iOS compatibility
+      if (isIOS && this.synth) {
+        try {
+          console.log('Testing audio with silent note...');
+          this.synth.triggerAttackRelease(440, "32n", undefined, 0.001);
+          await new Promise(resolve => setTimeout(resolve, 50));
+          console.log('Silent test note completed');
+        } catch (testError) {
+          console.warn('Silent test note failed:', testError);
+        }
+      }
       
       this.audioEnabled = true;
+      console.log('Audio context initialization successful');
       return true;
+      
     } catch (error) {
       console.error('Failed to initialize audio context:', error);
+      this.audioEnabled = false;
       return false;
     }
   }
@@ -171,14 +235,29 @@ class MandalaPlayground {
     
     const notice = document.createElement('div');
     notice.className = 'audio-notice';
-    notice.innerHTML = '🔊 Click anywhere to enable audio for the mandala sonification';
+    
+    // Detect if this is likely an iPhone/mobile device (with debug mode support)
+    const forceIOSMode = window.location.search.includes('debug=ios');
+    const actuallyIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isIOS = actuallyIOS || forceIOSMode;
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || forceIOSMode;
+    
+    // Enhanced message for iPhone users
+    let message = '🔊 Click anywhere to enable audio for the mandala sonification';
+    if (isIOS) {
+      message = '🔊 TAP HERE to enable audio for iPhone/iPad - May require multiple taps';
+    } else if (isMobile) {
+      message = '🔊 TAP HERE to enable audio for mobile device';
+    }
+    
+    notice.innerHTML = message;
     notice.style.cssText = `
       position: fixed;
-      top: 70px;
-      right: 20px;
+      top: ${isIOS || isMobile ? '10px' : '70px'};
+      ${isIOS || isMobile ? 'left: 50%; transform: translateX(-50%);' : 'right: 20px;'}
       background: rgba(26, 188, 156, 0.95);
       color: white;
-      padding: 15px 25px;
+      padding: ${isIOS || isMobile ? '20px 30px' : '15px 25px'};
       border-radius: 10px;
       font-weight: bold;
       cursor: pointer;
@@ -186,8 +265,8 @@ class MandalaPlayground {
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
       transition: all 0.3s ease;
       font-family: inherit;
-      font-size: 14px;
-      max-width: 300px;
+      font-size: ${isIOS || isMobile ? '16px' : '14px'};
+      max-width: ${isIOS || isMobile ? '90vw' : '300px'};
       line-height: 1.4;
       border: 2px solid rgba(255, 255, 255, 0.3);
       backdrop-filter: blur(5px);
@@ -195,31 +274,65 @@ class MandalaPlayground {
       visibility: visible;
       display: block;
       pointer-events: auto;
+      text-align: center;
     `;
     
-    // Add hover effect
-    notice.addEventListener('mouseenter', () => {
-      notice.style.transform = 'scale(1.05)';
-      notice.style.background = 'rgba(26, 188, 156, 1)';
-    });
-    
-    notice.addEventListener('mouseleave', () => {
-      notice.style.transform = 'scale(1)';
-      notice.style.background = 'rgba(26, 188, 156, 0.95)';
-    });
-    
-    notice.addEventListener('click', async () => {
-      const success = await this.initializeAudioContext();
-      if (success) {
-        notice.style.opacity = '0';
-        notice.style.transform = 'scale(0.8)';
-        setTimeout(() => {
-          if (notice.parentElement) {
-            notice.remove();
-          }
-        }, 300);
+    // Enhanced interaction handlers for mobile
+    const enableAudio = async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      console.log('Audio notice clicked/touched');
+      
+      try {
+        // For iOS, try multiple approaches
+        if (isIOS && window.Tone) {
+          await Tone.start();
+          await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        
+        const success = await this.initializeAudioContext();
+        console.log('Audio initialization result:', success);
+        
+        if (success) {
+          notice.style.opacity = '0';
+          notice.style.transform = 'scale(0.8)';
+          setTimeout(() => {
+            if (notice.parentElement) {
+              notice.remove();
+            }
+          }, 300);
+        } else if (isIOS) {
+          // Show a different message for iOS if first attempt fails
+          notice.innerHTML = '🔊 PLEASE TAP AGAIN - iPhone requires multiple interactions for audio';
+          notice.style.background = 'rgba(231, 76, 60, 0.95)';
+        }
+      } catch (error) {
+        console.error('Audio enable error:', error);
+        if (isIOS) {
+          notice.innerHTML = '🔊 TAP AGAIN - Audio setup in progress...';
+          notice.style.background = 'rgba(243, 156, 18, 0.95)';
+        }
       }
-    });
+    };
+    
+    // Add multiple event listeners for better mobile compatibility
+    notice.addEventListener('click', enableAudio);
+    notice.addEventListener('touchstart', enableAudio, { passive: false });
+    notice.addEventListener('touchend', enableAudio, { passive: false });
+    
+    // Add hover effect for desktop
+    if (!isMobile) {
+      notice.addEventListener('mouseenter', () => {
+        notice.style.transform = 'scale(1.05)';
+        notice.style.background = 'rgba(26, 188, 156, 1)';
+      });
+      
+      notice.addEventListener('mouseleave', () => {
+        notice.style.transform = 'scale(1)';
+        notice.style.background = 'rgba(26, 188, 156, 0.95)';
+      });
+    }
     
     // Append to body and ensure it's visible
     document.body.appendChild(notice);
@@ -229,15 +342,10 @@ class MandalaPlayground {
       notice.style.opacity = '1';
       notice.style.visibility = 'visible';
       notice.style.display = 'block';
-      console.log('Audio notice visibility set');
-      console.log('Notice element:', notice);
-      console.log('Notice computed styles:', window.getComputedStyle(notice));
-      console.log('Notice bounding rect:', notice.getBoundingClientRect());
+      console.log('Audio notice visibility set for device type:', { isIOS, isMobile });
     }, 100);
     
     console.log('Audio notice added to DOM');
-    console.log('Notice parent:', notice.parentElement);
-    console.log('Body children count:', document.body.children.length);
   }
 
   // Create simple mandala grid - append directly to body
@@ -944,13 +1052,24 @@ class MandalaPlayground {
   // Play color note with proper audio context handling
   async playColorNote(colorIndex) {
     try {
-      // Ensure audio context is running
-      if (!this.audioEnabled || !this.synth) {
-        await this.initializeAudioContext();
+      // Enhanced audio checking for iPhone compatibility
+      if (!this.audioEnabled || !this.synth || !window.Tone || Tone.context.state !== 'running') {
+        console.log('Audio not ready, attempting to initialize...', {
+          audioEnabled: this.audioEnabled,
+          synthExists: !!this.synth,
+          toneExists: !!window.Tone,
+          contextState: window.Tone ? Tone.context.state : 'N/A'
+        });
+        
+        const success = await this.initializeAudioContext();
+        if (!success) {
+          console.warn('Audio initialization failed, cannot play note');
+          return;
+        }
       }
       
       if (!this.synth) {
-        console.warn('Audio synth not available');
+        console.warn('Audio synth not available after initialization');
         return;
       }
       
@@ -960,9 +1079,26 @@ class MandalaPlayground {
       const semitones = pentatonic[noteIndex];
       const frequency = baseFreq * Math.pow(2, semitones / 12);
       
-      // Use Tone.now() to schedule notes properly and avoid timing conflicts
-      const now = Tone.now();
-      this.synth.triggerAttackRelease(frequency, "8n", now);
+      console.log(`Playing note: colorIndex=${colorIndex}, frequency=${frequency.toFixed(2)}Hz`);
+      
+      // Enhanced note triggering for iPhone compatibility
+      try {
+        // Use Tone.now() to schedule notes properly and avoid timing conflicts
+        const now = Tone.now();
+        const forceIOSMode = window.location.search.includes('debug=ios');
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || forceIOSMode;
+        const duration = isIOS ? "16n" : "8n"; // Shorter notes on iOS for better reliability
+        
+        this.synth.triggerAttackRelease(frequency, duration, now);
+        console.log('Note triggered successfully');
+        
+      } catch (audioError) {
+        console.error('Audio playback failed:', audioError);
+        // Try to reinitialize audio context
+        this.audioEnabled = false;
+        this.synth = null;
+        return;
+      }
       
       // Visual feedback on color palette with moderate duration for manual clicks
       const colorNotes = this.elements.colorGrid.querySelectorAll('.color-note');
@@ -972,8 +1108,12 @@ class MandalaPlayground {
           colorNotes[colorIndex].classList.remove('playing');
         }, 400); // Moderate duration for manual clicks
       }
+      
     } catch (error) {
       console.error('Error playing color note:', error);
+      // Reset audio state on error
+      this.audioEnabled = false;
+      this.synth = null;
     }
   }
 
