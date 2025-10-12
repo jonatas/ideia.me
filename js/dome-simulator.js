@@ -231,21 +231,21 @@ class DomeSimulator {
             const phaseDescriptions = [
                 [
                     "Organize struts by type (A, B, C, etc.)",
-                    "Group struts for each triangle type",
-                    "Prepare cutting stations and materials",
+                    "Cut compound angles: 18° miter + 27.8° bevel",
+                    "Prepare Good Karma hubless joint system",
                     "Sort components for efficient assembly"
                 ],
                 [
-                    "Assemble triangles from organized strut groups",
+                    "Assemble triangles with overlapping struts",
                     "Create triangle type A (using struts A-A-B)",
                     "Create triangle type B (using struts A-B-C)", 
                     "Stack completed triangles by type for integration"
                 ],
                 [
                     "Start with ground foundation triangles",
-                    "Build first ring connecting to foundation",
-                    "Add second ring with proper alignment",
-                    "Complete dome with top cap triangles"
+                    "Connect overlapping struts at compound angles",
+                    "Build rings with Good Karma joint system",
+                    "Complete dome with hubless overlapping joints"
                 ]
             ];
             
@@ -1056,6 +1056,9 @@ class DomeSimulator {
 
             const mesh = new THREE.Mesh(geometry, material);
             
+            // Add triangle border edges for better visualization
+            this.addTriangleBorders(mesh, tri, triangleTypeInfo);
+            
             // Calculate strut info
             const side1 = tri[0].distanceTo(tri[1]) * 1000;
             const side2 = tri[1].distanceTo(tri[2]) * 1000;
@@ -1118,8 +1121,12 @@ class DomeSimulator {
         const v2 = strutInfo.vertices[1];
         const length = v1.distanceTo(v2);
         
-        // Create strut geometry with proper dimensions
-        const strutGeometry = this.createStrutGeometryForDome(length);
+        // Extend strut for Good Karma overlapping joint system
+        const extendFactor = 1.05; // 5% extension to create overlap at joints
+        const extendedLength = length * extendFactor;
+        
+        // Create strut geometry with Good Karma overlapping system
+        const strutGeometry = this.createStrutGeometryForDome(extendedLength);
         const strutMaterial = new THREE.MeshStandardMaterial({
             color: new THREE.Color(strutInfo.color),
             metalness: 0.3,
@@ -1128,15 +1135,19 @@ class DomeSimulator {
         
         const strutMesh = new THREE.Mesh(strutGeometry, strutMaterial);
         
-        // Position strut between vertices (maintain geodesic positioning)
-        const midPoint = v1.clone().add(v2).multiplyScalar(0.5);
+        // Position strut with Good Karma overlapping system - struts extend to vertices for overlap
+        const direction = v2.clone().sub(v1);
+        // For Good Karma system, struts should overlap at joints, not have gaps
+        const extendedV1 = v1.clone().sub(direction.clone().multiplyScalar((extendFactor - 1) / 2));
+        const extendedV2 = v2.clone().add(direction.clone().multiplyScalar((extendFactor - 1) / 2));
+        const midPoint = extendedV1.clone().add(extendedV2).multiplyScalar(0.5);
         strutMesh.position.copy(midPoint);
         
         // Simplified and corrected strut orientation for proper yaw rotation
-        const direction = v2.clone().sub(v1).normalize();
+        const normalizedDirection = direction.clone().normalize();
         
-        // Position strut along the direction vector
-        strutMesh.lookAt(v2);
+        // Position strut along the direction vector using extended endpoints for overlap
+        strutMesh.lookAt(extendedV2);
         
         // Correct the orientation - struts should align along their length (Y-axis in geometry)
         // The lookAt method aligns the Z-axis, so we need to rotate to align Y-axis
@@ -1168,27 +1179,68 @@ class DomeSimulator {
             strutInfo: strutInfo,
             vertices: [v1, v2],
             length: length,
+            extendedLength: extendedLength,
             midPoint: midPoint,
             direction: direction,
             rotationApplied: rotationAngle,
             heightFactor: heightFactor,
-            radialDistance: radialDistance
+            radialDistance: radialDistance,
+            isGoodKarmaOverlap: true
         };
         
         return strutMesh;
     }
     
+    addTriangleBorders(triangleMesh, triangle, triangleTypeInfo) {
+        // Create border edges for triangle visualization
+        const borderGeometry = new THREE.BufferGeometry();
+        const borderVertices = new Float32Array([
+            // Edge 1: v0 -> v1
+            triangle[0].x, triangle[0].y, triangle[0].z,
+            triangle[1].x, triangle[1].y, triangle[1].z,
+            // Edge 2: v1 -> v2
+            triangle[1].x, triangle[1].y, triangle[1].z,
+            triangle[2].x, triangle[2].y, triangle[2].z,
+            // Edge 3: v2 -> v0
+            triangle[2].x, triangle[2].y, triangle[2].z,
+            triangle[0].x, triangle[0].y, triangle[0].z
+        ]);
+        
+        borderGeometry.setAttribute('position', new THREE.BufferAttribute(borderVertices, 3));
+        
+        // Use a darker version of the triangle type color for borders
+        let borderColor = 0x000000; // Default black
+        if (triangleTypeInfo && triangleTypeInfo.color) {
+            const typeColor = new THREE.Color(triangleTypeInfo.color);
+            // Darken the color for border
+            borderColor = typeColor.clone().multiplyScalar(0.3).getHex();
+        }
+        
+        const borderMaterial = new THREE.LineBasicMaterial({
+            color: borderColor,
+            linewidth: 2,
+            transparent: true,
+            opacity: 0.8
+        });
+        
+        const borderLines = new THREE.LineSegments(borderGeometry, borderMaterial);
+        triangleMesh.add(borderLines);
+    }
+    
     createStrutGeometryForDome(length) {
         // Create rectangular strut geometry matching actual dimensions (Good Karma hubless style)
-        const width = this.strutWidth / 1000; // Convert mm to meters
-        const height = this.strutHeight / 1000; // Convert mm to meters
+        // Scale down strut cross-section to be more proportional to dome size
+        const scaleFactor = 0.5; // Make struts thinner for better visualization
+        const width = (this.strutWidth / 1000) * scaleFactor; // Convert mm to meters and scale
+        const height = (this.strutHeight / 1000) * scaleFactor; // Convert mm to meters and scale
         
         // Create box geometry with proper rectangular cross-section
         const geometry = new THREE.BoxGeometry(width, length, height);
         
-        // Apply Good Karma compound cuts for hubless joints with improved geodesic alignment
-        const miterAngle = 18 * Math.PI / 180;
-        const bevelAngle = 27.8 * Math.PI / 180;
+        // Apply Good Karma compound cuts for hubless joints - enhanced for overlapping system
+        const miterAngle = 18 * Math.PI / 180; // Horizontal cut angle
+        const bevelAngle = 27.8 * Math.PI / 180; // Vertical cut angle
+        // Enhanced cuts for better overlap visualization
         
         const positions = geometry.attributes.position;
         const vertex = new THREE.Vector3();
@@ -1250,10 +1302,10 @@ class DomeSimulator {
             });
         });
         
-        // Create Good Karma hubless joint indicators with enhanced positioning
+        // Create Good Karma hubless joint indicators - representing overlapping strut intersections
         vertexMap.forEach((vertexData, key) => {
-            // Adaptive joint size based on connection count for better visualization
-            const baseRadius = 0.006;
+            // Joint size represents the overlapping zone where struts meet
+            const baseRadius = 0.004; // Slightly larger to show overlap zone
             const connectionMultiplier = Math.max(1, vertexData.connections / 5);
             const jointRadius = baseRadius * connectionMultiplier;
             const jointGeometry = new THREE.SphereGeometry(jointRadius, 16, 16);
