@@ -34,13 +34,20 @@ permalink: /dome-builder/
                         <input
                             type="range"
                             id="zoom-slider"
-                            min="0.3"
-                            max="3"
+                            min="0.1"
+                            max="50"
                             step="0.1"
                             value="1"
                             class="w-full"
                         />
                     </div>
+                    
+                    <button
+                        id="assembly-mode-toggle"
+                        class="px-6 py-3 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 active:bg-green-700 shadow-md"
+                    >
+                        🔧 Assembly Mode
+                    </button>
                     
                     <button
                         id="clear-selection"
@@ -52,7 +59,38 @@ permalink: /dome-builder/
 
                 <div class="bg-blue-50 p-3 rounded mb-3">
                     <p id="view-mode-info" class="text-sm font-bold">🏠 Full Dome View</p>
-                    <p class="text-xs text-gray-600">Double-tap/click to cycle views • Scroll to zoom • Tap triangles to select</p>
+                    <p class="text-xs text-gray-600">🖱️ Left drag: Orbit • Right drag: Pan • Scroll: Zoom • 📱 1-finger: Orbit • 2-finger: Pan • Tap: Select</p>
+                </div>
+
+                <div id="assembly-controls" class="bg-green-50 p-3 rounded mb-3 border-2 border-green-300 hidden">
+                    <div class="flex items-center justify-between mb-2">
+                        <p class="text-sm font-bold text-green-800">🔧 Assembly Mode - Step <span id="assembly-step-display">0</span> of <span id="assembly-total-display">0</span></p>
+                        <button id="assembly-mode-exit" class="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600">Exit</button>
+                    </div>
+                    
+                    <!-- Phase Navigation -->
+                    <div class="flex gap-1 mb-3">
+                        <button id="assembly-phase-prev" class="px-3 py-1 bg-purple-500 text-white text-xs rounded hover:bg-purple-600 disabled:bg-gray-300">◀ Phase</button>
+                        <div class="flex-1 bg-white rounded px-2 py-1 text-center text-xs font-bold" id="assembly-phase-display">
+                            Phase 1: Strut Collection
+                        </div>
+                        <button id="assembly-phase-next" class="px-3 py-1 bg-purple-500 text-white text-xs rounded hover:bg-purple-600 disabled:bg-gray-300">Phase ▶</button>
+                    </div>
+                    
+                    <div class="flex gap-2 mb-2">
+                        <button id="assembly-prev" class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 disabled:bg-gray-300">← Prev</button>
+                        <button id="assembly-next" class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 disabled:bg-gray-300">Next →</button>
+                        <button id="assembly-auto" class="px-4 py-2 bg-orange-500 text-white text-sm rounded hover:bg-orange-600">▶ Auto</button>
+                    </div>
+                    <p id="assembly-description" class="text-xs text-green-700">Watch how struts come together to form the geodesic dome structure</p>
+                </div>
+
+                <!-- Triangle Type Inventory -->
+                <div id="triangle-inventory" class="bg-blue-50 p-3 rounded mb-3 border-2 border-blue-300 hidden">
+                    <h3 class="text-sm font-bold text-blue-800 mb-2">📦 Triangle Inventory</h3>
+                    <div id="triangle-types-grid" class="grid grid-cols-2 gap-2 text-xs">
+                        <!-- Triangle types will be populated by JavaScript -->
+                    </div>
                 </div>
 
                 <div id="triangle-info" class="bg-yellow-100 p-4 rounded-lg border-2 border-yellow-500 shadow-lg hidden">
@@ -224,94 +262,37 @@ permalink: /dome-builder/
                     </div>
                 </div>
 
-                <!-- Immersive Walkthrough -->
-                <div class="bg-gradient-to-br from-indigo-900 to-purple-900 text-white p-6 rounded-xl border-2 border-indigo-400 shadow-lg">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="text-4xl">🎮</span>
-                        <div>
-                            <h3 class="font-bold text-xl">Immersive Assembly Walkthrough</h3>
-                            <p class="text-sm text-gray-300">Camera walks through construction stages - like a game!</p>
+                <!-- Summary card -->
+                <div class="mt-8 bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 rounded-xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                        <span class="text-2xl">✅</span> Complete Cutting & Assembly Guide
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                        <div class="bg-white bg-opacity-20 p-4 rounded-lg">
+                            <p class="font-semibold text-lg mb-2">📏 Your Strut Type <span id="summary-strut-type">A</span></p>
+                            <p>Length: <span id="summary-length">0.0</span>mm</p>
+                            <p>Width: <span id="summary-width-before">40</span>mm → ~<span id="summary-width-after">0.0</span>mm</p>
+                            <p>Height: <span id="summary-height-before">90</span>mm → ~<span id="summary-height-after">0.0</span>mm</p>
+                        </div>
+                        <div class="bg-white bg-opacity-20 p-4 rounded-lg">
+                            <p class="font-semibold text-lg mb-2">🔴 Miter Cut</p>
+                            <p>Angle: 18° horizontal</p>
+                            <p>Both ends: YES - identical cuts</p>
+                            <p>Affects: Top edge</p>
+                            <p class="text-sm mt-1">Combined with bevel = compound</p>
+                        </div>
+                        <div class="bg-white bg-opacity-20 p-4 rounded-lg">
+                            <p class="font-semibold text-lg mb-2">🟢 Bevel Cut</p>
+                            <p>Angle: 27.8° vertical</p>
+                            <p>Both ends: YES - identical cuts</p>
+                            <p>Affects: Side edge</p>
+                            <p class="text-sm mt-1">Combined with miter = compound</p>
                         </div>
                     </div>
-                    
-                    <div id="walkthrough-view" class="w-full h-screen max-h-[600px] bg-gradient-to-b from-gray-900 to-black rounded-lg shadow-inner mb-4 border-4 border-purple-500"></div>
-                    
-                    <div class="bg-black bg-opacity-40 p-4 rounded-lg mb-4">
-                        <div class="text-center mb-3">
-                            <p class="text-white font-bold mb-2">Click any stage to explore:</p>
-                        </div>
-                        <div class="flex items-center justify-center gap-4 mb-3">
-                            <div id="stage-0" class="flex flex-col items-center p-3 rounded-lg transition-all bg-yellow-500 text-black scale-110 cursor-pointer hover:scale-125 shadow-lg">
-                                <span class="text-2xl">🪵</span>
-                                <span class="text-xs mt-1 font-bold">Single Strut</span>
-                            </div>
-                            <div id="stage-1" class="flex flex-col items-center p-3 rounded-lg transition-all bg-gray-700 text-gray-400 cursor-pointer hover:scale-110 hover:bg-gray-600">
-                                <span class="text-2xl">🔩</span>
-                                <span class="text-xs mt-1 font-bold">Joints Form</span>
-                            </div>
-                            <div id="stage-2" class="flex flex-col items-center p-3 rounded-lg transition-all bg-gray-700 text-gray-400 cursor-pointer hover:scale-110 hover:bg-gray-600">
-                                <span class="text-2xl">🔺</span>
-                                <span class="text-xs mt-1 font-bold">Triangle</span>
-                            </div>
-                            <div id="stage-3" class="flex flex-col items-center p-3 rounded-lg transition-all bg-gray-700 text-gray-400 cursor-pointer hover:scale-110 hover:bg-gray-600">
-                                <span class="text-2xl">⭐</span>
-                                <span class="text-xs mt-1 font-bold">Star Pattern</span>
-                            </div>
-                        </div>
-                        <div class="w-full bg-gray-700 rounded-full h-2">
-                            <div id="progress-bar" class="bg-gradient-to-r from-yellow-400 to-purple-500 h-2 rounded-full transition-all duration-500" style="width: 25%"></div>
-                        </div>
-                        <div class="text-center mt-3">
-                            <p class="text-gray-300 text-sm">🖱️ Drag to rotate • 🔍 Scroll to zoom • 📱 Touch controls supported</p>
-                        </div>
-                    </div>
-
-                    <!-- Dynamic stage content -->
-                    <div id="stage-content" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                        <!-- Content will be populated by JavaScript based on current stage -->
-                    </div>
-
-                    <div class="mt-4 bg-gradient-to-r from-blue-500 to-green-500 text-white p-4 rounded-lg text-center font-bold">
-                        🎯 Interactive Assembly Guide • Click stages above to explore each step! 🎯
-                    </div>
+                    <p class="mt-4 text-center text-sm bg-white bg-opacity-20 p-3 rounded">
+                        💡 <strong>Good Karma Hubless System:</strong> Each strut needs BOTH 18° miter AND 27.8° bevel on BOTH ends (compound angle). The rectangular cross-section with compound cuts creates perfect overlapping joints - no complex hubs required!
+                    </p>
                 </div>
-            </div>
-
-            <!-- Summary card -->
-            <div class="mt-8 bg-gradient-to-r from-blue-500 to-purple-600 text-white p-6 rounded-xl shadow-lg">
-                <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
-                    <span class="text-2xl">✅</span> Complete Cutting & Assembly Guide
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                    <div class="bg-white bg-opacity-20 p-4 rounded-lg">
-                        <p class="font-semibold text-lg mb-2">📏 Your Strut Type <span id="summary-strut-type">A</span></p>
-                        <p>Length: <span id="summary-length">0.0</span>mm</p>
-                        <p>Width: <span id="summary-width-before">40</span>mm → ~<span id="summary-width-after">0.0</span>mm</p>
-                        <p>Height: <span id="summary-height-before">90</span>mm → ~<span id="summary-height-after">0.0</span>mm</p>
-                    </div>
-                    <div class="bg-white bg-opacity-20 p-4 rounded-lg">
-                        <p class="font-semibold text-lg mb-2">🔴 Miter Cut</p>
-                        <p>Angle: 18° horizontal</p>
-                        <p>Both ends: YES - identical cuts</p>
-                        <p>Affects: Top edge</p>
-                        <p class="text-sm mt-1">Combined with bevel = compound</p>
-                    </div>
-                    <div class="bg-white bg-opacity-20 p-4 rounded-lg">
-                        <p class="font-semibold text-lg mb-2">🟢 Bevel Cut</p>
-                        <p>Angle: 27.8° vertical</p>
-                        <p>Both ends: YES - identical cuts</p>
-                        <p>Affects: Side edge</p>
-                        <p class="text-sm mt-1">Combined with miter = compound</p>
-                    </div>
-                </div>
-                <div class="mt-4 bg-white bg-opacity-20 p-4 rounded-lg">
-                    <p class="font-semibold mb-2 text-lg">🎮 Immersive Walkthrough</p>
-                    <p class="text-sm">Watch the full construction journey! Camera automatically walks through 4 stages every 4 seconds: Single Strut → Joints → Triangle → Star Pattern. See exactly how your compound angles enable the geodesic dome structure!</p>
-                </div>
-                <p class="mt-4 text-center text-sm bg-white bg-opacity-20 p-3 rounded">
-                    💡 <strong>Pro Tip:</strong> Each strut needs BOTH 18° miter AND 27.8° bevel on BOTH ends (compound angle). The immersive walkthrough shows why this precision matters - watch it cycle through all 4 construction stages! All views are interactive!
-                </p>
-            </div>
         </div>
     </div>
 
