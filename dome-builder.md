@@ -85,13 +85,6 @@ permalink: /dome-builder/
                     <p id="assembly-description" class="text-xs text-green-700">Watch how struts come together to form the geodesic dome structure</p>
                 </div>
 
-                <!-- Triangle Type Inventory -->
-                <div id="triangle-inventory" class="bg-blue-50 p-3 rounded mb-3 border-2 border-blue-300 hidden">
-                    <h3 class="text-sm font-bold text-blue-800 mb-2">📦 Triangle Inventory</h3>
-                    <div id="triangle-types-grid" class="grid grid-cols-2 gap-2 text-xs">
-                        <!-- Triangle types will be populated by JavaScript -->
-                    </div>
-                </div>
 
                 <div id="triangle-info" class="bg-yellow-100 p-4 rounded-lg border-2 border-yellow-500 shadow-lg hidden">
                     <p class="text-base font-bold mb-3">📐 Triangle #<span id="triangle-number"></span></p>
@@ -140,6 +133,14 @@ permalink: /dome-builder/
                     class="w-full mb-1"
                 />
                 <span id="strut-height-display" class="text-sm font-bold">90mm</span>
+            </div>
+
+            <!-- Triangle Type Inventory -->
+            <div id="triangle-inventory" class="bg-blue-50 p-3 rounded mb-3 border-2 border-blue-300 hidden">
+                <h3 class="text-sm font-bold text-blue-800 mb-2">📦 Triangle Inventory</h3>
+                <div id="triangle-types-grid" class="grid grid-cols-1 gap-2 text-xs">
+                    <!-- Triangle types will be populated by JavaScript -->
+                </div>
             </div>
 
             <div class="space-y-2">

@@ -380,11 +380,17 @@ class DomeSimulator {
     getMaxStepsForCurrentPhase() {
         switch (this.assemblyPhase) {
             case 0: // Strut Collection Phase
-                return Math.max(1, this.triangleTypes.size);
+                // Calculate total examples to show (3 per type)
+                let totalExamples = 0;
+                this.triangleTypes.forEach((typeData) => {
+                    totalExamples += Math.min(3, typeData.triangles.length);
+                });
+                return Math.max(1, totalExamples - 1);
             case 1: // Triangle Assembly Phase
-                return Math.max(1, this.triangleTypes.size);
+                // Show all triangles one by one from ground up
+                return Math.max(1, this.allTriangles.length - 1);
             case 2: // Component Integration Phase
-                return Math.max(1, this.assemblyLayers.length);
+                return Math.max(1, this.assemblyLayers.length - 1);
             default:
                 return Math.min(this.allTriangles.length, 20);
         }
@@ -694,6 +700,9 @@ class DomeSimulator {
             return avgY > -0.5;
         });
 
+        // Calculate Y range for proper height level calculation
+        this.yRange = this.calculateYRange();
+        
         // Calculate strut types
         this.calculateStrutTypes();
         
@@ -836,7 +845,13 @@ class DomeSimulator {
     
     getTriangleHeightLevel(tri) {
         const avgY = (tri[0].y + tri[1].y + tri[2].y) / 3;
-        const normalizedHeight = (avgY + 3.5) / 7.0; // Normalize to 0-1 range
+        
+        // Find the actual Y range of all triangles for proper normalization
+        if (!this.yRange) {
+            this.yRange = this.calculateYRange();
+        }
+        
+        const normalizedHeight = (avgY - this.yRange.min) / (this.yRange.max - this.yRange.min);
         
         // Divide into 5 levels for assembly layers
         if (normalizedHeight < 0.2) return 0; // Ground level
@@ -844,6 +859,24 @@ class DomeSimulator {
         if (normalizedHeight < 0.6) return 2; // Second ring
         if (normalizedHeight < 0.8) return 3; // Third ring
         return 4; // Top level
+    }
+    
+    calculateYRange() {
+        if (!this.allTriangles || this.allTriangles.length === 0) {
+            return { min: -0.5, max: 3.5 }; // Fallback
+        }
+        
+        let minY = Infinity;
+        let maxY = -Infinity;
+        
+        this.allTriangles.forEach(tri => {
+            tri.forEach(vertex => {
+                minY = Math.min(minY, vertex.y);
+                maxY = Math.max(maxY, vertex.y);
+            });
+        });
+        
+        return { min: minY, max: maxY };
     }
     
     generateTriangleTypeColor(typeSignature) {
@@ -930,34 +963,59 @@ class DomeSimulator {
             return typeData ? typeData.triangles.map(t => t.triangle) : [];
         }
         
-        // Show a few examples of each triangle type
+        // Show progressive examples of each triangle type, building up step by step
         const exampleTriangles = [];
-        let typeIndex = 0;
+        let currentStep = 0;
+        
         this.triangleTypes.forEach((typeData, typeKey) => {
-            if (typeIndex < this.assemblyStep + 1) {
-                // Show first triangle of each type as example
-                if (typeData.triangles.length > 0) {
-                    exampleTriangles.push(typeData.triangles[0].triangle);
+            if (currentStep <= this.assemblyStep && typeData.triangles.length > 0) {
+                // Show multiple examples of each type to demonstrate strut collection
+                const examplesPerType = Math.min(3, typeData.triangles.length);
+                const trianglesToShow = Math.min(examplesPerType, Math.max(1, this.assemblyStep - currentStep + 1));
+                
+                for (let i = 0; i < trianglesToShow; i++) {
+                    if (typeData.triangles[i]) {
+                        exampleTriangles.push(typeData.triangles[i].triangle);
+                    }
                 }
+                currentStep += examplesPerType;
             }
-            typeIndex++;
         });
         
         return exampleTriangles;
     }
     
     getTrianglesForTriangleAssembly() {
-        // Show triangles being assembled by type
+        // Show triangles being assembled triangle by triangle from ground up
         const assembledTriangles = [];
-        let typeIndex = 0;
         
+        // Start with ground triangles and build up layer by layer
+        const allTrianglesByHeight = [];
+        
+        // Collect all triangles with their height levels
         this.triangleTypes.forEach((typeData, typeKey) => {
-            if (typeIndex <= this.assemblyStep) {
-                // Show all triangles of completed types
-                assembledTriangles.push(...typeData.triangles.map(t => t.triangle));
-            }
-            typeIndex++;
+            typeData.triangles.forEach(triangleData => {
+                allTrianglesByHeight.push({
+                    triangle: triangleData.triangle,
+                    heightLevel: triangleData.heightLevel,
+                    type: typeKey
+                });
+            });
         });
+        
+        // Sort by height level (ground first) then by type for consistent ordering
+        allTrianglesByHeight.sort((a, b) => {
+            if (a.heightLevel !== b.heightLevel) {
+                return a.heightLevel - b.heightLevel;
+            }
+            return a.type.localeCompare(b.type);
+        });
+        
+        // Show triangles up to current assembly step
+        const trianglesToShow = Math.min(this.assemblyStep + 1, allTrianglesByHeight.length);
+        for (let i = 0; i < trianglesToShow; i++) {
+            assembledTriangles.push(allTrianglesByHeight[i].triangle);
+        }
         
         return assembledTriangles;
     }
