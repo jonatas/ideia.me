@@ -7,6 +7,107 @@ group: navigation
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
+<style>
+/* Category Bar Graph Styles */
+.category-funnel {
+  margin: 2rem 0;
+}
+
+.funnel-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.funnel-bar {
+  position: relative;
+  margin: 0.75rem auto;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.all-categories-bar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 100%;
+}
+
+.category-bar {
+  min-width: 200px;
+}
+
+.bar-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: white;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  padding: 0 1.5rem;
+}
+
+.bar-label {
+  font-size: 1.1rem;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  letter-spacing: -0.02em;
+}
+
+.bar-count {
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+/* Active state */
+.funnel-bar.active {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.funnel-bar.active .bar-content {
+  color: #fff;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .funnel-container {
+    padding: 0 0.5rem;
+  }
+  
+  .bar-content {
+    padding: 0 1rem;
+    gap: 0.75rem;
+  }
+  
+  .bar-label {
+    font-size: 1rem;
+  }
+  
+  .bar-count {
+    font-size: 0.8rem;
+    min-width: 2rem;
+  }
+  
+  .category-bar {
+    min-width: 150px;
+  }
+  
+  .funnel-bar {
+    height: 45px;
+  }
+}
+</style>
+
 <div class="categories-container">
   <div class="category-header mb-4">
     <h1 class="display-4 mb-3">Explore Content by Category</h1>
@@ -66,12 +167,18 @@ group: navigation
     </div>
   </div>
 
-  <div class="category-filters mb-4">
-    <h3 class="mb-3">Filter by Category:</h3>
-    <div class="category-filter-buttons">
-      <button class="category-filter-btn active" data-category="all">All Categories</button>
+  <div class="category-funnel mb-5">
+    <div class="funnel-container">
+      <div class="funnel-bar all-categories-bar" data-category="all">
+        <div class="bar-content">
+          <span class="bar-label">All Categories</span>
+          <span class="bar-count">{{ site.posts.size }} posts</span>
+        </div>
+      </div>
+      
       {% assign all_categories = site.categories | sort %}
       {% assign categories_list = '' | split: '' %}
+      {% assign all_categories_list = '' | split: '' %}
       {% assign max_posts = 0 %}
       {% for category in all_categories %}
         {% if category[1].size >= 3 and category[1].size > max_posts %}
@@ -82,14 +189,30 @@ group: navigation
         {% for category in all_categories %}
           {% if category[1].size == i %}
             {% assign categories_list = categories_list | push: category %}
+            {% assign all_categories_list = all_categories_list | push: category %}
           {% endif %}
         {% endfor %}
       {% endfor %}
+      {% assign categories_list = categories_list | slice: 0, 10 %}
+      
+      {% assign logo_colors = '#FBBF24,#0EA5E9,#1E3A8A,#EF4444' | split: ',' %}
+      {% assign color_index = 0 %}
       {% for category in categories_list %}
-        <button class="category-filter-btn" data-category="{{ category[0] }}">
-          {{ category[0] | capitalize }}
-          <span class="badge bg-primary rounded-pill">{{ category[1].size }}</span>
-        </button>
+        {% assign current_color = logo_colors[color_index] %}
+        {% assign color_index = color_index | plus: 1 %}
+        {% if color_index >= logo_colors.size %}
+          {% assign color_index = 0 %}
+        {% endif %}
+        
+        {% assign bar_width = category[1].size | times: 100 | divided_by: max_posts %}
+        <div class="funnel-bar category-bar" 
+             data-category="{{ category[0] }}" 
+             style="background-color: {{ current_color }} !important; width: {{ bar_width }}%;">
+          <div class="bar-content">
+            <span class="bar-label">{{ category[0] | capitalize }}</span>
+            <span class="bar-count">{{ category[1].size }} posts</span>
+          </div>
+        </div>
       {% endfor %}
     </div>
   </div>
@@ -102,7 +225,7 @@ group: navigation
             <h5 class="mb-0">Quick Navigation</h5>
           </div>
           <div class="list-group list-group-flush">
-            {% for category in categories_list %}
+            {% for category in all_categories_list %}
               <a href="#{{ category[0] }}-ref" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center category-nav-link">
                 {{ category[0] | capitalize }}
                 <span class="badge bg-primary rounded-pill">{{ category[1].size }}</span>
@@ -122,7 +245,7 @@ group: navigation
         
         <!-- Category-based view (default) -->
         <div id="category-sections">
-          {% for category in categories_list %}
+          {% for category in all_categories_list %}
               <div class="category-section mb-5" id="{{ category[0] }}-ref" data-category="{{ category[0] }}">
                 <div class="card">
                   <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
@@ -538,4 +661,84 @@ group: navigation
     }
   }
 </style>
+
+<script>
+// Funnel Bar Interaction
+document.addEventListener('DOMContentLoaded', function() {
+  const funnelBars = document.querySelectorAll('.funnel-bar');
+  const categorySections = document.querySelectorAll('.category-section');
+  const filteredPosts = document.getElementById('filtered-posts');
+  const categorySectionsContainer = document.getElementById('category-sections');
+  const noResults = document.getElementById('no-results');
+  const allCategoriesBar = document.querySelector('.all-categories-bar');
+  
+  // Add click event listeners to funnel bars
+  funnelBars.forEach(bar => {
+    bar.addEventListener('click', function() {
+      const category = this.getAttribute('data-category');
+      
+      // Remove active class from all bars
+      funnelBars.forEach(b => b.classList.remove('active'));
+      
+      // Add active class to clicked bar
+      this.classList.add('active');
+      
+      // Update "All Categories" bar color based on clicked category
+      if (category !== 'all' && allCategoriesBar) {
+        const clickedBarColor = this.style.backgroundColor;
+        allCategoriesBar.style.background = clickedBarColor;
+        allCategoriesBar.style.transition = 'background 0.3s ease';
+      } else if (category === 'all' && allCategoriesBar) {
+        // Reset to original gradient when "All Categories" is clicked
+        allCategoriesBar.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+      }
+      
+      // Filter content based on category
+      if (category === 'all') {
+        // Show all categories
+        categorySections.forEach(section => {
+          section.style.display = 'block';
+        });
+        filteredPosts.style.display = 'none';
+        categorySectionsContainer.style.display = 'block';
+        noResults.style.display = 'none';
+      } else {
+        // Show only selected category
+        categorySections.forEach(section => {
+          if (section.getAttribute('data-category') === category) {
+            section.style.display = 'block';
+          } else {
+            section.style.display = 'none';
+          }
+        });
+        filteredPosts.style.display = 'none';
+        categorySectionsContainer.style.display = 'block';
+        noResults.style.display = 'none';
+      }
+      
+      // Scroll to the content
+      const contentContainer = document.querySelector('.col-md-9');
+      if (contentContainer) {
+        contentContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+  
+  // Simple hover effect for better UX
+  funnelBars.forEach(bar => {
+    bar.addEventListener('mouseenter', function() {
+      this.style.opacity = '0.9';
+    });
+    
+    bar.addEventListener('mouseleave', function() {
+      this.style.opacity = '1';
+    });
+  });
+  
+  // Initialize with "All Categories" active
+  if (allCategoriesBar) {
+    allCategoriesBar.classList.add('active');
+  }
+});
+</script>
 
