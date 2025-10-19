@@ -1,0 +1,174 @@
+/* Flipable Cards */
+.transformation-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-md);
+  margin: var(--spacing-lg) 0;
+}
+
+.flip-card {
+  background-color: transparent;
+  width: 100%;
+  height: 300px;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.flip-card-front {
+  background: linear-gradient(135deg, var(--logo-golden-yellow), var(--logo-vibrant-light-blue));
+  color: white;
+  border: 2px solid var(--logo-golden-yellow);
+}
+
+.flip-card-back {
+  background: var(--card-bg-color);
+  color: var(--text-color);
+  border: 2px solid var(--border-color);
+  transform: rotateY(180deg);
+  text-align: left;
+}
+
+.card-icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-sm);
+}
+
+.flip-card-front h4 {
+  font-size: 1.5rem;
+  margin: var(--spacing-sm) 0;
+  font-weight: 600;
+}
+
+.flip-card-front p {
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.flip-card-back h4 {
+  font-size: 1.3rem;
+  margin: 0 0 var(--spacing-sm) 0;
+  color: var(--logo-vibrant-light-blue);
+  text-align: center;
+}
+
+.flip-card-back p {
+  line-height: 1.6;
+  margin-bottom: var(--spacing-sm);
+}
+
+.learning-tip {
+  background: rgba(251, 191, 36, 0.1);
+  border-left: 3px solid var(--logo-golden-yellow);
+  padding: var(--spacing-sm);
+  border-radius: 6px;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-xs);
+}
+
+.learning-tip .bi {
+  color: var(--logo-golden-yellow);
+  font-size: 1.1rem;
+  margin-top: 0.1rem;
+  flex-shrink: 0;
+}
+
+.learning-tip span {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  font-style: italic;
+}
+
+/* Word Insight Display */
+.word-insight-detail {
+  padding: var(--spacing-md);
+}
+
+.word-insight-detail h3 {
+  color: var(--logo-golden-yellow);
+  font-size: 1.5rem;
+  margin-bottom: var(--spacing-md);
+  text-align: center;
+}
+
+.insight-section {
+  margin-bottom: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border-left: 3px solid var(--logo-vibrant-light-blue);
+}
+
+.insight-section h4 {
+  color: var(--logo-vibrant-light-blue);
+  margin-bottom: var(--spacing-xs);
+  font-size: 1rem;
+}
+
+.insight-section p {
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Word Badges */
+.word-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.word-badge {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  display: inline-block;
+}
+
+.word-badge:hover {
+  background: var(--logo-golden-yellow);
+  color: var(--bg-color);
+  transform: scale(1.05);
+  border-color: var(--logo-golden-yellow);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .transformation-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .flip-card {
+    height: 250px;
+  }
+}

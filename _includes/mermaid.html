@@ -19,10 +19,10 @@
       padding: 20
     },
     themeVariables: {
-      primaryColor: isDarkMode ? '#5c9eff' : '#4361ee',
+      primaryColor: isDarkMode ? '#FBBF24' : '#0EA5E9',
       primaryTextColor: isDarkMode ? '#f0f2f5' : '#000000',
-      primaryBorderColor: isDarkMode ? '#5c9eff' : '#4361ee',
-      lineColor: isDarkMode ? '#FBBF24' : '#000000',
+      primaryBorderColor: isDarkMode ? '#FBBF24' : '#0EA5E9',
+      lineColor: isDarkMode ? '#EF4444' : '#1E3A8A',
       sectionBkgColor: isDarkMode ? '#1e1e1e' : '#ffffff',
       altSectionBkgColor: isDarkMode ? '#2a2d31' : '#f8f9fa',
       gridColor: isDarkMode ? '#FBBF24' : '#000000',
@@ -132,23 +132,23 @@
     .mermaid .node ellipse,
     .mermaid .node polygon {
       fill: var(--card-bg-color, #1e1e1e) !important;
-      stroke: var(--primary-color, #5c9eff) !important;
+      stroke: var(--primary-color, #FBBF24) !important;
       stroke-width: 2px !important;
     }
     
     .mermaid .edgePath .path {
-      stroke: #FBBF24 !important;
+      stroke: #EF4444 !important;
       stroke-width: 3px !important;
     }
     
     .mermaid .flowchart-link {
-      stroke: #FBBF24 !important;
+      stroke: #EF4444 !important;
       stroke-width: 3px !important;
     }
     
     .mermaid .marker {
-      fill: #FBBF24 !important;
-      stroke: #FBBF24 !important;
+      fill: #EF4444 !important;
+      stroke: #EF4444 !important;
     }
     
     .mermaid .edgeLabel {
@@ -165,13 +165,13 @@
     
     /* Subgraph styling for dark mode */
     .mermaid .cluster rect {
-      fill: rgba(92, 158, 255, 0.1) !important;
-      stroke: var(--primary-color, #5c9eff) !important;
+      fill: rgba(251, 191, 36, 0.1) !important;
+      stroke: var(--primary-color, #FBBF24) !important;
       stroke-width: 1px !important;
     }
     
     .mermaid .cluster text {
-      fill: var(--primary-color, #5c9eff) !important;
+      fill: var(--primary-color, #FBBF24) !important;
       font-weight: 600 !important;
     }
   }
@@ -183,12 +183,12 @@
     .mermaid .node ellipse,
     .mermaid .node polygon {
       fill: var(--card-bg-color, #ffffff) !important;
-      stroke: var(--primary-color, #4361ee) !important;
+      stroke: var(--primary-color, #0EA5E9) !important;
       stroke-width: 2px !important;
     }
     
     .mermaid .edgePath .path {
-      stroke: #000000 !important;
+      stroke: #1E3A8A !important;
       stroke-width: 3px !important;
     }
     
@@ -205,13 +205,13 @@
     }
     
     .mermaid .cluster rect {
-      fill: rgba(67, 97, 238, 0.05) !important;
-      stroke: var(--primary-color, #4361ee) !important;
+      fill: rgba(14, 165, 233, 0.05) !important;
+      stroke: var(--primary-color, #0EA5E9) !important;
       stroke-width: 1px !important;
     }
     
     .mermaid .cluster text {
-      fill: var(--primary-color, #4361ee) !important;
+      fill: var(--primary-color, #0EA5E9) !important;
       font-weight: 600 !important;
     }
   }
