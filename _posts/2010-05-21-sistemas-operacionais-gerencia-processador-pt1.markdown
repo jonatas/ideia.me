@@ -5,7 +5,6 @@ description: Primeira parte sobre gerência de processador em sistemas operacion
 categories: sistemas-operacionais
 ---
 
-{% include JB/setup %}
 
 # Gerência do Processador em Sistemas Operacionais
 

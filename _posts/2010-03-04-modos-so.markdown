@@ -5,7 +5,6 @@ description: Modos de Acesso do SO
 categories: sistemas-operacionais
 ---
 
-{% include JB/setup %}
 # Entendendo os Modos de Acesso do Sistema Operacional
 
 O sistema operacional é dividido em dois modos básicos, sendo estes o modo Kernel e o modo Usuário. Esta divisão permite que os aplicativos sejam executados com segurança.

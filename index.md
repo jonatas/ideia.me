@@ -1,7 +1,6 @@
 ---
 layout: page
 ---
-{% include JB/setup %}
 
 <!-- Hero section with glass card styling -->
 <div class="hero-section glass-card mb-5 p-4 rounded">
