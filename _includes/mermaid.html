@@ -1,5 +1,5 @@
 <!-- Mermaid.js Support -->
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
 <script>
   // Initialize Mermaid with configuration based on color scheme
   const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ||
@@ -7,47 +7,57 @@
                      document.body.classList.contains('dark-mode');
   
   mermaid.initialize({ 
-    startOnLoad: false,
+    startOnLoad: false,  // Don't auto-render on load
     theme: 'base',
     securityLevel: 'loose',
     flowchart: {
       useMaxWidth: true,
       htmlLabels: true,
-      curve: 'basis',
-      nodeSpacing: 40,
-      rankSpacing: 60,
-      padding: 20
+      curve: 'basis'
     },
     themeVariables: {
       primaryColor: isDarkMode ? '#FBBF24' : '#0EA5E9',
       primaryTextColor: isDarkMode ? '#f0f2f5' : '#000000',
       primaryBorderColor: isDarkMode ? '#FBBF24' : '#0EA5E9',
       lineColor: isDarkMode ? '#EF4444' : '#1E3A8A',
-      sectionBkgColor: isDarkMode ? '#1e1e1e' : '#ffffff',
-      altSectionBkgColor: isDarkMode ? '#2a2d31' : '#f8f9fa',
-      gridColor: isDarkMode ? '#FBBF24' : '#000000',
-      tertiaryColor: isDarkMode ? '#2a2d31' : '#f8f9fa',
+      secondaryColor: isDarkMode ? '#2a2d31' : '#f8f9fa',
+      tertiaryColor: isDarkMode ? '#1e1e1e' : '#ffffff',
       background: isDarkMode ? '#1e1e1e' : '#ffffff',
       mainBkg: isDarkMode ? '#1e1e1e' : '#ffffff',
       secondBkg: isDarkMode ? '#2a2d31' : '#f8f9fa',
-      tertiaryBkg: isDarkMode ? '#1e1e1e' : '#ffffff',
+      lineColor: isDarkMode ? '#EF4444' : '#1E3A8A',
+      textColor: isDarkMode ? '#f0f2f5' : '#000000',
       edgeLabelBackground: isDarkMode ? '#1e1e1e' : '#ffffff'
     }
   });
   
-  // Convert code blocks with language-mermaid to mermaid diagrams
-  document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('pre > code.language-mermaid').forEach((codeBlock) => {
-      const mermaidCode = codeBlock.textContent;
-      const mermaidDiv = document.createElement('div');
-      mermaidDiv.className = 'mermaid';
-      mermaidDiv.textContent = mermaidCode;
-      codeBlock.parentElement.replaceWith(mermaidDiv);
-    });
-    
-    // Initialize and render all mermaid diagrams
-    mermaid.run();
-  });
+  // Function to render Mermaid diagrams in visible elements only
+  window.renderVisibleMermaid = function() {
+    // Find all active/visible chapters
+    const activeChapter = document.querySelector('.chapter.active');
+    if (activeChapter) {
+      const mermaidDivs = activeChapter.querySelectorAll('.mermaid:not([data-processed])');
+      mermaidDivs.forEach((element, index) => {
+        const id = `mermaid-${Date.now()}-${index}`;
+        element.id = id;
+        try {
+          mermaid.render(id + '-svg', element.textContent).then(result => {
+            element.innerHTML = result.svg;
+            element.setAttribute('data-processed', 'true');
+          });
+        } catch (error) {
+          console.error('Mermaid rendering error:', error);
+        }
+      });
+    }
+  };
+  
+  // Render visible Mermaid diagrams when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', window.renderVisibleMermaid);
+  } else {
+    window.renderVisibleMermaid();
+  }
 </script>
 
 <!-- Mermaid diagram styling -->

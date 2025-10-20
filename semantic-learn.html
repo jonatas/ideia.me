@@ -23,10 +23,9 @@ title: Interactive Semantic Fields Learning Journey
 <div class="semantic-learn-container">
   
   <!-- Navigation Sidebar -->
-  <nav class="chapter-nav">
+  <nav class="chapter-nav" id="chapter-nav">
     <div class="nav-header">
       <h2>Chapters</h2>
-      <button class="nav-toggle" id="nav-toggle"><i class="bi bi-list"></i></button>
     </div>
     <ul class="chapter-list">
       <li class="chapter-item active" data-chapter="1">
@@ -64,6 +63,9 @@ title: Interactive Semantic Fields Learning Journey
     <!-- Chapter 1: Rewiring the Mind -->
     <section class="chapter active" id="chapter-1">
       <div class="chapter-header">
+        <div class="chapter-icon">
+          <lottie-player src="/images/icons/brain/physics.json" background="transparent" speed="1" style="width: 120px; height: 120px; margin: 0 auto 20px;" loop autoplay></lottie-player>
+        </div>
         <span class="chapter-label">Chapter 1</span>
         <h1 class="chapter-title-main">Rewiring the Mind</h1>
         <p class="chapter-subtitle">The Language of Change</p>
@@ -87,7 +89,10 @@ title: Interactive Semantic Fields Learning Journey
 
       <!-- The Inner Landscape -->
       <div class="content-card">
-        <h2>The Inner Landscape</h2>
+        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+          <lottie-player src="/images/icons/general/connection.json" background="transparent" speed="1" style="width: 80px; height: 80px;" loop hover></lottie-player>
+          <h2 style="margin: 0;">The Inner Landscape</h2>
+        </div>
         <p>Imagine your mind as a vast, unexplored territory. Every thought you think, every word you speak, creates pathways through this landscape. Some paths are well-worn highways of habit, while others are barely visible trails of possibility.</p>
         
         <p>The words we use internally create neural pathways that become increasingly entrenched with repetition. These pathways influence not only our thoughts but our emotions, behaviors, and ultimately, our life experiences.</p>
@@ -124,6 +129,9 @@ title: Interactive Semantic Fields Learning Journey
                 <h4>Recognition</h4>
               </div>
               <div class="flip-card-back">
+                <div class="card-icon">
+                  <lottie-player src="/images/icons/general/barrier.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop autoplay></lottie-player>
+                </div>
                 <h4>Recognition</h4>
                 <p><strong>The Analysis:</strong> Identify patterns that limit your potential. Recognize which words create barriers and which open possibilities.</p>
                 <div class="learning-tip">
@@ -141,6 +149,9 @@ title: Interactive Semantic Fields Learning Journey
                 <h4>Creativity</h4>
               </div>
               <div class="flip-card-back">
+                <div class="card-icon">
+                  <lottie-player src="/images/icons/general/growth.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop autoplay></lottie-player>
+                </div>
                 <h4>Creativity</h4>
                 <p><strong>The Innovation:</strong> Craft new words that serve your growth. Replace limiting language with empowering alternatives that resonate with your goals.</p>
                 <div class="learning-tip">
@@ -249,13 +260,17 @@ title: Interactive Semantic Fields Learning Journey
       </div>
 
       <div class="chapter-navigation">
-        <button class="btn-primary" onclick="SemanticLearn.goToChapter(2)">Continue to Chapter 2 →</button>
+        <button class="btn-primary" onclick="SemanticLearn.completeChapter(1)">Complete Chapter 1 →</button>
       </div>
+
     </section>
 
     <!-- Chapter 2: Neovocabularies -->
     <section class="chapter" id="chapter-2">
       <div class="chapter-header">
+        <div class="chapter-icon">
+          <lottie-player src="/images/icons/emotions/emotional-intelligence.json" background="transparent" speed="1" style="width: 120px; height: 120px; margin: 0 auto 20px;" loop autoplay></lottie-player>
+        </div>
         <span class="chapter-label">Chapter 2</span>
         <h1 class="chapter-title-main">Neovocabularies and Neologisms</h1>
         <p class="chapter-subtitle">Building Your Personal Language of Transformation</p>
@@ -281,13 +296,14 @@ title: Interactive Semantic Fields Learning Journey
         <p>The foundation of any neo-vocabulary begins with understanding your emotional landscape. We all experience six core emotions that drive our behavior and shape our thoughts.</p>
         
         <h3>The Six Core Emotions</h3>
-        <p class="emotion-instruction">Click on any emotion card to explore its deeper meaning and vocabulary patterns:</p>
+        <p class="emotion-instruction">Explore the deeper meaning and vocabulary patterns of each emotion:</p>
         <div class="emotion-grid">
-          <div class="emotion-card" onclick="expandEmotion(this, 'joy')">
-            <div class="emotion-icon"><i class="bi bi-emoji-smile"></i></div>
+          <div class="emotion-card">
+            <div class="emotion-icon">
+              <lottie-player src="/images/icons/emotions/joy.json" background="transparent" speed="1" style="width: 80px; height: 80px;" loop hover></lottie-player>
+            </div>
             <h4>Joy</h4>
-            <p class="emotion-summary">The feeling of pleasure, happiness, and contentment that expands possibilities</p>
-            <div class="emotion-details" style="display: none;">
+            <div class="emotion-details">
               <div class="emotion-section">
                 <h5>Understanding Joy</h5>
                 <p>Joy is the emotional state of well-being, success, and good fortune. It's characterized by feelings of contentment, satisfaction, and pleasure. Unlike fleeting happiness, joy can be a deeper, more enduring state.</p>
@@ -313,11 +329,12 @@ title: Interactive Semantic Fields Learning Journey
             </div>
           </div>
           
-          <div class="emotion-card" onclick="expandEmotion(this, 'fear')">
-            <div class="emotion-icon"><i class="bi bi-emoji-frown"></i></div>
+          <div class="emotion-card">
+            <div class="emotion-icon">
+              <lottie-player src="/images/icons/emotions/fear.json" background="transparent" speed="1" style="width: 80px; height: 80px;" loop hover></lottie-player>
+            </div>
             <h4>Fear</h4>
-            <p class="emotion-summary">The protective response to perceived danger that can limit or safeguard us</p>
-            <div class="emotion-details" style="display: none;">
+            <div class="emotion-details">
               <div class="emotion-section">
                 <h5>Understanding Fear</h5>
                 <p>Fear is a primal emotion designed to protect us from danger. It activates our survival responses and heightens our awareness. While fear can be limiting, it can also be informative when understood and honored.</p>
@@ -343,11 +360,12 @@ title: Interactive Semantic Fields Learning Journey
             </div>
           </div>
           
-          <div class="emotion-card" onclick="expandEmotion(this, 'anger')">
-            <div class="emotion-icon"><i class="bi bi-fire"></i></div>
+          <div class="emotion-card">
+            <div class="emotion-icon">
+              <lottie-player src="/images/icons/emotions/anger.json" background="transparent" speed="1" style="width: 80px; height: 80px;" loop hover></lottie-player>
+            </div>
             <h4>Anger</h4>
-            <p class="emotion-summary">The energizing force that signals boundaries and drives change</p>
-            <div class="emotion-details" style="display: none;">
+            <div class="emotion-details">
               <div class="emotion-section">
                 <h5>Understanding Anger</h5>
                 <p>Anger is a powerful emotion that arises when our boundaries are violated or our values are challenged. It contains valuable information about what matters to us and can be a catalyst for necessary change.</p>
@@ -373,11 +391,12 @@ title: Interactive Semantic Fields Learning Journey
             </div>
           </div>
           
-          <div class="emotion-card" onclick="expandEmotion(this, 'sadness')">
-            <div class="emotion-icon"><i class="bi bi-cloud-rain"></i></div>
+          <div class="emotion-card">
+            <div class="emotion-icon">
+              <lottie-player src="/images/icons/emotions/sadness.json" background="transparent" speed="1" style="width: 80px; height: 80px;" loop hover></lottie-player>
+            </div>
             <h4>Sadness</h4>
-            <p class="emotion-summary">The reflective state that processes loss and facilitates healing</p>
-            <div class="emotion-details" style="display: none;">
+            <div class="emotion-details">
               <div class="emotion-section">
                 <h5>Understanding Sadness</h5>
                 <p>Sadness is a natural response to loss, disappointment, or unfulfilled needs. It allows us to process difficult experiences, release what we're holding, and make space for renewal. Sadness is essential for healing.</p>
@@ -403,11 +422,12 @@ title: Interactive Semantic Fields Learning Journey
             </div>
           </div>
           
-          <div class="emotion-card" onclick="expandEmotion(this, 'surprise')">
-            <div class="emotion-icon"><i class="bi bi-lightning"></i></div>
+          <div class="emotion-card">
+            <div class="emotion-icon">
+              <lottie-player src="/images/icons/emotions/surprise.json" background="transparent" speed="1" style="width: 80px; height: 80px;" loop hover></lottie-player>
+            </div>
             <h4>Surprise</h4>
-            <p class="emotion-summary">The momentary reset that opens us to new information and possibilities</p>
-            <div class="emotion-details" style="display: none;">
+            <div class="emotion-details">
               <div class="emotion-section">
                 <h5>Understanding Surprise</h5>
                 <p>Surprise is a brief, powerful emotion that occurs when we encounter something unexpected. It serves as a mental reset button, interrupting our patterns and opening us to new information and perspectives.</p>
@@ -433,11 +453,12 @@ title: Interactive Semantic Fields Learning Journey
             </div>
           </div>
           
-          <div class="emotion-card" onclick="expandEmotion(this, 'disgust')">
-            <div class="emotion-icon"><i class="bi bi-x-circle"></i></div>
+          <div class="emotion-card">
+            <div class="emotion-icon">
+              <lottie-player src="/images/icons/emotions/swear.json" background="transparent" speed="1" style="width: 80px; height: 80px;" loop hover></lottie-player>
+            </div>
             <h4>Disgust</h4>
-            <p class="emotion-summary">The protective response that helps us avoid what's harmful or toxic</p>
-            <div class="emotion-details" style="display: none;">
+            <div class="emotion-details">
               <div class="emotion-section">
                 <h5>Understanding Disgust</h5>
                 <p>Disgust is a protective emotion that helps us avoid things that may be harmful, toxic, or violate our core values. It can be physical (related to taste, smell) or moral (related to behaviors or situations).</p>
@@ -534,7 +555,23 @@ title: Interactive Semantic Fields Learning Journey
 
       <!-- Affirmations and Symbols -->
       <div class="content-card">
-        <h2>Affirmation Phrases, Symbols, and Drawings</h2>
+        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+          <div class="affirmation-logo">
+            <svg width="80" height="80" viewBox="0 0 80 80" style="margin-right: 20px;">
+              <!-- Outer arc -->
+              <path d="M20 20 A30 30 0 0 1 60 20" stroke="#FBBF24" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <!-- Inner circle -->
+              <circle cx="50" cy="35" r="12" fill="#EF4444"/>
+            </svg>
+          </div>
+          <div class="affirmation-title">
+            <span class="title-word affirmation">Affirmation</span>
+            <span class="title-word phrases">Phrases,</span>
+            <span class="title-word symbols">Symbols,</span>
+            <span class="title-word and">and</span>
+            <span class="title-word drawings">Drawings</span>
+          </div>
+        </div>
         <p>Words become most powerful when paired with symbols and visual representations that anchor them in your consciousness.</p>
         
         <h3>Creating Effective Affirmations</h3>
@@ -585,31 +622,201 @@ title: Interactive Semantic Fields Learning Journey
           <div class="sense-card">
             <div class="sense-icon"><i class="bi bi-eye"></i></div>
             <h4>Visual</h4>
-            <p>What images represent your goals? Create vision boards, color associations, or meaningful imagery that embodies your transformation.</p>
+            <div class="sense-details">
+              <div class="sense-section">
+                <h5>Visual Vocabulary Techniques</h5>
+                <p>Visual language anchors your neo-vocabulary through imagery, color, and symbolic representation. This creates powerful mental associations that reinforce your transformation.</p>
+              </div>
+              <div class="sense-section">
+                <h5>Color Associations</h5>
+                <ul>
+                  <li><strong>Blue:</strong> Calm, trust, stability → "I am grounded in peace"</li>
+                  <li><strong>Green:</strong> Growth, renewal, harmony → "I am growing through this"</li>
+                  <li><strong>Gold:</strong> Success, wisdom, achievement → "I am embracing my potential"</li>
+                  <li><strong>White:</strong> Clarity, purity, new beginnings → "I am starting fresh"</li>
+                </ul>
+              </div>
+              <div class="sense-section">
+                <h5>Vision Board Elements</h5>
+                <p>Create visual anchors for your neo-vocabulary:</p>
+                <ul>
+                  <li>Images that represent your desired states</li>
+                  <li>Symbols that embody your transformation</li>
+                  <li>Words written in colors that evoke the feeling</li>
+                  <li>Photos of people who inspire your growth</li>
+                </ul>
+              </div>
+              <div class="sense-section">
+                <h5>Practice Exercise</h5>
+                <p>Choose three colors that represent your transformation journey. For each color, create a visual association with a key word from your neo-vocabulary. Notice how the color enhances the word's impact.</p>
+              </div>
+            </div>
           </div>
           
           <div class="sense-card">
             <div class="sense-icon"><i class="bi bi-music-note"></i></div>
             <h4>Auditory</h4>
-            <p>What sounds symbolize your journey? Music, nature sounds, or specific tones can become triggers for desired mental states.</p>
+            <div class="sense-details">
+              <div class="sense-section">
+                <h5>Sound as Vocabulary Anchor</h5>
+                <p>Sound has a unique ability to bypass conscious thought and create direct emotional and physiological responses. Use this power to anchor your neo-vocabulary.</p>
+              </div>
+              <div class="sense-section">
+                <h5>Nature Sound Associations</h5>
+                <ul>
+                  <li><strong>Ocean waves:</strong> Flow, rhythm, vastness → "I am flowing with life"</li>
+                  <li><strong>Rain:</strong> Cleansing, renewal, growth → "I am washing away old patterns"</li>
+                  <li><strong>Birdsong:</strong> Joy, freedom, new beginnings → "I am celebrating my freedom"</li>
+                  <li><strong>Wind through trees:</strong> Flexibility, adaptation, strength → "I am bending without breaking"</li>
+                </ul>
+              </div>
+              <div class="sense-section">
+                <h5>Musical Vocabulary</h5>
+                <p>Create soundtracks for different aspects of your neo-vocabulary:</p>
+                <ul>
+                  <li><strong>Morning Activation:</strong> Upbeat, energizing music for starting your day</li>
+                  <li><strong>Focus & Clarity:</strong> Instrumental music that enhances concentration</li>
+                  <li><strong>Evening Reflection:</strong> Calm, contemplative sounds for processing</li>
+                  <li><strong>Transformation:</strong> Music that represents your growth journey</li>
+                </ul>
+              </div>
+              <div class="sense-section">
+                <h5>Voice and Tone</h5>
+                <p>Notice how your internal voice sounds when using different vocabulary. Practice speaking your neo-vocabulary aloud with different tones to find what resonates most powerfully.</p>
+              </div>
+              <div class="sense-section">
+                <h5>Practice Exercise</h5>
+                <p>Create a 5-minute playlist that embodies your transformation. Choose songs that musically represent your journey from limitation to empowerment. Listen while repeating your key neo-vocabulary words.</p>
+              </div>
+            </div>
           </div>
           
           <div class="sense-card">
             <div class="sense-icon"><i class="bi bi-wind"></i></div>
             <h4>Olfactory</h4>
-            <p>What scents represent freshness or new beginnings? The smell of mint, lavender, or fresh air can anchor new vocabulary patterns.</p>
+            <div class="sense-details">
+              <div class="sense-section">
+                <h5>The Power of Scent Memory</h5>
+                <p>Smell is directly connected to memory and emotion centers in the brain. This makes it one of the most powerful anchors for vocabulary transformation.</p>
+              </div>
+              <div class="sense-section">
+                <h5>Transformation Scents</h5>
+                <ul>
+                  <li><strong>Lavender:</strong> Calm, peace, healing → "I am cultivating inner peace"</li>
+                  <li><strong>Mint:</strong> Freshness, clarity, renewal → "I am starting with fresh perspective"</li>
+                  <li><strong>Eucalyptus:</strong> Cleansing, breathing, opening → "I am opening to new possibilities"</li>
+                  <li><strong>Rose:</strong> Love, self-compassion, beauty → "I am loving myself through growth"</li>
+                  <li><strong>Citrus:</strong> Energy, optimism, brightness → "I am embracing my bright future"</li>
+                </ul>
+              </div>
+              <div class="sense-section">
+                <h5>Creating Scent Anchors</h5>
+                <p>Develop specific scent associations for your neo-vocabulary:</p>
+                <ul>
+                  <li>Use essential oils during meditation with your key words</li>
+                  <li>Create a "transformation blend" that represents your journey</li>
+                  <li>Associate different scents with different emotional states</li>
+                  <li>Use scents to trigger positive vocabulary patterns</li>
+                </ul>
+              </div>
+              <div class="sense-section">
+                <h5>Environmental Scent Design</h5>
+                <p>Design your environment with scents that support your vocabulary transformation. Consider how different spaces can have different aromatic profiles that reinforce your desired states.</p>
+              </div>
+              <div class="sense-section">
+                <h5>Practice Exercise</h5>
+                <p>Choose one scent that represents your transformation. Spend 5 minutes each morning inhaling this scent while repeating your most important neo-vocabulary words. Notice how the scent enhances the word's impact.</p>
+              </div>
+            </div>
           </div>
           
           <div class="sense-card">
             <div class="sense-icon"><i class="bi bi-cup-hot"></i></div>
             <h4>Gustatory</h4>
-            <p>What tastes symbolize nourishment or renewal? Associate empowering words with specific flavors that ground you in the present.</p>
+            <div class="sense-details">
+              <div class="sense-section">
+                <h5>Taste as Transformation Anchor</h5>
+                <p>Flavor can be a powerful anchor for vocabulary transformation. The act of tasting engages us fully in the present moment, making it ideal for grounding new language patterns.</p>
+              </div>
+              <div class="sense-section">
+                <h5>Flavor Associations</h5>
+                <ul>
+                  <li><strong>Sweet:</strong> Joy, satisfaction, celebration → "I am savoring my progress"</li>
+                  <li><strong>Bitter:</strong> Strength, resilience, growth → "I am growing stronger through challenges"</li>
+                  <li><strong>Spicy:</strong> Energy, passion, excitement → "I am igniting my potential"</li>
+                  <li><strong>Savory:</strong> Grounding, nourishment, stability → "I am nourishing my growth"</li>
+                  <li><strong>Fresh:</strong> Clarity, renewal, vitality → "I am embracing fresh perspectives"</li>
+                </ul>
+              </div>
+              <div class="sense-section">
+                <h5>Mindful Eating Vocabulary</h5>
+                <p>Transform your relationship with food and your vocabulary simultaneously:</p>
+                <ul>
+                  <li>Practice saying gratitude phrases while eating</li>
+                  <li>Use meal times to reinforce positive vocabulary</li>
+                  <li>Associate specific foods with specific empowering words</li>
+                  <li>Create mindful eating rituals that include neo-vocabulary</li>
+                </ul>
+              </div>
+              <div class="sense-section">
+                <h5>Beverage Rituals</h5>
+                <p>Create intentional beverage rituals that anchor your vocabulary:</p>
+                <ul>
+                  <li><strong>Morning tea:</strong> Set intention for the day with specific words</li>
+                  <li><strong>Water breaks:</strong> Use hydration as a moment for vocabulary reinforcement</li>
+                  <li><strong>Evening infusion:</strong> Reflect on growth with calming words</li>
+                </ul>
+              </div>
+              <div class="sense-section">
+                <h5>Practice Exercise</h5>
+                <p>Choose one meal this week to eat mindfully while practicing your neo-vocabulary. Notice the textures, flavors, and how they connect to your transformation words. What tastes represent your journey?</p>
+              </div>
+            </div>
           </div>
           
           <div class="sense-card">
             <div class="sense-icon"><i class="bi bi-hand-index"></i></div>
             <h4>Kinesthetic</h4>
-            <p>What physical sensations accompany your neo-vocabulary? Notice how words feel in your body—lightness, warmth, expansion.</p>
+            <div class="sense-details">
+              <div class="sense-section">
+                <h5>Body as Vocabulary Compass</h5>
+                <p>Your body is the most immediate feedback system for vocabulary effectiveness. Pay attention to how different words feel physically—this guides you toward your most powerful neo-vocabulary.</p>
+              </div>
+              <div class="sense-section">
+                <h5>Physical Sensation Vocabulary</h5>
+                <ul>
+                  <li><strong>Expansion:</strong> Chest opening, shoulders relaxing → "I am opening to possibilities"</li>
+                  <li><strong>Grounding:</strong> Feet firmly planted, spine aligned → "I am rooted in my strength"</li>
+                  <li><strong>Flow:</strong> Movement without resistance → "I am flowing with life's rhythm"</li>
+                  <li><strong>Power:</strong> Core engagement, confident posture → "I am accessing my inner power"</li>
+                  <li><strong>Peace:</strong> Muscles releasing, breath deepening → "I am cultivating inner peace"</li>
+                </ul>
+              </div>
+              <div class="sense-section">
+                <h5>Movement Anchors</h5>
+                <p>Create physical movements that reinforce your vocabulary:</p>
+                <ul>
+                  <li><strong>Breath practices:</strong> Inhale empowerment, exhale limitation</li>
+                  <li><strong>Gesture associations:</strong> Specific hand movements for key words</li>
+                  <li><strong>Posture shifts:</strong> Body positions that embody transformation</li>
+                  <li><strong>Walking meditations:</strong> Movement that reinforces vocabulary</li>
+                </ul>
+              </div>
+              <div class="sense-section">
+                <h5>Body Scanning Vocabulary</h5>
+                <p>Practice body scanning while using your neo-vocabulary:</p>
+                <ul>
+                  <li>Notice tension areas and use releasing words</li>
+                  <li>Feel energy centers and use activating words</li>
+                  <li>Observe posture and use aligning words</li>
+                  <li>Sense breath and use centering words</li>
+                </ul>
+              </div>
+              <div class="sense-section">
+                <h5>Practice Exercise</h5>
+                <p>Stand in a comfortable position and repeat your key neo-vocabulary words. Notice how each word affects your posture, breathing, and muscle tension. Which words make you feel most empowered physically?</p>
+              </div>
+            </div>
           </div>
         </div>
         
@@ -625,7 +832,10 @@ title: Interactive Semantic Fields Learning Journey
 
       <!-- Turning Words into Mantras -->
       <div class="content-card">
-        <h2>Turning Words into Mantras</h2>
+        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+          <lottie-player src="/images/icons/general/notebook.json" background="transparent" speed="1" style="width: 80px; height: 80px;" loop hover></lottie-player>
+          <h2 style="margin: 0;">Turning Words into Mantras</h2>
+        </div>
         <p>A mantra is more than a repeated phrase—it's a tool for embedding new neural pathways and transforming your inner dialogue.</p>
         
         <h3>The Power of Repetition</h3>
@@ -767,220 +977,673 @@ title: Interactive Semantic Fields Learning Journey
 
       <div class="chapter-navigation">
         <button class="btn-secondary" onclick="SemanticLearn.goToChapter(1)">← Previous Chapter</button>
-        <button class="btn-primary" onclick="SemanticLearn.goToChapter(3)">Continue to Chapter 3 →</button>
+        <button class="btn-primary" onclick="SemanticLearn.completeChapter(2)">Complete Chapter 2 →</button>
       </div>
+
     </section>
 
     <!-- Chapter 3: NVC Case Study -->
     <section class="chapter" id="chapter-3">
       <div class="chapter-header">
+        <div class="chapter-icon">
+          <lottie-player src="/images/icons/communication/communication.json" background="transparent" speed="1" style="width: 120px; height: 120px; margin: 0 auto 20px;" loop autoplay></lottie-player>
+        </div>
         <span class="chapter-label">Chapter 3</span>
-        <h1 class="chapter-title-main">NVC - A Semantic Field Case Study</h1>
-        <p class="chapter-subtitle">Nonviolent Communication</p>
+        <h1 class="chapter-title-main">Nonviolent Communication</h1>
+        <p class="chapter-subtitle">A Semantic Field Case Study</p>
       </div>
 
+      <!-- Introduction -->
       <div class="content-card">
-        <h2>The Essence of NVC</h2>
-        <p>Nonviolent Communication (NVC) represents a transformative approach to reshaping our language. It's built on four key components:</p>
+        <h2>Introduction to NVC</h2>
+        <p>Nonviolent Communication (NVC), developed by Marshall Rosenberg, represents one of the most powerful applications of semantic field transformation. It's not just a communication technique—it's a complete vocabulary shift that transforms how we perceive and interact with ourselves and others.</p>
+        
+        <div class="insight-box">
+          <div class="insight-icon"><i class="bi bi-lightbulb"></i></div>
+          <div class="insight-content">
+            <h4>Core Insight</h4>
+            <p>NVC demonstrates that by changing the language patterns we use in conflict and connection, we fundamentally change the quality of our relationships and our inner peace.</p>
+          </div>
+        </div>
+        
+        <p>This chapter explores NVC as a living example of semantic field theory in action, showing how a structured vocabulary shift can create profound transformation in human connection.</p>
+      </div>
+
+      <!-- The Four Components -->
+      <div class="content-card">
+        <h2>The Four Components of NVC</h2>
+        <p>NVC is built on four key components that form a complete semantic system for compassionate communication:</p>
         
         <div class="nvc-components">
           <div class="nvc-card">
             <div class="nvc-number">1</div>
             <h3>Observations</h3>
-            <p>What we see/hear without evaluation</p>
+            <p>What we see or hear without evaluation or interpretation</p>
+            <div class="nvc-detail">
+              <strong>Key shift:</strong> From judgment to neutral description
+            </div>
           </div>
           <div class="nvc-card">
             <div class="nvc-number">2</div>
             <h3>Feelings</h3>
-            <p>Our emotions in response</p>
+            <p>Our emotional response to what we observe</p>
+            <div class="nvc-detail">
+              <strong>Key shift:</strong> From blame to emotional awareness
+            </div>
           </div>
           <div class="nvc-card">
             <div class="nvc-number">3</div>
             <h3>Needs</h3>
-            <p>The underlying needs creating feelings</p>
+            <p>The universal human needs creating our feelings</p>
+            <div class="nvc-detail">
+              <strong>Key shift:</strong> From demand to vulnerability
+            </div>
           </div>
           <div class="nvc-card">
             <div class="nvc-number">4</div>
             <h3>Requests</h3>
-            <p>Concrete actions to meet needs</p>
+            <p>Clear, positive actions that might meet our needs</p>
+            <div class="nvc-detail">
+              <strong>Key shift:</strong> From control to collaboration
+            </div>
           </div>
         </div>
       </div>
 
+      <!-- Observations: The Foundation -->
       <div class="content-card">
-        <h2>NVC Communication Flow</h2>
+        <h2>Component 1: Observations</h2>
+        <p>The first semantic shift in NVC is learning to distinguish between observation and evaluation. This seemingly simple distinction transforms how we perceive reality.</p>
+        
+        <h3>Observation vs. Evaluation</h3>
+        <div class="comparison-examples">
+          <div class="comparison-row">
+            <div class="comparison-label">Evaluation (judgment)</div>
+            <div class="comparison-text">"You're always late"</div>
+            <div class="comparison-arrow"><i class="bi bi-arrow-right"></i></div>
+            <div class="comparison-label">Observation (neutral)</div>
+            <div class="comparison-text">"You arrived 20 minutes after we agreed to meet"</div>
+          </div>
+          
+          <div class="comparison-row">
+            <div class="comparison-label">Evaluation</div>
+            <div class="comparison-text">"You don't care about this project"</div>
+            <div class="comparison-arrow"><i class="bi bi-arrow-right"></i></div>
+            <div class="comparison-label">Observation</div>
+            <div class="comparison-text">"I noticed you haven't attended the last three meetings"</div>
+          </div>
+          
+          <div class="comparison-row">
+            <div class="comparison-label">Evaluation</div>
+            <div class="comparison-text">"You're being defensive"</div>
+            <div class="comparison-arrow"><i class="bi bi-arrow-right"></i></div>
+            <div class="comparison-label">Observation</div>
+            <div class="comparison-text">"When I shared feedback, your voice got louder and you crossed your arms"</div>
+          </div>
+        </div>
+        
+        <p><strong>Why this matters:</strong> Evaluations trigger defensiveness. Observations create space for dialogue. This vocabulary shift alone can de-escalate most conflicts.</p>
+      </div>
+
+      <!-- Feelings Vocabulary -->
+      <div class="content-card">
+        <h2>Component 2: Feelings</h2>
+        <p>NVC teaches us to develop a rich vocabulary of feelings, distinguishing between genuine emotions and thoughts disguised as feelings.</p>
+        
+        <h3>Genuine Feelings vs. Pseudo-Feelings</h3>
+        <p>Many words we think express feelings are actually interpretations, judgments, or thoughts about what others are doing to us:</p>
+        
+        <div class="feeling-categories">
+          <div class="feeling-category">
+            <h4><i class="bi bi-x-circle"></i> Pseudo-Feelings (contain judgment)</h4>
+            <ul>
+              <li>"I feel <em>ignored</em>" (interpretation of other's behavior)</li>
+              <li>"I feel <em>manipulated</em>" (judgment of other's intent)</li>
+              <li>"I feel <em>rejected</em>" (interpretation of other's actions)</li>
+              <li>"I feel <em>misunderstood</em>" (judgment about other's perception)</li>
+            </ul>
+          </div>
+          
+          <div class="feeling-category">
+            <h4><i class="bi bi-check-circle"></i> Genuine Feelings (pure emotion)</h4>
+            <ul>
+              <li>"I feel <em>sad</em>" (emotional state)</li>
+              <li>"I feel <em>frustrated</em>" (emotional response)</li>
+              <li>"I feel <em>hurt</em>" (emotional experience)</li>
+              <li>"I feel <em>confused</em>" (emotional state)</li>
+            </ul>
+          </div>
+        </div>
+        
+        <h3>Expanding Your Feelings Vocabulary</h3>
+        <p>NVC encourages developing nuanced emotional language:</p>
+        <div class="feelings-spectrum">
+          <div class="spectrum-group">
+            <strong>When needs ARE met:</strong>
+            <span>joyful, grateful, peaceful, confident, inspired, hopeful, relieved, content, energized, curious</span>
+          </div>
+          <div class="spectrum-group">
+            <strong>When needs are NOT met:</strong>
+            <span>frustrated, anxious, disappointed, lonely, irritated, overwhelmed, discouraged, worried, tense, sad</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Needs: The Heart of NVC -->
+      <div class="content-card">
+        <h2>Component 3: Needs</h2>
+        <p>Needs are universal human values that drive all our emotions and behaviors. Understanding needs is the key to empathy and connection.</p>
+        
+        <h3>Universal Human Needs</h3>
+        <div class="needs-categories">
+          <div class="needs-group">
+            <h4>Connection</h4>
+            <p>acceptance, affection, appreciation, belonging, closeness, communication, companionship, empathy, inclusion, intimacy, love, respect, support, trust, understanding</p>
+          </div>
+          
+          <div class="needs-group">
+            <h4>Physical Well-Being</h4>
+            <p>air, food, movement, rest, safety, shelter, touch, water</p>
+          </div>
+          
+          <div class="needs-group">
+            <h4>Autonomy</h4>
+            <p>choice, freedom, independence, space, spontaneity</p>
+          </div>
+          
+          <div class="needs-group">
+            <h4>Meaning</h4>
+            <p>awareness, celebration, challenge, clarity, competence, consciousness, contribution, creativity, discovery, efficacy, growth, hope, learning, mourning, participation, purpose, self-expression, stimulation, understanding</p>
+          </div>
+          
+          <div class="needs-group">
+            <h4>Peace</h4>
+            <p>beauty, communion, ease, equality, harmony, inspiration, order</p>
+          </div>
+          
+          <div class="needs-group">
+            <h4>Play</h4>
+            <p>joy, humor, fun, pleasure</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Emotion-Need Connection Diagrams -->
+      <div class="content-card">
+        <h2>Understanding Emotion-Need Connections</h2>
+        <p>Every emotion is a signal pointing to a need. Understanding this connection is fundamental to NVC. Let's explore common patterns through individual examples:</p>
+        
+        <!-- Diagram 1: When Feeling Lonely -->
+        <h3>When Feeling Lonely</h3>
+        <p>Loneliness often signals unmet needs for connection and belonging. This emotion can arise when we feel disconnected from others or when our relationships lack the depth we crave. By recognizing the underlying needs, we can move from isolation to connection.</p>
+        
         <div class="mermaid">
 graph TD
-    A[Situation Occurs] --> B[Observe Without Judgment]
-    B --> C[Identify Your Feelings]
-    C --> D[Recognize Underlying Needs]
-    D --> E[Make Clear Request]
-    E --> F[Compassionate Connection]
+    F1[Lonely] --> N1[Need for Connection]
+    F1 --> N2[Need for Belonging]
+    F1 --> N3[Need for Understanding]
+    N1 --> R1["Request: Would you like to spend time together?"]
+    N2 --> R2["Request: Can I join your activity?"]
+    N3 --> R3["Request: Would you be willing to listen?"]
         </div>
-      </div>
-
-      <div class="interactive-section">
-        <h2>🎮 Mini-Game: Emotion-Need Matcher</h2>
-        <p>Drag emotions to their underlying needs. Understanding this connection is key to compassionate communication.</p>
         
-        <div id="emotion-need-game" class="game-container">
-          <div class="game-instructions">
-            <p>Match each emotion with its underlying need:</p>
-          </div>
-          <div class="drag-drop-area">
-            <div class="emotions-column">
-              <h4>Emotions</h4>
-              <div id="emotions-list" class="draggable-list">
-                <!-- Populated by JavaScript -->
-              </div>
+        <p><strong>Understanding Loneliness:</strong> When we feel lonely, it's not just about physical proximity to others. The deeper need is often for meaningful connection, a sense of belonging to a community, or the feeling that someone truly understands us. These requests focus on creating genuine connection rather than just filling time.</p>
+        
+        <!-- Diagram 2: When Feeling Anxious -->
+        <h3>When Feeling Anxious</h3>
+        <p>Anxiety typically points to needs for safety, clarity, and support. This emotion often arises when we face uncertainty or feel overwhelmed by circumstances beyond our control. By identifying what we need to feel secure, we can transform anxiety into constructive action.</p>
+        
+        <div class="mermaid">
+graph TD
+    F2[Anxious] --> N4[Need for Safety]
+    F2 --> N5[Need for Clarity]
+    F2 --> N6[Need for Support]
+    N4 --> R4["Request: Can we discuss the backup plan?"]
+    N5 --> R5["Request: Would you share more details?"]
+    N6 --> R6["Request: Are you available if I need help?"]
+        </div>
+        
+        <p><strong>Understanding Anxiety:</strong> Anxiety is often our system's way of alerting us to potential threats or uncertainties. Rather than trying to eliminate anxiety entirely, we can use it as information about what we need to feel more secure. These requests help create the conditions for safety and clarity that can reduce anxiety naturally.</p>
+        
+        <!-- Diagram 3: When Feeling Frustrated -->
+        <h3>When Feeling Frustrated</h3>
+        <p>Frustration usually indicates needs for progress, efficiency, or understanding. This emotion often emerges when we encounter obstacles or when our efforts don't seem to be producing the results we want. By connecting to the underlying needs, we can channel frustration into productive problem-solving.</p>
+        
+        <div class="mermaid">
+graph TD
+    F3[Frustrated] --> N7[Need for Progress]
+    F3 --> N8[Need for Efficiency]
+    F3 --> N9[Need for Understanding]
+    N7 --> R7["Request: Can we set clearer milestones?"]
+    N8 --> R8["Request: Would you help me streamline this?"]
+    N9 --> R9["Request: Can we clarify expectations?"]
+        </div>
+        
+        <p><strong>Understanding Frustration:</strong> Frustration is often a signal that something isn't working as expected or that we need more clarity about how to proceed. Rather than seeing frustration as a negative emotion to suppress, we can use it as valuable feedback about what needs to change. These requests focus on creating the conditions for more effective progress.</p>
+        
+        <div class="nvc-pattern-examples">
+          <h3>Sample NVC Phrases</h3>
+          
+          <div class="pattern-example">
+            <div class="pattern-situation"><strong>Situation:</strong> Feeling frustrated about repeated lateness</div>
+            <div class="pattern-nvc">
+              <p><strong>Observation:</strong> "When you arrive after our agreed meeting time..."</p>
+              <p><strong>Feeling:</strong> "I feel frustrated and stressed..."</p>
+              <p><strong>Need:</strong> "because I need reliability and respect for shared time..."</p>
+              <p><strong>Request:</strong> "Would you be willing to text me if you're running more than 5 minutes late?"</p>
             </div>
-            <div class="needs-column">
-              <h4>Needs</h4>
-              <div id="needs-list" class="droppable-list">
-                <!-- Populated by JavaScript -->
-              </div>
+          </div>
+          
+          <div class="pattern-example">
+            <div class="pattern-situation"><strong>Situation:</strong> Feeling anxious about unclear project expectations</div>
+            <div class="pattern-nvc">
+              <p><strong>Observation:</strong> "I've noticed the project scope has changed three times this week..."</p>
+              <p><strong>Feeling:</strong> "I feel anxious and uncertain..."</p>
+              <p><strong>Need:</strong> "because I need clarity and stability to do my best work..."</p>
+              <p><strong>Request:</strong> "Would you be willing to schedule a 30-minute alignment meeting to finalize the scope?"</p>
             </div>
           </div>
-          <div class="game-controls">
-            <button class="btn-secondary" onclick="SemanticGames.resetEmotionNeed()">Reset</button>
-            <button class="btn-primary" onclick="SemanticGames.checkEmotionNeed()">Check Answers</button>
+          
+          <div class="pattern-example">
+            <div class="pattern-situation"><strong>Situation:</strong> Feeling lonely after friend cancels plans</div>
+            <div class="pattern-nvc">
+              <p><strong>Observation:</strong> "When our plans got canceled for the third weekend in a row..."</p>
+              <p><strong>Feeling:</strong> "I feel sad and disconnected..."</p>
+              <p><strong>Need:</strong> "because connection and quality time with you are important to me..."</p>
+              <p><strong>Request:</strong> "Would you be willing to set a specific date we can both commit to?"</p>
+            </div>
           </div>
-          <div class="game-feedback" id="emotion-need-feedback"></div>
         </div>
       </div>
 
+      <!-- Requests: Actionable Connection -->
       <div class="content-card">
-        <h2>Before & After NVC</h2>
+        <h2>Component 4: Requests</h2>
+        <p>Requests complete the NVC framework by translating needs into concrete, positive actions. Effective requests create possibilities for connection.</p>
+        
+        <h3>Requests vs. Demands</h3>
         <div class="comparison-box">
-          <div class="before">
-            <h4>❌ Without NVC</h4>
-            <p>"You never listen to me! You're so selfish!"</p>
+          <div class="comparison-side">
+            <h4>Demands (create resistance)</h4>
+            <ul>
+              <li>Imply punishment if not met</li>
+              <li>Focus on what NOT to do</li>
+              <li>Vague or abstract</li>
+              <li>Assume agreement</li>
+            </ul>
+            <div class="comparison-example">
+              <strong>Example:</strong> "You need to stop being so negative!"
+            </div>
           </div>
-          <div class="after">
-            <h4>✓ With NVC</h4>
-            <p>"When I share my ideas and don't receive feedback (observation), I feel frustrated (feeling) because I need to be heard and valued (need). Would you be willing to set aside 10 minutes to discuss this with me? (request)"</p>
+          <div class="comparison-side">
+            <h4>Requests (invite cooperation)</h4>
+            <ul>
+              <li>Accept "no" as valid response</li>
+              <li>Focus on positive action</li>
+              <li>Specific and concrete</li>
+              <li>Ask for willingness</li>
+            </ul>
+            <div class="comparison-example">
+              <strong>Example:</strong> "Would you be willing to share one thing that went well today?"
+            </div>
+          </div>
+        </div>
+        
+        <h3>Making Clear Requests</h3>
+        <p>Effective requests are:</p>
+        <ul>
+          <li><strong>Positive:</strong> Ask for what you DO want, not what you don't want</li>
+          <li><strong>Concrete:</strong> Specific actions that can be seen or heard</li>
+          <li><strong>Doable:</strong> Within the person's ability and time frame</li>
+          <li><strong>Open:</strong> Genuinely accepting of "no" as an answer</li>
+        </ul>
+      </div>
+
+      <!-- Transforming Language Patterns -->
+      <div class="content-card">
+        <h2>Transforming Common Language Patterns</h2>
+        <p>NVC provides specific vocabulary shifts for common communication challenges:</p>
+        
+        <div class="transformation-patterns">
+          <div class="pattern-card">
+            <h4>From Blame to Responsibility</h4>
+            <div class="pattern-before">Before: "You made me angry!"</div>
+            <div class="pattern-after">After: "When I heard that, I felt angry because I need respect."</div>
+            <div class="pattern-insight">Shift: Taking ownership of your feelings</div>
+          </div>
+          
+          <div class="pattern-card">
+            <h4>From Criticism to Observation</h4>
+            <div class="pattern-before">Before: "You're lazy and irresponsible!"</div>
+            <div class="pattern-after">After: "I noticed the dishes from yesterday are still in the sink."</div>
+            <div class="pattern-insight">Shift: Removing judgment and interpretation</div>
+          </div>
+          
+          <div class="pattern-card">
+            <h4>From "Should" to Needs</h4>
+            <div class="pattern-before">Before: "You should be more grateful!"</div>
+            <div class="pattern-after">After: "I feel hurt because I need acknowledgment for my efforts."</div>
+            <div class="pattern-insight">Shift: Expressing vulnerability instead of control</div>
+          </div>
+          
+          <div class="pattern-card">
+            <h4>From "Why" to Curiosity</h4>
+            <div class="pattern-before">Before: "Why didn't you call me back?"</div>
+            <div class="pattern-after">After: "I'm curious what happened that prevented you from calling?"</div>
+            <div class="pattern-insight">Shift: Opening dialogue instead of implying blame</div>
           </div>
         </div>
       </div>
 
+      <!-- Self-Empathy with NVC -->
       <div class="content-card">
-        <h2>📝 Reflection Exercise</h2>
-        <div class="reflection-box">
-          <p><strong>Practice NVC:</strong></p>
-          <p>Think of a recent difficult conversation. Reframe it using the four NVC components.</p>
-          <textarea 
-            class="reflection-textarea" 
-            id="reflection-ch3"
-            placeholder="Observation: ...\nFeelings: ...\nNeeds: ...\nRequest: ..."
-            rows="8"
-          ></textarea>
-          <p class="save-status" id="save-status-ch3">💾 Auto-saving...</p>
+        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+          <lottie-player src="/images/icons/communication/empathy.json" background="transparent" speed="1" style="width: 80px; height: 80px;" loop hover></lottie-player>
+          <h2 style="margin: 0;">Self-Empathy: NVC with Yourself</h2>
         </div>
+        <p>Perhaps the most powerful application of NVC is in your internal dialogue. The same four-component structure transforms self-judgment into self-compassion.</p>
+        
+        <h3>Internal NVC Process</h3>
+        <div class="self-empathy-example">
+          <div class="self-talk-section">
+            <h4>Old Pattern (Self-Judgment)</h4>
+            <p class="self-talk-text">"I'm such an idiot! I can't believe I made that mistake. I always mess things up. I'm never going to succeed."</p>
+          </div>
+          
+          <div class="self-talk-section">
+            <h4>NVC Pattern (Self-Empathy)</h4>
+            <p><strong>Observation:</strong> "I made an error in the calculation that affected the outcome."</p>
+            <p><strong>Feeling:</strong> "I feel disappointed and worried."</p>
+            <p><strong>Need:</strong> "Because I value competence and want to contribute meaningfully."</p>
+            <p><strong>Request (to self):</strong> "Can I learn from this and create a checklist for next time?"</p>
+          </div>
+        </div>
+        
+        <p>This shift from self-violence to self-compassion creates the foundation for all other transformation. When you stop attacking yourself with language, you free enormous energy for growth.</p>
+      </div>
+
+      <!-- Practice Integration -->
+      <div class="content-card">
+        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+          <lottie-player src="/images/icons/communication/listening.json" background="transparent" speed="1" style="width: 80px; height: 80px;" loop hover></lottie-player>
+          <h2 style="margin: 0;">Integrating NVC into Daily Life</h2>
+        </div>
+        <p>NVC is not just for difficult conversations—it's a complete vocabulary transformation that affects every interaction.</p>
+        
+        <h3>Daily NVC Practice</h3>
+        <div class="practice-steps">
+          <div class="practice-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Morning Check-In</h4>
+              <p>Start each day by identifying your feelings and needs: "This morning I feel... because I need..."</p>
+            </div>
+          </div>
+          
+          <div class="practice-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Notice Judgments</h4>
+              <p>When you catch yourself judging (others or yourself), translate it into feelings and needs.</p>
+            </div>
+          </div>
+          
+          <div class="practice-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Empathy Practice</h4>
+              <p>In conversations, listen for feelings and needs beneath the words being spoken.</p>
+            </div>
+          </div>
+          
+          <div class="practice-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>Evening Reflection</h4>
+              <p>Review one interaction: What were the observations, feelings, needs, and requests?</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conclusion -->
+      <div class="content-card">
+        <h2>NVC as Semantic Field Transformation</h2>
+        <p>Nonviolent Communication demonstrates the power of semantic field theory in action. By systematically replacing judgment-based vocabulary with observation-based language, and by distinguishing feelings from needs, NVC creates a complete linguistic ecosystem that naturally generates connection and compassion.</p>
+        
+        <div class="insight-box">
+          <div class="insight-icon"><i class="bi bi-star"></i></div>
+          <div class="insight-content">
+            <h4>Key Takeaway</h4>
+            <p>NVC shows that transformation isn't about changing who you are—it's about changing the semantic fields you habitually occupy. The vocabulary you use literally creates the world you experience.</p>
+          </div>
+        </div>
+        
+        <p>As you continue your journey with neo-vocabulary, NVC offers a proven framework for structured language transformation. Its four components provide a map for navigating from conflict to connection, from judgment to compassion, from violence to peace—all through the power of conscious language choice.</p>
       </div>
 
       <div class="chapter-navigation">
         <button class="btn-secondary" onclick="SemanticLearn.goToChapter(2)">← Previous Chapter</button>
         <button class="btn-primary" onclick="SemanticLearn.completeChapter(3)">Complete Chapter 3 →</button>
       </div>
+
     </section>
 
     <!-- Chapter 4: Neurosynaptic Systems -->
     <section class="chapter" id="chapter-4">
       <div class="chapter-header">
+        <div class="chapter-icon">
+          <img src="/images/icons/brain/neuron.svg" alt="Neuron" style="width: 120px; height: 120px; margin: 0 auto 20px; display: block;">
+        </div>
         <span class="chapter-label">Chapter 4</span>
         <h1 class="chapter-title-main">Neurosynaptic Systems</h1>
         <p class="chapter-subtitle">The Neuroscience of Transformation</p>
       </div>
 
       <div class="content-card">
-        <h2>Your Brain as a Dynamic City</h2>
-        <p>Imagine your brain as a bustling city where neural pathways are streets. The more you travel a particular route, the wider and more efficient that street becomes. This is neuroplasticity in action.</p>
+        <h2>Introduction to Neuroscience Vocabulary</h2>
+        <p>Before diving into how active participation affects memory wiring, let's introduce some key technical terms from neuroscience that will be pivotal in our understanding:</p>
         
-        <div class="highlight-box">
-          <p><strong>Key Concept:</strong> Every time you choose a new thought pattern over an old habit, you're literally rewiring your brain's infrastructure.</p>
+        <div class="insight-box">
+          <div class="insight-icon"><i class="bi bi-brain"></i></div>
+          <div class="insight-content">
+            <h4>Key Neuroscience Terms</h4>
+            <ul>
+              <li><strong>Neuroplasticity:</strong> The brain's ability to reorganize itself by forming new neural connections throughout life. Neuroplasticity allows the neurons (nerve cells) in the brain to compensate for injury and disease and to adjust their activities in response to new situations or changes in their environment.</li>
+              <li><strong>Synapse:</strong> A synapse is a structure that permits a neuron (or nerve cell) to pass an electrical or chemical signal to another neuron.</li>
+              <li><strong>Dendrite:</strong> These are the branched extensions of a neuron that act to conduct the electrochemical stimulation received from other neural cells to the cell body, or soma, of the neuron from which the dendrites project.</li>
+            </ul>
+          </div>
         </div>
+      </div>
+
+      <div class="content-card">
+        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+          <lottie-player src="/images/icons/general/confidence.json" background="transparent" speed="1" style="width: 80px; height: 80px;" loop hover></lottie-player>
+          <h2 style="margin: 0;">Your Brain as a Dynamic City</h2>
+        </div>
+        <p>Imagine your brain as a bustling city with countless roads (neural pathways) and intersections (synapses). Each time you learn something new or engage in a new activity, it's like constructing new roads or strengthening existing ones, making travel (signal transmission) more efficient.</p>
+        
+        <h3>Understanding the City Metaphor</h3>
+        <ul>
+          <li><strong>Constructing New Roads (Neuroplasticity):</strong> When you actively engage in new activities or thought processes, your brain responds by building new roads. This means creating new neural pathways, enhancing its ability to adapt and learn.</li>
+          <li><strong>Busy Intersections (Synapses):</strong> Each time you revisit a thought or practice a skill, it's like adding traffic lights or signs at an intersection, making information transfer at these synapses more effective and efficient.</li>
+          <li><strong>Building a Resilient Network:</strong> Just as a city expands and upgrades its roads to improve traffic flow, your brain modifies its neural network for better information processing and retrieval, enhancing memory and learning capabilities.</li>
+        </ul>
       </div>
 
       <div class="content-card">
         <h2>Neural Pathway Formation</h2>
+        <p>The process of building new habits and weakening old ones follows a predictable pattern. This diagram illustrates how repeated use strengthens neural pathways while disuse weakens them:</p>
+        
         <div class="mermaid">
 graph LR
-    A[New Thought] -->|First Use| B[Weak Connection]
-    B -->|Repetition| C[Strengthening]
-    C -->|Consistent Practice| D[Strong Pathway]
-    D -->|Habit Formation| E[Automatic Response]
+    A[New Vocabulary/Thought] -->|First Use| B[Weak Neural Connection]
+    B -->|Daily Repetition| C[Strengthening Pathway]
+    C -->|Consistent Practice<br/>21+ Days| D[Strong Neural Pathway]
+    D -->|Becomes Natural| E[New Automatic Response]
     
-    A2[Old Habit] -->|Disuse| B2[Weakening]
-    B2 -->|New Alternatives| C2[Fading]
-    C2 -->|Time| D2[Dormant Pathway]
+    style A fill:#e3f2fd
+    style B fill:#fff3e0
+    style C fill:#fff9c4
+    style D fill:#c8e6c9
+    style E fill:#a5d6a7
         </div>
-      </div>
-
-      <div class="interactive-section">
-        <h2>🎮 Mini-Game: Brain City Simulator</h2>
-        <p>Build neural pathways by clicking to strengthen connections. Watch your new vocabulary patterns become highways!</p>
         
-        <div id="brain-city-game" class="game-container">
-          <div class="brain-canvas-wrapper">
-            <canvas id="brain-city-canvas" width="800" height="500"></canvas>
-          </div>
-          <div class="brain-controls">
-            <div class="pathway-selector">
-              <h4>Choose Your Practice:</h4>
-              <button class="pathway-btn" data-pathway="positive" onclick="SemanticGames.selectPathway('positive')">
-                Positive Self-Talk
-              </button>
-              <button class="pathway-btn" data-pathway="gratitude" onclick="SemanticGames.selectPathway('gratitude')">
-                Gratitude Practice
-              </button>
-              <button class="pathway-btn" data-pathway="resilience" onclick="SemanticGames.selectPathway('resilience')">
-                Resilience Building
-              </button>
-            </div>
-            <div class="practice-counter">
-              <p>Practice Count: <span id="practice-count">0</span></p>
-              <p>Pathway Strength: <span id="pathway-strength">Weak</span></p>
-            </div>
-          </div>
-          <div class="game-instructions">
-            <p>💡 Click repeatedly on your chosen practice to strengthen that neural pathway. Watch it grow from a thin line to a vibrant highway!</p>
+        <div class="mermaid">
+graph LR
+    A2[Old Limiting Habit] -->|Choose Alternatives| B2[Reduced Usage]
+    B2 -->|New Pathways Form| C2[Weakening Connection]
+    C2 -->|Time & Disuse| D2[Dormant Pathway]
+    D2 -->|Complete Rewiring| E2[Old Pattern Fades]
+    
+    style A2 fill:#ffcdd2
+    style B2 fill:#f8bbd0
+    style C2 fill:#e1bee7
+    style D2 fill:#d1c4e9
+    style E2 fill:#c5cae9
+        </div>
+        
+        <div class="insight-box">
+          <div class="insight-icon"><i class="bi bi-lightbulb"></i></div>
+          <div class="insight-content">
+            <h4>Active Participation as Reinforcement</h4>
+            <p>Engaging in exercises and applying new knowledge is like regularly commuting on these new roads. The more you travel these paths, the more ingrained they become in the city's infrastructure, similar to how repeated use of new knowledge or skills strengthens neural pathways.</p>
           </div>
         </div>
       </div>
 
       <div class="content-card">
-        <h2>Memory Scale: From Zombie to Awake</h2>
-        <div class="memory-scale">
-          <div class="scale-item" data-level="1">
-            <span class="scale-emoji">😴</span>
-            <span class="scale-label">Primitive</span>
-            <span class="scale-desc">Instinctual, reflexive</span>
-          </div>
-          <div class="scale-item" data-level="2">
-            <span class="scale-emoji">😑</span>
-            <span class="scale-label">Evasive</span>
-            <span class="scale-desc">Avoiding deeper issues</span>
-          </div>
-          <div class="scale-item" data-level="3">
-            <span class="scale-emoji">🤔</span>
-            <span class="scale-label">Aware</span>
-            <span class="scale-desc">Beginning to notice patterns</span>
-          </div>
-          <div class="scale-item" data-level="4">
-            <span class="scale-emoji">💭</span>
-            <span class="scale-label">Conscious</span>
-            <span class="scale-desc">Actively choosing thoughts</span>
-          </div>
-          <div class="scale-item" data-level="5">
-            <span class="scale-emoji">✨</span>
-            <span class="scale-label">Awake</span>
-            <span class="scale-desc">Fully conscious, enlightened</span>
+        <h2>Reinforcing Mindset Changes Through Active Participation</h2>
+        <p>Through this imaginative exploration, we see that active participation in learning and applying new concepts is critical in rewiring our brains. This process of continual construction and reinforcement not only enhances our cognitive abilities but also solidifies the mindset changes we strive for.</p>
+        
+        <p>Just like a dynamic city that evolves and grows, our brain's capacity for change and adaptation is limitless.</p>
+        
+        <div class="highlight-box">
+          <p><strong>Key Concept:</strong> Every time you choose a new thought pattern over an old habit, you're literally rewiring your brain's infrastructure. Consistent practice and application of what you've learned are akin to adding new amenities or services along these roads, making them more attractive and efficient routes for neural signals.</p>
+        </div>
+      </div>
+
+
+      <div class="content-card">
+        <h2>Thinking Models Scale: From Zombie to Awakened</h2>
+        <p>This scale illustrates a progression from rudimentary and unconscious to highly developed and enlightened states of consciousness. It serves as a tool for self-assessment and a guide for personal cognitive development.</p>
+        
+        <div class="mermaid">
+graph TD
+    A[😴 Zombie<br/>Automatic, unconscious,<br/>habitual thought patterns] --> B[😤 Reactive<br/>Impulsive, triggered by<br/>external stimuli]
+    B --> C[👥 Conforming<br/>Adheres strictly to<br/>societal norms]
+    C --> D[🔒 Rigid<br/>Inflexible, resistant<br/>to change]
+    D --> E[😵 Distracted<br/>Lacking focus<br/>or depth]
+    E --> F[🤔 Questioning<br/>Beginning to challenge norms,<br/>seeking understanding]
+    F --> G[🔄 Adaptive<br/>Flexible and responsive<br/>to new information]
+    G --> H[💡 Innovative<br/>Creative, original thinking<br/>beyond boundaries]
+    H --> I[🧘 Mindful<br/>Highly aware, present,<br/>contemplative]
+    I --> J[⚖️ Integrated<br/>Harmonious balance of<br/>logic with intuition]
+    J --> K[✨ Awakened<br/>Fully conscious, enlightened<br/>profound insight & clarity]
+    
+    style A fill:#ffcdd2
+    style B fill:#f8bbd0
+    style C fill:#e1bee7
+    style D fill:#d1c4e9
+    style E fill:#c5cae9
+    style F fill:#bbdefb
+    style G fill:#b3e5fc
+    style H fill:#b2ebf2
+    style I fill:#b2dfdb
+    style J fill:#c8e6c9
+    style K fill:#a5d6a7
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h2>Scale of Memory: From Primitive to Enlightened</h2>
+        <p>This spectrum represents the evolution from automatic, unconscious thought patterns to conscious, enlightened cognition. Understanding where you are on this scale helps you identify areas for growth.</p>
+        
+        <div class="mermaid">
+graph TD
+    M1[1. Primitive<br/>Instinctual, reflexive responses<br/>with little conscious thought] --> M2[2. Evasive<br/>Avoidant memory that<br/>sidesteps deeper issues]
+    M2 --> M3[3. Dependent<br/>Memory reliant on<br/>external cues or validation]
+    M3 --> M4[4. Tendentious<br/>Biased memory influenced<br/>by personal desires or fears]
+    M4 --> M5[5. Invasive<br/>Overpowering memories that<br/>dominate thoughts and behaviors]
+    M5 --> M6[6. Replicated<br/>Memory based on imitation<br/>or repetition without innovation]
+    M6 --> M7[7. Neutral<br/>Memory without significant<br/>positive or negative impact]
+    M7 --> M8[8. Independent<br/>Self-sufficient memory not<br/>influenced by external pressures]
+    M8 --> M9[9. Useful<br/>Pragmatic memory that serves<br/>practical purposes effectively]
+    M9 --> M10[10. Empowered<br/>Memory used actively for<br/>personal growth and development]
+    M10 --> M11[11. Enlightened<br/>Memory that incorporates<br/>deep understanding and insight]
+    
+    style M1 fill:#ffcdd2
+    style M2 fill:#f8bbd0
+    style M3 fill:#e1bee7
+    style M4 fill:#d1c4e9
+    style M5 fill:#c5cae9
+    style M6 fill:#bbdefb
+    style M7 fill:#b3e5fc
+    style M8 fill:#b2ebf2
+    style M9 fill:#b2dfdb
+    style M10 fill:#c8e6c9
+    style M11 fill:#a5d6a7
+        </div>
+        
+        <div class="insight-box">
+          <div class="insight-icon"><i class="bi bi-compass"></i></div>
+          <div class="insight-content">
+            <h4>Self-Assessment Tool</h4>
+            <p>These scales are tools for self-reflection. As you read through each level, notice which descriptions resonate with your current state. Remember, growth is not linear—you may find yourself at different levels in different areas of your life. The goal is progress, not perfection.</p>
           </div>
         </div>
-        <div class="scale-slider">
-          <label>Where are you on this scale?</label>
-          <input type="range" min="1" max="5" value="3" id="memory-scale-slider" oninput="SemanticLearn.updateMemoryScale(this.value)">
-          <p class="scale-current">Current Level: <span id="current-memory-level">Aware</span></p>
+      </div>
+
+      <div class="content-card">
+        <h2>Cognitive Processes and New Synapse Creation</h2>
+        <p>Certain cognitive processes can be linked to the development of new neural connections. By engaging in specific thought patterns and activities, you can stimulate the creation of new synapses and enhance neuroplasticity.</p>
+        
+        <div class="table-responsive">
+          <table class="neuro-table">
+            <thead>
+              <tr>
+                <th>Cognitive Process</th>
+                <th>New Synapse Type</th>
+                <th>Keywords to Provoke Neuroplasticity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Self-cognition</strong><br/>Understanding yourself</td>
+                <td>Self-adaptive new synapses</td>
+                <td>Introspection, Self-analysis, Mindfulness</td>
+              </tr>
+              <tr>
+                <td><strong>Cognition about others</strong><br/>Understanding others</td>
+                <td>Interassistential new synapses</td>
+                <td>Empathy, Altruism, Social Learning</td>
+              </tr>
+              <tr>
+                <td><strong>Multidimensional Cognition</strong><br/>Broader perspectives</td>
+                <td>Multidimensional new synapses</td>
+                <td>Exploration, Curiosity, Transcendence</td>
+              </tr>
+              <tr>
+                <td><strong>Whole-brain thinking</strong><br/>Integrated cognition</td>
+                <td>Integrative new synapses</td>
+                <td>Creativity, Innovation, Holistic Integration</td>
+              </tr>
+              <tr>
+                <td><strong>Recent Intraconscientiality</strong><br/>Fresh experiences</td>
+                <td>Recent new synapses</td>
+                <td>Fresh Experiences, Novelty, Adaptation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="insight-box">
+          <div class="insight-icon"><i class="bi bi-star"></i></div>
+          <div class="insight-content">
+            <h4>Practical Application</h4>
+            <p>By engaging in specific cognitive processes such as self-cognition or considering the multidimensional aspects of consciousness, you can stimulate the creation of new synapses. Keywords like "introspection" or "curiosity" can help provoke thoughts and actions that lead to enhanced neuroplasticity performance, aiding in the development of a more flexible and adaptive mind.</p>
+          </div>
         </div>
       </div>
 
@@ -988,7 +1651,7 @@ graph LR
         <h2>📝 Reflection Exercise</h2>
         <div class="reflection-box">
           <p><strong>Neural Awareness:</strong></p>
-          <p>What old neural pathways (habits) would you like to weaken? What new pathways do you want to strengthen?</p>
+          <p>What old neural pathways (habits) would you like to weaken? What new pathways do you want to strengthen? Which cognitive processes from the table above could you practice to stimulate new synapse creation?</p>
           <textarea 
             class="reflection-textarea" 
             id="reflection-ch4"
@@ -1008,6 +1671,9 @@ graph LR
     <!-- Chapter 5: Empowering Therapy -->
     <section class="chapter" id="chapter-5">
       <div class="chapter-header">
+        <div class="chapter-icon">
+          <lottie-player src="/images/icons/general/support.json" background="transparent" speed="1" style="width: 120px; height: 120px; margin: 0 auto 20px;" loop autoplay></lottie-player>
+        </div>
         <span class="chapter-label">Chapter 5</span>
         <h1 class="chapter-title-main">Empowering Therapy</h1>
         <p class="chapter-subtitle">A Guide for Therapeutic Application</p>
@@ -1034,84 +1700,76 @@ graph TD
         </div>
       </div>
 
-      <div class="interactive-section">
-        <h2>🎮 Mini-Game: Therapist Toolkit Builder</h2>
-        <p>Take a quiz to build a personalized therapeutic approach based on patient preferences.</p>
+      <!-- Practical Application Section -->
+      <div class="content-card">
+        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 20px;">
+          <lottie-player src="/images/icons/general/mentoring.json" background="transparent" speed="1" style="width: 80px; height: 80px;" loop hover></lottie-player>
+          <h2 style="margin: 0;">Practical Application: Building Your Therapeutic Toolkit</h2>
+        </div>
+        <p>Based on the principles from the official book, here are practical exercises to help you develop your own therapeutic approach using semantic field transformation.</p>
         
-        <div id="toolkit-builder-game" class="game-container">
-          <div class="quiz-container" id="toolkit-quiz">
-            <div class="quiz-question active" data-question="1">
-              <h4>Question 1: Patient Age Group</h4>
-              <div class="quiz-options">
-                <label class="quiz-option">
-                  <input type="radio" name="q1" value="adolescent">
-                  <span>Adolescent (13-19)</span>
-                </label>
-                <label class="quiz-option">
-                  <input type="radio" name="q1" value="adult">
-                  <span>Adult (20-64)</span>
-                </label>
-                <label class="quiz-option">
-                  <input type="radio" name="q1" value="elderly">
-                  <span>Elderly (65+)</span>
-                </label>
-              </div>
+        <div class="therapeutic-exercises">
+          <div class="exercise-section">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+              <lottie-player src="/images/icons/emotions/emotion.json" background="transparent" speed="1" style="width: 60px; height: 60px; flex-shrink: 0;" loop hover></lottie-player>
+              <h3 style="margin: 0;">Daily Emotion Tracking</h3>
             </div>
-            
-            <div class="quiz-question" data-question="2">
-              <h4>Question 2: Learning Style Preference</h4>
-              <div class="quiz-options">
-                <label class="quiz-option">
-                  <input type="radio" name="q2" value="visual">
-                  <span>Visual (charts, diagrams, art)</span>
-                </label>
-                <label class="quiz-option">
-                  <input type="radio" name="q2" value="auditory">
-                  <span>Auditory (music, discussion)</span>
-                </label>
-                <label class="quiz-option">
-                  <input type="radio" name="q2" value="kinesthetic">
-                  <span>Kinesthetic (movement, hands-on)</span>
-                </label>
-                <label class="quiz-option">
-                  <input type="radio" name="q2" value="reading">
-                  <span>Reading/Writing</span>
-                </label>
-              </div>
-            </div>
-            
-            <div class="quiz-question" data-question="3">
-              <h4>Question 3: Primary Therapeutic Goal</h4>
-              <div class="quiz-options">
-                <label class="quiz-option">
-                  <input type="radio" name="q3" value="emotional">
-                  <span>Emotional Regulation</span>
-                </label>
-                <label class="quiz-option">
-                  <input type="radio" name="q3" value="communication">
-                  <span>Communication Skills</span>
-                </label>
-                <label class="quiz-option">
-                  <input type="radio" name="q3" value="trauma">
-                  <span>Trauma Processing</span>
-                </label>
-                <label class="quiz-option">
-                  <input type="radio" name="q3" value="identity">
-                  <span>Identity & Self-Discovery</span>
-                </label>
-              </div>
+            <p>Keep a daily log of your emotions and the exact words you use to describe them. Notice patterns and identify which words create barriers and which open possibilities.</p>
+            <div class="exercise-prompt">
+              <h4>Reflection Questions:</h4>
+              <ul>
+                <li>What limiting phrases do you catch yourself using most frequently?</li>
+                <li>Which of the six core emotions most influences your vocabulary patterns?</li>
+                <li>How do different words affect your sense of what's possible?</li>
+              </ul>
             </div>
           </div>
           
-          <div class="quiz-controls">
-            <button class="btn-secondary" onclick="SemanticGames.prevQuestion()" id="prev-btn" disabled>← Previous</button>
-            <button class="btn-primary" onclick="SemanticGames.nextQuestion()" id="next-btn">Next →</button>
+          <div class="exercise-section">
+            <h3>Visual Vocabulary Mapping</h3>
+            <p>Create a visual map of your current vocabulary around a specific habit or challenge. Then build a new map with your neo-vocabulary, drawing connections between old and new words.</p>
+            <div class="exercise-prompt">
+              <h4>Mapping Exercise:</h4>
+              <p>Choose one area of your life where you'd like to see transformation. Map out:</p>
+              <ul>
+                <li>Current limiting vocabulary</li>
+                <li>Associated emotions and triggers</li>
+                <li>New empowering alternatives</li>
+                <li>Visual symbols that represent your transformation</li>
+              </ul>
+            </div>
           </div>
           
-          <div class="toolkit-results" id="toolkit-results" style="display: none;">
-            <h3>🎯 Your Personalized Toolkit</h3>
-            <div id="toolkit-recommendations"></div>
-            <button class="btn-primary" onclick="SemanticGames.restartQuiz()">Start Over</button>
+          <div class="exercise-section">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+              <lottie-player src="/images/icons/emotions/self-control-2.json" background="transparent" speed="1" style="width: 60px; height: 60px; flex-shrink: 0;" loop hover></lottie-player>
+              <h3 style="margin: 0;">Mantra Development</h3>
+            </div>
+            <p>Create your personal mantra following the principles from the book. An effective mantra is short, rhythmic, meaningful, and describes current reality rather than future hope.</p>
+            <div class="exercise-prompt">
+              <h4>Mantra Creation:</h4>
+              <p>Develop a 5-10 word phrase that embodies your transformation journey. Examples from the book:</p>
+              <ul>
+                <li>"Less puffs, more breaths" (personal transformation from smoking)</li>
+                <li>"I am peace in motion" (cultivating calm during activity)</li>
+                <li>"Each breath brings clarity" (grounding in present awareness)</li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="exercise-section">
+            <h3>Sensory Vocabulary Integration</h3>
+            <p>Extend your vocabulary to include other senses. What tastes, smells, or sounds symbolize your journey or goals? Create multi-sensory anchors for your transformation.</p>
+            <div class="exercise-prompt">
+              <h4>Sensory Practice:</h4>
+              <p>For each sense, identify one element that represents your transformation:</p>
+              <ul>
+                <li><strong>Visual:</strong> Colors, images, or symbols</li>
+                <li><strong>Auditory:</strong> Music, sounds, or tones</li>
+                <li><strong>Olfactory:</strong> Scents that represent freshness or renewal</li>
+                <li><strong>Kinesthetic:</strong> Physical sensations and movements</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -1203,8 +1861,8 @@ graph TD
             <div class="next-step">
               <span class="step-icon">🔄</span>
               <h4>Practice Daily</h4>
-              <p>Return to the mini-games to reinforce your learning</p>
-              <button class="btn-secondary" onclick="SemanticLearn.goToChapter(1)">Replay Games</button>
+              <p>Return to the exercises and reflections to reinforce your learning</p>
+              <button class="btn-secondary" onclick="SemanticLearn.goToChapter(1)">Review Exercises</button>
             </div>
             <div class="next-step">
               <span class="step-icon">🤝</span>
@@ -1248,169 +1906,5 @@ graph TD
 document.addEventListener('DOMContentLoaded', function() {
   SemanticLearn.init();
 });
-
-// Global functions for interactive elements
-function flipCard(card) {
-  card.classList.toggle('flipped');
-}
-
-// Initialize word insights data
-const wordInsights = {
-  "can't": {
-    impact: "Creates mental barriers and limits possibilities",
-    alternative: "I choose to",
-    practice: "When you catch yourself thinking 'can't', pause and ask: 'What would I choose to do instead?'"
-  },
-  "stuck": {
-    impact: "Suggests permanent immobility and helplessness",
-    alternative: "I'm exploring options",
-    practice: "Replace 'stuck' with 'exploring options' to open your mind to possibilities"
-  },
-  "impossible": {
-    impact: "Shuts down creative problem-solving",
-    alternative: "This is a challenge I can work through",
-    practice: "When facing 'impossible' situations, ask: 'What's the first small step I can take?'"
-  },
-  "failure": {
-    impact: "Creates shame and stops learning",
-    alternative: "I'm learning",
-    practice: "Reframe failures as learning opportunities that bring you closer to success"
-  },
-  "maybe": {
-    impact: "Creates uncertainty and delays decision-making",
-    alternative: "I'll decide by [specific time]",
-    practice: "Give yourself a deadline for decisions to avoid endless 'maybe' loops"
-  },
-  "sometimes": {
-    impact: "Lacks specificity and commitment",
-    alternative: "I choose to [specific action] when [specific condition]",
-    practice: "Be specific about when and how you'll take action"
-  },
-  "possibly": {
-    impact: "Maintains uncertainty and indecision",
-    alternative: "I'm considering this option",
-    practice: "Move from 'possibly' to clear consideration and decision-making"
-  },
-  "perhaps": {
-    impact: "Keeps you in a state of perpetual uncertainty",
-    alternative: "I'm evaluating this",
-    practice: "Replace vague 'perhaps' with active evaluation and decision-making"
-  },
-  "choose": {
-    impact: "Empowers you with agency and control",
-    alternative: "I am choosing",
-    practice: "Use 'choose' to remind yourself that you have power over your decisions"
-  },
-  "capable": {
-    impact: "Builds confidence and self-belief",
-    alternative: "I am developing my capability",
-    practice: "Use 'capable' to reinforce your belief in your abilities"
-  },
-  "opportunity": {
-    impact: "Opens your mind to positive possibilities",
-    alternative: "This is an opportunity for growth",
-    practice: "Look for opportunities in every situation, even challenges"
-  },
-  "growth": {
-    impact: "Frames experiences as positive development",
-    alternative: "I am growing through this",
-    practice: "View every experience as contributing to your growth and development"
-  }
-};
-
-function exploreWord(word) {
-  const insightCard = document.getElementById('word-insight-card');
-  const insightContent = document.getElementById('word-insight-content');
-  
-  if (wordInsights[word]) {
-    const insight = wordInsights[word];
-    insightContent.innerHTML = `
-      <div class="word-insight-detail">
-        <h3>"${word}"</h3>
-        <div class="insight-section">
-          <h4>Impact on Your Mind:</h4>
-          <p>${insight.impact}</p>
-        </div>
-        <div class="insight-section">
-          <h4>Empowering Alternative:</h4>
-          <p><strong>${insight.alternative}</strong></p>
-        </div>
-        <div class="insight-section">
-          <h4>Practice Tip:</h4>
-          <p>${insight.practice}</p>
-        </div>
-      </div>
-    `;
-    insightCard.style.display = 'block';
-    insightCard.scrollIntoView({ behavior: 'smooth' });
-  }
-}
-
-function showReflectionPrompt(type) {
-  const prompts = {
-    'body': 'Notice any tension, warmth, or other sensations. What does this word feel like in your body?',
-    'mind': 'What thoughts automatically arise when you encounter this word? What memories or associations come up?',
-    'possibility': 'How does this word affect your sense of what\'s possible? Does it open doors or close them?'
-  };
-  
-  if (prompts[type]) {
-    alert(prompts[type]);
-  }
-}
-
-function spinWordWheel() {
-  const wheel = document.getElementById('word-wheel');
-  if (wheel) {
-    wheel.style.animation = 'none';
-    setTimeout(() => {
-      wheel.style.animation = 'gentleSpin 3s ease-in-out';
-    }, 10);
-  }
-}
-
-function expandEmotion(card, emotionName) {
-  // Find the details section within this card
-  const details = card.querySelector('.emotion-details');
-  const summary = card.querySelector('.emotion-summary');
-  const icon = card.querySelector('.emotion-icon');
-  
-  // Check if already expanded
-  const isExpanded = details.style.display !== 'none';
-  
-  // Close all other emotion cards first
-  document.querySelectorAll('.emotion-card').forEach(otherCard => {
-    if (otherCard !== card) {
-      const otherDetails = otherCard.querySelector('.emotion-details');
-      const otherSummary = otherCard.querySelector('.emotion-summary');
-      const otherIcon = otherCard.querySelector('.emotion-icon');
-      if (otherDetails) {
-        otherDetails.style.display = 'none';
-        otherCard.classList.remove('expanded');
-      }
-      if (otherSummary) otherSummary.style.display = 'block';
-      if (otherIcon) otherIcon.style.display = 'block';
-    }
-  });
-  
-  // Toggle this card
-  if (isExpanded) {
-    // Collapse
-    details.style.display = 'none';
-    summary.style.display = 'block';
-    icon.style.display = 'block';
-    card.classList.remove('expanded');
-  } else {
-    // Expand
-    details.style.display = 'block';
-    summary.style.display = 'none';
-    icon.style.display = 'none';
-    card.classList.add('expanded');
-    
-    // Smooth scroll to the card
-    setTimeout(() => {
-      card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 100);
-  }
-}
 </script>
 

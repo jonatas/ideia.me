@@ -29,12 +29,6 @@ const SemanticLearn = {
     this.loadVocabulary();
     this.updateVocabularyCount();
     
-    // Setup mobile navigation
-    this.setupMobileNav();
-    
-    // Unlock first chapter
-    this.unlockChapter(1);
-    
     // Animate page elements
     this.animatePageElements();
   },
@@ -118,26 +112,11 @@ const SemanticLearn = {
     chapterItems.forEach(item => {
       item.addEventListener('click', () => {
         const chapterNum = parseInt(item.dataset.chapter);
-        if (!item.classList.contains('locked')) {
-          this.goToChapter(chapterNum);
-        }
+        this.goToChapter(chapterNum);
       });
     });
   },
-  
-  /**
-   * Setup mobile navigation toggle
-   */
-  setupMobileNav() {
-    const navToggle = document.getElementById('nav-toggle');
-    const chapterNav = document.querySelector('.chapter-nav');
-    
-    if (navToggle && chapterNav) {
-      navToggle.addEventListener('click', () => {
-        chapterNav.classList.toggle('open');
-      });
-    }
-  },
+
   
   /**
    * Navigate to a specific chapter
@@ -173,6 +152,13 @@ const SemanticLearn = {
       
       // Initialize chapter-specific features
       this.initChapterFeatures(chapterNum);
+      
+      // Re-render Mermaid diagrams in the newly visible chapter
+      setTimeout(() => {
+        if (typeof window.renderVisibleMermaid === 'function') {
+          window.renderVisibleMermaid();
+        }
+      }, 100);
     }
   },
   
@@ -296,7 +282,7 @@ const SemanticLearn = {
   },
   
   /**
-   * Complete a chapter and unlock the next one
+   * Complete a chapter
    */
   completeChapter(chapterNum) {
     // Mark chapter as completed
@@ -305,9 +291,8 @@ const SemanticLearn = {
       chapterItem.classList.add('completed');
     }
     
-    // Unlock next chapter
+    // Navigate to next chapter or completion page
     if (chapterNum < 5) {
-      this.unlockChapter(chapterNum + 1);
       this.goToChapter(chapterNum + 1);
     } else {
       // All chapters complete - go to completion page
@@ -331,27 +316,6 @@ const SemanticLearn = {
         spread: 100,
         origin: { y: 0.6 }
       });
-    }
-  },
-  
-  /**
-   * Unlock a chapter
-   */
-  unlockChapter(chapterNum) {
-    const chapterItem = document.querySelector(`.chapter-item[data-chapter="${chapterNum}"]`);
-    if (chapterItem) {
-      chapterItem.classList.remove('locked');
-      chapterItem.querySelector('.chapter-status').textContent = '○';
-      
-      // Animate unlock
-      if (typeof anime !== 'undefined') {
-        anime({
-          targets: chapterItem,
-          scale: [0.95, 1],
-          duration: 300,
-          easing: 'easeOutElastic(1, .6)'
-        });
-      }
     }
   },
   
@@ -869,4 +833,76 @@ const SemanticLearn = {
 
 // Make available globally
 window.SemanticLearn = SemanticLearn;
+
+/**
+ * Global utility functions for interactive elements
+ * These are called directly from HTML onclick handlers
+ */
+
+/**
+ * Flip card animation handler
+ */
+window.flipCard = function(card) {
+  card.classList.toggle('flipped');
+};
+
+/**
+ * Explore word insights - shows detailed information about a word
+ */
+window.exploreWord = function(word) {
+  const insightCard = document.getElementById('word-insight-card');
+  const insightContent = document.getElementById('word-insight-content');
+  
+  if (SemanticLearn.wordInsights && SemanticLearn.wordInsights[word]) {
+    const insight = SemanticLearn.wordInsights[word];
+    insightContent.innerHTML = `
+      <div class="word-insight-detail">
+        <h3>"${word}"</h3>
+        <div class="insight-section">
+          <h4>Impact on Your Mind:</h4>
+          <p>${insight.impact}</p>
+        </div>
+        <div class="insight-section">
+          <h4>Empowering Alternative:</h4>
+          <p><strong>${insight.alternative}</strong></p>
+        </div>
+        <div class="insight-section">
+          <h4>Practice Tip:</h4>
+          <p>${insight.practice}</p>
+        </div>
+      </div>
+    `;
+    insightCard.style.display = 'block';
+    insightCard.scrollIntoView({ behavior: 'smooth' });
+  }
+};
+
+/**
+ * Show reflection prompt as alert
+ */
+window.showReflectionPrompt = function(type) {
+  const prompts = {
+    'body': 'Notice any tension, warmth, or other sensations. What does this word feel like in your body?',
+    'mind': 'What thoughts automatically arise when you encounter this word? What memories or associations come up?',
+    'possibility': 'How does this word affect your sense of what\'s possible? Does it open doors or close them?'
+  };
+  
+  if (prompts[type]) {
+    alert(prompts[type]);
+  }
+};
+
+/**
+ * Spin word wheel animation
+ */
+window.spinWordWheel = function() {
+  const wheel = document.getElementById('word-wheel');
+  if (wheel) {
+    wheel.style.animation = 'none';
+    setTimeout(() => {
+      wheel.style.animation = 'gentleSpin 3s ease-in-out';
+    }, 10);
+  }
+};
+
 

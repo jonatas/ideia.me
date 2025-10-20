@@ -60,6 +60,20 @@
   margin-bottom: var(--spacing-sm);
 }
 
+.flip-card-front .card-icon {
+  color: white;
+}
+
+.flip-card-front .card-icon i {
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.flip-card-back .card-icon {
+  color: var(--logo-vibrant-light-blue);
+  margin-bottom: var(--spacing-sm);
+}
+
 .flip-card-front h4 {
   font-size: 1.5rem;
   margin: var(--spacing-sm) 0;
