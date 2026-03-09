@@ -13,7 +13,11 @@
     flowchart: {
       useMaxWidth: true,
       htmlLabels: true,
-      curve: 'basis'
+      curve: 'basis',
+      nodeSpacing: 60,
+      rankSpacing: 80,
+      wrapLines: true,
+      padding: 25
     },
     themeVariables: {
       primaryColor: isDarkMode ? '#FBBF24' : '#0EA5E9',
@@ -85,7 +89,8 @@
     font-size: 18px !important;
     font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
     font-weight: 500 !important;
-    line-height: 1.4 !important;
+    line-height: 1.5 !important;
+    text-anchor: middle !important;
   }
   
   .mermaid .nodeLabel,
@@ -124,8 +129,9 @@
   .mermaid .node circle,
   .mermaid .node ellipse,
   .mermaid .node polygon {
-    min-width: 120px !important;
-    min-height: 40px !important;
+    min-width: 140px !important;
+    min-height: 50px !important;
+    padding: 8px !important;
   }
   
   /* Dark mode support using your CSS variables */

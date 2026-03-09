@@ -13,8 +13,8 @@ title: Interactive Semantic Fields Learning Journey
 <div class="learning-header">
   <div class="container">
     <div class="journey-title">
-      <h2>🌱 Your Inner Journey</h2>
-      <p>Exploring the landscapes of language and consciousness</p>
+      <h2>🌊 Diving into Semantic Fields</h2>
+      <p>Exploring the ocean of language where meaning flows and connects</p>
     </div>
   </div>
 </div>
@@ -236,25 +236,97 @@ title: Interactive Semantic Fields Learning Journey
         <div id="word-insight-content"></div>
       </div>
 
-      <!-- Inner Journey Reflection -->
+      <!-- Exploring Semantic Fields: An Ocean of Words -->
       <div class="content-card">
-        <h2>Your Inner Journey</h2>
-        <div class="journey-reflection">
-          <p><strong>Pause and reflect:</strong> As you explore these semantic fields, notice what happens in your body when you encounter different words. Which words feel heavy? Which feel light? Which open up possibilities?</p>
-          
-          <div class="reflection-prompts">
-            <div class="prompt-item" onclick="showReflectionPrompt('body')">
-              <span class="prompt-icon"><i class="bi bi-heart-pulse"></i></span>
-              <span class="prompt-text">What do you feel in your body?</span>
+        <h2>Exploring Semantic Fields: An Ocean of Words</h2>
+        <p>Just as the ocean has distinct layers—from the sunlit surface to the mysterious depths—words exist in semantic fields where meaning flows and connects. Let's dive into understanding how words cluster together based on similarity and context.</p>
+        
+        <div class="insight-box">
+          <div class="insight-icon"><i class="bi bi-water"></i></div>
+          <div class="insight-content">
+            <h4>Technical Concept</h4>
+            <p>A semantic field is a group of words that share related meanings and belong to the same conceptual domain. Words within a field are closer in meaning and more likely to appear in similar contexts. This similarity can be measured computationally using vector embeddings.</p>
+          </div>
+        </div>
+
+        <h3>Ocean Layers: Visualizing Semantic Proximity</h3>
+        <p>In this ocean-themed visualization, we've organized marine-related words by their semantic similarity. Words that appear together in the same layer share similar contexts and meanings in language:</p>
+
+        <!-- Ocean Surface Layer -->
+        <div class="ocean-layer" style="background: linear-gradient(180deg, rgba(14, 165, 233, 0.1) 0%, rgba(14, 165, 233, 0.2) 100%); border-left: 4px solid var(--logo-vibrant-light-blue); padding: 1.5rem; margin: 1.5rem 0; border-radius: 8px;">
+          <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 1rem;">
+            <lottie-player src="/images/icons/ocean/ocean-surface/seagull.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <lottie-player src="/images/icons/ocean/ocean-surface/buoy.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <lottie-player src="/images/icons/ocean/ocean-surface/crane.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <div>
+              <h4 style="margin: 0; color: var(--logo-vibrant-light-blue);">Surface Layer</h4>
+              <p style="margin: 0.5rem 0 0 0; color: var(--text-muted); font-size: 0.9rem;">Above and at the water's edge</p>
             </div>
-            <div class="prompt-item" onclick="showReflectionPrompt('mind')">
-              <span class="prompt-icon"><i class="bi bi-brain"></i></span>
-              <span class="prompt-text">What thoughts arise?</span>
+          </div>
+          <p><strong>Semantic Field:</strong> Words related to navigation, observation, and maritime infrastructure. These terms share contexts about boats, harbors, and coastal activities.</p>
+          <p><strong>Technical Note:</strong> These words have high cosine similarity in embeddings because they frequently co-occur in texts about maritime activities and coastal environments.</p>
+        </div>
+
+        <!-- Mid Ocean Layer -->
+        <div class="ocean-layer" style="background: linear-gradient(180deg, rgba(14, 165, 233, 0.2) 0%, rgba(14, 165, 233, 0.3) 100%); border-left: 4px solid var(--logo-vibrant-light-blue); padding: 1.5rem; margin: 1.5rem 0; border-radius: 8px;">
+          <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 1rem; flex-wrap: wrap;">
+            <lottie-player src="/images/icons/ocean/ocean-mid/fish.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <lottie-player src="/images/icons/ocean/ocean-mid/fish-2.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <lottie-player src="/images/icons/ocean/ocean-mid/squid.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <lottie-player src="/images/icons/ocean/ocean-mid/pisces.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <lottie-player src="/images/icons/ocean/ocean-mid/cancer.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <lottie-player src="/images/icons/ocean/ocean-mid/scorpio.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <div style="flex-basis: 100%;">
+              <h4 style="margin: 0; color: var(--logo-vibrant-light-blue);">Mid-Water Layer</h4>
+              <p style="margin: 0.5rem 0 0 0; color: var(--text-muted); font-size: 0.9rem;">Swimming and mobile creatures</p>
             </div>
-            <div class="prompt-item" onclick="showReflectionPrompt('possibility')">
-              <span class="prompt-icon"><i class="bi bi-star"></i></span>
-              <span class="prompt-text">What becomes possible?</span>
+          </div>
+          <p><strong>Semantic Field:</strong> Words describing marine life that actively swims and moves through the water column. Includes both common fish and crustaceans, plus astrological symbols linked to aquatic creatures.</p>
+          <p><strong>Technical Note:</strong> These terms cluster together because they share semantic features: [+aquatic], [+mobile], [+creature]. The astrological terms (Pisces, Cancer, Scorpio) join this field due to their etymological ocean connections.</p>
+        </div>
+
+        <!-- Deep Ocean Layer -->
+        <div class="ocean-layer" style="background: linear-gradient(180deg, rgba(30, 58, 138, 0.3) 0%, rgba(30, 58, 138, 0.4) 100%); border-left: 4px solid var(--logo-deep-purple-blue); padding: 1.5rem; margin: 1.5rem 0; border-radius: 8px;">
+          <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 1rem;">
+            <lottie-player src="/images/icons/ocean/ocean-deep/anglerfish.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <div>
+              <h4 style="margin: 0; color: var(--logo-deep-purple-blue);">Deep Ocean Layer</h4>
+              <p style="margin: 0.5rem 0 0 0; color: var(--text-muted); font-size: 0.9rem;">Abyssal zone creatures</p>
             </div>
+          </div>
+          <p><strong>Semantic Field:</strong> Words associated with deep-sea environments—darkness, pressure, bioluminescence, and specialized adaptations.</p>
+          <p><strong>Technical Note:</strong> These terms form a distinct semantic cluster because they appear in contexts about extreme ocean environments and deep-sea biology.</p>
+        </div>
+
+        <!-- Ocean Floor Layer -->
+        <div class="ocean-layer" style="background: linear-gradient(180deg, rgba(30, 58, 138, 0.4) 0%, rgba(30, 58, 138, 0.5) 100%); border-left: 4px solid var(--logo-deep-purple-blue); padding: 1.5rem; margin: 1.5rem 0; border-radius: 8px;">
+          <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 1rem; flex-wrap: wrap;">
+            <lottie-player src="/images/icons/ocean/ocean-floor/coral.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <lottie-player src="/images/icons/ocean/ocean-floor/coral-2.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <lottie-player src="/images/icons/ocean/ocean-floor/shell.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <lottie-player src="/images/icons/ocean/ocean-floor/seaweed.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <lottie-player src="/images/icons/ocean/ocean-floor/seaweed-2.json" background="transparent" speed="1" style="width: 60px; height: 60px;" loop hover></lottie-player>
+            <div style="flex-basis: 100%;">
+              <h4 style="margin: 0; color: var(--logo-deep-purple-blue);">Ocean Floor Layer</h4>
+              <p style="margin: 0.5rem 0 0 0; color: var(--text-muted); font-size: 0.9rem;">Stationary and bottom-dwelling life</p>
+            </div>
+          </div>
+          <p><strong>Semantic Field:</strong> Words for sessile (non-mobile) marine organisms and objects found on the ocean floor. These terms relate to anchored, rooted, or stationary aspects of marine ecosystems.</p>
+          <p><strong>Technical Note:</strong> This semantic cluster is characterized by words with features: [+aquatic], [-mobile], [+substrate-attached]. They appear together in discussions of coral reefs, tidepools, and benthic zones.</p>
+        </div>
+
+        <div class="insight-box" style="margin-top: 2rem;">
+          <div class="insight-icon"><i class="bi bi-graph-up"></i></div>
+          <div class="insight-content">
+            <h4>From Ocean to Mind</h4>
+            <p>Understanding semantic fields helps us see how our minds organize concepts. When you change one word in your vocabulary, you're not just swapping labels—you're shifting your position within an entire field of meaning. By consciously choosing words from empowering semantic fields, you reshape the conceptual ocean in which your thoughts swim.</p>
+            <br />
+            <div style="display: flex; justify-content: center; align-items: center;">
+              <lottie-player src="/images/icons/ocean/ocean-mid/squid.json" background="transparent" speed="1" style="width: 100px; height: 100px;" loop hover></lottie-player>
+            </div>
+            <br />
+            <h4>Do you believe squid is a fish?</h4>
+            <p>No, squid is not a fish. It is a mollusk. But in the ocean, they are both in the same semantic field because they are both marine creatures.</p>
           </div>
         </div>
       </div>
@@ -269,7 +341,7 @@ title: Interactive Semantic Fields Learning Journey
     <section class="chapter" id="chapter-2">
       <div class="chapter-header">
         <div class="chapter-icon">
-          <lottie-player src="/images/icons/emotions/emotional-intelligence.json" background="transparent" speed="1" style="width: 120px; height: 120px; margin: 0 auto 20px;" loop autoplay></lottie-player>
+          <lottie-player src="/images/icons/emotions/emotional-intelligence.json" background="transparent" speed="1" style="width: 120px; height: 120px; margin: 0 auto 20px;" loop hover autoplay></lottie-player>
         </div>
         <span class="chapter-label">Chapter 2</span>
         <h1 class="chapter-title-main">Neovocabularies and Neologisms</h1>
@@ -1477,7 +1549,7 @@ graph TD
         <p>The process of building new habits and weakening old ones follows a predictable pattern. This diagram illustrates how repeated use strengthens neural pathways while disuse weakens them:</p>
         
         <div class="mermaid">
-graph LR
+graph TD
     A[New Vocabulary/Thought] -->|First Use| B[Weak Neural Connection]
     B -->|Daily Repetition| C[Strengthening Pathway]
     C -->|Consistent Practice<br/>21+ Days| D[Strong Neural Pathway]
@@ -1491,7 +1563,7 @@ graph LR
         </div>
         
         <div class="mermaid">
-graph LR
+graph TD
     A2[Old Limiting Habit] -->|Choose Alternatives| B2[Reduced Usage]
     B2 -->|New Pathways Form| C2[Weakening Connection]
     C2 -->|Time & Disuse| D2[Dormant Pathway]
@@ -1531,16 +1603,16 @@ graph LR
         
         <div class="mermaid">
 graph TD
-    A[😴 Zombie<br/>Automatic, unconscious,<br/>habitual thought patterns] --> B[😤 Reactive<br/>Impulsive, triggered by<br/>external stimuli]
-    B --> C[👥 Conforming<br/>Adheres strictly to<br/>societal norms]
-    C --> D[🔒 Rigid<br/>Inflexible, resistant<br/>to change]
-    D --> E[😵 Distracted<br/>Lacking focus<br/>or depth]
-    E --> F[🤔 Questioning<br/>Beginning to challenge norms,<br/>seeking understanding]
-    F --> G[🔄 Adaptive<br/>Flexible and responsive<br/>to new information]
-    G --> H[💡 Innovative<br/>Creative, original thinking<br/>beyond boundaries]
-    H --> I[🧘 Mindful<br/>Highly aware, present,<br/>contemplative]
-    I --> J[⚖️ Integrated<br/>Harmonious balance of<br/>logic with intuition]
-    J --> K[✨ Awakened<br/>Fully conscious, enlightened<br/>profound insight & clarity]
+    A[😴 Zombie: Automatic, unconscious,<br/>habitual thought patterns] --> B[😤 Reactive: Impulsive, triggered by<br/>external stimuli]
+    B --> C[👥 Conforming: Adheres strictly to societal norms]
+    C --> D[🔒 Rigid: Inflexible, resistant to change]
+    D --> E[😵 Distracted: Lacking focus or depth]
+    E --> F[🤔 Questioning: Beginning to challenge norms, seeking understanding]
+    F --> G[🔄 Adaptive: Flexible and responsive to new information]
+    G --> H[💡 Innovative: Creative, original thinking beyond boundaries]
+    H --> I[🧘 Mindful: Highly aware, present, contemplative]
+    I --> J[⚖️ Integrated: Harmonious balance of logic with intuition]
+    J --> K[✨ Awakened: Fully conscious, enlightened profound insight & clarity]
     
     style A fill:#ffcdd2
     style B fill:#f8bbd0
