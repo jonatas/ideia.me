@@ -70,7 +70,7 @@ The focus measures your ability of not switching apps. It counts unfocus when
 you spend less than 90 seconds on an app.
 
 Using Hubstaff as a user made me think a lot about how I relate to time. I wrote
-about this in [Time Economics](/2025/06/20/time-economics/) — the idea that time
+about this in [Time Economics](/time-economics) — the idea that time
 is your most non-renewable resource and every hour can be viewed through the lens
 of future value, present value, and authorship. The tracker is essentially a
 mirror for that: it makes the invisible visible. Core work vs distraction maps
