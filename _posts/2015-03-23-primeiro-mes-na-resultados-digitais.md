@@ -1,7 +1,7 @@
 ---
 title: "Primeiro mês na Resultados Digitais"
 layout: post
-categories: ['Resultados Digitais']
+categories: [career, 'Resultados Digitais']
 description: "Seguindo minha experiência da primeira semana, decidi escrever sobre o primeiro mês que completo exatamente hoje!"
 ---
 Seguindo minha experiência [da primeira semana](/primeira-semana-na-resultados-digitais/), decidi escrever sobre o primeiro mês que completo exatamente hoje!

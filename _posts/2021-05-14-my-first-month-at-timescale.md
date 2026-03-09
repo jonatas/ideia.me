@@ -1,6 +1,7 @@
 ---
 title: "My first month at Timescale"
 layout: post
+categories: [career]
 description: "Time flies! and here I am to share a bit more about my first-month adventures working on a genuinely open source company."
 ---
 Time flies! and here I am to share a bit more about my first-month adventures working on a genuinely open source company.
