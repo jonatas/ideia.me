@@ -69,6 +69,15 @@ helpful or healthy for you.
 The focus measures your ability of not switching apps. It counts unfocus when
 you spend less than 90 seconds on an app.
 
+Using Hubstaff as a user made me think a lot about how I relate to time. I wrote
+about this in [Time Economics](/2025/06/20/time-economics/) — the idea that time
+is your most non-renewable resource and every hour can be viewed through the lens
+of future value, present value, and authorship. The tracker is essentially a
+mirror for that: it makes the invisible visible. Core work vs distraction maps
+directly to future value filtering. The focus metric is a proxy for
+authorshipmetry — are you writing your own story or just reacting to noise?
+And that Friday at 4 PM, walking to the waterfall, was pure present value.
+
 ## Tech stack
 
 Ruby and Postgresql! Yes! These tools make me feel at home. Also, the high
