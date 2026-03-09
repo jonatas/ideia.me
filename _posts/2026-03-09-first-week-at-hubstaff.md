@@ -43,7 +43,7 @@ help you to grow and increase your focus on your role.
 Understand where do you spend your time. How much do you invest on each tool and
 how long.
 
-A developer may have LinkedIn as a core-work as a recruiter. Every app can be
+A developer may not have LinkedIn as a core-work as a recruiter. Every app can be
 judged or classified depending your role.
 
 This is very cool and helps to understand how much we're derailing from the
