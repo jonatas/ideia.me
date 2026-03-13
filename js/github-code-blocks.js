@@ -22,7 +22,12 @@ document.addEventListener('DOMContentLoaded', function() {
     copyButton.setAttribute('aria-label', 'Copy code to clipboard');
     copyButton.setAttribute('title', 'Copy code');
     copyButton.addEventListener('click', function() {
-      copyToClipboard(codeElement.textContent, copyButton);
+      const lang = block.getAttribute('data-language');
+      let text = codeElement.textContent;
+      if (lang === 'bash' || lang === 'sh' || lang === 'shell') {
+        text = text.split('\n').map(line => line.replace(/^\$ /, '')).join('\n');
+      }
+      copyToClipboard(text, copyButton);
     });
     // Append to parent div.highlight so position:absolute works outside overflow:auto
     const container = block.parentElement.classList.contains('highlight') ? block.parentElement : block;
