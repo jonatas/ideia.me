@@ -19,7 +19,7 @@ a row scan.
 
 I ran everything in this post for real. The output is actual output.
 
-## The setup: what we're building
+## The setup: per-plan retention in TimescaleDB
 
 We have an `events` table. Each row belongs to a subscription tier:
 
@@ -30,7 +30,7 @@ We have an `events` table. Each row belongs to a subscription tier:
 
 The goal is to enforce those retention windows cheaply — and let the database do it on a schedule.
 
-## Creating the hypertable
+## Creating the hypertable in PostgreSQL
 
 Start with a table that includes the tier as a column:
 
@@ -47,7 +47,7 @@ SELECT create_hypertable('events', 'time');
 At this point, TimescaleDB partitions by time only. One chunk per time interval — default is
 7 days. Every tier's data lands in the same physical file.
 
-## The key step: add a space dimension
+## The key step: `add_dimension` for space partitioning
 
 ```sql
 SELECT add_dimension('events', 'retention_tier', number_partitions => 4);
@@ -59,7 +59,7 @@ you get four — one per tier value. Each time bucket produces four separate phy
 That's the whole trick. TimescaleDB's chunk-drop mechanism operates on whole files. If each tier
 has its own files, you can drop tier 0's old chunks without touching tier 3's data at all.
 
-## What the chunks actually look like
+## What TimescaleDB chunks look like after `add_dimension`
 
 After loading about 15 months of data across all four tiers, the chunk view shows the structure
 clearly:
@@ -204,7 +204,7 @@ The 500k rows we dropped across 35 chunks took milliseconds. Each chunk drop is 
 `unlink` call — the database removes the file and updates its catalog. No WAL for the row data,
 no dead tuples, no bloat.
 
-## Scheduling it
+## Scheduling with TimescaleDB's background job
 
 Once you've verified the procedure works, hand it to TimescaleDB's job scheduler:
 
@@ -239,7 +239,7 @@ flowchart TD
     Q3 --> D
 {% endmermaid %}
 
-## Why this beats DELETE
+## Why chunk drops scale better than DELETE in PostgreSQL
 
 A `DELETE WHERE retention_tier = 0 AND time < now() - INTERVAL '2 weeks'` has to:
 
@@ -272,7 +272,7 @@ If plan changes need retroactive retiering, you'd handle that separately (a back
 job, or accepting that old data ages out under the old tier's policy). The point is to think
 about it upfront, not after you've got a 200GB table.
 
-## The broader pattern
+## The broader pattern: TimescaleDB space dimensions at scale
 
 Space dimensions in TimescaleDB exist to spread write load across multiple disks or nodes. But
 the partitioning they create is a general-purpose tool. Any column you want to treat as a
