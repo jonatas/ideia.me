@@ -97,9 +97,6 @@
             <li class="nav-item">
               <a class="nav-link py-1" href="/videos">🍿</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link py-1 claude-nav-link" href="/claude/">~/.claude</a>
-            </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle py-1" href="#" id="pagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               </a>
@@ -132,7 +129,8 @@
     
     <footer class="footer py-4 mt-5">
       <div class="container text-center">
-        <p class="text-muted mb-0">© {{ site.time | date: '%Y' }} {{ site.author.name }}. All rights reserved.</p>
+        <p class="text-muted mb-1">© {{ site.time | date: '%Y' }} {{ site.author.name }}. All rights reserved.</p>
+        <p class="mb-0"><a class="text-muted claude-nav-link" href="/claude/">~/.claude</a></p>
       </div>
     </footer>
 

@@ -6,3 +6,6 @@ images/.DS_Store
 # Environment variables
 .env
 .env.*
+
+# Claude worktrees (active git worktrees, not for committing)
+.claude/worktrees/
