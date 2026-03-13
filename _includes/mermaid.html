@@ -37,10 +37,10 @@
   
   // Function to render Mermaid diagrams in visible elements only
   window.renderVisibleMermaid = function() {
-    // Find all active/visible chapters
-    const activeChapter = document.querySelector('.chapter.active');
-    if (activeChapter) {
-      const mermaidDivs = activeChapter.querySelectorAll('.mermaid:not([data-processed])');
+    // Use active chapter if present (slides/presentation layouts), otherwise the whole document
+    const container = document.querySelector('.chapter.active') || document;
+    const mermaidDivs = container.querySelectorAll('.mermaid:not([data-processed])');
+    if (mermaidDivs.length > 0) {
       mermaidDivs.forEach((element, index) => {
         const id = `mermaid-${Date.now()}-${index}`;
         element.id = id;
