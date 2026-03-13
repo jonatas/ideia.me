@@ -5,6 +5,7 @@ categories: ['programming', 'tools', 'git']
 tags: ['git', 'worktrees', 'workflow', 'productivity']
 description: "A ground-up look at git worktrees — how they store state, what they cost, and why they replace the stash-switch-unstash loop you've been living with."
 image: /images/git-worktrees.png
+mermaid: true
 ---
 
 This is a follow-up to my [post on Claude Code's worktree isolation](/claude-worktrees). That post
@@ -66,7 +67,24 @@ Each worktree has its own:
 
 But they all share the same object store. No copying. No re-downloading. Just new pointers.
 
+{% mermaid %}
+graph TD
+    subgraph shared[".git/"]
+        OBJ["objects/\ncommits · blobs · trees"]
+        META["worktrees/hotfix/\nHEAD · index · gitdir"]
+    end
+
+    MAIN["~/project/\nHEAD: main"]
+    HOTFIX[".worktrees/hotfix/\nHEAD: hotfix/urgent-bug\n.git → pointer"]
+
+    MAIN --> OBJ
+    HOTFIX -->|".git file"| META
+    META --> OBJ
+{% endmermaid %}
+
 ### Creating one
+
+The command takes a path and, optionally, `-b` to create a new branch at that worktree:
 
 ```bash
 $ git worktree add .worktrees/hotfix -b hotfix/urgent-bug
@@ -77,6 +95,12 @@ $ git worktree list
 /private/tmp/wt-demo                    9ad49c8 [main]
 /private/tmp/wt-demo/.worktrees/hotfix  9ad49c8 [hotfix/urgent-bug]
 ```
+
+Without `-b`, git checks out an existing branch into the new worktree. With `-b`, it creates a
+fresh branch first — so the worktree starts clean from your current commit, on a branch that's
+yours to mess with.
+
+Think about it as a shortcut directory to another branch you need to work in parallel.
 
 Two working directories. Two branches. One `.git`. And critically — my uncommitted changes in
 `main` are completely untouched:
