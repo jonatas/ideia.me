@@ -1,9 +1,10 @@
 ---
 layout: post
 title: "My First Time with Claude Worktrees"
-categories: ['programming', 'ai', 'tools']
+categories: ['programming', 'ai', 'tools', 'claude']
 tags: ['claude', 'claude-code', 'git', 'worktrees', 'productivity']
 description: "First impressions of using Claude Code's worktree isolation feature — running AI agents in isolated git branches without touching your working directory."
+image: /images/claude-worktrees-containment-dome.png
 ---
 
 I just used Claude worktrees for the first time and I'm still buzzing from it.

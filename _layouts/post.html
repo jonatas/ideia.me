@@ -21,6 +21,12 @@ layout: default
     </div>
   </div>
   
+  {% if page.image %}
+  <div class="article-cover">
+    <img src="{{ page.image }}" alt="{{ page.title }}">
+  </div>
+  {% endif %}
+
   <div class="article-content">
     {{ content }}
   </div>
