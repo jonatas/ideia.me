@@ -409,32 +409,40 @@ code {
   font-family: 'Open Sans', sans-serif;
 }
 
-/* Copy button styling - modified to be less intrusive */
+/* Copy button styling - icon-only clipboard button */
 .copy-button {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.2);
-  color: var(--text-color);
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
   border: none;
   border-radius: 4px;
-  padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
   cursor: pointer;
-  opacity: 0.6;
-  transition: opacity 0.2s ease, background-color 0.2s ease;
+  opacity: 0;
+  transition: opacity 0.2s ease, color 0.2s ease;
   z-index: 10;
 }
 
-.copy-button:hover {
+.highlight:hover .copy-button {
   opacity: 1;
-  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.copy-button:hover {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .copy-button.copied {
-  background-color: var(--primary-color);
-  color: white;
-  opacity: 1;
+  color: var(--primary-teal);
+  opacity: 1 !important;
 }
 
 /* Blockquote styling */
