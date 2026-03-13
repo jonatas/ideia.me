@@ -1,33 +1,37 @@
 // GitHub-style code blocks enhancement
 document.addEventListener('DOMContentLoaded', function() {
   // Add data-lang attribute to code blocks based on their language class
-  const codeBlocks = document.querySelectorAll('.highlight');
+  const codeBlocks = document.querySelectorAll('pre.highlight');
   
   codeBlocks.forEach(function(block) {
     // Find language class from the code element
     const codeElement = block.querySelector('code');
     if (!codeElement) return;
     
-    // Extract language from class name
+    // Extract language from class name (optional, for data-lang attribute)
     const langClass = Array.from(codeElement.classList)
       .find(cls => cls.startsWith('language-'));
-    
     if (langClass) {
-      const language = langClass.replace('language-', '');
-      block.setAttribute('data-lang', language);
-      
-      // Add copy button
-      const copyButton = document.createElement('button');
-      copyButton.className = 'copy-button';
-      copyButton.textContent = 'Copy';
-      copyButton.setAttribute('aria-label', 'Copy code to clipboard');
-      copyButton.addEventListener('click', function() {
-        const code = codeElement.textContent;
-        copyToClipboard(code, copyButton);
-      });
-      
-      block.appendChild(copyButton);
+      block.setAttribute('data-language', langClass.replace('language-', ''));
     }
+
+    // Add copy button to all code blocks
+    const copyButton = document.createElement('button');
+    copyButton.className = 'copy-button';
+    copyButton.innerHTML = '<i class="bi bi-clipboard"></i>';
+    copyButton.setAttribute('aria-label', 'Copy code to clipboard');
+    copyButton.setAttribute('title', 'Copy code');
+    copyButton.addEventListener('click', function() {
+      copyToClipboard(codeElement.textContent, copyButton);
+    });
+    // Append to parent div.highlight so position:absolute works outside overflow:auto
+    const container = block.parentElement.classList.contains('highlight') ? block.parentElement : block;
+    container.style.position = 'relative';
+    copyButton.style.setProperty('position', 'absolute', 'important');
+    copyButton.style.setProperty('top', '8px', 'important');
+    copyButton.style.setProperty('right', '8px', 'important');
+    copyButton.style.setProperty('z-index', '10', 'important');
+    container.appendChild(copyButton);
     
     // Remove any existing line number elements
     const lineNumbers = block.querySelectorAll('.lineno, .line-numbers-rows');
@@ -38,13 +42,14 @@ document.addEventListener('DOMContentLoaded', function() {
   function copyToClipboard(text, button) {
     navigator.clipboard.writeText(text).then(function() {
       // Success - show copied state
-      const originalText = button.textContent;
-      button.textContent = 'Copied!';
+      button.innerHTML = '<i class="bi bi-clipboard-check"></i>';
+      button.setAttribute('title', 'Copied!');
       button.classList.add('copied');
-      
+
       // Reset after 2 seconds
       setTimeout(function() {
-        button.textContent = originalText;
+        button.innerHTML = '<i class="bi bi-clipboard"></i>';
+        button.setAttribute('title', 'Copy code');
         button.classList.remove('copied');
       }, 2000);
     }).catch(function(err) {
@@ -56,21 +61,23 @@ document.addEventListener('DOMContentLoaded', function() {
       textArea.style.opacity = 0;
       document.body.appendChild(textArea);
       textArea.select();
-      
+
       try {
         document.execCommand('copy');
-        const originalText = button.textContent;
-        button.textContent = 'Copied!';
+        button.innerHTML = '<i class="bi bi-clipboard-check"></i>';
+        button.setAttribute('title', 'Copied!');
         button.classList.add('copied');
-        
+
         // Reset after 2 seconds
         setTimeout(function() {
-          button.textContent = originalText;
+          button.innerHTML = '<i class="bi bi-clipboard"></i>';
+          button.setAttribute('title', 'Copy code');
           button.classList.remove('copied');
         }, 2000);
       } catch (err) {
         console.error('Fallback copy failed: ', err);
-        button.textContent = 'Failed to copy';
+        button.innerHTML = '<i class="bi bi-x-circle"></i>';
+        button.setAttribute('title', 'Copy failed');
       }
       
       document.body.removeChild(textArea);
