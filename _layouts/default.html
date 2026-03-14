@@ -95,7 +95,7 @@
               <a class="nav-link py-1" href="/talks">🎤</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link py-1" href="/videos">🍿</a>
+              <a class="nav-link py-1 pe-1" href="/videos">🍿</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle py-1" href="#" id="pagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -119,6 +119,38 @@
             {{ page.title }}
           </div>
           {% endif %}
+
+          <!-- Slide nav (visible only in presentation mode) -->
+          <div id="talk-controls-center" class="talk-nav-center" style="display:none">
+            <button id="btn-prev" class="talk-btn talk-btn-nav" title="Previous slide (←)" disabled>
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <span id="talk-slide-counter" class="talk-slide-counter">1 / 1</span>
+            <button id="btn-next" class="talk-btn talk-btn-nav" title="Next slide (→)">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+            <button id="btn-fullscreen" class="talk-btn talk-btn-nav" title="Toggle fullscreen (f)">
+              <i class="bi bi-fullscreen" id="fullscreen-icon"></i>
+            </button>
+          </div>
+
+          <!-- Zoom + Present controls (always in navbar, disabled on non-post pages) -->
+          <div id="talk-controls" class="talk-nav-controls{% unless page.layout == 'post' or page.layout == 'talk' %} talk-nav-disabled{% endunless %} ms-2">
+            <button id="btn-zoom-less" class="talk-btn talk-btn-zoom" title="Less detail">
+              <i class="bi bi-dash-circle"></i>
+            </button>
+            <span id="talk-zoom-dots" class="talk-zoom-dots"></span>
+            <button id="btn-zoom-more" class="talk-btn talk-btn-zoom" title="More detail" disabled>
+              <i class="bi bi-plus-circle"></i>
+            </button>
+            <span class="talk-controls-divider"></span>
+            <button id="btn-present" class="talk-btn talk-btn-primary" title="Start presentation — use ← → to navigate slides, Esc to exit">
+              <i class="bi bi-play-circle-fill"></i>
+            </button>
+            <button id="btn-exit-present" class="talk-btn talk-btn-exit" title="Exit presentation (Esc)" style="display:none">
+              <i class="bi bi-x-circle-fill"></i>
+            </button>
+          </div>
         </div>
       </div>
     </nav>
@@ -129,6 +161,19 @@
     
     <footer class="footer py-4 mt-5">
       <div class="container text-center">
+        <p class="text-muted mb-2">
+          <a class="text-muted me-3" href="/archive"><i class="bi bi-archive"></i> Archive</a>
+          <a class="text-muted me-3" href="/talks">🎤 Talks</a>
+          <a class="text-muted me-3" href="/videos">🍿 Videos</a>
+          <a class="text-muted me-3" href="/categories"><i class="bi bi-tags"></i> Categories</a>
+        </p>
+        <p class="text-muted mb-2">
+          <a class="text-muted me-3" href="https://www.linkedin.com/in/jonatasdp"><i class="bi bi-linkedin"></i></a>
+          <a class="text-muted me-3" href="https://github.com/jonatas"><i class="bi bi-github"></i></a>
+          <a class="text-muted me-3" href="https://twitter.com/jonatasdp"><i class="bi bi-twitter"></i></a>
+          <a class="text-muted me-3" href="https://instagram.com/jonatasdp"><i class="bi bi-instagram"></i></a>
+          <a class="text-muted me-3" href="https://www.youtube.com/user/jonatasdp"><i class="bi bi-youtube"></i></a>
+        </p>
         <p class="text-muted mb-1">© {{ site.time | date: '%Y' }} {{ site.author.name }}. All rights reserved.</p>
         <p class="mb-0"><a class="text-muted claude-nav-link" href="/claude/">~/.claude</a></p>
       </div>
