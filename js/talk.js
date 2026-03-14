@@ -135,7 +135,7 @@
     // If the first chapter is a preamble (no heading), prepend the page title as h1
     if (chapters.length > 0 && chapters[0].classList.contains('talk-chapter-preamble')) {
       var titleEl = document.createElement('h1');
-      titleEl.textContent = document.title.replace(/\s*[|\-–]\s*.*$/, '').trim();
+      titleEl.textContent = document.title.replace(/\s*[|–]\s*.*$/, '').trim();
       chapters[0].insertBefore(titleEl, chapters[0].firstChild);
     }
 
