@@ -13,11 +13,6 @@
   flex-shrink: 0;
 }
 
-.talk-nav-disabled {
-  opacity: 0.25;
-  pointer-events: none;
-}
-
 /* Slide nav — hidden in reading mode, shown in presentation */
 .talk-nav-center {
   align-items: center;

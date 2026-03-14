@@ -120,7 +120,8 @@
           </div>
           {% endif %}
 
-          <!-- Slide nav (visible only in presentation mode) -->
+          <!-- Slide nav (visible only in presentation mode, only on post/talk pages) -->
+          {% if page.layout == 'post' or page.layout == 'talk' %}
           <div id="talk-controls-center" class="talk-nav-center" style="display:none">
             <button id="btn-prev" class="talk-btn talk-btn-nav" title="Previous slide (←)" disabled>
               <i class="bi bi-chevron-left"></i>
@@ -133,9 +134,11 @@
               <i class="bi bi-fullscreen" id="fullscreen-icon"></i>
             </button>
           </div>
+          {% endif %}
 
-          <!-- Zoom + Present controls (always in navbar, disabled on non-post pages) -->
-          <div id="talk-controls" class="talk-nav-controls{% unless page.layout == 'post' or page.layout == 'talk' %} talk-nav-disabled{% endunless %} ms-2">
+          <!-- Zoom + Present controls (only on post/talk pages) -->
+          {% if page.layout == 'post' or page.layout == 'talk' %}
+          <div id="talk-controls" class="talk-nav-controls ms-2">
             <button id="btn-zoom-less" class="talk-btn talk-btn-zoom" title="Less detail">
               <i class="bi bi-dash-circle"></i>
             </button>
@@ -151,6 +154,7 @@
               <i class="bi bi-x-circle-fill"></i>
             </button>
           </div>
+          {% endif %}
         </div>
       </div>
     </nav>
