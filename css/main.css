@@ -12,17 +12,17 @@
   --gradient-blue-teal: linear-gradient(135deg, var(--primary-blue), var(--primary-teal));
   --gradient-purple-blue: linear-gradient(135deg, var(--primary-purple), var(--primary-light-blue));
   
-  /* Dark UI elements with improved contrast */
-  --bg-color: #000000; /* Pure black for maximum contrast */
-  --card-bg-color: #0a0a0a;
-  --text-color: #ffffff;
-  --text-muted: #d1d5db;
-  --border-color: rgba(255, 255, 255, 0.2);
-  --code-bg-color: #111111;
-  
-  /* Shadows and effects with better visibility */
-  --card-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
-  --hover-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
+  /* Dark UI elements — navy-tinted, airy */
+  --bg-color: #0f1117;
+  --card-bg-color: #161b27;
+  --text-color: #ccd6f6;
+  --text-muted: #8892b0;
+  --border-color: rgba(255, 255, 255, 0.07);
+  --code-bg-color: #1a1f2e;
+
+  /* Shadows — neutral, lightweight */
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
   --transition-speed: 0.3s;
 }
 
@@ -400,7 +400,7 @@ footer {
 
 /* Navbar styling with improved contrast */
 .navbar {
-  background: rgba(0, 0, 0, 0.95) !important;
+  background: rgba(15, 17, 23, 0.95) !important;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border-bottom: 2px solid var(--border-color);
@@ -473,7 +473,7 @@ footer {
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 /* Code blocks with modern styling */
@@ -498,7 +498,7 @@ code:not(pre code) {
 
 /* Footer styling */
 .footer {
-  background-color: rgba(0, 0, 0, 0.9) !important;
+  background-color: rgba(15, 17, 23, 0.95) !important;
   border-top: 1px solid var(--border-color);
   padding: 2rem 0;
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
@@ -531,7 +531,7 @@ a:hover {
 }
 
 .dropdown-item:hover {
-  background-color: rgba(92, 158, 255, 0.15);
+  background-color: rgba(92, 158, 255, 0.05);
   color: var(--primary-blue);
 }
 
@@ -638,5 +638,5 @@ table th {
 
 .author-bio .social-links a:hover {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }

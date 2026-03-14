@@ -28,15 +28,16 @@
     --light-color: #2c3034;
     --dark-color: #f8f9fa;
     --gray-color: #c5cfd9;
-    --bg-color: #121212;
-    --card-bg-color: #1e1e1e;
-    --text-color: #f0f2f5;
-    --border-color: rgba(255, 255, 255, 0.15);
-    --code-bg-color: #2a2d31;
-    --blockquote-bg-color: rgba(92, 158, 255, 0.15);
-    --hover-bg-color: rgba(92, 158, 255, 0.15);
-    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    --card-hover-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+    --bg-color: #0f1117;
+    --card-bg-color: #161b27;
+    --text-color: #ccd6f6;
+    --gray-color: #8892b0;
+    --border-color: rgba(255, 255, 255, 0.07);
+    --code-bg-color: #1a1f2e;
+    --blockquote-bg-color: rgba(92, 158, 255, 0.06);
+    --hover-bg-color: rgba(92, 158, 255, 0.06);
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    --card-hover-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
   }
   
   /* Force application of dark mode styles for all key elements */
@@ -46,7 +47,7 @@
   }
   
   .navbar {
-    background-color: #1a1a1a !important;
+    background-color: #0f1117 !important;
   }
   
   .content-container, .container {
@@ -69,7 +70,7 @@
   
   /* Apply dark mode to footer */
   .footer {
-    background-color: #1a1a1a !important;
+    background-color: #0f1117 !important;
     color: var(--gray-color) !important;
   }
   
@@ -79,7 +80,7 @@
   }
   
   .bg-dark {
-    background-color: #1a1a1a !important;
+    background-color: #0f1117 !important;
   }
 }
 
@@ -164,8 +165,8 @@ h1, h2, h3, h4, h5, h6 {
 /* Dark mode overrides for Bootstrap components */
 @media (prefers-color-scheme: dark) {
   .navbar-dark {
-    background-color: #1a1a1a !important;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    background-color: #0f1117 !important;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
   }
   
   .bg-light {
@@ -230,7 +231,7 @@ h1, h2, h3, h4, h5, h6 {
   }
   
   pre, code {
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.07);
   }
   
   /* Ensure post content has good contrast */
@@ -684,7 +685,7 @@ body.dark-mode .post-content blockquote {
 }
 
 body.dark-mode blockquote {
-  background-color: rgba(92, 158, 255, 0.1);
+  background-color: rgba(92, 158, 255, 0.06);
   border-left-color: var(--primary-color);
 }
 
@@ -750,8 +751,8 @@ body.dark-mode .latest-post p {
 
 /* Latest post card dark mode improvements */
 body.dark-mode .latest-post-card {
-  background-color: #1e1e1e;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: #161b27;
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 body.dark-mode .latest-post-card h2,
@@ -821,7 +822,7 @@ body.dark-mode .cookie-policy,
 body.dark-mode #cookie-policy {
   background-color: #2d3748 !important;
   color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -839,7 +840,7 @@ body.dark-mode #cookie-policy a {
 
 /* Footer improvements for dark mode */
 body.dark-mode .footer {
-  background-color: #1a1a1a !important;
+  background-color: #0f1117 !important;
   color: #b0bcc8 !important;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -879,8 +880,8 @@ body.dark-mode .btn-outline-primary:hover {
 /* Standalone dark mode class styling - will apply regardless of media query */
 html.dark-mode,
 body.dark-mode {
-  background-color: #121212 !important;
-  color: #f0f2f5 !important;
+  background-color: #0f1117 !important;
+  color: #ccd6f6 !important;
 }
 
 html.dark-mode h1, 
@@ -898,31 +899,31 @@ body.dark-mode h6 {
   color: #ffffff !important;
 }
 
-html.dark-mode p, 
-html.dark-mode li, 
+html.dark-mode p,
+html.dark-mode li,
 html.dark-mode blockquote,
-body.dark-mode p, 
-body.dark-mode li, 
+body.dark-mode p,
+body.dark-mode li,
 body.dark-mode blockquote {
-  color: #f0f2f5 !important;
+  color: #ccd6f6 !important;
 }
 
 html.dark-mode .navbar-dark,
 body.dark-mode .navbar-dark {
-  background-color: #1a1a1a !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background-color: #0f1117 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
 }
 
 html.dark-mode .bg-dark,
 body.dark-mode .bg-dark {
-  background-color: #1a1a1a !important;
+  background-color: #0f1117 !important;
 }
 
 html.dark-mode .bg-light,
 body.dark-mode .bg-light,
 html.dark-mode .footer,
 body.dark-mode .footer {
-  background-color: #1a1a1a !important;
+  background-color: #0f1117 !important;
   color: var(--gray-color) !important;
 }
 
@@ -938,9 +939,9 @@ html.dark-mode [class*="share-buttons"],
 body.dark-mode [class*="share-buttons"],
 html.dark-mode [class*="comments-section"],
 body.dark-mode [class*="comments-section"] {
-  background-color: #1e1e1e !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
-  color: #f0f2f5 !important;
+  background-color: #161b27 !important;
+  border-color: rgba(255, 255, 255, 0.07) !important;
+  color: #ccd6f6 !important;
 }
 
 html.dark-mode .content-container,
@@ -990,8 +991,8 @@ html.dark-mode .profile-container,
 body.dark-mode .profile-container,
 html.dark-mode .author-card,
 body.dark-mode .author-card {
-  background-color: #1e1e1e !important;
-  color: #f0f2f5 !important;
+  background-color: #161b27 !important;
+  color: #ccd6f6 !important;
 }
 
 /* Fix for navigation buttons at the bottom */
@@ -1001,8 +1002,8 @@ html.dark-mode .previous-next-links,
 body.dark-mode .previous-next-links,
 html.dark-mode .navigation-links,
 body.dark-mode .navigation-links {
-  background-color: #1e1e1e !important;
-  color: #f0f2f5 !important;
+  background-color: #161b27 !important;
+  color: #ccd6f6 !important;
 }
 
 /* Force all backgrounds to be dark */
@@ -1020,7 +1021,7 @@ html.dark-mode div[class*="share"],
 body.dark-mode div[class*="share"],
 html.dark-mode div[class*="social"],
 body.dark-mode div[class*="social"] {
-  background-color: #1e1e1e !important;
+  background-color: #161b27 !important;
 }
 
 /* Make all containers transparent */
@@ -1038,21 +1039,21 @@ body.dark-mode article {
 /* Set dark backgrounds for specific containers */
 html.dark-mode .footer,
 body.dark-mode .footer {
-  background-color: #1a1a1a !important;
+  background-color: #0f1117 !important;
   color: #b0bcc8 !important;
 }
 
 /* Ensure all text is visible on dark backgrounds */
 html.dark-mode *,
 body.dark-mode * {
-  color: #f0f2f5;
+  color: #ccd6f6;
 }
 
 /* Override default styles for social sharing buttons */
 html.dark-mode .share-buttons,
 body.dark-mode .share-buttons {
-  background-color: #1e1e1e !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background-color: #161b27 !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
   border-radius: 8px;
   padding: 1rem;
 }
@@ -1072,13 +1073,13 @@ body.dark-mode a.btn-social {
 html.dark-mode *,
 body.dark-mode * {
   box-shadow: none !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.07) !important;
 }
 
 /* Fix for the content area */
 html.dark-mode .content-container,
 body.dark-mode .content-container {
-  background-color: #121212 !important;
+  background-color: #0f1117 !important;
 }
 
 /* Fix for existing links */
@@ -1097,7 +1098,7 @@ html.dark-mode .bi,
 body.dark-mode .bi,
 html.dark-mode i,
 body.dark-mode i {
-  color: #f0f2f5 !important;
+  color: #ccd6f6 !important;
 }
 
 /* Fix for cards and containers */
@@ -1105,7 +1106,7 @@ html.dark-mode .bg-light,
 body.dark-mode .bg-light,
 html.dark-mode .text-muted,
 body.dark-mode .text-muted {
-  background-color: #1e1e1e !important;
+  background-color: #161b27 !important;
   color: #b0bcc8 !important;
 }
 
@@ -1149,9 +1150,9 @@ html.dark-mode .share-this-post,
 body.dark-mode .share-this-post,
 html.dark-mode [id*="share"],
 body.dark-mode [id*="share"] {
-  background-color: #1e1e1e !important;
-  color: #f0f2f5 !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background-color: #161b27 !important;
+  color: #ccd6f6 !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
   padding: 15px !important;
   border-radius: 8px !important;
 }
@@ -1173,10 +1174,10 @@ html.dark-mode .reactions,
 body.dark-mode .reactions,
 html.dark-mode [class*="comment"],
 body.dark-mode [class*="comment"] {
-  background-color: #1e1e1e !important;
-  color: #f0f2f5 !important;
+  background-color: #161b27 !important;
+  color: #ccd6f6 !important;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
 }
 
 /* Fix for all inputs in dark mode */
@@ -1187,7 +1188,7 @@ body.dark-mode textarea,
 html.dark-mode .form-control,
 body.dark-mode .form-control {
   background-color: #2a2d31 !important;
-  color: #f0f2f5 !important;
+  color: #ccd6f6 !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
@@ -1214,9 +1215,9 @@ html.dark-mode .post-comment,
 body.dark-mode .post-comment,
 html.dark-mode .comment-container,
 body.dark-mode .comment-container {
-  background-color: #1e1e1e !important;
-  color: #f0f2f5 !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
+  background-color: #161b27 !important;
+  color: #ccd6f6 !important;
+  border-color: rgba(255, 255, 255, 0.07) !important;
 }
 
 /* Override third-party comment systems */
@@ -1226,9 +1227,9 @@ html.dark-mode section[id^="comment"],
 body.dark-mode section[id^="comment"],
 html.dark-mode .comments-area,
 body.dark-mode .comments-area {
-  background-color: #1e1e1e !important;
-  color: #f0f2f5 !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  background-color: #161b27 !important;
+  color: #ccd6f6 !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
   border-radius: 8px;
   padding: 20px;
   margin-top: 30px;
@@ -1242,7 +1243,7 @@ body.dark-mode .btn,
 html.dark-mode input[type="submit"],
 body.dark-mode input[type="submit"] {
   background-color: #2a2d31 !important;
-  color: #f0f2f5 !important;
+  color: #ccd6f6 !important;
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
 
@@ -1259,7 +1260,7 @@ body.dark-mode [class*="reaction"] {
 /* Special handling for iframes to ensure dark backgrounds */
 html.dark-mode iframe,
 body.dark-mode iframe {
-  background-color: #1e1e1e !important;
+  background-color: #161b27 !important;
 }
 
 .month-heading {
