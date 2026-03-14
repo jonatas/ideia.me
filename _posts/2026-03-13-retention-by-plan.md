@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Partitions for Profit: Per-Plan Retention with TimescaleDB Dimensions"
+title: Per-Plan Retention with TimescaleDB Dimensions
 categories: ['timescaledb', 'postgresql', 'tutorial']
 tags: ['timescaledb', 'partitioning', 'retention', 'postgresql', 'saas']
 description: "How to use TimescaleDB's space dimensions to implement per-subscription-plan data retention — dropping entire chunk files instead of row-level deletes."
