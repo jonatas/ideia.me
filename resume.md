@@ -5,9 +5,9 @@ title: Jônatas Davi Paganini - Resume
 
 {{ site.author.bio }}
 
-## Staff Engineer at Bax Energy
+## Senior Software Engineer at Hubstaff
 
-Currently working as Staff Engineer at Bax Energy, focusing on database performance optimization and system architecture. With 20+ years of experience, I specialize in:
+Currently working with Ruby and Rust, focusing on database performance optimization and system architecture. With 20+ years of experience, I specialize in:
 
 * Database Performance Optimization & Architecture Design
 * Microservices Migration & System Modernization
