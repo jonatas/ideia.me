@@ -69,13 +69,9 @@ This maps directly to what [Time Economics](/time-economics/) calls **authorship
 A few principles worth anchoring to:
 
 1. **Protect the irreducible** — identify 2-3 practices that are non-negotiable expressions of who you are. Guard them from optimization.
-
 2. **Slow is a feature, not a bug** — in permaculture terms, "observe and interact" before you intervene. The same applies to life design. Don't abstract yourself away from your own land too fast.
-
 3. **Beware the perpetual deferral** — "I'll do the things I love once I've built enough." That threshold tends to move. The life you want isn't behind the work — it needs to be *woven into* the work.
-
 4. **Ask: who's living this?** — Periodically audit your week. How many hours did you spend inside experiences you'd choose, versus managing systems that supposedly exist to serve you?
-
 5. **Meaning is made in contact** — with soil, with people, with problems, with your own limits. Delegation creates distance. Sometimes distance is relief. Sometimes it's loss.
 
 ## The AI Wildcard

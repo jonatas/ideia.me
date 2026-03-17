@@ -241,7 +241,6 @@ body.talk-presenting .talk-chapter h1 {
   font-weight: 700;
   line-height: 1.1;
   margin-bottom: 1rem;
-  white-space: nowrap;
   background: var(--gradient-blue-teal);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -252,7 +251,6 @@ body.talk-presenting .talk-chapter h2 {
   font-weight: 600;
   line-height: 1.2;
   margin-bottom: 0.8rem;
-  white-space: nowrap;
   color: var(--primary-light-blue);
 }
 
@@ -333,47 +331,205 @@ body.talk-presenting .talk-wrapper::after {
   display: none;
 }
 
-/* Level 3: Hide paragraphs + lists */
-#talk-content[data-zoom="3"] p,
-#talk-content[data-zoom="3"] ul,
-#talk-content[data-zoom="3"] ol {
+/* Level 3: Simplify complex list items — show bold emphasis only, hide detail text */
+#talk-content[data-zoom="3"] p {
+  display: none;
+}
+#talk-content[data-zoom="3"] li.zoom-list-complex .zoom-list-detail {
   display: none;
 }
 
-/* Level 4: Hide paragraphs + lists + code + extra images + mermaid (keep first image per slide) */
+/* Level 4: Hide lists, tables, blockquotes, and callouts */
 #talk-content[data-zoom="4"] p,
 #talk-content[data-zoom="4"] ul,
 #talk-content[data-zoom="4"] ol,
-#talk-content[data-zoom="4"] pre,
-#talk-content[data-zoom="4"] .highlight,
-#talk-content[data-zoom="4"] .mermaid,
-#talk-content[data-zoom="4"] .talk-extra-img {
+#talk-content[data-zoom="4"] table,
+#talk-content[data-zoom="4"] blockquote,
+#talk-content[data-zoom="4"] .callout {
   display: none;
 }
 
-/* Level 5: Headers only — hide everything except headings */
+/* Level 5: + code, video embeds, extra images, mermaid */
 #talk-content[data-zoom="5"] p,
 #talk-content[data-zoom="5"] ul,
 #talk-content[data-zoom="5"] ol,
+#talk-content[data-zoom="5"] table,
+#talk-content[data-zoom="5"] blockquote,
+#talk-content[data-zoom="5"] .callout,
 #talk-content[data-zoom="5"] pre,
 #talk-content[data-zoom="5"] .highlight,
-#talk-content[data-zoom="5"] img,
-#talk-content[data-zoom="5"] figure,
 #talk-content[data-zoom="5"] .mermaid,
-#talk-content[data-zoom="5"] blockquote,
-#talk-content[data-zoom="5"] table,
+#talk-content[data-zoom="5"] .video-container,
 #talk-content[data-zoom="5"] .talk-extra-img {
   display: none;
 }
 
-/* Code blocks are visible at levels 0–3, hidden at 4–5 (above) */
+/* Level 6: Headers only — hide everything except headings */
+#talk-content[data-zoom="6"] p,
+#talk-content[data-zoom="6"] ul,
+#talk-content[data-zoom="6"] ol,
+#talk-content[data-zoom="6"] table,
+#talk-content[data-zoom="6"] blockquote,
+#talk-content[data-zoom="6"] .callout,
+#talk-content[data-zoom="6"] pre,
+#talk-content[data-zoom="6"] .highlight,
+#talk-content[data-zoom="6"] img,
+#talk-content[data-zoom="6"] figure,
+#talk-content[data-zoom="6"] .mermaid,
+#talk-content[data-zoom="6"] .video-container,
+#talk-content[data-zoom="6"] .talk-extra-img {
+  display: none;
+}
+
+/* Code blocks are visible at levels 0–4, hidden at 5–6 (above) */
 #talk-content[data-zoom="1"] pre,
 #talk-content[data-zoom="2"] pre,
 #talk-content[data-zoom="3"] pre,
+#talk-content[data-zoom="4"] pre,
 #talk-content[data-zoom="1"] .highlight,
 #talk-content[data-zoom="2"] .highlight,
-#talk-content[data-zoom="3"] .highlight {
+#talk-content[data-zoom="3"] .highlight,
+#talk-content[data-zoom="4"] .highlight {
   display: block !important;
+}
+
+/* ---------------------------------------------------------------------------
+   Chapter anchor links — copy-to-clipboard icon on headings
+   --------------------------------------------------------------------------- */
+
+.talk-chapter-anchor {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.35em;
+  opacity: 0;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.55em;
+  vertical-align: middle;
+  transition: opacity 0.15s ease, color 0.15s ease;
+  -webkit-text-fill-color: initial; /* override gradient fill on h1 */
+}
+
+.talk-chapter h1:hover .talk-chapter-anchor,
+.talk-chapter h2:hover .talk-chapter-anchor {
+  opacity: 1;
+}
+
+.talk-chapter-anchor:hover {
+  color: var(--primary-light-blue);
+  -webkit-text-fill-color: var(--primary-light-blue);
+}
+
+/* ---------------------------------------------------------------------------
+   Toast notification
+   --------------------------------------------------------------------------- */
+
+.talk-toast {
+  position: fixed;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(0.75rem);
+  background: var(--primary-light-blue, #0ea5e9);
+  color: #fff;
+  padding: 0.55rem 1.4rem;
+  border-radius: 24px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 9999;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.talk-toast.talk-toast-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ---------------------------------------------------------------------------
+   First-slide QR + author — hidden in reading mode, shown in presentation
+   Layout: QR floats right (30%), text content takes 70%
+   --------------------------------------------------------------------------- */
+
+.talk-slide-qr {
+  display: none;
+}
+
+/* First slide: two columns — left 65% (title + body), right 35% (QR centered) */
+body.talk-presenting .talk-chapter:first-child.active {
+  display: grid;
+  grid-template-columns: 65% 35%;
+  grid-template-rows: auto;
+  column-gap: 3rem;
+  align-content: start;
+  overflow: hidden;
+}
+
+/* h1 stays in left column, aligned with body */
+body.talk-presenting .talk-chapter:first-child.active > h1 {
+  grid-column: 1;
+  grid-row: 1;
+  margin-bottom: 0.5rem;
+}
+
+body.talk-presenting .talk-chapter:first-child.active > .talk-slide-body {
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+  min-width: 0;
+  padding-bottom: 1rem;
+}
+
+body.talk-presenting .talk-chapter:first-child.active > .talk-slide-qr {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  float: none;
+  width: auto;
+  margin: 0;
+}
+
+body.talk-presenting .talk-slide-qr-code canvas,
+body.talk-presenting .talk-slide-qr-code img {
+  width: 70% !important;
+  height: auto !important;
+  border-radius: 8px;
+  padding: 10px;
+  background: #fff;
+  display: block;
+}
+
+body.talk-presenting .talk-slide-qr-link {
+  text-align: center;
+  font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+body.talk-presenting .talk-slide-qr-link strong {
+  color: var(--text-color);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+body.talk-presenting .talk-slide-qr-link a {
+  color: var(--primary-light-blue);
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9em;
+  word-break: break-all;
+}
+
+body.talk-presenting .talk-slide-qr-link a:hover {
+  text-decoration: underline;
 }
 
 /* ---------------------------------------------------------------------------
