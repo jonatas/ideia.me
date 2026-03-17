@@ -289,6 +289,14 @@ We breathe about 20,000 times a day. Most of those are fine without any interven
 
     document.getElementById(cfg.id + '-wrap').addEventListener('click', function () {
       active = !active;
+      if (typeof gtag === 'function') {
+        gtag('event', 'breathing_exercise', {
+          event_category: 'breathing',
+          event_label: cfg.name,
+          exercise_action: active ? 'start' : 'stop',
+          page_path: window.location.pathname
+        });
+      }
       if (active) {
         t0 = null;
         raf = requestAnimationFrame(tick);
