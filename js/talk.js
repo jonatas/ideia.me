@@ -182,6 +182,7 @@
     slides[currentSlide].classList.remove('active');
     currentSlide = n;
     slides[currentSlide].classList.add('active');
+    trackEvent('slide_navigate', { slide_index: currentSlide + 1, total_slides: slides.length });
     updateUI();
     fitActiveSlideHeadings();
     // Re-render mermaid diagrams in the new active slide
@@ -194,7 +195,10 @@
   // Zoom
   // ---------------------------------------------------------------------------
   function setZoom(level) {
-    zoomLevel = Math.max(0, Math.min(ZOOM_MAX, level));
+    var newLevel = Math.max(0, Math.min(ZOOM_MAX, level));
+    if (newLevel === zoomLevel) return;
+    zoomLevel = newLevel;
+    trackEvent('zoom_change', { zoom_level: zoomLevel, zoom_label: ZOOM_CONTENT[zoomLevel] || (zoomLevel === 0 ? 'full' : 'headers_only') });
     content.setAttribute('data-zoom', zoomLevel);
     updateUI();
   }
@@ -202,8 +206,15 @@
   // ---------------------------------------------------------------------------
   // Presentation Mode
   // ---------------------------------------------------------------------------
+  function trackEvent(action, params) {
+    if (typeof gtag === 'function') {
+      gtag('event', action, Object.assign({ page_path: window.location.pathname }, params));
+    }
+  }
+
   function enterPresentation() {
     isPresenting = true;
+    trackEvent('presentation_start', { total_slides: slides.length });
     document.body.classList.add('talk-presenting');
     document.body.style.overflow = 'hidden';
 
@@ -228,6 +239,7 @@
 
   function exitPresentation() {
     isPresenting = false;
+    trackEvent('presentation_exit', { slide_reached: currentSlide + 1, total_slides: slides.length });
     document.body.classList.remove('talk-presenting');
     document.body.style.overflow = '';
 
