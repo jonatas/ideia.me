@@ -1,0 +1,174 @@
+/* Interactive Learning Engine Styles */
+
+/* --------------------------------------------------------------------------
+   Quiz Component 
+   -------------------------------------------------------------------------- */
+semantic-quiz {
+  display: block;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: rgba(30, 35, 45, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+semantic-quiz:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+semantic-quiz .quiz-question {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: var(--primary-blue, #6fa8dc);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+semantic-quiz .quiz-question::before {
+  content: "🤔";
+  font-size: 1.5rem;
+}
+
+semantic-quiz .quiz-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+semantic-quiz .quiz-option-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 1rem 1.25rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #ccd6f6;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+semantic-quiz .quiz-option-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+semantic-quiz .quiz-option-text {
+  position: relative;
+  z-index: 2;
+  font-weight: 500;
+}
+
+semantic-quiz .quiz-hint {
+  display: none;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #a0aec0;
+  font-style: italic;
+  position: relative;
+  z-index: 2;
+  animation: fadeIn 0.3s ease;
+}
+
+semantic-quiz .quiz-hint.visible {
+  display: block;
+}
+
+/* Status variants */
+semantic-quiz .quiz-option-btn.selected-wrong {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+semantic-quiz .quiz-option-btn.selected-wrong::before {
+  content: "❌";
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  z-index: 2;
+}
+
+semantic-quiz .quiz-option-btn.reveal-correct {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
+}
+
+semantic-quiz .quiz-option-btn.reveal-correct::before {
+  content: "✅";
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  z-index: 2;
+  animation: bounceCorrect 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Disable buttons after interaction */
+semantic-quiz.answered .quiz-option-btn:not(.reveal-correct):not(.selected-wrong) {
+  opacity: 0.5;
+  cursor: default;
+}
+
+semantic-quiz.answered .quiz-option-btn {
+  cursor: default;
+  transform: none;
+}
+
+/* --------------------------------------------------------------------------
+   Animations 
+   -------------------------------------------------------------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounceCorrect {
+  0% { transform: scale(0); }
+  50% { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+/* --------------------------------------------------------------------------
+   Secret Images 
+   -------------------------------------------------------------------------- */
+.learning-secret-media {
+  margin-top: 1.5rem;
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.learning-secret-media.revealed {
+  display: block;
+  /* Next frame opacity trigger */
+}
+
+.learning-secret-media.animate-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.learning-secret-media img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}

@@ -39,19 +39,10 @@
   window.renderVisibleMermaid = function() {
     // Use active chapter if present (slides/presentation layouts), otherwise the whole document
     const container = document.querySelector('.chapter.active') || document;
-    const mermaidDivs = container.querySelectorAll('.mermaid:not([data-processed])');
-    if (mermaidDivs.length > 0) {
-      mermaidDivs.forEach((element, index) => {
-        const id = `mermaid-${Date.now()}-${index}`;
-        element.id = id;
-        try {
-          mermaid.render(id + '-svg', element.textContent).then(result => {
-            element.innerHTML = result.svg;
-            element.setAttribute('data-processed', 'true');
-          });
-        } catch (error) {
-          console.error('Mermaid rendering error:', error);
-        }
+    const nodes = Array.from(container.querySelectorAll('.mermaid:not([data-processed])'));
+    if (nodes.length > 0) {
+      mermaid.run({ nodes }).catch(error => {
+        console.error('Mermaid rendering error:', error);
       });
     }
   };

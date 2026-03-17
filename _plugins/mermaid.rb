@@ -18,7 +18,7 @@ module Jekyll
         # Return the mermaid diagram wrapped in a div.
         # The div must start at column 0 — kramdown treats indented HTML as a
         # code block and will render it as escaped literal text instead of HTML.
-        "<div class=\"mermaid\">\n#{content}\n</div>"
+        "<div class=\"mermaid\" markdown=\"0\">\n#{content}\n</div>"
       end
     end
   end
