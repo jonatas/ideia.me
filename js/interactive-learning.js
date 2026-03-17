@@ -68,18 +68,38 @@ class SemanticQuiz extends HTMLElement {
   handleOptionClick(clickedBtn, optionData, container, secretImageId) {
     if (this.answered) return; // Prevent multiple answers
     this.answered = true;
-    
+
     this.classList.add('answered');
 
     // Show hints for the clicked button (if any)
     const clickedHint = clickedBtn.querySelector('.quiz-hint');
     if (clickedHint) clickedHint.classList.add('visible');
 
+    const questionText = this.getAttribute('question-text') || 'unknown';
+
     // Evaluate
     if (optionData.isCorrect) {
       clickedBtn.classList.add('reveal-correct');
+      if (typeof gtag === 'function') {
+        gtag('event', 'quiz_answer', {
+          event_category: 'interactive_learning',
+          event_label: questionText,
+          quiz_result: 'correct',
+          answer_text: optionData.text,
+          page_path: window.location.pathname
+        });
+      }
     } else {
       clickedBtn.classList.add('selected-wrong');
+      if (typeof gtag === 'function') {
+        gtag('event', 'quiz_answer', {
+          event_category: 'interactive_learning',
+          event_label: questionText,
+          quiz_result: 'incorrect',
+          answer_text: optionData.text,
+          page_path: window.location.pathname
+        });
+      }
       // Find and reveal the actual correct option
       const correctBtn = container.querySelector(`[data-index="${this.findCorrectIndex()}"]`);
       if (correctBtn) {
@@ -95,8 +115,15 @@ class SemanticQuiz extends HTMLElement {
       if (secretImgContainer) {
         secretImgContainer.classList.add('revealed');
         // trigger reflow
-        void secretImgContainer.offsetWidth; 
+        void secretImgContainer.offsetWidth;
         secretImgContainer.classList.add('animate-in');
+        if (typeof gtag === 'function') {
+          gtag('event', 'quiz_secret_revealed', {
+            event_category: 'interactive_learning',
+            event_label: questionText,
+            page_path: window.location.pathname
+          });
+        }
       }
     }
   }

@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" class="dark-mode">
   <head>
-    <!-- Analytics disabled to remove ads -->
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NV80WM9HT0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NV80WM9HT0');
+    </script>
     <meta charset="utf-8">
     <title>{{ page.title }}</title>
     {% if page.description %}<meta name="description" content="{{ page.description }}">{% endif %}
