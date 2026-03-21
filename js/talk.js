@@ -411,6 +411,13 @@
     document.body.classList.add('talk-presenting');
     document.body.style.overflow = 'hidden';
 
+    // Auto-fold the sidebar
+    var appSidebar = document.getElementById('appSidebar');
+    if (appSidebar) {
+      appSidebar.dataset.wasFolded = appSidebar.classList.contains('menu-folded');
+      appSidebar.classList.add('menu-folded');
+    }
+
     btnPresent.style.display = 'none';
     btnExit.style.display = '';
 
@@ -434,6 +441,12 @@
     trackEvent('presentation_exit', { slide_reached: currentSlide + 1, total_slides: slides.length });
     document.body.classList.remove('talk-presenting');
     document.body.style.overflow = '';
+
+    // Unfold the sidebar if it wasn't folded before
+    var appSidebar = document.getElementById('appSidebar');
+    if (appSidebar && appSidebar.dataset.wasFolded !== 'true') {
+      appSidebar.classList.remove('menu-folded');
+    }
 
     btnPresent.style.display = '';
     btnExit.style.display = 'none';
