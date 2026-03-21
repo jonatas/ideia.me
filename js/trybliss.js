@@ -25,6 +25,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const optionsGrid = document.createElement('div');
     optionsGrid.className = 'd-grid gap-3 mt-3';
 
+    let quizImageWrapper = ul.previousElementSibling;
+    let hasImageSpoiler = false;
+    while (quizImageWrapper && quizImageWrapper.tagName !== 'H3' && quizImageWrapper.tagName !== 'H2') {
+      if (quizImageWrapper.tagName === 'P' && quizImageWrapper.querySelector('img')) {
+        hasImageSpoiler = true;
+        break;
+      }
+      quizImageWrapper = quizImageWrapper.previousElementSibling;
+    }
+
+    if (hasImageSpoiler && quizImageWrapper) {
+      quizImageWrapper.style.display = 'none';
+      
+      // Let's create an enticing placeholder inside the quizContainer
+      const placeholder = document.createElement('div');
+      placeholder.className = 'text-center my-3 p-3 rounded-3';
+      placeholder.style.background = 'rgba(255,255,255,0.05)';
+      placeholder.style.border = '1px dashed rgba(255,255,255,0.2)';
+      placeholder.innerHTML = '<i class="bi bi-eye-slash text-muted" style="font-size: 2rem;"></i><div class="small text-muted mt-2">A imagem da resposta está oculta. Selecione uma opção para revelar!</div>';
+      
+      quizContainer.appendChild(placeholder);
+      quizContainer.dataset.hasPlaceholder = 'true';
+    }
+
     const items = Array.from(ul.querySelectorAll('li'));
     items.forEach(li => {
       let isCorrect = false;
@@ -43,6 +67,18 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.innerHTML = `<span>${html}</span><span class="quiz-icon-container"></span>`;
 
       btn.addEventListener('click', function() {
+        if (hasImageSpoiler && quizImageWrapper) {
+          quizImageWrapper.style.display = 'block';
+          quizImageWrapper.style.animation = 'bounce-in 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+          
+          if (quizContainer.dataset.hasPlaceholder === 'true') {
+            const ph = quizContainer.querySelector('.text-center.my-3');
+            if (ph) ph.remove();
+          }
+          
+          hasImageSpoiler = false;
+        }
+
         Array.from(optionsGrid.children).forEach(b => {
           b.disabled = true;
           b.style.opacity = '0.6';
