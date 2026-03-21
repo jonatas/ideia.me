@@ -1,0 +1,287 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Syne:wght@700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #ccd6f6;
+    --paper: #0f1117;
+    --accent: #2563eb;
+    --muted: #8892b0;
+    --line: rgba(255, 255, 255, 0.07);
+    --canvas-bg: #161b27;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+  }
+
+  header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1.5px solid var(--line);
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    background: var(--paper);
+  }
+
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  header span {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .workspace {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    height: calc(100vh - 110px);
+    overflow: hidden;
+  }
+
+  .canvas-area {
+    position: relative;
+    background: var(--canvas-bg);
+    border-right: 1.5px solid var(--line);
+    overflow: hidden;
+  }
+
+  canvas#draw {
+    position: absolute;
+    top: 0; left: 0;
+    cursor: crosshair;
+    touch-action: none;
+  }
+
+  /* Grid overlay */
+  .canvas-area::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .sidebar {
+    display: flex;
+    flex-direction: column;
+    background: var(--paper);
+    overflow-y: auto;
+  }
+
+  .panel {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1.5px solid var(--line);
+  }
+
+  .panel-title {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .btn-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  button {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    padding: 0.5rem 0.9rem;
+    border: 1.5px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+
+  button:hover { background: var(--ink); color: var(--paper); }
+
+  button.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+    font-weight: 400;
+  }
+  button.primary:hover { background: #c9302a; border-color: #c9302a; }
+
+  button.active {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  button:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  button:disabled:hover { background: transparent; color: var(--ink); }
+
+  .slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .slider-row label {
+    font-size: 0.68rem;
+    color: var(--muted);
+    width: 80px;
+    flex-shrink: 0;
+  }
+
+  .slider-row input[type=range] {
+    flex: 1;
+    accent-color: var(--accent);
+  }
+
+  .slider-row .val {
+    font-size: 0.68rem;
+    width: 30px;
+    text-align: right;
+    color: var(--ink);
+  }
+
+  .path-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .path-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.5rem;
+    font-size: 0.68rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.1s;
+  }
+
+  .path-item:hover { border-color: var(--line); }
+  .path-item.selected { border-color: var(--ink); background: rgba(0,0,0,0.03); }
+
+  .path-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .path-name { flex: 1; }
+  .path-pts { color: var(--muted); }
+
+  .path-del {
+    opacity: 0;
+    font-size: 0.75rem;
+    cursor: pointer;
+    color: var(--muted);
+    border: none;
+    background: none;
+    padding: 0;
+    transition: opacity 0.1s;
+  }
+  .path-item:hover .path-del { opacity: 1; }
+
+  .preview-area {
+    flex: 1;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  #preview-canvas {
+    border: 1.5px solid var(--line);
+    background: white;
+    width: 100%;
+    image-rendering: crisp-edges;
+  }
+
+  .status-bar {
+    padding: 0.6rem 2rem;
+    border-top: 1.5px solid var(--line);
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    display: flex;
+    gap: 2rem;
+  }
+
+  .status-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    margin-right: 0.4rem;
+    vertical-align: middle;
+  }
+  .status-dot.recording { background: var(--accent); animation: pulse 0.8s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .color-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .swatch {
+    width: 20px; height: 20px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: border-color 0.1s;
+  }
+  .swatch.active { border-color: var(--ink); }
+
+  .progress-bar {
+    height: 2px;
+    background: var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.05s;
+  }
+
+  .empty-hint {
+    font-size: 0.68rem;
+    color: var(--muted);
+    font-style: italic;
+    padding: 0.5rem 0;
+  }

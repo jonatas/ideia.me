@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Path Recorder → Animation</title>
+<link rel="stylesheet" href="/css/drawing-recorder.css">
+</head>
+<body>
+
+<!-- Navigation back to Apps -->
+<a href="/apps" style="position: fixed; top: 1rem; left: 1rem; z-index: 1000; background: #161b27; border: 1px solid rgba(255,255,255,0.1); color: #ccd6f6; text-decoration: none; padding: 0.5rem 1rem; border-radius: 8px; font-family: monospace; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: background 0.2s;">
+  &larr; Back to Apps
+</a>
+
+<header>
+  <h1>Path Recorder</h1>
+  <span>draw → record → animate → export</span>
+</header>
+
+<div class="workspace">
+  <div class="canvas-area" id="canvas-wrap">
+    <canvas id="draw"></canvas>
+  </div>
+
+  <div class="sidebar">
+
+    <div class="panel">
+      <div class="panel-title">Tools</div>
+      <div class="btn-row">
+        <button id="btn-draw" class="active" title="Draw mode">✏ Draw</button>
+        <button id="btn-erase" title="Eraser">◻ Erase</button>
+        <button id="btn-undo" title="Undo last stroke">↩ Undo</button>
+        <button id="btn-clear" title="Clear all">✕ Clear</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Stroke</div>
+      <div class="slider-group">
+        <div class="slider-row">
+          <label>Width</label>
+          <input type="range" id="stroke-width" min="1" max="20" value="3">
+          <span class="val" id="sw-val">3</span>
+        </div>
+        <div class="slider-row">
+          <label>Opacity</label>
+          <input type="range" id="stroke-opacity" min="10" max="100" value="100">
+          <span class="val" id="so-val">100</span>
+        </div>
+      </div>
+      <div style="margin-top:0.75rem">
+        <div class="panel-title" style="margin-bottom:0.5rem">Color</div>
+        <div class="color-row" id="color-row">
+          <div class="swatch active" style="background:#ccd6f6" data-color="#ccd6f6"></div>
+          <div class="swatch" style="background:#e63c2f" data-color="#e63c2f"></div>
+          <div class="swatch" style="background:#2563eb" data-color="#2563eb"></div>
+          <div class="swatch" style="background:#16a34a" data-color="#16a34a"></div>
+          <div class="swatch" style="background:#d97706" data-color="#d97706"></div>
+          <div class="swatch" style="background:#9333ea" data-color="#9333ea"></div>
+          <input type="color" id="custom-color" value="#ccd6f6" style="width:20px;height:20px;border:none;padding:0;cursor:pointer;border:2px solid var(--line);" title="Custom color">
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Recorded Paths (<span id="path-count">0</span>)</div>
+      <div class="path-list" id="path-list">
+        <div class="empty-hint">Draw to record paths...</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">Animation</div>
+      <div class="slider-group">
+        <div class="slider-row">
+          <label>FPS</label>
+          <input type="range" id="anim-fps" min="6" max="60" value="24">
+          <span class="val" id="fps-val">24</span>
+        </div>
+        <div class="slider-row">
+          <label>Duration</label>
+          <input type="range" id="anim-dur" min="1" max="10" value="3">
+          <span class="val" id="dur-val">3s</span>
+        </div>
+        <div class="slider-row">
+          <label>Line width</label>
+          <input type="range" id="anim-lw" min="1" max="20" value="3">
+          <span class="val" id="lw-val">3</span>
+        </div>
+      </div>
+      <div style="margin-top:0.9rem" class="btn-row">
+        <button id="btn-preview" disabled>▶ Preview</button>
+        <button id="btn-export-svg" disabled>⬇ SVG</button>
+        <button id="btn-export-apng" class="primary" disabled>⬇ Export APNG</button>
+      </div>
+      <div style="margin-top:0.75rem" class="progress-bar">
+        <div class="progress-fill" id="export-progress"></div>
+      </div>
+    </div>
+
+    <div class="preview-area">
+      <div class="panel-title">Preview</div>
+      <canvas id="preview-canvas" height="140"></canvas>
+    </div>
+
+  </div>
+</div>
+
+<div class="status-bar">
+  <span><span class="status-dot" id="status-dot"></span><span id="status-text">READY</span></span>
+  <span id="status-coords">x:— y:—</span>
+  <span id="status-paths">0 paths · 0 pts</span>
+</div>
+
+<!-- APNG builder lib (pure JS, no CDN needed) -->
+
+
+
+<script src="/js/drawing-recorder.js"></script>
+</body>
+</html>
+

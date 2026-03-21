@@ -1,0 +1,151 @@
+---
+layout: default
+title: Lottie DSL Animation Lab
+description: Experimenting with Bodymovin JSON generation
+---
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-12 text-center">
+      <h1>Lottie Animation DSL</h1>
+      <p class="lead">Generated entirely with JavaScript, animated with Bodymovin.</p>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-4">
+    <div class="col-md-8 text-center">
+      <div class="glass-card p-4 mx-auto" style="width: 500px; height: 500px; border-radius: 20px;">
+        <lottie-player id="dsl-player" background="transparent" speed="1" style="width: 100%; height: 100%;" loop autoplay></lottie-player>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-12">
+      <h3>The Code Behind the Scene</h3>
+      <p>This animation is generated dynamically using our <code>LottieBuilder</code> DSL, applying the site's logo colors synchronized to the golden ratio.</p>
+      
+      <pre><code class="language-javascript" id="code-preview">
+// Code will be injected here
+      </code></pre>
+    </div>
+  </div>
+</div>
+
+<script src="/js/lottie-dsl.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Brand Colors
+    const colors = {
+      yellow: '#FBBF24',
+      lightBlue: '#0EA5E9',
+      darkBlue: '#1E3A8A',
+      red: '#EF4444'
+    };
+
+    // 11 seconds at 60fps = 660 total frames
+    // Breathing cycle: 3s IN (0-180), 1s HOLD (180-240), 5s OUT (240-540), 2s HOLD (540-660)
+    const fps = 60;
+    const totalFrames = 660;
+    const builder = new LottieBuilder(500, 500, fps, totalFrames);
+    
+    // Easing curves for smooth breathing
+    const easeInOut = { o: {x: 0.4, y: 0}, i: {x: 0.2, y: 1} };
+    const easeOut = { o: {x: 0, y: 0}, i: {x: 0.2, y: 1} }; // for rotation spin-down
+
+    // Meditator breathing scale
+    const breathingScale = [
+      { t: 0, s: 80, ease: easeInOut },               // Start (empty)
+      { t: 180, s: 120, ease: easeInOut },            // Inhale 3s
+      { t: 240, s: 120, ease: easeInOut },            // Hold 1s
+      { t: 540, s: 80, ease: easeInOut },             // Exhale 5s
+      { t: 660, s: 80, ease: easeInOut }              // Hold 2s (End)
+    ];
+
+    // Rotation slowing down: rapid early on, tapering off
+    // 0 deg at start, 90 deg by the end, easing out sharply
+    const rotSpin = [
+      { t: 0, s: 0, ease: easeOut },
+      { t: 660, s: 90, ease: easeOut }
+    ];
+
+    builder.addCircle({
+      x: 250, y: 250, size: 420,
+      color: [colors.darkBlue, colors.lightBlue],
+      scaleKeyframes: breathingScale,
+      rotationKeyframes: rotSpin
+    });
+
+    builder.addCircle({
+      x: 250, y: 250, size: 300,
+      color: [colors.lightBlue, colors.yellow],
+      scaleKeyframes: breathingScale,
+      rotationKeyframes: rotSpin
+    });
+
+    builder.addCircle({
+      x: 250, y: 250, size: 190,
+      color: [colors.yellow, colors.red],
+      scaleKeyframes: breathingScale,
+      rotationKeyframes: rotSpin
+    });
+
+    // Inner meditator body pulsating with the breath
+    builder.addMeditator({
+      x: 250, y: 250, color: "#ffffff",
+      scaleKeyframes: breathingScale,
+      opacityKeyframes: [
+        { t: 0, s: 50, ease: easeInOut },
+        { t: 180, s: 100, ease: easeInOut },
+        { t: 240, s: 100, ease: easeInOut },
+        { t: 540, s: 50, ease: easeInOut },
+        { t: 660, s: 50, ease: easeInOut }
+      ]
+    });
+
+    const animationJSON = builder.toJSON();
+    
+    // Render the animation
+    const player = document.getElementById('dsl-player');
+    player.load(animationJSON);
+
+    // Show the generator code
+    const codePreview = document.getElementById('code-preview');
+    codePreview.textContent = `// Breathing Cycle: 3s IN, 1s HOLD, 5s OUT, 2s HOLD = 11s Total
+const totalFrames = 660; // 11s @ 60fps
+const builder = new LottieBuilder(500, 500, 60, totalFrames);
+
+const breathingScale = [
+  { t: 0, s: 80 },    // Start
+  { t: 180, s: 120 }, // Inhale 3s
+  { t: 240, s: 120 }, // Hold 1s
+  { t: 540, s: 80 },  // Exhale 5s
+  { t: 660, s: 80 }   // Hold 2s
+];
+
+const rotSpin = [
+  { t: 0, s: 0 },
+  { t: 660, s: 90 }  // Rotates 90 deg, slowing down
+];
+
+builder.addCircle({
+  size: 420,
+  color: ['#1E3A8A', '#0EA5E9'], // Gradient Fill
+  scaleKeyframes: breathingScale,
+  rotationKeyframes: rotSpin
+});
+
+// ... outer circles ...
+
+builder.addMeditator({
+  color: "#ffffff",
+  scaleKeyframes: breathingScale
+});
+
+player.load(builder.toJSON());`;
+
+    if (window.Prism) {
+      Prism.highlightElement(codePreview);
+    }
+  });
+</script>
