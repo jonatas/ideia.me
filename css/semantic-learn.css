@@ -291,7 +291,6 @@
   filter: grayscale(0%);
   animation: badgeUnlock 0.6s var(--bounce);
   border-color: var(--success-color);
-  box-shadow: 0 0 20px rgba(81, 207, 102, 0.3);
 }
 
 @keyframes badgeUnlock {
@@ -396,7 +395,6 @@
 
 .content-card:hover {
   border-color: var(--primary-blue);
-  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.15);
   transform: translateY(-2px);
 }
 
@@ -572,7 +570,6 @@
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(251, 191, 36, 0.4);
 }
 
 .btn-secondary {
@@ -740,11 +737,9 @@
 
 .word-node:hover {
   transform: scale(1.1);
-  box-shadow: 0 5px 20px rgba(37, 99, 235, 0.5);
 }
 
 .word-node.selected {
-  box-shadow: 0 0 0 3px var(--warning-color);
   animation: pulse 1s infinite;
 }
 
@@ -824,7 +819,6 @@
 .mapper-input input:focus {
   outline: none;
   border-color: var(--primary-blue);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
 }
 
 .mapper-arrow {
@@ -985,7 +979,6 @@
 
 .draggable-item:hover {
   transform: scale(1.02);
-  box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
 }
 
 .draggable-item.dragging {
@@ -1157,7 +1150,6 @@
 .step-content:hover {
   background: rgba(255, 255, 255, 0.08);
   transform: translateX(5px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .scale-emoji {
@@ -1268,7 +1260,6 @@
 
 .scale-slider input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.2);
-  box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
 }
 
 .scale-current {
@@ -1443,7 +1434,6 @@
 .reflection-textarea:focus {
   outline: none;
   border-color: var(--primary-purple);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
 }
 
 .save-status {
@@ -1620,7 +1610,6 @@
   background: var(--card-bg-color);
   border: 2px solid var(--border-color);
   border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
   z-index: 999;
   display: none;
   flex-direction: column;
@@ -1729,7 +1718,6 @@
   color: white;
   font-size: 1.5rem;
   cursor: pointer;
-  box-shadow: 0 5px 20px rgba(37, 99, 235, 0.4);
   z-index: 998;
   transition: all var(--transition-speed);
   display: flex;
@@ -1739,7 +1727,6 @@
 
 .vocab-builder-toggle:hover {
   transform: scale(1.1);
-  box-shadow: 0 8px 30px rgba(37, 99, 235, 0.6);
 }
 
 .vocab-count-badge {
@@ -2134,28 +2121,24 @@
 .title-word.affirmation {
   background: linear-gradient(135deg, #FBBF24, #F59E0B);
   color: #1E3A8A;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   animation: colorShift1 4s ease-in-out infinite;
 }
 
 .title-word.phrases {
   background: linear-gradient(135deg, #0EA5E9, #0284C7);
   color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   animation: colorShift2 4s ease-in-out infinite 1s;
 }
 
 .title-word.symbols {
   background: linear-gradient(135deg, #EF4444, #DC2626);
   color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   animation: colorShift3 4s ease-in-out infinite 2s;
 }
 
 .title-word.and {
   background: linear-gradient(135deg, #1E3A8A, #1E40AF);
   color: #FBBF24;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   font-weight: 500;
   animation: colorShift4 4s ease-in-out infinite 3s;
 }
@@ -2163,7 +2146,6 @@
 .title-word.drawings {
   background: linear-gradient(135deg, #8B5CF6, #7C3AED);
   color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
   position: relative;
   animation: colorShift5 4s ease-in-out infinite 4s;
 }
@@ -2947,7 +2929,6 @@
   background: var(--card-bg);
   border-radius: var(--border-radius);
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .neuro-table thead {

@@ -83,98 +83,95 @@
     <!-- Geometric background pattern -->
     <div class="geometric-bg"></div>
 
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-      <div class="container">
-        <a class="navbar-brand py-0" href="/">
-          <span class="logo">
-            <span class="i">i</span>
-            <span class="d">d</span>
-            <span class="e">e</span>
-            <span class="i2">i</span>
-            <span class="a">a</span>
-            <span class="dot">.</span>
-            <span class="m">m</span>
-            <span class="e2">e</span>
+    <!-- Mobile Sidebar Toggler -->
+    <button class="sidebar-toggler" type="button" id="sidebarToggle" aria-label="Toggle navigation">
+      <i class="bi bi-list fs-3"></i>
+    </button>
+
+    <div class="app-layout">
+      <!-- Lateral Sidebar -->
+      <aside class="app-sidebar d-flex flex-column p-3" id="appSidebar">
+        <a class="navbar-brand py-0 mb-4 px-2" href="/">
+          <span class="logo fs-4">
+            <span class="i">i</span><span class="d">d</span><span class="e">e</span><span class="i2">i</span><span class="a">a</span><span class="dot">.</span><span class="m">m</span><span class="e2">e</span>
           </span>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarMain">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link py-1" href="/talks">🎤</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link py-1 pe-1" href="/videos">🍿</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle py-1" href="#" id="pagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              </a>
-              <ul class="dropdown-menu shadow-sm glass-card" aria-labelledby="pagesDropdown">
-                <li><a class="dropdown-item" href="/archive">Archive</a></li>
-                <li><a class="dropdown-item" href="/talks">Talks</a></li>
-                <li><a class="dropdown-item" href="/videos">Videos</a></li>
-                <li><a class="dropdown-item" href="/categories">Categories</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="https://www.linkedin.com/in/jonatasdp"><i class="bi bi-linkedin"></i> Linkedin</a></li>
-                <li><a class="dropdown-item" href="https://github.com/jonatas"><i class="bi bi-github"></i> Github</a></li>
-                <li><a class="dropdown-item" href="https://twitter.com/jonatasdp"><i class="bi bi-twitter"></i> Twitter</a></li>
-                <li><a class="dropdown-item" href="https://instagram.com/jonatasdp"><i class="bi bi-instagram"></i> Instagram</a></li>
-                <li><a class="dropdown-item" href="https://www.youtube.com/user/jonatasdp"><i class="bi bi-youtube"></i> Youtube</a></li>
-              </ul>
-            </li>
-          </ul>
-          {% if page.title %}
-          <div class="d-none d-md-block page-title-nav me-auto ms-2">
-            {{ page.title }}
-          </div>
-          {% endif %}
+        
+        <ul class="nav nav-pills flex-column mb-auto" id="main-nav-menu">
+          <li class="nav-item mb-1">
+            <a href="/" class="nav-link text-white {% if page.url == '/' %}active bg-primary{% endif %}">
+              <i class="bi bi-house me-2"></i> Home
+            </a>
+          </li>
+          <li class="nav-item mb-1">
+            <a href="/archive" class="nav-link text-white {% if page.url == '/archive' or page.layout == 'post' %}active bg-primary{% endif %}">
+              <i class="bi bi-journal-text me-2"></i> Blog
+            </a>
+          </li>
+          <li class="nav-item mb-1">
+            <a href="/apps" class="nav-link text-white {% if page.url contains '/apps' %}active bg-primary{% endif %}">
+              <i class="bi bi-grid me-2"></i> Apps
+            </a>
+          </li>
+          <li class="nav-item mb-1">
+            <a href="/talks" class="nav-link text-white {% if page.url == '/talks' or page.layout == 'talk' %}active bg-primary{% endif %}">
+              <i class="bi bi-mic me-2"></i> Talks
+            </a>
+          </li>
+          <li class="nav-item mb-1">
+            <a href="/videos" class="nav-link text-white {% if page.url == '/videos' %}active bg-primary{% endif %}">
+              <i class="bi bi-play-btn me-2"></i> Videos
+            </a>
+          </li>
+          <li class="nav-item mb-1">
+            <a href="/categories" class="nav-link text-white {% if page.url == '/categories' %}active bg-primary{% endif %}">
+              <i class="bi bi-tags me-2"></i> Categories
+            </a>
+          </li>
+        </ul>
 
-          <!-- Slide nav (visible only in presentation mode, only on post/talk pages) -->
-          {% if page.layout == 'post' or page.layout == 'talk' %}
-          <div id="talk-controls-center" class="talk-nav-center" style="display:none">
-            <button id="btn-prev" class="talk-btn talk-btn-nav" title="Previous slide (←)" disabled>
-              <i class="bi bi-chevron-left"></i>
-            </button>
-            <span id="talk-slide-counter" class="talk-slide-counter">1 / 1</span>
-            <button id="btn-next" class="talk-btn talk-btn-nav" title="Next slide (→)">
-              <i class="bi bi-chevron-right"></i>
-            </button>
-            <button id="btn-fullscreen" class="talk-btn talk-btn-nav" title="Toggle fullscreen (f)">
-              <i class="bi bi-fullscreen" id="fullscreen-icon"></i>
-            </button>
-          </div>
-          {% endif %}
-
-          <!-- Zoom + Present controls (only on post/talk pages) -->
-          {% if page.layout == 'post' or page.layout == 'talk' %}
-          <div id="talk-controls" class="talk-nav-controls ms-2">
-            <button id="btn-zoom-less" class="talk-btn talk-btn-zoom" title="Less detail">
-              <i class="bi bi-dash-circle"></i>
-            </button>
-            <span id="talk-zoom-dots" class="talk-zoom-dots"></span>
-            <button id="btn-zoom-more" class="talk-btn talk-btn-zoom" title="More detail" disabled>
-              <i class="bi bi-plus-circle"></i>
-            </button>
-            <span class="talk-controls-divider"></span>
-            <button id="btn-present" class="talk-btn talk-btn-primary" title="Start presentation — use ← → to navigate slides, Esc to exit">
-              <i class="bi bi-play-circle-fill"></i>
-            </button>
-            <button id="btn-exit-present" class="talk-btn talk-btn-exit" title="Exit presentation (Esc)" style="display:none">
-              <i class="bi bi-x-circle-fill"></i>
-            </button>
-          </div>
-          {% endif %}
+        {% if page.layout == 'post' or page.layout == 'talk' %}
+        <div class="mt-4 p-2 hide-on-fold">
+          <button id="btn-present" class="btn btn-primary w-100 d-flex align-items-center justify-content-center py-2">
+            <i class="bi bi-play-fill fs-5 me-1"></i> Present
+          </button>
         </div>
-      </div>
-    </nav>
-    
-    <div class="container content-container mt-5 pt-5">
-      {{ content }}
-    </div>
-    
-    <footer class="footer py-4 mt-5">
+        {% endif %}
+
+        <hr class="border-secondary opacity-25 hide-on-fold">
+        
+        <div class="d-flex flex-column gap-2 mb-3 px-2 hide-on-fold">
+          <div class="text-muted small fw-bold text-uppercase" style="font-size: 0.7rem; letter-spacing: 1px;">Connect</div>
+          <div class="d-flex gap-2">
+            <a class="text-white opacity-75 text-decoration-none" href="https://github.com/jonatas" target="_blank"><i class="bi bi-github"></i></a>
+            <a class="text-white opacity-75 text-decoration-none" href="https://twitter.com/jonatasdp" target="_blank"><i class="bi bi-twitter"></i></a>
+            <a class="text-white opacity-75 text-decoration-none" href="https://www.linkedin.com/in/jonatasdp" target="_blank"><i class="bi bi-linkedin"></i></a>
+            <a class="text-white opacity-75 text-decoration-none" href="https://www.youtube.com/user/jonatasdp" target="_blank"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+        
+        <div class="d-flex flex-column align-items-center mt-2 px-2 pb-2 hide-on-fold text-center">
+          <img src="{{ site.author.avatar }}" alt="Jonatas" width="48" height="48" class="rounded-circle mb-2 profile-image">
+          <div class="lh-1">
+            <strong class="d-block small text-white mb-1">{{ site.author.name }}</strong>
+            <span class="text-muted" style="font-size: 0.75rem;">@jonatasdp</span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="app-main">
+        {% if page.title %}
+        <div class="page-title-header d-md-none p-3 border-bottom border-secondary mb-3 pt-4">
+          <h1 class="h4 mb-0 text-white mt-2">{{ page.title }}</h1>
+        </div>
+        {% endif %}
+        
+        <div class="container content-container mt-4 pt-4 pt-md-5">
+          {{ content }}
+        </div>
+        
+        <footer class="footer py-4 mt-auto">
       <div class="container text-center">
         <p class="text-muted mb-2">
           <a class="text-muted me-3" href="/archive"><i class="bi bi-archive"></i> Archive</a>
@@ -189,10 +186,57 @@
           <a class="text-muted me-3" href="https://instagram.com/jonatasdp"><i class="bi bi-instagram"></i></a>
           <a class="text-muted me-3" href="https://www.youtube.com/user/jonatasdp"><i class="bi bi-youtube"></i></a>
         </p>
-        <p class="text-muted mb-1">© {{ site.time | date: '%Y' }} {{ site.author.name }}. All rights reserved.</p>
+        <p class="text-muted mb-1">© {{ site.time | date: '%Y' }} <a href="/resume" class="text-muted text-decoration-none">{{ site.author.name }}</a>. All rights reserved.</p>
         <p class="mb-0"><a class="text-muted claude-nav-link" href="/claude/">~/.claude</a></p>
       </div>
     </footer>
+    </main>
+    </div>
+
+    <!-- Presentation Top Bar -->
+    {% if page.layout == 'post' or page.layout == 'talk' %}
+    <div id="talk-controls-topbar" class="d-flex justify-content-between align-items-center px-4 py-2">
+      <div class="d-flex align-items-center">
+        <button id="btn-exit-present" class="btn btn-danger btn-sm me-4 d-flex align-items-center rounded-0">
+          <i class="bi bi-stop-circle me-1"></i> Exit Present
+        </button>
+        
+        <div id="talk-controls" class="d-flex align-items-center">
+          <a href="#" id="btn-zoom-less" class="text-white text-decoration-none opacity-75 me-2 fs-5 hover-opacity-100" title="Less detail"><i class="bi bi-dash-circle"></i></a>
+          <span id="talk-zoom-dots" class="text-white small mx-2 d-flex align-items-center"></span>
+          <a href="#" id="btn-zoom-more" class="text-white text-decoration-none opacity-75 ms-2 fs-5 hover-opacity-100" title="More detail"><i class="bi bi-plus-circle"></i></a>
+        </div>
+      </div>
+      
+      <div class="d-flex align-items-center gap-3">
+        <button id="btn-prev" class="btn btn-outline-light border-0 fs-5 p-1" title="Previous slide (←)" disabled><i class="bi bi-chevron-left"></i></button>
+        <span id="talk-slide-counter" class="text-white font-monospace fs-6 px-2 py-1 bg-dark rounded">1/1</span>
+        <button id="btn-next" class="btn btn-outline-light border-0 fs-5 p-1" title="Next slide (→)"><i class="bi bi-chevron-right"></i></button>
+        <button id="btn-fullscreen" class="btn btn-outline-light border-0 fs-5 p-1 ms-3" title="Toggle fullscreen (f)"><i class="bi bi-fullscreen" id="fullscreen-icon"></i></button>
+      </div>
+    </div>
+    
+    <style>
+      #talk-controls-topbar {
+        position: fixed;
+        top: -100px;
+        left: 0;
+        width: 100%;
+        background: rgba(15, 17, 23, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        z-index: 2000;
+        transition: top 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      }
+      body.talk-presenting #talk-controls-topbar {
+        top: 0;
+      }
+      body.talk-presenting {
+        padding-top: 3rem; /* Provide space so content isn't flush with topbar */
+      }
+    </style>
+    {% endif %}
 
     <!-- Consolidated JS -->
     <script>
@@ -272,7 +316,52 @@
           }
         });
       });
+      
+      
+      // Mobile sidebar toggle logic
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const appSidebar = document.getElementById('appSidebar');
+      const appLayout = document.querySelector('.app-layout');
+      
+      if (sidebarToggle && appSidebar) {
+        sidebarToggle.addEventListener('click', function(e) {
+          appSidebar.classList.toggle('show');
+          appLayout.classList.toggle('sidebar-open');
+          e.stopPropagation();
+        });
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+          if (window.innerWidth < 768 && appSidebar.classList.contains('show')) {
+            if (!appSidebar.contains(e.target) && e.target !== sidebarToggle) {
+              appSidebar.classList.remove('show');
+              appLayout.classList.remove('sidebar-open');
+            }
+          }
+        });
+      }
+
+      // Fold Menu toggle logic
+      const btnFoldMenu = document.getElementById('btn-fold-menu');
+      if (btnFoldMenu && appSidebar) {
+        btnFoldMenu.addEventListener('click', function() {
+          appSidebar.classList.toggle('menu-folded');
+        });
+      }
     </script>
+    
+    <style>
+      .app-sidebar.menu-folded .navbar-brand,
+      .app-sidebar.menu-folded #main-nav-menu,
+      .app-sidebar.menu-folded .hide-on-fold {
+        display: none !important;
+      }
+      .app-sidebar.menu-folded {
+        width: max-content;
+        min-width: 80px;
+        padding-top: 1rem !important;
+      }
+    </style>
     
     <!-- Dedicated scripts -->
   </body>

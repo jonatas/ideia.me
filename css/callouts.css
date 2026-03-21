@@ -6,7 +6,6 @@
   page-break-inside: avoid;
   border-left: 0.25rem solid var(--admonition-color, #2196f3);
   border-radius: 0.125rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   background-color: #fff;
   font-size: 0.8rem;
 }
@@ -164,7 +163,6 @@
 /* Dark mode support */
 .dark-mode .admonition {
   background-color: #1e1e1e;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
 }
 
 .dark-mode .admonition-content {
@@ -202,7 +200,6 @@
 @media print {
   .admonition {
     border: 1px solid var(--admonition-color, #2196f3);
-    box-shadow: none;
   }
   
   .admonition-collapsible .admonition-title::after {

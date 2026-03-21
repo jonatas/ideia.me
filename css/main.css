@@ -20,9 +20,9 @@
   --border-color: rgba(255, 255, 255, 0.07);
   --code-bg-color: #1a1f2e;
 
-  /* Shadows — neutral, lightweight */
-  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  /* Shadows — flat design */
+  --card-shadow: none;
+  --hover-shadow: none;
   --transition-speed: 0.3s;
 }
 
@@ -102,7 +102,6 @@ a:hover {
 .content {
   background-color: white;
   border-radius: 8px;
-  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
   padding: 2rem;
   margin: 2rem 0;
 }
@@ -110,7 +109,6 @@ a:hover {
 /* Navigation */
 .navbar {
   background-color: white;
-  box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);
   padding: 1rem 0;
 }
 
@@ -240,10 +238,6 @@ footer {
     background-color: #2d3748;
   }
   
-  .navbar {
-    box-shadow: 0 1px 3px 0 rgba(0,0,0,0.3);
-  }
-  
   h2 {
     border-bottom-color: #4a5568;
   }
@@ -333,21 +327,7 @@ footer {
   color: #EF4444; /* Red */
 }
 
-/* Emoji Navigation Links */
-.nav-item .nav-link[href="/talks"],
-.nav-item .nav-link[href="/videos"] {
-  font-size: 1.4rem;
-  padding: 0.2rem 0.6rem;
-  transition: transform 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.nav-item .nav-link[href="/talks"]:hover,
-.nav-item .nav-link[href="/videos"]:hover {
-  transform: scale(1.2);
-}
 
 /* Videos Page Link on Talks Page */
 .videos-link, .talks-link {
@@ -373,7 +353,6 @@ footer {
 
 .videos-link .btn:hover, .talks-link .btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 .videos-link .btn:hover {
@@ -405,7 +384,6 @@ footer {
   -webkit-backdrop-filter: blur(15px);
   border-bottom: 2px solid var(--border-color);
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .navbar-brand {
@@ -426,54 +404,57 @@ footer {
   color: var(--primary-light-blue) !important;
 }
 
-/* Card styling with gradient borders and improved contrast */
+/* Card styling with flat terminal-style design and improved contrast */
 .card, .glass-card {
-  background-color: var(--card-bg-color);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px; /* Flatter terminal style */
   overflow: hidden;
-  box-shadow: var(--card-shadow);
-  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  transition: border-color var(--transition-speed);
   position: relative;
 }
 
-.card::before, .glass-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--gradient-blue-purple);
-}
-
 .card:hover, .glass-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--hover-shadow);
+  border-color: rgba(255, 255, 255, 0.3); /* Simple highlight on hover instead of shadow/transform */
 }
 
 /* Glassmorphism effect */
 .glass-card {
-  background: rgba(17, 17, 17, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(17, 17, 17, 0.4);
+  backdrop-filter: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   padding: 1rem;
 }
 
 /* Button styling */
 .btn-primary {
-  background: var(--gradient-blue-purple);
-  border: none;
-  border-radius: 6px;
-  transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+  background: transparent;
+  color: var(--primary-light-blue);
+  border: 1px solid var(--primary-light-blue);
+  border-radius: 4px;
+  transition: all var(--transition-speed);
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
   font-weight: 500;
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  background: var(--primary-light-blue);
+  color: var(--bg-color);
+}
+
+.btn-danger {
+  background: transparent;
+  color: #EF4444;
+  border: 1px solid #EF4444;
+  border-radius: 0;
+  transition: all var(--transition-speed);
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
+  font-weight: 500;
+}
+
+.btn-danger:hover {
+  background: #EF4444;
+  color: var(--bg-color);
 }
 
 /* Code blocks with modern styling */
@@ -638,5 +619,81 @@ table th {
 
 .author-bio .social-links a:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Sidebar Layout */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+}
+.app-sidebar {
+  width: 250px;
+  background-color: var(--card-bg-color);
+  border-right: 1px solid var(--border-color);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+.app-main {
+  flex-grow: 1;
+  margin-left: 250px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.sidebar-toggler {
+  display: none;
+  position: fixed;
+  top: 0.75rem;
+  right: 1rem;
+  z-index: 1050;
+  background: var(--card-bg-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  border-radius: 8px;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+.sidebar-toggler i {
+  color: var(--primary-light-blue);
+}
+.page-title-header {
+  background: var(--card-bg-color);
+}
+
+@media (max-width: 767.98px) {
+  .app-sidebar {
+    transform: translateX(-100%);
+  }
+  .app-sidebar.show {
+    transform: translateX(0);
+  }
+  .app-main {
+    margin-left: 0;
+  }
+  .sidebar-toggler {
+    display: block;
+  }
+  .app-layout.sidebar-open::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(3px);
+    z-index: 1030;
+    animation: fadeIn 0.3s ease;
+  }
+}
+
+/* High contrast for Bliss symbols in dark mode */
+.dark-mode img[src*="/images/symbols/"],
+.dark-mode img[src*="bliss"] {
+  filter: invert(1) brightness(1.5);
 }

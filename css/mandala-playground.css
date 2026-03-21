@@ -45,7 +45,6 @@ body {
 .banner-mandala.selected {
   transform: scale(1.15);
   border-color: #ffffff;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
 }
 
 @keyframes rotate-mandala {
@@ -108,7 +107,6 @@ body {
   border-radius: 10px;
   outline: none;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 .speed-slider::-webkit-slider-thumb {
@@ -120,13 +118,11 @@ body {
   border: 3px solid #1abc9c;
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 0 15px rgba(26, 188, 156, 0.6);
   transition: all 0.2s ease;
 }
 
 .speed-slider::-webkit-slider-thumb:hover {
   transform: scale(1.2);
-  box-shadow: 0 0 25px rgba(26, 188, 156, 0.8);
 }
 
 .speed-display {
@@ -250,7 +246,6 @@ body {
 .color-note:hover {
   transform: scale(1.3);
   z-index: 10;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
 }
 
 .color-note.playing {
@@ -332,13 +327,11 @@ body {
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 6px 20px rgba(243, 156, 18, 0.3);
   font-family: inherit;
 }
 
 .aspiral-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(243, 156, 18, 0.5);
 }
 
 .aspiral-button:active {
@@ -393,7 +386,6 @@ body {
 
 .speed-slider-aspiral::-webkit-slider-thumb:hover {
   transform: scale(1.3);
-  box-shadow: 0 0 15px rgba(243, 156, 18, 0.8);
 }
 
 .aspiral-dot {
@@ -527,7 +519,6 @@ body {
   font-weight: bold !important;
   cursor: pointer !important;
   z-index: 99 !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
   transition: all 0.3s ease !important;
   font-family: inherit !important;
   font-size: 14px !important;

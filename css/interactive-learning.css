@@ -12,12 +12,10 @@ semantic-quiz {
   border-radius: 12px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 semantic-quiz:hover {
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
 }
 
 semantic-quiz .quiz-question {
@@ -105,7 +103,6 @@ semantic-quiz .quiz-option-btn.selected-wrong::before {
 semantic-quiz .quiz-option-btn.reveal-correct {
   background: rgba(16, 185, 129, 0.1);
   border-color: rgba(16, 185, 129, 0.5);
-  box-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
 }
 
 semantic-quiz .quiz-option-btn.reveal-correct::before {

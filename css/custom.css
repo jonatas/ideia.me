@@ -123,7 +123,6 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Navigation styling */
 .navbar {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
   min-height: auto;
@@ -242,11 +241,9 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Further style adjustments for the navbar in dark mode */
 .dark-mode .navbar-dark {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .dark-mode .dropdown-menu {
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* Card styling for posts and content */
@@ -256,13 +253,11 @@ h1, h2, h3, h4, h5, h6 {
   border-radius: 8px;
   margin-bottom: 1.5rem;
   transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-  box-shadow: var(--card-shadow);
   overflow: hidden;
 }
 
 .card:hover {
   transform: translateY(-5px);
-  box-shadow: var(--card-hover-shadow);
 }
 
 .card-title {
@@ -366,7 +361,6 @@ pre {
   background-color: var(--code-bg-color);
   border: 1px solid var(--border-color);
   overflow-x: auto;
-  box-shadow: var(--card-shadow);
 }
 
 code {
@@ -781,7 +775,6 @@ body.dark-mode .code {
 body.dark-mode .post-content code[class*="language-"],
 body.dark-mode .post-content pre[class*="language-"] {
   color: #f8f8f2 !important;
-  text-shadow: none !important;
 }
 
 body.dark-mode .token.comment,
@@ -823,7 +816,6 @@ body.dark-mode #cookie-policy {
   background-color: #2d3748 !important;
   color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 body.dark-mode .cookie-policy button,
@@ -1072,7 +1064,6 @@ body.dark-mode a.btn-social {
 /* Remove all shadows and add dark borders */
 html.dark-mode *,
 body.dark-mode * {
-  box-shadow: none !important;
   border-color: rgba(255, 255, 255, 0.07) !important;
 }
 
