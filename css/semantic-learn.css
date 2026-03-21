@@ -32,6 +32,15 @@
   --bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+.learning-header .container {
+  max-width: 100%;
+  padding: 0 var(--spacing-md);
+}
+
 /* Particles Background */
 #particles-js {
   position: fixed;
@@ -126,10 +135,8 @@
   margin-top: 120px;
   min-height: calc(100vh - 120px);
   gap: var(--spacing-lg);
-  padding: var(--spacing-lg);
-  max-width: 1400px;
-  margin-left: auto;
-  margin-right: auto;
+  padding: var(--spacing-md);
+  width: 100%;
 }
 
 /* Navigation Sidebar */

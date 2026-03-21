@@ -1,0 +1,92 @@
+/* Shared CSS for Lorenzo Games (Figuras Repetidas & Jogo da Memória) */
+
+.lorenzo-game-container {
+    perspective: 1000px;
+}
+
+.game-board {
+    min-height: 400px;
+    width: 100%;
+}
+
+.items-board {
+    transition: all 0.3s ease;
+}
+
+.icon-item {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease;
+    border-radius: 8px;
+}
+
+.icon-item lottie-player {
+    display: block;
+}
+
+.icon-item:hover {
+    transform: scale(1.1);
+}
+
+/* Jogo da Memória Card Styles */
+.memory-board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.memory-card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.memory-card.flipped {
+    transform: rotateY(180deg);
+}
+
+.memory-card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.memory-card-back {
+    /* The back of the card (what you see when hidden) */
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(30, 58, 138, 0.3));
+    border: 1px solid var(--primary-light-blue);
+}
+
+.memory-card-back::after {
+    content: "?";
+    font-size: 3rem;
+    color: var(--primary-light-blue);
+    opacity: 0.5;
+    font-weight: bold;
+}
+
+.memory-card-front {
+    /* The front of the card (the icon) */
+    transform: rotateY(180deg);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.memory-card.solved .memory-card-front {
+    border: 2px solid var(--bs-success);
+    background: rgba(25, 135, 84, 0.1);
+}

@@ -1,0 +1,30 @@
+---
+layout: default
+title: "Jogo da Memória"
+description: "A classic memory game with a sleek interactive design."
+---
+
+<link rel="stylesheet" href="/css/lorenzo-games.css">
+
+<div class="learning-header">
+  <div class="container">
+    <div class="journey-title text-center">
+      <h2>🧠 Jogo da Memória</h2>
+      <p>Test your memory and match the pairs</p>
+    </div>
+  </div>
+</div>
+
+<div class="semantic-learn-container pt-4 pb-5">
+  <div class="container">
+    <div class="content-card text-center mb-4">
+      <h3 id="game_status" class="mb-0" style="color: var(--primary-light-blue);">Level 1 - Find 4 pairs</h3>
+    </div>
+    
+    <div class="glass-card p-4 mx-auto" style="max-width: 900px;">
+      <div id="board" class="game-board memory-board"></div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/jogo-da-memoria.js"></script>
