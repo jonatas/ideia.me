@@ -618,6 +618,52 @@ permalink: /yoga.html
                 }
             },
             {
+                id: 'ardha-baddha-padma-paschimottanasana', name: 'Half-Bound Lotus Forward Fold',
+                desc: 'One leg straight, the other folded into half lotus. Fold torso over the straight leg.',
+                inherit: 'paschimottanasana',
+                vars: {
+                    '--rl-rot': 0, '--rk-rot': -150 // Right knee bent sharply outward and back
+                }
+            },
+            {
+                id: 'triang-mukha-eka-pada-paschimottanasana', name: 'Three-Limbed Forward Fold',
+                desc: 'Fold over a straight leg with the other leg folded back beside the hip.',
+                inherit: 'paschimottanasana',
+                vars: {
+                    '--rl-rot': 0, '--rk-rot': 150 // Right foot points straight back
+                }
+            },
+            {
+                id: 'janu-sirsasana', name: 'Head-to-Knee Pose (Janu Sirsasana)',
+                desc: 'Fold over a straight leg, with the sole of the other foot pressing into the inner thigh.',
+                inherit: 'paschimottanasana',
+                vars: {
+                    '--rl-rot': 20, '--rk-rot': -120 // Knee drops outward
+                }
+            },
+            {
+                id: 'marichyasana-a', name: 'Marichyasana A',
+                desc: 'Seated with one leg straight, the other knee bent pointing up. Bind the bent knee and fold forward.',
+                inherit: 'dandasana', // Start upright
+                vars: {
+                    '--ub-rot': 40, '--head-rot': 10,  // Fold forward
+                    '--rl-rot': -30, '--rk-rot': 120,  // Right knee points UP, foot planted
+                    '--la-rot': -60, '--le-rot': 60,   // Arms binding behind back
+                    '--ra-rot': 120, '--re-rot': -60
+                }
+            },
+            {
+                id: 'kurmasana', name: 'Tortoise Pose (Kurmasana)',
+                desc: 'Seated with legs wide, torso folded flat to the floor, arms thread under the knees.',
+                inherit: 'prasarita-padottanasana', // Wide legs, fold flat
+                vars: {
+                    '--fig-rot': 180, // Flip upside down from standing wide legs to put it on the floor
+                    '--fig-y': 168,   // Sit on floor
+                    '--la-rot': 90, '--le-rot': 0, // Arms spread under legs
+                    '--ra-rot': -90, '--re-rot': 0
+                }
+            },
+            {
                 id: 'navasana', name: 'Boat Pose (Navasana)',
                 desc: 'Balance on your sit bones with your torso leaning back and your legs raised to form a V-shape.',
                 vars: {
@@ -675,7 +721,17 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'prasarita-padottanasana', name: 'Wide-Legged Forward Fold (Prasarita Padottanasana)',
+                id: 'parivrtta-parsvakonasana', name: 'Revolved Side Angle (Parivrtta Parsvakonasana)',
+                desc: 'Lunge with torso twisted across the bent knee. Lower hand outside the foot, upper arm over the ear.',
+                inherit: 'utthita-parsvakonasana',
+                vars: {
+                    '--ub-rot': -120, // Twist backward across body
+                    '--la-rot': -60, '--le-rot': 0, // Left hand to floor
+                    '--ra-rot': 180, '--re-rot': 0  // Right arm over ear
+                }
+            },
+            {
+                id: 'prasarita-padottanasana', name: 'Wide-Legged Forward Fold A (Prasarita Padottanasana)',
                 desc: 'Stand with legs wide apart. Hinge at the hips, bringing the crown of the head and hands toward the floor.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 38,
@@ -683,6 +739,45 @@ permalink: /yoga.html
                     '--la-rot': 180, '--le-rot': 0,
                     '--ra-rot': 180, '--re-rot': 0,
                     '--ll-rot': 40, '--lk-rot': 0,
+                    '--rl-rot': -40, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'prasarita-padottanasana-b', name: 'Wide-Legged Fold B (Prasarita Padottanasana B)',
+                desc: 'Wide-legged fold with hands firmly planted on the waist.',
+                inherit: 'prasarita-padottanasana',
+                vars: {
+                    '--la-rot': -90, '--le-rot': -90,
+                    '--ra-rot': 90, '--re-rot': 90
+                }
+            },
+            {
+                id: 'prasarita-padottanasana-c', name: 'Wide-Legged Fold C (Prasarita Padottanasana C)',
+                desc: 'Wide-legged fold with fingers interlaced behind the back and arms stretched overhead toward the floor.',
+                inherit: 'prasarita-padottanasana',
+                vars: {
+                    '--la-rot': 0, '--le-rot': 0,
+                    '--ra-rot': 0, '--re-rot': 0
+                }
+            },
+            {
+                id: 'prasarita-padottanasana-d', name: 'Wide-Legged Fold D (Prasarita Padottanasana D)',
+                desc: 'Wide-legged fold grasping the big toes.',
+                inherit: 'prasarita-padottanasana',
+                vars: {
+                    '--la-rot': 160, '--le-rot': 0,
+                    '--ra-rot': -160, '--re-rot': 0
+                }
+            },
+            {
+                id: 'parsvottanasana', name: 'Pyramid Pose (Parsvottanasana)',
+                desc: 'Fold torso over a straight front leg with hands in reverse prayer behind the back.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': 0, '--fig-y': 24,
+                    '--ub-rot': 140, '--head-rot': 0,
+                    '--la-rot': -160, '--le-rot': -120,
+                    '--ra-rot': 160, '--re-rot': 120,
+                    '--ll-rot': 30, '--lk-rot': 0,
                     '--rl-rot': -40, '--rk-rot': 0
                 }
             },
@@ -711,6 +806,17 @@ permalink: /yoga.html
                 }
             },
             {
+                id: 'sirsasana', name: 'Headstand (Sirsasana)',
+                desc: 'Invert completely, balancing on forearms with the crown of your head lightly on the floor. Legs reach straight up.',
+                inherit: 'salamba-sarvangasana',
+                vars: {
+                    '--head-rot': 0,
+                    '--fig-y': 60,
+                    '--la-rot': 135, '--le-rot': 90,
+                    '--ra-rot': 225, '--re-rot': -90
+                }
+            },
+            {
                 id: 'halasana', name: 'Plow Pose (Halasana)',
                 desc: 'From Shoulder Stand, hinge at the hips to lower your toes to the floor beyond your head. Extend arms along the floor.',
                 inherit: 'salamba-sarvangasana',
@@ -731,6 +837,36 @@ permalink: /yoga.html
                     '--ra-rot': 0, '--re-rot': 0,
                     '--ll-rot': 0, '--lk-rot': 0,
                     '--rl-rot': 0, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'baddha-padmasana', name: 'Bound Lotus (Baddha Padmasana)',
+                desc: 'Sit in full lotus and bind your arms behind your back to grasp your opposite toes.',
+                inherit: 'dandasana',
+                vars: {
+                    '--ll-rot': -45, '--lk-rot': 90,
+                    '--rl-rot': -135, '--rk-rot': -90,
+                    '--la-rot': -60, '--le-rot': 120,
+                    '--ra-rot': 60, '--re-rot': -120
+                }
+            },
+            {
+                id: 'padmasana', name: 'Lotus Pose (Padmasana)',
+                desc: 'Sit in full lotus with spine straight and hands resting on knees in Jnana mudra.',
+                inherit: 'baddha-padmasana',
+                vars: {
+                    '--la-rot': -30, '--le-rot': 30,
+                    '--ra-rot': 30, '--re-rot': -30
+                }
+            },
+            {
+                id: 'tolasana', name: 'Scale Pose (Tolasana)',
+                desc: 'From Lotus pose, press your hands into the floor and lift your entire body off the ground.',
+                inherit: 'padmasana',
+                vars: {
+                    '--fig-y': 100, // Lifted heavily off the floor!
+                    '--la-rot': 0, '--le-rot': 0, // Arms lock straight down
+                    '--ra-rot': 0, '--re-rot': 0
                 }
             }
         ];
@@ -791,7 +927,7 @@ permalink: /yoga.html
             const card = document.createElement('div');
             card.className = 'pose-card' + (i === 0 ? ' active' : '');
             card.draggable = true;
-            card.addEventListener('dragstart', (e) => drag(e, i));
+            card.addEventListener('dragstart', (e) => drag(e, p.id));
             
             // Extract short name for the thumbnail (e.g. "Tree Pose")
             const shortName = p.name.split('(')[0].trim();
@@ -838,8 +974,12 @@ permalink: /yoga.html
         }
 
         // Drag and Drop Logic
-        // Pre-load Surya Namaskar A (Sun Salutation) as the default sequence
-        let sequence = [0, 1, 2, 3, 4, 5, 7, 3, 2, 1, 0];
+        // Pre-load Surya Namaskar A (Sun Salutation) as the default sequence using IDs
+        let sequence = [
+            'tadasana', 'urdhva-hastasana', 'uttanasana-a', 'ardha-uttanasana', 
+            'chaturanga-dandasana', 'urdhva-mukha-svanasana', 'adho-mukha-svanasana', 
+            'ardha-uttanasana', 'uttanasana-a', 'urdhva-hastasana', 'tadasana'
+        ];
         let draggedTimelineIndex = null;
         
         // Initial Render
@@ -858,8 +998,8 @@ permalink: /yoga.html
             document.getElementById('timelineTrack').classList.remove('drag-over');
         }
 
-        function drag(ev, poseIndex) {
-            ev.dataTransfer.setData("poseIndex", poseIndex);
+        function drag(ev, poseId) {
+            ev.dataTransfer.setData("poseId", poseId);
             draggedTimelineIndex = null;
         }
 
@@ -873,12 +1013,12 @@ permalink: /yoga.html
             const track = document.getElementById('timelineTrack');
             track.classList.remove('drag-over');
 
-            const pIndex = ev.dataTransfer.getData("poseIndex");
+            const pId = ev.dataTransfer.getData("poseId");
             const tIndex = ev.dataTransfer.getData("timelineIndex");
 
-            if (pIndex !== "") {
+            if (pId !== "") {
                 // Add new from library
-                sequence.push(parseInt(pIndex));
+                sequence.push(pId);
                 renderTimeline();
             } else if (tIndex !== "") {
                 // Reorder to end
@@ -914,8 +1054,11 @@ permalink: /yoga.html
             }
             ph.style.display = 'none';
 
-            sequence.forEach((poseIdx, tIndex) => {
-                const p = POSES[poseIdx];
+            sequence.forEach((poseId, tIndex) => {
+                const p = POSES.find(pose => pose.id === poseId);
+                if (!p) return; // fail safe
+                const poseIdx = POSES.indexOf(p);
+                
                 const card = document.createElement('div');
                 card.className = 'timeline-card';
                 card.draggable = true;
@@ -970,9 +1113,13 @@ permalink: /yoga.html
             }
             if (playIndex >= sequence.length) playIndex = 0; // loop back to start
             
-            const poseIdx = sequence[playIndex];
-            loadPose(poseIdx);
-            updateTimelineHighlight(playIndex);
+            const poseId = sequence[playIndex];
+            const p = POSES.find(pose => pose.id === poseId);
+            if (p) {
+                const poseIdx = POSES.indexOf(p);
+                loadPose(poseIdx);
+                updateTimelineHighlight(playIndex);
+            }
             
             playIndex++;
         }
