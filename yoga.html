@@ -111,7 +111,10 @@ permalink: /yoga.html
         .bone-front { stroke: #F8FAFC; stroke-width: 14; stroke-linecap: round; stroke-linejoin: round; }
         .bone-back { stroke: #94A3B8; stroke-width: 14; stroke-linecap: round; stroke-linejoin: round; }
         .head { fill: #F8FAFC; }
-        .joint-group { transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); }
+        .joint-group { 
+            transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+            transform-box: view-box;
+        }
 
         .pose-info {
             text-align: center;

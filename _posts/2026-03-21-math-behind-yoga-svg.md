@@ -37,59 +37,164 @@ By placing the `transform-origin` exactly at the joints, the `lower-arm` automat
 
 Try it out here:
 
+<style>
+.blog-debug-panel {
+    margin-top: 20px;
+    padding: 15px;
+    background: rgba(0,0,0,0.4);
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.blog-debug-row {
+    display: flex;
+    align-items: center;
+    width: 200px;
+    font-size: 0.8rem;
+    color: #94A3B8;
+}
+.blog-debug-row label {
+    width: 90px;
+}
+.blog-debug-row input[type=range] {
+    flex: 1;
+}
+.blog-debug-row input[type=number] {
+    width: 45px;
+    background: transparent;
+    color: white;
+    border: 1px solid #333;
+    margin-left: 5px;
+    text-align: center;
+}
+</style>
+
 <div style="background: #0f172a; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: center; border: 1px solid rgba(255,255,255,0.1)">
-    <svg viewBox="-200 -50 600 450" style="width: 100%; max-width: 400px; height: 300px; filter: drop-shadow(0 0 10px rgba(13, 148, 136, 0.3));" id="demo-svg">
+    <!-- Yoga Figure Playground -->
+    <svg viewBox="-300 -100 800 600" style="width: 100%; max-width: 600px; height: 350px; filter: drop-shadow(0 0 10px rgba(13, 148, 136, 0.3));" id="demo-svg">
         <line x1="-500" y1="368" x2="1000" y2="368" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
-        <g id="figure" style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-origin: 100px 200px; transform: translate(var(--fig-x, 0px), var(--fig-y, 0px)) rotate(var(--fig-rot, 0deg));">
+        <g id="figure" style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 200px; transform: translate(var(--fig-x, 0px), var(--fig-y, 0px)) rotate(var(--fig-rot, 0deg));">
             <!-- Left Leg -->
-            <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-origin: 100px 200px; transform: rotate(var(--ll-rot, 0deg));">
+            <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 200px; transform: rotate(var(--ll-rot, 0deg));">
                 <line x1="100" y1="200" x2="100" y2="280" stroke="#94A3B8" stroke-width="14" stroke-linecap="round" />
-                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-origin: 100px 280px; transform: rotate(var(--lk-rot, 0deg));">
+                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 280px; transform: rotate(var(--lk-rot, 0deg));">
                     <line x1="100" y1="280" x2="100" y2="360" stroke="#94A3B8" stroke-width="14" stroke-linecap="round" />
                 </g>
             </g>
             <!-- Right Leg -->
-            <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-origin: 100px 200px; transform: rotate(var(--rl-rot, 0deg));">
+            <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 200px; transform: rotate(var(--rl-rot, 0deg));">
                 <line x1="100" y1="200" x2="100" y2="280" stroke="#F8FAFC" stroke-width="14" stroke-linecap="round" />
-                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-origin: 100px 280px; transform: rotate(var(--rk-rot, 0deg));">
+                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 280px; transform: rotate(var(--rk-rot, 0deg));">
                     <line x1="100" y1="280" x2="100" y2="360" stroke="#F8FAFC" stroke-width="14" stroke-linecap="round" />
                 </g>
             </g>
             <!-- Upper Body -->
-            <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-origin: 100px 200px; transform: rotate(var(--ub-rot, 0deg));">
+            <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 200px; transform: rotate(var(--ub-rot, 0deg));">
                 <!-- Left Arm -->
-                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-origin: 100px 100px; transform: rotate(var(--la-rot, 0deg));">
+                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 100px; transform: rotate(var(--la-rot, 0deg));">
                     <line x1="100" y1="100" x2="100" y2="160" stroke="#94A3B8" stroke-width="14" stroke-linecap="round" />
-                    <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-origin: 100px 160px; transform: rotate(var(--le-rot, 0deg));">
+                    <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 160px; transform: rotate(var(--le-rot, 0deg));">
                         <line x1="100" y1="160" x2="100" y2="220" stroke="#94A3B8" stroke-width="14" stroke-linecap="round" />
                     </g>
                 </g>
                 <line x1="100" y1="200" x2="100" y2="100" stroke="#F8FAFC" stroke-width="16" stroke-linecap="round" />
-                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-origin: 100px 100px; transform: rotate(var(--head-rot, 0deg));">
+                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 100px; transform: rotate(var(--head-rot, 0deg));">
                     <line x1="100" y1="100" x2="100" y2="80" stroke="#F8FAFC" stroke-width="10" stroke-linecap="round" />
                     <circle cx="100" cy="65" r="20" fill="#F8FAFC" />
                 </g>
                 <!-- Right Arm -->
-                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-origin: 100px 100px; transform: rotate(var(--ra-rot, 0deg));">
+                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 100px; transform: rotate(var(--ra-rot, 0deg));">
                     <line x1="100" y1="100" x2="100" y2="160" stroke="#F8FAFC" stroke-width="14" stroke-linecap="round" />
-                    <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-origin: 100px 160px; transform: rotate(var(--re-rot, 0deg));">
+                    <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 160px; transform: rotate(var(--re-rot, 0deg));">
                         <line x1="100" y1="160" x2="100" y2="220" stroke="#F8FAFC" stroke-width="14" stroke-linecap="round" />
                     </g>
                 </g>
             </g>
         </g>
     </svg>
-    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+    
+    <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
         <button onclick="setPose({'--ub-rot':0, '--ll-rot':0, '--rl-rot':0, '--lk-rot':0,'--rk-rot':0, '--la-rot':0, '--ra-rot':0, '--le-rot':0, '--re-rot':0, '--head-rot':0, '--fig-y':0, '--fig-x':0})" style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 20px; cursor: pointer;">Tadasana</button>
-        <button onclick="setPose({'--ub-rot':126, '--ll-rot':36, '--rl-rot':36, '--lk-rot':0,'--rk-rot':0, '--la-rot':180, '--ra-rot':180, '--le-rot':0, '--re-rot':0, '--head-rot':0, '--fig-y':38.6, '--fig-x':0})" style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 20px; cursor: pointer;">Downward Dog</button>
-        <button onclick="setPose({'--ub-rot':0, '--ll-rot':60, '--rl-rot':-90, '--lk-rot':0,'--rk-rot':90, '--la-rot':90, '--ra-rot':-90, '--le-rot':0, '--re-rot':0, '--head-rot':0, '--fig-y':88, '--fig-x':0})" style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 20px; cursor: pointer;">Warrior II</button>
+        <button onclick="setPose({'--ub-rot':0, '--head-rot':-20, '--la-rot':180, '--ra-rot':180, '--ll-rot':0, '--rl-rot':0, '--lk-rot':0, '--rk-rot':0, '--le-rot':0, '--re-rot':0, '--fig-y':0, '--fig-x':0})" style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 20px; cursor: pointer;">Upward Salute</button>
+        <button onclick="setPose({'--ub-rot':180, '--head-rot':0, '--la-rot':60, '--le-rot':-120, '--ra-rot':60, '--re-rot':-120, '--ll-rot':0, '--rl-rot':0, '--lk-rot':0, '--rk-rot':0, '--fig-y':8, '--fig-x':0})" style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 20px; cursor: pointer;">Forward Fold</button>
+        <button onclick="setPose({'--fig-rot': 0, '--fig-x': -110, '--fig-y': 168, '--ub-rot': 90, '--head-rot': 0, '--la-rot': 0, '--le-rot': 0, '--ra-rot': 0, '--re-rot': 0, '--ll-rot': -90, '--lk-rot': 180, '--rl-rot': -90, '--rk-rot': 180})" style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 20px; cursor: pointer;">Child's Pose</button>
     </div>
+
+    <!-- The Debug Panel -->
+    <div class="blog-debug-panel" id="blog-debug-panel"></div>
 </div>
 <script>
-function setPose(vars) {
-    const svg = document.getElementById('demo-svg');
+const varsDef = [
+    { id: '--fig-rot', min: -180, max: 180, label: 'Fig Rot' },
+    { id: '--fig-x', min: -200, max: 200, label: 'Fig X' },
+    { id: '--fig-y', min: -200, max: 200, label: 'Fig Y' },
+    { id: '--ub-rot', min: -180, max: 180, label: 'Hip Bend' },
+    { id: '--head-rot', min: -90, max: 90, label: 'Head' },
+    { id: '--la-rot', min: -360, max: 360, label: 'L Arm Up' },
+    { id: '--le-rot', min: -180, max: 180, label: 'L Arm Low' },
+    { id: '--ra-rot', min: -360, max: 360, label: 'R Arm Up' },
+    { id: '--re-rot', min: -180, max: 180, label: 'R Arm Low' },
+    { id: '--ll-rot', min: -180, max: 180, label: 'L Leg Up' },
+    { id: '--lk-rot', min: -180, max: 180, label: 'L Leg Low' },
+    { id: '--rl-rot', min: -180, max: 180, label: 'R Leg Up' },
+    { id: '--rk-rot', min: -180, max: 180, label: 'R Leg Low' },
+];
+
+let currentVars = {};
+const svgMain = document.getElementById('demo-svg');
+const panel = document.getElementById('blog-debug-panel');
+
+varsDef.forEach(v => {
+    const row = document.createElement('div');
+    row.className = 'blog-debug-row';
+    
+    const lbl = document.createElement('label');
+    lbl.textContent = v.label;
+    
+    const range = document.createElement('input');
+    range.type = 'range';
+    range.id = 'inp_' + v.id;
+    range.min = v.min;
+    range.max = v.max;
+    range.value = 0;
+    
+    const num = document.createElement('input');
+    num.type = 'number';
+    num.id = 'num_' + v.id;
+    num.value = 0;
+
+    const update = (val) => {
+        range.value = val;
+        num.value = val;
+        currentVars[v.id] = parseInt(val);
+        const cssVal = v.id.includes('rot') ? `${val}deg` : `${val}px`;
+        svgMain.style.setProperty(v.id, cssVal);
+    };
+
+    range.addEventListener('input', (e) => update(e.target.value));
+    num.addEventListener('input', (e) => update(e.target.value));
+
+    row.appendChild(lbl);
+    row.appendChild(range);
+    row.appendChild(num);
+    panel.appendChild(row);
+});
+
+function setPose(vars, targetId = 'demo-svg') {
+    const targetSvg = document.getElementById(targetId);
     for (let k in vars) {
-        svg.style.setProperty(k, vars[k] + (k.includes('x') || k.includes('y') ? 'px' : 'deg'));
+        if (targetId === 'demo-svg') {
+            currentVars[k] = vars[k];
+            const inp = document.getElementById('inp_' + k);
+            const num = document.getElementById('num_' + k);
+            if (inp && num) {
+                inp.value = vars[k];
+                num.value = vars[k];
+            }
+        }
+        const cssVal = k.includes('rot') ? `${vars[k]}deg` : `${vars[k]}px`;
+        targetSvg.style.setProperty(k, cssVal);
     }
 }
 </script>
@@ -122,7 +227,52 @@ Because the torso points up from the hips, and the hips sit in the middle of our
 When you apply these calculated CSS angles, the stickman seamlessly lowers itself into a geometrically flawless plank.
 
 <div style="background: #0f172a; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: center; border: 1px solid rgba(255,255,255,0.1)">
-    <button onclick="setPose({'--ub-rot':76.66, '--ll-rot':76.66, '--rl-rot':76.66, '--lk-rot':0,'--rk-rot':0, '--la-rot':-166.66, '--ra-rot':-166.66, '--le-rot':90, '--re-rot':90, '--head-rot':0, '--fig-y':131, '--fig-x':-50})" style="padding: 8px 16px; background: #ea580c; font-weight: bold; color: white; border: none; border-radius: 20px; cursor: pointer;">Execute Chaturanga</button>
+    <div style="margin-bottom: 20px;">
+        <button onclick="setPose({'--ub-rot':76.66, '--ll-rot':76.66, '--rl-rot':76.66, '--lk-rot':0,'--rk-rot':0, '--la-rot':-166.66, '--ra-rot':-166.66, '--le-rot':90, '--re-rot':90, '--head-rot':0, '--fig-y':131, '--fig-x':-50}, 'demo-svg-2')" style="padding: 8px 16px; background: #ea580c; font-weight: bold; color: white; border: none; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(234, 88, 12, 0.4);">Execute Chaturanga</button>
+        <button onclick="setPose({'--ub-rot':0, '--ll-rot':0, '--rl-rot':0, '--lk-rot':0,'--rk-rot':0, '--la-rot':0, '--ra-rot':0, '--le-rot':0, '--re-rot':0, '--head-rot':0, '--fig-y':0, '--fig-x':0}, 'demo-svg-2')" style="padding: 8px 16px; background: transparent; color: #94a3b8; border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; cursor: pointer; margin-left: 10px;">Reset</button>
+    </div>
+    
+    <svg viewBox="-300 -100 800 600" style="width: 100%; max-width: 600px; height: 350px; filter: drop-shadow(0 0 10px rgba(13, 148, 136, 0.3));" id="demo-svg-2">
+        <line x1="-500" y1="368" x2="1000" y2="368" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+        <g id="figure2" style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 200px; transform: translate(var(--fig-x, 0px), var(--fig-y, 0px)) rotate(var(--fig-rot, 0deg));">
+            <!-- Left Leg -->
+            <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 200px; transform: rotate(var(--ll-rot, 0deg));">
+                <line x1="100" y1="200" x2="100" y2="280" stroke="#94A3B8" stroke-width="14" stroke-linecap="round" />
+                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 280px; transform: rotate(var(--lk-rot, 0deg));">
+                    <line x1="100" y1="280" x2="100" y2="360" stroke="#94A3B8" stroke-width="14" stroke-linecap="round" />
+                </g>
+            </g>
+            <!-- Right Leg -->
+            <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 200px; transform: rotate(var(--rl-rot, 0deg));">
+                <line x1="100" y1="200" x2="100" y2="280" stroke="#F8FAFC" stroke-width="14" stroke-linecap="round" />
+                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 280px; transform: rotate(var(--rk-rot, 0deg));">
+                    <line x1="100" y1="280" x2="100" y2="360" stroke="#F8FAFC" stroke-width="14" stroke-linecap="round" />
+                </g>
+            </g>
+            <!-- Upper Body -->
+            <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 200px; transform: rotate(var(--ub-rot, 0deg));">
+                <!-- Left Arm -->
+                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 100px; transform: rotate(var(--la-rot, 0deg));">
+                    <line x1="100" y1="100" x2="100" y2="160" stroke="#94A3B8" stroke-width="14" stroke-linecap="round" />
+                    <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 160px; transform: rotate(var(--le-rot, 0deg));">
+                        <line x1="100" y1="160" x2="100" y2="220" stroke="#94A3B8" stroke-width="14" stroke-linecap="round" />
+                    </g>
+                </g>
+                <line x1="100" y1="200" x2="100" y2="100" stroke="#F8FAFC" stroke-width="16" stroke-linecap="round" />
+                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 100px; transform: rotate(var(--head-rot, 0deg));">
+                    <line x1="100" y1="100" x2="100" y2="80" stroke="#F8FAFC" stroke-width="10" stroke-linecap="round" />
+                    <circle cx="100" cy="65" r="20" fill="#F8FAFC" />
+                </g>
+                <!-- Right Arm -->
+                <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 100px; transform: rotate(var(--ra-rot, 0deg));">
+                    <line x1="100" y1="100" x2="100" y2="160" stroke="#F8FAFC" stroke-width="14" stroke-linecap="round" />
+                    <g style="transition: transform 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); transform-box: view-box; transform-origin: 100px 160px; transform: rotate(var(--re-rot, 0deg));">
+                        <line x1="100" y1="160" x2="100" y2="220" stroke="#F8FAFC" stroke-width="14" stroke-linecap="round" />
+                    </g>
+                </g>
+            </g>
+        </g>
+    </svg>
 </div>
 
 Math doesn't just ensure algorithms run efficiently; it gives us the power to orchestrate beautiful physical geometry. Take a look at the final [Yoga Poses application](/yoga.html) to see the full Ashtanga sequence running entirely on these trigonometric angles!
