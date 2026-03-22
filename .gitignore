@@ -9,3 +9,4 @@ images/.DS_Store
 
 # Claude worktrees (active git worktrees, not for committing)
 .claude/worktrees/
+vendor/bundle/

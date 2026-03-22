@@ -155,6 +155,7 @@ varsDef.forEach(v => {
     
     const lbl = document.createElement('label');
     lbl.textContent = v.label;
+    lbl.setAttribute('for', 'inp_' + v.id);
     
     const range = document.createElement('input');
     range.type = 'range';

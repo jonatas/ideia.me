@@ -2,6 +2,7 @@
 layout: post
 categories: [career]
 title: First week at Hubstaff
+mermaid: true
 ---
 
 # My first week at Hubstaff
@@ -39,6 +40,12 @@ There are insights related to how do you use your day in the app and they all
 help you to grow and increase your focus on your role.
 
 ### Core work vs non-core vs distraction
+
+{% mermaid %}
+pie title How a tool like LinkedIn might be classified based on your role
+    "Core Work (Recruiter)" : 85
+    "Distraction (Developer)" : 15
+{% endmermaid %}
 
 Understand where do you spend your time. How much do you invest on each tool and
 how long.

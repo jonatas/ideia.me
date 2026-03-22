@@ -1,0 +1,3 @@
+## 2026-03-22 - Custom Interactive Div Accessibility and Dynamic Labels
+**Learning:** Custom div-based widgets for interaction need `role="button"`, `tabindex="0"`, and `keydown` event listeners for full accessibility. Without these, keyboard users cannot focus or trigger them. Additionally, dynamically generated forms need explicit label associations (e.g. `lbl.setAttribute('for', 'inp_id')`) to work with screen readers.
+**Action:** Always verify custom interaction elements (like `div` circles used for breathing apps) include standard HTML button attributes and keyboard triggers. Always associate labels using the `for` attribute when generating inputs dynamically via JS.

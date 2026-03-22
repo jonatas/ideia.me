@@ -270,13 +270,13 @@ We breathe about 20,000 times a day. Most of those are fine without any interven
     var CYCLE = cfg.phases.reduce(function (s, p) { return s + p.ms; }, 0);
 
     el.innerHTML =
-      '<div class="bw-circle-wrap" id="' + cfg.id + '-wrap">' +
+      '<div class="bw-circle-wrap" id="' + cfg.id + '-wrap" tabindex="0" role="button" aria-label="Start ' + cfg.name + '">' +
         '<div class="bw-glow" id="' + cfg.id + '-glow"></div>' +
         '<div class="bw-ring" id="' + cfg.id + '-ring" style="background: radial-gradient(circle at 38% 32%, ' + cfg.idle + ', #1E3A8A); transform: scale(0.72);">' +
-          '<span class="bw-count" id="' + cfg.id + '-count"></span>' +
+          '<span class="bw-count" id="' + cfg.id + '-count" aria-live="polite"></span>' +
         '</div>' +
       '</div>' +
-      '<div class="bw-phase" id="' + cfg.id + '-phase" style="color: #8892b0;">' + cfg.name + '</div>' +
+      '<div class="bw-phase" id="' + cfg.id + '-phase" style="color: #8892b0;" aria-live="polite">' + cfg.name + '</div>' +
       '<div class="bw-hint" id="' + cfg.id + '-hint">click to breathe</div>';
 
     var ring  = document.getElementById(cfg.id + '-ring');
@@ -287,7 +287,9 @@ We breathe about 20,000 times a day. Most of those are fine without any interven
 
     var active = false, raf = null, t0 = null;
 
-    document.getElementById(cfg.id + '-wrap').addEventListener('click', function () {
+    var wrapEl = document.getElementById(cfg.id + '-wrap');
+
+    function toggleBreathing() {
       active = !active;
       if (typeof gtag === 'function') {
         gtag('event', 'breathing_exercise', {
@@ -300,6 +302,7 @@ We breathe about 20,000 times a day. Most of those are fine without any interven
       if (active) {
         t0 = null;
         raf = requestAnimationFrame(tick);
+        wrapEl.setAttribute('aria-label', 'Stop ' + cfg.name);
       } else {
         cancelAnimationFrame(raf);
         ring.style.transform = 'scale(0.72)';
@@ -309,6 +312,15 @@ We breathe about 20,000 times a day. Most of those are fine without any interven
         phase.textContent = cfg.name;
         phase.style.color = '#8892b0';
         hint.textContent = 'click to breathe';
+        wrapEl.setAttribute('aria-label', 'Start ' + cfg.name);
+      }
+    }
+
+    wrapEl.addEventListener('click', toggleBreathing);
+    wrapEl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleBreathing();
       }
     });
 
