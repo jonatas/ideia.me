@@ -142,27 +142,27 @@ This intentional alignment helps you maintain authorship while contributing mean
 
 ## Decision Framework
 
-```mermaid
+{% mermaid %}
 graph TD
-    subgraph FH["🎯 Future + High Control"]
+    subgraph FH ["🎯 Future + High Control"]
         B1["🎯 Skill Building"]
         B2["🔧 System Creation"]
         B3["❤️ Relationships"]
     end
     
-    subgraph FL["📚 Future + Low Control"]
+    subgraph FL ["📚 Future + Low Control"]
         A1["📚 Required Learning"]
         A2["👪 Family Duties"] 
         A3["🏥 Health Care"]
     end
     
-    subgraph PH["🎮 Present + High Control"]
+    subgraph PH ["🎮 Present + High Control"]
         D1["🎮 Chosen Fun"]
         D2["🎒 Adventures"]
         D3["✍️ Flow Work"]
     end
     
-    subgraph PL["🌅 Present + Low Control"]
+    subgraph PL ["🌅 Present + Low Control"]
         C1["🌅 Unexpected Beauty"]
         C2["🚨 Crisis Help"]
         C3["😴 Natural Rest"]
@@ -181,7 +181,7 @@ graph TD
     class B1,B2,B3 futureValue
     class C1,C2,C3 presentValue
     class D1,D2,D3 presentValue
-```
+{% endmermaid %}
 
 Your time decisions involve three different versions of yourself:
 

@@ -228,10 +228,10 @@ flowchart TD
     L --> T2[tier 2 — default\ncutoff: now - 6 months]
     L --> T3[tier 3 — long\ncutoff: now - 1 year]
 
-    T0 --> Q0[find chunks WHERE\nrange_end < cutoff\nAND space_dim = 0]
-    T1 --> Q1[find chunks WHERE\nrange_end < cutoff\nAND space_dim = 1]
-    T2 --> Q2[find chunks WHERE\nrange_end < cutoff\nAND space_dim = 2]
-    T3 --> Q3[find chunks WHERE\nrange_end < cutoff\nAND space_dim = 3]
+    T0 --> Q0[find chunks WHERE\nrange_end &lt; cutoff\nAND space_dim = 0]
+    T1 --> Q1[find chunks WHERE\nrange_end &lt; cutoff\nAND space_dim = 1]
+    T2 --> Q2[find chunks WHERE\nrange_end &lt; cutoff\nAND space_dim = 2]
+    T3 --> Q3[find chunks WHERE\nrange_end &lt; cutoff\nAND space_dim = 3]
 
     Q0 --> D[DROP TABLE chunk\nunlink on disk\nno WAL, no bloat]
     Q1 --> D
