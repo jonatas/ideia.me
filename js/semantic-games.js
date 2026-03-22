@@ -547,14 +547,15 @@ const SemanticGames = {
     });
     
     // Pathway selector
-    document.querySelectorAll('.pathway-btn').forEach(btn => {
+    const pathwayBtns = document.querySelectorAll('.pathway-btn');
+    pathwayBtns.forEach(btn => {
       btn.addEventListener('click', () => {
         selectedPathway = btn.dataset.pathway;
         practiceCount = 0;
         pathwayStrength = 0;
         
         // Update button states
-        document.querySelectorAll('.pathway-btn').forEach(b => b.classList.remove('active'));
+        pathwayBtns.forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         
         // Update displays
