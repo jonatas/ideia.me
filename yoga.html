@@ -549,8 +549,8 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'virabhadrasana-i', name: 'Warrior I (Virabhadrasana I)',
-                desc: 'Step one foot back, keep back leg straight, front knee bent 90 degrees. Reach arms up to the sky.',
+                id: 'virabhadrasana-i', name: 'Warrior I - Right (Virabhadrasana I)',
+                desc: 'Step left foot back, keep back leg straight, front knee bent 90 degrees. Reach arms up to the sky.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 88,
                     '--ub-rot': 0, '--head-rot': -15,
@@ -558,6 +558,15 @@ permalink: /yoga.html
                     '--ra-rot': 180, '--re-rot': 0,
                     '--ll-rot': 60, '--lk-rot': 0,
                     '--rl-rot': -90, '--rk-rot': 90
+                }
+            },
+            {
+                id: 'virabhadrasana-i-left', name: 'Warrior I - Left (Virabhadrasana I)',
+                desc: 'Step right foot back, keep back leg straight, front left knee bent 90 degrees.',
+                inherit: 'virabhadrasana-i',
+                vars: {
+                    '--ll-rot': -90, '--lk-rot': 90,
+                    '--rl-rot': 60, '--rk-rot': 0
                 }
             },
             {
@@ -633,7 +642,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'trikonasana', name: 'Triangle Pose (Trikonasana)',
+                id: 'trikonasana', name: 'Triangle Pose - Right (Trikonasana)',
                 desc: 'Stand with legs wide, fold torso sideways over the front leg. One hand touches the ankle, the other reaches for the sky.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 38,
@@ -642,6 +651,15 @@ permalink: /yoga.html
                     '--ra-rot': -90, '--re-rot': 0,
                     '--ll-rot': 40, '--lk-rot': 0,
                     '--rl-rot': -40, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'parivrtta-trikonasana', name: 'Revolved Triangle (Parivrtta Trikonasana)',
+                desc: 'From Triangle Pose, revolve your torso so the opposite hand reaches for the floor and the other reaches for the sky.',
+                inherit: 'trikonasana',
+                vars: {
+                    '--la-rot': -90, '--le-rot': 0,
+                    '--ra-rot': 90, '--re-rot': 0
                 }
             },
             {
@@ -690,6 +708,17 @@ permalink: /yoga.html
                     '--ra-rot': 0, '--re-rot': 0,
                     '--ll-rot': 180, '--lk-rot': 0,
                     '--rl-rot': 180, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'halasana', name: 'Plow Pose (Halasana)',
+                desc: 'From Shoulder Stand, hinge at the hips to lower your toes to the floor beyond your head. Extend arms along the floor.',
+                inherit: 'salamba-sarvangasana',
+                vars: {
+                    '--la-rot': -90, '--le-rot': 0,
+                    '--ra-rot': -90, '--re-rot': 0,
+                    '--ll-rot': -45, '--lk-rot': 0,
+                    '--rl-rot': -45, '--rk-rot': 0
                 }
             },
             {
@@ -744,6 +773,18 @@ permalink: /yoga.html
             });
             return s;
         }
+
+        // Resolve Mathematical Inheritance
+        const poseMap = {};
+        POSES.forEach(p => poseMap[p.id] = p);
+        POSES.forEach(p => {
+            if (p.inherit) {
+                const parent = poseMap[p.inherit];
+                if (parent && parent.vars) {
+                    p.vars = Object.assign({}, parent.vars, p.vars);
+                }
+            }
+        });
 
         // Setup UI
         POSES.forEach((p, i) => {
