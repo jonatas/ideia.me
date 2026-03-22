@@ -22,7 +22,8 @@ class LocalProfile {
         firstVisit: Date.now(),
         lastVisit: Date.now(),
         savedItems: [],
-        favorites: []
+        favorites: [],
+        quizAnswers: {}
       };
       this.save();
     } else {
@@ -31,6 +32,7 @@ class LocalProfile {
         // Migration/defaults
         if(!this.data.favorites) this.data.favorites = [];
         if(!this.data.savedItems) this.data.savedItems = [];
+        if(!this.data.quizAnswers) this.data.quizAnswers = {};
         this.data.lastVisit = Date.now();
       } catch(e) {
         console.error("Failed to parse local profile data", e);
@@ -87,6 +89,17 @@ class LocalProfile {
   
   isSaved(id) {
     return this.data.savedItems.some(i => i.id === id);
+  }
+
+  saveQuizAnswer(question, answerStr, isCorrect) {
+    if (!this.data.quizAnswers) this.data.quizAnswers = {};
+    this.data.quizAnswers[question] = { answer: answerStr, isCorrect, answeredAt: Date.now() };
+    this.save();
+  }
+  
+  getQuizAnswer(question) {
+    if (!this.data.quizAnswers) return null;
+    return this.data.quizAnswers[question];
   }
 
   toggleFavorite(category, id, url, title, iconClass = 'bi-heart') {

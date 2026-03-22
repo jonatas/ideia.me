@@ -1178,8 +1178,9 @@ permalink: /yoga.html
                 desc: 'From Upward Lotus, fold the crossed legs down tightly toward your chest, wrapping arms around them.',
                 inherit: 'urdhva-padmasana',
                 vars: {
-                    '--ll-rot': -80, '--rk-rot': 160, // Swing lotus back to face deeply
-                    '--rl-rot': 0, '--lk-rot': -160, 
+                    '--ub-rot': -10, '--head-rot': 10, // weight shifts to upper back/neck
+                    '--ll-rot': -200, '--rk-rot': 160, // Swing lotus back to face deeply
+                    '--rl-rot': -180, '--lk-rot': -160, 
                     '--la-rot': 150, '--le-rot': 60, // reach arms forward to wrap
                     '--ra-rot': 150, '--re-rot': 60
                 }
@@ -1339,6 +1340,45 @@ permalink: /yoga.html
             nameEl.textContent = pose.name;
             descEl.textContent = pose.desc;
             applyVars(pose.vars);
+            
+            renderFlowSuggestions(pose.id);
+        }
+
+        function renderFlowSuggestions(poseId) {
+            const container = document.getElementById('flowSuggestions');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            const pose = POSES.find(p => p.id === poseId);
+            if (!pose || !pose.flow || pose.flow.length === 0) {
+                container.classList.remove('active');
+                return;
+            }
+
+            container.classList.add('active');
+            
+            pose.flow.forEach(flowId => {
+                const fPose = POSES.find(p => p.id === flowId);
+                if (!fPose) return;
+
+                const btn = document.createElement('button');
+                btn.className = 'flow-card';
+                btn.dataset.id = flowId;
+                btn.innerHTML = `<i class="bi bi-bezier2"></i> <span>${fPose.name.split(' (')[0]}</span>`;
+                btn.title = `Flow into ${fPose.name}`;
+                btn.onclick = () => {
+                    const fIndex = POSES.indexOf(fPose);
+                    // Add to timeline automatically for easy sequence building
+                    document.getElementById('timelinePlaceholder').style.display = 'none';
+                    sequence.push(flowId);
+                    saveTimelineToCurrentSequence();
+                    renderTimeline();
+                    
+                    // Load the pose
+                    loadPose(fIndex);
+                };
+                container.appendChild(btn);
+            });
         }
 
         // Dynamic Sequences & Theming
@@ -1656,8 +1696,8 @@ permalink: /yoga.html
 
         // Keyboard Shortcuts & Fuzzy Finder
         window.addEventListener('keydown', (e) => {
-            // Fullscreen 'f'
-            if (e.key === 'f' && document.activeElement.tagName !== 'INPUT') {
+            // Fullscreen Cmd+Enter
+            if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
                 e.preventDefault();
                 toggleFullScreen();
             }
@@ -1678,10 +1718,14 @@ permalink: /yoga.html
             
             // Escape to close fuzzy finder
             if (e.key === 'Escape') {
-                document.getElementById('fuzzyFinder').style.display = 'none';
-                document.getElementById('fuzzyInput').value = '';
-                filterPoses('');
-                document.getElementById('fuzzyInput').blur();
+                const ff = document.getElementById('fuzzyFinder');
+                if (ff.style.display !== 'none') {
+                    ff.style.display = 'none';
+                    document.getElementById('fuzzyInput').value = '';
+                    filterPoses('');
+                    document.getElementById('fuzzyInput').blur();
+                }
+                // (Esc also exits fullscreen natively in the browser)
             }
         });
 
@@ -1716,5 +1760,48 @@ permalink: /yoga.html
         loadPose(0);
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            function trackGA(action, label) {
+                if (typeof gtag === 'function') {
+                    gtag('event', 'interaction', {
+                        event_category: 'yoga_app',
+                        event_label: label,
+                        action: action
+                    });
+                }
+            }
+
+            const trackedButtons = {
+                'saveAppBtn': 'Save App',
+                'fullscreenBtn': 'Toggle Fullscreen',
+                'debugBtn': 'Toggle Editor',
+                'playSeqBtn': 'Play Sequence',
+                'clearSeqBtn': 'Clear Sequence'
+            };
+
+            Object.keys(trackedButtons).forEach(id => {
+                const btn = document.getElementById(id);
+                if(btn) btn.addEventListener('click', () => trackGA('button_click', trackedButtons[id]));
+            });
+
+            document.addEventListener('click', (e) => {
+                const poseCard = e.target.closest('.pose-card');
+                if (poseCard && poseCard.dataset.id) {
+                    trackGA('select_pose', poseCard.dataset.id);
+                }
+                
+                const flowCard = e.target.closest('.flow-card');
+                if (flowCard && flowCard.dataset.id) {
+                    trackGA('select_flow_suggestion', flowCard.dataset.id);
+                }
+                
+                const seqDot = e.target.closest('.seq-dot:not(.add-seq)');
+                if (seqDot) {
+                    trackGA('select_sequence', seqDot.title || 'Sequence');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

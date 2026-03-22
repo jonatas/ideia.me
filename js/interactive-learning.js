@@ -16,7 +16,6 @@ class SemanticQuiz extends HTMLElement {
     // Only render once if parsed
     if (this.querySelector('.quiz-wrapper')) return;
 
-    // Read attributes parsed from Markdown
     const questionText = this.getAttribute('question-text') || 'Question';
     
     let options = [];
@@ -27,6 +26,7 @@ class SemanticQuiz extends HTMLElement {
     }
 
     const secretImageId = this.getAttribute('secret-image-id');
+    const previousAnswer = window.userProfile ? window.userProfile.getQuizAnswer(questionText) : null;
 
     // Build internal DOM (not fully shadow DOM to inherit global styles easily)
     const wrapper = document.createElement('div');
@@ -57,11 +57,44 @@ class SemanticQuiz extends HTMLElement {
         btn.appendChild(hintSpan);
       }
 
+      // Restore previous answer state
+      if (previousAnswer) {
+        this.answered = true;
+        this.classList.add('answered');
+        if (previousAnswer.answer === opt.text) {
+          if (previousAnswer.isCorrect) {
+            btn.classList.add('reveal-correct');
+          } else {
+            btn.classList.add('selected-wrong');
+          }
+          if (opt.hint) btn.querySelector('.quiz-hint').classList.add('visible');
+        }
+        
+        // If wrong answer was chosen previously, also reveal the correct one
+        if (!previousAnswer.isCorrect && opt.isCorrect) {
+          btn.classList.add('reveal-correct');
+          if (opt.hint) btn.querySelector('.quiz-hint').classList.add('visible');
+        }
+      }
+
       btn.addEventListener('click', () => this.handleOptionClick(btn, opt, optionsContainer, secretImageId));
       optionsContainer.appendChild(btn);
     });
 
     wrapper.appendChild(optionsContainer);
+    this.appendChild(wrapper);
+    
+    // Restore secret image if answered
+    if (this.answered && secretImageId) {
+      setTimeout(() => {
+        const secretImgContainer = document.getElementById(secretImageId);
+        if (secretImgContainer) {
+          secretImgContainer.classList.add('revealed');
+          void secretImgContainer.offsetWidth; // reflow
+          secretImgContainer.classList.add('animate-in');
+        }
+      }, 300);
+    }
     this.appendChild(wrapper);
   }
 
@@ -78,6 +111,10 @@ class SemanticQuiz extends HTMLElement {
     const questionText = this.getAttribute('question-text') || 'unknown';
 
     // Evaluate
+    if (window.userProfile) {
+      window.userProfile.saveQuizAnswer(questionText, optionData.text, optionData.isCorrect);
+    }
+
     if (optionData.isCorrect) {
       clickedBtn.classList.add('reveal-correct');
       if (typeof gtag === 'function') {

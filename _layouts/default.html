@@ -390,6 +390,34 @@
           btn.classList.add('text-white');
         }
       }, 500);
+
+      // Global Navigation & Content Interaction Tracking
+      function trackGA(action, label) {
+        if (typeof gtag === 'function') {
+          gtag('event', 'interaction', {
+            event_category: 'navigation',
+            event_label: label,
+            action: action
+          });
+        }
+      }
+
+      document.addEventListener('click', (e) => {
+        const navLink = e.target.closest('.nav-link');
+        if (navLink) {
+          trackGA('click_nav', navLink.textContent.trim());
+        }
+
+        const presentBtn = e.target.closest('#btn-present');
+        if (presentBtn) {
+          trackGA('click_present', 'Start Presentation');
+        }
+
+        const savePresBtn = e.target.closest('#btn-save-presentation');
+        if (savePresBtn) {
+          trackGA('click_save_presentation', document.title);
+        }
+      });
     </script>
     
     <style>

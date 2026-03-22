@@ -57,6 +57,21 @@ permalink: /profile/
   </div>
 </div>
 
+<div class="row fade-in mt-5">
+  <div class="col-12">
+    <h3 class="mb-4 text-white"><i class="bi bi-journal-check me-2 text-success"></i>Interactive Journey</h3>
+    <div id="quiz-answers-grid" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <div class="col w-100 text-center text-muted" id="quiz-empty-state">
+        <div class="p-5 border border-secondary border-opacity-25 border-dashed rounded bg-dark bg-opacity-25">
+          <i class="bi bi-question-circle fs-1 mb-3 text-muted opacity-50"></i>
+          <p>You haven't answered any interactive quizzes yet.</p>
+          <a href="/trybliss" class="btn btn-outline-success btn-sm mt-2">Try Bliss</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Clear Data Modal -->
 <div class="mt-5 text-center text-md-end fade-in">
   <button class="btn btn-link text-danger text-decoration-none opacity-50 hover-opacity-100 btn-sm" data-bs-toggle="modal" data-bs-target="#clearDataModal">
@@ -89,6 +104,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const countDisplay = document.getElementById('saved-count-display');
   const grid = document.getElementById('saved-items-grid');
   const emptyState = document.getElementById('empty-state');
+  
+  const quizGrid = document.getElementById('quiz-answers-grid');
+  const quizEmptyState = document.getElementById('quiz-empty-state');
   
   function renderSavedItems(items) {
     if (!items || items.length === 0) {
@@ -150,6 +168,52 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
+  function renderQuizAnswers(quizAnswers) {
+    if (!quizAnswers || Object.keys(quizAnswers).length === 0) {
+      quizEmptyState.style.display = 'block';
+      Array.from(quizGrid.children).forEach(el => {
+        if (el.id !== 'quiz-empty-state') el.remove();
+      });
+      return;
+    }
+    
+    quizEmptyState.style.display = 'none';
+
+    Array.from(quizGrid.children).forEach(el => {
+      if (el.id !== 'quiz-empty-state') el.remove();
+    });
+
+    const answers = Object.entries(quizAnswers)
+      .map(([q, details]) => ({ question: q, ...details }))
+      .sort((a,b) => b.answeredAt - a.answeredAt);
+
+    answers.forEach(item => {
+      const col = document.createElement('div');
+      col.className = 'col animate__animated animate__fadeIn';
+      
+      const badge = item.isCorrect 
+        ? '<span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-25 mt-2 d-inline-block"><i class="bi bi-check-circle me-1"></i> Correct</span>'
+        : '<span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25 mt-2 d-inline-block"><i class="bi bi-x-circle me-1"></i> Incorrect</span>';
+      
+      col.innerHTML = `
+        <div class="card h-100 glass-card position-relative overflow-hidden group">
+          <div class="card-body p-4 d-flex flex-column">
+             <div class="d-flex justify-content-between align-items-start mb-3">
+               <div class="icon-square bg-dark bg-opacity-50 text-white rounded p-2 border border-secondary border-opacity-25">
+                 <i class="bi bi-question-square fs-4"></i>
+               </div>
+             </div>
+             <h6 class="card-title text-white mb-2">${item.question}</h6>
+             <p class="text-muted small mb-1">Your answer: <strong>${item.answer}</strong></p>
+             <div>${badge}</div>
+             <div class="mt-auto pt-3 text-muted small"><i class="bi bi-clock-history me-1"></i> ${new Date(item.answeredAt).toLocaleDateString()}</div>
+          </div>
+        </div>
+      `;
+      quizGrid.appendChild(col);
+    });
+  }
+  
   if (window.userProfile) {
     // Initial render
     firstVisitDisplay.innerText = new Date(window.userProfile.data.firstVisit).toLocaleDateString();
@@ -159,6 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
       timeDisplay.innerText = window.userProfile.formatTime(data.totalTimeSeconds);
       countDisplay.innerText = data.savedItems.length;
       renderSavedItems(data.savedItems);
+      renderQuizAnswers(data.quizAnswers);
     });
   }
   
