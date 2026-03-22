@@ -4,6 +4,563 @@ title: Try Bliss
 permalink: /trybliss/
 ---
 
+# The Power of Blissymbolics
+
+Welcome to the **Try Bliss** experience, an interactive way to understand [Blissymbolics](https://en.wikipedia.org/wiki/Blissymbols). Originally conceived as a universal written language, Blissymbolics is a generative, meaning-based (ideographic) system now used globally for Augmentative and Alternative Communication (AAC). 
+
+What makes Blissymbols remarkably deep is its **generative grammar**:
+- It comprises over **6,500 authorized symbols** (Bliss-characters and Bliss-words).
+- You can combine these core symbols endlessly to create new, abstract, and complex meanings. 
+- It has visual markers to change nouns into verbs, add tenses, indicate plurals, and formulate complete, grammatically sound sentences.
+
+By understanding just a few foundational shapes and their combinations, you can quickly grasp how people combine concepts to write expressive, deep content using Blissymbols online today!
+
+---
+
+# Welcome to Bliss
+
+Bliss is a language of communication through symbols.
+
+The symbols are simple and can be learned by anyone.
+
+### house: 
+
+![house,building,dwelling,residence][]
+
+    Observe the house
+
+#### It is a mixture of:
+
+![limit(s),limitation][]
+
+limit
+
+### over the earth
+
+![earth,ground,land][]
+
+earth
+
+### with protection
+
+![earth,ground,land][]
+![limit(s),limitation][]
+![protection,shelter][]
+![same,equal,equality][]
+![house,building,dwelling,residence][]
+
+    ground limit protection equal house
+
+...
+
+#### or, more correctly:
+![foundation,base,fundament][]
+
+base
+
+![and,also,plus,too][]
+
+and
+
+![protection,shelter][]
+
+protection
+
+![foundation,base,fundament][]
+![and,also,plus,too][]
+![protection,shelter][]
+![same,equal,equality][]
+![house,building,dwelling,residence][]
+
+    base and protection equal house
+
+## Observe the eye
+
+![eye][]
+
+eye
+
+    and with 2 eyes joined by a stem we have glasses
+![glasses,eyeglasses][]
+
+glasses
+
+### See the sun
+
+![sun][]
+
+sun
+
+    and with glasses and a sun we have sunglasses
+    
+![sunglasses][]
+
+sunglasses
+
+### And understand light
+
+![light][]
+
+
+    The light eye inside the sun.
+    Or the sun inside the eye...
+    
+---
+    
+# See the man
+
+![man,male][]
+
+## and the woman, female
+
+![woman,female][]
+
+## Remember the protection
+
+![protection,shelter][]
+
+    The protective man is the father.
+ 
+![father,dad,daddy,papa,pa,pop][]
+
+father
+
+# Then think about family
+
+![family,couple][]
+
+family or couple
+
+
+    But a house of a group of people can also be a family
+    
+# This is a person
+
+![person,human_being,individual,human][]
+
+person
+
+    And a group of people who live together form a family.
+
+![family_(group_home)][]
+
+family (_family_ _group_ _home_)
+
+# Animals
+
+There are a number of symbolized animals. Let's show some of them.
+
+![animal,beast][]
+
+animal
+
+    The feline is an animal with claws
+    
+![cat,feline_(animal),felid][]
+
+cat
+
+![dog,canine_(animal),canid][]
+
+    The dog lives with its tail shaped like an umbrella handle
+
+
+    And the ox does not forget its horns
+    
+![animal_(bovine),bovine,ovine][]
+
+ox, bovine
+
+### Giraffe    
+    
+![giraffe][] ![sky][]
+
+giraffe with a neck that goes past even the sky
+
+    
+![animal_skin,hide,pelt][]
+
+
+Mind
+===========
+
+The mind is a very important symbol in bliss.
+
+With it and other symbols, many important meanings in the bliss language are composed.
+
+![mind,intellect,reason][]
+
+mind, intellect, reason
+
+    A question inside a mind is a doubt
+
+![doubt,uncertainty][]
+
+Doubt, uncertainty
+
+### acquire knowledge
+
+![knowledge,class_(in_combinations)][]
+
+    Knowledge is a mind connected to the earth.
+    
+? Answer
+
+### eye and mind?
+
+![observation][]
+
+* -> Admiration ![respect,admiration][]
+* -> Observation ![observation][] <-
+* -> Expectation ![expect,anticipate-(to)][]
+
+
+### This is a mouth
+![mouth][]
+
+### This is speech
+![say,speak,talk,tell,express-(to)][]
+
+    Speech is the action of the mouth
+
+### Explain
+![explain-(to)][]
+
+    To explain is to speak of knowledge
+
+# Feeling
+
+![feeling,emotion,sensation][]
+
+    Feeling is an arrow piercing love.
+
+![love,affection][]
+
+Love
+
+? Answer
+
+##  What would be a house with feeling? 
+
+![home][]
+
+
+* -> Family ![family,couple][] 
+* -> Home ![home][] <-
+* -> Restaurant ![restaurant,cafeteria][]
+
+# Wheel
+
+![wheel][]
+
+    The sun is the energy, which together with the wheel makes the machine
+    
+![machine,appliance,engine,motor][]
+
+machine, engine, motor
+
+? Answer
+
+### wheel and mind
+
+![computer_(OLD)][]
+
+* -> Computer ![computer_(OLD)][] <-
+* -> Money ![money,cash][]
+* -> Factory ![factory,plant][]
+
+
+# See the water
+
+![water,fluid,liquid][]
+
+    if the water flows it makes a river
+    
+![river,stream,current][]
+
+River
+
+    if there is lots and lots of water it is the ocean
+
+![ocean,sea][]
+
+Ocean
+
+# Fire
+
+![fire][]
+
+    Fire is the natural element of the game (Raul Seixas)
+
+## To smoke
+
+![smoke-(to)][]
+
+    Observe that the smoke comes out of the mouth
+
+## To drink
+
+![drink-(to)][]
+
+    Observe that the water is above the mouth
+
+? Answer
+
+### What is the fire inside the mind?
+
+* -> Money ![money,cash][]
+* -> Health ![health][]
+* -> Desire ![wish,desire][] <-
+
+# Action
+
+![action,act,deed][]
+
+    Action can also be an indicator of action
+    
+![mind,intellect,reason][]
+
+Mind
+
+    The action of the mind is to think
+
+![think,reason-(to)][]
+
+Think
+
+? What is the action of the eye?
+
+![see,look,watch-(to)][]
+
+* -> To look ![see,look,watch-(to)][] <-
+* -> To admire ![health][]
+* -> To observe ![observe-(to)][]
+
+
+# Time
+
+![time][]
+
+We are connected to time in everything we do and generally we are within a limit or interval of time proposed by life.
+
+    Time is a portion of the sun.
+    
+![day][]
+
+Day
+
+    Practically a piece of the day.
+    
+   
+
+
+![limited_time,interval,period,awhile,for_a_while][]
+
+    A time limit is a time within limits
+
+## Work
+
+Work is connected to time
+
+
+![work_day][]
+
+Work day
+
+    A work day is a work sun
+    
+
+---
+
+# Some temporal elements
+
+
+![past][] | ![present][] | ![future][]
+----------|----------------|--------
+past | present | future
+
+## relating time with the time particle
+ 
+
+![ago,then_(past)][] | ![now][] |  ![then,so,later][]
+------|-------|------------
+before | now | after
+
+
+![sun][] | ![day][] | ![week][] | ![month][] | ![year][] | ![decade][]
+---------|-----------|---------|--------
+sun | day | week | month | year | decade
+
+## seasons and other details of time
+
+![morning_(early)][] | ![evening][] | ![spring_(ckb)][] | ![summer_(ckb)][] | ![autumn,fall_(ckb)][] | ![winter_(ckb)][]
+-----|----------|------|------|-----|-----
+morning| night | spring | summer | autumn | winter |
+
+
+
+? Answer
+
+### What is the time now?
+
+![now][]
+
+* -> Past ![past][]
+* -> Present ![present][] <-
+* -> Future ![future][]
+
+## relating time with the day cycle
+
+
+![yesterday][] | ![today][] | ![tomorrow][]
+---------------|------------|------------
+ yesterday | today |  tomorrow 
+ 
+## combining times and cycles
+
+![last_month][] | ![next_week][] | ![next_year][] 
+---------------|------------|------------
+last month | next week | next year
+
+# Nature elements
+
+![fire][] | ![water,fluid,liquid][] | ![lake,pond][] | ![river,stream,current][] | ![ocean,sea][] | ![earth,globe,world][] | ![star] [] | ![cloud][]
+----------|-------------------------|------------------|---------------------|-----------|-------
+fire | water | lake | river | ocean | earth, globe | star | cloud  
+
+# More elements of nature
+
+![creation,nature][] | ![flower][] | ![garden][] | ![tree][] | ![island][] | ![stone,rock][] | ![mountain][] | ![valley][] | ![forest,bush,wood,woods][]
+---------|------|--------|--------|-------|--------|----------|-------|-------------
+nature | flower | garden | tree | island  | stone  | mountain | valley  | forest
+
+
+
+? Answer
+
+### Water and earth form what?
+
+* -> Fire ![fire][]
+* -> Island ![island][] <-
+* -> Cloud ![cloud][]
+
+## Animals
+
+ 
+
+![animal,beast][] | ![horse][] | ![dog,canine_(animal),canid][] | ![cat,feline_(animal),felid][] | ![animal_(bovine),bovine,ovine][]  | ![sheep][] | ![pig][] | ![dinosaur][] | ![giraffe][] 
+----------|-------------|----------------|--------------------|------------------------|--------------|-----------------------
+animal | horse | dog | cat | ox | sheep | pig | dinosaur | giraffe
+
+![bird][]| ![parrot,myna,talking_bird][] |  ![mouse][] | ![insect,bug][] | ![butterfly,moth][] | ![bear][]
+---------|----------|-------|-----------|-------|-----
+bird  | parrot | mouse | insect | butterfly | bear 
+
+
+
+
+? Answer
+
+### Which animal has a neck that goes past even the sky?
+
+![giraffe][]
+
+* -> Dog ![dog,canine_(animal),canid][]
+* -> Giraffe ![giraffe][] <-
+* -> Bear ![bear][]
+
+# Space concepts
+
+![container,bowl,holder,pouch][] | ![foundation,base,fundament][] | ![protection,shelter][] | ![room][] | ![limit(s),limitation][] | ![place,area,location,space][]
+-----------|------|----------|-----|---------|--------
+container | base | protection | room| limits | place, space
+
+
+## directions
+
+![open][] | ![closed][] | ![up,upward][] | ![down,downward][] | ![shake,jiggle-(to)][] | ![forward][] | ![backward,back][] 
+----------|-------------|----------------|--------------------|------------------------|--------------|-----------------
+   open |    closed  |     up      |      down        |       shake     | forward | backward 
+
+## relative positions
+
+  ![over,above,superior][] | ![under,below,inferior][] | ![before,in_front_of,prior_to][]  | ![until,till,to][] | ![after,behind][] | ![from][] | ![in,inside,interior,internal][] | ![out,exterior,external,outside][]
+------|---------------------------|---------------------------|---------------------------------|-------|-----|-------|------
+over, superior    |    under, inferior      | before, in front  | until, to   | after, behind  | from | inside | outside
+
+
+## measures of quantity
+
+![group_of,much_of,many_of,quantity_of][] | ![group_of,much_of,many_of,quantity_of][] ![group_of,much_of,many_of,quantity_of][] | ![more][] | ![most,maximum][] | ![fewer,less][] 
+----------|-------------|----------------|--------------------|------------------------|--------------|------------------------|-------------|-------
+much | very much | more | most, maximum  | less 
+
+
+## measures of size
+
+![littleness,smallness][] | ![bigness,largeness][] | ![shortness_(distance,length)][] | ![lowness,shortness_(height)][] | ![length,longness][]
+--------|--------|--------------------|----------------|--------------------------|-------
+small | big | short (distance) | short (height) | long (length)
+
+### size emphasis
+
+![high,tall][] | ![giant][] | ![longest][]
+---------------|------------|----------
+tall           |   giant  |  longest
+
+# man
+
+## person
+
+![man,male][]  | ![woman,female][] | ![standing_(standing_person)][] | ![child,kid,youngster][] | ![baby,infant][]
+---------------|-------------------|---------------------------------|--------------------------|------------
+man          |  woman           | standing person                    | child                  |  baby 
+
+
+
+? Answer
+
+### Man and woman form...
+
+* -> A child ![child,kid,youngster][]
+* -> A face ![face][]
+* -> A family or couple ![family,couple][] <-
+
+## face
+
+
+![face][] | ![beard][] | ![head][] | ![neck_(head)][] | ![mouth][] |  ![nose][] | ![eye][] | ![ear][] 
+----------|------------|-----------|------------------|------------|------------|----------|-------------| 
+face      | beard      | head    | neck          | mouth       |    nose   |   eye   | ear
+
+## body
+
+
+![body,trunk][] | ![back_(body)][] | ![heart][]  | ![legs_and_feet][] | ![knee][] | ![hand][] | ![arm][]
+----------------|------------------|-------------|--------------------|-----------|-----------|----------
+  body         |        back    |   heart   |   legs and feet     |  knee   |   hand     | arm
+
+---
+
+# O Poder dos Blissymbolics
+
+Bem-vindo à experiência **Try Bliss**, uma forma interativa de entender os [Blissymbolics](https://pt.wikipedia.org/wiki/Blissymbolics). Originalmente concebida como uma linguagem escrita universal, os Blissymbolics são um sistema ideográfico gerativo e focado no significado, hoje usado globalmente para Comunicação Aumentativa e Alternativa (CAA).
+
+O que torna os símbolos Bliss notavelmente profundos é sua **gramática gerativa**:
+- O sistema dispõe de mais de **6.500 símbolos autorizados** (caracteres Bliss e palavras Bliss).
+- Você pode combinar esses símbolos fundamentais infinitamente para criar significados novos, abstratos e complexos.
+- Possui marcadores visuais para transformar substantivos em verbos, adicionar tempos verbais, indicar plurais e formular sentenças completas e consistentes do ponto de vista gramatical.
+
+Ao compreender apenas algumas formas básicas e suas infinitas combinações, você pode notar rapidamente por que as pessoas são capazes de escrever conteúdos online extensos e expressivos usando o sistema de símbolos Bliss hoje em dia!
+
+---
+
+\n---
+layout: default
+title: Try Bliss
+permalink: /trybliss/
+---
+
 Bem vindo ao bliss
 ==================
 

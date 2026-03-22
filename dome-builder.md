@@ -19,8 +19,8 @@ permalink: /dome-builder/
                         <input
                             type="range"
                             id="frequency-slider"
-                            min="2"
-                            max="4"
+                            min="1"
+                            max="6"
                             step="1"
                             value="3"
                             class="w-full"
@@ -163,7 +163,7 @@ permalink: /dome-builder/
             </h2>
             <p class="text-sm text-gray-600 mb-6">
                 Follow these 3 cutting steps, then watch the immersive walkthrough showing assembly! 
-                <strong class="text-blue-600"> Each end gets BOTH a miter (18°) AND bevel (27.8°) cut. The game-like walkthrough shows construction! Drag/swipe to rotate views!</strong>
+                <strong class="text-blue-600"> Each end gets BOTH a miter (<span id="guide-miter-angle">18</span>°) AND bevel (<span id="guide-bevel-angle">27.8</span>°) cut. The game-like walkthrough shows construction! Drag/swipe to rotate views!</strong>
             </p>
 
             <div class="space-y-6">
@@ -204,7 +204,7 @@ permalink: /dome-builder/
                     <div class="flex items-center gap-3 mb-4">
                         <span class="text-4xl">2️⃣</span>
                         <div>
-                            <h3 class="font-bold text-xl text-red-700">Top View - Miter Cut (18°)</h3>
+                            <h3 class="font-bold text-xl text-red-700">Top View - Miter Cut</h3>
                             <p class="text-sm text-gray-600">Looking from above - horizontal angle</p>
                         </div>
                     </div>
@@ -213,7 +213,7 @@ permalink: /dome-builder/
                         <div>
                             <p class="font-semibold text-red-600">What you see:</p>
                             <ul class="list-disc list-inside space-y-1 mt-2">
-                                <li>18° horizontal angle (red lines)</li>
+                                <li><span id="guide-miter-angle-2">18</span>° horizontal angle (red lines)</li>
                                 <li>How the cut affects width</li>
                                 <li>Top edge of the wood</li>
                                 <li><strong>BOTH ends get this cut!</strong></li>
@@ -222,7 +222,7 @@ permalink: /dome-builder/
                         <div>
                             <p class="font-semibold text-red-600">How to cut:</p>
                             <ul class="list-disc list-inside space-y-1 mt-2">
-                                <li>Set saw miter to 18°</li>
+                                <li>Set saw miter to <span id="guide-miter-angle-3">18</span>°</li>
                                 <li>Cut LEFT end at this angle</li>
                                 <li>Cut RIGHT end at this angle</li>
                                 <li>Material loss per end: ~<span id="miter-loss">0.0</span>mm</li>
@@ -236,7 +236,7 @@ permalink: /dome-builder/
                     <div class="flex items-center gap-3 mb-4">
                         <span class="text-4xl">3️⃣</span>
                         <div>
-                            <h3 class="font-bold text-xl text-green-700">Side View - Bevel Cut (27.8°)</h3>
+                            <h3 class="font-bold text-xl text-green-700">Side View - Bevel Cut</h3>
                             <p class="text-sm text-gray-600">Looking from the side - vertical angle</p>
                         </div>
                     </div>
@@ -245,7 +245,7 @@ permalink: /dome-builder/
                         <div>
                             <p class="font-semibold text-green-600">What you see:</p>
                             <ul class="list-disc list-inside space-y-1 mt-2">
-                                <li>27.8° vertical angle (green lines)</li>
+                                <li><span id="guide-bevel-angle-2">27.8</span>° vertical angle (green lines)</li>
                                 <li>How the cut affects height</li>
                                 <li>Side edge of the wood</li>
                                 <li><strong>BOTH ends get this cut!</strong></li>
@@ -254,7 +254,7 @@ permalink: /dome-builder/
                         <div>
                             <p class="font-semibold text-green-600">How to cut:</p>
                             <ul class="list-disc list-inside space-y-1 mt-2">
-                                <li>Set saw bevel to 27.8°</li>
+                                <li>Set saw bevel to <span id="guide-bevel-angle-3">27.8</span>°</li>
                                 <li>Cut LEFT end at this angle</li>
                                 <li>Cut RIGHT end at this angle</li>
                                 <li>Material loss per end: ~<span id="bevel-loss">0.0</span>mm</li>
@@ -277,21 +277,21 @@ permalink: /dome-builder/
                         </div>
                         <div class="bg-white bg-opacity-20 p-4 rounded-lg">
                             <p class="font-semibold text-lg mb-2">🔴 Miter Cut</p>
-                            <p>Angle: 18° horizontal</p>
+                            <p>Angle: <span id="guide-miter-angle-4">18</span>° horizontal</p>
                             <p>Both ends: YES - identical cuts</p>
                             <p>Affects: Top edge</p>
                             <p class="text-sm mt-1">Combined with bevel = compound</p>
                         </div>
                         <div class="bg-white bg-opacity-20 p-4 rounded-lg">
                             <p class="font-semibold text-lg mb-2">🟢 Bevel Cut</p>
-                            <p>Angle: 27.8° vertical</p>
+                            <p>Angle: <span id="guide-bevel-angle-4">27.8</span>° vertical</p>
                             <p>Both ends: YES - identical cuts</p>
                             <p>Affects: Side edge</p>
                             <p class="text-sm mt-1">Combined with miter = compound</p>
                         </div>
                     </div>
                     <p class="mt-4 text-center text-sm bg-white bg-opacity-20 p-3 rounded">
-                        💡 <strong>Good Karma Hubless System:</strong> Each strut needs BOTH 18° miter AND 27.8° bevel on BOTH ends (compound angle). The rectangular cross-section with compound cuts creates perfect overlapping joints - no complex hubs required!
+                        💡 <strong>Good Karma Hubless System:</strong> Each strut needs BOTH a miter AND bevel on BOTH ends (compound angle). The rectangular cross-section with compound cuts creates perfect overlapping joints - no complex hubs required!
                     </p>
                 </div>
         </div>

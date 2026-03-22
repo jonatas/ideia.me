@@ -486,8 +486,8 @@ class DomeSimulator {
                     </div>
                     <div>
                         <p class="font-semibold">Hubless Cuts:</p>
-                        <p>Miter: 18° (horizontal)</p>
-                        <p>Bevel: 27.8° (vertical)</p>
+                        <p>Miter: ${strutInfo.miterAngle.toFixed(1)}° (horizontal)</p>
+                        <p>Bevel: ${strutInfo.bevelAngle.toFixed(1)}° (vertical)</p>
                         <p>Cross-section: Rectangular</p>
                     </div>
                 </div>
@@ -543,12 +543,26 @@ class DomeSimulator {
         document.getElementById('selected-strut-type').textContent = this.selectedStrutType.type;
         document.getElementById('selected-strut-length').textContent = this.selectedStrutType.length.toFixed(1);
         
-        // Update dimension displays
-        const miterLoss = (this.strutHeight * Math.tan(18 * Math.PI / 180)).toFixed(1);
-        const bevelLoss = (this.strutWidth * Math.tan(27.8 * Math.PI / 180)).toFixed(1);
+        // Update dimension displays based on actual dynamic angles
+        const miterLoss = (this.strutHeight * Math.tan(this.selectedStrutType.miterAngle * Math.PI / 180)).toFixed(1);
+        const bevelLoss = (this.strutWidth * Math.tan(this.selectedStrutType.bevelAngle * Math.PI / 180)).toFixed(1);
         
         document.getElementById('miter-loss').textContent = miterLoss;
         document.getElementById('bevel-loss').textContent = bevelLoss;
+        
+        // Update UI displays for dynamic angles (dome-builder.md spans)
+        const updateSpanIfExt = (id, val) => {
+            const el = document.getElementById(id);
+            if(el) el.textContent = val;
+        };
+        updateSpanIfExt('guide-miter-angle', this.selectedStrutType.miterAngle.toFixed(1));
+        updateSpanIfExt('guide-bevel-angle', this.selectedStrutType.bevelAngle.toFixed(1));
+        updateSpanIfExt('guide-miter-angle-2', this.selectedStrutType.miterAngle.toFixed(1));
+        updateSpanIfExt('guide-miter-angle-3', this.selectedStrutType.miterAngle.toFixed(1));
+        updateSpanIfExt('guide-miter-angle-4', this.selectedStrutType.miterAngle.toFixed(1));
+        updateSpanIfExt('guide-bevel-angle-2', this.selectedStrutType.bevelAngle.toFixed(1));
+        updateSpanIfExt('guide-bevel-angle-3', this.selectedStrutType.bevelAngle.toFixed(1));
+        updateSpanIfExt('guide-bevel-angle-4', this.selectedStrutType.bevelAngle.toFixed(1));
         
         // Update all width/height displays
         ['width-display-1', 'summary-width-before'].forEach(id => {
@@ -691,7 +705,7 @@ class DomeSimulator {
             const v1 = baseVertices[face[0]];
             const v2 = baseVertices[face[1]];
             const v3 = baseVertices[face[2]];
-            this.allTriangles.push(...this.subdivideTriangle(v1, v2, v3, this.frequency - 1, radius));
+            this.allTriangles.push(...this.subdivideTriangle(v1, v2, v3, this.frequency, radius));
         });
 
         // Filter triangles (keep only upper hemisphere)
@@ -713,21 +727,40 @@ class DomeSimulator {
         this.createDomeGeometry();
     }
     
-    subdivideTriangle(v1, v2, v3, depth, radius) {
-        if (depth === 0) {
+    subdivideTriangle(v1, v2, v3, frequency, radius) {
+        if (frequency === 1) {
             return [[v1.clone(), v2.clone(), v3.clone()]];
         }
 
         const triangles = [];
-        const m1 = v1.clone().add(v2).multiplyScalar(0.5).normalize().multiplyScalar(radius);
-        const m2 = v2.clone().add(v3).multiplyScalar(0.5).normalize().multiplyScalar(radius);
-        const m3 = v3.clone().add(v1).multiplyScalar(0.5).normalize().multiplyScalar(radius);
-
-        triangles.push(...this.subdivideTriangle(v1, m1, m3, depth - 1, radius));
-        triangles.push(...this.subdivideTriangle(v2, m2, m1, depth - 1, radius));
-        triangles.push(...this.subdivideTriangle(v3, m3, m2, depth - 1, radius));
-        triangles.push(...this.subdivideTriangle(m1, m2, m3, depth - 1, radius));
-
+        const getPoint = (c1, c2) => {
+            const c3 = frequency - c1 - c2;
+            const p = new THREE.Vector3(0,0,0);
+            p.addScaledVector(v1, c1/frequency);
+            p.addScaledVector(v2, c2/frequency);
+            p.addScaledVector(v3, c3/frequency);
+            return p.normalize().multiplyScalar(radius);
+        };
+        
+        for (let c1 = 0; c1 < frequency; c1++) {
+            for (let c2 = 0; c2 < frequency - c1; c2++) {
+                // Upright triangle
+                triangles.push([
+                    getPoint(c1 + 1, c2),
+                    getPoint(c1, c2 + 1),
+                    getPoint(c1, c2)
+                ]);
+                
+                // Inverted triangle
+                if (c1 + c2 < frequency - 1) {
+                    triangles.push([
+                        getPoint(c1 + 1, c2),
+                        getPoint(c1 + 1, c2 + 1),
+                        getPoint(c1, c2 + 1)
+                    ]);
+                }
+            }
+        }
         return triangles;
     }
     
@@ -738,35 +771,89 @@ class DomeSimulator {
         // Track all struts to avoid counting duplicates
         const processedStruts = new Set();
         
+        // Map to store faces adjacent to each edge to calculate Dihedral Angles (Bevel)
+        const edgeFacesMap = new Map();
+        // Map to accumulate face angles adjacent to each strut type (Miter)
+        const strutFaceAnglesMap = new Map();
+        
         this.allTriangles.forEach((tri) => {
+            // Calculate face normal
+            const vA = new THREE.Vector3().subVectors(tri[1], tri[0]);
+            const vB = new THREE.Vector3().subVectors(tri[2], tri[0]);
+            const normal = new THREE.Vector3().crossVectors(vA, vB).normalize();
+            
+            // Calculate interior angles of the triangle
+            const angles = [
+                vA.clone().normalize().angleTo(vB.clone().normalize()),
+                new THREE.Vector3().subVectors(tri[2], tri[1]).normalize().angleTo(new THREE.Vector3().subVectors(tri[0], tri[1]).normalize()),
+                new THREE.Vector3().subVectors(tri[0], tri[2]).normalize().angleTo(new THREE.Vector3().subVectors(tri[1], tri[2]).normalize())
+            ];
+            
             for (let i = 0; i < 3; i++) {
                 const v1 = tri[i];
                 const v2 = tri[(i + 1) % 3];
                 const length = v1.distanceTo(v2) * 1000;
-                const key = Math.round(length);
+                const roundedLength = Math.round(length);
                 
-                // Create a unique strut identifier to avoid counting shared struts twice
-                const strutKey = this.getStrutKey(v1, v2);
+                const strutKeyPos = this.getStrutKey(v1, v2);
                 
-                if (!strutLengthMap.has(key)) {
-                    strutLengthMap.set(key, length);
+                if (!edgeFacesMap.has(strutKeyPos)) {
+                    edgeFacesMap.set(strutKeyPos, { roundedLength, normals: [] });
+                }
+                edgeFacesMap.get(strutKeyPos).normals.push(normal);
+                
+                if (!strutFaceAnglesMap.has(roundedLength)) {
+                    strutFaceAnglesMap.set(roundedLength, []);
+                }
+                // Save the angles at the endpoints of this strut
+                strutFaceAnglesMap.get(roundedLength).push(angles[i]);
+                strutFaceAnglesMap.get(roundedLength).push(angles[(i + 1) % 3]);
+                
+                if (!strutLengthMap.has(roundedLength)) {
+                    strutLengthMap.set(roundedLength, length);
                 }
                 
-                // Count each unique strut only once
-                if (!processedStruts.has(strutKey)) {
-                    processedStruts.add(strutKey);
-                    strutCountMap.set(key, (strutCountMap.get(key) || 0) + 1);
+                if (!processedStruts.has(strutKeyPos)) {
+                    processedStruts.add(strutKeyPos);
+                    strutCountMap.set(roundedLength, (strutCountMap.get(roundedLength) || 0) + 1);
                 }
             }
         });
 
-        const uniqueLengths = Array.from(strutLengthMap.values()).sort((a, b) => a - b);
-        this.strutTypes = uniqueLengths.map((len, idx) => ({
-            type: String.fromCharCode(65 + idx),
-            length: len,
-            count: strutCountMap.get(Math.round(len)) || 0,
-            color: ['#e74c3c', '#3498db', '#2ecc71', '#f39c12', '#9b59b6'][idx % 5]
-        }));
+        // Compute Dihedral angles (Bevels) per strut length
+        const strutBevelsMap = new Map();
+        edgeFacesMap.forEach((data, key) => {
+            if (data.normals.length === 2) {
+                // Dihedral angle between the two adjacent faces
+                const angleRad = data.normals[0].angleTo(data.normals[1]);
+                const angleDeg = angleRad * 180 / Math.PI;
+                // Accumulate bevel angles (half of dihedral)
+                if (!strutBevelsMap.has(data.roundedLength)) strutBevelsMap.set(data.roundedLength, []);
+                strutBevelsMap.get(data.roundedLength).push(angleDeg / 2);
+            }
+        });
+
+        const uniqueLengths = Array.from(strutLengthMap.keys()).sort((a, b) => a - b);
+        this.strutTypes = uniqueLengths.map((roundedLen, idx) => {
+            const exactLen = strutLengthMap.get(roundedLen);
+            const bevels = strutBevelsMap.get(roundedLen) || [0];
+            const avgBevel = bevels.reduce((a, b) => a + b, 0) / Math.max(1, bevels.length);
+            
+            // Approximate Miter based on average interior angles adjacent to this strut
+            const faceAngles = strutFaceAnglesMap.get(roundedLen) || [0];
+            const avgFaceAngle = faceAngles.reduce((a, b) => a + b, 0) / Math.max(1, faceAngles.length);
+            // The Miter angle corresponds to the cut off square: 90 - (angle in degrees) [usually closely modeling geodesic points]
+            let miter = Math.max(0, 90 - (avgFaceAngle * 180 / Math.PI));
+
+            return {
+                type: String.fromCharCode(65 + idx), // A, B, C etc.
+                length: exactLen,
+                count: strutCountMap.get(roundedLen) || 0,
+                color: ['#4361ee', '#f72585', '#7209b7', '#4ECDC4', '#FBBF24', '#0EA5E9', '#EF4444', '#10b981', '#f78c6b', '#8338ec'][idx % 10],
+                miterAngle: miter,
+                bevelAngle: avgBevel
+            };
+        });
     }
     
     organizeTrianglesByType() {
@@ -880,10 +967,10 @@ class DomeSimulator {
     }
     
     generateTriangleTypeColor(typeSignature) {
-        // Generate consistent colors based on strut type signature
+        // Generate consistent colors based on strut type signature matching brand colors
         const colors = [
-            '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7',
-            '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'
+            '#4361ee', '#f72585', '#7209b7', '#4ECDC4', '#FBBF24',
+            '#0EA5E9', '#EF4444', '#10b981', '#f78c6b', '#8338ec'
         ];
         
         let hash = 0;
@@ -1184,7 +1271,7 @@ class DomeSimulator {
         const extendedLength = length * extendFactor;
         
         // Create strut geometry with Good Karma overlapping system
-        const strutGeometry = this.createStrutGeometryForDome(extendedLength);
+        const strutGeometry = this.createStrutGeometryForDome(extendedLength, strutInfo);
         const strutMaterial = new THREE.MeshStandardMaterial({
             color: new THREE.Color(strutInfo.color),
             metalness: 0.3,
@@ -1285,7 +1372,7 @@ class DomeSimulator {
         triangleMesh.add(borderLines);
     }
     
-    createStrutGeometryForDome(length) {
+    createStrutGeometryForDome(length, strutInfo) {
         // Create rectangular strut geometry matching actual dimensions (Good Karma hubless style)
         // Scale down strut cross-section to be more proportional to dome size
         const scaleFactor = 0.5; // Make struts thinner for better visualization
@@ -1296,8 +1383,8 @@ class DomeSimulator {
         const geometry = new THREE.BoxGeometry(width, length, height);
         
         // Apply Good Karma compound cuts for hubless joints - enhanced for overlapping system
-        const miterAngle = 18 * Math.PI / 180; // Horizontal cut angle
-        const bevelAngle = 27.8 * Math.PI / 180; // Vertical cut angle
+        const miterAngle = (strutInfo ? strutInfo.miterAngle : 18) * Math.PI / 180; // Horizontal cut angle
+        const bevelAngle = (strutInfo ? strutInfo.bevelAngle : 27.8) * Math.PI / 180; // Vertical cut angle
         // Enhanced cuts for better overlap visualization
         
         const positions = geometry.attributes.position;

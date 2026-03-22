@@ -43,7 +43,11 @@ document.addEventListener("DOMContentLoaded", () => {
       placeholder.className = 'text-center my-3 p-3 rounded-3';
       placeholder.style.background = 'rgba(255,255,255,0.05)';
       placeholder.style.border = '1px dashed rgba(255,255,255,0.2)';
-      placeholder.innerHTML = '<i class="bi bi-eye-slash text-muted" style="font-size: 2rem;"></i><div class="small text-muted mt-2">A imagem da resposta está oculta. Selecione uma opção para revelar!</div>';
+      placeholder.innerHTML = `
+        <i class="bi bi-eye-slash text-muted" style="font-size: 2rem;"></i>
+        <div class="small text-muted mt-2 lang-pt-text">A imagem da resposta está oculta. Selecione uma opção para revelar!</div>
+        <div class="small text-muted mt-2 lang-en-text d-none">The answer image is hidden. Select an option to reveal it!</div>
+      `;
       
       quizContainer.appendChild(placeholder);
       quizContainer.dataset.hasPlaceholder = 'true';
@@ -124,4 +128,116 @@ document.addEventListener("DOMContentLoaded", () => {
     quizContainer.appendChild(optionsGrid);
     ul.parentNode.replaceChild(quizContainer, ul);
   });
-});
+
+// Remove old static language logic
+    // We already moved to dynamic wrapping below.
+  });
+
+  // Dynamic Language Wrapping
+  const h1s = document.querySelectorAll('h1');
+  let ptStartH1 = null;
+  let enStartH1 = h1s.length > 0 ? h1s[0] : null;
+
+  for (let h of h1s) {
+    if (h.textContent.includes('O Poder dos Blissymbolics')) {
+      ptStartH1 = h;
+      break;
+    }
+  }
+
+  if (enStartH1 && ptStartH1) {
+    const parent = enStartH1.parentNode;
+    const enWrapper = document.createElement('div');
+    enWrapper.className = 'lang-en';
+    const ptWrapper = document.createElement('div');
+    ptWrapper.className = 'lang-pt d-none';
+
+    // Build the language toggle UI
+    const toggleHtml = `
+      <div class="lang-toggle text-end mb-3 mt-2">
+        <button id="btn-en" class="btn btn-sm btn-primary active" title="Switch to English">🇬🇧 EN</button>
+        <button id="btn-pt" class="btn btn-sm btn-outline-primary" title="Mudar para Português">🇧🇷 PT-BR</button>
+      </div>
+      <div class="text-center mb-5 mt-3">
+        <a href="/bliss-glossary/" class="btn btn-outline-primary lang-en-btn"><i class="bi bi-book"></i> View Bliss Glossary</a>
+        <a href="/bliss-glossary/" class="btn btn-outline-primary lang-pt-btn d-none"><i class="bi bi-book"></i> Ver Glossário Bliss</a>
+      </div>
+    `;
+    const toggleContainer = document.createElement('div');
+    toggleContainer.innerHTML = toggleHtml;
+    parent.insertBefore(toggleContainer, enStartH1);
+
+    // Also the hr right before ptStartH1
+    const separatorHr = ptStartH1.previousElementSibling;
+
+    parent.insertBefore(enWrapper, ptStartH1);
+    parent.insertBefore(ptWrapper, separatorHr ? separatorHr : ptStartH1);
+
+    // Move EN nodes
+    let curr = enStartH1;
+    while (curr && curr !== ptStartH1 && curr !== separatorHr) {
+      let next = curr.nextElementSibling;
+      enWrapper.appendChild(curr);
+      curr = next;
+    }
+
+    if (separatorHr) separatorHr.style.display = 'none';
+
+    // Move PT nodes
+    curr = ptStartH1;
+    while (curr && curr.tagName !== 'SCRIPT') {
+      let next = curr.nextElementSibling;
+      ptWrapper.appendChild(curr);
+      curr = next;
+    }
+
+    // Language Toggle Logic
+    const btnEn = document.getElementById('btn-en');
+    const btnPt = document.getElementById('btn-pt');
+    const langEnBtn = document.querySelector('.lang-en-btn');
+    const langPtBtn = document.querySelector('.lang-pt-btn');
+
+    function setLanguage(lang) {
+      const enTexts = document.querySelectorAll('.lang-en-text');
+      const ptTexts = document.querySelectorAll('.lang-pt-text');
+
+      if (lang === 'en') {
+        btnEn.classList.add('active', 'btn-primary');
+        btnEn.classList.remove('btn-outline-primary');
+        btnPt.classList.remove('active', 'btn-primary');
+        btnPt.classList.add('btn-outline-primary');
+        
+        enWrapper.classList.remove('d-none');
+        ptWrapper.classList.add('d-none');
+        langEnBtn.classList.remove('d-none');
+        langPtBtn.classList.add('d-none');
+        
+        enTexts.forEach(el => el.classList.remove('d-none'));
+        ptTexts.forEach(el => el.classList.add('d-none'));
+        
+        localStorage.setItem('blissLang', 'en');
+      } else {
+        btnPt.classList.add('active', 'btn-primary');
+        btnPt.classList.remove('btn-outline-primary');
+        btnEn.classList.remove('active', 'btn-primary');
+        btnEn.classList.add('btn-outline-primary');
+        
+        enWrapper.classList.add('d-none');
+        ptWrapper.classList.remove('d-none');
+        langEnBtn.classList.add('d-none');
+        langPtBtn.classList.remove('d-none');
+
+        ptTexts.forEach(el => el.classList.remove('d-none'));
+        enTexts.forEach(el => el.classList.add('d-none'));
+
+        localStorage.setItem('blissLang', 'pt');
+      }
+    }
+
+    btnEn.addEventListener('click', () => setLanguage('en'));
+    btnPt.addEventListener('click', () => setLanguage('pt'));
+
+    // Init
+    const savedLang = localStorage.getItem('blissLang') || 'en';
+    setLanguage(savedLang);
+  }
