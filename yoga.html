@@ -652,6 +652,24 @@ permalink: /yoga.html
                 }
             },
             {
+                id: 'padangusthasana', name: 'Big Toe Pose (Padangusthasana)',
+                desc: 'Fold forward, grab your big toes with your index and middle fingers, and pull your torso down.',
+                inherit: 'uttanasana-a',
+                vars: {
+                    '--la-rot': -125, '--le-rot': -95,
+                    '--ra-rot': -125, '--re-rot': -95
+                }
+            },
+            {
+                id: 'padahastasana', name: 'Gorilla Pose (Padahastasana)',
+                desc: 'Fold forward, slide your hands completely under your feet, palms facing up.',
+                inherit: 'padangusthasana',
+                vars: {
+                    '--la-rot': -130, '--le-rot': -100,
+                    '--ra-rot': -130, '--re-rot': -100
+                }
+            },
+            {
                 id: 'chaturanga-dandasana', name: 'Low Plank (Chaturanga Dandasana)',
                 desc: 'Exhale and lower into a push-up hover. Keep your body in a straight line and elbows hugged into your ribs.',
                 vars: {
@@ -828,6 +846,27 @@ permalink: /yoga.html
                 }
             },
             {
+                id: 'baddha-konasana', name: 'Bound Angle Pose (Baddha Konasana)',
+                desc: 'Seated with the soles of the feet together, knees dropped open to the sides. Hold feet and fold forward.',
+                inherit: 'dandasana', 
+                vars: {
+                    '--ub-rot': 30, '--head-rot': 20,
+                    '--ll-rot': -30, '--lk-rot': 120, 
+                    '--rl-rot': -30, '--rk-rot': 120,
+                    '--la-rot': -20, '--le-rot': 20, 
+                    '--ra-rot': -20, '--re-rot': 20
+                }
+            },
+            {
+                id: 'upavistha-konasana', name: 'Wide-Angle Seated Forward Bend',
+                desc: 'Seated with legs wide open, fold torso straight forward to the floor, grabbing big toes.',
+                inherit: 'kurmasana', 
+                vars: {
+                    '--la-rot': -90, '--le-rot': 0, 
+                    '--ra-rot': -90, '--re-rot': 0
+                }
+            },
+            {
                 id: 'navasana', name: 'Boat Pose (Navasana)',
                 desc: 'Balance on your sit bones with your torso leaning back and your legs raised to form a V-shape.',
                 vars: {
@@ -873,6 +912,27 @@ permalink: /yoga.html
                 }
             },
             {
+                id: 'trikonasana-left', name: 'Triangle Pose - Left (Trikonasana)',
+                desc: 'Stand with legs wide, fold sideways over the left leg. Left hand touches ankle, right reaches sky.',
+                inherit: 'trikonasana',
+                vars: {
+                    '--ub-rot': -90, '--head-rot': 0,
+                    '--la-rot': 90, '--le-rot': 0,
+                    '--ra-rot': -90, '--re-rot': 0,
+                    '--ll-rot': 40, '--lk-rot': 0,
+                    '--rl-rot': -40, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'parivrtta-trikonasana-left', name: 'Revolved Triangle - Left',
+                desc: 'Revolve torso over the left leg. Right hand to the floor, left reaches sky.',
+                inherit: 'trikonasana-left',
+                vars: {
+                    '--la-rot': -90, '--le-rot': 0,
+                    '--ra-rot': 90, '--re-rot': 0
+                }
+            },
+            {
                 id: 'utthita-parsvakonasana', name: 'Extended Side Angle (Utthita Parsvakonasana)',
                 desc: 'Deep lunge. Torso leans over the bent leg. Lower hand touches the floor, upper arm extends diagonally over the ear.',
                 vars: {
@@ -892,6 +952,28 @@ permalink: /yoga.html
                     '--ub-rot': -120, // Twist backward across body
                     '--la-rot': -60, '--le-rot': 0, // Left hand to floor
                     '--ra-rot': 180, '--re-rot': 0  // Right arm over ear
+                }
+            },
+            {
+                id: 'utthita-parsvakonasana-left', name: 'Extended Side Angle - Left',
+                desc: 'Deep lunge on left leg. Torso leans over the bent leg. Left hand to floor, right arm over the ear.',
+                inherit: 'utthita-parsvakonasana',
+                vars: {
+                    '--ub-rot': -60, '--head-rot': 37,
+                    '--la-rot': 60, '--le-rot': 0,
+                    '--ra-rot': -180, '--re-rot': 0,
+                    '--ll-rot': 90, '--lk-rot': -90,
+                    '--rl-rot': -60, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'parivrtta-parsvakonasana-left', name: 'Revolved Side Angle - Left',
+                desc: 'Lunge on left leg, torso twisted across the knee. Right hand to floor, left arm over ear.',
+                inherit: 'utthita-parsvakonasana-left',
+                vars: {
+                    '--ub-rot': 120, 
+                    '--la-rot': -180, '--le-rot': 0, 
+                    '--ra-rot': 60, '--re-rot': 0  
                 }
             },
             {
@@ -989,6 +1071,55 @@ permalink: /yoga.html
                     '--ra-rot': -90, '--re-rot': 0,
                     '--ll-rot': -45, '--lk-rot': 0,
                     '--rl-rot': -45, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'karnapidasana', name: 'Ear Pressure Pose (Karnapidasana)',
+                desc: 'From Plow Pose, bend your knees and bring them to the floor beside your ears, pressing inward.',
+                inherit: 'halasana',
+                vars: {
+                    '--ll-rot': -120, '--lk-rot': -120,
+                    '--rl-rot': -120, '--rk-rot': -120
+                }
+            },
+            {
+                id: 'supta-konasana', name: 'Reclining Angle Pose (Supta Konasana)',
+                desc: 'Lying on your back, legs swing overhead and open wide, hands grabbing the toes.',
+                inherit: 'halasana', 
+                vars: {
+                    '--ll-rot': 150, '--lk-rot': 0,
+                    '--rl-rot': 150, '--rk-rot': 0,
+                    '--la-rot': -150, '--le-rot': 0,
+                    '--ra-rot': -150, '--re-rot': 0
+                }
+            },
+            {
+                id: 'urdhva-padmasana', name: 'Upward Lotus (Urdhva Padmasana)',
+                desc: 'From Shoulder Stand, fold your legs into Lotus Pose and balance on your shoulders.',
+                inherit: 'salamba-sarvangasana',
+                vars: {
+                    '--ll-rot': 80, '--lk-rot': -160,  
+                    '--rl-rot': -80, '--rk-rot': 160  
+                }
+            },
+            {
+                id: 'pindasana', name: 'Embryo Pose (Pindasana)',
+                desc: 'From Upward Lotus, fold the crossed legs down tightly toward your chest, wrapping arms around them.',
+                inherit: 'urdhva-padmasana',
+                vars: {
+                    '--ub-rot': -45, '--head-rot': -45, 
+                    '--la-rot': -200, '--le-rot': 40,
+                    '--ra-rot': -200, '--re-rot': 40
+                }
+            },
+            {
+                id: 'matsyasana', name: 'Fish Pose (Matsyasana)',
+                desc: 'Lie on your back, arch your upper body, and rest the crown of your head on the floor. Legs straight or in Lotus.',
+                inherit: 'savasana',
+                vars: {
+                    '--ub-rot': -30, '--head-rot': 45, // Arch upper back, tilt head back
+                    '--la-rot': 10, '--le-rot': -20, // elbows pressing into floor
+                    '--ra-rot': 10, '--re-rot': -20
                 }
             },
             {
