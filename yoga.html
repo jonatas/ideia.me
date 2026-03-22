@@ -139,72 +139,120 @@ permalink: /yoga.html
             line-height: 1.5;
         }
 
-        /* Sequence Tabs & Theming */
-        .sequence-tabs-container {
+        /* Timeline Builder & Sequencer */
+        .timeline-area {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 24px;
-            background: rgba(0,0,0,0.4);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .sequence-tabs {
-            display: flex;
-            gap: 12px;
-            overflow-x: auto;
-            scrollbar-width: none; /* Hide scrollbar Firefox */
-        }
-        .sequence-tabs::-webkit-scrollbar { display: none; /* Hide scrollbar Chrome */ }
-
-        .seq-tab {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.15);
-            color: var(--muted-color);
-            padding: 6px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-        }
-
-        .seq-tab:hover {
-            border-color: var(--tab-color);
-            color: var(--tab-color);
-        }
-
-        .seq-tab.active {
-            background: var(--tab-color);
-            color: #0f172a;
-            border-color: var(--tab-color);
-            font-weight: 600;
-        }
-
-        .theme-toggle {
-            color: var(--muted-color);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            white-space: nowrap;
-            margin-left: 20px;
-        }
-
-        .theme-toggle input {
-            cursor: pointer;
-        }
-
-        /* Timeline Builder */
-        .timeline-section {
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
             gap: 16px;
-            background: rgba(255,255,255,0.02);
+            padding: 16px 24px;
+            background: rgba(0,0,0,0.2);
             border-bottom: 1px solid rgba(255,255,255,0.05);
+            align-items: stretch;
             z-index: 5;
         }
+        
+        .seq-dots {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-top: 4px;
+        }
+
+        .seq-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--dot-color);
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            opacity: 0.3;
+        }
+
+        .seq-dot:hover {
+            opacity: 0.7;
+            transform: scale(1.1);
+        }
+
+        .seq-dot.active {
+            opacity: 1;
+            border-color: #fff;
+            transform: scale(1.1);
+            box-shadow: 0 0 10px var(--dot-color);
+        }
+
+        .seq-dot.add-seq {
+            background: rgba(255,255,255,0.05);
+            border: 1px dashed rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.3);
+            opacity: 1;
+        }
+
+        .seq-dot.add-seq:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.8);
+            color: #fff;
+        }
+
+        .timeline-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .timeline-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .seq-name-display {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            cursor: pointer;
+            border-bottom: 1px dashed transparent;
+            padding: 2px 4px;
+            transition: color 0.3s;
+        }
+
+        .seq-name-display:hover {
+            border-bottom-color: var(--accent-color);
+        }
+
+        .seq-name-input {
+            background: rgba(0,0,0,0.3);
+            border: none;
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+            width: 200px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border-bottom: 2px solid var(--accent-color);
+            outline: none;
+            display: none;
+        }
+
+        .seq-color-picker {
+            width: 26px;
+            height: 26px;
+            padding: 0;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            background: none;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .seq-color-picker::-webkit-color-swatch-wrapper { padding: 0; }
+        .seq-color-picker::-webkit-color-swatch { border: none; border-radius: 50%; }
 
         .timeline-track {
             flex: 1;
@@ -271,8 +319,8 @@ permalink: /yoga.html
 
         .timeline-controls {
             display: flex;
-            flex-direction: column;
             gap: 8px;
+            margin-left: auto;
         }
 
         .timeline-controls .icon-btn {
@@ -410,20 +458,6 @@ permalink: /yoga.html
         </div>
     </header>
 
-    <div class="sequence-tabs-container">
-        <div class="sequence-tabs">
-            <button class="seq-tab active" data-seq="sun-a" style="--tab-color: #fbbf24;">Sun Salutation A</button>
-            <button class="seq-tab" data-seq="standing" style="--tab-color: #34d399;">Standing Sequence</button>
-            <button class="seq-tab" data-seq="seated" style="--tab-color: #60a5fa;">Seated Sequence</button>
-            <button class="seq-tab" data-seq="finishing" style="--tab-color: #a78bfa;">Finishing Sequence</button>
-        </div>
-        <div class="theme-toggle">
-            <label title="Toggle dynamic sequence color themes">
-                <input type="checkbox" id="themeToggle" checked> Colors
-            </label>
-        </div>
-    </div>
-
     <svg width="0" height="0" style="display:none;">
         <defs>
             <g id="stickman">
@@ -471,13 +505,23 @@ permalink: /yoga.html
         </defs>
     </svg>
 
-    <div class="timeline-section">
-        <div class="timeline-controls">
-            <button id="playSeqBtn" class="icon-btn" title="Play Sequence" onclick="togglePlaySequence()"><i class="bi bi-play-fill" id="playIcon"></i></button>
-            <button id="clearSeqBtn" class="icon-btn" title="Clear Sequence" onclick="clearSequence()"><i class="bi bi-trash"></i></button>
+    <div class="timeline-area">
+        <div class="seq-dots" id="seqDots">
+            <!-- Rendered by JS -->
         </div>
-        <div class="timeline-track" id="timelineTrack" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
-            <div class="timeline-placeholder" id="timelinePlaceholder">Drag poses from the collection below directly here to build a custom sequence!</div>
+        <div class="timeline-content">
+            <div class="timeline-header">
+                <span id="seqNameDisplay" class="seq-name-display" ondblclick="editSeqName()" title="Double-click to edit name"></span>
+                <input type="text" id="seqNameInput" class="seq-name-input" onblur="updateSeqName()" onkeydown="if(event.key==='Enter') this.blur();">
+                <input type="color" id="seqColorPicker" class="seq-color-picker" onchange="updateSeqColor(this.value)" title="Change Sequence Color">
+                <div class="timeline-controls">
+                    <button id="playSeqBtn" class="icon-btn" title="Play Sequence" onclick="togglePlaySequence()"><i class="bi bi-play-fill" id="playIcon"></i></button>
+                    <button id="clearSeqBtn" class="icon-btn" title="Clear Sequence" onclick="clearSequence()"><i class="bi bi-trash"></i></button>
+                </div>
+            </div>
+            <div class="timeline-track" id="timelineTrack" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+                <div class="timeline-placeholder" id="timelinePlaceholder">Drag poses from the collection below directly here to build a custom sequence!</div>
+            </div>
         </div>
     </div>
 
@@ -1045,8 +1089,9 @@ permalink: /yoga.html
             applyVars(pose.vars);
         }
 
-        // Macro Sequences & Theming
-        const MACRO_SEQUENCES = {
+        // Dynamic Sequences & Theming
+        let customSequenceCounter = 1;
+        let mySequences = {
             'sun-a': {
                 name: 'Sun Salutation A', color: '#fbbf24',
                 poses: ['tadasana', 'urdhva-hastasana', 'uttanasana-a', 'ardha-uttanasana', 'chaturanga-dandasana', 'urdhva-mukha-svanasana', 'adho-mukha-svanasana', 'ardha-uttanasana', 'uttanasana-a', 'urdhva-hastasana', 'tadasana']
@@ -1065,42 +1110,95 @@ permalink: /yoga.html
             }
         };
 
-        let useThemes = true;
-        const themeToggle = document.getElementById('themeToggle');
-        themeToggle.addEventListener('change', (e) => {
-            useThemes = e.target.checked;
-            updateAppTheme();
-        });
-
         let activeSequenceKey = 'sun-a';
+
+        function renderSeqDots() {
+            const container = document.getElementById('seqDots');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            Object.keys(mySequences).forEach(key => {
+                const seq = mySequences[key];
+                const btn = document.createElement('button');
+                btn.className = 'seq-dot' + (key === activeSequenceKey ? ' active' : '');
+                btn.style.setProperty('--dot-color', seq.color);
+                btn.title = seq.name;
+                btn.onclick = () => loadMacroSequence(key);
+                container.appendChild(btn);
+            });
+            
+            const addBtn = document.createElement('button');
+            addBtn.className = 'seq-dot add-seq';
+            addBtn.title = 'Add New Sequence';
+            addBtn.innerHTML = '<i class="bi bi-plus"></i>';
+            addBtn.onclick = addNewSequence;
+            container.appendChild(addBtn);
+        }
+
+        function addNewSequence() {
+            const key = 'custom-' + customSequenceCounter++;
+            mySequences[key] = {
+                name: 'New Sequence',
+                color: '#f43f5e',
+                poses: []
+            };
+            loadMacroSequence(key);
+        }
 
         function loadMacroSequence(key) {
             activeSequenceKey = key;
-            const seqData = MACRO_SEQUENCES[key];
+            const seqData = mySequences[key];
             sequence = [...seqData.poses];
-            stopSequence(); // Stop any playing sequence when switching
-            renderTimeline();
             
-            // Update active tab visuals
-            document.querySelectorAll('.seq-tab').forEach(tab => {
-                if (tab.dataset.seq === key) tab.classList.add('active');
-                else tab.classList.remove('active');
-            });
+            document.getElementById('seqNameDisplay').innerText = seqData.name;
+            document.getElementById('seqNameInput').value = seqData.name;
+            document.getElementById('seqColorPicker').value = seqData.color;
+            
+            stopSequence();
+            renderTimeline();
+            renderSeqDots();
             updateAppTheme();
+        }
+
+        function saveTimelineToCurrentSequence() {
+            if (mySequences[activeSequenceKey]) {
+                mySequences[activeSequenceKey].poses = [...sequence];
+            }
+        }
+
+        function editSeqName() {
+            document.getElementById('seqNameDisplay').style.display = 'none';
+            const input = document.getElementById('seqNameInput');
+            input.style.display = 'block';
+            input.focus();
+        }
+
+        function updateSeqName() {
+            const newName = document.getElementById('seqNameInput').value;
+            document.getElementById('seqNameInput').style.display = 'none';
+            document.getElementById('seqNameDisplay').style.display = 'block';
+            document.getElementById('seqNameDisplay').innerText = newName;
+            
+            if (mySequences[activeSequenceKey]) {
+                mySequences[activeSequenceKey].name = newName;
+            }
+            renderSeqDots();
+        }
+
+        function updateSeqColor(colorVal) {
+            if (mySequences[activeSequenceKey]) {
+                mySequences[activeSequenceKey].color = colorVal;
+                updateAppTheme();
+                renderSeqDots();
+            }
         }
 
         function updateAppTheme() {
             const root = document.documentElement;
-            if (useThemes && MACRO_SEQUENCES[activeSequenceKey]) {
-                root.style.setProperty('--accent-color', MACRO_SEQUENCES[activeSequenceKey].color);
-            } else {
-                root.style.setProperty('--accent-color', '#14b8a6'); // default teal
+            if (mySequences[activeSequenceKey]) {
+                root.style.setProperty('--accent-color', mySequences[activeSequenceKey].color);
             }
         }
-
-        document.querySelectorAll('.seq-tab').forEach(tab => {
-            tab.addEventListener('click', () => loadMacroSequence(tab.dataset.seq));
-        });
 
         // Drag and Drop Logic
         let sequence = [];
@@ -1143,11 +1241,13 @@ permalink: /yoga.html
             if (pId !== "") {
                 // Add new from library
                 sequence.push(pId);
+                saveTimelineToCurrentSequence();
                 renderTimeline();
             } else if (tIndex !== "") {
                 // Reorder to end
                 const movedItem = sequence.splice(parseInt(tIndex), 1)[0];
                 sequence.push(movedItem);
+                saveTimelineToCurrentSequence();
                 renderTimeline();
             }
         }
@@ -1156,12 +1256,14 @@ permalink: /yoga.html
             ev.stopPropagation();
             sequence.splice(tIndex, 1);
             if (sequence.length === 0) stopSequence();
+            saveTimelineToCurrentSequence();
             renderTimeline();
         }
 
         function clearSequence() {
             sequence = [];
             stopSequence();
+            saveTimelineToCurrentSequence();
             renderTimeline();
         }
 
