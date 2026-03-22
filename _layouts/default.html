@@ -121,14 +121,28 @@
           </li>
           <li class="nav-item mb-1">
             <div class="d-flex align-items-center justify-content-between nav-link text-white cursor-pointer {% if page.url contains '/apps' %}active bg-primary{% endif %}" data-bs-toggle="collapse" data-bs-target="#appsSubmenu" style="cursor: pointer;">
-              <span><i class="bi bi-grid me-2"></i> Apps</span>
+              <span><i class="bi bi-grid me-2"></i> <span id="rotating-menu-text" style="transition: opacity 0.3s ease-in-out; display: inline-block; min-width: 80px;">Apps</span></span>
               <i class="bi bi-chevron-down ms-2 small"></i>
             </div>
-            <div class="collapse ps-4 pe-2 mt-1" id="appsSubmenu">
-              <a href="/apps" class="d-block text-white opacity-75 text-decoration-none py-1 small hover-opacity-100">All Apps</a>
-              <a href="/trybliss" class="d-block text-white opacity-75 text-decoration-none py-1 small hover-opacity-100">Try Bliss</a>
-              <a href="/mandala-playground" class="d-block text-white opacity-75 text-decoration-none py-1 small hover-opacity-100">Mandala</a>
-              <a href="/dome-builder" class="d-block text-white opacity-75 text-decoration-none py-1 small hover-opacity-100">Dome Builder</a>
+            <div class="collapse ps-4 pe-2 mt-2" id="appsSubmenu">
+              <a href="/apps" class="d-flex align-items-center text-white opacity-75 text-decoration-none py-2 ps-3 small hover-opacity-100">
+                <i class="bi bi-grid-fill me-2 opacity-50"></i> All Apps
+              </a>
+              <a href="/trybliss" class="d-flex align-items-center text-white opacity-75 text-decoration-none py-2 ps-3 small hover-opacity-100">
+                <i class="bi bi-emoji-smile me-2 text-warning opacity-75"></i> Try Bliss
+              </a>
+              <a href="/mandala-playground" class="d-flex align-items-center text-white opacity-75 text-decoration-none py-2 ps-3 small hover-opacity-100">
+                <i class="bi bi-circle me-2 text-info opacity-75"></i> Mandala
+              </a>
+              <a href="/dome-builder" class="d-flex align-items-center text-white opacity-75 text-decoration-none py-2 ps-3 small hover-opacity-100">
+                <i class="bi bi-hexagon me-2 text-success opacity-75"></i> Dome Builder
+              </a>
+              <a href="/yoga" class="d-flex align-items-center text-white opacity-75 text-decoration-none py-2 ps-3 small hover-opacity-100">
+                <i class="bi bi-person-arms-up me-2 text-danger opacity-75"></i> Yoga
+              </a>
+              <a href="/breathe" class="d-flex align-items-center text-white opacity-75 text-decoration-none py-2 ps-3 small hover-opacity-100">
+                <i class="bi bi-wind me-2 text-info opacity-75"></i> Breathe
+              </a>
             </div>
           </li>
           <li class="nav-item mb-1">
@@ -335,6 +349,21 @@
             });
           }
         });
+
+        // Setup rotating menu text
+        const rotatingText = document.getElementById('rotating-menu-text');
+        if (rotatingText) {
+          const words = ['Art', 'Curiosity', 'Creativity', 'Apps', 'AI'];
+          let currentIndex = 3; // 'Apps' is at index 3
+          setInterval(() => {
+            rotatingText.style.opacity = '0';
+            setTimeout(() => {
+              currentIndex = (currentIndex + 1) % words.length;
+              rotatingText.textContent = words[currentIndex];
+              rotatingText.style.opacity = '1';
+            }, 300);
+          }, 4000);
+        }
       });
       
       
