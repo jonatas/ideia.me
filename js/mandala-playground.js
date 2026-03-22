@@ -121,15 +121,6 @@ class MandalaPlayground {
       const actuallyIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
       const isIOS = actuallyIOS || forceIOSMode;
       
-      console.log('Initializing audio context...', {
-        toneAvailable: !!window.Tone,
-        contextState: window.Tone ? Tone.context.state : 'N/A',
-        userAgent: navigator.userAgent,
-        actuallyIOS: actuallyIOS,
-        forceIOSMode: forceIOSMode,
-        isIOS: isIOS
-      });
-      
       if (!window.Tone) {
         console.error('Tone.js is not loaded');
         return false;
@@ -139,15 +130,12 @@ class MandalaPlayground {
       // (isIOS already defined above with debug mode support)
       
       if (Tone.context.state !== 'running') {
-        console.log('Starting Tone.js context...');
         await Tone.start();
         
         // For iOS, wait a bit longer to ensure context is fully initialized
         if (isIOS) {
           await new Promise(resolve => setTimeout(resolve, 100));
         }
-        
-        console.log('Tone.js context state after start:', Tone.context.state);
       }
       
       // Ensure context is actually running before proceeding
@@ -158,7 +146,6 @@ class MandalaPlayground {
       
       // Create synth with iOS-optimized settings
       if (!this.synth) {
-        console.log('Creating synthesizer...');
         this.synth = new Tone.Synth({
           oscillator: { 
             type: "sine",
@@ -172,24 +159,19 @@ class MandalaPlayground {
             release: isIOS ? 0.4 : 0.8    // Shorter release on iOS
           }
         }).toDestination();
-        
-        console.log('Synthesizer created successfully');
       }
       
       // Test the synth with a silent note for iOS compatibility
       if (isIOS && this.synth) {
         try {
-          console.log('Testing audio with silent note...');
           this.synth.triggerAttackRelease(440, "32n", undefined, 0.001);
           await new Promise(resolve => setTimeout(resolve, 50));
-          console.log('Silent test note completed');
         } catch (testError) {
           console.warn('Silent test note failed:', testError);
         }
       }
       
       this.audioEnabled = true;
-      console.log('Audio context initialization successful');
       return true;
       
     } catch (error) {
