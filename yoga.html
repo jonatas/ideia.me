@@ -435,10 +435,60 @@ permalink: /yoga.html
             color: rgba(255,255,255,0.3);
         }
 
+        /* Flow Suggestions */
+        .flow-suggestions-area {
+            position: fixed;
+            bottom: 110px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+            transform: translateY(10px);
+            z-index: 50;
+        }
+
+        .flow-suggestions-area.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .flow-card {
+            background: rgba(13, 148, 136, 0.2);
+            border: 1px solid rgba(13, 148, 136, 0.5);
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            color: var(--teal-color);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .flow-card:hover {
+            background: rgba(13, 148, 136, 0.4);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .flow-card i {
+            font-size: 1rem;
+        }
+
         /* Debug Tools */
         .debug-panel {
             position: fixed;
             right: 0;
+
             top: 60px;
             bottom: 0;
             width: 300px;
@@ -493,6 +543,9 @@ permalink: /yoga.html
             </a>
         </div>
         <div class="header-right">
+            <button id="saveAppBtn" class="icon-btn" title="Save to My Space" onclick="saveThisApp(this)">
+                <i class="bi bi-bookmark"></i>
+            </button>
             <button id="fullscreenBtn" class="icon-btn" title="Toggle Fullscreen (f)" onclick="toggleFullScreen()">
                 <i class="bi bi-arrows-fullscreen"></i>
             </button>
@@ -592,6 +645,10 @@ permalink: /yoga.html
         <!-- Populated by JS -->
     </div>
 
+    <div class="flow-suggestions-area" id="flowSuggestions">
+        <!-- Populated dynamically by JS when a pose is selected -->
+    </div>
+
     <!-- Debug Panel for Pose Editing -->
     <div class="debug-panel" id="debugPanel">
         <h3 style="margin-top:0">Pose Editor</h3>
@@ -600,11 +657,25 @@ permalink: /yoga.html
         <textarea id="exportArea" style="width: 100%; height: 100px; margin-top: 10px; background: #222; color: #fff; border: none; font-family: monospace; font-size: 10px;"></textarea>
     </div>
 
+    <script src="/js/profile.js"></script>
     <script>
+        function saveThisApp(btn) {
+            if (window.userProfile) {
+                const isSaved = window.userProfile.toggleFavorite('yoga', window.location.pathname, window.location.href, 'Yoga Sequences', 'bi-person-arms-up');
+                btn.innerHTML = isSaved ? '<i class="bi bi-bookmark-fill text-info"></i>' : '<i class="bi bi-bookmark"></i>';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('saveAppBtn');
+            if (btn && window.userProfile && window.userProfile.isSaved(window.location.pathname)) {
+                btn.innerHTML = '<i class="bi bi-bookmark-fill text-info"></i>';
+            }
+        });
+
         // Initial Basic Poses
         const POSES = [
             {
-                id: 'tadasana', name: 'Mountain Pose (Tadasana)',
+                id: 'tadasana', name: 'Mountain Pose (Tadasana)', flow: ['urdhva-hastasana', 'uttanasana-a', 'utkatasana', 'vrksasana'],
                 desc: 'Stand tall with your feet together, shoulders relaxed, weight distributed evenly through your soles, arms at sides.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 0,
@@ -616,7 +687,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'urdhva-hastasana', name: 'Upward Salute (Urdhva Hastasana)',
+                id: 'urdhva-hastasana', name: 'Upward Salute (Urdhva Hastasana)', flow: ['uttanasana-a'],
                 desc: 'Inhale and sweep your arms up toward the ceiling. Keep your palms facing each other or touching, gazing slightly up.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 0,
@@ -628,7 +699,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'uttanasana-a', name: 'Standing Forward Fold (Uttanasana A)',
+                id: 'uttanasana-a', name: 'Standing Forward Fold (Uttanasana A)', flow: ['ardha-uttanasana', 'padangusthasana'],
                 desc: 'Exhale and fold forward from your hip joints. Let your head hang and bring your hands down towards the floor.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': -30,
@@ -640,7 +711,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'ardha-uttanasana', name: 'Half Forward Fold (Ardha Uttanasana)',
+                id: 'ardha-uttanasana', name: 'Half Forward Fold (Ardha Uttanasana)', flow: ['chaturanga-dandasana', 'uttanasana-a'],
                 desc: 'Inhale, lift your torso halfway up to parallel with the floor. Keep your spine long and fingertips dangling or on your shins.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': -50, '--fig-y': 0,
@@ -652,7 +723,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'padangusthasana', name: 'Big Toe Pose (Padangusthasana)',
+                id: 'padangusthasana', name: 'Big Toe Pose (Padangusthasana)', flow: ['padahastasana', 'ardha-uttanasana'],
                 desc: 'Fold forward, grab your big toes with your index and middle fingers, and pull your torso down.',
                 inherit: 'uttanasana-a',
                 vars: {
@@ -661,7 +732,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'padahastasana', name: 'Gorilla Pose (Padahastasana)',
+                id: 'padahastasana', name: 'Gorilla Pose (Padahastasana)', flow: ['ardha-uttanasana'],
                 desc: 'Fold forward, slide your hands completely under your feet, palms facing up.',
                 inherit: 'padangusthasana',
                 vars: {
@@ -670,7 +741,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'chaturanga-dandasana', name: 'Low Plank (Chaturanga Dandasana)',
+                id: 'chaturanga-dandasana', name: 'Low Plank (Chaturanga Dandasana)', flow: ['urdhva-mukha-svanasana'],
                 desc: 'Exhale and lower into a push-up hover. Keep your body in a straight line and elbows hugged into your ribs.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': -50, '--fig-y': 131,
@@ -682,7 +753,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'urdhva-mukha-svanasana', name: 'Upward-Facing Dog (Urdhva Mukha Svanasana)',
+                id: 'urdhva-mukha-svanasana', name: 'Upward-Facing Dog (Urdhva Mukha Svanasana)', flow: ['adho-mukha-svanasana'],
                 desc: 'Inhale, press into your hands, straighten your arms, lift your chest, and hover your thighs just above the floor.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': -50, '--fig-y': 140,
@@ -706,7 +777,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'adho-mukha-svanasana', name: 'Downward-Facing Dog (Adho Mukha Svanasana)',
+                id: 'adho-mukha-svanasana', name: 'Downward-Facing Dog (Adho Mukha Svanasana)', flow: ['virabhadrasana-i', 'virabhadrasana-i-left', 'trikonasana', 'trikonasana-left', 'ardha-uttanasana'],
                 desc: 'Form an inverted V shape with your body. Press hands into the floor, hips lifted high, legs straight.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 38.6,
@@ -718,7 +789,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'utkatasana', name: 'Chair Pose (Utkatasana)',
+                id: 'utkatasana', name: 'Chair Pose (Utkatasana)', flow: ['uttanasana-a', 'virabhadrasana-i'],
                 desc: 'Bend your knees and lower your hips as if sitting in a chair. Reach your arms up alongside your ears.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 32,
@@ -730,7 +801,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'virabhadrasana-i', name: 'Warrior I - Right (Virabhadrasana I)',
+                id: 'virabhadrasana-i', name: 'Warrior I - Right (Virabhadrasana I)', flow: ['virabhadrasana-ii', 'utthita-parsvakonasana', 'parivrtta-parsvakonasana'],
                 desc: 'Step left foot back, keep back leg straight, front knee bent 90 degrees. Reach arms up to the sky.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 88,
@@ -742,7 +813,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'virabhadrasana-i-left', name: 'Warrior I - Left (Virabhadrasana I)',
+                id: 'virabhadrasana-i-left', name: 'Warrior I - Left (Virabhadrasana I)', flow: ['virabhadrasana-ii'],
                 desc: 'Step right foot back, keep back leg straight, front left knee bent 90 degrees.',
                 inherit: 'virabhadrasana-i',
                 vars: {
@@ -751,7 +822,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'virabhadrasana-ii', name: 'Warrior II (Virabhadrasana II)',
+                id: 'virabhadrasana-ii', name: 'Warrior II (Virabhadrasana II)', flow: ['utthita-parsvakonasana', 'trikonasana', 'parsvottanasana'],
                 desc: 'Lunge right knee to 90 degrees, left leg straight back. Stretch arms horizontally, gaze over your front hand.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 88,
@@ -763,7 +834,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'balasana', name: 'Child\'s Pose (Balasana)',
+                id: 'balasana', name: 'Child\'s Pose (Balasana)', flow: ['dandasana', 'savasana'],
                 desc: 'Kneel on the floor, fold your torso over your thighs, and stretch your arms forward. Rest your forehead.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': -100, '--fig-y': 168,
@@ -775,7 +846,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'dandasana', name: 'Staff Pose (Dandasana)',
+                id: 'dandasana', name: 'Staff Pose (Dandasana)', flow: ['paschimottanasana', 'purvottanasana', 'janu-sirsasana', 'marichyasana-a', 'navasana'],
                 desc: 'Sit on the floor with legs extended straight in front. Keep torso perfectly upright and hands beside your hips.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': -60, '--fig-y': 168,
@@ -787,7 +858,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'paschimottanasana', name: 'Seated Forward Bend (Paschimottanasana)',
+                id: 'paschimottanasana', name: 'Seated Forward Bend (Paschimottanasana)', flow: ['ardha-baddha-padma-paschimottanasana', 'triang-mukha-eka-pada-paschimottanasana', 'purvottanasana'],
                 desc: 'From Staff Pose, fold forward at the hips, reaching your hands toward your feet over straight legs.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': -60, '--fig-y': 168,
@@ -799,7 +870,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'ardha-baddha-padma-paschimottanasana', name: 'Half-Bound Lotus Forward Fold',
+                id: 'ardha-baddha-padma-paschimottanasana', name: 'Half-Bound Lotus Forward Fold', flow: ['paschimottanasana'],
                 desc: 'One leg straight, the other folded into half lotus. Fold torso over the straight leg.',
                 inherit: 'paschimottanasana',
                 vars: {
@@ -808,7 +879,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'triang-mukha-eka-pada-paschimottanasana', name: 'Three-Limbed Forward Fold',
+                id: 'triang-mukha-eka-pada-paschimottanasana', name: 'Three-Limbed Forward Fold', flow: ['janu-sirsasana'],
                 desc: 'Fold over a straight leg with the other leg folded back beside the hip.',
                 inherit: 'paschimottanasana',
                 vars: {
@@ -816,7 +887,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'janu-sirsasana', name: 'Head-to-Knee Pose (Janu Sirsasana)',
+                id: 'janu-sirsasana', name: 'Head-to-Knee Pose (Janu Sirsasana)', flow: ['marichyasana-a'],
                 desc: 'Fold over a straight leg, with the sole of the other foot pressing into the inner thigh.',
                 inherit: 'paschimottanasana',
                 vars: {
@@ -824,7 +895,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'marichyasana-a', name: 'Marichyasana A',
+                id: 'marichyasana-a', name: 'Marichyasana A', flow: ['navasana'],
                 desc: 'Seated with one leg straight, the other knee bent pointing up. Bind the bent knee and fold forward.',
                 inherit: 'dandasana', // Start upright
                 vars: {
@@ -835,7 +906,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'kurmasana', name: 'Tortoise Pose (Kurmasana)',
+                id: 'kurmasana', name: 'Tortoise Pose (Kurmasana)', flow: ['baddha-konasana', 'upavistha-konasana'],
                 desc: 'Seated with legs wide, torso folded flat to the floor, arms thread under the knees.',
                 inherit: 'prasarita-padottanasana', // Wide legs, fold flat
                 vars: {
@@ -846,7 +917,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'baddha-konasana', name: 'Bound Angle Pose (Baddha Konasana)',
+                id: 'baddha-konasana', name: 'Bound Angle Pose (Baddha Konasana)', flow: ['upavistha-konasana', 'navasana'],
                 desc: 'Seated with the soles of the feet together, knees dropped open to the sides. Hold feet and fold forward.',
                 inherit: 'dandasana', 
                 vars: {
@@ -858,7 +929,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'upavistha-konasana', name: 'Wide-Angle Seated Forward Bend',
+                id: 'upavistha-konasana', name: 'Wide-Angle Seated Forward Bend', flow: ['urdhva-dhanurasana', 'supta-konasana'],
                 desc: 'Seated with legs wide open, fold torso straight forward to the floor, grabbing big toes.',
                 inherit: 'kurmasana', 
                 vars: {
@@ -867,7 +938,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'navasana', name: 'Boat Pose (Navasana)',
+                id: 'navasana', name: 'Boat Pose (Navasana)', flow: ['baddha-konasana', 'upavistha-konasana', 'kurmasana'],
                 desc: 'Balance on your sit bones with your torso leaning back and your legs raised to form a V-shape.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': -40, '--fig-y': 168,
@@ -879,7 +950,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'purvottanasana', name: 'Upward Plank Pose (Purvottanasana)',
+                id: 'purvottanasana', name: 'Upward Plank Pose (Purvottanasana)', flow: ['dandasana'],
                 desc: 'From a seated position, place hands behind hips and press up into a reverse plank, keeping body straight.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 94,
@@ -891,7 +962,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'trikonasana', name: 'Triangle Pose - Right (Trikonasana)',
+                id: 'trikonasana', name: 'Triangle Pose - Right (Trikonasana)', flow: ['parivrtta-trikonasana', 'utthita-parsvakonasana', 'prasarita-padottanasana'],
                 desc: 'Stand with legs wide, fold torso sideways over the front leg. One hand touches the ankle, the other reaches for the sky.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 38,
@@ -903,7 +974,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'parivrtta-trikonasana', name: 'Revolved Triangle (Parivrtta Trikonasana)',
+                id: 'parivrtta-trikonasana', name: 'Revolved Triangle (Parivrtta Trikonasana)', flow: ['utthita-parsvakonasana'],
                 desc: 'From Triangle Pose, revolve your torso so the opposite hand reaches for the floor and the other reaches for the sky.',
                 inherit: 'trikonasana',
                 vars: {
@@ -912,7 +983,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'trikonasana-left', name: 'Triangle Pose - Left (Trikonasana)',
+                id: 'trikonasana-left', name: 'Triangle Pose - Left (Trikonasana)', flow: ['parivrtta-trikonasana-left'],
                 desc: 'Stand with legs wide, fold sideways over the left leg. Left hand touches ankle, right reaches sky.',
                 inherit: 'trikonasana',
                 vars: {
@@ -933,7 +1004,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'utthita-parsvakonasana', name: 'Extended Side Angle (Utthita Parsvakonasana)',
+                id: 'utthita-parsvakonasana', name: 'Extended Side Angle (Utthita Parsvakonasana)', flow: ['parivrtta-parsvakonasana', 'prasarita-padottanasana'],
                 desc: 'Deep lunge. Torso leans over the bent leg. Lower hand touches the floor, upper arm extends diagonally over the ear.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 88,
@@ -945,7 +1016,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'parivrtta-parsvakonasana', name: 'Revolved Side Angle (Parivrtta Parsvakonasana)',
+                id: 'parivrtta-parsvakonasana', name: 'Revolved Side Angle (Parivrtta Parsvakonasana)', flow: ['adho-mukha-svanasana'],
                 desc: 'Lunge with torso twisted across the bent knee. Lower hand outside the foot, upper arm over the ear.',
                 inherit: 'utthita-parsvakonasana',
                 vars: {
@@ -955,7 +1026,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'utthita-parsvakonasana-left', name: 'Extended Side Angle - Left',
+                id: 'utthita-parsvakonasana-left', name: 'Extended Side Angle - Left', flow: ['parivrtta-parsvakonasana-left'],
                 desc: 'Deep lunge on left leg. Torso leans over the bent leg. Left hand to floor, right arm over the ear.',
                 inherit: 'utthita-parsvakonasana',
                 vars: {
@@ -977,7 +1048,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'prasarita-padottanasana', name: 'Wide-Legged Forward Fold A (Prasarita Padottanasana)',
+                id: 'prasarita-padottanasana', name: 'Wide-Legged Forward Fold A (Prasarita Padottanasana)', flow: ['prasarita-padottanasana-b', 'kurmasana', 'parsvottanasana'],
                 desc: 'Stand with legs wide apart. Hinge at the hips, bringing the crown of the head and hands toward the floor.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 38,
@@ -989,7 +1060,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'prasarita-padottanasana-b', name: 'Wide-Legged Fold B (Prasarita Padottanasana B)',
+                id: 'prasarita-padottanasana-b', name: 'Wide-Legged Fold B (Prasarita Padottanasana B)', flow: ['prasarita-padottanasana-c'],
                 desc: 'Wide-legged fold with hands firmly planted on the waist.',
                 inherit: 'prasarita-padottanasana',
                 vars: {
@@ -998,7 +1069,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'prasarita-padottanasana-c', name: 'Wide-Legged Fold C (Prasarita Padottanasana C)',
+                id: 'prasarita-padottanasana-c', name: 'Wide-Legged Fold C (Prasarita Padottanasana C)', flow: ['prasarita-padottanasana-d'],
                 desc: 'Wide-legged fold with fingers interlaced behind the back and arms stretched overhead toward the floor.',
                 inherit: 'prasarita-padottanasana',
                 vars: {
@@ -1007,7 +1078,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'prasarita-padottanasana-d', name: 'Wide-Legged Fold D (Prasarita Padottanasana D)',
+                id: 'prasarita-padottanasana-d', name: 'Wide-Legged Fold D (Prasarita Padottanasana D)', flow: ['ardha-uttanasana'],
                 desc: 'Wide-legged fold grasping the big toes.',
                 inherit: 'prasarita-padottanasana',
                 vars: {
@@ -1016,7 +1087,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'parsvottanasana', name: 'Pyramid Pose (Parsvottanasana)',
+                id: 'parsvottanasana', name: 'Pyramid Pose (Parsvottanasana)', flow: ['adho-mukha-svanasana'],
                 desc: 'Fold torso over a straight front leg with hands in reverse prayer behind the back.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 24,
@@ -1028,7 +1099,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'urdhva-dhanurasana', name: 'Wheel Pose (Urdhva Dhanurasana)',
+                id: 'urdhva-dhanurasana', name: 'Wheel Pose (Urdhva Dhanurasana)', flow: ['paschimottanasana', 'salamba-sarvangasana'],
                 desc: 'Lie on your back, plant hands near ears and feet near hips, then press up to arch your spine into a wheel.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 48,
@@ -1040,7 +1111,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'salamba-sarvangasana', name: 'Shoulder Stand (Salamba Sarvangasana)',
+                id: 'salamba-sarvangasana', name: 'Shoulder Stand (Salamba Sarvangasana)', flow: ['halasana', 'urdhva-padmasana'],
                 desc: 'Support your back with your hands as you extend your legs and spine straight up to the ceiling, balancing on your shoulders.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 52,
@@ -1052,7 +1123,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'sirsasana', name: 'Headstand (Sirsasana)',
+                id: 'sirsasana', name: 'Headstand (Sirsasana)', flow: ['balasana'],
                 desc: 'Invert completely, balancing on forearms with the crown of your head lightly on the floor. Legs reach straight up.',
                 inherit: 'salamba-sarvangasana',
                 vars: {
@@ -1063,7 +1134,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'halasana', name: 'Plow Pose (Halasana)',
+                id: 'halasana', name: 'Plow Pose (Halasana)', flow: ['karnapidasana', 'supta-konasana', 'matsyasana'],
                 desc: 'From Shoulder Stand, hinge at the hips to lower your toes to the floor beyond your head. Extend arms along the floor.',
                 inherit: 'salamba-sarvangasana',
                 vars: {
@@ -1074,7 +1145,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'karnapidasana', name: 'Ear Pressure Pose (Karnapidasana)',
+                id: 'karnapidasana', name: 'Ear Pressure Pose (Karnapidasana)', flow: ['supta-konasana', 'matsyasana'],
                 desc: 'From Plow Pose, bend your knees and bring them to the floor beside your ears, pressing inward.',
                 inherit: 'halasana',
                 vars: {
@@ -1083,7 +1154,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'supta-konasana', name: 'Reclining Angle Pose (Supta Konasana)',
+                id: 'supta-konasana', name: 'Reclining Angle Pose (Supta Konasana)', flow: ['matsyasana'],
                 desc: 'Lying on your back, legs swing overhead and open wide, hands grabbing the toes.',
                 inherit: 'halasana', 
                 vars: {
@@ -1094,7 +1165,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'urdhva-padmasana', name: 'Upward Lotus (Urdhva Padmasana)',
+                id: 'urdhva-padmasana', name: 'Upward Lotus (Urdhva Padmasana)', flow: ['pindasana'],
                 desc: 'From Shoulder Stand, fold your legs into Lotus Pose and balance on your shoulders.',
                 inherit: 'salamba-sarvangasana',
                 vars: {
@@ -1103,17 +1174,18 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'pindasana', name: 'Embryo Pose (Pindasana)',
+                id: 'pindasana', name: 'Embryo Pose (Pindasana)', flow: ['matsyasana', 'sirsasana'],
                 desc: 'From Upward Lotus, fold the crossed legs down tightly toward your chest, wrapping arms around them.',
                 inherit: 'urdhva-padmasana',
                 vars: {
-                    '--ub-rot': -45, '--head-rot': -45, 
-                    '--la-rot': -200, '--le-rot': 40,
-                    '--ra-rot': -200, '--re-rot': 40
+                    '--ll-rot': -80, '--rk-rot': 160, // Swing lotus back to face deeply
+                    '--rl-rot': 0, '--lk-rot': -160, 
+                    '--la-rot': 150, '--le-rot': 60, // reach arms forward to wrap
+                    '--ra-rot': 150, '--re-rot': 60
                 }
             },
             {
-                id: 'matsyasana', name: 'Fish Pose (Matsyasana)',
+                id: 'matsyasana', name: 'Fish Pose (Matsyasana)', flow: ['savasana'],
                 desc: 'Lie on your back, arch your upper body, and rest the crown of your head on the floor. Legs straight or in Lotus.',
                 inherit: 'savasana',
                 vars: {
@@ -1135,7 +1207,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'baddha-padmasana', name: 'Bound Lotus (Baddha Padmasana)',
+                id: 'baddha-padmasana', name: 'Bound Lotus (Baddha Padmasana)', flow: ['padmasana'],
                 desc: 'Sit in full lotus and bind your arms behind your back to grasp your opposite toes.',
                 inherit: 'dandasana',
                 vars: {
@@ -1147,7 +1219,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'padmasana', name: 'Lotus Pose (Padmasana)',
+                id: 'padmasana', name: 'Lotus Pose (Padmasana)', flow: ['tolasana'],
                 desc: 'Sit in full lotus with spine straight and hands resting on knees in Jnana mudra.',
                 inherit: 'baddha-padmasana',
                 vars: {
@@ -1156,7 +1228,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'tolasana', name: 'Scale Pose (Tolasana)',
+                id: 'tolasana', name: 'Scale Pose (Tolasana)', flow: ['savasana'],
                 desc: 'From Lotus pose, press your hands into the floor and lift your entire body off the ground.',
                 inherit: 'padmasana',
                 vars: {

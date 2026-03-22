@@ -45,6 +45,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
     <script src="/js/modern-effects.js"></script>
+    <script src="/js/profile.js"></script>
     
     <!-- Interactive Learning Engine -->
     <link href="/css/interactive-learning.css" rel="stylesheet">
@@ -111,6 +112,11 @@
           <li class="nav-item mb-1">
             <a href="/archive" class="nav-link text-white {% if page.url == '/archive' or page.layout == 'post' %}active bg-primary{% endif %}">
               <i class="bi bi-journal-text me-2"></i> Blog
+            </a>
+          </li>
+          <li class="nav-item mb-1">
+            <a href="/profile/" class="nav-link text-white {% if page.url == '/profile/' %}active bg-primary{% endif %}">
+              <i class="bi bi-person-workspace me-2 text-primary"></i> My Space
             </a>
           </li>
           <li class="nav-item mb-1">
@@ -209,6 +215,10 @@
       <div class="d-flex align-items-center">
         <button id="btn-exit-present" class="btn btn-danger btn-sm me-4 d-flex align-items-center rounded-0">
           <i class="bi bi-stop-circle me-1"></i> Exit Present
+        </button>
+        
+        <button id="btn-save-presentation" class="btn btn-outline-info btn-sm me-4 d-flex align-items-center rounded-0" onclick="saveCurrentPresentation(this)">
+          <i class="bi bi-bookmark me-1"></i> Save to Space
         </button>
         
         <div id="talk-controls" class="d-flex align-items-center">
@@ -359,6 +369,27 @@
           if (appLayout) appLayout.classList.toggle('menu-folded');
         });
       }
+      
+      // Save presentation logic
+      function saveCurrentPresentation(btn) {
+        if (window.userProfile) {
+          const isSaved = window.userProfile.toggleFavorite('presentation', window.location.pathname, window.location.href, document.title, 'bi-file-slides');
+          btn.innerHTML = isSaved ? '<i class="bi bi-bookmark-fill me-1"></i> Saved' : '<i class="bi bi-bookmark me-1"></i> Save to Space';
+          btn.classList.toggle('btn-info', isSaved);
+          btn.classList.toggle('btn-outline-info', !isSaved);
+          btn.classList.toggle('text-white', isSaved);
+        }
+      }
+      
+      // Init button state
+      setTimeout(() => {
+        const btn = document.getElementById('btn-save-presentation');
+        if (btn && window.userProfile && window.userProfile.isSaved(window.location.pathname)) {
+          btn.innerHTML = '<i class="bi bi-bookmark-fill me-1"></i> Saved';
+          btn.classList.replace('btn-outline-info', 'btn-info');
+          btn.classList.add('text-white');
+        }
+      }, 500);
     </script>
     
     <style>

@@ -398,6 +398,9 @@ permalink: /breathe.html
         </div>
         
         <div class="header-right">
+            <button id="saveAppBtn" class="icon-btn" title="Save to My Space" onclick="saveThisApp(this)">
+                <i class="bi bi-bookmark"></i>
+            </button>
             <a href="/learning-to-breathe/" class="icon-btn" title="Read the deeply detailed post">
                 <i class="bi bi-question-circle"></i>
             </a>
@@ -499,7 +502,21 @@ permalink: /breathe.html
     <!-- Need Lottie for the stats modal graphic -->
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
+    <script src="/js/profile.js"></script>
     <script>
+        function saveThisApp(btn) {
+            if (window.userProfile) {
+                const isSaved = window.userProfile.toggleFavorite('breathe', window.location.pathname, window.location.href, 'Breathing Exercises', 'bi-lungs');
+                btn.innerHTML = isSaved ? '<i class="bi bi-bookmark-fill text-info"></i>' : '<i class="bi bi-bookmark"></i>';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('saveAppBtn');
+            if (btn && window.userProfile && window.userProfile.isSaved(window.location.pathname)) {
+                btn.innerHTML = '<i class="bi bi-bookmark-fill text-info"></i>';
+            }
+        });
+
         const PREDEFINED_CONFIGS = [
             {
                 id: 'bw0', name: 'Belly Breathing', idle: '#0d9488',
