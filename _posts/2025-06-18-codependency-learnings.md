@@ -8,8 +8,6 @@ description: "A philosophical exploration of codependency as a natural mechanism
 image: /images/codependence-learnings.png
 ---
 
-![Codependency as interconnected nature](/images/codependence-learnings.png)
-
 For quite some time I was heavily dependent on my mother. As a newborn, I was completely vulnerable and needed constant care and feeding—newborns can survive without feeding for several hours, but their wellbeing depends entirely on caregivers. This stark reality of human vulnerability has stayed with me, shaping how I understand our fundamental need for connection.
 
 Codependency is a natural mechanism. From ancient amoebas and parasites to modern systems, we're all codependent to be alive. It's not a flaw in our design—it's the very foundation of life itself. Every breath we take depends on plants producing oxygen. Every meal connects us to farmers, soil, and countless other beings in an intricate web of mutual support.

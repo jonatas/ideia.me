@@ -5,9 +5,8 @@ categories: ['philosophy', 'productivity', 'systems-thinking', 'life-optimizatio
 tags: ['time-management', 'decision-making', 'resource-allocation', 'personal-development', 'economics', 'life-philosophy']
 description: "A systematic framework for treating time as your most valuable resource, with metrics and decision-making tools to optimize how you invest, spend, and value your hours."
 mermaid: true
+image: /images/time-investment-visualization.png
 ---
-
-![Time Investment Chart](/images/time-investment-visualization.png)
 
 I was checking old notes from my phone this week and found a little note about how I nurture my relationship with my time and how I create satisfying meaningful moments. This simple note brought me to a long AI conversation and reflections on how we can apply economic thinking to our most finite resource: **time**.
 

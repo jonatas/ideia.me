@@ -7,8 +7,6 @@ description: "My friend Edegar spent four months building a bamboo web structure
 image: /images/bamboo-structure-night-view.jpeg
 ---
 
-![The completed bamboo pavilion illuminated at night](/images/bamboo-structure-night-view.jpeg)
-
 What happens when you "hire" your childhood friend to build something in your backyard with nothing but a sketch and a dream? 
 
 This is the story of how my friend Edegar spent four months turning a truck with 600 bamboo strips into an incredible web structure that became the talk of our neighborhood.

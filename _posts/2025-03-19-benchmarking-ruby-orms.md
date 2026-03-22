@@ -10,7 +10,6 @@ Hey Ruby friends! This year I'm super excited to offer a PostgreSQL Performance 
 
 I wanted to share some key learnings we discovered during the workshop and reflect on how our technology choices impact performance. I'm particularly interested in how we can mix technologies to keep all the conveniences Rails offers while still achieving fast execution and low memory footprint for those high-throughput bottlenecks we all struggle with.
 
-![Performance Workshop](/images/postgresql-performance-workshop.webp "Performance Workshop ORMs comparison")
 
 With Ruby 3.3's impressive performance improvements and Rails 8's focus on speed, I've been watching the ORM performance landscape evolve rapidly. The benchmarks I've been running show up to 70% faster Ruby code execution with YJIT in Ruby 3.3, but I kept wondering: how does this translate to real-world database operations? As our applications scale and data grows, choosing the right ORM strategy becomes more critical than ever.
 

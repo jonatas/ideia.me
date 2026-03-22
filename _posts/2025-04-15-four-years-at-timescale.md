@@ -3,9 +3,8 @@ layout: post
 title: "Four Years at Timescale: My Journey as Dev 🥑"
 categories: [career, timescale, postgresql]
 tags: [timescale, postgresql, ruby, community, career]
+image: /images/jonatas-2025-timescaledb-madrid-snow.jpg
 ---
-
-![Timescaler Meets Snow](/images/jonatas-2025-timescaledb-madrid-snow.jpg)
 
 Today marks my fourth anniversary at Timescale, and what an incredible journey it has been! As I reflect on these years, I'm filled with gratitude for the opportunities, challenges, and growth I've experienced. Let me share some highlights of my journey.
 

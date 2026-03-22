@@ -5,8 +5,6 @@ categories: postgresql database performance storage
 image: /images/postgresql-performance-workshop.webp
 ---
 
-![PostgreSQL Storage Deep Dive](/images/postgresql-performance-workshop.webp)
-
 Hello dear reader, I'm a PostgreSQL fan and I have been using it since the beginning of my career in 2004. Indeed, one of my first tasks was migrating DBF files to a PostgreSQL database. I was honored to have had the opportunity to work with DBF files and understand how the simple world of DBFs worked. I remember it was only DBFs and DBIs for the indices. You would open the index and use the `Seek` method to find the row and then you would open the DBF and go to the row.
 
 PostgreSQL has many components working together, even its own language. Each part helps with data storage, consistency, and performance. During my last 4 years at Timescale, now TigerData, I got a lot of learnings through community users sharing their scenarios.

@@ -3,8 +3,8 @@ title: "Automatize primeiro"
 layout: post
 categories: ['pense', 'dev']
 description: "Automatize tarefas repetitivas para aumentar a produtividade"
+image: https://res.cloudinary.com/robolike/image/upload/v1417674434/blue-robolike-robot_cujcxi.jpg
 ---
-!["Robot image"](https://res.cloudinary.com/robolike/image/upload/v1417674434/blue-robolike-robot_cujcxi.jpg)
 
 Essa semana iniciei um projetinho na [Resultados Digitais](http://resultadosdigitais.com.br) com Ruby, uma
 ferramenta interna para resolver alguns problemas da nossa infra.

@@ -636,7 +636,7 @@ table th {
   left: 0;
   z-index: 1040;
   overflow-y: auto;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, width 0.3s ease;
 }
 .app-main {
   flex-grow: 1;
@@ -644,6 +644,7 @@ table th {
   min-width: 0;
   display: flex;
   flex-direction: column;
+  transition: margin-left 0.3s ease;
 }
 .sidebar-toggler {
   display: none;
