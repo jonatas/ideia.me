@@ -35,6 +35,11 @@ layout: default
     padding: 2rem 1rem;
   }
   
+  .sonification-article.full-width {
+    max-width: 100%;
+    padding: 2rem 2%;
+  }
+  
   /* Special styling for embedded interactive demos */
   .demo-section {
     background: linear-gradient(145deg, #2c3e50 0%, #34495e 100%);
@@ -88,7 +93,7 @@ layout: default
 </style>
 
 <div class="sonification-container">
-  <div class="sonification-article">
+  <div class="sonification-article {% if page.full_width %}full-width{% endif %}">
     <div class="article-wrapper">
       <div class="article-header">
         <div class="article-meta">
@@ -120,7 +125,9 @@ layout: default
       </div>
       {% endif %}
       
+      {% if page.share != false %}
       {% include social_sharing.html %}
+      {% endif %}
       {% include author_bio.html %}
       {% include content_nav.html %}
       {% include related_posts.html %}

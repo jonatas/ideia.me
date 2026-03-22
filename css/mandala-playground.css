@@ -87,7 +87,7 @@ body {
   position: relative;
   margin-top: 2rem;
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
   margin-left: auto;
   margin-right: auto;
   text-align: center;
@@ -190,7 +190,7 @@ body {
 /* Color Palette Styles */
 .color-palette-container {
   width: 100%;
-  max-width: 600px;
+  max-width: 1200px;
   text-align: center;
   margin: 2rem auto;
   padding: 1rem;
@@ -207,7 +207,7 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
   gap: 20px;
-  max-width: 85vw; /* Use 85% of viewport width */
+  max-width: 98vw; /* Use 98% of viewport width */
   margin: 0 auto;
 }
 
