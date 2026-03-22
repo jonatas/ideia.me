@@ -6,11 +6,15 @@ tags: ['svg', 'geometry', 'trigonometry', 'css-animations', 'front-end']
 description: "How simple trigonometry and CSS variables combine to create anatomically connected, fully animatable SVG stick figures for yoga."
 ---
 
-When I set out to build an [Interactive Yoga Poses App](/yoga.html), I wanted the transitions between poses to feel organic. If you've ever tried to animate a complex vector graphic, you know the struggle: limbs detach, elbows bend the wrong way, and figures often look like they're breaking apart mid-animation.
+When I set out to build an [Interactive Yoga Poses App](/yoga.html), I had virtually no prior experience working with complex animations and only the most basic knowledge of SVG.
 
-The solution wasn't a complex JavaScript animation library. It was geometry.
+This project, however, was about more than just web development. Over the last few nights, I've been testing and integrating with the **Antigravity platform**—using it to rescue a graveyard of abandoned, hard-to-maintain old projects and migrating them into a brand-new [Apps](/apps) section on this website. I wanted to bring their essence back to life.
 
-By anchoring an SVG figure correctly and relying on pure CSS rotational variables, you can create a skeleton that inherently understands its own joints.
+Building this animated yoga app became my way to deeply test the Antigravity platform. I am leveraging my curiosity to learn more about the things I feel attracted to—mixing my personal interests in yoga and math with code. I am absolutely loving the new capabilities and interactions this process is unlocking.
+
+If you've ever tried to animate a vector graphic from scratch, you know the struggle: limbs detach, elbows bend the wrong way, and figures often look like they're breaking apart mid-animation. But the solution here wasn't a heavy JavaScript animation library. It was pure geometry.
+
+By anchoring an SVG figure correctly and relying entirely on CSS rotational variables, you can create a skeleton that inherently understands its own joints.
 
 ## The Coordinate System
 
