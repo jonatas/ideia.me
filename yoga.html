@@ -139,6 +139,101 @@ permalink: /yoga.html
             line-height: 1.5;
         }
 
+        /* Timeline Builder */
+        .timeline-section {
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(255,255,255,0.02);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            z-index: 5;
+        }
+
+        .timeline-track {
+            flex: 1;
+            display: flex;
+            gap: 10px;
+            min-height: 80px;
+            padding: 10px;
+            border: 2px dashed rgba(255,255,255,0.1);
+            border-radius: 12px;
+            overflow-x: auto;
+            align-items: center;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .timeline-track.drag-over {
+            background: rgba(13, 148, 136, 0.1);
+            border-color: rgba(13, 148, 136, 0.5);
+        }
+
+        .timeline-placeholder {
+            color: var(--muted-color);
+            margin: auto;
+            pointer-events: none;
+            font-style: italic;
+        }
+
+        .timeline-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 4px;
+            cursor: grab;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 60px;
+            position: relative;
+            user-select: none;
+        }
+
+        .timeline-card.playing {
+            box-shadow: 0 0 0 2px var(--accent-color);
+            background: rgba(13, 148, 136, 0.2);
+        }
+
+        .timeline-card .remove-btn {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .timeline-card:hover .remove-btn {
+            display: flex;
+        }
+
+        .timeline-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .timeline-controls .icon-btn {
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        .timeline-controls .icon-btn:hover {
+            background: rgba(13, 148, 136, 0.2);
+            color: var(--accent-color);
+        }
+
         /* Nav Bar */
         .pose-nav {
             display: flex;
@@ -306,6 +401,16 @@ permalink: /yoga.html
         </defs>
     </svg>
 
+    <div class="timeline-section">
+        <div class="timeline-controls">
+            <button id="playSeqBtn" class="icon-btn" title="Play Sequence" onclick="togglePlaySequence()"><i class="bi bi-play-fill" id="playIcon"></i></button>
+            <button id="clearSeqBtn" class="icon-btn" title="Clear Sequence" onclick="clearSequence()"><i class="bi bi-trash"></i></button>
+        </div>
+        <div class="timeline-track" id="timelineTrack" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
+            <div class="timeline-placeholder" id="timelinePlaceholder">Drag poses from the collection below directly here to build a custom sequence!</div>
+        </div>
+    </div>
+
     <main>
         <div class="yoga-container" id="svgContainer">
             <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" class="yoga-man">
@@ -432,6 +537,30 @@ permalink: /yoga.html
                 }
             },
             {
+                id: 'utkatasana', name: 'Chair Pose (Utkatasana)',
+                desc: 'Bend your knees and lower your hips as if sitting in a chair. Reach your arms up alongside your ears.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': 0, '--fig-y': 32,
+                    '--ub-rot': 45, '--head-rot': -20,
+                    '--la-rot': 135, '--le-rot': 0,
+                    '--ra-rot': 135, '--re-rot': 0,
+                    '--ll-rot': -45, '--lk-rot': 45,
+                    '--rl-rot': -45, '--rk-rot': 45
+                }
+            },
+            {
+                id: 'virabhadrasana-i', name: 'Warrior I (Virabhadrasana I)',
+                desc: 'Step one foot back, keep back leg straight, front knee bent 90 degrees. Reach arms up to the sky.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': 0, '--fig-y': 88,
+                    '--ub-rot': 0, '--head-rot': -15,
+                    '--la-rot': 180, '--le-rot': 0,
+                    '--ra-rot': 180, '--re-rot': 0,
+                    '--ll-rot': 60, '--lk-rot': 0,
+                    '--rl-rot': -90, '--rk-rot': 90
+                }
+            },
+            {
                 id: 'virabhadrasana-ii', name: 'Warrior II (Virabhadrasana II)',
                 desc: 'Lunge right knee to 90 degrees, left leg straight back. Stretch arms horizontally, gaze over your front hand.',
                 vars: {
@@ -453,6 +582,30 @@ permalink: /yoga.html
                     '--ra-rot': 0, '--re-rot': 0,
                     '--ll-rot': -90, '--lk-rot': 180,
                     '--rl-rot': -90, '--rk-rot': 180
+                }
+            },
+            {
+                id: 'dandasana', name: 'Staff Pose (Dandasana)',
+                desc: 'Sit on the floor with legs extended straight in front. Keep torso perfectly upright and hands beside your hips.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': -60, '--fig-y': 168,
+                    '--ub-rot': 0, '--head-rot': 0,
+                    '--la-rot': 0, '--le-rot': 0,
+                    '--ra-rot': 0, '--re-rot': 0,
+                    '--ll-rot': -90, '--lk-rot': 0,
+                    '--rl-rot': -90, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'paschimottanasana', name: 'Seated Forward Bend (Paschimottanasana)',
+                desc: 'From Staff Pose, fold forward at the hips, reaching your hands toward your feet over straight legs.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': -60, '--fig-y': 168,
+                    '--ub-rot': 90, '--head-rot': 30,
+                    '--la-rot': 180, '--le-rot': 0,
+                    '--ra-rot': 180, '--re-rot': 0,
+                    '--ll-rot': -90, '--lk-rot': 0,
+                    '--rl-rot': -90, '--rk-rot': 0
                 }
             }
         ];
@@ -498,8 +651,10 @@ permalink: /yoga.html
 
         // Setup UI
         POSES.forEach((p, i) => {
-            const card = document.createElement('button');
+            const card = document.createElement('div');
             card.className = 'pose-card' + (i === 0 ? ' active' : '');
+            card.draggable = true;
+            card.addEventListener('dragstart', (e) => drag(e, i));
             
             // Extract short name for the thumbnail (e.g. "Tree Pose")
             const shortName = p.name.split('(')[0].trim();
@@ -543,6 +698,150 @@ permalink: /yoga.html
             nameEl.textContent = pose.name;
             descEl.textContent = pose.desc;
             applyVars(pose.vars);
+        }
+
+        // Drag and Drop Logic
+        let sequence = [];
+        let draggedTimelineIndex = null;
+
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+
+        function dragEnter(ev) {
+            ev.preventDefault();
+            document.getElementById('timelineTrack').classList.add('drag-over');
+        }
+
+        function dragLeave(ev) {
+            document.getElementById('timelineTrack').classList.remove('drag-over');
+        }
+
+        function drag(ev, poseIndex) {
+            ev.dataTransfer.setData("poseIndex", poseIndex);
+            draggedTimelineIndex = null;
+        }
+
+        function dragTimeline(ev, tIndex) {
+            ev.dataTransfer.setData("timelineIndex", tIndex);
+            draggedTimelineIndex = tIndex;
+        }
+
+        function drop(ev) {
+            ev.preventDefault();
+            const track = document.getElementById('timelineTrack');
+            track.classList.remove('drag-over');
+
+            const pIndex = ev.dataTransfer.getData("poseIndex");
+            const tIndex = ev.dataTransfer.getData("timelineIndex");
+
+            if (pIndex !== "") {
+                // Add new from library
+                sequence.push(parseInt(pIndex));
+                renderTimeline();
+            } else if (tIndex !== "") {
+                // Reorder to end
+                const movedItem = sequence.splice(parseInt(tIndex), 1)[0];
+                sequence.push(movedItem);
+                renderTimeline();
+            }
+        }
+
+        function removeFromTimeline(ev, tIndex) {
+            ev.stopPropagation();
+            sequence.splice(tIndex, 1);
+            if (sequence.length === 0) stopSequence();
+            renderTimeline();
+        }
+
+        function clearSequence() {
+            sequence = [];
+            stopSequence();
+            renderTimeline();
+        }
+
+        function renderTimeline() {
+            const track = document.getElementById('timelineTrack');
+            const ph = document.getElementById('timelinePlaceholder');
+            
+            const existing = track.querySelectorAll('.timeline-card');
+            existing.forEach(e => e.remove());
+
+            if (sequence.length === 0) {
+                ph.style.display = 'block';
+                return;
+            }
+            ph.style.display = 'none';
+
+            sequence.forEach((poseIdx, tIndex) => {
+                const p = POSES[poseIdx];
+                const card = document.createElement('div');
+                card.className = 'timeline-card';
+                card.draggable = true;
+                card.addEventListener('dragstart', (e) => dragTimeline(e, tIndex));
+                card.onclick = () => loadPose(poseIdx);
+
+                card.innerHTML = `
+                    <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" class="mini-pose" style="${getVarStyles(p.vars)}">
+                        <line x1="-500" y1="368" x2="1000" y2="368" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
+                        <use href="#stickman" />
+                    </svg>
+                    <button class="remove-btn" onclick="removeFromTimeline(event, ${tIndex})"><i class="bi bi-x"></i></button>
+                `;
+                track.appendChild(card);
+            });
+            updateTimelineHighlight(playIndex - 1);
+        }
+
+        // Auto-play Engine
+        let playInterval = null;
+        let playIndex = 0;
+
+        function togglePlaySequence() {
+            if (playInterval) {
+                stopSequence();
+            } else {
+                if (sequence.length === 0) return;
+                startSequence();
+            }
+        }
+
+        function startSequence() {
+            const icon = document.getElementById('playIcon');
+            icon.className = 'bi bi-pause-fill';
+            playIndex = 0;
+            playNextPose();
+            playInterval = setInterval(playNextPose, 3500); 
+        }
+
+        function stopSequence() {
+            const icon = document.getElementById('playIcon');
+            icon.className = 'bi bi-play-fill';
+            clearInterval(playInterval);
+            playInterval = null;
+            updateTimelineHighlight(-1);
+        }
+
+        function playNextPose() {
+            if (sequence.length === 0) {
+                stopSequence();
+                return;
+            }
+            if (playIndex >= sequence.length) playIndex = 0; // loop back to start
+            
+            const poseIdx = sequence[playIndex];
+            loadPose(poseIdx);
+            updateTimelineHighlight(playIndex);
+            
+            playIndex++;
+        }
+
+        function updateTimelineHighlight(tIndex) {
+            const cards = document.querySelectorAll('#timelineTrack .timeline-card');
+            cards.forEach((c, idx) => {
+                if (idx === tIndex) c.classList.add('playing');
+                else c.classList.remove('playing');
+            });
         }
 
         // Debug Setup
