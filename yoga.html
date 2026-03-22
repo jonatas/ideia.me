@@ -139,6 +139,62 @@ permalink: /yoga.html
             line-height: 1.5;
         }
 
+        /* Sequence Tabs & Theming */
+        .sequence-tabs-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px;
+            background: rgba(0,0,0,0.4);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .sequence-tabs {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+        }
+        .sequence-tabs::-webkit-scrollbar { display: none; /* Hide scrollbar Chrome */ }
+
+        .seq-tab {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.15);
+            color: var(--muted-color);
+            padding: 6px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .seq-tab:hover {
+            border-color: var(--tab-color);
+            color: var(--tab-color);
+        }
+
+        .seq-tab.active {
+            background: var(--tab-color);
+            color: #0f172a;
+            border-color: var(--tab-color);
+            font-weight: 600;
+        }
+
+        .theme-toggle {
+            color: var(--muted-color);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            margin-left: 20px;
+        }
+
+        .theme-toggle input {
+            cursor: pointer;
+        }
+
         /* Timeline Builder */
         .timeline-section {
             padding: 16px 24px;
@@ -353,6 +409,20 @@ permalink: /yoga.html
             </button>
         </div>
     </header>
+
+    <div class="sequence-tabs-container">
+        <div class="sequence-tabs">
+            <button class="seq-tab active" data-seq="sun-a" style="--tab-color: #fbbf24;">Sun Salutation A</button>
+            <button class="seq-tab" data-seq="standing" style="--tab-color: #34d399;">Standing Sequence</button>
+            <button class="seq-tab" data-seq="seated" style="--tab-color: #60a5fa;">Seated Sequence</button>
+            <button class="seq-tab" data-seq="finishing" style="--tab-color: #a78bfa;">Finishing Sequence</button>
+        </div>
+        <div class="theme-toggle">
+            <label title="Toggle dynamic sequence color themes">
+                <input type="checkbox" id="themeToggle" checked> Colors
+            </label>
+        </div>
+    </div>
 
     <svg width="0" height="0" style="display:none;">
         <defs>
@@ -622,7 +692,8 @@ permalink: /yoga.html
                 desc: 'One leg straight, the other folded into half lotus. Fold torso over the straight leg.',
                 inherit: 'paschimottanasana',
                 vars: {
-                    '--rl-rot': 0, '--rk-rot': -150 // Right knee bent sharply outward and back
+                    '--ll-rot': -120, '--lk-rot': 180, // Left leg completely folded in half (thigh up-right, shin down-left)
+                    '--rl-rot': -90, '--rk-rot': 0   // Right leg straight horizontal
                 }
             },
             {
@@ -844,8 +915,9 @@ permalink: /yoga.html
                 desc: 'Sit in full lotus and bind your arms behind your back to grasp your opposite toes.',
                 inherit: 'dandasana',
                 vars: {
-                    '--ll-rot': -45, '--lk-rot': 90,
-                    '--rl-rot': -135, '--rk-rot': -90,
+                    '--fig-y': 155, // Hips almost on floor
+                    '--ll-rot': 80, '--lk-rot': -160,  // Left knee points left
+                    '--rl-rot': -80, '--rk-rot': 160,  // Right knee points right
                     '--la-rot': -60, '--le-rot': 120,
                     '--ra-rot': 60, '--re-rot': -120
                 }
@@ -855,8 +927,8 @@ permalink: /yoga.html
                 desc: 'Sit in full lotus with spine straight and hands resting on knees in Jnana mudra.',
                 inherit: 'baddha-padmasana',
                 vars: {
-                    '--la-rot': -30, '--le-rot': 30,
-                    '--ra-rot': 30, '--re-rot': -30
+                    '--la-rot': 40, '--le-rot': 40, // Hands resting on left knee
+                    '--ra-rot': -40, '--re-rot': -40 // Hands resting on right knee
                 }
             },
             {
@@ -864,7 +936,7 @@ permalink: /yoga.html
                 desc: 'From Lotus pose, press your hands into the floor and lift your entire body off the ground.',
                 inherit: 'padmasana',
                 vars: {
-                    '--fig-y': 100, // Lifted heavily off the floor!
+                    '--fig-y': 100, // Lifted completely off the floor!
                     '--la-rot': 0, '--le-rot': 0, // Arms lock straight down
                     '--ra-rot': 0, '--re-rot': 0
                 }
@@ -973,17 +1045,69 @@ permalink: /yoga.html
             applyVars(pose.vars);
         }
 
+        // Macro Sequences & Theming
+        const MACRO_SEQUENCES = {
+            'sun-a': {
+                name: 'Sun Salutation A', color: '#fbbf24',
+                poses: ['tadasana', 'urdhva-hastasana', 'uttanasana-a', 'ardha-uttanasana', 'chaturanga-dandasana', 'urdhva-mukha-svanasana', 'adho-mukha-svanasana', 'ardha-uttanasana', 'uttanasana-a', 'urdhva-hastasana', 'tadasana']
+            },
+            'standing': {
+                name: 'Standing Sequence', color: '#34d399',
+                poses: ['padangusthasana', 'padahastasana', 'trikonasana', 'parivrtta-trikonasana', 'utthita-parsvakonasana', 'parivrtta-parsvakonasana', 'prasarita-padottanasana', 'prasarita-padottanasana-b', 'prasarita-padottanasana-c', 'prasarita-padottanasana-d', 'parsvottanasana']
+            },
+            'seated': {
+                name: 'Seated Sequence', color: '#60a5fa',
+                poses: ['dandasana', 'paschimottanasana', 'purvottanasana', 'ardha-baddha-padma-paschimottanasana', 'triang-mukha-eka-pada-paschimottanasana', 'janu-sirsasana', 'marichyasana-a', 'navasana', 'kurmasana']
+            },
+            'finishing': {
+                name: 'Finishing Sequence', color: '#a78bfa',
+                poses: ['urdhva-dhanurasana', 'paschimottanasana', 'salamba-sarvangasana', 'halasana', 'sirsasana', 'balasana', 'baddha-padmasana', 'padmasana', 'tolasana', 'savasana']
+            }
+        };
+
+        let useThemes = true;
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('change', (e) => {
+            useThemes = e.target.checked;
+            updateAppTheme();
+        });
+
+        let activeSequenceKey = 'sun-a';
+
+        function loadMacroSequence(key) {
+            activeSequenceKey = key;
+            const seqData = MACRO_SEQUENCES[key];
+            sequence = [...seqData.poses];
+            stopSequence(); // Stop any playing sequence when switching
+            renderTimeline();
+            
+            // Update active tab visuals
+            document.querySelectorAll('.seq-tab').forEach(tab => {
+                if (tab.dataset.seq === key) tab.classList.add('active');
+                else tab.classList.remove('active');
+            });
+            updateAppTheme();
+        }
+
+        function updateAppTheme() {
+            const root = document.documentElement;
+            if (useThemes && MACRO_SEQUENCES[activeSequenceKey]) {
+                root.style.setProperty('--accent-color', MACRO_SEQUENCES[activeSequenceKey].color);
+            } else {
+                root.style.setProperty('--accent-color', '#14b8a6'); // default teal
+            }
+        }
+
+        document.querySelectorAll('.seq-tab').forEach(tab => {
+            tab.addEventListener('click', () => loadMacroSequence(tab.dataset.seq));
+        });
+
         // Drag and Drop Logic
-        // Pre-load Surya Namaskar A (Sun Salutation) as the default sequence using IDs
-        let sequence = [
-            'tadasana', 'urdhva-hastasana', 'uttanasana-a', 'ardha-uttanasana', 
-            'chaturanga-dandasana', 'urdhva-mukha-svanasana', 'adho-mukha-svanasana', 
-            'ardha-uttanasana', 'uttanasana-a', 'urdhva-hastasana', 'tadasana'
-        ];
+        let sequence = [];
         let draggedTimelineIndex = null;
         
         // Initial Render
-        setTimeout(() => renderTimeline(), 0);
+        setTimeout(() => loadMacroSequence('sun-a'), 0);
 
         function allowDrop(ev) {
             ev.preventDefault();
