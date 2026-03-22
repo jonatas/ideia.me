@@ -3,14 +3,44 @@ layout: post
 title: Modos de Acesso
 description: Modos de Acesso do SO
 categories: sistemas-operacionais
+mermaid: true
 ---
 
-{% include JB/setup %}
 # Entendendo os Modos de Acesso do Sistema Operacional
 
 O sistema operacional é dividido em dois modos básicos, sendo estes o modo Kernel e o modo Usuário. Esta divisão permite que os aplicativos sejam executados com segurança.
 
-![Kernel - imagem do wikipedia](https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Kernel_Layout.svg/382px-Kernel_Layout.svg.png)
+{% mermaid %}
+graph TD
+    subgraph USpace [Modo Usuário - User Space]
+        A[Aplicativos / Processos]
+    end
+    
+    subgraph KSpace [Modo Kernel - Kernel Space]
+        B((Interface de System Calls))
+        C[Gerenciador de Processos]
+        D[Gerenciador de Memória]
+        E[Sistemas de Arquivos]
+        F[Drivers de Dispositivos]
+        
+        B --> C
+        B --> D
+        B --> E
+        B --> F
+    end
+
+    subgraph HW [Hardware]
+        G[CPU]
+        H[Memória RAM]
+        I[Dispositivos / Discos]
+    end
+
+    A -- "System Calls" --> B
+    C --> HW
+    D --> HW
+    E --> HW
+    F --> HW
+{% endmermaid %}
 
 ## Arquitetura em Camadas do Sistema Operacional
 
@@ -46,6 +76,12 @@ No modo Kernel:
 - Gerenciamento direto da memória e dispositivos
 
 A linguagem de programação Assembly é a linguagem que interpreta uma série de comandos e envia os comandos para o processador, sendo frequentemente usada para implementar partes do kernel.
+
+#### Qual é a principal diferença de privilégios entre o Modo Usuário e o Modo Kernel?
+
+* O Modo Kernel tem acesso completo ao hardware, enquanto o Modo Usuário acessa recursos de forma restrita <- (Correto! Esta separação é vital para a segurança do SO)
+* O Modo Usuário é usado apenas por administradores de rede, o Kernel por usuários comuns (Incorreto, os nomes não se referem aos tipos de conta de usuário)
+* Não há diferença de privilégio, apenas uma variação na velocidade de processamento (Incorreto, o nível de privilégio é a característica que os define)
 
 As rotinas do sistema operacional podem fazer chamadas a respeito de x comandos.
 
@@ -90,6 +126,12 @@ As chamadas ao sistema são chamadas de "[system calls](https://en.wikipedia.org
 System call é uma chamada do sistema, como sua própria tradução indica. Em uma chamada ao sistema, o sistema operacional recebe um comando e possíveis parâmetros. Como resposta, recebe um outro código, que pode indicar sucesso, falha ou até mesmo o resultado do próprio comando.
 
 No processo de receber o comando, o sistema identifica o aplicativo que fez a chamada e verifica a sua permissão para execução do comando. Dada a permissão executa e retorna o resultado.
+
+#### Como o sistema operacional reage se um comando no modo usuário tenta violar a segurança ou acessar locais proibidos?
+
+* Executa o comando em modo de segurança e depois notifica o usuário (A verificação barra a execução antes mesmo de iniciar)
+* O Kernel cancela a operação silenciosamente para não travar o processo (Sempre é retornado um código de erro ou exceção)
+* O sistema envia uma exceção e nega a execução da operação <- (Exatamente! O Kernel protege o sistema e devolve o erro para a aplicação tratar)
 
 ![System Calls Diagram](/images/system-calls-diagram.png)
 
@@ -226,6 +268,4 @@ A compreensão dos modos de acesso do sistema operacional é fundamental para en
 
 Através dos mecanismos de proteção, system calls e arquiteturas adequadas, os sistemas operacionais conseguem equilibrar desempenho, segurança e usabilidade, permitindo que usuários executem suas tarefas sem comprometer a estabilidade do sistema.
 
-{% include adsense.html %}
-{% include ads_lateral.html %}
 

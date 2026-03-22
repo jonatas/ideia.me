@@ -4,7 +4,19 @@ title: Pages
 header: Pages
 group: navigation
 ---
-{% include JB/setup %}
 
-{% assign pages_list = site.pages %}
-{% include JB/pages_list %}
+<div class="pages-container">
+  <h2>All Pages</h2>
+  <ul class="pages-list">
+    {% for page in site.pages %}
+      {% if page.title != null %}
+        <li class="page-item">
+          <a href="{{ page.url }}">{{ page.title }}</a>
+          {% if page.description %}
+            <span class="page-description">{{ page.description }}</span>
+          {% endif %}
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>

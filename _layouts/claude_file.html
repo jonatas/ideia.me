@@ -1,0 +1,81 @@
+---
+layout: default
+---
+
+<div class="claude-file-view">
+
+  <div class="claude-breadcrumb mb-4">
+    <a href="/claude/" class="text-muted text-decoration-none">~/.claude</a>
+    <span class="text-muted mx-2">/</span>
+    <span class="claude-current-path">{{ page.source_path }}</span>
+  </div>
+
+  {% if page.front_matter %}
+    <div class="claude-section mb-4">
+      <div class="claude-section-label">frontmatter</div>
+      <div class="highlight">
+        <pre><code class="language-yaml">---
+{% for pair in page.front_matter %}{{ pair[0] }}: {{ pair[1] }}
+{% endfor %}---</code></pre>
+      </div>
+    </div>
+
+    <div class="claude-section">
+      <div class="claude-section-label">body</div>
+      <div class="claude-body glass-card p-4">
+        {{ content }}
+      </div>
+    </div>
+
+  {% else %}
+    <div class="claude-body glass-card p-4">
+      {{ content }}
+    </div>
+  {% endif %}
+
+  <div class="mt-4">
+    <a href="/claude/" class="text-muted text-decoration-none" style="font-size:0.85rem;">← back to ~/.claude</a>
+  </div>
+
+</div>
+
+<style>
+.claude-breadcrumb {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+}
+
+.claude-current-path {
+  color: var(--primary-light-blue);
+}
+
+.claude-section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.claude-body {
+  line-height: 1.7;
+}
+
+.claude-body h1,
+.claude-body h2,
+.claude-body h3 {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.claude-body pre {
+  background-color: var(--code-bg-color) !important;
+  border-radius: 6px;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.claude-body code {
+  font-size: 0.85rem;
+}
+</style>

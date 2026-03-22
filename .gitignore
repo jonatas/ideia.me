@@ -1,2 +1,11 @@
 _site
 apresentacao_xp.{aux,log,nav,out,snm,toc}
+.DS_Store
+images/.DS_Store
+
+# Environment variables
+.env
+.env.*
+
+# Claude worktrees (active git worktrees, not for committing)
+.claude/worktrees/

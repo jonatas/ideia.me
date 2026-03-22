@@ -1,5 +1,5 @@
 <!-- Mermaid.js Support -->
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
 <script>
   // Initialize Mermaid with configuration based on color scheme
   const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ||
@@ -7,47 +7,52 @@
                      document.body.classList.contains('dark-mode');
   
   mermaid.initialize({ 
-    startOnLoad: false,
+    startOnLoad: false,  // Don't auto-render on load
     theme: 'base',
     securityLevel: 'loose',
     flowchart: {
       useMaxWidth: true,
       htmlLabels: true,
       curve: 'basis',
-      nodeSpacing: 40,
-      rankSpacing: 60,
-      padding: 20
+      nodeSpacing: 60,
+      rankSpacing: 80,
+      wrapLines: true,
+      padding: 25
     },
     themeVariables: {
-      primaryColor: isDarkMode ? '#5c9eff' : '#4361ee',
+      primaryColor: isDarkMode ? '#FBBF24' : '#0EA5E9',
       primaryTextColor: isDarkMode ? '#f0f2f5' : '#000000',
-      primaryBorderColor: isDarkMode ? '#5c9eff' : '#4361ee',
-      lineColor: isDarkMode ? '#FBBF24' : '#000000',
-      sectionBkgColor: isDarkMode ? '#1e1e1e' : '#ffffff',
-      altSectionBkgColor: isDarkMode ? '#2a2d31' : '#f8f9fa',
-      gridColor: isDarkMode ? '#FBBF24' : '#000000',
-      tertiaryColor: isDarkMode ? '#2a2d31' : '#f8f9fa',
+      primaryBorderColor: isDarkMode ? '#FBBF24' : '#0EA5E9',
+      lineColor: isDarkMode ? '#EF4444' : '#1E3A8A',
+      secondaryColor: isDarkMode ? '#2a2d31' : '#f8f9fa',
+      tertiaryColor: isDarkMode ? '#1e1e1e' : '#ffffff',
       background: isDarkMode ? '#1e1e1e' : '#ffffff',
       mainBkg: isDarkMode ? '#1e1e1e' : '#ffffff',
       secondBkg: isDarkMode ? '#2a2d31' : '#f8f9fa',
-      tertiaryBkg: isDarkMode ? '#1e1e1e' : '#ffffff',
+      lineColor: isDarkMode ? '#EF4444' : '#1E3A8A',
+      textColor: isDarkMode ? '#f0f2f5' : '#000000',
       edgeLabelBackground: isDarkMode ? '#1e1e1e' : '#ffffff'
     }
   });
   
-  // Convert code blocks with language-mermaid to mermaid diagrams
-  document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('pre > code.language-mermaid').forEach((codeBlock) => {
-      const mermaidCode = codeBlock.textContent;
-      const mermaidDiv = document.createElement('div');
-      mermaidDiv.className = 'mermaid';
-      mermaidDiv.textContent = mermaidCode;
-      codeBlock.parentElement.replaceWith(mermaidDiv);
-    });
-    
-    // Initialize and render all mermaid diagrams
-    mermaid.run();
-  });
+  // Function to render Mermaid diagrams in visible elements only
+  window.renderVisibleMermaid = function() {
+    // Use active chapter if present (slides/presentation layouts), otherwise the whole document
+    const container = document.querySelector('.chapter.active') || document;
+    const nodes = Array.from(container.querySelectorAll('.mermaid:not([data-processed])'));
+    if (nodes.length > 0) {
+      mermaid.run({ nodes }).catch(error => {
+        console.error('Mermaid rendering error:', error);
+      });
+    }
+  };
+  
+  // Render visible Mermaid diagrams when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', window.renderVisibleMermaid);
+  } else {
+    window.renderVisibleMermaid();
+  }
 </script>
 
 <!-- Mermaid diagram styling -->
@@ -75,7 +80,8 @@
     font-size: 18px !important;
     font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
     font-weight: 500 !important;
-    line-height: 1.4 !important;
+    line-height: 1.5 !important;
+    text-anchor: middle !important;
   }
   
   .mermaid .nodeLabel,
@@ -114,8 +120,9 @@
   .mermaid .node circle,
   .mermaid .node ellipse,
   .mermaid .node polygon {
-    min-width: 120px !important;
-    min-height: 40px !important;
+    min-width: 140px !important;
+    min-height: 50px !important;
+    padding: 8px !important;
   }
   
   /* Dark mode support using your CSS variables */
@@ -132,23 +139,23 @@
     .mermaid .node ellipse,
     .mermaid .node polygon {
       fill: var(--card-bg-color, #1e1e1e) !important;
-      stroke: var(--primary-color, #5c9eff) !important;
+      stroke: var(--primary-color, #FBBF24) !important;
       stroke-width: 2px !important;
     }
     
     .mermaid .edgePath .path {
-      stroke: #FBBF24 !important;
+      stroke: #EF4444 !important;
       stroke-width: 3px !important;
     }
     
     .mermaid .flowchart-link {
-      stroke: #FBBF24 !important;
+      stroke: #EF4444 !important;
       stroke-width: 3px !important;
     }
     
     .mermaid .marker {
-      fill: #FBBF24 !important;
-      stroke: #FBBF24 !important;
+      fill: #EF4444 !important;
+      stroke: #EF4444 !important;
     }
     
     .mermaid .edgeLabel {
@@ -165,13 +172,13 @@
     
     /* Subgraph styling for dark mode */
     .mermaid .cluster rect {
-      fill: rgba(92, 158, 255, 0.1) !important;
-      stroke: var(--primary-color, #5c9eff) !important;
+      fill: rgba(251, 191, 36, 0.1) !important;
+      stroke: var(--primary-color, #FBBF24) !important;
       stroke-width: 1px !important;
     }
     
     .mermaid .cluster text {
-      fill: var(--primary-color, #5c9eff) !important;
+      fill: var(--primary-color, #FBBF24) !important;
       font-weight: 600 !important;
     }
   }
@@ -183,12 +190,12 @@
     .mermaid .node ellipse,
     .mermaid .node polygon {
       fill: var(--card-bg-color, #ffffff) !important;
-      stroke: var(--primary-color, #4361ee) !important;
+      stroke: var(--primary-color, #0EA5E9) !important;
       stroke-width: 2px !important;
     }
     
     .mermaid .edgePath .path {
-      stroke: #000000 !important;
+      stroke: #1E3A8A !important;
       stroke-width: 3px !important;
     }
     
@@ -205,13 +212,13 @@
     }
     
     .mermaid .cluster rect {
-      fill: rgba(67, 97, 238, 0.05) !important;
-      stroke: var(--primary-color, #4361ee) !important;
+      fill: rgba(14, 165, 233, 0.05) !important;
+      stroke: var(--primary-color, #0EA5E9) !important;
       stroke-width: 1px !important;
     }
     
     .mermaid .cluster text {
-      fill: var(--primary-color, #4361ee) !important;
+      fill: var(--primary-color, #0EA5E9) !important;
       font-weight: 600 !important;
     }
   }

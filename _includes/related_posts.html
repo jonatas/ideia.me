@@ -1,78 +1,65 @@
 {% if site.related_posts %}
-<div class="related-posts">
-  <div class="card">
-    <div class="card-header">
-      <h4>Related Articles</h4>
-    </div>
-    <div class="card-body">
-      <div class="row">
-        {% assign max_related = site.related_posts_max | default: 5 %}
-        {% assign min_common_tags = 1 %}
-        {% assign common_tags = '' %}
-        
-        {% for post in site.posts %}
-          {% if post.url != page.url %}
-            {% if post.categories %}
-              {% assign same_categories = false %}
-              {% for category in post.categories %}
-                {% if page.categories contains category %}
-                  {% assign same_categories = true %}
-                  {% break %}
-                {% endif %}
-              {% endfor %}
-              
-              {% if same_categories %}
-                {% assign common_tags = common_tags | append: post.url | append: ',' %}
-              {% endif %}
+<div class="related-posts mt-5 pt-4 border-top border-secondary">
+  <h4 class="mb-4">Related Articles</h4>
+  <div class="related-posts-list">
+    {% assign max_related = site.related_posts_max | default: 5 %}
+    {% assign common_tags = '' %}
+    
+    {% for post in site.posts %}
+      {% if post.url != page.url %}
+        {% if post.categories %}
+          {% assign same_categories = false %}
+          {% for category in post.categories %}
+            {% if page.categories contains category %}
+              {% assign same_categories = true %}
+              {% break %}
             {% endif %}
-          {% endif %}
+          {% endfor %}
           
-          {% if forloop.index >= 20 %}
-            {% break %}
+          {% if same_categories %}
+            {% assign common_tags = common_tags | append: post.url | append: ',' %}
           {% endif %}
-        {% endfor %}
-        
-        {% assign common_tags_array = common_tags | split: ',' %}
-        {% assign related_posts_count = 0 %}
-        
-        {% for url in common_tags_array %}
-          {% if url != '' %}
-            {% assign related_posts_count = related_posts_count | plus: 1 %}
-            {% for post in site.posts %}
-              {% if post.url == url %}
-                <div class="col-md-6 mb-3">
-                  <div class="card h-100">
-                    <div class="card-body">
-                      <h5 class="card-title">
-                        <a href="{{ post.url }}">{{ post.title }}</a>
-                      </h5>
-                      <p class="card-text text-muted">
-                        <small>
-                          <i class="bi bi-calendar3"></i> {{ post.date | date: "%B %d, %Y" }}
-                        </small>
-                      </p>
-                      {% if post.description %}
-                        <p class="card-text">{{ post.description | truncate: 120 }}</p>
-                      {% endif %}
-                    </div>
-                  </div>
-                </div>
-              {% endif %}
-            {% endfor %}
-          {% endif %}
-          
-          {% if related_posts_count >= max_related %}
-            {% break %}
-          {% endif %}
-        {% endfor %}
-        
-        {% if related_posts_count == 0 %}
-          <div class="col-12">
-            <p>No related posts found. Check out <a href="/archive.html">recent posts</a> instead.</p>
-          </div>
         {% endif %}
-      </div>
-    </div>
+      {% endif %}
+      
+      {% if forloop.index >= 20 %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+    
+    {% assign common_tags_array = common_tags | split: ',' %}
+    {% assign related_posts_count = 0 %}
+    
+    {% for url in common_tags_array %}
+      {% if url != '' %}
+        {% assign related_posts_count = related_posts_count | plus: 1 %}
+        {% for post in site.posts %}
+          {% if post.url == url %}
+            <div class="d-flex justify-content-between align-items-baseline mb-2">
+              <a href="{{ post.url }}">{{ post.title }}</a>
+              <small class="related-post-date ms-2 text-nowrap" style="font-family: monospace;">{{ post.date | date: "%b %d, %Y" }}</small>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+      
+      {% if related_posts_count >= max_related %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+    
+    {% if related_posts_count == 0 %}
+      <p class="text-muted">No related posts found. Check out <a href="/archive">recent posts</a> instead.</p>
+    {% endif %}
   </div>
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const defaultColors = ['#FBBF24', '#0EA5E9', '#1E3A8A', '#EF4444'];
+    document.querySelectorAll('.related-post-date').forEach((el, i) => {
+      el.style.color = defaultColors[i % defaultColors.length];
+    });
+  });
+</script>
 {% endif %} 

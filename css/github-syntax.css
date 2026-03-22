@@ -191,33 +191,4 @@ pre code {
   padding-top: 52px;
 }
 
-/* Copy button styling */
-.highlight .copy-button {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  z-index: 10;
-  padding: 4px 8px;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 20px;
-  color: var(--gh-code-text);
-  background-color: var(--gh-code-background);
-  border: 1px solid var(--gh-code-border);
-  border-radius: 6px;
-  cursor: pointer;
-  opacity: 0.6;
-  transition: opacity 0.2s;
-}
-
-.highlight .copy-button:hover {
-  opacity: 1;
-}
-
-.highlight .copy-button.copied {
-  color: #22863a;
-}
-
-.dark-mode .highlight .copy-button.copied {
-  color: #7ee787;
-} 
+ 

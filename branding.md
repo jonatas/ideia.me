@@ -3,11 +3,20 @@ layout: page
 title: Jônatas Davi Paganini (Branding)
 ---
 
-# Position
+# Ideia.me Logo
 
-I'm a developer advocate at [Timescale](https://timescale.com).
-
-I split my time between community management, content creation, and developer relations.
+<a class="navbar-brand py-0" href="/">
+  <span class="logo">
+    <span class="i">i</span>
+    <span class="d">d</span>
+    <span class="e">e</span>
+    <span class="i2">i</span>
+    <span class="a">a</span>
+    <span class="dot">.</span>
+    <span class="m">m</span>
+    <span class="e2">e</span>
+  </span>
+</a>
 
 # Mini-Bio English:
 

@@ -1,6 +1,7 @@
 ---
 title: "Primeiro Ano na RD"
 layout: post
+categories: [career]
 tags: ['Resultados Digitais', 'pense']
 description: "Completando um ano de RD e aqui estou eu a refletir :)"
 ---

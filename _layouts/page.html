@@ -1,5 +1,15 @@
 ---
 layout: default
 ---
-{% include JB/setup %}
-{% include themes/twitter/page.html %}
+
+<div class="page-container">
+  <div class="page-header mb-4">
+    <h1 class="page-title">{{ page.title }}</h1>
+  </div>
+  
+  <div class="page-content glass-card">
+    <div class="card-body p-4">
+      {{ content }}
+    </div>
+  </div>
+</div>

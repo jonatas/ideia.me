@@ -5,7 +5,6 @@ description: Primeira parte sobre gerência de processador em sistemas operacion
 categories: sistemas-operacionais
 ---
 
-{% include JB/setup %}
 
 # Gerência do Processador em Sistemas Operacionais
 
@@ -317,6 +316,4 @@ A escolha da política de escalonamento deve considerar as características e ob
 
 Os sistemas operacionais modernos tipicamente implementam algoritmos híbridos que combinam características de múltiplas abordagens para atingir um bom desempenho em diversos cenários.
 
-{% include adsense.html %}
-{% include ads_lateral.html %}
 
