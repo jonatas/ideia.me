@@ -481,6 +481,120 @@ permalink: /yoga.html
             padding: 8px;
         }
         .icon-btn:hover { color: var(--text-color); }
+
+        .perspective-controls {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+            background: rgba(0,0,0,0.5);
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .perspective-controls.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .toggle-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .toggle-btn:hover {
+            background: rgba(13, 148, 136, 0.3);
+            border-color: rgba(13, 148, 136, 0.8);
+        }
+
+        .toggle-btn.active-view {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .yoga-man-wrapper {
+            transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
+            transform-origin: center center;
+        }
+
+        /* Hotspots and Zoom UI */
+        .hotspot {
+            fill: transparent !important;
+            stroke: transparent !important;
+            stroke-width: 0 !important;
+            cursor: pointer;
+            pointer-events: all;
+        }
+
+        .hotspot:hover {
+            fill: rgba(13, 148, 136, 0.3) !important;
+            stroke: var(--accent-color) !important;
+            stroke-width: 2 !important;
+        }
+
+        .zoom-overlay {
+            position: absolute;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(13, 148, 136, 0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: var(--text-color);
+            padding: 16px;
+            border-radius: 12px;
+            max-width: 280px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(10px) scale(0.95);
+            transition: opacity 0.2s, transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .zoom-overlay.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        .zoom-overlay-title {
+            color: var(--accent-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-size: 0.8rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 6px;
+            margin-bottom: 4px;
+        }
+
+        /* Drishti Line */
+        .drishti-line {
+            stroke: var(--accent-color);
+            stroke-width: 4;
+            stroke-dasharray: 8 8;
+            opacity: var(--drishti-opacity, 0);
+            transition: opacity 0.3s;
+        }
     </style>
 </head>
 <body>
@@ -516,6 +630,7 @@ permalink: /yoga.html
                         <line x1="100" y1="200" x2="100" y2="280" class="bone-back" />
                         <g id="left-knee" class="joint-group" style="transform-origin: 100px 280px; transform: rotate(var(--lk-rot, 0deg));">
                             <line x1="100" y1="280" x2="100" y2="360" class="bone-back" />
+                            <circle cx="100" cy="360" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="feet" onmouseover="showDetails('feet', event)" onmouseout="hideDetails()" />
                         </g>
                     </g>
                     <!-- Right Leg (Front) -->
@@ -523,6 +638,7 @@ permalink: /yoga.html
                         <line x1="100" y1="200" x2="100" y2="280" class="bone-front" />
                         <g id="right-knee" class="joint-group" style="transform-origin: 100px 280px; transform: rotate(var(--rk-rot, 0deg));">
                             <line x1="100" y1="280" x2="100" y2="360" class="bone-front" />
+                            <circle cx="100" cy="360" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="feet" onmouseover="showDetails('feet', event)" onmouseout="hideDetails()" />
                         </g>
                     </g>
                     <!-- Upper Body -->
@@ -532,6 +648,7 @@ permalink: /yoga.html
                             <line x1="100" y1="100" x2="100" y2="160" class="bone-back" />
                             <g id="left-elbow" class="joint-group" style="transform-origin: 100px 160px; transform: rotate(var(--le-rot, 0deg));">
                                 <line x1="100" y1="160" x2="100" y2="220" class="bone-back" />
+                                <circle cx="100" cy="220" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="hands" onmouseover="showDetails('hands', event)" onmouseout="hideDetails()" />
                             </g>
                         </g>
                         <!-- Torso -->
@@ -540,13 +657,70 @@ permalink: /yoga.html
                         <g id="head-group" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--head-rot, 0deg));">
                             <line x1="100" y1="100" x2="100" y2="80" class="bone-front" stroke-width="10" />
                             <circle cx="100" cy="65" r="20" class="head" />
+                            <line x1="100" y1="65" x2="100" y2="-200" class="drishti-line" style="transform-origin: 100px 65px; transform: rotate(var(--drishti-rot, 0deg));" />
+                            <circle cx="100" cy="65" r="30" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="head" onmouseover="showDetails('head', event)" onmouseout="hideDetails()" />
                         </g>
                         <!-- Right Arm (Front) -->
                         <g id="right-arm" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--ra-rot, 0deg));">
                             <line x1="100" y1="100" x2="100" y2="160" class="bone-front" />
                             <g id="right-elbow" class="joint-group" style="transform-origin: 100px 160px; transform: rotate(var(--re-rot, 0deg));">
                                 <line x1="100" y1="160" x2="100" y2="220" class="bone-front" />
+                                <circle cx="100" cy="220" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="hands" onmouseover="showDetails('hands', event)" onmouseout="hideDetails()" />
                             </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+
+            <!-- Front-Facing Stickman -->
+            <g id="stickman-front">
+                <g id="figure-front" class="joint-group" style="transform-origin: 100px 200px; transform: translate(var(--fig-x, 0px), var(--fig-y, 0px)) rotate(var(--fig-rot, 0deg));">
+                    <!-- Hips line -->
+                    <line x1="80" y1="200" x2="120" y2="200" class="bone-front" stroke-width="14" />
+                    <!-- Left Leg -->
+                    <g id="left-leg-f" class="joint-group" style="transform-origin: 80px 200px; transform: rotate(var(--ll-rot-f, 0deg));">
+                        <line x1="80" y1="200" x2="80" y2="280" class="bone-front" />
+                        <g id="left-knee-f" class="joint-group" style="transform-origin: 80px 280px; transform: rotate(var(--lk-rot-f, 0deg));">
+                            <line x1="80" y1="280" x2="80" y2="360" class="bone-front" />
+                            <circle cx="80" cy="360" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="feet" onmouseover="showDetails('feet', event)" onmouseout="hideDetails()" />
+                        </g>
+                    </g>
+                    <!-- Right Leg -->
+                    <g id="right-leg-f" class="joint-group" style="transform-origin: 120px 200px; transform: rotate(var(--rl-rot-f, 0deg));">
+                        <line x1="120" y1="200" x2="120" y2="280" class="bone-front" />
+                        <g id="right-knee-f" class="joint-group" style="transform-origin: 120px 280px; transform: rotate(var(--rk-rot-f, 0deg));">
+                            <line x1="120" y1="280" x2="120" y2="360" class="bone-front" />
+                            <circle cx="120" cy="360" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="feet" onmouseover="showDetails('feet', event)" onmouseout="hideDetails()" />
+                        </g>
+                    </g>
+                    <!-- Upper Body -->
+                    <g id="upper-body-f" class="joint-group" style="transform-origin: 100px 200px; transform: rotate(var(--ub-rot-f, 0deg));">
+                        <!-- Torso -->
+                        <line x1="100" y1="200" x2="100" y2="100" class="bone-front" stroke-width="16" />
+                        <!-- Shoulders -->
+                        <line x1="70" y1="100" x2="130" y2="100" class="bone-front" stroke-width="14" />
+                        <!-- Left Arm -->
+                        <g id="left-arm-f" class="joint-group" style="transform-origin: 70px 100px; transform: rotate(var(--la-rot-f, 0deg));">
+                            <line x1="70" y1="100" x2="50" y2="160" class="bone-front" />
+                            <g id="left-elbow-f" class="joint-group" style="transform-origin: 50px 160px; transform: rotate(var(--le-rot-f, 0deg));">
+                                <line x1="50" y1="160" x2="40" y2="220" class="bone-front" />
+                                <circle cx="40" cy="220" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="hands" onmouseover="showDetails('hands', event)" onmouseout="hideDetails()" />
+                            </g>
+                        </g>
+                        <!-- Right Arm -->
+                        <g id="right-arm-f" class="joint-group" style="transform-origin: 130px 100px; transform: rotate(var(--ra-rot-f, 0deg));">
+                            <line x1="130" y1="100" x2="150" y2="160" class="bone-front" />
+                            <g id="right-elbow-f" class="joint-group" style="transform-origin: 150px 160px; transform: rotate(var(--re-rot-f, 0deg));">
+                                <line x1="150" y1="160" x2="160" y2="220" class="bone-front" />
+                                <circle cx="160" cy="220" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="hands" onmouseover="showDetails('hands', event)" onmouseout="hideDetails()" />
+                            </g>
+                        </g>
+                        <!-- Head -->
+                        <g id="head-group-f" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--head-rot-f, 0deg));">
+                            <line x1="100" y1="100" x2="100" y2="80" class="bone-front" stroke-width="10" />
+                            <circle cx="100" cy="65" r="20" class="head" />
+                            <line x1="100" y1="65" x2="100" y2="-200" class="drishti-line" style="transform-origin: 100px 65px; transform: rotate(var(--drishti-rot, 0deg));" />
+                            <circle cx="100" cy="65" r="30" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="head" onmouseover="showDetails('head', event)" onmouseout="hideDetails()" />
                         </g>
                     </g>
                 </g>
@@ -575,10 +749,23 @@ permalink: /yoga.html
     </div>
 
     <main>
+        <div id="zoomOverlay" class="zoom-overlay">
+            <div class="zoom-overlay-title" id="zoomOverlayTitle">Details</div>
+            <div id="zoomOverlayText"></div>
+        </div>
+        <div class="perspective-controls" id="perspectiveControls">
+            <button class="toggle-btn active-view" id="btnSideView" onclick="toggleView('side')" title="Side Profile View"><i class="bi bi-person"></i> Side</button>
+            <button class="toggle-btn" id="btnFrontView" onclick="toggleView('front')" title="Front Facing View"><i class="bi bi-person-bounding-box"></i> Front</button>
+            <div style="width: 1px; background: rgba(255,255,255,0.1); margin: 0 4px;"></div>
+            <button class="toggle-btn" id="btnFlipH" onclick="toggleFlip('x')" title="Flip Horizontally"><i class="bi bi-symmetry-vertical"></i> Flip</button>
+            <button class="toggle-btn" id="btnFlipV" onclick="toggleFlip('y')" title="Flip Vertically"><i class="bi bi-symmetry-horizontal"></i> Upside Down</button>
+        </div>
         <div class="yoga-container" id="svgContainer">
-            <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" class="yoga-man">
-                <line x1="-500" y1="368" x2="1000" y2="368" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
-                <use href="#stickman" />
+            <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" class="yoga-man" id="yogaManSvg">
+                <g class="yoga-man-wrapper" id="yogaManWrapper">
+                    <line x1="-500" y1="368" x2="1000" y2="368" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+                    <use href="#stickman" id="mainUse" />
+                </g>
             </svg>
         </div>
 
@@ -708,7 +895,13 @@ permalink: /yoga.html
             {
                 id: 'adho-mukha-svanasana', name: 'Downward-Facing Dog (Adho Mukha Svanasana)',
                 desc: 'Form an inverted V shape with your body. Press hands into the floor, hips lifted high, legs straight.',
+                details: {
+                    head: 'Relax your neck. Let the crown of your head point towards the floor. Drishti (gaze) is towards your navel.',
+                    hands: 'Spread fingers wide, index fingers parallel. Press firmly through all knuckles.',
+                    feet: 'Feet hip-width apart. Press heels gently toward the mat.'
+                },
                 vars: {
+                    '--drishti-rot': 0, '--drishti-opacity': 0.6,
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 38.6,
                     '--ub-rot': 126, '--head-rot': 0,
                     '--la-rot': 180, '--le-rot': 0,
@@ -732,6 +925,20 @@ permalink: /yoga.html
             {
                 id: 'virabhadrasana-i', name: 'Warrior I - Right (Virabhadrasana I)',
                 desc: 'Step left foot back, keep back leg straight, front knee bent 90 degrees. Reach arms up to the sky.',
+                view: 'front',
+                details: {
+                    head: 'Gaze forward past your nose, or gently tip the head back to look at your thumbs.',
+                    hands: 'Palms pressed together or facing each other, reaching straight up.',
+                    feet: 'Back foot turned out 45 degrees, pressing firmly into the outer edge. Front knee tracks over the ankle.'
+                },
+                varsFront: {
+                    '--fig-y': 88, '--drishti-rot': 0, '--drishti-opacity': 0.6,
+                    '--ub-rot-f': 0, '--head-rot-f': -15,
+                    '--la-rot-f': 180, '--le-rot-f': 0,
+                    '--ra-rot-f': 180, '--re-rot-f': 0,
+                    '--ll-rot-f': 30, '--lk-rot-f': 0,
+                    '--rl-rot-f': -60, '--rk-rot-f': 60
+                },
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 88,
                     '--ub-rot': 0, '--head-rot': -15,
@@ -893,6 +1100,20 @@ permalink: /yoga.html
             {
                 id: 'trikonasana', name: 'Triangle Pose - Right (Trikonasana)',
                 desc: 'Stand with legs wide, fold torso sideways over the front leg. One hand touches the ankle, the other reaches for the sky.',
+                view: 'front',
+                details: {
+                    head: 'Turn your head gently to gaze up past the thumb of your raised hand.',
+                    hands: 'Bottom hand rests lightly on shin or floor. Top hand reaches energetically towards the ceiling.',
+                    feet: 'Back foot angled at 45 degrees. Front foot pointing straight ahead.'
+                },
+                varsFront: {
+                    '--fig-y': 28, '--drishti-rot': 0, '--drishti-opacity': 0.6,
+                    '--ub-rot-f': 90, '--head-rot-f': -90,
+                    '--la-rot-f': 0, '--le-rot-f': 0,
+                    '--ra-rot-f': 180, '--re-rot-f': 0,
+                    '--ll-rot-f': 40, '--lk-rot-f': 0,
+                    '--rl-rot-f': -40, '--rk-rot-f': 0
+                },
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 38,
                     '--ub-rot': 90, '--head-rot': 0,
@@ -1192,9 +1413,24 @@ permalink: /yoga.html
         const debugBtn = document.getElementById('debugBtn');
         const controls = document.getElementById('controls');
 
+        const perspectiveControls = document.getElementById('perspectiveControls');
+        const mainUse = document.getElementById('mainUse');
+        const btnSideView = document.getElementById('btnSideView');
+        const btnFrontView = document.getElementById('btnFrontView');
+        const btnFlipH = document.getElementById('btnFlipH');
+        const btnFlipV = document.getElementById('btnFlipV');
+        const yogaManWrapper = document.getElementById('yogaManWrapper');
+
+        const zoomOverlay = document.getElementById('zoomOverlay');
+        const zoomOverlayTitle = document.getElementById('zoomOverlayTitle');
+        const zoomOverlayText = document.getElementById('zoomOverlayText');
+
         // State
         let currentVars = {};
         let activeIndex = 0;
+        let currentView = 'side';
+        let flipX = 1;
+        let flipY = 1;
 
         // Generate Styles for Variables
         function getVarStyles(v) {
@@ -1241,8 +1477,15 @@ permalink: /yoga.html
         });
 
         function applyVars(v) {
+            // First remove any properties that were in currentVars but are not in the new v
+            Object.keys(currentVars).forEach(k => {
+                if (!(k in v)) {
+                    svgContainer.style.removeProperty(k);
+                }
+            });
+
             Object.keys(v).forEach(k => {
-                const val = (k.includes('rot')) ? `${v[k]}deg` : `${v[k]}px`;
+                const val = (k.includes('opacity')) ? `${v[k]}` : (k.includes('rot') ? `${v[k]}deg` : `${v[k]}px`);
                 svgContainer.style.setProperty(k, val);
                 
                 // update debug UI if applicable
@@ -1266,8 +1509,88 @@ permalink: /yoga.html
             const pose = POSES[index];
             nameEl.textContent = pose.name;
             descEl.textContent = pose.desc;
-            applyVars(pose.vars);
+
+            // Check views and show/hide controls
+            if (pose.view === 'front' || pose.varsFront) {
+                perspectiveControls.classList.add('active');
+                if (pose.view === 'front') {
+                    toggleView('front');
+                } else if (currentView === 'front' && !pose.varsFront) {
+                    // Fallback to side if we were in front but new pose lacks front vars
+                    toggleView('side');
+                } else if (currentView === 'front' && pose.varsFront) {
+                    toggleView('front');
+                } else {
+                    applyVars(pose.vars);
+                }
+            } else {
+                perspectiveControls.classList.remove('active');
+                if (currentView === 'front') toggleView('side');
+                applyVars(pose.vars);
+            }
         }
+
+        window.toggleView = function(viewStr) {
+            const pose = POSES[activeIndex];
+            if (!pose) return;
+
+            currentView = viewStr;
+            if (viewStr === 'front' && pose.varsFront) {
+                mainUse.setAttribute('href', '#stickman-front');
+                applyVars(pose.varsFront);
+                btnFrontView.classList.add('active-view');
+                btnSideView.classList.remove('active-view');
+            } else {
+                currentView = 'side';
+                mainUse.setAttribute('href', '#stickman');
+                applyVars(pose.vars);
+                btnSideView.classList.add('active-view');
+                btnFrontView.classList.remove('active-view');
+            }
+        };
+
+        window.toggleFlip = function(axis) {
+            if (axis === 'x') {
+                flipX = flipX === 1 ? -1 : 1;
+                if(flipX === -1) btnFlipH.classList.add('active-view');
+                else btnFlipH.classList.remove('active-view');
+            }
+            if (axis === 'y') {
+                flipY = flipY === 1 ? -1 : 1;
+                if(flipY === -1) btnFlipV.classList.add('active-view');
+                else btnFlipV.classList.remove('active-view');
+            }
+            yogaManWrapper.style.transform = `scale(${flipX}, ${flipY})`;
+        };
+
+        // Hotspot Overlay Logic
+        window.showDetails = function(part, event) {
+            const pose = POSES[activeIndex];
+            if (!pose || !pose.details || !pose.details[part]) return;
+
+            zoomOverlayTitle.textContent = part.charAt(0).toUpperCase() + part.slice(1);
+            zoomOverlayText.textContent = pose.details[part];
+
+            // Get screen coordinates
+            const x = event.clientX;
+            const y = event.clientY;
+
+            zoomOverlay.style.left = `${x + 15}px`;
+            zoomOverlay.style.top = `${y + 15}px`;
+            zoomOverlay.classList.add('visible');
+        };
+
+        window.hideDetails = function() {
+            zoomOverlay.classList.remove('visible');
+        };
+
+        // Follow mouse while hovering
+        svgContainer.addEventListener('mousemove', (e) => {
+            if (zoomOverlay.classList.contains('visible')) {
+                zoomOverlay.style.left = `${e.clientX + 15}px`;
+                zoomOverlay.style.top = `${e.clientY + 15}px`;
+            }
+        });
 
         // Dynamic Sequences & Theming
         let customSequenceCounter = 1;
