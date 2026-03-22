@@ -133,6 +133,18 @@ permalink: /yoga.html
             text-transform: uppercase;
         }
 
+        .sanskrit-name {
+            display: block;
+            margin-top: 4px;
+            font-size: 1.3rem;
+            font-weight: 400;
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            color: var(--teal-color);
+            text-transform: none;
+            letter-spacing: normal;
+        }
+
         .pose-desc {
             color: var(--muted-color);
             font-size: 1.1rem;
@@ -1337,7 +1349,17 @@ permalink: /yoga.html
             cards[activeIndex].classList.add('active');
 
             const pose = POSES[index];
-            nameEl.textContent = pose.name;
+            
+            // Format name to separate sanskrit
+            const match = pose.name.match(/(.+?)\s*\((.+?)\)$/);
+            if (match) {
+                const displayName = match[1].trim();
+                const sanskritName = match[2].trim();
+                nameEl.innerHTML = `${displayName}<br><span class="sanskrit-name">${sanskritName}</span>`;
+            } else {
+                nameEl.textContent = pose.name;
+            }
+
             descEl.textContent = pose.desc;
             applyVars(pose.vars);
             
