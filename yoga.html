@@ -393,6 +393,41 @@ permalink: /yoga.html
             line-height: 1.2;
             white-space: nowrap;
         }
+        
+        /* Fuzzy Finder */
+        .fuzzy-finder {
+            position: fixed;
+            bottom: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 12px 24px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+        .fuzzy-finder i { 
+            color: var(--muted-color); 
+            font-size: 1.2rem;
+        }
+        .fuzzy-finder input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            outline: none;
+            width: 300px;
+            font-family: monospace;
+        }
+        .fuzzy-finder input::placeholder {
+            color: rgba(255,255,255,0.3);
+        }
 
         /* Debug Tools */
         .debug-panel {
@@ -452,11 +487,19 @@ permalink: /yoga.html
             </a>
         </div>
         <div class="header-right">
+            <button id="fullscreenBtn" class="icon-btn" title="Toggle Fullscreen (f)" onclick="toggleFullScreen()">
+                <i class="bi bi-arrows-fullscreen"></i>
+            </button>
             <button id="debugBtn" class="icon-btn" title="Toggle Editor">
                 <i class="bi bi-sliders"></i>
             </button>
         </div>
     </header>
+    
+    <div id="fuzzyFinder" class="fuzzy-finder" style="display: none;">
+        <i class="bi bi-search"></i>
+        <input type="text" id="fuzzyInput" placeholder="Find a pose (Cmd+F)..." autocomplete="off">
+    </div>
 
     <svg width="0" height="0" style="display:none;">
         <defs>
@@ -1155,6 +1198,7 @@ permalink: /yoga.html
             document.getElementById('seqColorPicker').value = seqData.color;
             
             stopSequence();
+            playIndex = 0;
             renderTimeline();
             renderSeqDots();
             updateAppTheme();
@@ -1263,6 +1307,7 @@ permalink: /yoga.html
         function clearSequence() {
             sequence = [];
             stopSequence();
+            playIndex = 0;
             saveTimelineToCurrentSequence();
             renderTimeline();
         }
@@ -1318,18 +1363,16 @@ permalink: /yoga.html
 
         function startSequence() {
             const icon = document.getElementById('playIcon');
-            icon.className = 'bi bi-pause-fill';
-            playIndex = 0;
+            if (icon) icon.className = 'bi bi-pause-fill';
             playNextPose();
             playInterval = setInterval(playNextPose, 3500); 
         }
 
         function stopSequence() {
             const icon = document.getElementById('playIcon');
-            icon.className = 'bi bi-play-fill';
+            if (icon) icon.className = 'bi bi-play-fill';
             clearInterval(playInterval);
             playInterval = null;
-            updateTimelineHighlight(-1);
         }
 
         function playNextPose() {
@@ -1401,6 +1444,64 @@ permalink: /yoga.html
         window.exportPose = function() {
             document.getElementById('exportArea').value = JSON.stringify(currentVars, null, 2);
         };
+
+        // Keyboard Shortcuts & Fuzzy Finder
+        window.addEventListener('keydown', (e) => {
+            // Fullscreen 'f'
+            if (e.key === 'f' && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                toggleFullScreen();
+            }
+            
+            // Cmd+F or Ctrl+F Fuzzy Finder
+            if ((e.metaKey || e.ctrlKey) && e.key === 'f') {
+                e.preventDefault();
+                const ff = document.getElementById('fuzzyFinder');
+                ff.style.display = 'flex';
+                document.getElementById('fuzzyInput').focus();
+            }
+
+            // Spacebar Play/Pause/Skip
+            if (e.key === ' ' && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                togglePlaySequence();
+            }
+            
+            // Escape to close fuzzy finder
+            if (e.key === 'Escape') {
+                document.getElementById('fuzzyFinder').style.display = 'none';
+                document.getElementById('fuzzyInput').value = '';
+                filterPoses('');
+                document.getElementById('fuzzyInput').blur();
+            }
+        });
+
+        window.toggleFullScreen = function() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log("Error attempting to enable fullscreen:", err.message);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        };
+
+        document.getElementById('fuzzyInput').addEventListener('input', (e) => filterPoses(e.target.value));
+
+        function filterPoses(query) {
+            query = query.toLowerCase();
+            const cards = document.querySelectorAll('#poseNav .pose-card');
+            cards.forEach(card => {
+                const name = card.querySelector('.pose-card-name').textContent.toLowerCase();
+                if (name.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
 
         // Init
         loadPose(0);
