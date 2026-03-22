@@ -797,8 +797,12 @@ permalink: /yoga.html
         }
 
         // Drag and Drop Logic
-        let sequence = [];
+        // Pre-load Surya Namaskar A (Sun Salutation) as the default sequence
+        let sequence = [0, 1, 2, 3, 4, 5, 7, 3, 2, 1, 0];
         let draggedTimelineIndex = null;
+        
+        // Initial Render
+        setTimeout(() => renderTimeline(), 0);
 
         function allowDrop(ev) {
             ev.preventDefault();
