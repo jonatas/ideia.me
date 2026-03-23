@@ -4,6 +4,7 @@ title: "The Validation Model"
 categories: ['personal', 'productivity', 'career']
 description: "How a simple time tracker changed my relationship with work by giving my brain the validation it was unconsciously looking for."
 image: /images/the-validation-model-stopwatch-split.png
+mermaid: true
 ---
 
 Today I'm thinking how interesting it's been to be freelancing again. Well, I have a
@@ -23,6 +24,20 @@ when I'm unsatisfied or use distraction to control my anxiety.
 But now I'm looking to the validation model that my brain is offering me. Yes, I
 see myself more validated by the time as time is the first commitment expected
 when you have a job. Later come, focus, deliveries and goal achievements.
+
+{% mermaid %}
+flowchart TD
+    A[Work Performed] --> B{Tracked?}
+    B -- Yes --> C[Visible Metrics]
+    C --> D[Brain sees \"I did my part\"]
+    D --> E[Relief & Permission to Rest]
+    E --> F[Present in Personal Life]
+
+    B -- No --> G[Invisible Effort]
+    G --> H[Brain feels \"Did I do enough?\"]
+    H --> I[Anxiety & Guilt]
+    I --> J[Distracted in Personal Life]
+{% endmermaid %}
 
 I feel I work purely disconnected to the work when I leave the computer. I know
 I'm not tracking my time. This is a very important factor on my brain. If I'm
