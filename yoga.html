@@ -10,6 +10,7 @@ permalink: /yoga.html
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yoga Poses</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.js"></script>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -105,6 +106,47 @@ permalink: /yoga.html
             max-height: 100%;
             width: 100%;
             filter: drop-shadow(0 0 20px rgba(13, 148, 136, 0.2));
+            transition: transform 0.3s;
+        }
+
+        @keyframes globalBreath {
+            0%, 100% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(13, 148, 136, 0.2));
+            }
+            33%, 50% {
+                transform: scale(1.04);
+                filter: drop-shadow(0 0 60px rgba(13, 148, 136, 0.8));
+            }
+            83% {
+                transform: scale(1);
+                filter: drop-shadow(0 0 20px rgba(13, 148, 136, 0.2));
+            }
+        }
+
+        @keyframes iconBreath {
+            0%, 100% {
+                transform: scale(1);
+            }
+            33%, 50% {
+                transform: scale(1.25);
+                color: var(--accent-color);
+                text-shadow: 0 0 10px rgba(13, 148, 136, 0.5);
+            }
+            83% {
+                transform: scale(1);
+            }
+        }
+
+        body.breathing-sync .yoga-man {
+            animation: globalBreath var(--breath-anim-duration, 6s) ease-in-out infinite;
+            transform-origin: center center;
+        }
+
+        body.breathing-sync #breathBtn i {
+            animation: iconBreath var(--breath-anim-duration, 6s) ease-in-out infinite;
+            display: inline-block;
+            transform-origin: center center;
         }
 
         /* SVG Styles */
@@ -302,7 +344,38 @@ permalink: /yoga.html
             min-width: 60px;
             position: relative;
             user-select: none;
+            border: 2px solid transparent; /* base border for phase coloring */
+            transition: min-width 0.3s ease;
         }
+
+        .timeline-card.inhale {
+            border-color: rgba(13, 148, 136, 0.5); /* Teal */
+        }
+        .timeline-card.exhale {
+            border-color: rgba(148, 163, 184, 0.4); /* Slate */
+        }
+
+        .breath-badge {
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            background: var(--bg-color);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            border-radius: 12px;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .breath-badge:hover {
+            background: var(--accent-color);
+            color: var(--bg-color);
+        }
+
 
         .timeline-card.playing {
             box-shadow: 0 0 0 2px var(--accent-color);
@@ -693,6 +766,9 @@ permalink: /yoga.html
             <button id="fullscreenBtn" class="icon-btn" title="Toggle Fullscreen (f)" onclick="toggleFullScreen()">
                 <i class="bi bi-arrows-fullscreen"></i>
             </button>
+            <button id="breathBtn" class="icon-btn" title="Toggle Breathing Sync (b)" onclick="toggleBreathing()">
+                <i class="bi bi-lungs"></i>
+            </button>
             <button id="debugBtn" class="icon-btn" title="Toggle Editor">
                 <i class="bi bi-sliders"></i>
             </button>
@@ -823,7 +899,7 @@ permalink: /yoga.html
                         <input type="checkbox" id="suggestFlowsToggle" onchange="updateFlowSuggestions()" checked>
                         Suggest Flows
                     </label>
-                    <button id="exportSeqBtn" class="icon-btn" title="Export Video" onclick="exportSequence()"><i class="bi bi-camera-reels"></i></button>
+                    <button id="exportSeqBtn" class="icon-btn" title="Export GIF" onclick="exportSequence()"><i class="bi bi-filetype-gif"></i></button>
                     <button id="shareSeqBtn" class="icon-btn" title="Share Sequence" onclick="shareSequence()"><i class="bi bi-share"></i></button>
                     <button id="playSeqBtn" class="icon-btn" title="Play Sequence" onclick="togglePlaySequence()"><i class="bi bi-play-fill" id="playIcon"></i></button>
                     <button id="clearSeqBtn" class="icon-btn" title="Clear Sequence" onclick="clearSequence()"><i class="bi bi-trash"></i></button>
@@ -1557,7 +1633,7 @@ permalink: /yoga.html
                 desc: 'Balance on one leg with the same hand on the floor, lifting the other leg parallel to the ground and extending the top arm up.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 30,
-                    '--ub-rot': 90, '--head-rot': -45,
+                    '--ub-rot': 90, '--head-rot': 0,
                     '--la-rot': 90, '--le-rot': 0,
                     '--ra-rot': -90, '--re-rot': 0,
                     '--ll-rot': 90, '--lk-rot': 0,
@@ -1569,7 +1645,7 @@ permalink: /yoga.html
                 desc: 'Balance on one leg with the torso and raised leg parallel to the floor, arms extended forward.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 10,
-                    '--ub-rot': 90, '--head-rot': -45,
+                    '--ub-rot': 90, '--head-rot': 0,
                     '--la-rot': -180, '--le-rot': 0,
                     '--ra-rot': -180, '--re-rot': 0,
                     '--ll-rot': 90, '--lk-rot': 0,
@@ -1581,7 +1657,7 @@ permalink: /yoga.html
                 desc: 'Lunge with the front knee bent, back leg straight with heel lifted, and arms reaching straight up.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 40,
-                    '--ub-rot': 0, '--head-rot': -20,
+                    '--ub-rot': 0, '--head-rot': 0,
                     '--la-rot': -180, '--le-rot': 0,
                     '--ra-rot': -180, '--re-rot': 0,
                     '--ll-rot': -70, '--lk-rot': 70,
@@ -1593,7 +1669,7 @@ permalink: /yoga.html
                 desc: 'From Warrior II, reach the front arm up and back while the back hand rests lightly on the back leg.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 88,
-                    '--ub-rot': -20, '--head-rot': -30,
+                    '--ub-rot': -20, '--head-rot': -10,
                     '--la-rot': 65, '--le-rot': 0,
                     '--ra-rot': 160, '--re-rot': 0,
                     '--ll-rot': 60, '--lk-rot': 0,
@@ -1605,7 +1681,7 @@ permalink: /yoga.html
                 desc: 'Balance on your hands with your knees resting on your upper arms and feet lifted floor.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 110,
-                    '--ub-rot': 70, '--head-rot': -40,
+                    '--ub-rot': 70, '--head-rot': -20,
                     '--la-rot': -70, '--le-rot': 0,
                     '--ra-rot': -70, '--re-rot': 0,
                     '--ll-rot': -80, '--lk-rot': 160,
@@ -1616,10 +1692,10 @@ permalink: /yoga.html
                 id: 'ustrasana', name: 'Camel Pose (Ustrasana)', flow: ['balasana'],
                 desc: 'Kneel and lean back, arching your spine to reach your hands to your heels, pushing your hips forward.',
                 vars: {
-                    '--fig-rot': 0, '--fig-x': -40, '--fig-y': 100,
-                    '--ub-rot': -40, '--head-rot': -40,
-                    '--la-rot': 85, '--le-rot': 0,
-                    '--ra-rot': 85, '--re-rot': 0,
+                    '--fig-rot': 0, '--fig-x': 40, '--fig-y': 80,
+                    '--ub-rot': -70, '--head-rot': 0,
+                    '--la-rot': 65, '--le-rot': 0,
+                    '--ra-rot': 65, '--re-rot': 0,
                     '--ll-rot': 0, '--lk-rot': 90,
                     '--rl-rot': 0, '--rk-rot': 90
                 }
@@ -1629,7 +1705,7 @@ permalink: /yoga.html
                 desc: 'Balance on one foot, reaching the opposite arm forward while grabbing the lifted back foot with the other hand.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 10,
-                    '--ub-rot': 40, '--head-rot': -20,
+                    '--ub-rot': 40, '--head-rot': 0,
                     '--la-rot': 70, '--le-rot': 0,
                     '--ra-rot': -130, '--re-rot': 0,
                     '--ll-rot': 130, '--lk-rot': 80,
@@ -1641,7 +1717,7 @@ permalink: /yoga.html
                 desc: 'Lie on your belly, bend your knees, reach back to grab your ankles, and lift your chest and thighs off the floor.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': -40, '--fig-y': 170,
-                    '--ub-rot': 40, '--head-rot': -30,
+                    '--ub-rot': 40, '--head-rot': 0,
                     '--la-rot': 80, '--le-rot': 0,
                     '--ra-rot': 80, '--re-rot': 0,
                     '--ll-rot': 130, '--lk-rot': 60,
@@ -1653,7 +1729,7 @@ permalink: /yoga.html
                 desc: 'Lie on your belly and lift your chest, arms, and legs off the floor, reaching arms back.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': -40, '--fig-y': 170,
-                    '--ub-rot': 30, '--head-rot': -20,
+                    '--ub-rot': 30, '--head-rot': 0,
                     '--la-rot': 60, '--le-rot': 0,
                     '--ra-rot': 60, '--re-rot': 0,
                     '--ll-rot': 100, '--lk-rot': 0,
@@ -1664,12 +1740,12 @@ permalink: /yoga.html
                 id: 'setu-bandha-sarvangasana', name: 'Bridge Pose (Setu Bandha Sarvangasana)', flow: ['urdhva-dhanurasana'],
                 desc: 'Lie on your back, bend your knees, press feet into the floor, and lift your hips high, clasping hands under your back.',
                 vars: {
-                    '--fig-rot': -90, '--fig-x': 50, '--fig-y': -80,
-                    '--ub-rot': 40, '--head-rot': -40,
-                    '--la-rot': 140, '--le-rot': 0,
-                    '--ra-rot': 140, '--re-rot': 0,
-                    '--ll-rot': 40, '--lk-rot': 90,
-                    '--rl-rot': 40, '--rk-rot': 90
+                    '--fig-rot': 0, '--fig-x': 0, '--fig-y': 80,
+                    '--ub-rot': -135, '--head-rot': 0,
+                    '--la-rot': 45, '--le-rot': 0,
+                    '--ra-rot': 45, '--re-rot': 0,
+                    '--ll-rot': -90, '--lk-rot': 90,
+                    '--rl-rot': -90, '--rk-rot': 90
                 }
             }
         ];
@@ -1708,6 +1784,10 @@ permalink: /yoga.html
         let currentVars = {};
         let activeIndex = 0;
         let currentView = 'side';
+
+        let settings = {
+            breathDurationMs: 6000
+        };
 
         // Generate Styles for Variables
         function getVarStyles(v) {
@@ -1838,6 +1918,33 @@ permalink: /yoga.html
             }
         };
 
+        function calculatePoseDistance(pose1, pose2) {
+            const v1 = pose1.vars || {};
+            const v2 = pose2.vars || {};
+            const keys = ['--fig-rot', '--fig-x', '--fig-y', '--ub-rot', '--head-rot', '--la-rot', '--le-rot', '--ra-rot', '--re-rot', '--ll-rot', '--lk-rot', '--rl-rot', '--rk-rot'];
+            
+            let sumSq = 0;
+            keys.forEach(k => {
+                let val1 = parseFloat(v1[k]) || 0;
+                let val2 = parseFloat(v2[k]) || 0;
+                
+                // Weight torso and legs more heavily for structural similarity
+                let weight = 1;
+                if (k.includes('fig-rot') || k.includes('ub-rot') || k.includes('ll-rot') || k.includes('rl-rot')) weight = 2;
+                if (k.includes('x') || k.includes('y')) weight = 0.5; // X/Y position matters less than angles
+                
+                let diff = val1 - val2;
+                
+                if (k.includes('rot')) {
+                    while (diff > 180) diff -= 360;
+                    while (diff < -180) diff += 360;
+                }
+                
+                sumSq += (diff * weight) ** 2;
+            });
+            return Math.sqrt(sumSq);
+        }
+
         function renderFlowSuggestions(poseId) {
             const container = document.getElementById('flowSuggestions');
             if (!container) return;
@@ -1855,31 +1962,54 @@ permalink: /yoga.html
             }
 
             const pose = POSES.find(p => p.id === poseId);
-            if (!pose || !pose.flow || pose.flow.length === 0) {
+            if (!pose) {
+                container.classList.remove('active');
+                return;
+            }
+
+            let flowIds = [...(pose.flow || [])];
+            let autoSuggestedIds = [];
+
+            // Expand or fallback: guarantee at least 4 suggestions via vector search 
+            if (flowIds.length < 4) {
+                const distances = POSES.map(p => ({
+                    id: p.id,
+                    distance: calculatePoseDistance(pose, p)
+                })).filter(d => d.id !== poseId && !flowIds.includes(d.id));
+                
+                distances.sort((a, b) => a.distance - b.distance);
+                
+                const needed = 4 - flowIds.length;
+                autoSuggestedIds = distances.slice(0, needed).map(d => d.id);
+                flowIds = flowIds.concat(autoSuggestedIds);
+            }
+
+            if (flowIds.length === 0) {
                 container.classList.remove('active');
                 return;
             }
 
             container.classList.add('active');
             
-            pose.flow.forEach(flowId => {
+            flowIds.forEach(flowId => {
                 const fPose = POSES.find(p => p.id === flowId);
                 if (!fPose) return;
 
+                const isAuto = autoSuggestedIds.includes(flowId);
                 const btn = document.createElement('button');
                 btn.className = 'flow-card';
                 btn.dataset.id = flowId;
-                btn.innerHTML = `<i class="bi bi-bezier2"></i> <span>${fPose.name.split(' (')[0]}</span>`;
-                btn.title = `Flow into ${fPose.name}`;
+                
+                const icon = isAuto ? '<i class="bi bi-stars"></i>' : '<i class="bi bi-bezier2"></i>';
+                btn.innerHTML = `${icon} <span>${fPose.name.split(' (')[0]}</span>`;
+                btn.title = isAuto ? `Similar pose to ${fPose.name}` : `Flow into ${fPose.name}`;
+                
                 btn.onclick = () => {
                     const fIndex = POSES.indexOf(fPose);
-                    // Add to timeline automatically for easy sequence building
                     document.getElementById('timelinePlaceholder').style.display = 'none';
-                    sequence.push(flowId);
+                    sequence.push({ id: flowId, breaths: 1 });
                     saveTimelineToCurrentSequence();
                     renderTimeline();
-                    
-                    // Load the pose
                     loadPose(fIndex);
                 };
                 container.appendChild(btn);
@@ -1991,7 +2121,7 @@ permalink: /yoga.html
         function loadMacroSequence(key) {
             activeSequenceKey = key;
             const seqData = mySequences[key];
-            sequence = [...seqData.poses];
+            sequence = seqData.poses.map(p => typeof p === 'string' ? { id: p, breaths: 1 } : { ...p });
             
             document.getElementById('seqNameDisplay').innerText = seqData.name;
             document.getElementById('seqNameInput').value = seqData.name;
@@ -2007,7 +2137,7 @@ permalink: /yoga.html
 
         function saveTimelineToCurrentSequence() {
             if (mySequences[activeSequenceKey]) {
-                mySequences[activeSequenceKey].poses = [...sequence];
+                mySequences[activeSequenceKey].poses = sequence.map(p => ({ ...p }));
                 updateSaveButtonState();
             }
         }
@@ -2069,90 +2199,159 @@ permalink: /yoga.html
         
         async function exportSequence() {
             if (sequence.length === 0) return alert('Add poses to the sequence first!');
-            alert("Recording started! Please wait without interacting. The sequence will play once and then prompt you to download the video.");
             
             const btn = document.getElementById('exportSeqBtn');
             const originalHtml = btn.innerHTML;
             btn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
             btn.style.color = '#ef4444';
             
-            const canvas = document.createElement('canvas');
-            canvas.width = 800; canvas.height = 600;
-            const ctx = canvas.getContext('2d');
-            
-            ctx.fillStyle = '#0f172a';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            const stream = canvas.captureStream(30);
-            let mimeType = 'video/webm; codecs=vp9';
-            if (!MediaRecorder.isTypeSupported(mimeType)) {
-                mimeType = 'video/webm';
-                if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = 'video/mp4';
-            }
-            
-            const mediaRecorder = new MediaRecorder(stream, { mimeType: mimeType });
-            const chunks = [];
-            mediaRecorder.ondataavailable = e => chunks.push(e.data);
-            
-            let recordingComplete = false;
-            mediaRecorder.onstop = () => {
-                recordingComplete = true;
-                const blob = new Blob(chunks, { type: mimeType });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `sequence.webm`;
-                a.click();
-                URL.revokeObjectURL(url);
+            try {
+                // Fetch worker locally to avoid cross-origin taint
+                const res = await fetch('https://cdnjs.cloudflare.com/ajax/libs/gif.js/0.2.0/gif.worker.js');
+                const text = await res.text();
+                const workerBlob = new Blob([text], { type: 'application/javascript' });
+                const workerScriptUrl = URL.createObjectURL(workerBlob);
+
+                const gif = new GIF({
+                    workers: 4,
+                    quality: 10,
+                    workerScript: workerScriptUrl,
+                    width: 800,
+                    height: 600,
+                    background: '#0f172a'
+                });
+
+                const canvas = document.createElement('canvas');
+                canvas.width = 800; canvas.height = 600;
+                const ctx = canvas.getContext('2d');
                 
+                const svgNode = document.getElementById('yogaManSvg');
+                
+                const renderFrameToCanvas = (vars, view) => {
+                    return new Promise((resolve) => {
+                        const clone = svgNode.cloneNode(true);
+                        
+                        // Ensure xmlns namespace is defined
+                        if (!clone.getAttribute('xmlns')) {
+                            clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+                        }
+
+                        // The external <defs> must be embedded inside this SVG so it can render headlessly
+                        const defs = document.querySelector('svg > defs');
+                        if (defs) {
+                            clone.insertBefore(defs.cloneNode(true), clone.firstChild);
+                        }
+
+                        // Missing CSS classes must be explicitly inserted so the frame draws with color
+                        const styleNode = document.createElement('style');
+                        styleNode.textContent = `
+                            .bone-front { stroke: #F8FAFC; stroke-width: 14; stroke-linecap: round; stroke-linejoin: round; }
+                            .bone-back { stroke: #94A3B8; stroke-width: 14; stroke-linecap: round; stroke-linejoin: round; }
+                            .head { fill: #F8FAFC; }
+                            .joint-group { transform-box: view-box; }
+                        `;
+                        clone.insertBefore(styleNode, clone.firstChild);
+
+                        const mainUse = clone.querySelector('#mainUse');
+                        if (mainUse) {
+                            mainUse.setAttribute('href', view === 'front' ? '#stickman-front' : '#stickman');
+                        }
+                        
+                        const jointGroups = clone.querySelectorAll('.joint-group, .yoga-man, .yoga-man-wrapper');
+                        jointGroups.forEach(g => {
+                            g.style.transition = 'none'; // Ensure instantly applied for snapshots
+                        });
+                        Object.keys(vars).forEach(k => {
+                            const val = (k.includes('opacity')) ? `${vars[k]}` : (k.includes('rot') ? `${vars[k]}deg` : `${vars[k]}px`);
+                            clone.style.setProperty(k, val);
+                        });
+                        
+                        // Force styles into the string
+                        const xml = new XMLSerializer().serializeToString(clone);
+                        const svg64 = btoa(unescape(encodeURIComponent(xml)));
+                        const image64 = 'data:image/svg+xml;base64,' + svg64;
+                        const img = new Image();
+                        img.onload = img.onerror = () => {
+                            ctx.fillStyle = '#0f172a';
+                            ctx.fillRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                            resolve();
+                        };
+                        img.src = image64;
+                    });
+                };
+
+                const fps = 20;
+                let lastVars = null;
+                let lastView = 'side';
+
+                for(let i=0; i<sequence.length; i++) {
+                    const poseId = sequence[i].id;
+                    const p = POSES.find(pose => pose.id === poseId);
+                    const targetView = p.view === 'front' || p.varsFront ? 'front' : 'side';
+                    const targetVars = targetView === 'front' ? p.varsFront : p.vars;
+                    
+                    // Fixed fast timing for GIF: 1 second per pose (800ms transition + 200ms hold)
+                    const transitionDuration = 800;
+                    const holdDuration = 200;
+                    
+                    if (lastVars) {
+                        const transitionFrames = Math.floor((transitionDuration / 1000) * fps);
+                        for (let f = 1; f <= transitionFrames; f++) {
+                            const progress = f / transitionFrames;
+                            const ease = 1 - Math.pow(1 - progress, 3); // cubic ease out
+                            
+                            const interpVars = {};
+                            Object.keys(targetVars).forEach(k => {
+                                const startVal = (lastVars[k] !== undefined && lastView === targetView) ? parseFloat(lastVars[k]) : parseFloat(targetVars[k]);
+                                const endVal = parseFloat(targetVars[k]);
+                                
+                                let diff = endVal - startVal;
+                                if (k.includes('rot')) {
+                                    while (diff > 180) diff -= 360;
+                                    while (diff < -180) diff += 360;
+                                }
+                                interpVars[k] = startVal + (diff * ease);
+                            });
+                            
+                            await renderFrameToCanvas(interpVars, targetView);
+                            gif.addFrame(ctx, {copy: true, delay: 1000 / fps});
+                        }
+                    } else {
+                        await renderFrameToCanvas(targetVars, targetView);
+                    }
+                    
+                    const holdFrames = Math.floor((holdDuration / 1000) * fps);
+                    if (holdFrames > 0) {
+                        await renderFrameToCanvas(targetVars, targetView);
+                        gif.addFrame(ctx, {copy: true, delay: holdDuration}); 
+                    }
+                    
+                    lastVars = targetVars;
+                    lastView = targetView;
+                }
+
+                gif.on('finished', function(blob) {
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `sequence.gif`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    
+                    btn.innerHTML = originalHtml;
+                    btn.style.color = '';
+                    URL.revokeObjectURL(workerScriptUrl);
+                });
+
+                gif.render();
+                
+            } catch(e) {
+                console.error(e);
+                alert("Error generating GIF. Make sure you have a working internet connection.");
                 btn.innerHTML = originalHtml;
                 btn.style.color = '';
-            };
-            
-            mediaRecorder.start();
-            stopSequence();
-            
-            const svgNode = document.getElementById('yogaManSvg');
-            const applyVarsToSvgNode = () => {
-                const clone = svgNode.cloneNode(true);
-                Object.keys(currentVars).forEach(k => {
-                    const val = (k.includes('opacity')) ? `${currentVars[k]}` : (k.includes('rot') ? `${currentVars[k]}deg` : `${currentVars[k]}px`);
-                    clone.style.setProperty(k, val);
-                });
-                return clone;
-            };
-
-            const recordFrame = () => {
-                if (mediaRecorder.state !== 'recording') return;
-                try {
-                    const clone = applyVarsToSvgNode();
-                    const xml = new XMLSerializer().serializeToString(clone);
-                    const svg64 = btoa(unescape(encodeURIComponent(xml)));
-                    const image64 = 'data:image/svg+xml;base64,' + svg64;
-                    const img = new Image();
-                    img.onload = () => {
-                        ctx.fillStyle = '#0f172a';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    };
-                    img.src = image64;
-                } catch(e) { console.error('frame err', e); }
-                
-                if (!recordingComplete) requestAnimationFrame(recordFrame);
-            };
-            
-            requestAnimationFrame(recordFrame);
-            
-            playIndex = 0;
-            for(let i=0; i<sequence.length; i++) {
-                loadPose(POSES.indexOf(POSES.find(p => p.id === sequence[i])));
-                updateTimelineHighlight(i);
-                let transitionTime = i === 0 ? 500 : 1500;
-                await new Promise(r => setTimeout(r, transitionTime + 1500)); 
             }
-            
-            playIndex = 0;
-            mediaRecorder.stop();
         }
         
         // Initial Render
@@ -2214,7 +2413,7 @@ permalink: /yoga.html
 
             if (pId !== "") {
                 // Add new from library
-                sequence.push(pId);
+                sequence.push({ id: pId, breaths: 1 });
                 saveTimelineToCurrentSequence();
                 renderTimeline();
             } else if (tIndex !== "") {
@@ -2242,6 +2441,15 @@ permalink: /yoga.html
             renderTimeline();
         }
 
+        window.cycleBreaths = function(ev, tIndex) {
+            ev.stopPropagation();
+            let b = sequence[tIndex].breaths || 1;
+            b = b >= 3 ? 1 : b + 1;
+            sequence[tIndex].breaths = b;
+            saveTimelineToCurrentSequence();
+            renderTimeline();
+        };
+
         function renderTimeline() {
             const track = document.getElementById('timelineTrack');
             const ph = document.getElementById('timelinePlaceholder');
@@ -2255,18 +2463,30 @@ permalink: /yoga.html
             }
             ph.style.display = 'none';
 
-            sequence.forEach((poseId, tIndex) => {
+            sequence.forEach((poseItem, tIndex) => {
+                const poseId = poseItem.id;
+                const breaths = poseItem.breaths || 1;
                 const p = POSES.find(pose => pose.id === poseId);
                 if (!p) return; // fail safe
                 const poseIdx = POSES.indexOf(p);
                 
                 const card = document.createElement('div');
                 card.className = 'timeline-card';
+                
+                // Visual Indicator for Phase
+                const phase = tIndex % 2 === 0 ? 'inhale' : 'exhale';
+                card.classList.add(phase);
+                card.title = phase === 'inhale' ? 'Inhale phase' : 'Exhale phase';
+                
+                // Size Timeline Graph visually
+                card.style.minWidth = (60 * breaths) + 'px';
+
                 card.draggable = true;
                 card.addEventListener('dragstart', (e) => dragTimeline(e, tIndex));
                 card.onclick = () => loadPose(poseIdx);
 
                 card.innerHTML = `
+                    <div class="breath-badge" onclick="cycleBreaths(event, ${tIndex})" title="Click to change breaths">${breaths}<i class="bi bi-lungs"></i></div>
                     <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" class="mini-pose" style="${getVarStyles(p.vars)}">
                         <line x1="-500" y1="368" x2="1000" y2="368" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
                         <use href="#stickman" />
@@ -2280,11 +2500,11 @@ permalink: /yoga.html
         }
 
         // Auto-play Engine
-        let playInterval = null;
+        let playTimeout = null;
         let playIndex = 0;
 
         function togglePlaySequence() {
-            if (playInterval) {
+            if (playTimeout) {
                 stopSequence();
             } else {
                 if (sequence.length === 0) return;
@@ -2296,14 +2516,13 @@ permalink: /yoga.html
             const icon = document.getElementById('playIcon');
             if (icon) icon.className = 'bi bi-pause-fill';
             playNextPose();
-            playInterval = setInterval(playNextPose, 3500); 
         }
 
         function stopSequence() {
             const icon = document.getElementById('playIcon');
             if (icon) icon.className = 'bi bi-play-fill';
-            clearInterval(playInterval);
-            playInterval = null;
+            if (playTimeout) clearTimeout(playTimeout);
+            playTimeout = null;
         }
 
         function playNextPose() {
@@ -2313,15 +2532,18 @@ permalink: /yoga.html
             }
             if (playIndex >= sequence.length) playIndex = 0; // loop back to start
             
-            const poseId = sequence[playIndex];
-            const p = POSES.find(pose => pose.id === poseId);
+            const poseItem = sequence[playIndex];
+            const p = POSES.find(pose => pose.id === poseItem.id);
             if (p) {
                 const poseIdx = POSES.indexOf(p);
                 loadPose(poseIdx);
                 updateTimelineHighlight(playIndex);
             }
             
+            const duration = (poseItem.breaths || 1) * settings.breathDurationMs;
+            
             playIndex++;
+            playTimeout = setTimeout(playNextPose, duration);
         }
 
         function updateTimelineHighlight(tIndex) {
@@ -2335,6 +2557,25 @@ permalink: /yoga.html
         // Debug Setup
         debugBtn.addEventListener('click', () => {
             debugPanel.classList.toggle('active');
+        });
+
+        // Add Breath Duration Setting
+        const breathRow = document.createElement('div');
+        breathRow.className = 'debug-row';
+        breathRow.style.marginTop = '20px';
+        breathRow.style.paddingTop = '10px';
+        breathRow.style.borderTop = '1px solid rgba(255,255,255,0.1)';
+        breathRow.innerHTML = `
+            <label style="width: auto;flex: 1;">Breath Cycle (s)</label>
+            <input type="number" id="breathSettingsInput" min="1" max="10" value="6" style="width: 50px;">
+        `;
+        controls.appendChild(breathRow);
+        document.getElementById('breathSettingsInput').addEventListener('input', (e) => {
+            settings.breathDurationMs = parseInt(e.target.value) * 1000;
+            // Also update the global animation duration
+            const duration = e.target.value + 's';
+            document.documentElement.style.setProperty('--breath-anim-duration', duration);
+            // Wait, we used hardcoded 6s in CSS currently.
         });
 
         varsDef.forEach(v => {
@@ -2392,6 +2633,12 @@ permalink: /yoga.html
                 document.getElementById('fuzzyInput').focus();
             }
 
+            // 'b' toggles breathing sync
+            if (e.key === 'b' && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                toggleBreathing();
+            }
+
             // Spacebar Play/Pause/Skip
             if (e.key === ' ' && document.activeElement.tagName !== 'INPUT') {
                 e.preventDefault();
@@ -2420,6 +2667,23 @@ permalink: /yoga.html
                 if (document.exitFullscreen) {
                     document.exitFullscreen();
                 }
+            }
+        };
+
+        window.toggleBreathing = function() {
+            document.body.classList.toggle('breathing-sync');
+            const btn = document.getElementById('breathBtn');
+            if (document.body.classList.contains('breathing-sync')) {
+                btn.style.color = 'var(--accent-color)';
+            } else {
+                btn.style.color = '';
+            }
+            if (typeof gtag === 'function') {
+                gtag('event', 'interaction', {
+                    event_category: 'yoga_app',
+                    event_label: document.body.classList.contains('breathing-sync') ? 'on' : 'off',
+                    action: 'toggle_breathing'
+                });
             }
         };
 
@@ -2475,6 +2739,7 @@ permalink: /yoga.html
             const trackedButtons = {
                 'saveAppBtn': 'Save App',
                 'fullscreenBtn': 'Toggle Fullscreen',
+                'breathBtn': 'Toggle Breathing',
                 'debugBtn': 'Toggle Editor',
                 'playSeqBtn': 'Play Sequence',
                 'clearSeqBtn': 'Clear Sequence'
