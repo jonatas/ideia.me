@@ -2,6 +2,7 @@
 layout: post
 categories: [career]
 title: First week at Hubstaff
+mermaid: true
 ---
 
 # My first week at Hubstaff
@@ -37,6 +38,13 @@ important.
 
 There are insights related to how do you use your day in the app and they all
 help you to grow and increase your focus on your role.
+
+```mermaid
+flowchart LR
+    Time[Tracked Time] --> Core[Core Work]
+    Time --> NonCore[Non-core Work]
+    Time --> Distractions[Distraction]
+```
 
 ### Core work vs non-core vs distraction
 

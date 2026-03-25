@@ -5,6 +5,7 @@ categories: ['philosophy', 'productivity', 'personal']
 tags: ['life-design', 'delegation', 'meaning', 'life-optimization', 'authorship', 'systems-thinking']
 description: "You work hard to fund the life you want, but the working consumes the life you're funding. An exploration of what happens when delegation optimizes meaning out of your life."
 image: /images/proxy-life-trap-unfinished-farm.png
+mermaid: true
 ---
 
 Welcome to the **Proxy Life Trap**:
@@ -22,6 +23,20 @@ The trap has layers:
 - **Economic logic says**: specialize, earn more per hour, buy back time
 - **Meaning logic says**: the doing *is* the point, not the outcome
 - **Identity logic says**: you become what you repeatedly do — if others do it, who are you becoming?
+
+```mermaid
+flowchart LR
+    A((The Proxy\nLife Trap)) --> B[Economic Logic]
+    A --> C[Meaning Logic]
+    A --> D[Identity Logic]
+
+    B -->|Optimize| E[Buy back time]
+    C -->|Intrinsic| F[The doing is the point]
+    D -->|Formation| G[You are what you do]
+
+    E -.->|Conflict| F
+    E -.->|Conflict| G
+```
 
 This tension sits at the heart of [Economics for Life](/economics-for-life/) — the framework that borrows systems thinking to optimize life like a well-architected codebase. The economic logic is sound. But there's an antipattern it doesn't fully account for: **premature delegation** of the wrong tasks.
 

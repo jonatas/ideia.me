@@ -4,6 +4,7 @@ title: "The Validation Model"
 categories: ['personal', 'productivity', 'career']
 description: "How a simple time tracker changed my relationship with work by giving my brain the validation it was unconsciously looking for."
 image: /images/the-validation-model-stopwatch-split.png
+mermaid: true
 ---
 
 Today I'm thinking how interesting it's been to be freelancing again. Well, I have a
@@ -76,6 +77,15 @@ makes me fall into a psychological trap to reduce my perception of my efforts.
 
 I think that my work-mind relationship now is much healthier just because I found a
 way to say, ok, I did it!
+
+```mermaid
+flowchart TD
+    A[Track Time Expected] -->|Creates measurable boundary| B(Sense of Accomplishment/Validation)
+    B --> C{Reduced Anxiety}
+    C -->|Less need to check-in| D[Clearer Separation]
+    C -->|Validation fulfilled| E[Better Focus during work]
+    D --> F[Healthier Free Time]
+```
 
 > And no, I haven't watched the series Severance but I know it exists ;)
 
