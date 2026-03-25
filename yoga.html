@@ -360,8 +360,8 @@ permalink: /yoga.html
             top: -8px;
             left: -8px;
             background: var(--bg-color);
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color);
+            border: 1px solid currentColor;
+            color: var(--muted-color);
             border-radius: 12px;
             padding: 2px 6px;
             font-size: 0.7rem;
@@ -370,10 +370,26 @@ permalink: /yoga.html
             display: flex;
             align-items: center;
             gap: 4px;
+            opacity: 0.4;
+            transition: all 0.2s;
         }
-        .breath-badge:hover {
-            background: var(--accent-color);
-            color: var(--bg-color);
+        
+        body:not(.breathing-sync) .breath-badge {
+            display: none;
+        }
+
+        .timeline-card:hover .breath-badge {
+            opacity: 1;
+        }
+
+        .timeline-card.inhale .breath-badge:hover {
+            color: rgba(13, 148, 136, 1);
+            background: rgba(13, 148, 136, 0.1);
+        }
+        
+        .timeline-card.exhale .breath-badge:hover {
+            color: rgba(148, 163, 184, 1);
+            background: rgba(148, 163, 184, 0.1);
         }
 
 
