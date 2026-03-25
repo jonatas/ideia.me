@@ -866,29 +866,29 @@ permalink: /yoga.html
     <svg width="0" height="0" style="display:none;">
         <defs>
             <g id="stickman">
-                <g id="figure" class="joint-group" style="transform-origin: 50% 50%; transform: translate(var(--fig-x, 0px), var(--fig-y, 0px)) rotate(var(--fig-rot, 0deg));">
+                <g id="figure" class="joint-group" style="transform-origin: 100px 200px; transform: translate(var(--fig-x, 0px), var(--fig-y, 0px)) rotate(var(--fig-rot, 0deg));">
                     <!-- Left Leg (Back) -->
-                    <g id="left-leg" class="joint-group" style="transform-origin: 50% 50%; transform: rotate(var(--ll-rot, 0deg));">
+                    <g id="left-leg" class="joint-group" style="transform-origin: 100px 200px; transform: rotate(var(--ll-rot, 0deg));">
                         <line x1="100" y1="200" x2="100" y2="280" class="bone-back" />
-                        <g id="left-knee" class="joint-group" style="transform-origin: 50% 63.3333%; transform: rotate(var(--lk-rot, 0deg));">
+                        <g id="left-knee" class="joint-group" style="transform-origin: 100px 280px; transform: rotate(var(--lk-rot, 0deg));">
                             <line x1="100" y1="280" x2="100" y2="360" class="bone-back" />
                             <circle cx="100" cy="360" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="feet" onmouseover="showDetails('feet', event)" onmouseout="hideDetails()" />
                         </g>
                     </g>
                     <!-- Right Leg (Front) -->
-                    <g id="right-leg" class="joint-group" style="transform-origin: 50% 50%; transform: rotate(var(--rl-rot, 0deg));">
+                    <g id="right-leg" class="joint-group" style="transform-origin: 100px 200px; transform: rotate(var(--rl-rot, 0deg));">
                         <line x1="100" y1="200" x2="100" y2="280" class="bone-front" />
-                        <g id="right-knee" class="joint-group" style="transform-origin: 50% 63.3333%; transform: rotate(var(--rk-rot, 0deg));">
+                        <g id="right-knee" class="joint-group" style="transform-origin: 100px 280px; transform: rotate(var(--rk-rot, 0deg));">
                             <line x1="100" y1="280" x2="100" y2="360" class="bone-front" />
                             <circle cx="100" cy="360" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="feet" onmouseover="showDetails('feet', event)" onmouseout="hideDetails()" />
                         </g>
                     </g>
                     <!-- Upper Body -->
-                    <g id="upper-body" class="joint-group" style="transform-origin: 50% 50%; transform: rotate(var(--ub-rot, 0deg));">
+                    <g id="upper-body" class="joint-group" style="transform-origin: 100px 200px; transform: rotate(var(--ub-rot, 0deg));">
                         <!-- Left Arm (Back) -->
-                        <g id="left-arm" class="joint-group" style="transform-origin: 50% 33.3333%; transform: rotate(var(--la-rot, 0deg));">
+                        <g id="left-arm" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--la-rot, 0deg));">
                             <line x1="100" y1="100" x2="100" y2="160" class="bone-back" />
-                            <g id="left-elbow" class="joint-group" style="transform-origin: 50% 43.3333%; transform: rotate(var(--le-rot, 0deg));">
+                            <g id="left-elbow" class="joint-group" style="transform-origin: 100px 160px; transform: rotate(var(--le-rot, 0deg));">
                                 <line x1="100" y1="160" x2="100" y2="220" class="bone-back" />
                                 <circle cx="100" cy="220" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="hands" onmouseover="showDetails('hands', event)" onmouseout="hideDetails()" />
                             </g>
@@ -896,15 +896,15 @@ permalink: /yoga.html
                         <!-- Torso -->
                         <line x1="100" y1="200" x2="100" y2="100" class="bone-front" stroke-width="16" />
                         <!-- Head -->
-                        <g id="head-group" class="joint-group" style="transform-origin: 50% 33.3333%; transform: rotate(var(--head-rot, 0deg));">
+                        <g id="head-group" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--head-rot, 0deg));">
                             <line x1="100" y1="100" x2="100" y2="80" class="bone-front" stroke-width="10" />
                             <circle cx="100" cy="65" r="20" class="head" />
                             <circle cx="100" cy="65" r="30" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="head" onmouseover="showDetails('head', event)" onmouseout="hideDetails()" />
                         </g>
                         <!-- Right Arm (Front) -->
-                        <g id="right-arm" class="joint-group" style="transform-origin: 50% 33.3333%; transform: rotate(var(--ra-rot, 0deg));">
+                        <g id="right-arm" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--ra-rot, 0deg));">
                             <line x1="100" y1="100" x2="100" y2="160" class="bone-front" />
-                            <g id="right-elbow" class="joint-group" style="transform-origin: 50% 43.3333%; transform: rotate(var(--re-rot, 0deg));">
+                            <g id="right-elbow" class="joint-group" style="transform-origin: 100px 160px; transform: rotate(var(--re-rot, 0deg));">
                                 <line x1="100" y1="160" x2="100" y2="220" class="bone-front" />
                                 <circle cx="100" cy="220" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="hands" onmouseover="showDetails('hands', event)" onmouseout="hideDetails()" />
                             </g>
@@ -915,49 +915,49 @@ permalink: /yoga.html
 
             <!-- Front-Facing Stickman -->
             <g id="stickman-front">
-                <g id="figure-front" class="joint-group" style="transform-origin: 50% 50%; transform: translate(var(--fig-x, 0px), var(--fig-y, 0px)) rotate(var(--fig-rot, 0deg));">
+                <g id="figure-front" class="joint-group" style="transform-origin: 100px 200px; transform: translate(var(--fig-x, 0px), var(--fig-y, 0px)) rotate(var(--fig-rot, 0deg));">
                     <!-- Hips line -->
                     <line x1="80" y1="200" x2="120" y2="200" class="bone-front" stroke-width="14" />
                     <!-- Left Leg -->
-                    <g id="left-leg-f" class="joint-group" style="transform-origin: 47.5% 50%; transform: rotate(var(--ll-rot-f, 0deg));">
+                    <g id="left-leg-f" class="joint-group" style="transform-origin: 80px 200px; transform: rotate(var(--ll-rot-f, 0deg));">
                         <line x1="80" y1="200" x2="80" y2="280" class="bone-front" />
-                        <g id="left-knee-f" class="joint-group" style="transform-origin: 47.5% 63.3333%; transform: rotate(var(--lk-rot-f, 0deg));">
+                        <g id="left-knee-f" class="joint-group" style="transform-origin: 80px 280px; transform: rotate(var(--lk-rot-f, 0deg));">
                             <line x1="80" y1="280" x2="80" y2="360" class="bone-front" />
                             <circle cx="80" cy="360" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="feet" onmouseover="showDetails('feet', event)" onmouseout="hideDetails()" />
                         </g>
                     </g>
                     <!-- Right Leg -->
-                    <g id="right-leg-f" class="joint-group" style="transform-origin: 52.5% 50%; transform: rotate(var(--rl-rot-f, 0deg));">
+                    <g id="right-leg-f" class="joint-group" style="transform-origin: 120px 200px; transform: rotate(var(--rl-rot-f, 0deg));">
                         <line x1="120" y1="200" x2="120" y2="280" class="bone-front" />
-                        <g id="right-knee-f" class="joint-group" style="transform-origin: 52.5% 63.3333%; transform: rotate(var(--rk-rot-f, 0deg));">
+                        <g id="right-knee-f" class="joint-group" style="transform-origin: 120px 280px; transform: rotate(var(--rk-rot-f, 0deg));">
                             <line x1="120" y1="280" x2="120" y2="360" class="bone-front" />
                             <circle cx="120" cy="360" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="feet" onmouseover="showDetails('feet', event)" onmouseout="hideDetails()" />
                         </g>
                     </g>
                     <!-- Upper Body -->
-                    <g id="upper-body-f" class="joint-group" style="transform-origin: 50% 50%; transform: rotate(var(--ub-rot-f, 0deg));">
+                    <g id="upper-body-f" class="joint-group" style="transform-origin: 100px 200px; transform: rotate(var(--ub-rot-f, 0deg));">
                         <!-- Torso -->
                         <line x1="100" y1="200" x2="100" y2="100" class="bone-front" stroke-width="16" />
                         <!-- Shoulders -->
                         <line x1="70" y1="100" x2="130" y2="100" class="bone-front" stroke-width="14" />
                         <!-- Left Arm -->
-                        <g id="left-arm-f" class="joint-group" style="transform-origin: 46.25% 33.3333%; transform: rotate(var(--la-rot-f, 0deg));">
+                        <g id="left-arm-f" class="joint-group" style="transform-origin: 70px 100px; transform: rotate(var(--la-rot-f, 0deg));">
                             <line x1="70" y1="100" x2="50" y2="160" class="bone-front" />
-                            <g id="left-elbow-f" class="joint-group" style="transform-origin: 43.75% 43.3333%; transform: rotate(var(--le-rot-f, 0deg));">
+                            <g id="left-elbow-f" class="joint-group" style="transform-origin: 50px 160px; transform: rotate(var(--le-rot-f, 0deg));">
                                 <line x1="50" y1="160" x2="40" y2="220" class="bone-front" />
                                 <circle cx="40" cy="220" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="hands" onmouseover="showDetails('hands', event)" onmouseout="hideDetails()" />
                             </g>
                         </g>
                         <!-- Right Arm -->
-                        <g id="right-arm-f" class="joint-group" style="transform-origin: 53.75% 33.3333%; transform: rotate(var(--ra-rot-f, 0deg));">
+                        <g id="right-arm-f" class="joint-group" style="transform-origin: 130px 100px; transform: rotate(var(--ra-rot-f, 0deg));">
                             <line x1="130" y1="100" x2="150" y2="160" class="bone-front" />
-                            <g id="right-elbow-f" class="joint-group" style="transform-origin: 56.25% 43.3333%; transform: rotate(var(--re-rot-f, 0deg));">
+                            <g id="right-elbow-f" class="joint-group" style="transform-origin: 150px 160px; transform: rotate(var(--re-rot-f, 0deg));">
                                 <line x1="150" y1="160" x2="160" y2="220" class="bone-front" />
                                 <circle cx="160" cy="220" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="hands" onmouseover="showDetails('hands', event)" onmouseout="hideDetails()" />
                             </g>
                         </g>
                         <!-- Head -->
-                        <g id="head-group-f" class="joint-group" style="transform-origin: 50% 33.3333%; transform: rotate(var(--head-rot-f, 0deg));">
+                        <g id="head-group-f" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--head-rot-f, 0deg));">
                             <line x1="100" y1="100" x2="100" y2="80" class="bone-front" stroke-width="10" />
                             <circle cx="100" cy="65" r="20" class="head" />
                             <circle cx="100" cy="65" r="30" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="head" onmouseover="showDetails('head', event)" onmouseout="hideDetails()" />
