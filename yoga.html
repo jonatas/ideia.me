@@ -27,7 +27,7 @@ permalink: /yoga.html
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            overflow: hidden;
+            /* overflow: hidden; removed to allow scroll on zoom */
             display: flex;
             flex-direction: column;
         }
@@ -301,7 +301,7 @@ permalink: /yoga.html
             border-radius: 50%;
             cursor: pointer;
             background: none;
-            overflow: hidden;
+            /* overflow: hidden; removed to allow scroll on zoom */
             flex-shrink: 0;
         }
         
@@ -543,7 +543,7 @@ permalink: /yoga.html
             -webkit-line-clamp: 2;
             line-clamp: 2;
             -webkit-box-orient: vertical;
-            overflow: hidden;
+            /* overflow: hidden; removed to allow scroll on zoom */
             width: 100%;
         }
         
@@ -738,6 +738,73 @@ permalink: /yoga.html
             margin-bottom: 4px;
         }
 
+        /* Classroom Mode */
+        body.classroom-mode header,
+        body.classroom-mode .pose-nav,
+        body.classroom-mode .timeline-area,
+        body.classroom-mode .pose-info,
+        body.classroom-mode .debug-panel {
+            display: none !important;
+        }
+        body.classroom-mode .yoga-container {
+            height: 100vh;
+            align-items: center;
+        }
+        body.classroom-mode .yoga-man {
+            height: 80vh;
+            max-height: 80vh;
+            width: auto;
+        }
+        #classroomSeqDots {
+            display: none;
+            position: fixed;
+            left: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            flex-direction: column;
+            gap: 16px;
+        }
+        body.classroom-mode #classroomSeqDots {
+            display: flex;
+        }
+        .classroom-nav-click {
+            display: none;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 40%;
+            z-index: 50;
+            cursor: pointer;
+        }
+        body.classroom-mode .classroom-nav-click {
+            display: block;
+        }
+        #classroomLeftClick { left: 0; }
+        #classroomRightClick { right: 0; }
+        
+        .classroom-thumbnail {
+            display: none;
+            position: absolute;
+            top: 24px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            z-index: 60;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+        body.classroom-mode .classroom-thumbnail {
+            display: flex;
+        }
+        #prevPoseThumbnail { left: 24px; }
+        #nextPoseThumbnail { right: 24px; }
+
         /* View Mode for Shared Sequences */
         body.view-mode .pose-nav,
         body.view-mode .seq-dot.add-seq,
@@ -799,29 +866,29 @@ permalink: /yoga.html
     <svg width="0" height="0" style="display:none;">
         <defs>
             <g id="stickman">
-                <g id="figure" class="joint-group" style="transform-origin: 100px 200px; transform: translate(var(--fig-x, 0px), var(--fig-y, 0px)) rotate(var(--fig-rot, 0deg));">
+                <g id="figure" class="joint-group" style="transform-origin: 50% 50%; transform: translate(var(--fig-x, 0px), var(--fig-y, 0px)) rotate(var(--fig-rot, 0deg));">
                     <!-- Left Leg (Back) -->
-                    <g id="left-leg" class="joint-group" style="transform-origin: 100px 200px; transform: rotate(var(--ll-rot, 0deg));">
+                    <g id="left-leg" class="joint-group" style="transform-origin: 50% 50%; transform: rotate(var(--ll-rot, 0deg));">
                         <line x1="100" y1="200" x2="100" y2="280" class="bone-back" />
-                        <g id="left-knee" class="joint-group" style="transform-origin: 100px 280px; transform: rotate(var(--lk-rot, 0deg));">
+                        <g id="left-knee" class="joint-group" style="transform-origin: 50% 63.3333%; transform: rotate(var(--lk-rot, 0deg));">
                             <line x1="100" y1="280" x2="100" y2="360" class="bone-back" />
                             <circle cx="100" cy="360" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="feet" onmouseover="showDetails('feet', event)" onmouseout="hideDetails()" />
                         </g>
                     </g>
                     <!-- Right Leg (Front) -->
-                    <g id="right-leg" class="joint-group" style="transform-origin: 100px 200px; transform: rotate(var(--rl-rot, 0deg));">
+                    <g id="right-leg" class="joint-group" style="transform-origin: 50% 50%; transform: rotate(var(--rl-rot, 0deg));">
                         <line x1="100" y1="200" x2="100" y2="280" class="bone-front" />
-                        <g id="right-knee" class="joint-group" style="transform-origin: 100px 280px; transform: rotate(var(--rk-rot, 0deg));">
+                        <g id="right-knee" class="joint-group" style="transform-origin: 50% 63.3333%; transform: rotate(var(--rk-rot, 0deg));">
                             <line x1="100" y1="280" x2="100" y2="360" class="bone-front" />
                             <circle cx="100" cy="360" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="feet" onmouseover="showDetails('feet', event)" onmouseout="hideDetails()" />
                         </g>
                     </g>
                     <!-- Upper Body -->
-                    <g id="upper-body" class="joint-group" style="transform-origin: 100px 200px; transform: rotate(var(--ub-rot, 0deg));">
+                    <g id="upper-body" class="joint-group" style="transform-origin: 50% 50%; transform: rotate(var(--ub-rot, 0deg));">
                         <!-- Left Arm (Back) -->
-                        <g id="left-arm" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--la-rot, 0deg));">
+                        <g id="left-arm" class="joint-group" style="transform-origin: 50% 33.3333%; transform: rotate(var(--la-rot, 0deg));">
                             <line x1="100" y1="100" x2="100" y2="160" class="bone-back" />
-                            <g id="left-elbow" class="joint-group" style="transform-origin: 100px 160px; transform: rotate(var(--le-rot, 0deg));">
+                            <g id="left-elbow" class="joint-group" style="transform-origin: 50% 43.3333%; transform: rotate(var(--le-rot, 0deg));">
                                 <line x1="100" y1="160" x2="100" y2="220" class="bone-back" />
                                 <circle cx="100" cy="220" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="hands" onmouseover="showDetails('hands', event)" onmouseout="hideDetails()" />
                             </g>
@@ -829,15 +896,15 @@ permalink: /yoga.html
                         <!-- Torso -->
                         <line x1="100" y1="200" x2="100" y2="100" class="bone-front" stroke-width="16" />
                         <!-- Head -->
-                        <g id="head-group" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--head-rot, 0deg));">
+                        <g id="head-group" class="joint-group" style="transform-origin: 50% 33.3333%; transform: rotate(var(--head-rot, 0deg));">
                             <line x1="100" y1="100" x2="100" y2="80" class="bone-front" stroke-width="10" />
                             <circle cx="100" cy="65" r="20" class="head" />
                             <circle cx="100" cy="65" r="30" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="head" onmouseover="showDetails('head', event)" onmouseout="hideDetails()" />
                         </g>
                         <!-- Right Arm (Front) -->
-                        <g id="right-arm" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--ra-rot, 0deg));">
+                        <g id="right-arm" class="joint-group" style="transform-origin: 50% 33.3333%; transform: rotate(var(--ra-rot, 0deg));">
                             <line x1="100" y1="100" x2="100" y2="160" class="bone-front" />
-                            <g id="right-elbow" class="joint-group" style="transform-origin: 100px 160px; transform: rotate(var(--re-rot, 0deg));">
+                            <g id="right-elbow" class="joint-group" style="transform-origin: 50% 43.3333%; transform: rotate(var(--re-rot, 0deg));">
                                 <line x1="100" y1="160" x2="100" y2="220" class="bone-front" />
                                 <circle cx="100" cy="220" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="hands" onmouseover="showDetails('hands', event)" onmouseout="hideDetails()" />
                             </g>
@@ -848,49 +915,49 @@ permalink: /yoga.html
 
             <!-- Front-Facing Stickman -->
             <g id="stickman-front">
-                <g id="figure-front" class="joint-group" style="transform-origin: 100px 200px; transform: translate(var(--fig-x, 0px), var(--fig-y, 0px)) rotate(var(--fig-rot, 0deg));">
+                <g id="figure-front" class="joint-group" style="transform-origin: 50% 50%; transform: translate(var(--fig-x, 0px), var(--fig-y, 0px)) rotate(var(--fig-rot, 0deg));">
                     <!-- Hips line -->
                     <line x1="80" y1="200" x2="120" y2="200" class="bone-front" stroke-width="14" />
                     <!-- Left Leg -->
-                    <g id="left-leg-f" class="joint-group" style="transform-origin: 80px 200px; transform: rotate(var(--ll-rot-f, 0deg));">
+                    <g id="left-leg-f" class="joint-group" style="transform-origin: 47.5% 50%; transform: rotate(var(--ll-rot-f, 0deg));">
                         <line x1="80" y1="200" x2="80" y2="280" class="bone-front" />
-                        <g id="left-knee-f" class="joint-group" style="transform-origin: 80px 280px; transform: rotate(var(--lk-rot-f, 0deg));">
+                        <g id="left-knee-f" class="joint-group" style="transform-origin: 47.5% 63.3333%; transform: rotate(var(--lk-rot-f, 0deg));">
                             <line x1="80" y1="280" x2="80" y2="360" class="bone-front" />
                             <circle cx="80" cy="360" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="feet" onmouseover="showDetails('feet', event)" onmouseout="hideDetails()" />
                         </g>
                     </g>
                     <!-- Right Leg -->
-                    <g id="right-leg-f" class="joint-group" style="transform-origin: 120px 200px; transform: rotate(var(--rl-rot-f, 0deg));">
+                    <g id="right-leg-f" class="joint-group" style="transform-origin: 52.5% 50%; transform: rotate(var(--rl-rot-f, 0deg));">
                         <line x1="120" y1="200" x2="120" y2="280" class="bone-front" />
-                        <g id="right-knee-f" class="joint-group" style="transform-origin: 120px 280px; transform: rotate(var(--rk-rot-f, 0deg));">
+                        <g id="right-knee-f" class="joint-group" style="transform-origin: 52.5% 63.3333%; transform: rotate(var(--rk-rot-f, 0deg));">
                             <line x1="120" y1="280" x2="120" y2="360" class="bone-front" />
                             <circle cx="120" cy="360" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="feet" onmouseover="showDetails('feet', event)" onmouseout="hideDetails()" />
                         </g>
                     </g>
                     <!-- Upper Body -->
-                    <g id="upper-body-f" class="joint-group" style="transform-origin: 100px 200px; transform: rotate(var(--ub-rot-f, 0deg));">
+                    <g id="upper-body-f" class="joint-group" style="transform-origin: 50% 50%; transform: rotate(var(--ub-rot-f, 0deg));">
                         <!-- Torso -->
                         <line x1="100" y1="200" x2="100" y2="100" class="bone-front" stroke-width="16" />
                         <!-- Shoulders -->
                         <line x1="70" y1="100" x2="130" y2="100" class="bone-front" stroke-width="14" />
                         <!-- Left Arm -->
-                        <g id="left-arm-f" class="joint-group" style="transform-origin: 70px 100px; transform: rotate(var(--la-rot-f, 0deg));">
+                        <g id="left-arm-f" class="joint-group" style="transform-origin: 46.25% 33.3333%; transform: rotate(var(--la-rot-f, 0deg));">
                             <line x1="70" y1="100" x2="50" y2="160" class="bone-front" />
-                            <g id="left-elbow-f" class="joint-group" style="transform-origin: 50px 160px; transform: rotate(var(--le-rot-f, 0deg));">
+                            <g id="left-elbow-f" class="joint-group" style="transform-origin: 43.75% 43.3333%; transform: rotate(var(--le-rot-f, 0deg));">
                                 <line x1="50" y1="160" x2="40" y2="220" class="bone-front" />
                                 <circle cx="40" cy="220" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="hands" onmouseover="showDetails('hands', event)" onmouseout="hideDetails()" />
                             </g>
                         </g>
                         <!-- Right Arm -->
-                        <g id="right-arm-f" class="joint-group" style="transform-origin: 130px 100px; transform: rotate(var(--ra-rot-f, 0deg));">
+                        <g id="right-arm-f" class="joint-group" style="transform-origin: 53.75% 33.3333%; transform: rotate(var(--ra-rot-f, 0deg));">
                             <line x1="130" y1="100" x2="150" y2="160" class="bone-front" />
-                            <g id="right-elbow-f" class="joint-group" style="transform-origin: 150px 160px; transform: rotate(var(--re-rot-f, 0deg));">
+                            <g id="right-elbow-f" class="joint-group" style="transform-origin: 56.25% 43.3333%; transform: rotate(var(--re-rot-f, 0deg));">
                                 <line x1="150" y1="160" x2="160" y2="220" class="bone-front" />
                                 <circle cx="160" cy="220" r="25" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="hands" onmouseover="showDetails('hands', event)" onmouseout="hideDetails()" />
                             </g>
                         </g>
                         <!-- Head -->
-                        <g id="head-group-f" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--head-rot-f, 0deg));">
+                        <g id="head-group-f" class="joint-group" style="transform-origin: 50% 33.3333%; transform: rotate(var(--head-rot-f, 0deg));">
                             <line x1="100" y1="100" x2="100" y2="80" class="bone-front" stroke-width="10" />
                             <circle cx="100" cy="65" r="20" class="head" />
                             <circle cx="100" cy="65" r="30" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="head" onmouseover="showDetails('head', event)" onmouseout="hideDetails()" />
@@ -932,6 +999,12 @@ permalink: /yoga.html
     </div>
 
     <main>
+        <div id="classroomSeqDots"></div>
+        <div id="classroomLeftClick" class="classroom-nav-click" onclick="prevClassroomPose()"></div>
+        <div id="classroomRightClick" class="classroom-nav-click" onclick="nextClassroomPose()"></div>
+        <div id="prevPoseThumbnail" class="classroom-thumbnail" title="Previous Pose"></div>
+        <div id="nextPoseThumbnail" class="classroom-thumbnail" title="Next Pose"></div>
+
         <div class="flow-suggestions-area" id="flowSuggestions">
             <!-- Populated dynamically by JS when a pose is selected -->
         </div>
@@ -1125,7 +1198,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'adho-mukha-svanasana', name: 'Downward-Facing Dog (Adho Mukha Svanasana)', flow: ['virabhadrasana-i', 'virabhadrasana-i-left', 'trikonasana', 'trikonasana-left', 'ardha-uttanasana'],
+                id: 'adho-mukha-svanasana', name: 'Downward-Facing Dog (Adho Mukha Svanasana)', flow: ['virabhadrasana-i', 'virabhadrasana-i-left', 'trikonasana', 'trikonasana-left', 'ardha-uttanasana', 'ardha-pincha-mayurasana', 'eka-pada-rajakapotasana', 'marjaryasana'],
                 desc: 'Form an inverted V shape with your body. Press hands into the floor, hips lifted high, legs straight.',
                 details: {
                     head: 'Relax your neck. Let the crown of your head point towards the floor. Drishti (gaze) is towards your navel.',
@@ -1763,6 +1836,54 @@ permalink: /yoga.html
                     '--ll-rot': -90, '--lk-rot': 90,
                     '--rl-rot': -90, '--rk-rot': 90
                 }
+            },
+            {
+                id: 'marjaryasana', name: 'Cat Pose (Marjaryasana)', flow: ['bitilasana', 'adho-mukha-svanasana', 'balasana'],
+                desc: 'On hands and knees, exhale and round your spine toward the ceiling like an angry cat. Tuck your chin.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': -40, '--fig-y': 150,
+                    '--ub-rot': 110, '--head-rot': 20,
+                    '--la-rot': 160, '--le-rot': 0,
+                    '--ra-rot': 160, '--re-rot': 0,
+                    '--ll-rot': -20, '--lk-rot': 90,
+                    '--rl-rot': -20, '--rk-rot': 90
+                }
+            },
+            {
+                id: 'bitilasana', name: 'Cow Pose (Bitilasana)', flow: ['marjaryasana', 'adho-mukha-svanasana', 'balasana'],
+                desc: 'On hands and knees, inhale and lift your sitting bones and chest toward the ceiling, allowing your belly to sink toward the floor.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': -40, '--fig-y': 150,
+                    '--ub-rot': 70, '--head-rot': -40,
+                    '--la-rot': 200, '--le-rot': 0,
+                    '--ra-rot': 200, '--re-rot': 0,
+                    '--ll-rot': 20, '--lk-rot': 90,
+                    '--rl-rot': 20, '--rk-rot': 90
+                }
+            },
+            {
+                id: 'ardha-pincha-mayurasana', name: 'Dolphin Pose (Ardha Pincha Mayurasana)', flow: ['adho-mukha-svanasana', 'sirsasana', 'marjaryasana', 'balasana'],
+                desc: 'Similar to Downward Dog, but on forearms. Press your forearms into the floor and lift your hips up and back.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': 0, '--fig-y': 60,
+                    '--ub-rot': 130, '--head-rot': 0,
+                    '--la-rot': 150, '--le-rot': -90,
+                    '--ra-rot': 150, '--re-rot': -90,
+                    '--ll-rot': 30, '--lk-rot': 0,
+                    '--rl-rot': 30, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'eka-pada-rajakapotasana', name: 'Pigeon Pose (Eka Pada Rajakapotasana)', flow: ['adho-mukha-svanasana', 'baddha-konasana'],
+                desc: 'From Downward Dog, bring your right knee forward behind your right wrist. Extend your left leg straight back. Keep your hips square.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': -40, '--fig-y': 150,
+                    '--ub-rot': 0, '--head-rot': -10,
+                    '--la-rot': 20, '--le-rot': 0,
+                    '--ra-rot': 20, '--re-rot': 0,
+                    '--ll-rot': 90, '--lk-rot': 0,
+                    '--rl-rot': -60, '--rk-rot': 120
+                }
             }
         ];
 
@@ -2103,25 +2224,40 @@ permalink: /yoga.html
 
         function renderSeqDots() {
             const container = document.getElementById('seqDots');
-            if (!container) return;
-            container.innerHTML = '';
+            const classContainer = document.getElementById('classroomSeqDots');
+            if (container) container.innerHTML = '';
+            if (classContainer) classContainer.innerHTML = '';
             
             Object.keys(mySequences).forEach(key => {
                 const seq = mySequences[key];
-                const btn = document.createElement('button');
-                btn.className = 'seq-dot' + (key === activeSequenceKey ? ' active' : '');
-                btn.style.setProperty('--dot-color', seq.color);
-                btn.title = seq.name;
-                btn.onclick = () => loadMacroSequence(key);
-                container.appendChild(btn);
+                
+                if (container) {
+                    const btn = document.createElement('button');
+                    btn.className = 'seq-dot' + (key === activeSequenceKey ? ' active' : '');
+                    btn.style.setProperty('--dot-color', seq.color);
+                    btn.title = seq.name;
+                    btn.onclick = () => loadMacroSequence(key);
+                    container.appendChild(btn);
+                }
+                
+                if (classContainer) {
+                    const classBtn = document.createElement('button');
+                    classBtn.className = 'seq-dot' + (key === activeSequenceKey ? ' active' : '');
+                    classBtn.style.setProperty('--dot-color', seq.color);
+                    classBtn.title = seq.name;
+                    classBtn.onclick = () => { loadMacroSequence(key); if (sequence.length > 0) { const p = POSES.find(pose => pose.id === sequence[playIndex].id); loadPose(POSES.indexOf(p)); } updateClassroomThumbnails(); };
+                    classContainer.appendChild(classBtn);
+                }
             });
             
-            const addBtn = document.createElement('button');
-            addBtn.className = 'seq-dot add-seq';
-            addBtn.title = 'Add New Sequence';
-            addBtn.innerHTML = '<i class="bi bi-plus"></i>';
-            addBtn.onclick = addNewSequence;
-            container.appendChild(addBtn);
+            if (container) {
+                const addBtn = document.createElement('button');
+                addBtn.className = 'seq-dot add-seq';
+                addBtn.title = 'Add New Sequence';
+                addBtn.innerHTML = '<i class="bi bi-plus"></i>';
+                addBtn.onclick = addNewSequence;
+                container.appendChild(addBtn);
+            }
         }
 
         function addNewSequence() {
@@ -2532,6 +2668,7 @@ permalink: /yoga.html
         }
 
         function startSequence() {
+            if (document.body.classList.contains('classroom-mode')) return;
             const icon = document.getElementById('playIcon');
             if (icon) icon.className = 'bi bi-pause-fill';
             playNextPose();
@@ -2638,6 +2775,13 @@ permalink: /yoga.html
 
         // Keyboard Shortcuts & Fuzzy Finder
         window.addEventListener('keydown', (e) => {
+            if (document.body.classList.contains('classroom-mode')) {
+                if (e.key === 'ArrowLeft') { e.preventDefault(); prevClassroomPose(); return; }
+                if (e.key === 'ArrowRight') { e.preventDefault(); nextClassroomPose(); return; }
+                if (e.key === 'ArrowUp') { e.preventDefault(); cycleClassroomSequence(-1); return; }
+                if (e.key === 'ArrowDown') { e.preventDefault(); cycleClassroomSequence(1); return; }
+            }
+            
             // Fullscreen Cmd+Enter
             if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
                 e.preventDefault();
@@ -2688,6 +2832,74 @@ permalink: /yoga.html
                 }
             }
         };
+
+        document.addEventListener('fullscreenchange', () => {
+            const isFullscreen = !!document.fullscreenElement;
+            document.body.classList.toggle('classroom-mode', isFullscreen);
+            if (isFullscreen) {
+                stopSequence();
+                if (sequence.length > 0) {
+                    if (playIndex >= sequence.length) playIndex = 0;
+                    const p = POSES.find(pose => pose.id === sequence[playIndex].id);
+                    const poseIdx = POSES.indexOf(p);
+                    if (poseIdx >= 0) loadPose(poseIdx);
+                }
+                updateClassroomThumbnails();
+            }
+        });
+
+        window.prevClassroomPose = function() {
+            if (sequence.length === 0) return;
+            playIndex--;
+            if (playIndex < 0) playIndex = sequence.length - 1;
+            const p = POSES.find(pose => pose.id === sequence[playIndex].id);
+            loadPose(POSES.indexOf(p));
+            updateClassroomThumbnails();
+        };
+
+        window.nextClassroomPose = function() {
+            if (sequence.length === 0) return;
+            playIndex++;
+            if (playIndex >= sequence.length) playIndex = 0;
+            const p = POSES.find(pose => pose.id === sequence[playIndex].id);
+            loadPose(POSES.indexOf(p));
+            updateClassroomThumbnails();
+        };
+
+        window.cycleClassroomSequence = function(dir) {
+            const keys = Object.keys(mySequences);
+            let idx = keys.indexOf(activeSequenceKey);
+            idx += dir;
+            if (idx < 0) idx = keys.length - 1;
+            if (idx >= keys.length) idx = 0;
+            loadMacroSequence(keys[idx]);
+            if (sequence.length > 0) {
+               const p = POSES.find(pose => pose.id === sequence[playIndex].id);
+               loadPose(POSES.indexOf(p));
+            }
+            updateClassroomThumbnails();
+        };
+
+        function updateClassroomThumbnails() {
+            if (!document.body.classList.contains('classroom-mode') || sequence.length === 0) return;
+            const prevIdx = (playIndex - 1 + sequence.length) % sequence.length;
+            const nextIdx = (playIndex + 1) % sequence.length;
+            
+            const pPrev = POSES.find(p => p.id === sequence[prevIdx].id);
+            const pNext = POSES.find(p => p.id === sequence[nextIdx].id);
+            
+            document.getElementById('prevPoseThumbnail').innerHTML = pPrev ? `
+                <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" style="${getVarStyles(pPrev.vars)}; width:100%; height:100%;">
+                    <use href="#stickman" />
+                </svg>
+            ` : '';
+            
+            document.getElementById('nextPoseThumbnail').innerHTML = pNext ? `
+                <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" style="${getVarStyles(pNext.vars)}; width:100%; height:100%;">
+                    <use href="#stickman" />
+                </svg>
+            ` : '';
+        }
 
         window.toggleBreathing = function() {
             document.body.classList.toggle('breathing-sync');
