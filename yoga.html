@@ -1950,7 +1950,7 @@ permalink: /yoga.html
             if (!container) return;
             container.innerHTML = '';
             
-            if (!activeSequenceKey.startsWith('custom-') || playInterval !== null) {
+            if (!activeSequenceKey.startsWith('custom-') || playTimeout !== null) {
                 container.classList.remove('active');
                 return;
             }
