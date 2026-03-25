@@ -974,7 +974,7 @@ permalink: /yoga.html
                 
                 if (typeof mySequences !== 'undefined' && typeof activeSequenceKey !== 'undefined' && mySequences[activeSequenceKey]) {
                     const seq = mySequences[activeSequenceKey];
-                    const seqStr = seq.poses.join(',');
+                    const seqStr = seq.poses.map(p => typeof p === 'string' ? p : (p.breaths && p.breaths > 1 ? `${p.id}:${p.breaths}` : p.id)).join(',');
                     if (seqStr) {
                         const searchParams = new URLSearchParams();
                         searchParams.set('seq', seqStr);
@@ -1000,7 +1000,7 @@ permalink: /yoga.html
             let urlPath = window.location.pathname;
             if (typeof mySequences !== 'undefined' && typeof activeSequenceKey !== 'undefined' && mySequences[activeSequenceKey]) {
                 const seq = mySequences[activeSequenceKey];
-                const seqStr = seq.poses.join(',');
+                const seqStr = seq.poses.map(p => typeof p === 'string' ? p : (p.breaths && p.breaths > 1 ? `${p.id}:${p.breaths}` : p.id)).join(',');
                 if (seqStr) {
                     const searchParams = new URLSearchParams();
                     searchParams.set('seq', seqStr);
@@ -2201,7 +2201,7 @@ permalink: /yoga.html
         function shareSequence() {
             if (!mySequences[activeSequenceKey]) return;
             const seq = mySequences[activeSequenceKey];
-            const seqStr = seq.poses.join(',');
+            const seqStr = seq.poses.map(p => typeof p === 'string' ? p : (p.breaths && p.breaths > 1 ? `${p.id}:${p.breaths}` : p.id)).join(',');
             const searchParams = new URLSearchParams();
             searchParams.set('seq', seqStr);
             searchParams.set('name', seq.name);
@@ -2374,7 +2374,10 @@ permalink: /yoga.html
         setTimeout(() => {
             const params = new URLSearchParams(window.location.search);
             if (params.has('seq')) {
-                const poses = params.get('seq').split(',').filter(p => p);
+                const poses = params.get('seq').split(',').filter(p => p).map(pstr => {
+                    const parts = pstr.split(':');
+                    return { id: parts[0], breaths: parts[1] ? parseInt(parts[1]) : 1 };
+                });
                 const name = params.get('name') || 'Shared Sequence';
                 const color = params.get('color') || '#ffffff';
                 const isView = params.get('view') === '1';
