@@ -590,52 +590,6 @@ permalink: /yoga.html
         }
         .icon-btn:hover { color: var(--text-color); }
 
-        .perspective-controls {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-            z-index: 20;
-            background: rgba(0,0,0,0.5);
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
-        }
-
-        .perspective-controls.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .toggle-btn {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .toggle-btn:hover {
-            background: rgba(13, 148, 136, 0.3);
-            border-color: rgba(13, 148, 136, 0.8);
-        }
-
-        .toggle-btn.active-view {
-            background: var(--accent-color);
-            border-color: var(--accent-color);
-        }
-
         .yoga-man-wrapper {
             transition: transform 0.5s cubic-bezier(0.4, 0.0, 0.2, 1);
             transform-origin: center center;
@@ -695,14 +649,32 @@ permalink: /yoga.html
             margin-bottom: 4px;
         }
 
-        /* Drishti Line */
-        .drishti-line {
-            stroke: var(--accent-color);
-            stroke-width: 4;
-            stroke-dasharray: 8 8;
-            opacity: var(--drishti-opacity, 0);
-            transition: opacity 0.3s;
+        /* View Mode for Shared Sequences */
+        body.view-mode .pose-nav,
+        body.view-mode .seq-dot.add-seq,
+        body.view-mode .timeline-placeholder,
+        body.view-mode .timeline-card .remove-btn,
+        body.view-mode .flow-suggestions-area,
+        body.view-mode .flow-suggest-label,
+        body.view-mode .timeline-controls #clearSeqBtn,
+        body.view-mode .timeline-controls #shareSeqBtn {
+            display: none !important;
         }
+        body.view-mode .seq-name-display {
+            pointer-events: none;
+            border-bottom-color: transparent;
+        }
+        body.view-mode .seq-color-picker {
+            pointer-events: none;
+        }
+        body.view-mode .timeline-track {
+            border-color: transparent;
+            pointer-events: none; /* disables drag and drop */
+        }
+        body.view-mode .timeline-track .timeline-card {
+            pointer-events: auto; /* allow clicking to view pose */
+        }
+
     </style>
 </head>
 <body>
@@ -768,7 +740,6 @@ permalink: /yoga.html
                         <g id="head-group" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--head-rot, 0deg));">
                             <line x1="100" y1="100" x2="100" y2="80" class="bone-front" stroke-width="10" />
                             <circle cx="100" cy="65" r="20" class="head" />
-                            <line x1="100" y1="65" x2="100" y2="-200" class="drishti-line" style="transform-origin: 100px 65px; transform: rotate(var(--drishti-rot, 0deg));" />
                             <circle cx="100" cy="65" r="30" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="head" onmouseover="showDetails('head', event)" onmouseout="hideDetails()" />
                         </g>
                         <!-- Right Arm (Front) -->
@@ -830,7 +801,6 @@ permalink: /yoga.html
                         <g id="head-group-f" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--head-rot-f, 0deg));">
                             <line x1="100" y1="100" x2="100" y2="80" class="bone-front" stroke-width="10" />
                             <circle cx="100" cy="65" r="20" class="head" />
-                            <line x1="100" y1="65" x2="100" y2="-200" class="drishti-line" style="transform-origin: 100px 65px; transform: rotate(var(--drishti-rot, 0deg));" />
                             <circle cx="100" cy="65" r="30" class="hotspot" stroke-width="0" fill="transparent" stroke="transparent" data-part="head" onmouseover="showDetails('head', event)" onmouseout="hideDetails()" />
                         </g>
                     </g>
@@ -853,6 +823,8 @@ permalink: /yoga.html
                         <input type="checkbox" id="suggestFlowsToggle" onchange="updateFlowSuggestions()" checked>
                         Suggest Flows
                     </label>
+                    <button id="exportSeqBtn" class="icon-btn" title="Export Video" onclick="exportSequence()"><i class="bi bi-camera-reels"></i></button>
+                    <button id="shareSeqBtn" class="icon-btn" title="Share Sequence" onclick="shareSequence()"><i class="bi bi-share"></i></button>
                     <button id="playSeqBtn" class="icon-btn" title="Play Sequence" onclick="togglePlaySequence()"><i class="bi bi-play-fill" id="playIcon"></i></button>
                     <button id="clearSeqBtn" class="icon-btn" title="Clear Sequence" onclick="clearSequence()"><i class="bi bi-trash"></i></button>
                 </div>
@@ -876,13 +848,7 @@ permalink: /yoga.html
             <div class="zoom-overlay-title" id="zoomOverlayTitle">Details</div>
             <div id="zoomOverlayText"></div>
         </div>
-        <div class="perspective-controls" id="perspectiveControls">
-            <button class="toggle-btn active-view" id="btnSideView" onclick="toggleView('side')" title="Side Profile View"><i class="bi bi-person"></i> Side</button>
-            <button class="toggle-btn" id="btnFrontView" onclick="toggleView('front')" title="Front Facing View"><i class="bi bi-person-bounding-box"></i> Front</button>
-            <div style="width: 1px; background: rgba(255,255,255,0.1); margin: 0 4px;"></div>
-            <button class="toggle-btn" id="btnFlipH" onclick="toggleFlip('x')" title="Flip Horizontally"><i class="bi bi-symmetry-vertical"></i> Flip</button>
-            <button class="toggle-btn" id="btnFlipV" onclick="toggleFlip('y')" title="Flip Vertically"><i class="bi bi-symmetry-horizontal"></i> Upside Down</button>
-        </div>
+
         <div class="yoga-container" id="svgContainer">
             <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" class="yoga-man" id="yogaManSvg">
                 <g class="yoga-man-wrapper" id="yogaManWrapper">
@@ -910,16 +876,57 @@ permalink: /yoga.html
     <script>
         function saveThisApp(btn) {
             if (window.userProfile) {
-                const isSaved = window.userProfile.toggleFavorite('yoga', window.location.pathname, window.location.href, 'Yoga Sequences', 'bi-person-arms-up');
+                let urlPath = window.location.pathname;
+                let fullUrl = window.location.href;
+                let title = 'Yoga Sequences';
+                
+                if (typeof mySequences !== 'undefined' && typeof activeSequenceKey !== 'undefined' && mySequences[activeSequenceKey]) {
+                    const seq = mySequences[activeSequenceKey];
+                    const seqStr = seq.poses.join(',');
+                    if (seqStr) {
+                        const searchParams = new URLSearchParams();
+                        searchParams.set('seq', seqStr);
+                        searchParams.set('name', seq.name);
+                        searchParams.set('color', seq.color);
+                        searchParams.set('view', '1');
+                        
+                        urlPath = window.location.pathname + '?' + searchParams.toString();
+                        fullUrl = window.location.origin + urlPath;
+                        title = seq.name;
+                    }
+                }
+
+                const isSaved = window.userProfile.toggleFavorite('yoga', urlPath, fullUrl, title, 'bi-person-arms-up');
                 btn.innerHTML = isSaved ? '<i class="bi bi-bookmark-fill text-info"></i>' : '<i class="bi bi-bookmark"></i>';
             }
         }
-        document.addEventListener('DOMContentLoaded', () => {
+        
+        function updateSaveButtonState() {
             const btn = document.getElementById('saveAppBtn');
-            if (btn && window.userProfile && window.userProfile.isSaved(window.location.pathname)) {
-                btn.innerHTML = '<i class="bi bi-bookmark-fill text-info"></i>';
+            if (!btn || !window.userProfile) return;
+            
+            let urlPath = window.location.pathname;
+            if (typeof mySequences !== 'undefined' && typeof activeSequenceKey !== 'undefined' && mySequences[activeSequenceKey]) {
+                const seq = mySequences[activeSequenceKey];
+                const seqStr = seq.poses.join(',');
+                if (seqStr) {
+                    const searchParams = new URLSearchParams();
+                    searchParams.set('seq', seqStr);
+                    searchParams.set('name', seq.name);
+                    searchParams.set('color', seq.color);
+                    searchParams.set('view', '1');
+                    urlPath = window.location.pathname + '?' + searchParams.toString();
+                }
             }
-        });
+            
+            if (window.userProfile.isSaved(urlPath)) {
+                btn.innerHTML = '<i class="bi bi-bookmark-fill text-info"></i>';
+            } else {
+                btn.innerHTML = '<i class="bi bi-bookmark"></i>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', updateSaveButtonState);
 
         // Initial Basic Poses
         const POSES = [
@@ -1034,7 +1041,6 @@ permalink: /yoga.html
                     feet: 'Feet hip-width apart. Press heels gently toward the mat.'
                 },
                 vars: {
-                    '--drishti-rot': 0, '--drishti-opacity': 0.6,
                     '--fig-rot': 0, '--fig-x': 0, '--fig-y': 38.6,
                     '--ub-rot': 126, '--head-rot': 0,
                     '--la-rot': 180, '--le-rot': 0,
@@ -1065,7 +1071,7 @@ permalink: /yoga.html
                     feet: 'Back foot turned out 45 degrees, pressing firmly into the outer edge. Front knee tracks over the ankle.'
                 },
                 varsFront: {
-                    '--fig-y': 88, '--drishti-rot': 0, '--drishti-opacity': 0.6,
+                    '--fig-y': 88,
                     '--ub-rot-f': 0, '--head-rot-f': -15,
                     '--la-rot-f': 180, '--le-rot-f': 0,
                     '--ra-rot-f': 180, '--re-rot-f': 0,
@@ -1240,10 +1246,10 @@ permalink: /yoga.html
                     feet: 'Back foot angled at 45 degrees. Front foot pointing straight ahead.'
                 },
                 varsFront: {
-                    '--fig-y': 28, '--drishti-rot': 0, '--drishti-opacity': 0.6,
+                    '--fig-y': 28,
                     '--ub-rot-f': 90, '--head-rot-f': -90,
-                    '--la-rot-f': 0, '--le-rot-f': 0,
-                    '--ra-rot-f': 180, '--re-rot-f': 0,
+                    '--la-rot-f': -105, '--le-rot-f': 0,
+                    '--ra-rot-f': -75, '--re-rot-f': 0,
                     '--ll-rot-f': 40, '--lk-rot-f': 0,
                     '--rl-rot-f': -40, '--rk-rot-f': 0
                 },
@@ -1520,6 +1526,151 @@ permalink: /yoga.html
                     '--la-rot': 0, '--le-rot': 0, // Arms lock straight down
                     '--ra-rot': 0, '--re-rot': 0
                 }
+            },
+            // NEW POSES:
+            {
+                id: 'phalakasana', name: 'Plank Pose (Phalakasana)', flow: ['chaturanga-dandasana'],
+                desc: 'Top of a push-up with arms straight, body in one long line.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': -50, '--fig-y': 100,
+                    '--ub-rot': 77, '--head-rot': -20,
+                    '--la-rot': -77, '--le-rot': 0,
+                    '--ra-rot': -77, '--re-rot': 0,
+                    '--ll-rot': 77, '--lk-rot': 0,
+                    '--rl-rot': 77, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'bhujangasana', name: 'Cobra Pose (Bhujangasana)', flow: ['adho-mukha-svanasana'],
+                desc: 'Lie on your belly, press your hands into the floor, and lift your chest with elbows slightly bent.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': -50, '--fig-y': 160,
+                    '--ub-rot': 40, '--head-rot': -20,
+                    '--la-rot': -20, '--le-rot': 40,
+                    '--ra-rot': -20, '--re-rot': 40,
+                    '--ll-rot': 80, '--lk-rot': 0,
+                    '--rl-rot': 80, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'ardha-chandrasana', name: 'Half Moon Pose (Ardha Chandrasana)', flow: ['virabhadrasana-ii'],
+                desc: 'Balance on one leg with the same hand on the floor, lifting the other leg parallel to the ground and extending the top arm up.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': 0, '--fig-y': 30,
+                    '--ub-rot': 90, '--head-rot': -45,
+                    '--la-rot': 90, '--le-rot': 0,
+                    '--ra-rot': -90, '--re-rot': 0,
+                    '--ll-rot': 90, '--lk-rot': 0,
+                    '--rl-rot': 0, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'virabhadrasana-iii', name: 'Warrior III (Virabhadrasana III)', flow: ['urdhva-hastasana'],
+                desc: 'Balance on one leg with the torso and raised leg parallel to the floor, arms extended forward.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': 0, '--fig-y': 10,
+                    '--ub-rot': 90, '--head-rot': -45,
+                    '--la-rot': -180, '--le-rot': 0,
+                    '--ra-rot': -180, '--re-rot': 0,
+                    '--ll-rot': 90, '--lk-rot': 0,
+                    '--rl-rot': 0, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'ashta-chandrasana', name: 'Crescent Lunge (Ashta Chandrasana)', flow: ['virabhadrasana-ii'],
+                desc: 'Lunge with the front knee bent, back leg straight with heel lifted, and arms reaching straight up.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': 0, '--fig-y': 40,
+                    '--ub-rot': 0, '--head-rot': -20,
+                    '--la-rot': -180, '--le-rot': 0,
+                    '--ra-rot': -180, '--re-rot': 0,
+                    '--ll-rot': -70, '--lk-rot': 70,
+                    '--rl-rot': 30, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'viparita-virabhadrasana', name: 'Reverse Warrior (Viparita Virabhadrasana)', flow: ['trikonasana'],
+                desc: 'From Warrior II, reach the front arm up and back while the back hand rests lightly on the back leg.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': 0, '--fig-y': 88,
+                    '--ub-rot': -20, '--head-rot': -30,
+                    '--la-rot': 65, '--le-rot': 0,
+                    '--ra-rot': 160, '--re-rot': 0,
+                    '--ll-rot': 60, '--lk-rot': 0,
+                    '--rl-rot': -90, '--rk-rot': 90
+                }
+            },
+            {
+                id: 'bakasana', name: 'Crow Pose (Bakasana)', flow: ['chaturanga-dandasana'],
+                desc: 'Balance on your hands with your knees resting on your upper arms and feet lifted floor.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': 0, '--fig-y': 110,
+                    '--ub-rot': 70, '--head-rot': -40,
+                    '--la-rot': -70, '--le-rot': 0,
+                    '--ra-rot': -70, '--re-rot': 0,
+                    '--ll-rot': -80, '--lk-rot': 160,
+                    '--rl-rot': -80, '--rk-rot': 160
+                }
+            },
+            {
+                id: 'ustrasana', name: 'Camel Pose (Ustrasana)', flow: ['balasana'],
+                desc: 'Kneel and lean back, arching your spine to reach your hands to your heels, pushing your hips forward.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': -40, '--fig-y': 100,
+                    '--ub-rot': -40, '--head-rot': -40,
+                    '--la-rot': 85, '--le-rot': 0,
+                    '--ra-rot': 85, '--re-rot': 0,
+                    '--ll-rot': 0, '--lk-rot': 90,
+                    '--rl-rot': 0, '--rk-rot': 90
+                }
+            },
+            {
+                id: 'natarajasana', name: 'Dancer\'s Pose (Natarajasana)', flow: ['tadasana'],
+                desc: 'Balance on one foot, reaching the opposite arm forward while grabbing the lifted back foot with the other hand.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': 0, '--fig-y': 10,
+                    '--ub-rot': 40, '--head-rot': -20,
+                    '--la-rot': 70, '--le-rot': 0,
+                    '--ra-rot': -130, '--re-rot': 0,
+                    '--ll-rot': 130, '--lk-rot': 80,
+                    '--rl-rot': 0, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'dhanurasana', name: 'Bow Pose (Dhanurasana)', flow: ['adho-mukha-svanasana'],
+                desc: 'Lie on your belly, bend your knees, reach back to grab your ankles, and lift your chest and thighs off the floor.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': -40, '--fig-y': 170,
+                    '--ub-rot': 40, '--head-rot': -30,
+                    '--la-rot': 80, '--le-rot': 0,
+                    '--ra-rot': 80, '--re-rot': 0,
+                    '--ll-rot': 130, '--lk-rot': 60,
+                    '--rl-rot': 130, '--rk-rot': 60
+                }
+            },
+            {
+                id: 'salabhasana', name: 'Locust Pose (Salabhasana)', flow: ['dhanurasana'],
+                desc: 'Lie on your belly and lift your chest, arms, and legs off the floor, reaching arms back.',
+                vars: {
+                    '--fig-rot': 0, '--fig-x': -40, '--fig-y': 170,
+                    '--ub-rot': 30, '--head-rot': -20,
+                    '--la-rot': 60, '--le-rot': 0,
+                    '--ra-rot': 60, '--re-rot': 0,
+                    '--ll-rot': 100, '--lk-rot': 0,
+                    '--rl-rot': 100, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'setu-bandha-sarvangasana', name: 'Bridge Pose (Setu Bandha Sarvangasana)', flow: ['urdhva-dhanurasana'],
+                desc: 'Lie on your back, bend your knees, press feet into the floor, and lift your hips high, clasping hands under your back.',
+                vars: {
+                    '--fig-rot': -90, '--fig-x': 50, '--fig-y': -80,
+                    '--ub-rot': 40, '--head-rot': -40,
+                    '--la-rot': 140, '--le-rot': 0,
+                    '--ra-rot': 140, '--re-rot': 0,
+                    '--ll-rot': 40, '--lk-rot': 90,
+                    '--rl-rot': 40, '--rk-rot': 90
+                }
             }
         ];
 
@@ -1547,25 +1698,16 @@ permalink: /yoga.html
         const debugPanel = document.getElementById('debugPanel');
         const debugBtn = document.getElementById('debugBtn');
         const controls = document.getElementById('controls');
-
-        const perspectiveControls = document.getElementById('perspectiveControls');
         const mainUse = document.getElementById('mainUse');
-        const btnSideView = document.getElementById('btnSideView');
-        const btnFrontView = document.getElementById('btnFrontView');
-        const btnFlipH = document.getElementById('btnFlipH');
-        const btnFlipV = document.getElementById('btnFlipV');
         const yogaManWrapper = document.getElementById('yogaManWrapper');
 
         const zoomOverlay = document.getElementById('zoomOverlay');
         const zoomOverlayTitle = document.getElementById('zoomOverlayTitle');
         const zoomOverlayText = document.getElementById('zoomOverlayText');
 
-        // State
         let currentVars = {};
         let activeIndex = 0;
         let currentView = 'side';
-        let flipX = 1;
-        let flipY = 1;
 
         // Generate Styles for Variables
         function getVarStyles(v) {
@@ -1594,6 +1736,7 @@ permalink: /yoga.html
             const card = document.createElement('div');
             card.className = 'pose-card' + (i === 0 ? ' active' : '');
             card.draggable = true;
+            card.dataset.name = p.name;
             card.addEventListener('dragstart', (e) => drag(e, p.id));
             
             // Extract short name for the thumbnail (e.g. "Tree Pose")
@@ -1654,13 +1797,11 @@ permalink: /yoga.html
             }
 
             descEl.textContent = pose.desc;
-            // Check views and show/hide controls
+            // Check views and apply logic
             if (pose.view === 'front' || pose.varsFront) {
-                perspectiveControls.classList.add('active');
                 if (pose.view === 'front') {
                     toggleView('front');
                 } else if (currentView === 'front' && !pose.varsFront) {
-                    // Fallback to side if we were in front but new pose lacks front vars
                     toggleView('side');
                 } else if (currentView === 'front' && pose.varsFront) {
                     toggleView('front');
@@ -1668,7 +1809,6 @@ permalink: /yoga.html
                     applyVars(pose.vars);
                 }
             } else {
-                perspectiveControls.classList.remove('active');
                 if (currentView === 'front') toggleView('side');
                 applyVars(pose.vars);
             }
@@ -1754,30 +1894,14 @@ permalink: /yoga.html
             if (viewStr === 'front' && pose.varsFront) {
                 mainUse.setAttribute('href', '#stickman-front');
                 applyVars(pose.varsFront);
-                btnFrontView.classList.add('active-view');
-                btnSideView.classList.remove('active-view');
             } else {
                 currentView = 'side';
                 mainUse.setAttribute('href', '#stickman');
                 applyVars(pose.vars);
-                btnSideView.classList.add('active-view');
-                btnFrontView.classList.remove('active-view');
             }
         };
 
-        window.toggleFlip = function(axis) {
-            if (axis === 'x') {
-                flipX = flipX === 1 ? -1 : 1;
-                if(flipX === -1) btnFlipH.classList.add('active-view');
-                else btnFlipH.classList.remove('active-view');
-            }
-            if (axis === 'y') {
-                flipY = flipY === 1 ? -1 : 1;
-                if(flipY === -1) btnFlipV.classList.add('active-view');
-                else btnFlipV.classList.remove('active-view');
-            }
-            yogaManWrapper.style.transform = `scale(${flipX}, ${flipY})`;
-        };
+
 
         // Hotspot Overlay Logic
         window.showDetails = function(part, event) {
@@ -1878,11 +2002,13 @@ permalink: /yoga.html
             renderTimeline();
             renderSeqDots();
             updateAppTheme();
+            updateSaveButtonState();
         }
 
         function saveTimelineToCurrentSequence() {
             if (mySequences[activeSequenceKey]) {
                 mySequences[activeSequenceKey].poses = [...sequence];
+                updateSaveButtonState();
             }
         }
 
@@ -1903,6 +2029,7 @@ permalink: /yoga.html
                 mySequences[activeSequenceKey].name = newName;
             }
             renderSeqDots();
+            updateSaveButtonState();
         }
 
         function updateSeqColor(colorVal) {
@@ -1910,6 +2037,7 @@ permalink: /yoga.html
                 mySequences[activeSequenceKey].color = colorVal;
                 updateAppTheme();
                 renderSeqDots();
+                updateSaveButtonState();
             }
         }
 
@@ -1924,8 +2052,134 @@ permalink: /yoga.html
         let sequence = [];
         let draggedTimelineIndex = null;
         
+        function shareSequence() {
+            if (!mySequences[activeSequenceKey]) return;
+            const seq = mySequences[activeSequenceKey];
+            const seqStr = seq.poses.join(',');
+            const searchParams = new URLSearchParams();
+            searchParams.set('seq', seqStr);
+            searchParams.set('name', seq.name);
+            searchParams.set('color', seq.color);
+            searchParams.set('view', '1');
+            const url = window.location.origin + window.location.pathname + '?' + searchParams.toString();
+            navigator.clipboard.writeText(url).then(() => {
+                alert('Shareable link copied to clipboard!');
+            });
+        }
+        
+        async function exportSequence() {
+            if (sequence.length === 0) return alert('Add poses to the sequence first!');
+            alert("Recording started! Please wait without interacting. The sequence will play once and then prompt you to download the video.");
+            
+            const btn = document.getElementById('exportSeqBtn');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="bi bi-hourglass-split"></i>';
+            btn.style.color = '#ef4444';
+            
+            const canvas = document.createElement('canvas');
+            canvas.width = 800; canvas.height = 600;
+            const ctx = canvas.getContext('2d');
+            
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            const stream = canvas.captureStream(30);
+            let mimeType = 'video/webm; codecs=vp9';
+            if (!MediaRecorder.isTypeSupported(mimeType)) {
+                mimeType = 'video/webm';
+                if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = 'video/mp4';
+            }
+            
+            const mediaRecorder = new MediaRecorder(stream, { mimeType: mimeType });
+            const chunks = [];
+            mediaRecorder.ondataavailable = e => chunks.push(e.data);
+            
+            let recordingComplete = false;
+            mediaRecorder.onstop = () => {
+                recordingComplete = true;
+                const blob = new Blob(chunks, { type: mimeType });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `sequence.webm`;
+                a.click();
+                URL.revokeObjectURL(url);
+                
+                btn.innerHTML = originalHtml;
+                btn.style.color = '';
+            };
+            
+            mediaRecorder.start();
+            stopSequence();
+            
+            const svgNode = document.getElementById('yogaManSvg');
+            const applyVarsToSvgNode = () => {
+                const clone = svgNode.cloneNode(true);
+                Object.keys(currentVars).forEach(k => {
+                    const val = (k.includes('opacity')) ? `${currentVars[k]}` : (k.includes('rot') ? `${currentVars[k]}deg` : `${currentVars[k]}px`);
+                    clone.style.setProperty(k, val);
+                });
+                return clone;
+            };
+
+            const recordFrame = () => {
+                if (mediaRecorder.state !== 'recording') return;
+                try {
+                    const clone = applyVarsToSvgNode();
+                    const xml = new XMLSerializer().serializeToString(clone);
+                    const svg64 = btoa(unescape(encodeURIComponent(xml)));
+                    const image64 = 'data:image/svg+xml;base64,' + svg64;
+                    const img = new Image();
+                    img.onload = () => {
+                        ctx.fillStyle = '#0f172a';
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    };
+                    img.src = image64;
+                } catch(e) { console.error('frame err', e); }
+                
+                if (!recordingComplete) requestAnimationFrame(recordFrame);
+            };
+            
+            requestAnimationFrame(recordFrame);
+            
+            playIndex = 0;
+            for(let i=0; i<sequence.length; i++) {
+                loadPose(POSES.indexOf(POSES.find(p => p.id === sequence[i])));
+                updateTimelineHighlight(i);
+                let transitionTime = i === 0 ? 500 : 1500;
+                await new Promise(r => setTimeout(r, transitionTime + 1500)); 
+            }
+            
+            playIndex = 0;
+            mediaRecorder.stop();
+        }
+        
         // Initial Render
-        setTimeout(() => loadMacroSequence('sun-a'), 0);
+        setTimeout(() => {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has('seq')) {
+                const poses = params.get('seq').split(',').filter(p => p);
+                const name = params.get('name') || 'Shared Sequence';
+                const color = params.get('color') || '#ffffff';
+                const isView = params.get('view') === '1';
+
+                const key = 'shared-1';
+                mySequences[key] = {
+                    name: name,
+                    color: color,
+                    poses: poses
+                };
+                
+                if (isView) {
+                    document.body.classList.add('view-mode');
+                }
+                
+                loadMacroSequence(key);
+            } else {
+                loadMacroSequence('sun-a');
+            }
+        }, 0);
 
         function allowDrop(ev) {
             ev.preventDefault();
@@ -2189,11 +2443,12 @@ permalink: /yoga.html
         }, {passive: true});
 
         function filterPoses(query) {
-            query = query.toLowerCase();
+            const normalize = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+            query = normalize(query);
             const cards = document.querySelectorAll('#poseNav .pose-card');
             cards.forEach(card => {
-                const name = card.querySelector('.pose-card-name').textContent.toLowerCase();
-                if (name.includes(query)) {
+                const searchString = normalize(card.dataset.name || card.querySelector('.pose-card-name').textContent);
+                if (searchString.includes(query)) {
                     card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
