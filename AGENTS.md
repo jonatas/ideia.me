@@ -24,9 +24,9 @@ This repository contains a Jekyll-based personal blog and several offline-first 
   - JavaScript files in `assets/js/` (e.g., `category-standardizer.js`) use conditional `module.exports` to enable compatibility with Node.js testing while remaining usable in the browser.
 
 ## Testing Guidelines
-- **No `package.json`**: The development environment lacks external network access for npm. Tests and benchmarks must rely on built-in Node.js modules or manual mocks rather than new third-party dependencies.
-- **Test Runner**: JavaScript tests are stored in the `tests/js/` directory. They must be executed with the built-in Node.js runner: `node --test tests/js/<filename>.test.js`.
-- **Assertions**: Use the built-in `node:assert` module.
+- **No `package.json`**: The development environment lacks external network access for npm. Testing should rely on built-in Node.js modules or manual mocks rather than new third-party dependencies.
+- **Temporary Tests**: There is no dedicated testing folder. Any tests written are temporary to prove functionality and should be removed before pushing.
+- **Demo Pages**: It is preferred to design a demo page that visually shows how a feature works rather than writing a unit test, unless the logic is highly complex and requires detailed specifications.
 
 ## Jules Execution Guidelines
 - **Refactoring & Dependency Creep**: When asked to improve a feature, always check for "dependency creep." If a native browser API can do it, do not suggest or use an NPM package.
