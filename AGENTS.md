@@ -10,7 +10,7 @@ This repository contains a Jekyll-based personal blog and several offline-first 
 - **Terminal Compatibility**: The project should be easily navigable and buildable via standard Linux/Bash tools.
 
 ## Technical Stack & Constraints
-- **Persistence**: Use `localStorage` for simple settings and `IndexedDB` for complex app data (e.g., classes, sequences).
+- **Persistence**: Use `LocalProfile` (via `js/profile.js` which wraps `localStorage`) for user engagement, simple settings, and favorites. Use `IndexedDB` for complex app data (e.g., classes, sequences).
 - **Connectivity (Offline-First)**: Applications must be fully functional PWAs (Progressive Web Apps) with a Service Worker that caches all assets (SVGs, scripts, styles) for 100% offline use.
 - **Data Portability**: Provide "Import/Export" functionality using JSON files so users can back up or share their data manually.
 - **Code Style**:
