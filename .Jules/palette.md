@@ -1,0 +1,3 @@
+## 2026-03-26 - Adding Focus Challenge Interaction
+**Learning:** Adding an interactive element that requires intentional stillness (hover/focus without moving) perfectly reinforces themes of mindfulness and attention. A 5-second timer with a progressive visual bar turns a passive reading experience into an active demonstration of the article's core concept. Ensuring it supports both mouse hover and keyboard focus is key for accessibility.
+**Action:** Use native HTML/JS with keyboard-accessible events (`focus`/`blur`) and `tabindex="0"` for interactive widgets in markdown posts to build engaging, accessible mini-challenges without extra dependencies.
