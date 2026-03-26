@@ -79,4 +79,144 @@ way to say, ok, I did it!
 
 > And no, I haven't watched the series Severance but I know it exists ;)
 
+---
+
+### Focus Challenge
+
+Want to see how hard it is to just stay still? Try holding your focus here for 5 seconds without clicking away or moving your mouse off the target.
+
+<style>
+#focus-challenge-widget {
+  background: #161b27;
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 16px;
+  padding: 40px 24px 32px;
+  text-align: center;
+  margin: 32px 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  user-select: none;
+}
+#focus-target {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #0d9488, #1E3A8A);
+  margin: 0 auto 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+}
+#focus-target:hover, #focus-target:focus {
+  transform: scale(1.05);
+  filter: brightness(1.2);
+  outline: 2px solid #0EA5E9;
+  outline-offset: 4px;
+}
+#focus-message {
+  color: #8892b0;
+  font-size: 1rem;
+  font-weight: bold;
+  min-height: 1.5em;
+}
+#focus-progress-container {
+  width: 100%;
+  max-width: 300px;
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  margin: 20px auto 0;
+  overflow: hidden;
+}
+#focus-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: #0EA5E9;
+  transition: width 0.1s linear;
+}
+</style>
+
+<div id="focus-challenge-widget">
+  <div id="focus-target" tabindex="0" aria-label="Hover or focus here for 5 seconds to complete the focus challenge" role="button">
+    <span id="focus-timer">5.0</span>
+  </div>
+  <div id="focus-message" aria-live="polite">Hover or focus to begin</div>
+  <div id="focus-progress-container" aria-hidden="true">
+    <div id="focus-progress-bar"></div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const target = document.getElementById('focus-target');
+  const timerDisplay = document.getElementById('focus-timer');
+  const messageDisplay = document.getElementById('focus-message');
+  const progressBar = document.getElementById('focus-progress-bar');
+
+  let focusInterval;
+  let startTime;
+  const targetDuration = 5000; // 5 seconds
+  let isFocused = false;
+  let hasWon = false;
+
+  function updateDisplay(safeMessage, timeLeftMs) {
+    if (safeMessage) {
+        messageDisplay.textContent = "";
+        messageDisplay.appendChild(document.createTextNode(safeMessage));
+    }
+
+    if (timeLeftMs !== undefined) {
+        const secondsLeft = Math.max(0, timeLeftMs / 1000).toFixed(1);
+        timerDisplay.textContent = "";
+        timerDisplay.appendChild(document.createTextNode(secondsLeft));
+
+        const progress = Math.min(100, Math.max(0, ((targetDuration - timeLeftMs) / targetDuration) * 100));
+        progressBar.style.width = `${progress}%`;
+    }
+  }
+
+  function startFocus() {
+    if (hasWon) return;
+    isFocused = true;
+    startTime = Date.now();
+    updateDisplay("Stay still...", targetDuration);
+
+    clearInterval(focusInterval);
+    focusInterval = setInterval(() => {
+      if (!isFocused) {
+        clearInterval(focusInterval);
+        return;
+      }
+
+      const elapsed = Date.now() - startTime;
+      const remaining = targetDuration - elapsed;
+
+      if (remaining <= 0) {
+        clearInterval(focusInterval);
+        hasWon = true;
+        updateDisplay("Focus Challenge Complete!", 0);
+        target.style.background = "radial-gradient(circle at 38% 32%, #10B981, #064E3B)";
+      } else {
+        updateDisplay(undefined, remaining);
+      }
+    }, 50);
+  }
+
+  function loseFocus() {
+    if (hasWon) return;
+    isFocused = false;
+    clearInterval(focusInterval);
+    updateDisplay("Focus lost! Hover or focus to restart.", targetDuration);
+  }
+
+  target.addEventListener('mouseenter', startFocus);
+  target.addEventListener('mouseleave', loseFocus);
+  target.addEventListener('focus', startFocus);
+  target.addEventListener('blur', loseFocus);
+})();
+</script>
 

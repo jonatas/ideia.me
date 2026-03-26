@@ -2,6 +2,7 @@
 layout: post
 categories: [career]
 title: First week at Hubstaff
+image: /images/time-investment-visualization.png
 ---
 
 # My first week at Hubstaff
