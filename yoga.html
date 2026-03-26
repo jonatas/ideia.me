@@ -649,10 +649,12 @@ permalink: /yoga.html
             top: 60px;
             bottom: 0;
             width: 300px;
-            background: rgba(0,0,0,0.8);
+            background: var(--bg-color);
             border-left: 1px solid rgba(255,255,255,0.1);
+            box-shadow: -5px 0 20px rgba(0,0,0,0.8);
             padding: 20px;
             overflow-y: auto;
+            z-index: 1000;
             display: none; /* change to block to use */
         }
         .debug-panel.active {
@@ -748,12 +750,125 @@ permalink: /yoga.html
             margin-bottom: 4px;
         }
 
+        /* Gallery View */
+        .gallery-view {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            width: 100%;
+            background: var(--bg-color);
+            z-index: 50;
+        }
+        .gallery-view.active {
+            display: flex;
+        }
+        .gallery-header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .gallery-header h3 { margin: 0; font-size: 1.2rem; color: var(--accent-color); }
+        .gallery-controls {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .gallery-controls .pose-selector { width: 100%; }
+        .gallery-grid {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 16px;
+            align-content: start;
+        }
+        .gallery-grid .pose-card {
+            width: 100%; min-width: 0; opacity: 0.6; padding: 12px; box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .gallery-grid .pose-card:hover { opacity: 1; background: rgba(255, 255, 255, 0.1); }
+        .gallery-grid .pose-card.active { opacity: 1; outline: 2px solid var(--accent-color); background: rgba(13, 148, 136, 0.2); }
+        
+        /* Tab Buttons */
+        .tab-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--muted-color);
+            padding: 6px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tab-btn:hover {
+            color: var(--text-color);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .tab-btn.active {
+            color: white;
+            background: rgba(13, 148, 136, 0.2);
+            border-color: rgba(13, 148, 136, 0.5);
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            min-height: 0;
+            width: 100%;
+        }
+
+        /* Dynamic Layouts */
+        body.layout-vertical .main-wrapper {
+            flex-direction: row;
+        }
+        
+        body.layout-vertical .pose-nav {
+            flex-direction: column;
+            width: 140px;
+            height: 100%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: linear-gradient(to right, rgba(0,0,0,0.5), transparent);
+            padding: 16px 8px;
+        }
+        
+        body.layout-vertical .pose-nav .pose-card {
+            width: 100%;
+            min-width: 0;
+        }
+
+        @media (min-width: 1024px) and (min-aspect-ratio: 4/3) {
+            body:not(.layout-horizontal) .main-wrapper {
+                flex-direction: row;
+            }
+            body:not(.layout-horizontal) .pose-nav {
+                flex-direction: column;
+                width: 140px;
+                height: 100%;
+                overflow-y: auto;
+                overflow-x: hidden;
+                background: linear-gradient(to right, rgba(0,0,0,0.5), transparent);
+                padding: 16px 8px;
+            }
+            body:not(.layout-horizontal) .pose-nav .pose-card {
+                width: 100%;
+                min-width: 0;
+            }
+        }
+
         /* Classroom Mode */
         body.classroom-mode header,
         body.classroom-mode .pose-nav,
         body.classroom-mode .timeline-area,
         body.classroom-mode .pose-info,
-        body.classroom-mode .debug-panel {
+        body.classroom-mode .debug-panel,
+        body.classroom-mode .gallery-view {
             display: none !important;
         }
         body.classroom-mode .yoga-container {
@@ -877,12 +992,21 @@ permalink: /yoga.html
 
     <header>
         <div class="header-left">
-            <a href="/apps/" class="back-btn" title="Back to Apps">
+            <a href="/apps/" class="back-btn" title="Back to Apps" style="margin-right: 16px;">
                 <i class="bi bi-arrow-left"></i>
                 <span class="d-none d-md-inline">Apps</span>
             </a>
+            <button id="viewPoseBtn" class="tab-btn active" onclick="switchView('pose')" title="Pose View">
+                <i class="bi bi-person-arms-up"></i>
+            </button>
+            <button id="viewGalleryBtn" class="tab-btn" onclick="switchView('gallery')" title="Gallery View">
+                <i class="bi bi-grid-3x3-gap"></i>
+            </button>
         </div>
         <div class="header-right">
+            <button id="searchBtn" class="icon-btn" title="Search Poses" onclick="toggleSearch()">
+                <i class="bi bi-search"></i>
+            </button>
             <button id="saveAppBtn" class="icon-btn" title="Save to My Space" onclick="saveThisApp(this)">
                 <i class="bi bi-bookmark"></i>
             </button>
@@ -1029,6 +1153,7 @@ permalink: /yoga.html
         </div>
     </div>
 
+    <div class="main-wrapper">
     <div class="pose-nav" id="poseNav">
         <!-- Populated by JS -->
     </div>
@@ -1066,11 +1191,18 @@ permalink: /yoga.html
             <div class="pose-desc" id="poseDesc">Stand tall with your feet together, shoulders relaxed, weight distributed evenly through your soles, arms at sides.</div>
         </div>
     </main>
+    </div>
 
     <!-- Debug Panel for Pose Editing -->
     <div class="debug-panel" id="debugPanel">
         <h3 style="margin-top:0">Settings</h3>
         <div style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; gap: 8px; align-items: center; color: var(--muted-color); font-size: 0.9rem;">
+                Layout:
+                <button class="icon-btn" style="padding: 4px; font-size: 1.2rem;" onclick="updateGalleryLayout('auto')" title="Auto Layout" id="layoutBtnAuto"><i class="bi bi-display"></i></button>
+                <button class="icon-btn" style="padding: 4px; font-size: 1.2rem;" onclick="updateGalleryLayout('horizontal')" title="Horizontal Layout" id="layoutBtnHoriz"><i class="bi bi-layout-top"></i></button>
+                <button class="icon-btn" style="padding: 4px; font-size: 1.2rem;" onclick="updateGalleryLayout('vertical')" title="Vertical Layout" id="layoutBtnVert"><i class="bi bi-layout-sidebar"></i></button>
+            </div>
             <label class="flow-suggest-label" title="Suggest Flows based on sequence">
                 <input type="checkbox" id="suggestFlowsToggle" onchange="updateFlowSuggestions()" checked>
                 Suggest Flows
@@ -1083,6 +1215,21 @@ permalink: /yoga.html
         <div id="controls"></div>
         <button onclick="exportPose()" style="margin-top: 15px; padding: 5px 10px; background: var(--accent-color); color: white; border: none; cursor:pointer;">Export JSON</button>
         <textarea id="exportArea" style="width: 100%; height: 100px; margin-top: 10px; background: #222; color: #fff; border: none; font-family: monospace; font-size: 10px;"></textarea>
+    </div>
+
+    <!-- Gallery View -->
+    <div class="gallery-view" id="galleryView">
+        <div class="gallery-header">
+            <h3>Pose Gallery</h3>
+        </div>
+        <div class="gallery-controls">
+            <select id="gallerySort" class="pose-selector" onchange="renderGallery()">
+                <option value="default">Default Order</option>
+                <option value="name">Sort by Name</option>
+                <option value="similarity">Sort by Similarity</option>
+            </select>
+        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
     </div>
 
     <script src="/js/profile.js"></script>
@@ -1222,7 +1369,8 @@ permalink: /yoga.html
                     '--la-rot': -167, '--le-rot': 90,
                     '--ra-rot': -167, '--re-rot': 90,
                     '--ll-rot': 77, '--lk-rot': 0,
-                    '--rl-rot': 77, '--rk-rot': 0
+                    '--rl-rot': 77, '--rk-rot': 0,
+                    '--torso-cx': 110
                 }
             },
             {
@@ -1234,7 +1382,8 @@ permalink: /yoga.html
                     '--la-rot': -23, '--le-rot': 0,
                     '--ra-rot': -23, '--re-rot': 0,
                     '--ll-rot': 80, '--lk-rot': 0,
-                    '--rl-rot': 80, '--rk-rot': 0
+                    '--rl-rot': 80, '--rk-rot': 0,
+                    '--torso-cx': 160
                 }
             },
             {
@@ -1263,7 +1412,8 @@ permalink: /yoga.html
                     '--la-rot': 180, '--le-rot': 0,
                     '--ra-rot': 180, '--re-rot': 0,
                     '--ll-rot': 36, '--lk-rot': 0,
-                    '--rl-rot': 36, '--rk-rot': 0
+                    '--rl-rot': 36, '--rk-rot': 0,
+                    '--torso-cx': 120
                 }
             },
             {
@@ -1283,7 +1433,8 @@ permalink: /yoga.html
                     '--la-rot': 135, '--le-rot': 0,
                     '--ra-rot': 135, '--re-rot': 0,
                     '--ll-rot': -45, '--lk-rot': 45,
-                    '--rl-rot': -45, '--rk-rot': 45
+                    '--rl-rot': -45, '--rk-rot': 45,
+                    '--torso-cx': 130
                 }
             },
             {
@@ -2869,9 +3020,42 @@ permalink: /yoga.html
         }
 
         // Debug Setup
-        debugBtn.addEventListener('click', () => {
+        debugBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             debugPanel.classList.toggle('active');
         });
+
+        document.addEventListener('click', (e) => {
+            if (debugPanel.classList.contains('active') && !debugPanel.contains(e.target)) {
+                debugPanel.classList.remove('active');
+            }
+        });
+
+        function updateGalleryLayout(layoutOverride) {
+            let layout = layoutOverride;
+            if (!layout) {
+                layout = localStorage.getItem('yoga-gallery-layout') || 'auto';
+            }
+            document.body.classList.remove('layout-horizontal', 'layout-vertical');
+            if (layout === 'horizontal') document.body.classList.add('layout-horizontal');
+            if (layout === 'vertical') document.body.classList.add('layout-vertical');
+            
+            // Update active states
+            const btns = {
+                'auto': document.getElementById('layoutBtnAuto'),
+                'horizontal': document.getElementById('layoutBtnHoriz'),
+                'vertical': document.getElementById('layoutBtnVert')
+            };
+            Object.keys(btns).forEach(k => {
+                if (btns[k]) {
+                    btns[k].style.color = (k === layout) ? 'var(--accent-color)' : 'var(--muted-color)';
+                }
+            });
+            
+            localStorage.setItem('yoga-gallery-layout', layout);
+        }
+
+        updateGalleryLayout();
 
         // Add Breath Duration Setting
         const breathRow = document.createElement('div');
@@ -3175,6 +3359,100 @@ permalink: /yoga.html
                 cards[originalSearchPoseIndex].classList.add('search-selected');
                 cards[originalSearchPoseIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
             }
+        }
+
+        function toggleSearch() {
+            const ff = document.getElementById('fuzzyFinder');
+            if (ff.style.display === 'none') {
+                originalSearchPoseIndex = activeIndex;
+                ff.style.display = 'flex';
+                document.getElementById('fuzzyInput').focus();
+            } else {
+                ff.style.display = 'none';
+                document.getElementById('fuzzyInput').value = '';
+                filterPoses('');
+                document.getElementById('fuzzyInput').blur();
+            }
+        }
+
+        function switchView(viewMode) {
+            const viewPoseBtn = document.getElementById('viewPoseBtn');
+            const viewGalleryBtn = document.getElementById('viewGalleryBtn');
+            const mainContainer = document.querySelector('.main-wrapper') || document.querySelector('main');
+            const timelineArea = document.querySelector('.timeline-area');
+            const galleryView = document.getElementById('galleryView');
+            
+            if (viewMode === 'gallery') {
+                if (viewPoseBtn) viewPoseBtn.classList.remove('active');
+                if (viewGalleryBtn) viewGalleryBtn.classList.add('active');
+                if (mainContainer) mainContainer.style.display = 'none';
+                if (timelineArea) timelineArea.style.display = 'none';
+                galleryView.classList.add('active');
+                renderGallery();
+            } else {
+                if (viewGalleryBtn) viewGalleryBtn.classList.remove('active');
+                if (viewPoseBtn) viewPoseBtn.classList.add('active');
+                if (mainContainer) mainContainer.style.display = ''; 
+                if (timelineArea) timelineArea.style.display = '';
+                galleryView.classList.remove('active');
+            }
+        }
+
+        function renderGallery() {
+            const sortVal = document.getElementById('gallerySort').value;
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = '';
+            
+            let posesList = POSES.map((pose, index) => ({ pose, index }));
+            
+            if (sortVal === 'name') {
+                posesList.sort((a, b) => a.pose.name.localeCompare(b.pose.name));
+            } else if (sortVal === 'similarity') {
+                const currentPose = POSES[activeIndex];
+                posesList.sort((a, b) => calculatePoseDistance(currentPose, a.pose) - calculatePoseDistance(currentPose, b.pose));
+            }
+            
+            posesList.forEach(item => {
+                const p = item.pose;
+                const i = item.index;
+                const card = document.createElement('div');
+                card.className = 'pose-card' + (i === activeIndex ? ' active' : '');
+                
+                const shortName = p.name.split('(')[0].trim();
+                
+                card.innerHTML = `
+                    <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" class="mini-pose" style="${getVarStyles(p.vars)}">
+                        <line x1="-500" y1="368" x2="1000" y2="368" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
+                        <use href="#stickman" />
+                    </svg>
+                    <div class="pose-card-name">${shortName}</div>
+                `;
+                
+                card.onclick = () => {
+                    loadPose(i);
+                    // Update active state in gallery visually immediately
+                    grid.querySelectorAll('.pose-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    
+                    if (typeof activeSequenceKey !== 'undefined' && activeSequenceKey.startsWith('custom-')) {
+                        sequence.push({ id: p.id, breaths: 1 });
+                        saveTimelineToCurrentSequence();
+                        renderTimeline();
+                    }
+                    
+                    if (sortVal === 'similarity') {
+                        // Re-render if similarity changed to keep the top accurate
+                        renderGallery();
+                    }
+
+                    // Return to pose view automatically!
+                    setTimeout(() => {
+                        switchView('pose');
+                    }, 100);
+                };
+                
+                grid.appendChild(card);
+            });
         }
 
         // Init
