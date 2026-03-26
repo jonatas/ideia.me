@@ -23,7 +23,7 @@ permalink: /yoga.html
             margin: 0;
             padding: 0;
             width: 100%;
-            height: 100%;
+            min-height: 100vh;
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -38,6 +38,7 @@ permalink: /yoga.html
             justify-content: space-between;
             align-items: center;
             z-index: 10;
+            flex-shrink: 0;
         }
 
         .header-left, .header-right {
@@ -98,13 +99,14 @@ permalink: /yoga.html
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 40vh;
+            padding: 40px 20px;
+            box-sizing: border-box;
         }
 
         .yoga-man {
             max-width: 800px;
-            max-height: 100%;
             width: 100%;
+            height: auto;
             filter: drop-shadow(0 0 20px rgba(13, 148, 136, 0.2));
             transition: transform 0.3s;
         }
@@ -202,6 +204,7 @@ permalink: /yoga.html
             border-bottom: 1px solid rgba(255,255,255,0.05);
             align-items: stretch;
             z-index: 5;
+            flex-shrink: 0;
         }
         
         .seq-dots {
@@ -468,6 +471,7 @@ permalink: /yoga.html
             background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
             box-sizing: border-box;
             -webkit-overflow-scrolling: touch;
+            flex-shrink: 0;
         }
 
         @media (max-width: 768px) {
@@ -1853,7 +1857,7 @@ permalink: /yoga.html
                 id: 'marjaryasana', name: 'Cat Pose (Marjaryasana)', flow: ['bitilasana', 'adho-mukha-svanasana', 'balasana'],
                 desc: 'On hands and knees, exhale and round your spine toward the ceiling like an angry cat. Tuck your chin.',
                 vars: {
-                    '--fig-rot': 90, '--fig-x': -40, '--fig-y': 250,
+                    '--fig-rot': 90, '--fig-x': -40, '--fig-y': 150,
                     '--ub-rot': 110, '--head-rot': 60,
                     '--la-rot': 90, '--le-rot': 0,
                     '--ra-rot': 90, '--re-rot': 0,
@@ -1865,7 +1869,7 @@ permalink: /yoga.html
                 id: 'bitilasana', name: 'Cow Pose (Bitilasana)', flow: ['marjaryasana', 'adho-mukha-svanasana', 'balasana'],
                 desc: 'On hands and knees, inhale and lift your sitting bones and chest toward the ceiling, allowing your belly to sink toward the floor.',
                 vars: {
-                    '--fig-rot': 90, '--fig-x': -40, '--fig-y': 250,
+                    '--fig-rot': 90, '--fig-x': -40, '--fig-y': 150,
                     '--ub-rot': 250, '--head-rot': -30,
                     '--la-rot': 90, '--le-rot': 0,
                     '--ra-rot': 90, '--re-rot': 0,
@@ -1876,25 +1880,26 @@ permalink: /yoga.html
             {
                 id: 'ardha-pincha-mayurasana', name: 'Dolphin Pose (Ardha Pincha Mayurasana)', flow: ['adho-mukha-svanasana', 'sirsasana', 'marjaryasana', 'balasana'],
                 desc: 'Similar to Downward Dog, but on forearms. Press your forearms into the floor and lift your hips up and back.',
+                inherit: 'adho-mukha-svanasana',
                 vars: {
-                    '--fig-rot': 135, '--fig-x': 0, '--fig-y': 150,
-                    '--ub-rot': 90, '--head-rot': 0,
-                    '--la-rot': 90, '--le-rot': 90,
-                    '--ra-rot': 90, '--re-rot': 90,
-                    '--ll-rot': 0, '--lk-rot': 0,
-                    '--rl-rot': 0, '--rk-rot': 0
+                    '--fig-y': 65,
+                    '--ub-rot': 130,
+                    '--la-rot': 150, '--le-rot': -90,
+                    '--ra-rot': 150, '--re-rot': -90,
+                    '--ll-rot': 30, '--lk-rot': 0,
+                    '--rl-rot': 30, '--rk-rot': 0
                 }
             },
             {
                 id: 'eka-pada-rajakapotasana', name: 'Pigeon Pose (Eka Pada Rajakapotasana)', flow: ['adho-mukha-svanasana', 'baddha-konasana'],
                 desc: 'From Downward Dog, bring your right knee forward behind your right wrist. Extend your left leg straight back. Keep your hips square.',
                 vars: {
-                    '--fig-rot': 15, '--fig-x': -40, '--fig-y': 300,
-                    '--ub-rot': 180, '--head-rot': 0,
-                    '--la-rot': 180, '--le-rot': 0,
-                    '--ra-rot': 180, '--re-rot': 0,
-                    '--ll-rot': 90, '--lk-rot': 90,
-                    '--rl-rot': -10, '--rk-rot': 0
+                    '--fig-rot': 0, '--fig-x': -40, '--fig-y': 150,
+                    '--ub-rot': 10, '--head-rot': -10,
+                    '--la-rot': 20, '--le-rot': 0,
+                    '--ra-rot': 20, '--re-rot': 0,
+                    '--ll-rot': 90, '--lk-rot': 0,
+                    '--rl-rot': -60, '--rk-rot': 120
                 }
             }
         ];
