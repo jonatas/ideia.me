@@ -815,6 +815,36 @@ permalink: /yoga.html
         #prevPoseThumbnail { left: 24px; }
         #nextPoseThumbnail { right: 24px; }
 
+        .classroom-exit-btn {
+            display: none;
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 32px;
+            height: 32px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 1.1rem;
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(2px);
+            transition: all 0.2s;
+        }
+        
+        .classroom-exit-btn:hover {
+            color: white;
+            background: rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        body.classroom-mode .classroom-exit-btn {
+            display: flex;
+        }
+
         /* View Mode for Shared Sequences */
         body.view-mode .pose-nav,
         body.view-mode .seq-dot.add-seq,
@@ -855,6 +885,9 @@ permalink: /yoga.html
         <div class="header-right">
             <button id="saveAppBtn" class="icon-btn" title="Save to My Space" onclick="saveThisApp(this)">
                 <i class="bi bi-bookmark"></i>
+            </button>
+            <button id="fullscreenBtn" class="icon-btn" title="Fullscreen / Classroom Mode" onclick="toggleFullScreen()">
+                <i class="bi bi-arrows-fullscreen"></i>
             </button>
             <button id="shareSeqBtn" class="icon-btn" title="Share All Sequences" onclick="shareSequence()">
                 <i class="bi bi-share"></i>
@@ -901,7 +934,7 @@ permalink: /yoga.html
                             </g>
                         </g>
                         <!-- Torso -->
-                        <line x1="100" y1="200" x2="100" y2="100" class="bone-front" stroke-width="16" />
+                        <path id="torso-path" class="bone-front" stroke-width="16" fill="none" d="M 100 200 Q 100 150 100 100" style="transition: all 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); d: var(--torso-path, path('M 100 200 Q 100 150 100 100'));" />
                         <!-- Head -->
                         <g id="head-group" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--head-rot, 0deg));">
                             <line x1="100" y1="100" x2="100" y2="80" class="bone-front" stroke-width="10" />
@@ -944,7 +977,7 @@ permalink: /yoga.html
                     <!-- Upper Body -->
                     <g id="upper-body-f" class="joint-group" style="transform-origin: 100px 200px; transform: rotate(var(--ub-rot-f, 0deg));">
                         <!-- Torso -->
-                        <line x1="100" y1="200" x2="100" y2="100" class="bone-front" stroke-width="16" />
+                        <path id="torso-path-f" class="bone-front" stroke-width="16" fill="none" d="M 100 200 Q 100 150 100 100" style="transition: all 1.5s cubic-bezier(0.4, 0.0, 0.2, 1); d: var(--torso-path-f, path('M 100 200 Q 100 150 100 100'));" />
                         <!-- Shoulders -->
                         <line x1="70" y1="100" x2="130" y2="100" class="bone-front" stroke-width="14" />
                         <!-- Left Arm -->
@@ -1006,6 +1039,9 @@ permalink: /yoga.html
         <div id="classroomRightClick" class="classroom-nav-click" onclick="nextClassroomPose()"></div>
         <div id="prevPoseThumbnail" class="classroom-thumbnail" title="Previous Pose"></div>
         <div id="nextPoseThumbnail" class="classroom-thumbnail" title="Next Pose"></div>
+        <button id="exitClassroomBtn" class="classroom-exit-btn" onclick="toggleFullScreen()" title="Exit Presentation Mode">
+            <i class="bi bi-fullscreen-exit"></i>
+        </button>
 
         <div class="flow-suggestions-area" id="flowSuggestions">
             <!-- Populated dynamically by JS when a pose is selected -->
@@ -1214,7 +1250,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'adho-mukha-svanasana', name: 'Downward-Facing Dog (Adho Mukha Svanasana)', flow: ['virabhadrasana-i', 'virabhadrasana-i-left', 'trikonasana', 'trikonasana-left', 'ardha-uttanasana', 'ardha-pincha-mayurasana', 'eka-pada-rajakapotasana', 'marjaryasana'],
+                id: 'adho-mukha-svanasana', name: 'Downward-Facing Dog (Adho Mukha Svanasana)', flow: ['virabhadrasana-i', 'virabhadrasana-i-left', 'trikonasana', 'trikonasana-left', 'ardha-uttanasana', 'ardha-pincha-mayurasana', 'eka-pada-rajakapotasana', 'marjaryasana', 'eka-pada-adho-mukha-svanasana'],
                 desc: 'Form an inverted V shape with your body. Press hands into the floor, hips lifted high, legs straight.',
                 details: {
                     head: 'Relax your neck. Let the crown of your head point towards the floor. Drishti (gaze) is towards your navel.',
@@ -1228,6 +1264,14 @@ permalink: /yoga.html
                     '--ra-rot': 180, '--re-rot': 0,
                     '--ll-rot': 36, '--lk-rot': 0,
                     '--rl-rot': 36, '--rk-rot': 0
+                }
+            },
+            {
+                id: 'eka-pada-adho-mukha-svanasana', name: 'Three-Legged Dog (Eka Pada Adho Mukha Svanasana)', flow: ['adho-mukha-svanasana', 'phalakasana', 'eka-pada-rajakapotasana', 'virabhadrasana-i'],
+                desc: 'From Downward Dog, lift one leg straight up and back, keeping hips square to the mat.',
+                inherit: 'adho-mukha-svanasana',
+                vars: {
+                    '--rl-rot': 180, '--rk-rot': 0
                 }
             },
             {
@@ -1298,7 +1342,8 @@ permalink: /yoga.html
                     '--la-rot': 0, '--le-rot': 0,
                     '--ra-rot': 0, '--re-rot': 0,
                     '--ll-rot': -90, '--lk-rot': 180,
-                    '--rl-rot': -90, '--rk-rot': 180
+                    '--rl-rot': -90, '--rk-rot': 180,
+                    '--torso-cx': 40
                 }
             },
             {
@@ -1322,7 +1367,8 @@ permalink: /yoga.html
                     '--la-rot': 180, '--le-rot': 0,
                     '--ra-rot': 180, '--re-rot': 0,
                     '--ll-rot': -90, '--lk-rot': 0,
-                    '--rl-rot': -90, '--rk-rot': 0
+                    '--rl-rot': -90, '--rk-rot': 0,
+                    '--torso-cx': 50
                 }
             },
             {
@@ -1402,7 +1448,8 @@ permalink: /yoga.html
                     '--la-rot': -65, '--le-rot': 0,
                     '--ra-rot': -65, '--re-rot': 0,
                     '--ll-rot': -135, '--lk-rot': 0,
-                    '--rl-rot': -135, '--rk-rot': 0
+                    '--rl-rot': -135, '--rk-rot': 0,
+                    '--torso-cx': 70
                 }
             },
             {
@@ -1577,7 +1624,8 @@ permalink: /yoga.html
                     '--la-rot': 90, '--le-rot': 0,
                     '--ra-rot': 90, '--re-rot': 0,
                     '--ll-rot': -60, '--lk-rot': 60,
-                    '--rl-rot': -60, '--rk-rot': 60
+                    '--rl-rot': -60, '--rk-rot': 60,
+                    '--torso-cx': 180
                 }
             },
             {
@@ -1611,7 +1659,8 @@ permalink: /yoga.html
                     '--la-rot': -90, '--le-rot': 0,
                     '--ra-rot': -90, '--re-rot': 0,
                     '--ll-rot': -45, '--lk-rot': 0,
-                    '--rl-rot': -45, '--rk-rot': 0
+                    '--rl-rot': -45, '--rk-rot': 0,
+                    '--torso-cx': 50
                 }
             },
             {
@@ -1722,7 +1771,7 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'bhujangasana', name: 'Cobra Pose (Bhujangasana)', flow: ['adho-mukha-svanasana'],
+                id: 'bhujangasana', name: 'Cobra Pose (Bhujangasana)', flow: ['adho-mukha-svanasana', 'salamba-bhujangasana'],
                 desc: 'Lie on your belly, press your hands into the floor, and lift your chest with elbows slightly bent.',
                 vars: {
                     '--fig-rot': 0, '--fig-x': -50, '--fig-y': 160,
@@ -1730,7 +1779,19 @@ permalink: /yoga.html
                     '--la-rot': -20, '--le-rot': 40,
                     '--ra-rot': -20, '--re-rot': 40,
                     '--ll-rot': 80, '--lk-rot': 0,
-                    '--rl-rot': 80, '--rk-rot': 0
+                    '--rl-rot': 80, '--rk-rot': 0,
+                    '--torso-cx': 140
+                }
+            },
+            {
+                id: 'salamba-bhujangasana', name: 'Sphinx Pose (Salamba Bhujangasana)', flow: ['bhujangasana', 'dhanurasana', 'balasana'],
+                desc: 'Lie on your belly, prop yourself up on your forearms, elbows under shoulders. Lift your chest.',
+                inherit: 'bhujangasana',
+                vars: {
+                    '--ub-rot': 20, '--head-rot': -10,
+                    '--la-rot': -80, '--le-rot': 90,
+                    '--ra-rot': -80, '--re-rot': 90,
+                    '--torso-cx': 120
                 }
             },
             {
@@ -1802,7 +1863,8 @@ permalink: /yoga.html
                     '--la-rot': 65, '--le-rot': 0,
                     '--ra-rot': 65, '--re-rot': 0,
                     '--ll-rot': 0, '--lk-rot': 90,
-                    '--rl-rot': 0, '--rk-rot': 90
+                    '--rl-rot': 0, '--rk-rot': 90,
+                    '--torso-cx': 170
                 }
             },
             {
@@ -1826,7 +1888,8 @@ permalink: /yoga.html
                     '--la-rot': 80, '--le-rot': 0,
                     '--ra-rot': 80, '--re-rot': 0,
                     '--ll-rot': 130, '--lk-rot': 60,
-                    '--rl-rot': 130, '--rk-rot': 60
+                    '--rl-rot': 130, '--rk-rot': 60,
+                    '--torso-cx': 180
                 }
             },
             {
@@ -1854,7 +1917,16 @@ permalink: /yoga.html
                 }
             },
             {
-                id: 'marjaryasana', name: 'Cat Pose (Marjaryasana)', flow: ['bitilasana', 'adho-mukha-svanasana', 'balasana'],
+                id: 'bharmanasana', name: 'Table Top Pose (Bharmanasana)', flow: ['marjaryasana', 'bitilasana', 'adho-mukha-svanasana', 'phalakasana'],
+                desc: 'On hands and knees, keep your spine neutral and flat like a table. Gaze straight down.',
+                inherit: 'marjaryasana',
+                vars: {
+                    '--ub-rot': 180, '--head-rot': 0,
+                    '--torso-cx': 100
+                }
+            },
+            {
+                id: 'marjaryasana', name: 'Cat Pose (Marjaryasana)', flow: ['bitilasana', 'adho-mukha-svanasana', 'balasana', 'bharmanasana'],
                 desc: 'On hands and knees, exhale and round your spine toward the ceiling like an angry cat. Tuck your chin.',
                 vars: {
                     '--fig-rot': 90, '--fig-x': -40, '--fig-y': 150,
@@ -1862,11 +1934,12 @@ permalink: /yoga.html
                     '--la-rot': 90, '--le-rot': 0,
                     '--ra-rot': 90, '--re-rot': 0,
                     '--ll-rot': -90, '--lk-rot': 90,
-                    '--rl-rot': -90, '--rk-rot': 90
+                    '--rl-rot': -90, '--rk-rot': 90,
+                    '--torso-cx': 50
                 }
             },
             {
-                id: 'bitilasana', name: 'Cow Pose (Bitilasana)', flow: ['marjaryasana', 'adho-mukha-svanasana', 'balasana'],
+                id: 'bitilasana', name: 'Cow Pose (Bitilasana)', flow: ['marjaryasana', 'adho-mukha-svanasana', 'balasana', 'bharmanasana'],
                 desc: 'On hands and knees, inhale and lift your sitting bones and chest toward the ceiling, allowing your belly to sink toward the floor.',
                 vars: {
                     '--fig-rot': 90, '--fig-x': -40, '--fig-y': 150,
@@ -1874,7 +1947,8 @@ permalink: /yoga.html
                     '--la-rot': 90, '--le-rot': 0,
                     '--ra-rot': 90, '--re-rot': 0,
                     '--ll-rot': -90, '--lk-rot': 90,
-                    '--rl-rot': -90, '--rk-rot': 90
+                    '--rl-rot': -90, '--rk-rot': 90,
+                    '--torso-cx': 150
                 }
             },
             {
@@ -1908,6 +1982,7 @@ permalink: /yoga.html
             { id: '--fig-rot', min: -180, max: 180, label: 'Fig Rot' },
             { id: '--fig-x', min: -200, max: 200, label: 'Fig X' },
             { id: '--fig-y', min: -200, max: 200, label: 'Fig Y' },
+            { id: '--torso-cx', min: 0, max: 200, label: 'Spine Curve' },
             { id: '--ub-rot', min: -180, max: 180, label: 'Hip Bend' },
             { id: '--head-rot', min: -90, max: 90, label: 'Head' },
             { id: '--la-rot', min: -360, max: 360, label: 'L Arm Upper' },
@@ -2015,7 +2090,21 @@ permalink: /yoga.html
                 }
             });
 
+            // Generate torso paths
+            let cx = v['--torso-cx'] !== undefined ? v['--torso-cx'] : 100;
+            let cy = v['--torso-cy'] !== undefined ? v['--torso-cy'] : 150;
+            let tp = document.getElementById('torso-path');
+            if (tp) tp.setAttribute('d', `M 100 200 Q ${cx} ${cy} 100 100`);
+            svgContainer.style.setProperty('--torso-path', `path('M 100 200 Q ${cx} ${cy} 100 100')`);
+            
+            let cxf = v['--torso-cx-f'] !== undefined ? v['--torso-cx-f'] : 100;
+            let cyf = v['--torso-cy-f'] !== undefined ? v['--torso-cy-f'] : 150;
+            let tpf = document.getElementById('torso-path-f');
+            if (tpf) tpf.setAttribute('d', `M 100 200 Q ${cxf} ${cyf} 100 100`);
+            svgContainer.style.setProperty('--torso-path-f', `path('M 100 200 Q ${cxf} ${cyf} 100 100')`);
+
             Object.keys(v).forEach(k => {
+                if (k.startsWith('--torso-cx') || k.startsWith('--torso-cy')) return;
                 const val = (k.includes('opacity')) ? `${v[k]}` : (k.includes('rot') ? `${v[k]}deg` : `${v[k]}px`);
                 svgContainer.style.setProperty(k, val);
                 
