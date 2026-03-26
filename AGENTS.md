@@ -1,22 +1,24 @@
 # AGENTS.md
 
 ## Project Context
-This repository contains a Jekyll-based personal blog and several offline-first web applications (e.g., `ideia.me/yoga`). **All apps in this repository should follow the same core principles and technical constraints as the Yoga App.**
+This repository contains a Jekyll-based personal blog and several offline-first web applications (e.g., `ideia.me/yoga`). The Yoga App is a free, open-source, offline-first yoga sequence builder designed specifically for yoga teachers to create and manage classes without the need for an account, internet connection, or data tracking.
+
+**All apps in this repository should follow the same core principles and technical constraints as the Yoga App.**
 
 ## Core Principles
-- **Zero Backend**: No signups, no external databases, and no APIs. All data must live in the user's browser.
-- **Performance First**: Minimal dependencies. Prioritize Vanilla JS, CSS Grid/Flexbox, and native Web APIs. Do not introduce new frameworks.
+- **Zero Backend**: No signups, no databases (external), and no APIs. All data must live in the user's browser.
+- **Performance First**: Minimal dependencies. Prioritize Vanilla JS, CSS Grid/Flexbox, and native Web APIs and no new frameworks.
 - **Privacy by Design**: No telemetry or third-party scripts.
 - **Terminal Compatibility**: The project should be easily navigable and buildable via standard Linux/Bash tools.
 
 ## Technical Stack & Constraints
 - **Persistence**: Use `LocalProfile` (via `js/profile.js` which wraps `localStorage`) for user engagement, simple settings, and favorites. Use `IndexedDB` for complex app data (e.g., classes, sequences).
-- **Connectivity (Offline-First)**: Applications must be fully functional PWAs (Progressive Web Apps) with a Service Worker that caches all assets (SVGs, scripts, styles) for 100% offline use.
-- **Data Portability**: Provide "Import/Export" functionality using JSON files so users can back up or share their data manually.
+- **Connectivity**: Must be a fully functional PWA (Progressive Web App) with a Service Worker that caches all assets (SVGs, scripts, styles) for 100% offline use.
+- **Data Portability**: Provide "Import/Export" functionality using JSON files so teachers can backup or share their flows manually.
 - **Code Style**:
-  - Favor a functional approach over complex OOP.
-  - Use clean, documented, SQL-like logic for data filtering within JavaScript.
-  - Prioritize mobile-responsive "studio-mode" interfaces (high contrast, large touch targets).
+  - Functional approach over complex OOP.
+  - Clean, documented SQL-like logic for data filtering within JS.
+  - Mobile-responsive "studio-mode" (high contrast, large touch targets).
 - **Security / XSS Prevention**: To prevent Cross-Site Scripting (XSS) vulnerabilities, avoid using `innerHTML` with dynamic or external data (e.g., from `data-*` attributes or JSON fields). Always use `document.createElement()`, `textContent`, and `appendChild()` for safe DOM manipulation.
 - **Performance (JavaScript)**: Cache DOM NodeList results (e.g., from `querySelectorAll`) outside of event listeners to avoid redundant and expensive DOM queries.
 - **JavaScript Structure**:
@@ -25,15 +27,14 @@ This repository contains a Jekyll-based personal blog and several offline-first 
 
 ## Testing Guidelines
 - **No `package.json`**: The development environment lacks external network access for npm. Testing should rely on built-in Node.js modules or manual mocks rather than new third-party dependencies.
-- **Temporary Tests**: There is no dedicated testing folder. Any tests written are temporary to prove functionality and should be removed before pushing.
-- **Demo Pages**: It is preferred to design a demo page that visually shows how a feature works rather than writing a unit test, unless the logic is highly complex and requires detailed specifications.
+- **JavaScript Tests**: JavaScript tests are stored in the `tests/js/` directory and can be executed with `node --test tests/js/<filename>.test.js`. Testing uses the built-in Node.js `node:test` runner and `node:assert` module.
 
 ## Jules Execution Guidelines
-- **Refactoring & Dependency Creep**: When asked to improve a feature, always check for "dependency creep." If a native browser API can do it, do not suggest or use an NPM package.
-- **Offline Verification**: Every new feature must include logic to ensure it functions when `navigator.onLine` is false.
+- **Refactoring**: When asked to improve a feature, always check for "dependency creep." If a native browser API can do it, do not suggest an NPM package.
+- **Daily Evolution**: Look for ways to recursively optimize the rendering of SVG yoga poses.
+- **Offline Verification**: Every new feature must include logic to ensure it functions when navigator.onLine is false.
 - **Frontend / Visual Verification**: Any frontend UI changes (HTML/CSS/JS) MUST be visually verified by starting a local server, writing a temporary Playwright script (`playwright.sync_api`) to capture a screenshot, and confirming it looks correct before finalizing.
 - **Accessibility Directive (a11y)**: Accessibility is mandatory. Interactive UI elements must support keyboard navigation (e.g., `tabindex="0"`, `focus`/`blur` event listeners) and provide appropriate context for screen readers (ARIA labels, roles).
-- **Daily Evolution**: Look for ways to recursively optimize rendering (e.g., rendering of SVG yoga poses).
 - **Journaling Directive**: Log critical UX and accessibility insights in `.Jules/palette.md` using the format:
   ```markdown
   ## YYYY-MM-DD - [Title]
@@ -53,6 +54,7 @@ This repository contains a Jekyll-based personal blog and several offline-first 
 - **Content Creation**: When adding a new yoga pose to `yoga.html`, always create a corresponding Jekyll markdown blog post in the `_posts/` directory that discusses the pose's ancient usage and suggests a sequence, maintaining a progression from beginner to advanced poses.
 
 ## Environment & Build Guidelines
+- **CLAUDE.md**: The repository contains a `CLAUDE.md` file providing project overview, stack details, and local development instructions (e.g., `bundle exec jekyll serve`).
 - **Jekyll Setup**: The project is a Jekyll-based personal blog using Ruby 3.3.8 (specified in `.ruby-version`).
 - **Dependencies**: When installing Ruby gems locally (e.g., via `bundle config set --local path`), ensure that `.bundle/` and `vendor/` directories are added to `.gitignore` to prevent tracking massive dependency diffs.
 - **Debug Features**: Note that specific apps might have debug flags (e.g., `js/mandala-playground.js` supports `debug=ios` URL query parameter to simulate iOS audio logic).
