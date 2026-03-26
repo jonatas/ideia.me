@@ -1222,12 +1222,11 @@ permalink: /yoga.html
         <div class="gallery-header">
             <h3>Pose Gallery</h3>
         </div>
-        <div class="gallery-controls">
-            <select id="gallerySort" class="pose-selector" onchange="renderGallery()">
-                <option value="default">Default Order</option>
-                <option value="name">Sort by Name</option>
-                <option value="similarity">Sort by Similarity</option>
-            </select>
+        <div class="gallery-controls" style="display: flex; gap: 8px; justify-content: flex-end; padding: 0 16px 16px;">
+            <input type="hidden" id="gallerySort" value="default">
+            <button class="tab-btn active" id="sortBtnDefault" onclick="updateGallerySort('default')" title="Default Order"><i class="bi bi-clock-history"></i></button>
+            <button class="tab-btn" id="sortBtnName" onclick="updateGallerySort('name')" title="Sort by Name"><i class="bi bi-sort-alpha-down"></i></button>
+            <button class="tab-btn" id="sortBtnSimilarity" onclick="updateGallerySort('similarity')" title="Sort by Similarity"><i class="bi bi-diagram-3"></i></button>
         </div>
         <div class="gallery-grid" id="galleryGrid"></div>
     </div>
@@ -3056,6 +3055,28 @@ permalink: /yoga.html
         }
 
         updateGalleryLayout();
+
+        function updateGallerySort(sortMode) {
+            document.getElementById('gallerySort').value = sortMode;
+            
+            const btns = {
+                'default': document.getElementById('sortBtnDefault'),
+                'name': document.getElementById('sortBtnName'),
+                'similarity': document.getElementById('sortBtnSimilarity')
+            };
+            
+            Object.keys(btns).forEach(k => {
+                if (btns[k]) {
+                    if (k === sortMode) {
+                        btns[k].classList.add('active');
+                    } else {
+                        btns[k].classList.remove('active');
+                    }
+                }
+            });
+            
+            renderGallery();
+        }
 
         // Add Breath Duration Setting
         const breathRow = document.createElement('div');
