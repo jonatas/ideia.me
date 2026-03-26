@@ -472,11 +472,10 @@ permalink: /yoga.html
 
         @media (max-width: 768px) {
             .pose-nav {
-                flex-wrap: wrap;
+                flex-wrap: nowrap;
                 justify-content: flex-start;
-                overflow-x: hidden;
-                overflow-y: auto;
-                max-height: 50vh;
+                overflow-x: auto;
+                overflow-y: hidden;
                 padding: 16px;
                 gap: 8px;
             }
@@ -522,6 +521,13 @@ permalink: /yoga.html
             opacity: 1;
             color: white;
             background: rgba(13, 148, 136, 0.15);
+        }
+
+        .pose-card.search-selected {
+            opacity: 1;
+            color: white;
+            outline: 2px solid var(--accent-color);
+            background: rgba(13, 148, 136, 0.25);
         }
 
         .mini-pose {
@@ -846,11 +852,8 @@ permalink: /yoga.html
             <button id="saveAppBtn" class="icon-btn" title="Save to My Space" onclick="saveThisApp(this)">
                 <i class="bi bi-bookmark"></i>
             </button>
-            <button id="fullscreenBtn" class="icon-btn" title="Toggle Fullscreen (f)" onclick="toggleFullScreen()">
-                <i class="bi bi-arrows-fullscreen"></i>
-            </button>
-            <button id="breathBtn" class="icon-btn" title="Toggle Breathing Sync (b)" onclick="toggleBreathing()">
-                <i class="bi bi-lungs"></i>
+            <button id="shareSeqBtn" class="icon-btn" title="Share All Sequences" onclick="shareSequence()">
+                <i class="bi bi-share"></i>
             </button>
             <button id="debugBtn" class="icon-btn" title="Toggle Editor">
                 <i class="bi bi-sliders"></i>
@@ -978,12 +981,7 @@ permalink: /yoga.html
                 <input type="text" id="seqNameInput" class="seq-name-input" onblur="updateSeqName()" onkeydown="if(event.key==='Enter') this.blur();">
                 <input type="color" id="seqColorPicker" class="seq-color-picker" onchange="updateSeqColor(this.value)" title="Change Sequence Color">
                 <div class="timeline-controls">
-                    <label class="flow-suggest-label" title="Suggest Flows based on sequence">
-                        <input type="checkbox" id="suggestFlowsToggle" onchange="updateFlowSuggestions()" checked>
-                        Suggest Flows
-                    </label>
                     <button id="exportSeqBtn" class="icon-btn" title="Export GIF" onclick="exportSequence()"><i class="bi bi-filetype-gif"></i></button>
-                    <button id="shareSeqBtn" class="icon-btn" title="Share Sequence" onclick="shareSequence()"><i class="bi bi-share"></i></button>
                     <button id="playSeqBtn" class="icon-btn" title="Play Sequence" onclick="togglePlaySequence()"><i class="bi bi-play-fill" id="playIcon"></i></button>
                     <button id="clearSeqBtn" class="icon-btn" title="Clear Sequence" onclick="clearSequence()"><i class="bi bi-trash"></i></button>
                 </div>
@@ -1031,6 +1029,16 @@ permalink: /yoga.html
 
     <!-- Debug Panel for Pose Editing -->
     <div class="debug-panel" id="debugPanel">
+        <h3 style="margin-top:0">Settings</h3>
+        <div style="margin-bottom: 20px; display: flex; flex-direction: column; gap: 12px;">
+            <label class="flow-suggest-label" title="Suggest Flows based on sequence">
+                <input type="checkbox" id="suggestFlowsToggle" onchange="updateFlowSuggestions()" checked>
+                Suggest Flows
+            </label>
+            <button id="breathBtn" class="icon-btn" title="Toggle Breathing Sync (b)" onclick="toggleBreathing()" style="display: flex; align-items: center; justify-content: flex-start; gap: 8px; padding: 0; font-size: 1rem;">
+                <i class="bi bi-lungs"></i> Toggle Breathing
+            </button>
+        </div>
         <h3 style="margin-top:0">Pose Editor</h3>
         <div id="controls"></div>
         <button onclick="exportPose()" style="margin-top: 15px; padding: 5px 10px; background: var(--accent-color); color: white; border: none; cursor:pointer;">Export JSON</button>
@@ -1039,26 +1047,35 @@ permalink: /yoga.html
 
     <script src="/js/profile.js"></script>
     <script>
+        function getExportDataJSON() {
+            if (typeof mySequences === 'undefined' || Object.keys(mySequences).length === 0) return null;
+            const exportData = {};
+            for (const key in mySequences) {
+                const seq = mySequences[key];
+                exportData[key] = {
+                    name: seq.name,
+                    color: seq.color,
+                    poses: seq.poses.map(p => typeof p === 'string' ? p : (p.breaths && p.breaths > 1 ? `${p.id}:${p.breaths}` : p.id))
+                };
+            }
+            return JSON.stringify(exportData);
+        }
+
         function saveThisApp(btn) {
             if (window.userProfile) {
                 let urlPath = window.location.pathname;
                 let fullUrl = window.location.href;
                 let title = 'Yoga Sequences';
                 
-                if (typeof mySequences !== 'undefined' && typeof activeSequenceKey !== 'undefined' && mySequences[activeSequenceKey]) {
-                    const seq = mySequences[activeSequenceKey];
-                    const seqStr = seq.poses.map(p => typeof p === 'string' ? p : (p.breaths && p.breaths > 1 ? `${p.id}:${p.breaths}` : p.id)).join(',');
-                    if (seqStr) {
-                        const searchParams = new URLSearchParams();
-                        searchParams.set('seq', seqStr);
-                        searchParams.set('name', seq.name);
-                        searchParams.set('color', seq.color);
-                        searchParams.set('view', '1');
-                        
-                        urlPath = window.location.pathname + '?' + searchParams.toString();
-                        fullUrl = window.location.origin + urlPath;
-                        title = seq.name;
-                    }
+                const exportJSON = getExportDataJSON();
+                if (exportJSON) {
+                    const searchParams = new URLSearchParams();
+                    searchParams.set('all_seqs', exportJSON);
+                    searchParams.set('view', '1');
+                    
+                    urlPath = window.location.pathname + '?' + searchParams.toString();
+                    fullUrl = window.location.origin + urlPath;
+                    title = (typeof activeSequenceKey !== 'undefined' && mySequences[activeSequenceKey]) ? mySequences[activeSequenceKey].name : 'Yoga Sequences';
                 }
 
                 const isSaved = window.userProfile.toggleFavorite('yoga', urlPath, fullUrl, title, 'bi-person-arms-up');
@@ -1071,17 +1088,12 @@ permalink: /yoga.html
             if (!btn || !window.userProfile) return;
             
             let urlPath = window.location.pathname;
-            if (typeof mySequences !== 'undefined' && typeof activeSequenceKey !== 'undefined' && mySequences[activeSequenceKey]) {
-                const seq = mySequences[activeSequenceKey];
-                const seqStr = seq.poses.map(p => typeof p === 'string' ? p : (p.breaths && p.breaths > 1 ? `${p.id}:${p.breaths}` : p.id)).join(',');
-                if (seqStr) {
-                    const searchParams = new URLSearchParams();
-                    searchParams.set('seq', seqStr);
-                    searchParams.set('name', seq.name);
-                    searchParams.set('color', seq.color);
-                    searchParams.set('view', '1');
-                    urlPath = window.location.pathname + '?' + searchParams.toString();
-                }
+            const exportJSON = getExportDataJSON();
+            if (exportJSON) {
+                const searchParams = new URLSearchParams();
+                searchParams.set('all_seqs', exportJSON);
+                searchParams.set('view', '1');
+                urlPath = window.location.pathname + '?' + searchParams.toString();
             }
             
             if (window.userProfile.isSaved(urlPath)) {
@@ -1841,48 +1853,48 @@ permalink: /yoga.html
                 id: 'marjaryasana', name: 'Cat Pose (Marjaryasana)', flow: ['bitilasana', 'adho-mukha-svanasana', 'balasana'],
                 desc: 'On hands and knees, exhale and round your spine toward the ceiling like an angry cat. Tuck your chin.',
                 vars: {
-                    '--fig-rot': 0, '--fig-x': -40, '--fig-y': 150,
-                    '--ub-rot': 110, '--head-rot': 20,
-                    '--la-rot': 160, '--le-rot': 0,
-                    '--ra-rot': 160, '--re-rot': 0,
-                    '--ll-rot': -20, '--lk-rot': 90,
-                    '--rl-rot': -20, '--rk-rot': 90
+                    '--fig-rot': 90, '--fig-x': -40, '--fig-y': 250,
+                    '--ub-rot': 110, '--head-rot': 60,
+                    '--la-rot': 90, '--le-rot': 0,
+                    '--ra-rot': 90, '--re-rot': 0,
+                    '--ll-rot': -90, '--lk-rot': 90,
+                    '--rl-rot': -90, '--rk-rot': 90
                 }
             },
             {
                 id: 'bitilasana', name: 'Cow Pose (Bitilasana)', flow: ['marjaryasana', 'adho-mukha-svanasana', 'balasana'],
                 desc: 'On hands and knees, inhale and lift your sitting bones and chest toward the ceiling, allowing your belly to sink toward the floor.',
                 vars: {
-                    '--fig-rot': 0, '--fig-x': -40, '--fig-y': 150,
-                    '--ub-rot': 70, '--head-rot': -40,
-                    '--la-rot': 200, '--le-rot': 0,
-                    '--ra-rot': 200, '--re-rot': 0,
-                    '--ll-rot': 20, '--lk-rot': 90,
-                    '--rl-rot': 20, '--rk-rot': 90
+                    '--fig-rot': 90, '--fig-x': -40, '--fig-y': 250,
+                    '--ub-rot': 250, '--head-rot': -30,
+                    '--la-rot': 90, '--le-rot': 0,
+                    '--ra-rot': 90, '--re-rot': 0,
+                    '--ll-rot': -90, '--lk-rot': 90,
+                    '--rl-rot': -90, '--rk-rot': 90
                 }
             },
             {
                 id: 'ardha-pincha-mayurasana', name: 'Dolphin Pose (Ardha Pincha Mayurasana)', flow: ['adho-mukha-svanasana', 'sirsasana', 'marjaryasana', 'balasana'],
                 desc: 'Similar to Downward Dog, but on forearms. Press your forearms into the floor and lift your hips up and back.',
                 vars: {
-                    '--fig-rot': 0, '--fig-x': 0, '--fig-y': 60,
-                    '--ub-rot': 130, '--head-rot': 0,
-                    '--la-rot': 150, '--le-rot': -90,
-                    '--ra-rot': 150, '--re-rot': -90,
-                    '--ll-rot': 30, '--lk-rot': 0,
-                    '--rl-rot': 30, '--rk-rot': 0
+                    '--fig-rot': 135, '--fig-x': 0, '--fig-y': 150,
+                    '--ub-rot': 90, '--head-rot': 0,
+                    '--la-rot': 90, '--le-rot': 90,
+                    '--ra-rot': 90, '--re-rot': 90,
+                    '--ll-rot': 0, '--lk-rot': 0,
+                    '--rl-rot': 0, '--rk-rot': 0
                 }
             },
             {
                 id: 'eka-pada-rajakapotasana', name: 'Pigeon Pose (Eka Pada Rajakapotasana)', flow: ['adho-mukha-svanasana', 'baddha-konasana'],
                 desc: 'From Downward Dog, bring your right knee forward behind your right wrist. Extend your left leg straight back. Keep your hips square.',
                 vars: {
-                    '--fig-rot': 0, '--fig-x': -40, '--fig-y': 150,
-                    '--ub-rot': 0, '--head-rot': -10,
-                    '--la-rot': 20, '--le-rot': 0,
-                    '--ra-rot': 20, '--re-rot': 0,
-                    '--ll-rot': 90, '--lk-rot': 0,
-                    '--rl-rot': -60, '--rk-rot': 120
+                    '--fig-rot': 15, '--fig-x': -40, '--fig-y': 300,
+                    '--ub-rot': 180, '--head-rot': 0,
+                    '--la-rot': 180, '--le-rot': 0,
+                    '--ra-rot': 180, '--re-rot': 0,
+                    '--ll-rot': 90, '--lk-rot': 90,
+                    '--rl-rot': -10, '--rk-rot': 0
                 }
             }
         ];
@@ -1920,6 +1932,7 @@ permalink: /yoga.html
 
         let currentVars = {};
         let activeIndex = 0;
+        let originalSearchPoseIndex = 0;
         let currentView = 'side';
 
         let settings = {
@@ -1967,7 +1980,25 @@ permalink: /yoga.html
                 <div class="pose-card-name">${shortName}</div>
             `;
             
-            card.addEventListener('click', () => loadPose(i));
+            card.addEventListener('mouseenter', () => {
+                const ff = document.getElementById('fuzzyFinder');
+                if (ff && ff.style.display !== 'none') {
+                    const visibleCards = Array.from(document.querySelectorAll('#poseNav .pose-card')).filter(c => c.style.display !== 'none');
+                    visibleCards.forEach(c => c.classList.remove('search-selected'));
+                    card.classList.add('search-selected');
+                    loadPose(i);
+                }
+            });
+            
+            card.addEventListener('click', () => {
+                loadPose(i);
+                const ff = document.getElementById('fuzzyFinder');
+                if (ff && ff.style.display !== 'none') {
+                    ff.style.display = 'none';
+                    document.getElementById('fuzzyInput').value = '';
+                    filterPoses('');
+                }
+            });
             navContainer.appendChild(card);
         });
 
@@ -2335,17 +2366,18 @@ permalink: /yoga.html
         let draggedTimelineIndex = null;
         
         function shareSequence() {
-            if (!mySequences[activeSequenceKey]) return;
-            const seq = mySequences[activeSequenceKey];
-            const seqStr = seq.poses.map(p => typeof p === 'string' ? p : (p.breaths && p.breaths > 1 ? `${p.id}:${p.breaths}` : p.id)).join(',');
+            const exportDataJSON = getExportDataJSON();
+            if (!exportDataJSON) return alert('No sequences to share!');
+            
             const searchParams = new URLSearchParams();
-            searchParams.set('seq', seqStr);
-            searchParams.set('name', seq.name);
-            searchParams.set('color', seq.color);
+            searchParams.set('all_seqs', exportDataJSON);
             searchParams.set('view', '1');
             const url = window.location.origin + window.location.pathname + '?' + searchParams.toString();
             navigator.clipboard.writeText(url).then(() => {
                 alert('Shareable link copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy', err);
+                prompt('Copy this link:', url);
             });
         }
         
@@ -2509,14 +2541,46 @@ permalink: /yoga.html
         // Initial Render
         setTimeout(() => {
             const params = new URLSearchParams(window.location.search);
-            if (params.has('seq')) {
+            const isView = params.get('view') === '1';
+
+            if (params.has('all_seqs')) {
+                try {
+                    const sequences = JSON.parse(params.get('all_seqs'));
+                    
+                    for (const key in sequences) {
+                        const seqData = sequences[key];
+                        const formattedPoses = seqData.poses.map(pstr => {
+                            if (typeof pstr === 'object') return pstr; 
+                            const parts = String(pstr).split(':');
+                            return { id: parts[0], breaths: parts[1] ? parseInt(parts[1]) : 1 };
+                        });
+                        
+                        mySequences[key] = {
+                            name: seqData.name || 'Shared Sequence',
+                            color: seqData.color || '#ffffff',
+                            poses: formattedPoses
+                        };
+                    }
+                    
+                    if (isView) document.body.classList.add('view-mode');
+                    
+                    const firstKey = Object.keys(sequences)[0];
+                    if (firstKey) {
+                        loadMacroSequence(firstKey);
+                    } else {
+                        loadMacroSequence('sun-a');
+                    }
+                } catch(e) {
+                    console.error('Failed to parse all_seqs', e);
+                    loadMacroSequence('sun-a');
+                }
+            } else if (params.has('seq')) {
                 const poses = params.get('seq').split(',').filter(p => p).map(pstr => {
                     const parts = pstr.split(':');
                     return { id: parts[0], breaths: parts[1] ? parseInt(parts[1]) : 1 };
                 });
                 const name = params.get('name') || 'Shared Sequence';
                 const color = params.get('color') || '#ffffff';
-                const isView = params.get('view') === '1';
 
                 const key = 'shared-1';
                 mySequences[key] = {
@@ -2792,6 +2856,9 @@ permalink: /yoga.html
             if ((e.metaKey || e.ctrlKey) && e.key === 'f') {
                 e.preventDefault();
                 const ff = document.getElementById('fuzzyFinder');
+                if (ff.style.display === 'none') {
+                    originalSearchPoseIndex = activeIndex;
+                }
                 ff.style.display = 'flex';
                 document.getElementById('fuzzyInput').focus();
             }
@@ -2813,6 +2880,7 @@ permalink: /yoga.html
                 const ff = document.getElementById('fuzzyFinder');
                 if (ff.style.display !== 'none') {
                     ff.style.display = 'none';
+                    loadPose(originalSearchPoseIndex);
                     document.getElementById('fuzzyInput').value = '';
                     filterPoses('');
                     document.getElementById('fuzzyInput').blur();
@@ -2919,6 +2987,50 @@ permalink: /yoga.html
         };
 
         document.getElementById('fuzzyInput').addEventListener('input', (e) => filterPoses(e.target.value));
+        
+        document.getElementById('fuzzyInput').addEventListener('keydown', (e) => {
+            const ff = document.getElementById('fuzzyFinder');
+            if (ff.style.display === 'none') return;
+            
+            const cards = Array.from(document.querySelectorAll('#poseNav .pose-card')).filter(c => c.style.display !== 'none');
+            if (cards.length === 0) return;
+            
+            let currentIndex = cards.findIndex(c => c.classList.contains('search-selected'));
+            if (currentIndex === -1) currentIndex = 0;
+
+            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                e.preventDefault();
+                currentIndex = (currentIndex + 1) % cards.length;
+                cards.forEach(c => c.classList.remove('search-selected'));
+                cards[currentIndex].classList.add('search-selected');
+                const poseIndex = Array.from(document.querySelectorAll('#poseNav .pose-card')).indexOf(cards[currentIndex]);
+                if (poseIndex !== -1) loadPose(poseIndex);
+                cards[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+                cards.forEach(c => c.classList.remove('search-selected'));
+                cards[currentIndex].classList.add('search-selected');
+                const poseIndex = Array.from(document.querySelectorAll('#poseNav .pose-card')).indexOf(cards[currentIndex]);
+                if (poseIndex !== -1) loadPose(poseIndex);
+                cards[currentIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                const poseIndex = Array.from(document.querySelectorAll('#poseNav .pose-card')).indexOf(cards[currentIndex]);
+                if (poseIndex !== -1) {
+                    loadPose(poseIndex);
+                    if (typeof activeSequenceKey !== 'undefined' && activeSequenceKey.startsWith('custom-')) {
+                        sequence.push({ id: POSES[poseIndex].id, breaths: 1 });
+                        if (typeof saveTimelineToCurrentSequence === 'function') saveTimelineToCurrentSequence();
+                        if (typeof renderTimeline === 'function') renderTimeline();
+                    }
+                }
+                ff.style.display = 'none';
+                e.target.value = '';
+                filterPoses('');
+                e.target.blur();
+            }
+        });
 
         let touchStartY = 0;
         const poseNavEl = document.getElementById('poseNav');
@@ -2931,6 +3043,9 @@ permalink: /yoga.html
                 let touchEndY = e.touches[0].clientY;
                 if (touchEndY - touchStartY > 60) {
                     const ff = document.getElementById('fuzzyFinder');
+                    if (ff.style.display === 'none') {
+                        originalSearchPoseIndex = activeIndex;
+                    }
                     ff.style.display = 'flex';
                     document.getElementById('fuzzyInput').focus();
                 }
@@ -2941,14 +3056,31 @@ permalink: /yoga.html
             const normalize = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
             query = normalize(query);
             const cards = document.querySelectorAll('#poseNav .pose-card');
-            cards.forEach(card => {
+            let firstVisibleIndex = -1;
+            cards.forEach((card, i) => {
                 const searchString = normalize(card.dataset.name || card.querySelector('.pose-card-name').textContent);
                 if (searchString.includes(query)) {
                     card.style.display = 'flex';
+                    if (firstVisibleIndex === -1 && query !== '') {
+                        firstVisibleIndex = i;
+                    }
                 } else {
                     card.style.display = 'none';
                 }
+                card.classList.remove('search-selected');
             });
+            
+            // Auto-preview first match if query is not empty
+            if (firstVisibleIndex !== -1 && query !== '') {
+                cards[firstVisibleIndex].classList.add('search-selected');
+                loadPose(firstVisibleIndex);
+                cards[firstVisibleIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            } else if (query === '') {
+                // If empty query, preview the original pose
+                loadPose(originalSearchPoseIndex);
+                cards[originalSearchPoseIndex].classList.add('search-selected');
+                cards[originalSearchPoseIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
         }
 
         // Init
