@@ -488,14 +488,19 @@ permalink: /yoga.html
                 min-width: 0;
             }
             .fuzzy-finder {
-                width: 90%;
-                top: 80px;
+                width: calc(100% - 32px);
+                top: 16px;
                 bottom: auto;
-                left: 50%;
-                transform: translateX(-50%);
+                left: 16px;
+                transform: none;
+                padding: 10px 16px;
+                box-sizing: border-box;
+                background: rgba(15, 23, 42, 0.95);
             }
             .fuzzy-finder input {
                 width: 100%;
+                font-size: 16px; /* Prevents auto-zoom on iOS Safari */
+                box-sizing: border-box;
             }
         }
 
@@ -3189,21 +3194,37 @@ permalink: /yoga.html
         });
 
         window.toggleFullScreen = function() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    console.log("Error attempting to enable fullscreen:", err.message);
-                });
+            const isNativeFs = !!document.fullscreenElement || !!document.webkitFullscreenElement;
+            const isPseudoFs = document.body.classList.contains('classroom-mode');
+            
+            if (!isNativeFs && !isPseudoFs) {
+                switchView('pose');
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.log("Error attempting to enable fullscreen:", err.message);
+                        applyClassroomMode(true);
+                    });
+                } else if (document.documentElement.webkitRequestFullscreen) {
+                    document.documentElement.webkitRequestFullscreen();
+                } else {
+                    applyClassroomMode(true);
+                }
             } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
+                if (isNativeFs) {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.webkitExitFullscreen) {
+                        document.webkitExitFullscreen();
+                    }
+                } else if (isPseudoFs) {
+                    applyClassroomMode(false);
                 }
             }
         };
 
-        document.addEventListener('fullscreenchange', () => {
-            const isFullscreen = !!document.fullscreenElement;
-            document.body.classList.toggle('classroom-mode', isFullscreen);
-            if (isFullscreen) {
+        function applyClassroomMode(enable) {
+            document.body.classList.toggle('classroom-mode', enable);
+            if (enable) {
                 stopSequence();
                 if (sequence.length > 0) {
                     if (playIndex >= sequence.length) playIndex = 0;
@@ -3213,6 +3234,16 @@ permalink: /yoga.html
                 }
                 updateClassroomThumbnails();
             }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+            const isFullscreen = !!document.fullscreenElement;
+            applyClassroomMode(isFullscreen);
+        });
+        
+        document.addEventListener('webkitfullscreenchange', () => {
+            const isFullscreen = !!document.webkitFullscreenElement;
+            applyClassroomMode(isFullscreen);
         });
 
         window.prevClassroomPose = function() {
