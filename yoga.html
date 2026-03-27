@@ -23,11 +23,11 @@ permalink: /yoga.html
             margin: 0;
             padding: 0;
             width: 100%;
-            min-height: 100vh;
+            height: 100vh;
+            overflow: hidden;
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            /* overflow: hidden; removed to allow scroll on zoom */
             display: flex;
             flex-direction: column;
         }
@@ -91,6 +91,8 @@ permalink: /yoga.html
             align-items: center;
             justify-content: center;
             position: relative;
+            min-height: 0;
+            overflow: hidden;
         }
 
         .yoga-container {
@@ -101,6 +103,8 @@ permalink: /yoga.html
             justify-content: center;
             padding: 40px 20px;
             box-sizing: border-box;
+            min-height: 0;
+            overflow: hidden;
         }
 
         .yoga-man {
