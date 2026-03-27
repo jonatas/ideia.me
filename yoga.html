@@ -1222,8 +1222,20 @@ permalink: /yoga.html
         </div>
         <h3 style="margin-top:0">Pose Editor</h3>
         <div id="controls"></div>
-        <button onclick="exportPose()" style="margin-top: 15px; padding: 5px 10px; background: var(--accent-color); color: white; border: none; cursor:pointer;">Export JSON</button>
-        <textarea id="exportArea" style="width: 100%; height: 100px; margin-top: 10px; background: #222; color: #fff; border: none; font-family: monospace; font-size: 10px;"></textarea>
+        <div style="margin-top: 15px; display: flex; gap: 8px; flex-wrap: wrap;">
+            <button onclick="exportPose()" style="padding: 5px 10px; background: var(--secondary-color); color: white; border: none; cursor:pointer;" title="Export raw JSON">Export JSON</button>
+        </div>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px; margin-bottom: 8px;">
+            <h3 style="margin: 0;">Local Patches</h3>
+            <button onclick="copyAllPatches(this)" class="icon-btn" title="Copy patches for all modified poses" style="padding: 4px; font-size: 1.1rem;"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <textarea id="patchArea" style="width: 100%; height: 100px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; padding: 6px; font-family: monospace; font-size: 11px; margin-bottom: 8px;" placeholder="@@ pose_id\n- --var: old\n+ --var: new"></textarea>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button onclick="applyPatchesFromUI()" style="padding: 5px 10px; background: var(--primary-color); color: white; border: none; cursor:pointer;" title="Save and apply patches to poses">Save & Apply</button>
+            <button onclick="clearPatches()" style="padding: 5px 10px; background: #c0392b; color: white; border: none; cursor:pointer;" title="Remove all local patches">Reset</button>
+        </div>
+        <textarea id="exportArea" style="width: 100%; height: 100px; margin-top: 10px; background: #222; color: #fff; border: none; font-family: monospace; font-size: 10px; display: none;"></textarea>
     </div>
 
     <!-- Gallery View -->
@@ -2188,6 +2200,78 @@ permalink: /yoga.html
             return s;
         }
 
+        // Save the original poses for patch generation before doing anything
+        const ORIGINAL_POSES = JSON.parse(JSON.stringify(POSES));
+        const YOGA_PATCHES_KEY = 'yoga_pose_patches';
+
+        function applyYogaPatches() {
+            const rawPatches = localStorage.getItem(YOGA_PATCHES_KEY) || '';
+            if (!rawPatches.trim()) return;
+
+            let patchesToKeep = [];
+            const blocks = rawPatches.split(/^@@\s+/m).filter(b => b.trim());
+            
+            for (const block of blocks) {
+                const lines = block.split('\n');
+                const poseId = lines[0].trim();
+                const poseIndex = POSES.findIndex(p => p.id === poseId);
+                
+                if (poseIndex === -1) continue;
+                const pose = POSES[poseIndex];
+                
+                let modificationsToKeep = [];
+                const varMods = {};
+                
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+                    const match = line.match(/^([+-])\s+(--[\w-]+):\s*(.+)$/);
+                    if (match) {
+                        const type = match[1];
+                        const varName = match[2];
+                        const numVal = parseFloat(match[3]);
+                        const val = isNaN(numVal) ? match[3] : numVal;
+                        
+                        if (!varMods[varName]) varMods[varName] = {};
+                        varMods[varName][type] = { val, line };
+                    }
+                }
+                
+                let keptVars = 0;
+                for (const varName in varMods) {
+                    const mod = varMods[varName];
+                    if (mod['+']) {
+                        const plusVal = mod['+'].val;
+                        let upstreamVal = pose.vars?.[varName] ?? pose.varsFront?.[varName];
+                        
+                        if (String(upstreamVal) !== String(plusVal)) {
+                            if (pose.vars && pose.vars[varName] !== undefined) pose.vars[varName] = plusVal;
+                            else if (pose.varsFront && pose.varsFront[varName] !== undefined) pose.varsFront[varName] = plusVal;
+                            else { if (!pose.vars) pose.vars = {}; pose.vars[varName] = plusVal; }
+                            
+                            if (mod['-']) modificationsToKeep.push(mod['-'].line);
+                            modificationsToKeep.push(mod['+'].line);
+                            keptVars++;
+                        } else {
+                            console.log(`[Yoga Patch] Discarding upstreamed patch: ${poseId} ${varName} = ${plusVal}`);
+                        }
+                    }
+                }
+                
+                if (keptVars > 0) {
+                    patchesToKeep.push(`@@ ${poseId}`);
+                    patchesToKeep.push(...modificationsToKeep);
+                }
+            }
+            
+            const newPatchesStr = patchesToKeep.join('\n');
+            if (newPatchesStr !== rawPatches.trim()) {
+                localStorage.setItem(YOGA_PATCHES_KEY, newPatchesStr);
+            }
+        }
+
+        applyYogaPatches();
+
         // Resolve Mathematical Inheritance
         const poseMap = {};
         POSES.forEach(p => poseMap[p.id] = p);
@@ -3031,11 +3115,19 @@ permalink: /yoga.html
         debugBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             debugPanel.classList.toggle('active');
+            if (!debugPanel.classList.contains('active') && window.isPatchFilterActive) {
+                window.isPatchFilterActive = false;
+                filterPoses('');
+            }
         });
 
         document.addEventListener('click', (e) => {
             if (debugPanel.classList.contains('active') && !debugPanel.contains(e.target)) {
                 debugPanel.classList.remove('active');
+                if (window.isPatchFilterActive) {
+                    window.isPatchFilterActive = false;
+                    filterPoses('');
+                }
             }
         });
 
@@ -3130,6 +3222,19 @@ permalink: /yoga.html
                 num.value = val;
                 currentVars[v.id] = parseInt(val);
                 applyVars(currentVars);
+                
+                // Live sync to POSES
+                const activeP = POSES[activeIndex];
+                if (activeP.vars && activeP.vars[v.id] !== undefined) {
+                    activeP.vars[v.id] = currentVars[v.id];
+                } else if (activeP.varsFront && activeP.varsFront[v.id] !== undefined) {
+                    activeP.varsFront[v.id] = currentVars[v.id];
+                } else {
+                    if (!activeP.vars) activeP.vars = {};
+                    activeP.vars[v.id] = currentVars[v.id];
+                }
+                
+                window.updatePatchAreaLive();
             };
 
             range.addEventListener('input', (e) => update(e.target.value));
@@ -3140,9 +3245,175 @@ permalink: /yoga.html
             row.appendChild(num);
             controls.appendChild(row);
         });
+        const patchArea = document.getElementById('patchArea');
+        if (patchArea) {
+            patchArea.value = localStorage.getItem(YOGA_PATCHES_KEY) || '';
+        }
+
+        window.updatePatchAreaLive = function() {
+            let allPatchText = "";
+            POSES.forEach(p => {
+                const originalPose = ORIGINAL_POSES.find(op => op.id === p.id);
+                if (!originalPose) return;
+                
+                let patchLines = [];
+                const pVars = p.vars || {};
+                const pVarsFront = p.varsFront || {};
+                const oVars = originalPose.vars || {};
+                const oVarsFront = originalPose.varsFront || {};
+                
+                const allKeys = new Set([...Object.keys(pVars), ...Object.keys(pVarsFront)]);
+                for (const key of allKeys) {
+                    const curVal = pVars[key] !== undefined ? pVars[key] : pVarsFront[key];
+                    const origVal = oVars[key] !== undefined ? oVars[key] : oVarsFront[key];
+                    
+                    if (origVal !== undefined && String(origVal) !== String(curVal)) {
+                        patchLines.push("- " + key + ": " + origVal);
+                        patchLines.push("+ " + key + ": " + curVal);
+                    }
+                }
+                
+                if (patchLines.length > 0) {
+                    allPatchText += "@@ " + p.id + "\n" + patchLines.join("\n") + "\n";
+                }
+            });
+            
+            const patchArea = document.getElementById('patchArea');
+            if (patchArea && allPatchText) {
+                // If it's different from current we overwrite
+                patchArea.value = allPatchText;
+            } else if (patchArea) {
+                patchArea.value = "";
+            }
+            return allPatchText;
+        };
+
+        window.copyAllPatches = function(btn) {
+            const allPatchText = window.updatePatchAreaLive();
+            
+            if (allPatchText) {
+                navigator.clipboard.writeText(allPatchText).then(() => {
+                    if (btn) {
+                        const icon = btn.innerHTML;
+                        btn.innerHTML = '<i class="bi bi-check2-all"></i>';
+                        setTimeout(() => btn.innerHTML = icon, 2000);
+                    }
+                });
+            } else {
+                alert('No changes detected compared to the original poses.');
+            }
+        };
+
+        window.applyPatchesFromUI = function() {
+            const text = document.getElementById('patchArea').value;
+            localStorage.setItem(YOGA_PATCHES_KEY, text);
+            
+            POSES.forEach((p) => {
+                const originalPose = ORIGINAL_POSES.find(op => op.id === p.id);
+                if (originalPose) {
+                    p.vars = JSON.parse(JSON.stringify(originalPose.vars || {}));
+                    if (originalPose.varsFront) {
+                        p.varsFront = JSON.parse(JSON.stringify(originalPose.varsFront));
+                    } else {
+                        delete p.varsFront;
+                    }
+                }
+            });
+            
+            applyYogaPatches();
+            
+            const poseMap = {};
+            POSES.forEach(p => poseMap[p.id] = p);
+            POSES.forEach(p => {
+                if (p.inherit) {
+                    const parent = poseMap[p.inherit];
+                    if (parent && parent.vars) {
+                        p.vars = Object.assign({}, parent.vars, p.vars);
+                    }
+                }
+            });
+            
+            window.filterPosesByPatch();
+        };
+
+        window.filterPosesByPatch = function() {
+            const cards = document.querySelectorAll('#poseNav .pose-card');
+            let firstPatchedIndex = -1;
+            
+            POSES.forEach((p, i) => {
+                const originalPose = ORIGINAL_POSES.find(op => op.id === p.id);
+                let isPatched = false;
+                
+                if (originalPose) {
+                    const oVars = originalPose.vars || {};
+                    const oVarsFront = originalPose.varsFront || {};
+                    const pVars = p.vars || {};
+                    const pVarsFront = p.varsFront || {};
+                    
+                    const allKeys = new Set([...Object.keys(pVars), ...Object.keys(pVarsFront)]);
+                    for (const key of allKeys) {
+                        const curVal = pVars[key] !== undefined ? pVars[key] : pVarsFront[key];
+                        const origVal = oVars[key] !== undefined ? oVars[key] : oVarsFront[key];
+                        if (origVal !== undefined && String(origVal) !== String(curVal)) {
+                            isPatched = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (isPatched && i < cards.length) {
+                    cards[i].style.display = 'flex';
+                    if (firstPatchedIndex === -1) firstPatchedIndex = i;
+                } else if (i < cards.length) {
+                    cards[i].style.display = 'none';
+                }
+            });
+            window.isPatchFilterActive = true;
+            
+            if (firstPatchedIndex !== -1) {
+                loadPose(firstPatchedIndex);
+                cards[firstPatchedIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        };
+
+        window.clearPatches = function() {
+            if (confirm('Are you sure you want to remove all local patches and reset to original poses?')) {
+                localStorage.removeItem(YOGA_PATCHES_KEY);
+                document.getElementById('patchArea').value = '';
+                
+                POSES.forEach((p) => {
+                    const originalPose = ORIGINAL_POSES.find(op => op.id === p.id);
+                    if (originalPose) {
+                        p.vars = JSON.parse(JSON.stringify(originalPose.vars || {}));
+                        if (originalPose.varsFront) {
+                            p.varsFront = JSON.parse(JSON.stringify(originalPose.varsFront));
+                        } else {
+                            delete p.varsFront;
+                        }
+                    }
+                });
+                
+                const poseMap = {};
+                POSES.forEach(p => poseMap[p.id] = p);
+                POSES.forEach(p => {
+                    if (p.inherit) {
+                        const parent = poseMap[p.inherit];
+                        if (parent && parent.vars) {
+                            p.vars = Object.assign({}, parent.vars, p.vars);
+                        }
+                    }
+                });
+                
+                window.isPatchFilterActive = false;
+                filterPoses('');
+                loadPose(activeIndex);
+            }
+        };
 
         window.exportPose = function() {
-            document.getElementById('exportArea').value = JSON.stringify(currentVars, null, 2);
+            const expArea = document.getElementById('exportArea');
+            expArea.style.display = 'block';
+            expArea.value = JSON.stringify(currentVars, null, 2);
         };
 
         // Keyboard Shortcuts & Fuzzy Finder
