@@ -159,9 +159,10 @@ Want to see how hard it is to just stay still? Try holding your focus here for 5
 
   let focusInterval;
   let startTime;
-  const targetDuration = 5000; // 5 seconds
+  let currentTargetDuration = 5000; // Start with 5 seconds
   let isFocused = false;
   let hasWon = false;
+  let winCount = 0;
 
   function updateDisplay(safeMessage, timeLeftMs) {
     if (safeMessage) {
@@ -174,7 +175,7 @@ Want to see how hard it is to just stay still? Try holding your focus here for 5
         timerDisplay.textContent = "";
         timerDisplay.appendChild(document.createTextNode(secondsLeft));
 
-        const progress = Math.min(100, Math.max(0, ((targetDuration - timeLeftMs) / targetDuration) * 100));
+        const progress = Math.min(100, Math.max(0, ((currentTargetDuration - timeLeftMs) / currentTargetDuration) * 100));
         progressBar.style.width = `${progress}%`;
     }
   }
@@ -183,7 +184,7 @@ Want to see how hard it is to just stay still? Try holding your focus here for 5
     if (hasWon) return;
     isFocused = true;
     startTime = Date.now();
-    updateDisplay("Stay still...", targetDuration);
+    updateDisplay(`Stay still for ${currentTargetDuration / 1000}s...`, currentTargetDuration);
 
     clearInterval(focusInterval);
     focusInterval = setInterval(() => {
@@ -193,13 +194,21 @@ Want to see how hard it is to just stay still? Try holding your focus here for 5
       }
 
       const elapsed = Date.now() - startTime;
-      const remaining = targetDuration - elapsed;
+      const remaining = currentTargetDuration - elapsed;
 
       if (remaining <= 0) {
         clearInterval(focusInterval);
         hasWon = true;
-        updateDisplay("Focus Challenge Complete!", 0);
+        winCount++;
+
         target.style.background = "radial-gradient(circle at 38% 32%, #10B981, #064E3B)";
+
+        if (winCount > 2 && window.userProfile) {
+          window.userProfile.saveItem('achievement', 'focus-master', '/the-validation-model', 'Focus Master', 'bi-trophy');
+          updateDisplay("Focus Master Achievement Unlocked! Saved to Profile.", 0);
+        } else {
+          updateDisplay("Focus Challenge Complete! Click to double the challenge.", 0);
+        }
       } else {
         updateDisplay(undefined, remaining);
       }
@@ -210,8 +219,25 @@ Want to see how hard it is to just stay still? Try holding your focus here for 5
     if (hasWon) return;
     isFocused = false;
     clearInterval(focusInterval);
-    updateDisplay("Focus lost! Hover or focus to restart.", targetDuration);
+    updateDisplay("Focus lost! Hover or focus to restart.", currentTargetDuration);
   }
+
+  function resetChallenge() {
+    if (!hasWon) return;
+    hasWon = false;
+    currentTargetDuration *= 2; // Double the time
+    target.style.background = "radial-gradient(circle at 38% 32%, #0d9488, #1E3A8A)";
+    updateDisplay(`Challenge increased to ${currentTargetDuration / 1000}s! Hover to start.`, currentTargetDuration);
+    target.blur(); // Remove focus to force re-interaction
+  }
+
+  target.addEventListener('click', resetChallenge);
+  target.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      resetChallenge();
+    }
+  });
 
   target.addEventListener('mouseenter', startFocus);
   target.addEventListener('mouseleave', loseFocus);
