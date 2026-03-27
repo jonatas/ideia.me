@@ -1,0 +1,92 @@
+Configuration file: /app/_config.yml
+            Source: /app
+       Destination: /app/_site
+ Incremental build: disabled. Enable with --incremental
+      Generating...
+       Jekyll Feed: Generating feed for posts
+                    done in 17.875 seconds.
+ Auto-regeneration: enabled for '/app'
+    Server address: http://127.0.0.1:4000
+  Server running... press ctrl-c to stop.
+      Regenerating: 1 file(s) changed at 2026-03-27 11:46:36
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 5.649866276 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-27 11:46:41
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 3.008350682 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-27 11:46:44
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 3.085474924 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-27 11:46:48
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 3.728653169 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-27 11:46:51
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 3.258380598 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-27 11:46:55
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 3.630397549 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-27 11:46:58
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 3.087953475 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-27 11:47:02
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.736016662 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-27 11:47:04
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.681292448 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-27 11:47:07
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.687486552 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-27 11:47:10
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.540866028 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-27 11:47:13
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.572724645 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-27 11:47:15
+                    jekyll.log
+[31m                    ------------------------------------------------[0m
+[31m      Jekyll 4.4.1   Please append `--trace` to the `serve` command [0m
+[31m                     for any additional information or backtrace. [0m
+[31m                    ------------------------------------------------[0m
+/app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/commands/serve.rb:291:in `join': SIGTERM (SignalException)
+	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/commands/serve.rb:291:in `boot_or_detach'
+	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/commands/serve.rb:221:in `start_up_webrick'
+	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/commands/serve.rb:102:in `process'
+	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/command.rb:91:in `block in process_with_graceful_fail'
+	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/command.rb:91:in `each'
+	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/command.rb:91:in `process_with_graceful_fail'
+	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/commands/serve.rb:85:in `block (2 levels) in init_with_program'
+	from /app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary/command.rb:221:in `block in execute'
+	from /app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary/command.rb:221:in `each'
+	from /app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary/command.rb:221:in `execute'
+	from /app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary/program.rb:44:in `go'
+	from /app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary.rb:21:in `program'
+	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/exe/jekyll:15:in `<top (required)>'
+	from /app/vendor/bundle/ruby/3.2.0/bin/jekyll:25:in `load'
+	from /app/vendor/bundle/ruby/3.2.0/bin/jekyll:25:in `<main>'
