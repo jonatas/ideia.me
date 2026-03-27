@@ -282,11 +282,28 @@ body.talk-presenting .talk-chapter .highlight {
   box-sizing: border-box;
 }
 
-body.talk-presenting .talk-chapter img {
+body.talk-presenting .talk-chapter img,
+body.talk-presenting .talk-chapter video,
+body.talk-presenting .talk-chapter svg {
   max-height: 50vh;
   max-width: 100%;
   border-radius: 8px;
   object-fit: contain;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.talk-presenting .talk-chapter .mermaid {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+body.talk-presenting .talk-chapter .mermaid svg {
+  max-height: 50vh !important;
+  max-width: 100% !important;
+  width: auto !important;
+  height: auto !important;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.talk-presenting .talk-chapter blockquote {
@@ -390,6 +407,27 @@ body.talk-presenting .talk-wrapper::after {
 #talk-content[data-zoom="4"] .highlight {
   display: block !important;
 }
+
+/* Dynamic Diagram Scaling — Use available space as text is hidden */
+body.talk-presenting #talk-content[data-zoom="1"] .talk-chapter img,
+body.talk-presenting #talk-content[data-zoom="1"] .talk-chapter video,
+body.talk-presenting #talk-content[data-zoom="1"] .talk-chapter svg { max-height: 55vh !important; }
+
+body.talk-presenting #talk-content[data-zoom="2"] .talk-chapter img,
+body.talk-presenting #talk-content[data-zoom="2"] .talk-chapter video,
+body.talk-presenting #talk-content[data-zoom="2"] .talk-chapter svg { max-height: 60vh !important; }
+
+body.talk-presenting #talk-content[data-zoom="3"] .talk-chapter img,
+body.talk-presenting #talk-content[data-zoom="3"] .talk-chapter video,
+body.talk-presenting #talk-content[data-zoom="3"] .talk-chapter svg { max-height: 65vh !important; }
+
+body.talk-presenting #talk-content[data-zoom="4"] .talk-chapter img,
+body.talk-presenting #talk-content[data-zoom="4"] .talk-chapter video,
+body.talk-presenting #talk-content[data-zoom="4"] .talk-chapter svg { max-height: 75vh !important; }
+
+body.talk-presenting #talk-content[data-zoom="5"] .talk-chapter img,
+body.talk-presenting #talk-content[data-zoom="5"] .talk-chapter video,
+body.talk-presenting #talk-content[data-zoom="5"] .talk-chapter svg { max-height: 85vh !important; }
 
 /* ---------------------------------------------------------------------------
    Chapter anchor links — copy-to-clipboard icon on headings
