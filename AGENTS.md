@@ -7,23 +7,24 @@ This repository contains a Jekyll-based personal blog and several offline-first 
 
 ## Core Principles
 - **Zero Backend**: No signups, no databases (external), and no APIs. All data must live in the user's browser.
-- **Performance First**: Minimal dependencies. Prioritize Vanilla JS, CSS Grid/Flexbox, native Web APIs, and no new frameworks.
+- **Performance First**: Minimal dependencies. Prioritize Vanilla JS, CSS Grid/Flexbox, and native Web APIs and no new frameworks.
 - **Privacy by Design**: No telemetry or third-party scripts.
 - **Terminal Compatibility**: The project should be easily navigable and buildable via standard Linux/Bash tools.
 
 ## Technical Stack & Constraints
-- **Persistence**: Use `LocalProfile` (via `js/profile.js` which wraps `localStorage`) for user engagement, simple settings, and favorites. Use `IndexedDB` for complex app data (e.g., classes, sequences).
+- **Persistence**: Use localStorage for simple settings and IndexedDB for complex class data/sequences. (Additionally, use `LocalProfile` via `js/profile.js` which wraps `localStorage` for user engagement and favorites).
 - **Connectivity**: Must be a fully functional PWA (Progressive Web App) with a Service Worker that caches all assets (SVGs, scripts, styles) for 100% offline use.
 - **Data Portability**: Provide "Import/Export" functionality using JSON files so teachers can backup or share their flows manually.
-- **Code Style**:
-  - Functional approach over complex OOP.
-  - Clean, documented SQL-like logic for data filtering within JS.
-  - Mobile-responsive "studio-mode" (high contrast, large touch targets).
 - **Security / XSS Prevention**: To prevent Cross-Site Scripting (XSS) vulnerabilities, avoid using `innerHTML` with dynamic or external data (e.g., from `data-*` attributes or JSON fields). Always use `document.createElement()`, `textContent`, and `appendChild()` for safe DOM manipulation.
 - **Performance (JavaScript)**: Cache DOM NodeList results (e.g., from `querySelectorAll`) outside of event listeners to avoid redundant and expensive DOM queries.
 - **JavaScript Structure**:
   - Source files are located in both `assets/js/` and `js/` directories.
   - JavaScript files in `assets/js/` (e.g., `category-standardizer.js`) use conditional `module.exports` to enable compatibility with Node.js testing while remaining usable in the browser.
+
+## Code Style:
+- Functional approach over complex OOP.
+- Clean, documented SQL-like logic for data filtering within JS.
+- Mobile-responsive "studio-mode" (high contrast, large touch targets).
 
 ## Testing Guidelines
 - **No `package.json`**: The development environment lacks external network access for npm. Testing should rely on built-in Node.js modules or manual mocks rather than new third-party dependencies.
@@ -33,7 +34,7 @@ This repository contains a Jekyll-based personal blog and several offline-first 
 - **Refactoring**: When asked to improve a feature, always check for "dependency creep." If a native browser API can do it, do not suggest an NPM package.
 - **Daily Evolution**: Look for ways to recursively optimize the rendering of SVG yoga poses.
 - **Offline Verification**: Every new feature must include logic to ensure it functions when `navigator.onLine` is false.
-- **Frontend / Visual Verification**: Any frontend UI changes (HTML/CSS/JS) MUST be visually verified by starting a local server, writing a temporary Playwright script (`playwright.sync_api`) to capture a screenshot, and confirming it looks correct before finalizing.
+- **Frontend / Visual Verification**: Any frontend UI changes (HTML/CSS/JS) MUST be visually verified by starting a local server, writing a temporary Playwright script (`playwright.sync_api` or playwright node module) to capture a screenshot, and confirming it looks correct before finalizing.
 - **Accessibility Directive (a11y)**:
   - Accessibility is mandatory. Interactive UI elements must support keyboard navigation (e.g., `tabindex="0"`, `focus`/`blur` event listeners) and provide appropriate context for screen readers (ARIA labels, roles).
   - When converting static lists or forms to interactive progress-based widgets, use `aria-live='polite'` regions to help screen reader users natively track form progress.
@@ -58,5 +59,5 @@ This repository contains a Jekyll-based personal blog and several offline-first 
 ## Environment & Build Guidelines
 - **CLAUDE.md**: The repository contains a `CLAUDE.md` file providing project overview, stack details, and local development instructions (e.g., `bundle exec jekyll serve`).
 - **Jekyll Setup**: The project is a Jekyll-based personal blog using Ruby 3.3.8 (specified in `.ruby-version`).
-- **Dependencies**: When installing Ruby gems locally (e.g., via `bundle config set --local path`), ensure that `.bundle/` and `vendor/` directories are added to `.gitignore` to prevent tracking massive dependency diffs.
+- **Dependencies**: When installing Ruby gems locally (e.g., via `bundle config set --local path`) or node packages via pnpm, ensure that `.bundle/`, `vendor/`, and `node_modules/` directories are added to `.gitignore` to prevent tracking massive dependency diffs.
 - **Debug Features**: Note that specific apps might have debug flags (e.g., `js/mandala-playground.js` supports `debug=ios` URL query parameter to force/simulate iOS-specific audio initialization logic on desktop browsers).
