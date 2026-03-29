@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## Project Context: ideia.me/yoga
-This repository contains a Jekyll-based personal blog and several offline-first web applications. The flagship app is the Yoga App (`ideia.me/yoga`), a free, open-source, offline-first yoga sequence builder designed specifically for yoga teachers to create and manage classes without the need for an account, internet connection, or data tracking.
+This repository contains a Jekyll-based personal blog and several offline-first web applications. The flagship app is the Yoga App (`ideia.me/yoga`), a free, open-source, offline-first yoga sequence builder. It is designed specifically for yoga teachers to create and manage classes without the need for an account, internet connection, or data tracking.
 
 **All apps in this repository must follow the same core principles and technical constraints as the Yoga App.**
 
@@ -12,7 +12,7 @@ This repository contains a Jekyll-based personal blog and several offline-first 
 - **Terminal Compatibility**: The project should be easily navigable and buildable via standard Linux/Bash tools.
 
 ## Technical Stack & Constraints
-- **Persistence**: Use `LocalProfile` (via `js/profile.js` which wraps `localStorage`) for user engagement, simple settings, and favorites. Use `IndexedDB` for complex app data (e.g., classes, sequences).
+- **Persistence**: Use `localStorage` (via `js/profile.js` `LocalProfile` wrap) for user engagement, simple settings, and favorites. Use `IndexedDB` for complex app data (e.g., classes, sequences).
 - **Connectivity**: Must be a fully functional PWA (Progressive Web App) with a Service Worker that caches all assets (SVGs, scripts, styles) for 100% offline use.
 - **Data Portability**: Provide "Import/Export" functionality using JSON files so teachers can backup or share their flows manually.
 - **Code Style**:
@@ -24,6 +24,7 @@ This repository contains a Jekyll-based personal blog and several offline-first 
 - **JavaScript Structure**:
   - Source files are located in both `assets/js/` and `js/` directories.
   - JavaScript files in `assets/js/` (e.g., `category-standardizer.js`) use conditional `module.exports` to enable compatibility with Node.js testing while remaining usable in the browser.
+  - When building interactive JS widgets directly inside Markdown posts, avoid inline event handlers (e.g., `onclick`). Instead, encapsulate logic in an IIFE and attach event listeners via `addEventListener` within a `DOMContentLoaded` block to prevent scope and reference issues.
 
 ## Testing Guidelines
 - **No `package.json`**: The development environment lacks external network access for npm. Testing should rely on built-in Node.js modules or manual mocks rather than new third-party dependencies.
@@ -33,10 +34,11 @@ This repository contains a Jekyll-based personal blog and several offline-first 
 - **Refactoring**: When asked to improve a feature, always check for "dependency creep." If a native browser API can do it, do not suggest an NPM package.
 - **Daily Evolution**: Look for ways to recursively optimize the rendering of SVG yoga poses.
 - **Offline Verification**: Every new feature must include logic to ensure it functions when `navigator.onLine` is false.
-- **Frontend / Visual Verification**: Any frontend UI changes (HTML/CSS/JS) MUST be visually verified by starting a local server, writing a temporary Playwright script (`playwright.sync_api`) to capture a screenshot, and confirming it looks correct before finalizing.
+- **Frontend / Visual Verification**: Any frontend UI changes (HTML/CSS/JS) MUST be visually verified by starting a local server, writing a temporary Playwright script (`playwright.sync_api` or playwright node module) to capture a screenshot, and confirming it looks correct before finalizing.
 - **Accessibility Directive (a11y)**:
   - Accessibility is mandatory. Interactive UI elements must support keyboard navigation (e.g., `tabindex="0"`, `focus`/`blur` event listeners) and provide appropriate context for screen readers (ARIA labels, roles).
   - When converting static lists or forms to interactive progress-based widgets, use `aria-live='polite'` regions to help screen reader users natively track form progress.
+  - To guarantee full accessibility in interactive state simulators, always accompany visual color updates with corresponding text changes and `aria-live` announcements; do not rely purely on color transitions to communicate state changes.
 - **Journaling Directive**: Log critical UX and accessibility insights in `.Jules/palette.md` using the format:
   ```markdown
   ## YYYY-MM-DD - [Title]
@@ -49,6 +51,7 @@ This repository contains a Jekyll-based personal blog and several offline-first 
 - Always look for opportunities to add banner images to plain text, use Mermaid diagrams for technical topics, and introduce interactive HTML/JS mini-games/challenges for learning modes (academic content).
 - **Restrictions**: Never alter personal experiences, redesign pages, change backend/performance code, use npm/yarn (only pnpm if strictly required and allowed), introduce new UI dependencies, add untrusted foreign JS, or make controversial design changes without mockups.
 - **Mermaid Diagrams**: To successfully render Mermaid diagrams in Jekyll blog posts, the markdown file's YAML frontmatter must include `mermaid: true`.
+- **Interactive Learning Features**: Distributed across `js/semantic-learn.js` (navigation, vocabulary transformation maps, word insights) and `js/semantic-games.js` (chapter-specific mini-games like Word Web Builder and Emotion Need Matcher).
 
 ## Domain-Specific Guidelines (Yoga App & Similar)
 - **Yoga Poses**: Poses in `yoga.html` are configured in a `POSES` JavaScript array. They use CSS custom properties (`vars` and `varsFront`) to control `#stickman` (side view) and `#stickman-front` (front view) SVG elements. They also accept a `details` object for anatomical overlays. Designs should utilize existing `--primary-color` and `--teal-color` tokens.
@@ -58,5 +61,7 @@ This repository contains a Jekyll-based personal blog and several offline-first 
 ## Environment & Build Guidelines
 - **CLAUDE.md**: The repository contains a `CLAUDE.md` file providing project overview, stack details, and local development instructions (e.g., `bundle exec jekyll serve`).
 - **Jekyll Setup**: The project is a Jekyll-based personal blog using Ruby 3.3.8 (specified in `.ruby-version`).
-- **Dependencies**: When installing Ruby gems locally (e.g., via `bundle config set --local path`), ensure that `.bundle/` and `vendor/` directories are added to `.gitignore` to prevent tracking massive dependency diffs.
+- **Dependencies**: When installing Ruby gems locally (e.g., via `bundle config set --local path vendor/bundle`) or node packages via pnpm, ensure that `.bundle/`, `vendor/`, and `node_modules/` directories are added to `.gitignore` to prevent tracking massive dependency diffs.
+- To correctly setup dependencies and build the Jekyll site without version conflicts, use the command sequence: `bundle config set --local path vendor/bundle && bundle install && bundle exec jekyll build`.
+- **Execution Command**: To verify the syntax of Node.js-compatible scripts (e.g., in `assets/js/`) without execution, use `node -c <filepath>`.
 - **Debug Features**: Note that specific apps might have debug flags (e.g., `js/mandala-playground.js` supports `debug=ios` URL query parameter to force/simulate iOS-specific audio initialization logic on desktop browsers).
