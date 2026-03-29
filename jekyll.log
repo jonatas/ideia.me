@@ -4,89 +4,327 @@ Configuration file: /app/_config.yml
  Incremental build: disabled. Enable with --incremental
       Generating...
        Jekyll Feed: Generating feed for posts
-                    done in 17.875 seconds.
+                    done in 5.658 seconds.
  Auto-regeneration: enabled for '/app'
     Server address: http://127.0.0.1:4000
   Server running... press ctrl-c to stop.
-      Regenerating: 1 file(s) changed at 2026-03-27 11:46:36
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:13
                     jekyll.log
        Jekyll Feed: Generating feed for posts
-                    ...done in 5.649866276 seconds.
+                    ...done in 4.633870846 seconds.
 
-      Regenerating: 1 file(s) changed at 2026-03-27 11:46:41
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:18
                     jekyll.log
        Jekyll Feed: Generating feed for posts
-                    ...done in 3.008350682 seconds.
+                    ...done in 2.502802192 seconds.
 
-      Regenerating: 1 file(s) changed at 2026-03-27 11:46:44
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:20
                     jekyll.log
        Jekyll Feed: Generating feed for posts
-                    ...done in 3.085474924 seconds.
+                    ...done in 2.577741289 seconds.
 
-      Regenerating: 1 file(s) changed at 2026-03-27 11:46:48
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:23
                     jekyll.log
        Jekyll Feed: Generating feed for posts
-                    ...done in 3.728653169 seconds.
+                    ...done in 2.554871823 seconds.
 
-      Regenerating: 1 file(s) changed at 2026-03-27 11:46:51
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:25
                     jekyll.log
        Jekyll Feed: Generating feed for posts
-                    ...done in 3.258380598 seconds.
+                    ...done in 2.698854668 seconds.
 
-      Regenerating: 1 file(s) changed at 2026-03-27 11:46:55
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:28
                     jekyll.log
        Jekyll Feed: Generating feed for posts
-                    ...done in 3.630397549 seconds.
+                    ...done in 2.662746734 seconds.
 
-      Regenerating: 1 file(s) changed at 2026-03-27 11:46:58
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:31
                     jekyll.log
        Jekyll Feed: Generating feed for posts
-                    ...done in 3.087953475 seconds.
+                    ...done in 2.66448943 seconds.
 
-      Regenerating: 1 file(s) changed at 2026-03-27 11:47:02
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:34
                     jekyll.log
        Jekyll Feed: Generating feed for posts
-                    ...done in 2.736016662 seconds.
+                    ...done in 2.62511858 seconds.
 
-      Regenerating: 1 file(s) changed at 2026-03-27 11:47:04
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:37
                     jekyll.log
        Jekyll Feed: Generating feed for posts
-                    ...done in 2.681292448 seconds.
+                    ...done in 2.751087318 seconds.
 
-      Regenerating: 1 file(s) changed at 2026-03-27 11:47:07
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:39
                     jekyll.log
        Jekyll Feed: Generating feed for posts
-                    ...done in 2.687486552 seconds.
+                    ...done in 2.737838984 seconds.
 
-      Regenerating: 1 file(s) changed at 2026-03-27 11:47:10
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:42
                     jekyll.log
        Jekyll Feed: Generating feed for posts
-                    ...done in 2.540866028 seconds.
+                    ...done in 2.700416094 seconds.
 
-      Regenerating: 1 file(s) changed at 2026-03-27 11:47:13
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:45
                     jekyll.log
        Jekyll Feed: Generating feed for posts
-                    ...done in 2.572724645 seconds.
+                    ...done in 2.565504901 seconds.
 
-      Regenerating: 1 file(s) changed at 2026-03-27 11:47:15
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:48
                     jekyll.log
-[31m                    ------------------------------------------------[0m
-[31m      Jekyll 4.4.1   Please append `--trace` to the `serve` command [0m
-[31m                     for any additional information or backtrace. [0m
-[31m                    ------------------------------------------------[0m
-/app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/commands/serve.rb:291:in `join': SIGTERM (SignalException)
-	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/commands/serve.rb:291:in `boot_or_detach'
-	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/commands/serve.rb:221:in `start_up_webrick'
-	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/commands/serve.rb:102:in `process'
-	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/command.rb:91:in `block in process_with_graceful_fail'
-	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/command.rb:91:in `each'
-	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/command.rb:91:in `process_with_graceful_fail'
-	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/commands/serve.rb:85:in `block (2 levels) in init_with_program'
-	from /app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary/command.rb:221:in `block in execute'
-	from /app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary/command.rb:221:in `each'
-	from /app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary/command.rb:221:in `execute'
-	from /app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary/program.rb:44:in `go'
-	from /app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary.rb:21:in `program'
-	from /app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/exe/jekyll:15:in `<top (required)>'
-	from /app/vendor/bundle/ruby/3.2.0/bin/jekyll:25:in `load'
-	from /app/vendor/bundle/ruby/3.2.0/bin/jekyll:25:in `<main>'
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.542032542 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:50
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.673646757 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:53
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.509960618 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:56
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.399234857 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:31:58
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.579458596 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:01
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.39986966 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:03
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.500600845 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:06
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.473350531 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:09
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.487349231 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:11
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.59973574 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:14
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.420999522 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:16
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.586417619 seconds.
+
+      Regenerating: 2 file(s) changed at 2026-03-29 03:32:19
+                    jekyll.log
+                    _posts/2026-03-15-the-proxy-life-trap.md
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.496314613 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:22
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.562391111 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:24
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.46900615 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:27
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.617975808 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:30
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.779675256 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:33
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.576322575 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:35
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.569561098 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:38
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.655848202 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:41
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.768549732 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:44
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.777492586 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:46
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.707147561 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:49
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.611360687 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:52
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.615456229 seconds.
+
+      Regenerating: 2 file(s) changed at 2026-03-29 03:32:55
+                    jekyll.log
+                    _posts/2026-03-24-ethics.md
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.661085476 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:32:57
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.632945038 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:00
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.761185107 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:03
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.668629678 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:06
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.698160765 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:09
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.46828554 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:11
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.635278619 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:14
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.463605058 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:16
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.561516462 seconds.
+
+      Regenerating: 2 file(s) changed at 2026-03-29 03:33:19
+                    jekyll.log
+                    .Jules/palette.md
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.598578056 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:22
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.531381447 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:24
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.497910411 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:27
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.620189109 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:30
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.552830079 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:32
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.668613332 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:35
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.605801603 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:38
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.729525831 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:41
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+E, [2026-03-29T03:33:47.092141 #2888] ERROR -- : Exception rescued in listen-run_thread:
+INotify::QueueOverflowError: inotify event queue has overflowed.
+/app/vendor/bundle/ruby/3.2.0/gems/rb-inotify-0.11.1/lib/rb-inotify/event.rb:120:in `initialize'
+/app/vendor/bundle/ruby/3.2.0/gems/rb-inotify-0.11.1/lib/rb-inotify/event.rb:100:in `new'
+/app/vendor/bundle/ruby/3.2.0/gems/rb-inotify-0.11.1/lib/rb-inotify/event.rb:100:in `consume'
+/app/vendor/bundle/ruby/3.2.0/gems/rb-inotify-0.11.1/lib/rb-inotify/notifier.rb:299:in `read_events'
+/app/vendor/bundle/ruby/3.2.0/gems/rb-inotify-0.11.1/lib/rb-inotify/notifier.rb:259:in `process'
+/app/vendor/bundle/ruby/3.2.0/gems/rb-inotify-0.11.1/lib/rb-inotify/notifier.rb:231:in `block in run'
+/app/vendor/bundle/ruby/3.2.0/gems/rb-inotify-0.11.1/lib/rb-inotify/notifier.rb:228:in `synchronize'
+/app/vendor/bundle/ruby/3.2.0/gems/rb-inotify-0.11.1/lib/rb-inotify/notifier.rb:228:in `run'
+/app/vendor/bundle/ruby/3.2.0/gems/listen-3.9.0/lib/listen/adapter/linux.rb:38:in `_run'
+/app/vendor/bundle/ruby/3.2.0/gems/listen-3.9.0/lib/listen/adapter/base.rb:79:in `block in start'
+/app/vendor/bundle/ruby/3.2.0/gems/listen-3.9.0/lib/listen/thread.rb:26:in `rescue_and_log'
+/app/vendor/bundle/ruby/3.2.0/gems/listen-3.9.0/lib/listen/thread.rb:18:in `block in new'
+--- Thread.new ---
+/app/vendor/bundle/ruby/3.2.0/gems/listen-3.9.0/lib/listen/adapter/base.rb:75:in `start'
+/usr/lib/ruby/3.2.0/forwardable.rb:240:in `start'
+/app/vendor/bundle/ruby/3.2.0/gems/listen-3.9.0/lib/listen/listener.rb:71:in `block in <class:Listener>'
+/app/vendor/bundle/ruby/3.2.0/gems/listen-3.9.0/lib/listen/fsm.rb:124:in `instance_eval'
+/app/vendor/bundle/ruby/3.2.0/gems/listen-3.9.0/lib/listen/fsm.rb:124:in `call'
+/app/vendor/bundle/ruby/3.2.0/gems/listen-3.9.0/lib/listen/fsm.rb:105:in `transition_with_callbacks!'
+/app/vendor/bundle/ruby/3.2.0/gems/listen-3.9.0/lib/listen/fsm.rb:72:in `transition'
+/app/vendor/bundle/ruby/3.2.0/gems/listen-3.9.0/lib/listen/listener.rb:92:in `start'
+/app/vendor/bundle/ruby/3.2.0/gems/jekyll-watch-2.2.1/lib/jekyll/watcher.rb:26:in `watch'
+/app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/commands/build.rb:77:in `watch'
+/app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/commands/build.rb:43:in `process'
+/app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/command.rb:91:in `block in process_with_graceful_fail'
+/app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/command.rb:91:in `each'
+/app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/command.rb:91:in `process_with_graceful_fail'
+/app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/lib/jekyll/commands/serve.rb:85:in `block (2 levels) in init_with_program'
+/app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary/command.rb:221:in `block in execute'
+/app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary/command.rb:221:in `each'
+/app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary/command.rb:221:in `execute'
+/app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary/program.rb:44:in `go'
+/app/vendor/bundle/ruby/3.2.0/gems/mercenary-0.4.0/lib/mercenary.rb:21:in `program'
+/app/vendor/bundle/ruby/3.2.0/gems/jekyll-4.4.1/exe/jekyll:15:in `<top (required)>'
+/app/vendor/bundle/ruby/3.2.0/bin/jekyll:25:in `load'
+/app/vendor/bundle/ruby/3.2.0/bin/jekyll:25:in `<main>'
+                    ...done in 5.894359375 seconds.
+
+      Regenerating: 1 file(s) changed at 2026-03-29 03:33:47
+                    jekyll.log
+       Jekyll Feed: Generating feed for posts
+                    ...done in 2.392615823 seconds.
