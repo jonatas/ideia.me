@@ -62,6 +62,210 @@ Not all delegation is equal. There's a meaningful difference between:
 
 The question isn't "can someone do this better?" — it's **"does doing this make me more myself?"**
 
+### Delegate or Keep? (Interactive Scenario)
+
+Test your intuition on the Proxy Life Trap framework. For each scenario, decide if it's something you should delegate or keep.
+
+<div class="interactive-widget" id="delegate-game" aria-live="polite">
+  <div class="game-header">
+    <span id="game-progress">Scenario 1 of 5</span>
+  </div>
+  <div class="game-body">
+    <p id="game-scenario" class="scenario-text">Filing your annual tax returns and managing business receipts.</p>
+    <div class="game-actions">
+      <button class="action-btn delegate">Delegate</button>
+      <button class="action-btn keep">Keep</button>
+    </div>
+  </div>
+  <div id="game-feedback" class="game-feedback hidden"></div>
+  <div id="game-next" class="hidden">
+    <button class="next-btn">Next Scenario ➔</button>
+  </div>
+</div>
+
+<style>
+.interactive-widget {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 24px;
+  border-radius: 12px;
+  margin: 30px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.game-header {
+  font-family: monospace;
+  color: #94a3b8;
+  margin-bottom: 15px;
+  font-size: 0.9em;
+}
+.scenario-text {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #f8fafc;
+}
+.game-actions {
+  display: flex;
+  gap: 15px;
+}
+.action-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1em;
+  cursor: pointer;
+  transition: transform 0.1s, filter 0.2s;
+}
+.action-btn:hover {
+  filter: brightness(1.2);
+}
+.action-btn:active {
+  transform: scale(0.98);
+}
+.action-btn.delegate {
+  background: #0ea5e9;
+  color: white;
+}
+.action-btn.keep {
+  background: #0d9488;
+  color: white;
+}
+.game-feedback {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+.game-feedback.hidden {
+  display: none;
+}
+.game-feedback.correct {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid #10b981;
+}
+.game-feedback.incorrect {
+  background: rgba(245, 158, 11, 0.2);
+  border: 1px solid #f59e0b;
+}
+.game-feedback.mixed {
+  background: rgba(139, 92, 246, 0.2);
+  border: 1px solid #8b5cf6;
+}
+#game-next {
+  margin-top: 15px;
+  text-align: right;
+}
+#game-next.hidden {
+  display: none;
+}
+.next-btn {
+  background: transparent;
+  color: #cbd5e1;
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+.next-btn:hover {
+  background: rgba(255,255,255,0.05);
+}
+</style>
+
+<script>
+(function() {
+const scenarios = [
+  {
+    text: "Filing your annual tax returns and managing business receipts.",
+    answer: "delegate",
+    reason: "Correct. This is administrative noise. It drains presence and has little to no intrinsic meaning."
+  },
+  {
+    text: "Building a treehouse with your child over the weekend.",
+    answer: "keep",
+    reason: "Correct. This is autotelic. The value is in the shared experience and embodied competence, not just having a treehouse."
+  },
+  {
+    text: "Scheduling meetings and responding to generic inquiry emails.",
+    answer: "delegate",
+    reason: "Correct. Logistics that drain presence. Someone else can easily handle this without losing any personal meaning."
+  },
+  {
+    text: "Writing the core architecture for a project you are deeply passionate about.",
+    answer: "keep",
+    reason: "Correct. This is craft and creation. Even if someone else could do it, doing it makes you more yourself."
+  },
+  {
+    text: "Cooking a complex, new recipe you've been excited to try for your partner's birthday.",
+    answer: "keep",
+    reason: "Correct. The struggle and learning curve here contain present value and irreplaceability. It's an expression of care."
+  }
+];
+
+let currentScenarioIndex = 0;
+
+function renderScenario() {
+  if (currentScenarioIndex >= scenarios.length) {
+    document.getElementById('game-body').innerHTML = '<h3 style="color:#10b981; text-align:center;">Exercise Complete!</h3><p style="text-align:center;">Remember: Delegate the burdens, keep the dreams.</p>';
+    document.getElementById('game-progress').textContent = 'Finished';
+    document.getElementById('game-feedback').classList.add('hidden');
+    document.getElementById('game-next').classList.add('hidden');
+    return;
+  }
+
+  const scenario = scenarios[currentScenarioIndex];
+  document.getElementById('game-progress').textContent = `Scenario ${currentScenarioIndex + 1} of ${scenarios.length}`;
+  document.getElementById('game-scenario').textContent = scenario.text;
+  document.getElementById('game-feedback').classList.add('hidden');
+  document.getElementById('game-next').classList.add('hidden');
+
+  const btns = document.querySelectorAll('.action-btn');
+  btns.forEach(btn => btn.disabled = false);
+}
+
+function submitAnswer(choice) {
+  const scenario = scenarios[currentScenarioIndex];
+  const feedbackEl = document.getElementById('game-feedback');
+  const btns = document.querySelectorAll('.action-btn');
+
+  btns.forEach(btn => btn.disabled = true);
+
+  feedbackEl.classList.remove('hidden', 'correct', 'incorrect', 'mixed');
+
+  if (choice === scenario.answer) {
+    feedbackEl.classList.add('correct');
+    feedbackEl.innerHTML = `<strong>Spot on!</strong> ${scenario.reason}`;
+  } else {
+    feedbackEl.classList.add('incorrect');
+    feedbackEl.innerHTML = `<strong>Think again.</strong> ${scenario.reason}`;
+  }
+
+  document.getElementById('game-next').classList.remove('hidden');
+}
+
+function nextScenario() {
+  currentScenarioIndex++;
+  renderScenario();
+}
+
+// Expose submitAnswer and nextScenario for inline handlers
+window.delegateGameSubmitAnswer = submitAnswer;
+window.delegateGameNextScenario = nextScenario;
+
+// Make inline onclick handlers point to the global references
+document.addEventListener("DOMContentLoaded", () => {
+  const delegateBtn = document.querySelector(".action-btn.delegate");
+  const keepBtn = document.querySelector(".action-btn.keep");
+  const nextBtn = document.querySelector(".next-btn");
+
+  if(delegateBtn) delegateBtn.addEventListener("click", () => window.delegateGameSubmitAnswer('delegate'));
+  if(keepBtn) keepBtn.addEventListener("click", () => window.delegateGameSubmitAnswer('keep'));
+  if(nextBtn) nextBtn.addEventListener("click", () => window.delegateGameNextScenario());
+});
+
+})();
+</script>
+
 This maps directly to what [Time Economics](/time-economics/) calls **authorshipmetry** — the degree to which you're actively writing your story versus being written into someone else's. High-authorship time tends to be the time you're most present in, most challenged by, most alive within.
 
 ## Life Authorship as a Practice
