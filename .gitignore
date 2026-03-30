@@ -11,3 +11,4 @@ images/.DS_Store
 .claude/worktrees/
 vendor/
 .bundle/
+node_modules/
