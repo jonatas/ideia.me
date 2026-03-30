@@ -291,13 +291,13 @@ from PostgreSQL. The AST conversion is very similar to what you have in the Ruby
 
 ```ruby
 Fast.parse_sql('select 1')
-s(:select_stmt,
-  s(:target_list,
-    s(:res_target,
-      s(:val,
-        s(:a_const,
-          s(:ival,
-            s(:ival, 1)))))))
+# => s(:select_stmt,
+#   s(:target_list,
+#     s(:res_target,
+#       s(:val,
+#         s(:a_const,
+#           s(:ival,
+#             s(:ival, 1)))))))
 ```
 
 And the SQL parser is just forwarding the pg_query AST to converge into a format

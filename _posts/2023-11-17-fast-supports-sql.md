@@ -48,17 +48,17 @@ This is the AST representation:
 
 ```ruby
 Fast.parse_sql("select * from customers")
- => s(:select_stmt,
-  s(:target_list,
-    s(:res_target,
-      s(:val,
-        s(:column_ref,
-          s(:fields))))),
-  s(:from_clause,
-    s(:range_var,
-      s(:relname, "customers"),
-      s(:inh, true),
-      s(:relpersistence, "p"))))
+# => s(:select_stmt,
+#   s(:target_list,
+#     s(:res_target,
+#       s(:val,
+#         s(:column_ref,
+#           s(:fields))))),
+#   s(:from_clause,
+#     s(:range_var,
+#       s(:relname, "customers"),
+#       s(:inh, true),
+#       s(:relpersistence, "p"))))
 ```
 
 Note that the `#replace` method is a shortcut to `replace` method from the

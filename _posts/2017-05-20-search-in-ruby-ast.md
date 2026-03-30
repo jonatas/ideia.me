@@ -337,7 +337,7 @@ RuboCop dependency. The idea is just starting: https://github.com/jonatas/fast
 You can do similar things with plain ruby code and arrays to build the matcher:
 
 ```ruby
-Fast.match?(s(:send, s(:send, nil, :a), :b), [:send, '...'])) # => true
+Fast.match?(s(:send, s(:send, nil, :a), :b), [:send, '...']) # => true
 ```
 
 Checkout the [current specs](https://github.com/jonatas/fast/blob/master/spec/fast_spec.rb#L48).
@@ -346,7 +346,7 @@ In the next step, I'm thinking about do a `f()` for find and `c()` to capture th
 exactly how to proceed but the idea is something like:
 
 ```ruby
-Fast.match?(ast, f(:send, f(:send, f(:send, c(:send, nil, '_'), '_'), :c), '_'))) # => s(:send, nil, :a)
+Fast.match?(ast, f(:send, f(:send, f(:send, c(:send, nil, '_'), '_'), :c), '_')) # => s(:send, nil, :a)
 ```
 
 Any thoughts or ideas about how to be expressive in this search?

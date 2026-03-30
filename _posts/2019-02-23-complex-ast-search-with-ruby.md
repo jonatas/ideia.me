@@ -85,7 +85,7 @@ Using [Fast.capture](https://jonatas.github.io/fast/syntax/#is-for-capture-curre
 It can be easily found. Let's see how I could do it in the old way?
 
 ```ruby
-Fast.capture(Fast.ast_from_file("example.rb"), "(def $_)")
+Fast.capture("(def $_)", Fast.ast_from_file("example.rb"))
 # => [:first_method, :second_method, :first_method]
 ```
 
@@ -155,8 +155,8 @@ from the expression:
 
 ```ruby
 puts Fast.search_file( '#duplicated_def', 'example.rb')
-(def :first_method
-  (args) nil)
+# (def :first_method
+#   (args) nil)
 ```
 
 That's all I have for today! I'm a bit bored with my tool, and I'm also working
