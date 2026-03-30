@@ -2,6 +2,8 @@
 layout: post
 categories: [career]
 title: First week at Hubstaff
+image: /images/time-investment-visualization.png
+mermaid: true
 ---
 
 # My first week at Hubstaff
@@ -37,6 +39,21 @@ important.
 
 There are insights related to how do you use your day in the app and they all
 help you to grow and increase your focus on your role.
+
+{% mermaid %}
+mindmap
+  root((Productivity Insights))
+    Time Allocation
+      Core Work
+      Non-core Work
+      Distraction
+    Activity
+      Keyboard Usage
+      Mouse Movement
+    Focus
+      Context Switching
+      Cognitive Load
+{% endmermaid %}
 
 ### Core work vs non-core vs distraction
 
