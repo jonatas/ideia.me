@@ -1,9 +1,10 @@
 # AGENTS.md
 
-## Project Context: ideia.me/yoga
-This is a free, open-source, offline-first yoga sequence builder. It is designed specifically for yoga teachers to create and manage classes without the need for an account, internet connection, or data tracking.
+## Project Context: ideia.me Apps
+This repository contains multiple web applications and interactive learning pages (e.g., Yoga App, Mandala Playground, Semantic Learn, etc.).
+**All apps in this repository must follow the same core principles and technical constraints established by the Yoga App.**
 
-**All apps in this repository must follow the same core principles and technical constraints as the Yoga App.**
+For context, the **Yoga App** is a free, open-source, offline-first yoga sequence builder designed specifically for yoga teachers to create and manage classes without the need for an account, internet connection, or data tracking.
 
 ## Core Principles
 - **Zero Backend**: No signups, no databases (external), and no APIs. All data must live in the user's browser.
