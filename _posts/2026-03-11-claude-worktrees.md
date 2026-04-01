@@ -5,6 +5,7 @@ categories: ['programming', 'ai', 'tools', 'claude']
 tags: ['claude', 'claude-code', 'git', 'worktrees', 'productivity']
 description: "First impressions of using Claude Code's worktree isolation feature — running AI agents in isolated git branches without touching your working directory."
 image: /images/claude-worktrees-containment-dome.png
+mermaid: true
 ---
 
 I just used Claude worktrees for the first time and I'm still buzzing from it.
@@ -112,6 +113,23 @@ an agent with that flag, it:
 The practical upshot: you can let an AI agent explore, edit, and experiment in
 your codebase without any risk to your current work. Your uncommitted changes
 stay untouched. Your stash stays empty. Nothing weird bleeds through.
+
+{% mermaid %}
+sequenceDiagram
+    participant Dev as Developer
+    participant Main as Main Working Dir
+    participant Claude as Claude Agent
+    participant WT as Git Worktree
+
+    Dev->>Main: Working on feature... (dirty state)
+    Dev->>Claude: `claude --worktree fix-bug`
+    Claude->>WT: Creates isolated worktree & branch
+    Claude->>WT: Works freely (modifies files, runs tests)
+    WT-->>Claude: Agent completes task
+    Claude->>Dev: Returns path & branch to review
+    Dev->>Main: `git diff master...fix-bug`
+    Note over Dev,Main: Main directory untouched!
+{% endmermaid %}
 
 This is exactly the kind of isolation I always wanted but never had the discipline
 to set up manually.
