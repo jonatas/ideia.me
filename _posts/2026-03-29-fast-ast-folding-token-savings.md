@@ -4,6 +4,7 @@ title: "Saving LLM Tokens with Fast: AST Folding & Dependency Free"
 categories: ['ruby', 'ast', 'programming', 'technology']
 tags: ['fast', 'llm', 'agents', 'refactoring', 'prism']
 description: "How removing the parser gem dependency and introducing AST folding in the Fast gem helps LLM agents navigate huge codebases efficiently while saving massive amounts of tokens."
+mermaid: true
 ---
 If you've been following my progress with the [Fast gem](https://github.com/jonatas/fast), you probably know I'm a big fan  of exploring code with Abstract Syntax Trees (ASTs) and using them to search and refactor code like a boss. But lately, I've had a new challenge on my plate: making `fast` a first-class citizen for AI agents.
 
@@ -20,6 +21,24 @@ Recently, Codex, Claude and Gemini helped me to made a massive architectural shi
 This refactoring wasn't just about reducing the dependency graph. It was about making `fast` leaner and deeply integrated with modern Ruby internals. 
 
 The best part? I managed to do this while keeping the core `fast` search API fully backward-compatible. All the node patterns you're used to—things like `(send (int _) :+ (int _))` or `{int float}`—continue to work effortlessly because `fast` elegantly adapts the Prism AST output back into the familiar `parser`-like node structures. Every single tutorial and script I've written over the years still works!
+
+{% mermaid %}
+graph TD
+    subgraph Before["Fast (Legacy)"]
+        A[Ruby Code] --> B["parser gem"]
+        B --> C["AST Nodes (parser format)"]
+    end
+
+    subgraph After["Fast (Modernized)"]
+        D[Ruby Code] --> E["Prism (Native)"]
+        E --> F["Prism AST Nodes"]
+        F --> G{"Fast Adapter"}
+        G --> H["AST Nodes (parser format)"]
+    end
+
+    C -. "Token bloat" .-> I[LLM Agent]
+    H -- "Folded & Lean" --> I
+{% endmermaid %}
 
 ### AST Folding: The LLM Token Saver
 
@@ -80,6 +99,137 @@ What just happened? Setting the proper folding levels provides extreme token sav
 2. **No deep details, only on-demand unfolding:** All method implementations are suppressed, leaving only signatures. 
 
 The payload shrinks down to barely **130 lines (~4,300 chars)**. We get over an **80% reduction in tokens** while retaining 100% of the class's structure. If the agent decides it needs the deep details of `video_available?`, it can query for that method's specific body rather than paying for the entire 700-line file.
+
+<div class="interactive-widget" style="margin: 2rem 0; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; background: rgba(0,0,0,0.2);">
+  <h3 style="margin-top: 0; font-size: 1.25rem;">Interactive Token Saver Simulator</h3>
+  <p style="margin-bottom: 1rem; font-size: 0.95rem; color: #94A3B8;">See how AST Folding changes the payload sent to the LLM agent.</p>
+
+  <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+    <button id="btn-full-source" role="button" tabindex="0" aria-pressed="true" style="flex: 1; padding: 0.75rem; border: 2px solid #334155; background: #1e293b; color: white; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.2s;">Full File Context</button>
+    <button id="btn-folded" role="button" tabindex="0" aria-pressed="false" style="flex: 1; padding: 0.75rem; border: 2px solid #334155; background: #0f172a; color: #94A3B8; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.2s;">Folded Skeleton</button>
+  </div>
+
+  <div id="simulator-live-region" aria-live="polite" class="sr-only" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;">Currently displaying Full File Context: 723 lines, massive token usage.</div>
+
+  <div id="simulator-display" style="background: #0d1117; padding: 1rem; border-radius: 6px; font-family: monospace; font-size: 0.85rem; color: #c9d1d9; overflow-x: auto; white-space: pre;">
+class Talk &lt; ApplicationRecord
+  WATCHABLE_PROVIDERS = [...]
+  KIND_LABELS = {...}
+
+  include Rollupable
+
+  belongs_to :event, optional: true, counter_cache: :talks_count, touch: true
+  has_many :child_talks, class_name: "Talk", foreign_key: :parent_talk_id, dependent: :destroy
+
+  # 700 lines of complex method logic...
+  def published?
+    # Complex business logic with multiple conditionals
+    # and database queries that the LLM doesn't need to read yet.
+    if event.published? &amp;&amp; approved_at.present?
+      # ...
+    end
+  end
+  # ... more methods
+end
+  </div>
+
+  <div style="margin-top: 1rem; display: flex; justify-content: space-between; font-size: 0.85rem; color: #94A3B8;">
+    <span id="simulator-metrics">Lines: 723 | Est. Tokens: ~6000 | Status: Expensive</span>
+    <span id="simulator-savings" style="color: #ef4444; font-weight: bold;">0% Token Savings</span>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  (function() {
+    const btnFull = document.getElementById('btn-full-source');
+    const btnFolded = document.getElementById('btn-folded');
+    const display = document.getElementById('simulator-display');
+    const metrics = document.getElementById('simulator-metrics');
+    const savings = document.getElementById('simulator-savings');
+    const liveRegion = document.getElementById('simulator-live-region');
+
+    const fullCode = `class Talk < ApplicationRecord
+  WATCHABLE_PROVIDERS = [...]
+  KIND_LABELS = {...}
+
+  include Rollupable
+
+  belongs_to :event, optional: true, counter_cache: :talks_count, touch: true
+  has_many :child_talks, class_name: "Talk", foreign_key: :parent_talk_id, dependent: :destroy
+
+  # 700 lines of complex method logic...
+  def published?
+    # Complex business logic with multiple conditionals
+    # and database queries that the LLM doesn't need to read yet.
+    if event.published? && approved_at.present?
+      # ...
+    end
+  end
+  # ... more methods
+end`;
+
+    const foldedCode = `class Talk < ApplicationRecord
+  WATCHABLE_PROVIDERS = [...]
+  KIND_LABELS = {...}
+
+  include Rollupable
+
+  belongs_to :event, optional: true, counter_cache: :talks_count, touch: true
+  has_many :child_talks, class_name: "Talk", foreign_key: :parent_talk_id, dependent: :destroy
+
+  def published?
+  def video_available?
+  def thumbnail_url(size:, request:)
+  # ... (40+ method signatures without bodies)
+end`;
+
+    function updateView(isFolded) {
+      if (isFolded) {
+        btnFolded.setAttribute('aria-pressed', 'true');
+        btnFull.setAttribute('aria-pressed', 'false');
+        btnFolded.style.background = '#1e293b';
+        btnFolded.style.color = 'white';
+        btnFull.style.background = '#0f172a';
+        btnFull.style.color = '#94A3B8';
+
+        display.textContent = foldedCode;
+        metrics.textContent = 'Lines: 130 | Est. Tokens: ~1000 | Status: Optimized';
+        savings.textContent = '83% Token Savings';
+        savings.style.color = '#10b981'; // Green
+
+        liveRegion.textContent = 'Folded Skeleton active. View updated to show 130 lines, achieving 83 percent token savings.';
+      } else {
+        btnFull.setAttribute('aria-pressed', 'true');
+        btnFolded.setAttribute('aria-pressed', 'false');
+        btnFull.style.background = '#1e293b';
+        btnFull.style.color = 'white';
+        btnFolded.style.background = '#0f172a';
+        btnFolded.style.color = '#94A3B8';
+
+        display.textContent = fullCode;
+        metrics.textContent = 'Lines: 723 | Est. Tokens: ~6000 | Status: Expensive';
+        savings.textContent = '0% Token Savings';
+        savings.style.color = '#ef4444'; // Red
+
+        liveRegion.textContent = 'Full File Context active. View updated to show 723 lines, massive token usage.';
+      }
+    }
+
+    function handleInteraction(event, isFolded) {
+      if (event.type === 'click' || (event.type === 'keydown' && (event.key === 'Enter' || event.key === ' '))) {
+        event.preventDefault();
+        updateView(isFolded);
+      }
+    }
+
+    btnFull.addEventListener('click', (e) => handleInteraction(e, false));
+    btnFull.addEventListener('keydown', (e) => handleInteraction(e, false));
+    btnFolded.addEventListener('click', (e) => handleInteraction(e, true));
+    btnFolded.addEventListener('keydown', (e) => handleInteraction(e, true));
+  })();
+});
+</script>
 
 ### MCP: Inline Experiments and Refactoring
 
