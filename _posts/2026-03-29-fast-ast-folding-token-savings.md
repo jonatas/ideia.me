@@ -4,6 +4,7 @@ title: "Saving LLM Tokens with Fast: AST Folding & Dependency Free"
 categories: ['ruby', 'ast', 'programming', 'technology']
 tags: ['fast', 'llm', 'agents', 'refactoring', 'prism']
 description: "How removing the parser gem dependency and introducing AST folding in the Fast gem helps LLM agents navigate huge codebases efficiently while saving massive amounts of tokens."
+mermaid: true
 ---
 If you've been following my progress with the [Fast gem](https://github.com/jonatas/fast), you probably know I'm a big fan  of exploring code with Abstract Syntax Trees (ASTs) and using them to search and refactor code like a boss. But lately, I've had a new challenge on my plate: making `fast` a first-class citizen for AI agents.
 
@@ -80,6 +81,114 @@ What just happened? Setting the proper folding levels provides extreme token sav
 2. **No deep details, only on-demand unfolding:** All method implementations are suppressed, leaving only signatures. 
 
 The payload shrinks down to barely **130 lines (~4,300 chars)**. We get over an **80% reduction in tokens** while retaining 100% of the class's structure. If the agent decides it needs the deep details of `video_available?`, it can query for that method's specific body rather than paying for the entire 700-line file.
+
+<div class="interactive-widget token-saver-widget" style="background: var(--bg-secondary, #0f172a); padding: 20px; border-radius: 12px; margin: 30px 0; border: 1px solid rgba(255,255,255,0.1);">
+  <h3 style="margin-top: 0; margin-bottom: 15px; font-size: 1.2rem; color: var(--text-color, #e2e8f0);">AST Folding Simulator</h3>
+  <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 300px;">
+      <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 10px;">Select Folding Level:</p>
+      <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+         <button id="btn-full" class="folding-btn active" style="padding: 8px 16px; background: #334155; color: white; border: 1px solid #475569; border-radius: 6px; cursor: pointer;">Full Code</button>
+         <button id="btn-folded" class="folding-btn" style="padding: 8px 16px; background: transparent; color: #94a3b8; border: 1px solid #334155; border-radius: 6px; cursor: pointer;">Folded (Level 1)</button>
+      </div>
+      <div style="background: #1e293b; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 0.85rem; color: #cbd5e1; height: 180px; overflow-y: auto;">
+        <pre id="code-display" style="margin: 0; white-space: pre-wrap;"><span style="color:#c678dd;">class</span> <span style="color:#e5c07b;">Talk</span> <span style="color:#56b6c2;">&lt;</span> <span style="color:#e5c07b;">ApplicationRecord</span>
+  <span style="color:#c678dd;">def</span> <span style="color:#61afef;">video_available?</span>
+    <span style="color:#c678dd;">if</span> status <span style="color:#56b6c2;">==</span> <span style="color:#98c379;">'published'</span> <span style="color:#56b6c2;">&&</span> video_url.present?
+      <span style="color:#e5c07b;">HTTParty</span>.get(video_url).success?
+    <span style="color:#c678dd;">else</span>
+      <span style="color:#d19a66;">false</span>
+    <span style="color:#c678dd;">end</span>
+  <span style="color:#c678dd;">end</span>
+<span style="color:#c678dd;">end</span></pre>
+      </div>
+    </div>
+    <div style="flex: 1; min-width: 250px; display: flex; flex-direction: column; justify-content: center;">
+       <div style="background: rgba(0,0,0,0.3); padding: 20px; border-radius: 8px; text-align: center;">
+          <p style="margin: 0 0 10px 0; font-size: 0.9rem; color: #94a3b8;">Estimated Tokens Used</p>
+          <div id="token-count" style="font-size: 3rem; font-weight: bold; color: #ef4444; margin-bottom: 10px;">84</div>
+          <div id="token-savings" style="font-size: 0.9rem; color: #10b981; min-height: 1.5em;"></div>
+       </div>
+    </div>
+  </div>
+  <div id="folding-live-region" aria-live="polite" class="sr-only" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;">Currently viewing Full Code using 84 tokens.</div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const btnFull = document.getElementById('btn-full');
+    const btnFolded = document.getElementById('btn-folded');
+    const codeDisplay = document.getElementById('code-display');
+    const tokenCount = document.getElementById('token-count');
+    const tokenSavings = document.getElementById('token-savings');
+    const liveRegion = document.getElementById('folding-live-region');
+
+    const fullCodeHTML = '<span style="color:#c678dd;">class</span> <span style="color:#e5c07b;">Talk</span> <span style="color:#56b6c2;">&lt;</span> <span style="color:#e5c07b;">ApplicationRecord</span>\n  <span style="color:#c678dd;">def</span> <span style="color:#61afef;">video_available?</span>\n    <span style="color:#c678dd;">if</span> status <span style="color:#56b6c2;">==</span> <span style="color:#98c379;">\'published\'</span> <span style="color:#56b6c2;">&&</span> video_url.present?\n      <span style="color:#e5c07b;">HTTParty</span>.get(video_url).success?\n    <span style="color:#c678dd;">else</span>\n      <span style="color:#d19a66;">false</span>\n    <span style="color:#c678dd;">end</span>\n  <span style="color:#c678dd;">end</span>\n<span style="color:#c678dd;">end</span>';
+
+    const foldedCodeHTML = '<span style="color:#c678dd;">class</span> <span style="color:#e5c07b;">Talk</span> <span style="color:#56b6c2;">&lt;</span> <span style="color:#e5c07b;">ApplicationRecord</span>\n  <span style="color:#c678dd;">def</span> <span style="color:#61afef;">video_available?</span>\n<span style="color:#c678dd;">end</span>';
+
+    function setFolded(isFolded) {
+        if (isFolded) {
+            btnFolded.style.background = '#334155';
+            btnFolded.style.color = 'white';
+            btnFolded.style.borderColor = '#475569';
+            btnFolded.setAttribute('aria-pressed', 'true');
+            btnFolded.classList.add('active');
+
+            btnFull.style.background = 'transparent';
+            btnFull.style.color = '#94a3b8';
+            btnFull.style.borderColor = '#334155';
+            btnFull.setAttribute('aria-pressed', 'false');
+            btnFull.classList.remove('active');
+
+            codeDisplay.innerHTML = foldedCodeHTML;
+            tokenCount.textContent = '12';
+            tokenCount.style.color = '#10b981';
+            tokenSavings.textContent = 'Saved 72 tokens (85% reduction)';
+            liveRegion.textContent = 'Currently viewing Folded Code using 12 tokens. Saved 72 tokens.';
+        } else {
+            btnFull.style.background = '#334155';
+            btnFull.style.color = 'white';
+            btnFull.style.borderColor = '#475569';
+            btnFull.setAttribute('aria-pressed', 'true');
+            btnFull.classList.add('active');
+
+            btnFolded.style.background = 'transparent';
+            btnFolded.style.color = '#94a3b8';
+            btnFolded.style.borderColor = '#334155';
+            btnFolded.setAttribute('aria-pressed', 'false');
+            btnFolded.classList.remove('active');
+
+            codeDisplay.innerHTML = fullCodeHTML;
+            tokenCount.textContent = '84';
+            tokenCount.style.color = '#ef4444';
+            tokenSavings.textContent = '';
+            liveRegion.textContent = 'Currently viewing Full Code using 84 tokens.';
+        }
+    }
+
+    btnFull.addEventListener('click', () => setFolded(false));
+    btnFolded.addEventListener('click', () => setFolded(true));
+});
+</script>
+
+{% mermaid %}
+graph TD
+    classDef folded fill:#f97316,stroke:#ea580c,stroke-width:2px,color:#fff;
+    classDef default fill:#1e293b,stroke:#334155,color:#fff;
+
+    subgraph "Full AST (Token Heavy)"
+        A1[class Talk] --> B1[def video_available?]
+        B1 --> C1[if status == 'published']
+        C1 --> D1[return video_url]
+        C1 --> E1[else]
+        E1 --> F1[return nil]
+    end
+
+    subgraph "Folded AST (Token Efficient)"
+        A2[class Talk] --> B2[def video_available? ... ]:::folded
+    end
+{% endmermaid %}
 
 ### MCP: Inline Experiments and Refactoring
 
