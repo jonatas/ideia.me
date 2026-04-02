@@ -5,6 +5,7 @@ categories: ['programming', 'ai', 'tools', 'claude']
 tags: ['claude', 'claude-code', 'git', 'worktrees', 'productivity']
 description: "First impressions of using Claude Code's worktree isolation feature — running AI agents in isolated git branches without touching your working directory."
 image: /images/claude-worktrees-containment-dome.png
+mermaid: true
 ---
 
 I just used Claude worktrees for the first time and I'm still buzzing from it.
@@ -29,6 +30,15 @@ directories — without cloning the repo again. Each worktree shares the same
 Both pointing to the same git history. Both independent of each other.
 
 ### How git stores this
+
+{% mermaid %}
+graph TD
+    A[.git] --> B[objects]
+    A --> C[worktrees]
+    C --> D[my-feature]
+    D --> E[HEAD]
+    D --> F[index]
+{% endmermaid %}
 
 Your main repo has a `.git/` directory that contains everything — objects,
 refs, config, HEAD. When you add a worktree, git does something elegant:

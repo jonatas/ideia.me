@@ -285,3 +285,63 @@ separated, the options open up.
 
 The full runnable snippet — table setup, data generation, retention procedure, and job scheduling
 — is on GitHub: [retention_by_plan.sql](https://github.com/jonatas/sql-snippets/blob/master/retention_by_plan.sql).
+
+## Quick Knowledge Check
+
+<div class="interactive-widget">
+  <div aria-live="polite" id="quiz-feedback" style="font-weight: bold; margin-bottom: 10px; min-height: 1.5em;"></div>
+  <form id="retention-quiz">
+    <p>Why does dropping a chunk scale better than a DELETE statement for retention?</p>
+    <div class="checkbox-wrapper">
+      <input type="radio" name="q1" id="q1a" value="a">
+      <label for="q1a">A) DELETE doesn't work on hypertables.</label>
+    </div>
+    <div class="checkbox-wrapper">
+      <input type="radio" name="q1" id="q1b" value="b">
+      <label for="q1b">B) Dropping a chunk is a single filesystem unlink, avoiding table scans and WAL bloat.</label>
+    </div>
+    <div class="checkbox-wrapper">
+      <input type="radio" name="q1" id="q1c" value="c">
+      <label for="q1c">C) Chunks automatically compress deleted rows.</label>
+    </div>
+  </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('retention-quiz');
+    const feedback = document.getElementById('quiz-feedback');
+    const radios = form.querySelectorAll('input[type="radio"]');
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            const value = e.target.value;
+            if (value === 'b') {
+                feedback.textContent = 'Correct! It is a simple OS-level unlink.';
+                feedback.style.color = '#10b981';
+            } else {
+                feedback.textContent = 'Incorrect. Try again!';
+                feedback.style.color = '#ef4444';
+            }
+        });
+    });
+});
+</script>
+
+<style>
+.interactive-widget {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+.checkbox-wrapper {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+}
+.checkbox-wrapper input {
+    margin-top: 4px;
+    margin-right: 10px;
+}
+</style>

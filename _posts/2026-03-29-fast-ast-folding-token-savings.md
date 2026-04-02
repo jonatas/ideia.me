@@ -4,6 +4,8 @@ title: "Saving LLM Tokens with Fast: AST Folding & Dependency Free"
 categories: ['ruby', 'ast', 'programming', 'technology']
 tags: ['fast', 'llm', 'agents', 'refactoring', 'prism']
 description: "How removing the parser gem dependency and introducing AST folding in the Fast gem helps LLM agents navigate huge codebases efficiently while saving massive amounts of tokens."
+image: /images/brain-interface.png
+mermaid: true
 ---
 If you've been following my progress with the [Fast gem](https://github.com/jonatas/fast), you probably know I'm a big fan  of exploring code with Abstract Syntax Trees (ASTs) and using them to search and refactor code like a boss. But lately, I've had a new challenge on my plate: making `fast` a first-class citizen for AI agents.
 
@@ -22,6 +24,15 @@ This refactoring wasn't just about reducing the dependency graph. It was about m
 The best part? I managed to do this while keeping the core `fast` search API fully backward-compatible. All the node patterns you're used to—things like `(send (int _) :+ (int _))` or `{int float}`—continue to work effortlessly because `fast` elegantly adapts the Prism AST output back into the familiar `parser`-like node structures. Every single tutorial and script I've written over the years still works!
 
 ### AST Folding: The LLM Token Saver
+
+{% mermaid %}
+graph LR
+    A[Full Source File] --> B(Parser)
+    B --> C{AST Folding}
+    C -- --level 1 --> D[Class & Signatures only]
+    C -- --level 2 --> E[Includes inner methods]
+    D --> F[LLM Agent]
+{% endmermaid %}
 
 With the dependencies cleaned up, I focused on the LLM challenge: token efficiency. I introduced an **AST folding** feature (`--level N`) into the CLI. 
 

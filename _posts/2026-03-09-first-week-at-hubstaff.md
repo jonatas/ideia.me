@@ -2,6 +2,8 @@
 layout: post
 categories: [career]
 title: First week at Hubstaff
+image: /images/jonatasdp-2023-smiling.jpg
+mermaid: true
 ---
 
 # My first week at Hubstaff
@@ -34,6 +36,13 @@ precious way to remind the day is going and you should focus on what is
 important.
 
 ## Productivity insights
+
+{% mermaid %}
+pie title Typical Day Breakdown
+  "Core Work" : 60
+  "Non-Core Work" : 25
+  "Distraction" : 15
+{% endmermaid %}
 
 There are insights related to how do you use your day in the app and they all
 help you to grow and increase your focus on your role.
