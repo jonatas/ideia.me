@@ -69,6 +69,84 @@ helpful or healthy for you.
 The focus measures your ability of not switching apps. It counts unfocus when
 you spend less than 90 seconds on an app.
 
+<div class="interactive-widget" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0;">
+  <h4 style="margin-top: 0; text-align: center;">Focus & Cognitive Load Simulator</h4>
+  <p style="font-size: 0.9em; color: #a1a1aa; text-align: center;">See how rapid context switching drains your cognitive focus.</p>
+
+  <div style="display: flex; justify-content: center; gap: 15px; margin-bottom: 20px;">
+    <button id="btn-work" style="padding: 10px 20px; background: #059669; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Deep Work (Stay on App)</button>
+    <button id="btn-switch" style="padding: 10px 20px; background: #dc2626; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Switch App</button>
+  </div>
+
+  <div style="background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); position: relative; overflow: hidden;">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold;">
+      <span>Focus Score: <span id="focus-score-display" style="color: #34d399;">100%</span></span>
+      <span>Cognitive Load: <span id="cog-load-display" style="color: #f87171;">Low</span></span>
+    </div>
+
+    <!-- Progress Bar -->
+    <div style="width: 100%; background: #334155; height: 20px; border-radius: 10px; overflow: hidden;">
+      <div id="focus-bar" style="width: 100%; height: 100%; background: #10b981; transition: width 0.3s ease, background-color 0.3s ease;"></div>
+    </div>
+  </div>
+
+  <div aria-live="polite" class="sr-only" id="focus-live-region" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;">Focus Simulator initialized. Score is 100%, Cognitive Load is Low.</div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  let score = 100;
+  let penaltyMultiplier = 1;
+  const btnWork = document.getElementById('btn-work');
+  const btnSwitch = document.getElementById('btn-switch');
+  const scoreDisplay = document.getElementById('focus-score-display');
+  const cogDisplay = document.getElementById('cog-load-display');
+  const bar = document.getElementById('focus-bar');
+  const liveRegion = document.getElementById('focus-live-region');
+
+  function updateUI(action) {
+    // Determine status text and colors
+    let cogText = 'Low';
+    let cogColor = '#f87171'; // light red
+    let barColor = '#10b981'; // green
+
+    if (score < 40) {
+      cogText = 'Overloaded!';
+      barColor = '#ef4444'; // red
+      cogColor = '#ef4444';
+    } else if (score < 75) {
+      cogText = 'High';
+      barColor = '#f59e0b'; // orange
+      cogColor = '#f59e0b';
+    }
+
+    scoreDisplay.textContent = `${Math.round(score)}%`;
+    scoreDisplay.style.color = barColor;
+    cogDisplay.textContent = cogText;
+    cogDisplay.style.color = cogColor;
+    bar.style.width = `${Math.round(score)}%`;
+    bar.style.backgroundColor = barColor;
+
+    // Announce to screen readers
+    liveRegion.textContent = `Action: ${action}. Focus score dropped to ${Math.round(score)}%. Cognitive load is ${cogText}.`;
+  }
+
+  btnWork.addEventListener('click', () => {
+    score = Math.min(100, score + 10);
+    penaltyMultiplier = 1; // reset penalty on deep work
+    updateUI('Deep Work');
+  });
+
+  btnSwitch.addEventListener('click', () => {
+    // Penalty increases if you switch rapidly
+    const penalty = 15 * penaltyMultiplier;
+    score = Math.max(0, score - penalty);
+    penaltyMultiplier = Math.min(3, penaltyMultiplier + 0.5);
+    updateUI('Switched App');
+  });
+});
+</script>
+
 Using Hubstaff as a user made me think a lot about how I relate to time. I wrote
 about this in [Time Economics](/time-economics) — the idea that time
 is your most non-renewable resource and every hour can be viewed through the lens

@@ -5,6 +5,7 @@ categories: ['programming', 'ai', 'tools', 'claude']
 tags: ['claude', 'claude-code', 'git', 'worktrees', 'productivity']
 description: "First impressions of using Claude Code's worktree isolation feature — running AI agents in isolated git branches without touching your working directory."
 image: /images/claude-worktrees-containment-dome.png
+mermaid: true
 ---
 
 I just used Claude worktrees for the first time and I'm still buzzing from it.
@@ -56,6 +57,30 @@ Inside `.git/worktrees/my-feature/` git stores the worktree-specific state:
 The key insight: **all worktrees share the same object store**. Commits,
 blobs, trees — all deduped in `.git/objects/`. You never copy files. You
 just get a new working tree and a new HEAD pointer. It's cheap.
+
+{% mermaid %}
+flowchart TD
+    subgraph Repository
+        O[Shared Object Store<br>.git/objects/]
+    end
+
+    subgraph Main Worktree
+        MW[~/code/myproject]
+        MH[HEAD: master]
+        MI[index]
+    end
+
+    subgraph Isolated Worktree
+        IW[~/.claude/worktrees/my-feature]
+        IH[HEAD: my-feature]
+        II[index]
+    end
+
+    MW --> O
+    IW --> O
+    MH -.-> O
+    IH -.-> O
+{% endmermaid %}
 
 You can inspect all your active worktrees at any time:
 

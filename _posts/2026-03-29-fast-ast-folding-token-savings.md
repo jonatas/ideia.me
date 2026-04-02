@@ -4,6 +4,7 @@ title: "Saving LLM Tokens with Fast: AST Folding & Dependency Free"
 categories: ['ruby', 'ast', 'programming', 'technology']
 tags: ['fast', 'llm', 'agents', 'refactoring', 'prism']
 description: "How removing the parser gem dependency and introducing AST folding in the Fast gem helps LLM agents navigate huge codebases efficiently while saving massive amounts of tokens."
+mermaid: true
 ---
 If you've been following my progress with the [Fast gem](https://github.com/jonatas/fast), you probably know I'm a big fan  of exploring code with Abstract Syntax Trees (ASTs) and using them to search and refactor code like a boss. But lately, I've had a new challenge on my plate: making `fast` a first-class citizen for AI agents.
 
@@ -81,6 +82,69 @@ What just happened? Setting the proper folding levels provides extreme token sav
 
 The payload shrinks down to barely **130 lines (~4,300 chars)**. We get over an **80% reduction in tokens** while retaining 100% of the class's structure. If the agent decides it needs the deep details of `video_available?`, it can query for that method's specific body rather than paying for the entire 700-line file.
 
+<div class="interactive-widget" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0;">
+  <h4 style="margin-top: 0;">AST Folding Simulator</h4>
+  <p style="font-size: 0.9em; color: #a1a1aa;">Try adjusting the folding level to see how it affects the code an LLM reads.</p>
+
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+    <label for="ast-level" style="font-weight: bold;">Folding Level: <span id="ast-level-display" style="color: #0d9488;">2 (Fully Expanded)</span></label>
+  </div>
+  <input type="range" id="ast-level" min="0" max="2" value="2" style="width: 100%; margin-bottom: 15px; cursor: pointer;">
+  <div aria-live="polite" class="sr-only" id="ast-live-region" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0;">Level 2 selected. Fully expanded code, 0% tokens saved.</div>
+
+  <pre id="ast-code-display" style="background: #0f172a; color: #e2e8f0; padding: 15px; border-radius: 5px; height: 260px; overflow-y: auto; font-size: 0.85em; border: 1px solid rgba(255,255,255,0.1);">
+class Talk < ApplicationRecord
+  WATCHABLE_PROVIDERS = [...]
+
+  belongs_to :event
+  has_many :child_talks
+
+  def video_available?
+    if published? && video_url.present?
+      check_provider_status
+    else
+      false
+    end
+  end
+
+  # ... 700 lines of implementation details ...
+end</pre>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const slider = document.getElementById('ast-level');
+  const display = document.getElementById('ast-level-display');
+  const liveRegion = document.getElementById('ast-live-region');
+  const codeDisplay = document.getElementById('ast-code-display');
+
+  const states = {
+    0: {
+      label: "0 (Class Skeleton)",
+      announcement: "Level 0 selected. Only class signature and constants. 80% tokens saved.",
+      code: "class Talk < ApplicationRecord\n  WATCHABLE_PROVIDERS = [...]\n  KIND_LABELS = {...}\n\n  # ... all methods and associations folded ...\nend"
+    },
+    1: {
+      label: "1 (Signatures & Macros)",
+      announcement: "Level 1 selected. Signatures and macros visible. 60% tokens saved.",
+      code: "class Talk < ApplicationRecord\n  WATCHABLE_PROVIDERS = [...]\n\n  belongs_to :event\n  has_many :child_talks\n\n  def published?\n  def video_available?\n  # ... bodies folded ...\nend"
+    },
+    2: {
+      label: "2 (Fully Expanded)",
+      announcement: "Level 2 selected. Fully expanded code, 0% tokens saved.",
+      code: "class Talk < ApplicationRecord\n  WATCHABLE_PROVIDERS = [...]\n  \n  belongs_to :event\n  has_many :child_talks\n\n  def video_available?\n    if published? && video_url.present?\n      check_provider_status\n    else\n      false\n    end\n  end\n  \n  # ... 700 lines of implementation details ...\nend"
+    }
+  };
+
+  slider.addEventListener('input', (e) => {
+    const val = e.target.value;
+    display.textContent = states[val].label;
+    codeDisplay.textContent = states[val].code;
+    liveRegion.textContent = states[val].announcement;
+  });
+});
+</script>
+
 ### MCP: Inline Experiments and Refactoring
 
 To truly scale LLM-driven coding on huge Ruby projects, token savings aren't enough; we need seamless interaction. That's why I've repurposed `fast`'s core into an **MCP (Model Context Protocol)** server tool. 
@@ -89,6 +153,23 @@ By exposing the `.summary`, `.scan`, and direct node-pattern queries to the LLM 
 1. **Navigating Big Codebases:** Instead of `cat`ing huge files, the agent uses `.scan` across `lib` or `app/models`.
 2. **Inline Experiments:** The AI uses `fast` patterns to test assumptions against the live AST.
 3. **Refactoring Confirmation:** When the LLM proposes a structural mutation, it uses the MCP loop to confirm structurally what it will change. Because `fast` understands the AST, the agent can dry-run a rewrite and verify the updated output—applying precise, safe updates recursively without context bloat or syntax hallucination.
+
+{% mermaid %}
+sequenceDiagram
+    participant AI as AI Agent
+    participant MCP as Fast MCP Server
+    participant AST as Ruby AST
+
+    AI->>MCP: Request `.summary app/models/talk.rb`
+    MCP->>AST: Parse with Prism
+    AST-->>MCP: Raw Syntax Tree
+    MCP->>MCP: Apply AST Folding (Level 1)
+    MCP-->>AI: Compressed Skeleton (130 lines)
+    AI->>MCP: Query specific method `.scan (def :video_available?)`
+    MCP->>AST: Extract node
+    AST-->>MCP: Method Node
+    MCP-->>AI: Complete Method Implementation
+{% endmermaid %}
 
 I see more and more that the bottleneck for AI isn't capability; it's the quality of the context we feed it. By trimming the fat with AST folding and exposing a dependency-free core through MCP, `fast` is turning out to be one of the best sidekicks an AI agent could ask for.
 
