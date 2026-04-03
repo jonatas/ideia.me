@@ -4,6 +4,7 @@ title: "Saving LLM Tokens with Fast: AST Folding & Dependency Free"
 categories: ['ruby', 'ast', 'programming', 'technology']
 tags: ['fast', 'llm', 'agents', 'refactoring', 'prism']
 description: "How removing the parser gem dependency and introducing AST folding in the Fast gem helps LLM agents navigate huge codebases efficiently while saving massive amounts of tokens."
+mermaid: true
 ---
 If you've been following my progress with the [Fast gem](https://github.com/jonatas/fast), you probably know I'm a big fan  of exploring code with Abstract Syntax Trees (ASTs) and using them to search and refactor code like a boss. But lately, I've had a new challenge on my plate: making `fast` a first-class citizen for AI agents.
 
@@ -17,9 +18,84 @@ For years, `fast` was married to the `parser` gem. It's an incredible piece of s
 
 Recently, Codex, Claude and Gemini helped me to made a massive architectural shift: I removed the `parser` gem dependency entirely in favor of [Prism](https://github.com/ruby/prism) (and Ruby's native syntax parser). 
 
+{% mermaid %}
+flowchart LR
+    A[Ruby Code] --> B{Parser Gem}
+    A --> C{Prism / Native}
+    B -- Old Fast --> D[AST]
+    C -- New Fast --> D
+    style B stroke:#ef4444,stroke-width:2px,color:#ef4444,stroke-dasharray: 5 5
+    style C stroke:#10b981,stroke-width:2px,color:#10b981
+{% endmermaid %}
+
 This refactoring wasn't just about reducing the dependency graph. It was about making `fast` leaner and deeply integrated with modern Ruby internals. 
 
 The best part? I managed to do this while keeping the core `fast` search API fully backward-compatible. All the node patterns you're used to—things like `(send (int _) :+ (int _))` or `{int float}`—continue to work effortlessly because `fast` elegantly adapts the Prism AST output back into the familiar `parser`-like node structures. Every single tutorial and script I've written over the years still works!
+
+
+<div class="interactive-widget fast-folding-widget" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin-bottom: 24px;">
+  <h4 style="margin-top: 0;">Interactive: AST Folding in Action</h4>
+  <p style="font-size: 0.9em; margin-bottom: 15px;">Toggle to see how AST folding reduces a class down to its skeleton.</p>
+
+  <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+    <button id="toggle-fold-btn" class="btn" aria-pressed="false" style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">Fold Code Structure</button>
+  </div>
+
+  <div aria-live="polite" id="folding-status" class="sr-only" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;">Currently viewing full code structure.</div>
+
+  <pre id="code-display" style="background: #1e1e1e; padding: 15px; border-radius: 6px; overflow-x: auto; font-size: 0.85em; color: #d4d4d4; transition: all 0.3s ease;">class Talk &lt; ApplicationRecord
+  def published?
+    status == "published" &amp;&amp; published_at &lt;= Time.current
+  end
+
+  def video_available?
+    video_url.present? || youtube_id.present?
+  end
+end</pre>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('toggle-fold-btn');
+    const display = document.getElementById('code-display');
+    const status = document.getElementById('folding-status');
+
+    const fullCode = `class Talk < ApplicationRecord
+  def published?
+    status == "published" && published_at <= Time.current
+  end
+
+  def video_available?
+    video_url.present? || youtube_id.present?
+  end
+end`;
+
+    const foldedCode = `class Talk < ApplicationRecord
+  def published?
+  def video_available?
+end`;
+
+    btn.addEventListener('click', () => {
+        const isFolded = btn.getAttribute('aria-pressed') === 'true';
+
+        if (isFolded) {
+            // Expand
+            btn.setAttribute('aria-pressed', 'false');
+            btn.textContent = 'Fold Code Structure';
+            btn.style.background = '#0d9488';
+            display.textContent = fullCode;
+            status.textContent = 'Currently viewing full code structure.';
+        } else {
+            // Fold
+            btn.setAttribute('aria-pressed', 'true');
+            btn.textContent = 'Expand Code Structure';
+            btn.style.background = '#ea580c';
+            display.textContent = foldedCode;
+            status.textContent = 'Currently viewing folded code structure.';
+        }
+    });
+});
+</script>
 
 ### AST Folding: The LLM Token Saver
 
