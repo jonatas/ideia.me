@@ -2,9 +2,10 @@
 
 ## Project Context: ideia.me Apps
 This repository contains multiple web applications and interactive learning pages (e.g., Yoga App, Mandala Playground, Semantic Learn, etc.).
-**All apps in this repository must follow the same core principles and technical constraints established by the Yoga App.**
 
 For context, the **Yoga App** is a free, open-source, offline-first yoga sequence builder designed specifically for yoga teachers to create and manage classes without the need for an account, internet connection, or data tracking.
+
+**CRITICAL DIRECTIVE: All apps should follow same as the Yoga App.** This applies to all current and future interactive pages within this repository.
 
 ## Core Principles
 - **Zero Backend**: No signups, no databases (external), and no APIs. All data must live in the user's browser.
@@ -25,20 +26,25 @@ For context, the **Yoga App** is a free, open-source, offline-first yoga sequenc
 - **JavaScript Structure**:
   - Source files are located in both `assets/js/` and `js/` directories.
   - JavaScript files in `assets/js/` (e.g., `category-standardizer.js`) use conditional `module.exports` to enable compatibility with Node.js testing while remaining usable in the browser.
-  - When building interactive JS widgets directly inside Markdown posts, avoid inline event handlers (e.g., `onclick`). Instead, encapsulate logic in an IIFE and attach event listeners via `addEventListener` within a `DOMContentLoaded` block to prevent scope and reference issues.
+  - When building interactive JS widgets directly inside Markdown posts, avoid inline event handlers (e.g., `onclick`). Instead, encapsulate logic in an IIFE and attach event listeners via `addEventListener` within a `DOMContentLoaded` block to prevent scope and reference issues. Ensure backticks are not escaped (e.g., avoid `\``) to prevent browser syntax errors; use standard backticks (`` ` ``).
 
 ## Testing Guidelines
 - **No `package.json`**: The development environment lacks external network access for npm. Testing should rely on built-in Node.js modules or manual mocks rather than new third-party dependencies.
-- **JavaScript Tests**: JavaScript tests are stored in the `tests/js/` directory and can be executed with `node --test tests/js/<filename>.test.js`. Testing uses the built-in Node.js `node:test` runner and `node:assert` module.
+- **JavaScript Tests**: JavaScript tests are stored in the `tests/js/` directory and can be executed with `node --test tests/js/<filename>.test.js`. Testing uses the built-in Node.js `node:test` runner and `node:assert` module. Note that the `tests/js/` directory might be missing if no tests have been written yet.
 - **Execution Command**: To verify the syntax of Node.js-compatible scripts (e.g., in `assets/js/`) without execution, use `node -c <filepath>`.
 
 ## Jules Execution Guidelines
 - **Refactoring**: When asked to improve a feature, always check for "dependency creep." If a native browser API can do it, do not suggest an NPM package.
 - **Daily Evolution**: Look for ways to recursively optimize the rendering of SVG yoga poses.
 - **Offline Verification**: Every new feature must include logic to ensure it functions when `navigator.onLine` is false.
-- **Frontend / Visual Verification**: Any frontend UI changes (HTML/CSS/JS) MUST be visually verified by starting a local server, writing a temporary Playwright script (`playwright.sync_api`) to capture a screenshot, and confirming it looks correct before finalizing.
+- **Frontend / Visual Verification**:
+  - Any frontend UI changes (HTML/CSS/JS) MUST be visually verified by starting a local server, writing a temporary Playwright script, capturing a screenshot, and confirming it looks correct before finalizing.
+  - The local environment does not have the Playwright Node module installed. Use Python's `playwright.sync_api` (via `python3`) to write and execute Playwright frontend verification scripts.
+  - When executing Playwright scripts, run a local Python HTTP server in the built `_site` directory using: `cd _site && python3 -m http.server 8000 &> /dev/null &`.
+  - Ensure Playwright scripts navigate to explicit `.html` file paths (e.g., `http://127.0.0.1:8000/post-title.html`). Verify the exact generated path using `find _site -name '*.html'` beforehand, as permalink structures may differ from source directories and extensionless URLs are not automatically resolved.
 - **Accessibility Directive (a11y)**:
   - Accessibility is mandatory. Interactive UI elements must support keyboard navigation (e.g., `tabindex="0"`, `focus`/`blur` event listeners) and provide appropriate context for screen readers (ARIA labels, roles).
+  - Custom interactive elements (like SVGs or DIVs) acting as buttons must explicitly implement `keydown` event listeners for the 'Enter' and 'Space' keys, in addition to using `tabindex="0"` and `role="button"`.
   - When converting static lists or forms to interactive progress-based widgets, use `aria-live='polite'` regions to help screen reader users natively track form progress.
   - To guarantee full accessibility in interactive state simulators, always accompany visual state changes (like color updates or collapsing/expanding code snippets) with corresponding explicit text changes and `aria-live` announcements; do not rely purely on visual transitions to communicate state changes to screen readers.
 - **Journaling Directive**: Log critical UX and accessibility insights in `.Jules/palette.md` using the format:
