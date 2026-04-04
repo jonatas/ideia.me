@@ -119,10 +119,10 @@ Try it out here:
     </svg>
     
     <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
-        <button onclick="setPose({'--ub-rot':0, '--ll-rot':0, '--rl-rot':0, '--lk-rot':0,'--rk-rot':0, '--la-rot':0, '--ra-rot':0, '--le-rot':0, '--re-rot':0, '--head-rot':0, '--fig-y':0, '--fig-x':0})" style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 20px; cursor: pointer;">Tadasana</button>
-        <button onclick="setPose({'--ub-rot':0, '--head-rot':-20, '--la-rot':180, '--ra-rot':180, '--ll-rot':0, '--rl-rot':0, '--lk-rot':0, '--rk-rot':0, '--le-rot':0, '--re-rot':0, '--fig-y':0, '--fig-x':0})" style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 20px; cursor: pointer;">Upward Salute</button>
-        <button onclick="setPose({'--ub-rot':180, '--head-rot':0, '--la-rot':60, '--le-rot':-120, '--ra-rot':60, '--re-rot':-120, '--ll-rot':0, '--rl-rot':0, '--lk-rot':0, '--rk-rot':0, '--fig-y':8, '--fig-x':0})" style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 20px; cursor: pointer;">Forward Fold</button>
-        <button onclick="setPose({'--fig-rot': 0, '--fig-x': -110, '--fig-y': 168, '--ub-rot': 90, '--head-rot': 0, '--la-rot': 0, '--le-rot': 0, '--ra-rot': 0, '--re-rot': 0, '--ll-rot': -90, '--lk-rot': 180, '--rl-rot': -90, '--rk-rot': 180})" style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 20px; cursor: pointer;">Child's Pose</button>
+        <button class="pose-btn" data-pose='{"--ub-rot":0, "--ll-rot":0, "--rl-rot":0, "--lk-rot":0,"--rk-rot":0, "--la-rot":0, "--ra-rot":0, "--le-rot":0, "--re-rot":0, "--head-rot":0, "--fig-y":0, "--fig-x":0}' style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 20px; cursor: pointer;">Tadasana</button>
+        <button class="pose-btn" data-pose='{"--ub-rot":0, "--head-rot":-20, "--la-rot":180, "--ra-rot":180, "--ll-rot":0, "--rl-rot":0, "--lk-rot":0, "--rk-rot":0, "--le-rot":0, "--re-rot":0, "--fig-y":0, "--fig-x":0}' style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 20px; cursor: pointer;">Upward Salute</button>
+        <button class="pose-btn" data-pose='{"--ub-rot":180, "--head-rot":0, "--la-rot":60, "--le-rot":-120, "--ra-rot":60, "--re-rot":-120, "--ll-rot":0, "--rl-rot":0, "--lk-rot":0, "--rk-rot":0, "--fig-y":8, "--fig-x":0}' style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 20px; cursor: pointer;">Forward Fold</button>
+        <button class="pose-btn" data-pose='{"--fig-rot": 0, "--fig-x": -110, "--fig-y": 168, "--ub-rot": 90, "--head-rot": 0, "--la-rot": 0, "--le-rot": 0, "--ra-rot": 0, "--re-rot": 0, "--ll-rot": -90, "--lk-rot": 180, "--rl-rot": -90, "--rk-rot": 180}' style="padding: 8px 16px; background: #0d9488; color: white; border: none; border-radius: 20px; cursor: pointer;">Child's Pose</button>
     </div>
 
     <!-- The Debug Panel -->
@@ -201,6 +201,16 @@ function setPose(vars, targetId = 'demo-svg') {
         targetSvg.style.setProperty(k, cssVal);
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.pose-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const poseData = JSON.parse(e.target.dataset.pose);
+            const targetId = e.target.dataset.target || 'demo-svg';
+            setPose(poseData, targetId);
+        });
+    });
+});
 </script>
 
 ## The Trigonometry of Chaturanga
@@ -232,8 +242,8 @@ When you apply these calculated CSS angles, the stickman seamlessly lowers itsel
 
 <div style="background: #0f172a; padding: 20px; border-radius: 12px; margin: 20px 0; text-align: center; border: 1px solid rgba(255,255,255,0.1)">
     <div style="margin-bottom: 20px;">
-        <button onclick="setPose({'--ub-rot':76.66, '--ll-rot':76.66, '--rl-rot':76.66, '--lk-rot':0,'--rk-rot':0, '--la-rot':-166.66, '--ra-rot':-166.66, '--le-rot':90, '--re-rot':90, '--head-rot':0, '--fig-y':131, '--fig-x':-50}, 'demo-svg-2')" style="padding: 8px 16px; background: #ea580c; font-weight: bold; color: white; border: none; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(234, 88, 12, 0.4);">Execute Chaturanga</button>
-        <button onclick="setPose({'--ub-rot':0, '--ll-rot':0, '--rl-rot':0, '--lk-rot':0,'--rk-rot':0, '--la-rot':0, '--ra-rot':0, '--le-rot':0, '--re-rot':0, '--head-rot':0, '--fig-y':0, '--fig-x':0}, 'demo-svg-2')" style="padding: 8px 16px; background: transparent; color: #94a3b8; border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; cursor: pointer; margin-left: 10px;">Reset</button>
+        <button class="pose-btn" data-target="demo-svg-2" data-pose='{"--ub-rot":76.66, "--ll-rot":76.66, "--rl-rot":76.66, "--lk-rot":0,"--rk-rot":0, "--la-rot":-166.66, "--ra-rot":-166.66, "--le-rot":90, "--re-rot":90, "--head-rot":0, "--fig-y":131, "--fig-x":-50}' style="padding: 8px 16px; background: #ea580c; font-weight: bold; color: white; border: none; border-radius: 20px; cursor: pointer; box-shadow: 0 4px 14px rgba(234, 88, 12, 0.4);">Execute Chaturanga</button>
+        <button class="pose-btn" data-target="demo-svg-2" data-pose='{"--ub-rot":0, "--ll-rot":0, "--rl-rot":0, "--lk-rot":0,"--rk-rot":0, "--la-rot":0, "--ra-rot":0, "--le-rot":0, "--re-rot":0, "--head-rot":0, "--fig-y":0, "--fig-x":0}' style="padding: 8px 16px; background: transparent; color: #94a3b8; border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; cursor: pointer; margin-left: 10px;">Reset</button>
     </div>
     
     <svg viewBox="-300 -100 800 600" style="width: 100%; max-width: 600px; height: 350px; filter: drop-shadow(0 0 10px rgba(13, 148, 136, 0.3));" id="demo-svg-2">

@@ -4,6 +4,8 @@ title: "Saving LLM Tokens with Fast: AST Folding & Dependency Free"
 categories: ['ruby', 'ast', 'programming', 'technology']
 tags: ['fast', 'llm', 'agents', 'refactoring', 'prism']
 description: "How removing the parser gem dependency and introducing AST folding in the Fast gem helps LLM agents navigate huge codebases efficiently while saving massive amounts of tokens."
+image: /images/monk-thinking-ai.png
+mermaid: true
 ---
 If you've been following my progress with the [Fast gem](https://github.com/jonatas/fast), you probably know I'm a big fan  of exploring code with Abstract Syntax Trees (ASTs) and using them to search and refactor code like a boss. But lately, I've had a new challenge on my plate: making `fast` a first-class citizen for AI agents.
 
@@ -80,6 +82,30 @@ What just happened? Setting the proper folding levels provides extreme token sav
 2. **No deep details, only on-demand unfolding:** All method implementations are suppressed, leaving only signatures. 
 
 The payload shrinks down to barely **130 lines (~4,300 chars)**. We get over an **80% reduction in tokens** while retaining 100% of the class's structure. If the agent decides it needs the deep details of `video_available?`, it can query for that method's specific body rather than paying for the entire 700-line file.
+
+{% mermaid %}
+graph LR
+    subgraph Full AST
+        ClassDef[class Talk]
+        ClassDef --> Const[WATCHABLE_PROVIDERS]
+        ClassDef --> Hook[before_validation]
+        ClassDef --> Method[def published?]
+        Method --> Body[Block / Inner Logic...]
+        Body --> Detail1[Method Call...]
+        Body --> Detail2[Condition...]
+    end
+
+    subgraph Folded AST
+        FClassDef[class Talk]
+        FClassDef --> FConst[WATCHABLE_PROVIDERS]
+        FClassDef --> FHook[before_validation]
+        FClassDef --> FMethod[def published?]
+    end
+
+    Full AST -.- Folded AST
+    style Full AST fill:#fca5a5,stroke:#b91c1c
+    style Folded AST fill:#86efac,stroke:#15803d
+{% endmermaid %}
 
 ### MCP: Inline Experiments and Refactoring
 
