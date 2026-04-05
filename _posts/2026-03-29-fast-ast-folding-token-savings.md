@@ -4,6 +4,8 @@ title: "Saving LLM Tokens with Fast: AST Folding & Dependency Free"
 categories: ['ruby', 'ast', 'programming', 'technology']
 tags: ['fast', 'llm', 'agents', 'refactoring', 'prism']
 description: "How removing the parser gem dependency and introducing AST folding in the Fast gem helps LLM agents navigate huge codebases efficiently while saving massive amounts of tokens."
+image: images/monk-thinking-ai.png
+mermaid: true
 ---
 If you've been following my progress with the [Fast gem](https://github.com/jonatas/fast), you probably know I'm a big fan  of exploring code with Abstract Syntax Trees (ASTs) and using them to search and refactor code like a boss. But lately, I've had a new challenge on my plate: making `fast` a first-class citizen for AI agents.
 
@@ -80,6 +82,71 @@ What just happened? Setting the proper folding levels provides extreme token sav
 2. **No deep details, only on-demand unfolding:** All method implementations are suppressed, leaving only signatures. 
 
 The payload shrinks down to barely **130 lines (~4,300 chars)**. We get over an **80% reduction in tokens** while retaining 100% of the class's structure. If the agent decides it needs the deep details of `video_available?`, it can query for that method's specific body rather than paying for the entire 700-line file.
+
+{% mermaid %}
+flowchart TD
+    A[Full AST ~23,000 chars] --> B{AST Folding}
+    B --> C[Strip Comments]
+    B --> D[Suppress Method Bodies]
+    B --> E[Extract Associations]
+    C --> F[Fast AST Skeleton]
+    D --> F
+    E --> F
+    F --> G[~4,300 chars (80% Reduction!)]
+    style F fill:#0d9488,stroke:#fff,stroke-width:2px,color:#fff
+    style G fill:#0ea5e9,stroke:#fff,stroke-width:2px,color:#fff
+{% endmermaid %}
+
+<div class="interactive-widget" style="background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 8px; margin: 20px 0;">
+  <h3 style="margin-top: 0; font-size: 1.25rem;">Token Savings Calculator</h3>
+  <p style="font-size: 0.95rem; margin-bottom: 15px;">Adjust the sliders to see how AST Folding can save tokens across different files.</p>
+
+  <div style="margin-bottom: 15px;">
+    <label for="file-size" style="display: block; font-weight: bold; margin-bottom: 5px;">Original File Size (Lines of Code):</label>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <input type="range" id="file-size" min="100" max="5000" step="100" value="700" style="flex: 1;" aria-label="Original file size in lines of code">
+        <span id="file-size-val" style="width: 60px; font-weight: bold;">700</span>
+    </div>
+  </div>
+
+  <div style="margin-bottom: 15px;">
+    <label for="complexity" style="display: block; font-weight: bold; margin-bottom: 5px;">Code Complexity (Fat Methods vs Declarations):</label>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <input type="range" id="complexity" min="10" max="90" step="5" value="70" style="flex: 1;" aria-label="Percentage of file made up of method bodies and comments">
+        <span id="complexity-val" style="width: 60px; font-weight: bold;">70%</span>
+    </div>
+  </div>
+
+  <div aria-live="polite" id="savings-result" style="margin-top: 20px; padding: 15px; background: rgba(13, 148, 136, 0.2); border-left: 4px solid #0d9488; border-radius: 4px; font-weight: bold; font-size: 1.1rem;">
+    With a 700 line file at 70% complexity, folding saves approx 490 lines, passing only 210 lines to the LLM. That's a 70% reduction in tokens!
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const sizeSlider = document.getElementById('file-size');
+    const compSlider = document.getElementById('complexity');
+    const sizeVal = document.getElementById('file-size-val');
+    const compVal = document.getElementById('complexity-val');
+    const result = document.getElementById('savings-result');
+
+    const updateSavings = () => {
+        const size = parseInt(sizeSlider.value, 10);
+        const comp = parseInt(compSlider.value, 10);
+
+        sizeVal.textContent = size;
+        compVal.textContent = comp + '%';
+
+        const savings = Math.round((size * comp) / 100);
+        const remaining = size - savings;
+
+        result.textContent = `With a ${size} line file at ${comp}% complexity, folding saves approx ${savings} lines, passing only ${remaining} lines to the LLM. That's a ${comp}% reduction in tokens!`;
+    };
+
+    sizeSlider.addEventListener('input', updateSavings);
+    compSlider.addEventListener('input', updateSavings);
+});
+</script>
 
 ### MCP: Inline Experiments and Refactoring
 
