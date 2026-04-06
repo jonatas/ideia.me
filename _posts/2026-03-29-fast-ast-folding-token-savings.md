@@ -4,6 +4,7 @@ title: "Saving LLM Tokens with Fast: AST Folding & Dependency Free"
 categories: ['ruby', 'ast', 'programming', 'technology']
 tags: ['fast', 'llm', 'agents', 'refactoring', 'prism']
 description: "How removing the parser gem dependency and introducing AST folding in the Fast gem helps LLM agents navigate huge codebases efficiently while saving massive amounts of tokens."
+mermaid: true
 ---
 If you've been following my progress with the [Fast gem](https://github.com/jonatas/fast), you probably know I'm a big fan  of exploring code with Abstract Syntax Trees (ASTs) and using them to search and refactor code like a boss. But lately, I've had a new challenge on my plate: making `fast` a first-class citizen for AI agents.
 
@@ -81,9 +82,127 @@ What just happened? Setting the proper folding levels provides extreme token sav
 
 The payload shrinks down to barely **130 lines (~4,300 chars)**. We get over an **80% reduction in tokens** while retaining 100% of the class's structure. If the agent decides it needs the deep details of `video_available?`, it can query for that method's specific body rather than paying for the entire 700-line file.
 
+<div id="ast-simulator" class="interactive-widget" style="background: rgba(0, 0, 0, 0.2); padding: 20px; border-radius: 8px; margin: 20px 0; border: 1px solid rgba(255,255,255,0.1);">
+  <h4 style="margin-top: 0; margin-bottom: 10px;">AST Folding Simulator</h4>
+  <p style="font-size: 0.9em; color: #94A3B8; margin-bottom: 15px;">Drag the slider to adjust the folding level and observe the code size and token usage change.</p>
+
+  <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 15px;">
+    <label for="folding-level" style="font-weight: bold; min-width: 60px;">Level:</label>
+    <input type="range" id="folding-level" min="0" max="3" value="0" step="1" style="flex-grow: 1; cursor: pointer;" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0" aria-valuetext="Level 0: Full Source Code">
+    <span id="level-display" style="font-weight: bold; min-width: 20px; text-align: center;">0</span>
+  </div>
+
+  <div aria-live="polite" id="token-stats" style="margin-bottom: 15px; display: flex; justify-content: space-between; font-family: monospace; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 4px;">
+    <span>Tokens: <strong id="token-count">7200</strong></span>
+    <span>Lines: <strong id="line-count">723</strong></span>
+    <span style="color: #10B981;">Savings: <strong id="savings-percent">0%</strong></span>
+  </div>
+
+  <pre style="margin: 0; max-height: 250px; overflow-y: auto; font-size: 0.85em; background: #0f172a; padding: 15px; border-radius: 6px;"><code id="code-display" class="language-ruby">class Talk < ApplicationRecord
+  # 700+ lines of raw logic, includes, scopes, validations,
+  # method definitions, and their implementations.
+
+  def video_available?
+    # ... lots of logic checking external providers,
+    # parsing URLs, and verifying metadata ...
+  end
+
+  # ... dozens of other methods with full bodies ...
+end</code></pre>
+</div>
+
+<script>
+(function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    const slider = document.getElementById('folding-level');
+    const levelDisplay = document.getElementById('level-display');
+    const tokenCount = document.getElementById('token-count');
+    const lineCount = document.getElementById('line-count');
+    const savingsPercent = document.getElementById('savings-percent');
+    const codeDisplay = document.getElementById('code-display');
+
+    const states = [
+      {
+        level: 0,
+        label: "Level 0: Full Source Code",
+        tokens: 7200,
+        lines: 723,
+        savings: 0,
+        code: `class Talk < ApplicationRecord\n  # 700+ lines of raw logic, includes, scopes, validations,\n  # method definitions, and their implementations.\n  \n  def video_available?\n    # ... lots of logic checking external providers,\n    # parsing URLs, and verifying metadata ...\n  end\n  \n  # ... dozens of other methods with full bodies ...\nend`
+      },
+      {
+        level: 1,
+        label: "Level 1: Strip Comments & Docs",
+        tokens: 5800,
+        lines: 510,
+        savings: 19,
+        code: `class Talk < ApplicationRecord\n  def video_available?\n    providers.any? { |p| p.active? } && url.present?\n  end\n  # ... other methods with bodies ...\nend`
+      },
+      {
+        level: 2,
+        label: "Level 2: Fold Private Methods",
+        tokens: 4100,
+        lines: 340,
+        savings: 43,
+        code: `class Talk < ApplicationRecord\n  def video_available?\n    providers.any? { |p| p.active? } && url.present?\n  end\n  \n  private\n  def parse_provider_url; end\n  def validate_metadata; end\nend`
+      },
+      {
+        level: 3,
+        label: "Level 3: Full Outline (Signatures Only)",
+        tokens: 1400,
+        lines: 130,
+        savings: 80,
+        code: `class Talk < ApplicationRecord\n  belongs_to :event\n  has_many :child_talks\n  \n  def published?; end\n  def video_available?; end\n  def thumbnail_url(size:, request:); end\nend`
+      }
+    ];
+
+    slider.addEventListener('input', function(e) {
+      const val = parseInt(e.target.value, 10);
+      const state = states[val];
+
+      levelDisplay.textContent = val;
+      slider.setAttribute('aria-valuenow', val);
+      slider.setAttribute('aria-valuetext', state.label);
+
+      tokenCount.textContent = state.tokens;
+      lineCount.textContent = state.lines;
+      savingsPercent.textContent = state.savings + '%';
+
+      codeDisplay.textContent = state.code;
+    });
+  });
+})();
+</script>
+
 ### MCP: Inline Experiments and Refactoring
 
 To truly scale LLM-driven coding on huge Ruby projects, token savings aren't enough; we need seamless interaction. That's why I've repurposed `fast`'s core into an **MCP (Model Context Protocol)** server tool. 
+
+{% mermaid %}
+flowchart TD
+    subgraph Ruby Project
+        Code[Huge Ruby Source Files]
+    end
+
+    subgraph Fast Gem Engine
+        Prism[Prism Native Parser]
+        AST[Abstract Syntax Tree]
+        FastNode[Fast Node Adapter]
+        Folder[AST Folder]
+    end
+
+    subgraph LLM Agent Environment
+        MCP[Fast MCP Server]
+        Agent[LLM Agent / Assistant]
+    end
+
+    Code -->|Parsed by| Prism
+    Prism -->|Generates| AST
+    AST -->|Adapted to| FastNode
+    FastNode -->|Filtered by| Folder
+    Folder -->|Provides clean skeleton| MCP
+    MCP <-->|Commands & Snippets| Agent
+{% endmermaid %}
 
 By exposing the `.summary`, `.scan`, and direct node-pattern queries to the LLM via MCP, we establish an interactive playground:
 1. **Navigating Big Codebases:** Instead of `cat`ing huge files, the agent uses `.scan` across `lib` or `app/models`.
