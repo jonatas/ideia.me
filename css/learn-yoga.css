@@ -1,0 +1,258 @@
+/* Yoga Learning Platform - Custom Styles */
+
+:root {
+  /* Yoga-themed colors */
+  --yoga-teal: #0d9488;
+  --yoga-gold: #fbbf24;
+  --yoga-slate: #94a3b8;
+  --yoga-deep: #1e3a8a;
+  --yoga-energy: #ef4444;
+  
+  /* Palette from IDEA.ME branding */
+  --logo-golden-yellow: #FBBF24;
+  --logo-vibrant-light-blue: #0EA5E9;
+  --logo-reddish-orange: #EF4444;
+  --logo-deep-purple-blue: #1E3A8A;
+  
+  /* UI colors */
+  --bg-color: #0f172a;
+  --card-bg-color: #1e293b;
+  --text-color: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: rgba(255, 255, 255, 0.1);
+  
+  /* Spacing */
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
+  --spacing-xl: 3rem;
+  
+  /* Animation */
+  --transition-speed: 0.3s;
+  --bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Particles Background */
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.2;
+}
+
+.learning-header {
+  padding: var(--spacing-xl) 0;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(13, 148, 136, 0.2) 0%, transparent 100%);
+}
+
+.journey-title h2 {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-sm);
+  background: linear-gradient(135deg, var(--yoga-teal), var(--yoga-gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.journey-title p {
+  font-size: 1.2rem;
+  color: var(--text-muted);
+}
+
+/* Main Container */
+.learn-yoga-container {
+  display: flex;
+  max-width: 1400px;
+  margin: 0 auto;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md);
+}
+
+/* Navigation Sidebar */
+.chapter-nav {
+  position: sticky;
+  top: 2rem;
+  width: 300px;
+  height: fit-content;
+  background: var(--card-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.nav-header h2 {
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: 1.5rem;
+  color: var(--yoga-gold);
+}
+
+.chapter-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.chapter-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-xs);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+  border: 1px solid transparent;
+}
+
+.chapter-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--yoga-teal);
+}
+
+.chapter-item.active {
+  background: linear-gradient(135deg, rgba(13, 148, 136, 0.2), rgba(251, 191, 36, 0.1));
+  border-color: var(--yoga-teal);
+}
+
+.chapter-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.chapter-title {
+  flex: 1;
+  font-weight: 500;
+}
+
+/* Content Area */
+.content-area {
+  flex: 1;
+  min-width: 0;
+}
+
+.chapter {
+  display: none;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.chapter.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.content-card {
+  background: var(--card-bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  transition: all var(--transition-speed);
+}
+
+.content-card h2 {
+  color: var(--yoga-teal);
+  margin-top: 0;
+}
+
+.insight-box {
+  background: rgba(13, 148, 136, 0.1);
+  border-left: 4px solid var(--yoga-teal);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  border-radius: 0 8px 8px 0;
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+.insight-icon {
+  font-size: 1.5rem;
+  color: var(--yoga-teal);
+}
+
+.insight-content h4 {
+  margin: 0 0 0.5rem 0;
+}
+
+/* Pose Grid */
+.pose-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.pose-preview-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: var(--spacing-md);
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.pose-preview-card:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.pose-mini-svg {
+  width: 100px;
+  height: 100px;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Flip Cards */
+.flip-card-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-md);
+}
+
+/* Quiz Specific */
+.quiz-section {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: var(--spacing-lg);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .learn-yoga-container {
+    flex-direction: column;
+  }
+  
+  .chapter-nav {
+    width: 100%;
+    position: relative;
+    top: 0;
+  }
+}

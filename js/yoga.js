@@ -1897,10 +1897,10 @@ function handleQuizGuess(card, guessedId) {
 
     if (isCorrect) {
         card.classList.add('correct');
-        if (feedback) feedback.innerHTML = '<span style="color: #10b981;">Correct!</span>';
+        if (feedback) feedback.innerHTML = '<span style="color: #10b981;">Correct!</span> <a href="/learn-yoga.html" style="color: var(--accent-color); margin-left: 10px; font-size: 0.8em;">Learn more</a>';
     } else {
         card.classList.add('wrong');
-        if (feedback) feedback.innerHTML = '<span style="color: #ef4444;">Incorrect!</span>';
+        if (feedback) feedback.innerHTML = '<span style="color: #ef4444;">Incorrect!</span> <a href="/learn-yoga.html" style="color: var(--accent-color); margin-left: 10px; font-size: 0.8em;">Review lessons</a>';
         // highlight correct
         const cards = document.querySelectorAll('.quiz-card');
         quizOptions.forEach((optIndex, i) => {

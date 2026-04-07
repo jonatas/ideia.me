@@ -1,0 +1,388 @@
+---
+layout: default
+title: Yoga Learning Journey
+mermaid: true
+---
+
+<link rel="stylesheet" href="/css/learn-yoga.css">
+<link rel="stylesheet" href="/css/flip-cards.css">
+
+<!-- Particle Background -->
+<div id="particles-js"></div>
+
+<!-- SVG Definitions for Stickman (Shared with yoga.html) -->
+<svg width="0" height="0" style="display:none;">
+    <defs>
+        <g id="stickman">
+            <g id="figure" class="joint-group" style="transform-origin: 100px 200px; transform: translate(var(--fig-x, 0px), var(--fig-y, 0px)) rotate(var(--fig-rot, 0deg));">
+                <g id="left-leg" class="joint-group" style="transform-origin: 100px 200px; transform: rotate(var(--ll-rot, 0deg));">
+                    <line x1="100" y1="200" x2="100" y2="280" style="stroke: #94A3B8; stroke-width: 14; stroke-linecap: round;" />
+                    <g id="left-knee" class="joint-group" style="transform-origin: 100px 280px; transform: rotate(var(--lk-rot, 0deg));">
+                        <line x1="100" y1="280" x2="100" y2="360" style="stroke: #94A3B8; stroke-width: 14; stroke-linecap: round;" />
+                    </g>
+                </g>
+                <g id="right-leg" class="joint-group" style="transform-origin: 100px 200px; transform: rotate(var(--rl-rot, 0deg));">
+                    <line x1="100" y1="200" x2="100" y2="280" style="stroke: #F8FAFC; stroke-width: 14; stroke-linecap: round;" />
+                    <g id="right-knee" class="joint-group" style="transform-origin: 100px 280px; transform: rotate(var(--rk-rot, 0deg));">
+                        <line x1="100" y1="280" x2="100" y2="360" style="stroke: #F8FAFC; stroke-width: 14; stroke-linecap: round;" />
+                    </g>
+                </g>
+                <g id="upper-body" class="joint-group" style="transform-origin: 100px 200px; transform: rotate(var(--ub-rot, 0deg));">
+                    <g id="left-arm" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--la-rot, 0deg));">
+                        <line x1="100" y1="100" x2="100" y2="160" style="stroke: #94A3B8; stroke-width: 14; stroke-linecap: round;" />
+                        <g id="left-elbow" class="joint-group" style="transform-origin: 100px 160px; transform: rotate(var(--le-rot, 0deg));">
+                            <line x1="100" y1="160" x2="100" y2="220" style="stroke: #94A3B8; stroke-width: 14; stroke-linecap: round;" />
+                        </g>
+                    </g>
+                    <path id="torso-path" style="stroke: #F8FAFC; stroke-width: 16; stroke-linecap: round; fill: none; d: var(--torso-path, path('M 100 200 Q 100 150 100 100'));" />
+                    <g id="head-group" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--head-rot, 0deg));">
+                        <line x1="100" y1="100" x2="100" y2="80" style="stroke: #F8FAFC; stroke-width: 10; stroke-linecap: round;" />
+                        <circle cx="100" cy="65" r="20" style="fill: #F8FAFC;" />
+                    </g>
+                    <g id="right-arm" class="joint-group" style="transform-origin: 100px 100px; transform: rotate(var(--ra-rot, 0deg));">
+                        <line x1="100" y1="100" x2="100" y2="160" style="stroke: #F8FAFC; stroke-width: 14; stroke-linecap: round;" />
+                        <g id="right-elbow" class="joint-group" style="transform-origin: 100px 160px; transform: rotate(var(--re-rot, 0deg));">
+                            <line x1="100" y1="160" x2="100" y2="220" style="stroke: #F8FAFC; stroke-width: 14; stroke-linecap: round;" />
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </defs>
+</svg>
+
+<!-- Learning Journey Header -->
+<div class="learning-header">
+  <div class="container">
+    <div class="journey-title">
+      <h2>🧘 Yoga: A Journey Inward</h2>
+      <p>Uniting breath, body, and mind through ancient wisdom</p>
+    </div>
+    <div class="progress-bar-container" style="max-width: 600px; margin: 2rem auto;">
+      <div class="progress-bar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content Area -->
+<div class="learn-yoga-container">
+  
+  <!-- Navigation Sidebar -->
+  <nav class="chapter-nav">
+    <div class="nav-header">
+      <h2>Pathways</h2>
+    </div>
+    <ul class="chapter-list">
+      <li class="chapter-item active" data-chapter="1">
+        <span class="chapter-number">1</span>
+        <span class="chapter-title">Roots of Wisdom</span>
+      </li>
+      <li class="chapter-item" data-chapter="2">
+        <span class="chapter-number">2</span>
+        <span class="chapter-title">The Vital Breath</span>
+      </li>
+      <li class="chapter-item" data-chapter="3">
+        <span class="chapter-number">3</span>
+        <span class="chapter-title">Sacred Shapes</span>
+      </li>
+      <li class="chapter-item" data-chapter="4">
+        <span class="chapter-number">4</span>
+        <span class="chapter-title">Flows & Traditions</span>
+      </li>
+      <li class="chapter-item" data-chapter="5">
+        <span class="chapter-number">5</span>
+        <span class="chapter-title">Daily Practice</span>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="content-area">
+
+    <!-- Chapter 1: Roots of Wisdom -->
+    <section class="chapter active" id="chapter-1">
+      <div class="chapter-header">
+        <span class="chapter-label">Chapter 1</span>
+        <h1 class="chapter-title-main">Roots of Wisdom</h1>
+        <p class="chapter-subtitle">Understanding Yoga's Essence and Language</p>
+      </div>
+
+      <div class="content-card">
+        <h2>What is Yoga?</h2>
+        <p>Yoga is an ancient physical, mental, and spiritual practice that originated in India. The word 'yoga' derives from Sanskrit and means to join or to unite, symbolizing the union of body and consciousness.</p>
+        
+        <div class="insight-box">
+          <div class="insight-icon"><i class="bi bi-lightbulb"></i></div>
+          <div class="insight-content">
+            <h4>Core Philosophy</h4>
+            <p>Yoga is more than just exercise; it's a holistic system for living. While the West often focuses on the physical poses (Asanas), traditional yoga includes ethical precepts, breath control, and meditation.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h2>Sanskrit: The Language of Yoga</h2>
+        <p>Most yoga terms are in Sanskrit, an ancient Indo-European language. Learning these terms helps deepen your understanding of the practice. Click the cards to learn key terms:</p>
+        
+        <div class="flip-card-container">
+          <div class="flip-card" onclick="flipCard(this)">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <h4>Asana</h4>
+              </div>
+              <div class="flip-card-back">
+                <p><strong>Physical Pose</strong></p>
+                <p>Originally meaning "seat", it now refers to any of the physical postures practiced in yoga.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card" onclick="flipCard(this)">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <h4>Pranayama</h4>
+              </div>
+              <div class="flip-card-back">
+                <p><strong>Breath Control</strong></p>
+                <p>The practice of controlling the breath, which is considered the source of our life force (Prana).</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card" onclick="flipCard(this)">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <h4>Drishti</h4>
+              </div>
+              <div class="flip-card-back">
+                <p><strong>Focused Gaze</strong></p>
+                <p>A specific point of focus for the eyes used during yoga poses to improve concentration and balance.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="flip-card" onclick="flipCard(this)">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <h4>Namaste</h4>
+              </div>
+              <div class="flip-card-back">
+                <p><strong>I bow to you</strong></p>
+                <p>A respectful greeting. "The divine light in me bows to the divine light in you."</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-navigation">
+        <button class="btn-primary" onclick="goToChapter(2)">Next: The Vital Breath →</button>
+      </div>
+    </section>
+
+    <!-- Chapter 2: The Vital Breath -->
+    <section class="chapter" id="chapter-2">
+      <div class="chapter-header">
+        <span class="chapter-label">Chapter 2</span>
+        <h1 class="chapter-title-main">The Vital Breath</h1>
+        <p class="chapter-subtitle">Pranayama: Harnessing Your Life Force</p>
+      </div>
+
+      <div class="content-card">
+        <h2>Pranayama Principles</h2>
+        <p>In yoga, the breath is the bridge between the body and the mind. By consciously regulating our breath, we can influence our nervous system, calming the mind or energizing the body.</p>
+      </div>
+
+      <div id="breathing-techniques-grid" class="therapeutic-exercises">
+        <!-- Populated by JS from PREDEFINED_CONFIGS -->
+      </div>
+
+      <div class="chapter-navigation">
+        <button class="btn-secondary" onclick="goToChapter(1)">← Back</button>
+        <button class="btn-primary" onclick="goToChapter(3)">Next: Sacred Shapes →</button>
+      </div>
+    </section>
+
+    <!-- Chapter 3: Sacred Shapes -->
+    <section class="chapter" id="chapter-3">
+      <div class="chapter-header">
+        <span class="chapter-label">Chapter 3</span>
+        <h1 class="chapter-title-main">Sacred Shapes</h1>
+        <p class="chapter-subtitle">Asanas: Building Strength and Flexibility</p>
+      </div>
+
+      <div class="content-card">
+        <h2>Fundamental Poses</h2>
+        <p>These poses form the foundation of most yoga practices. Click on a pose to see its details in the main app.</p>
+        
+        <div id="core-poses-grid" class="pose-grid">
+          <!-- Populated by JS from POSES -->
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h2>The 8 Limbs of Yoga</h2>
+        <p>Physical poses are just one of the eight "limbs" described by Patanjali in the Yoga Sutras:</p>
+        <ol>
+          <li><strong>Yama:</strong> Ethical standards (how we treat others)</li>
+          <li><strong>Niyama:</strong> Self-discipline (how we treat ourselves)</li>
+          <li><strong>Asana:</strong> Physical postures</li>
+          <li><strong>Pranayama:</strong> Breath control</li>
+          <li><strong>Pratyahara:</strong> Sensory withdrawal</li>
+          <li><strong>Dharana:</strong> Concentration</li>
+          <li><strong>Dhyana:</strong> Meditation</li>
+          <li><strong>Samadhi:</strong> State of bliss/union</li>
+        </ol>
+      </div>
+
+      <div class="chapter-navigation">
+        <button class="btn-secondary" onclick="goToChapter(2)">← Back</button>
+        <button class="btn-primary" onclick="goToChapter(4)">Next: Flows & Traditions →</button>
+      </div>
+    </section>
+
+    <!-- Chapter 4: Flows & Traditions -->
+    <section class="chapter" id="chapter-4">
+      <div class="chapter-header">
+        <span class="chapter-label">Chapter 4</span>
+        <h1 class="chapter-title-main">Flows & Traditions</h1>
+        <p class="chapter-subtitle">Exploring Different Styles of Yoga</p>
+      </div>
+
+      <div class="content-card">
+        <h2>Yoga Traditions</h2>
+        <p>While all yoga shares common roots, different styles have evolved to emphasize different aspects of the practice.</p>
+        
+        <div class="audience-cards">
+          <div class="audience-card">
+            <h4>🔥 Ashtanga</h4>
+            <p><strong>Focus:</strong> Rigorous, structured series of poses</p>
+            <p><strong>Style:</strong> Always follows the same sequence. High intensity and focuses on internal heat.</p>
+          </div>
+          <div class="audience-card">
+            <h4>🌊 Vinyasa</h4>
+            <p><strong>Focus:</strong> Flowing movement synchronized with breath</p>
+            <p><strong>Style:</strong> Creative sequences. Poses transition smoothly from one to another (often called "Flow").</p>
+          </div>
+          <div class="audience-card">
+            <h4>🧘 Hatha</h4>
+            <p><strong>Focus:</strong> Foundation and alignment</p>
+            <p><strong>Style:</strong> Slower pace, holding poses for longer. Great for beginners.</p>
+          </div>
+          <div class="audience-card">
+            <h4>❄️ Yin</h4>
+            <p><strong>Focus:</strong> Deep connective tissues</p>
+            <p><strong>Style:</strong> Passive poses held for 3-5 minutes. Focuses on flexibility and mindfulness.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h2>The Vinyasa Transition</h2>
+        <p>The "Vinyasa" or "Chaturanga Flow" is a common sequence used to link poses. It usually consists of:</p>
+        <div class="mermaid">
+graph LR
+    P[Plank] --> C[Chaturanga]
+    C --> U[Upward Dog]
+    U --> D[Downward Dog]
+        </div>
+      </div>
+
+      <div class="chapter-navigation">
+        <button class="btn-secondary" onclick="goToChapter(3)">← Back</button>
+        <button class="btn-primary" onclick="goToChapter(5)">Next: Daily Practice →</button>
+      </div>
+    </section>
+
+    <!-- Chapter 5: Daily Practice -->
+    <section class="chapter" id="chapter-5">
+      <div class="chapter-header">
+        <span class="chapter-label">Chapter 5</span>
+        <h1 class="chapter-title-main">Daily Practice</h1>
+        <p class="chapter-subtitle">Sequencing and Consistency</p>
+      </div>
+
+      <div class="content-card">
+        <h2>Sun Salutations (Surya Namaskar)</h2>
+        <p>Sun Salutations are the most famous yoga sequence, traditionally practiced at sunrise to honor the sun and energize the body.</p>
+        <div class="journey-flow">
+          <div class="flow-step">
+            <div class="step-number">1</div>
+            <div class="step-content"><h4>Tadasana</h4><p>Mountain Pose</p></div>
+          </div>
+          <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+          <div class="flow-step">
+            <div class="step-number">2</div>
+            <div class="step-content"><h4>Uttanasana</h4><p>Forward Fold</p></div>
+          </div>
+          <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+          <div class="flow-step">
+            <div class="step-number">3</div>
+            <div class="step-content"><h4>Vinyasa</h4><p>Flow transition</p></div>
+          </div>
+          <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+          <div class="flow-step">
+            <div class="step-number">4</div>
+            <div class="step-content"><h4>Adho Mukha</h4><p>Downward Dog</p></div>
+          </div>
+        </div>
+        <button class="btn-primary btn-large" onclick="window.location.href='/yoga.html?seq=sun-a'">Try Sun Salutation A</button>
+      </div>
+
+      <div class="content-card quiz-section">
+        <h2>Yoga Knowledge Check</h2>
+        <p>Test what you've learned in this journey!</p>
+        <button class="btn-primary" onclick="window.location.href='/yoga.html?view=quiz'">Launch the Interactive Quiz</button>
+      </div>
+
+      <div class="chapter-navigation">
+        <button class="btn-secondary" onclick="goToChapter(4)">← Back</button>
+        <button class="btn-add" onclick="window.location.href='/apps/'">Complete Journey 🎉</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Include Mermaid for diagrams -->
+{% include mermaid.html %}
+
+<!-- External Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<!-- Shared Data -->
+<script src="/js/yoga-poses.js"></script>
+<script src="/js/breathe-configs.js"></script>
+
+<!-- Custom JavaScript -->
+<script src="/js/breathe-widget.js"></script>
+<script src="/js/learn-yoga.js"></script>
+
+<script>
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+  LearnYoga.init();
+  
+  // Initialize particles background
+  if (typeof particlesJS !== 'undefined') {
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 40, density: { enable: true, value_area: 800 } },
+        color: { value: "#0d9488" },
+        shape: { type: "circle" },
+        opacity: { value: 0.2, random: false },
+        size: { value: 3, random: true },
+        line_linked: { enable: true, distance: 150, color: "#0d9488", opacity: 0.1, width: 1 },
+        move: { enable: true, speed: 1, direction: "none", random: false, straight: false, out_mode: "out", bounce: false }
+      },
+      interactivity: {
+        detect_on: "canvas",
+        events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true }
+      },
+      retina_detect: true
+    });
+  }
+});
+</script>
