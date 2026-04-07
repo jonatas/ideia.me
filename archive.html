@@ -11,6 +11,11 @@ group: navigation
   <div class="row">
     <div class="col-md-3 mb-4">
       <div class="archive-sidebar sticky-top" style="top: 20px;">
+        <div class="mb-4">
+          <a href="/categories" class="btn btn-outline-primary btn-sm w-100">
+            <i class="bi bi-tags me-1"></i> View by Categories
+          </a>
+        </div>
         <h6 class="text-muted text-uppercase mb-2">Years</h6>
         {% for year in posts_by_year %}
           <a href="#year-{{ year.name }}" class="d-flex justify-content-between year-link mb-1 text-decoration-none">
