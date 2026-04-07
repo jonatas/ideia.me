@@ -863,6 +863,18 @@ setTimeout(() => {
         }
         
         loadMacroSequence(key);
+    } else if (params.has('pose')) {
+        const poseId = params.get('pose');
+        const poseIndex = POSES.findIndex(p => p.id === poseId);
+        if (poseIndex !== -1) {
+            loadPose(poseIndex);
+            // Ensure the card is scrolled into view
+            const cards = document.querySelectorAll('#poseNav .pose-card');
+            if (cards[poseIndex]) {
+                cards[poseIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+        }
+        loadMacroSequence('sun-a');
     } else {
         loadMacroSequence('sun-a');
     }
@@ -1917,6 +1929,9 @@ function handleQuizGuess(card, guessedId) {
 
 // Init
 if (typeof POSES !== 'undefined') {
-    loadPose(0);
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has('pose')) {
+        loadPose(0);
+    }
 }
 initQuizSettings();
