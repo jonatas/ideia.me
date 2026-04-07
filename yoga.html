@@ -799,6 +799,96 @@ permalink: /yoga.html
         }
         .gallery-grid .pose-card:hover { opacity: 1; background: rgba(255, 255, 255, 0.1); }
         .gallery-grid .pose-card.active { opacity: 1; outline: 2px solid var(--accent-color); background: rgba(13, 148, 136, 0.2); }
+
+        /* Quiz View */
+        .quiz-view {
+            display: none;
+            flex-direction: column;
+            flex: 1;
+            width: 100%;
+            background: var(--bg-color);
+            z-index: 50;
+            padding: 24px;
+            box-sizing: border-box;
+            align-items: center;
+        }
+        .quiz-view.active {
+            display: flex;
+        }
+        .quiz-prompt {
+            font-size: 2rem;
+            color: var(--accent-color);
+            margin-bottom: 24px;
+            text-align: center;
+            line-height: 1.3;
+        }
+        .quiz-grid {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            max-width: 800px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        .quiz-card {
+            flex: 1;
+            min-width: 200px;
+            max-width: 250px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .quiz-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        .quiz-card.correct {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+        .quiz-card.wrong {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .quiz-card .pose-card-name {
+            display: none; /* hidden until answered */
+            margin-top: 12px;
+            font-size: 1rem;
+            text-align: center;
+        }
+        .quiz-card.revealed .pose-card-name {
+            display: block;
+        }
+        .quiz-card .sanskrit-name {
+            font-size: 0.9rem;
+        }
+        .quiz-feedback {
+            margin-top: 24px;
+            height: 40px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .quiz-next-btn {
+            display: none;
+            margin-top: 16px;
+            padding: 12px 24px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .quiz-next-btn:hover {
+            background: #0f766e;
+        }
         
         /* Tab Buttons */
         .tab-btn {
@@ -1011,6 +1101,9 @@ permalink: /yoga.html
             <button id="viewGalleryBtn" class="tab-btn" onclick="switchView('gallery')" title="Gallery View">
                 <i class="bi bi-grid-3x3-gap"></i>
             </button>
+            <button id="viewQuizBtn" class="tab-btn" onclick="switchView('quiz')" title="Quiz Game">
+                🎮
+            </button>
         </div>
         <div class="header-right">
             <button id="searchBtn" class="icon-btn" title="Search Poses" onclick="toggleSearch()">
@@ -1219,6 +1312,14 @@ permalink: /yoga.html
             <button id="breathBtn" class="icon-btn" title="Toggle Breathing Sync (b)" onclick="toggleBreathing()" style="display: flex; align-items: center; justify-content: flex-start; gap: 8px; padding: 0; font-size: 1rem;">
                 <i class="bi bi-lungs"></i> Toggle Breathing
             </button>
+            <div style="display: flex; justify-content: space-between; align-items: center; color: var(--muted-color); font-size: 0.9rem; margin-top: 8px;">
+                <label for="quizFormatSelect">Quiz Name Format:</label>
+                <select id="quizFormatSelect" onchange="updateQuizFormat(this.value)" style="background: rgba(0,0,0,0.3); color: white; border: none; padding: 4px; outline: none; border-radius: 4px;">
+                    <option value="sanskrit">Sanskrit Name</option>
+                    <option value="english">English Name</option>
+                    <option value="both">Both Names</option>
+                </select>
+            </div>
         </div>
         <h3 style="margin-top:0">Pose Editor</h3>
         <div id="controls"></div>
@@ -1250,6 +1351,14 @@ permalink: /yoga.html
             </div>
         </div>
         <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+
+    <!-- Quiz View -->
+    <div class="quiz-view" id="quizView">
+        <h2 class="quiz-prompt" id="quizPrompt">Identify this pose</h2>
+        <div class="quiz-grid" id="quizGrid"></div>
+        <div class="quiz-feedback" id="quizFeedback"></div>
+        <button id="quizNextBtn" class="quiz-next-btn" onclick="loadNextQuizQuestion()">Next Pose</button>
     </div>
 
     <script src="/js/profile.js"></script>
@@ -3705,23 +3814,31 @@ permalink: /yoga.html
         function switchView(viewMode) {
             const viewPoseBtn = document.getElementById('viewPoseBtn');
             const viewGalleryBtn = document.getElementById('viewGalleryBtn');
+            const viewQuizBtn = document.getElementById('viewQuizBtn');
             const mainContainer = document.querySelector('.main-wrapper') || document.querySelector('main');
             const timelineArea = document.querySelector('.timeline-area');
             const galleryView = document.getElementById('galleryView');
+            const quizView = document.getElementById('quizView');
+            
+            [viewPoseBtn, viewGalleryBtn, viewQuizBtn].forEach(b => b ? b.classList.remove('active') : null);
+            [galleryView, quizView].forEach(v => v ? v.classList.remove('active') : null);
             
             if (viewMode === 'gallery') {
-                if (viewPoseBtn) viewPoseBtn.classList.remove('active');
                 if (viewGalleryBtn) viewGalleryBtn.classList.add('active');
                 if (mainContainer) mainContainer.style.display = 'none';
                 if (timelineArea) timelineArea.style.display = 'none';
                 galleryView.classList.add('active');
                 renderGallery();
+            } else if (viewMode === 'quiz') {
+                if (viewQuizBtn) viewQuizBtn.classList.add('active');
+                if (mainContainer) mainContainer.style.display = 'none';
+                if (timelineArea) timelineArea.style.display = 'none';
+                quizView.classList.add('active');
+                initQuiz();
             } else {
-                if (viewGalleryBtn) viewGalleryBtn.classList.remove('active');
                 if (viewPoseBtn) viewPoseBtn.classList.add('active');
                 if (mainContainer) mainContainer.style.display = ''; 
                 if (timelineArea) timelineArea.style.display = '';
-                galleryView.classList.remove('active');
             }
         }
 
@@ -3782,8 +3899,136 @@ permalink: /yoga.html
             });
         }
 
+
+        // Quiz System
+        let currentQuizPose = null;
+        let quizFormat = 'both';
+        let quizOptions = [];
+        let canGuess = true;
+
+        window.updateQuizFormat = function(format) {
+            quizFormat = format;
+            if (window.userProfile && window.userProfile.settings) {
+                window.userProfile.settings.yogaQuizFormat = format;
+                window.userProfile.save();
+            } else {
+                localStorage.setItem('yoga-quiz-format', format);
+            }
+            if (document.getElementById('quizView').classList.contains('active')) {
+                // Rerender prompt immediately if active
+                if (currentQuizPose) setQuizPrompt(currentQuizPose);
+            }
+        };
+
+        function initQuizSettings() {
+            let savedFormat = 'both';
+            if (window.userProfile && window.userProfile.settings && window.userProfile.settings.yogaQuizFormat) {
+                savedFormat = window.userProfile.settings.yogaQuizFormat;
+            } else if (localStorage.getItem('yoga-quiz-format')) {
+                savedFormat = localStorage.getItem('yoga-quiz-format');
+            }
+            quizFormat = savedFormat;
+            const select = document.getElementById('quizFormatSelect');
+            if (select) select.value = savedFormat;
+        }
+
+        window.initQuiz = function() {
+            initQuizSettings();
+            loadNextQuizQuestion();
+        };
+
+        function setQuizPrompt(pose) {
+            const promptEl = document.getElementById('quizPrompt');
+            const match = pose.name.match(/(.+?)\s*\((.+?)\)$/);
+            let pName = pose.name;
+            if (match) {
+                const english = match[1].trim();
+                const sanskrit = match[2].trim();
+                if (quizFormat === 'sanskrit') pName = sanskrit;
+                else if (quizFormat === 'english') pName = english;
+                else pName = `${english} <br><span class="sanskrit-name" style="font-size: 0.8em; color: var(--teal-color);">(${sanskrit})</span>`;
+            }
+            promptEl.innerHTML = pName;
+        }
+
+        window.loadNextQuizQuestion = function() {
+            const grid = document.getElementById('quizGrid');
+            const feedback = document.getElementById('quizFeedback');
+            const nextBtn = document.getElementById('quizNextBtn');
+            
+            grid.innerHTML = '';
+            feedback.innerHTML = '';
+            nextBtn.style.display = 'none';
+            canGuess = true;
+
+            // Pick 3 random unique poses
+            let options = [];
+            let availablePoses = POSES.map((p, i) => i);
+            for(let i=0; i<3; i++) {
+                const r = Math.floor(Math.random() * availablePoses.length);
+                options.push(availablePoses.splice(r, 1)[0]);
+            }
+            
+            // Assign correct answer
+            const correctIndex = options[Math.floor(Math.random() * options.length)];
+            currentQuizPose = POSES[correctIndex];
+            quizOptions = options;
+
+            setQuizPrompt(currentQuizPose);
+
+            options.forEach((optIndex) => {
+                const p = POSES[optIndex];
+                const match = p.name.match(/(.+?)\s*\((.+?)\)$/);
+                let displayName = p.name;
+                if (match) {
+                    displayName = `${match[1].trim()}<br><span class="sanskrit-name">${match[2].trim()}</span>`;
+                }
+
+                const card = document.createElement('div');
+                card.className = 'quiz-card';
+                card.innerHTML = `
+                    <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" style="width: 150px; height: 150px; ${getVarStyles(p.vars)}">
+                        <line x1="-500" y1="368" x2="1000" y2="368" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
+                        <use href="#stickman" />
+                    </svg>
+                    <div class="pose-card-name">${displayName}</div>
+                `;
+                card.onclick = () => handleQuizGuess(card, p.id);
+                grid.appendChild(card);
+            });
+        };
+
+        function handleQuizGuess(card, guessedId) {
+            if (!canGuess) return;
+            canGuess = false;
+
+            const isCorrect = guessedId === currentQuizPose.id;
+            const feedback = document.getElementById('quizFeedback');
+            const nextBtn = document.getElementById('quizNextBtn');
+
+            if (isCorrect) {
+                card.classList.add('correct');
+                feedback.innerHTML = '<span style="color: #10b981;">Correct!</span>';
+            } else {
+                card.classList.add('wrong');
+                feedback.innerHTML = '<span style="color: #ef4444;">Incorrect!</span>';
+                // highlight correct
+                const cards = document.querySelectorAll('.quiz-card');
+                quizOptions.forEach((optIndex, i) => {
+                    if (POSES[optIndex].id === currentQuizPose.id) {
+                        cards[i].classList.add('correct');
+                    }
+                });
+            }
+
+            // Reveal all names
+            document.querySelectorAll('.quiz-card').forEach(c => c.classList.add('revealed'));
+            nextBtn.style.display = 'block';
+        }
+
         // Init
         loadPose(0);
+        initQuizSettings();
     </script>
 
     <script>
