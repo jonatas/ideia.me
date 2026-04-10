@@ -476,11 +476,11 @@ const POSES = [
         desc: 'Lie on your back, plant hands near ears and feet near hips, then press up to arch your spine into a wheel.',
         vars: {
             '--fig-rot': 0, '--fig-x': 0, '--fig-y': 48,
-            '--ub-rot': -90, '--head-rot': 90,
-            '--la-rot': 90, '--le-rot': 0,
-            '--ra-rot': 90, '--re-rot': 0,
-            '--ll-rot': -60, '--lk-rot': 60,
-            '--rl-rot': -60, '--rk-rot': 60,
+            '--ub-rot': -90, '--head-rot': -85,
+            '--la-rot': -260, '--le-rot': 0,
+            '--ra-rot': -260, '--re-rot': 0,
+            '--ll-rot': -35, '--lk-rot': 85,
+            '--rl-rot': -35, '--rk-rot': 85,
             '--torso-cx': 180
         }
     },

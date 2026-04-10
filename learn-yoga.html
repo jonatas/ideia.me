@@ -99,6 +99,46 @@ mermaid: true
   <!-- Main Content -->
   <main class="content-area">
 
+    <!-- Dynamic Pose Lesson Section -->
+    <section class="chapter" id="pose-lesson" style="display: none;">
+      <div class="chapter-header">
+        <span class="chapter-label">Deep Dive</span>
+        <h1 class="chapter-title-main" id="lesson-pose-name">Pose Name</h1>
+        <p class="chapter-subtitle" id="lesson-pose-sanskrit">Sanskrit Name</p>
+      </div>
+
+      <div class="content-card">
+        <div style="display: flex; gap: 30px; align-items: center; flex-wrap: wrap;">
+          <div id="lesson-svg-container" style="flex: 1; min-width: 300px; background: rgba(0,0,0,0.2); border-radius: 12px; padding: 20px;">
+            <!-- Rendered by JS -->
+          </div>
+          <div style="flex: 1; min-width: 300px;">
+            <h3>Instruction</h3>
+            <p id="lesson-pose-desc">Description goes here.</p>
+            <div id="lesson-details">
+              <!-- Details list -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="content-card">
+        <h2>Joyful Practice & Enrichment</h2>
+        <div class="insight-box" style="border-left-color: var(--accent-color);">
+          <div class="insight-icon" style="color: var(--accent-color);"><i class="bi bi-stars"></i></div>
+          <div class="insight-content">
+            <h4 id="lesson-enrichment-title">Make it Joyful</h4>
+            <p id="lesson-enrichment-content">Enrichment tips will appear here.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chapter-navigation">
+        <button class="btn-secondary" onclick="LearnYoga.goToChapter(1)">← Back to Journey</button>
+        <button class="btn-primary" id="lesson-back-to-app">Return to Yoga App →</button>
+      </div>
+    </section>
+
     <!-- Chapter 1: Roots of Wisdom -->
     <section class="chapter active" id="chapter-1">
       <div class="chapter-header">
@@ -280,11 +320,41 @@ mermaid: true
       <div class="content-card">
         <h2>The Vinyasa Transition</h2>
         <p>The "Vinyasa" or "Chaturanga Flow" is a common sequence used to link poses. It usually consists of:</p>
-        <div class="mermaid">
-graph LR
-    P[Plank] --> C[Chaturanga]
-    C --> U[Upward Dog]
-    U --> D[Downward Dog]
+        
+        <div class="vinyasa-container">
+          <div id="vinyasa-viewer" class="vinyasa-viewer">
+            <!-- SVG will be rendered here -->
+          </div>
+          
+          <div class="vinyasa-controls">
+            <div class="vinyasa-steps">
+              <div class="vinyasa-step active" data-pose="phalakasana">
+                <span class="step-dot"></span>
+                <span class="step-name">Plank</span>
+              </div>
+              <div class="vinyasa-step" data-pose="chaturanga-dandasana">
+                <span class="step-dot"></span>
+                <span class="step-name">Chaturanga</span>
+              </div>
+              <div class="vinyasa-step" data-pose="urdhva-mukha-svanasana">
+                <span class="step-dot"></span>
+                <span class="step-name">Upward Dog</span>
+              </div>
+              <div class="vinyasa-step" data-pose="adho-mukha-svanasana">
+                <span class="step-dot"></span>
+                <span class="step-name">Downward Dog</span>
+              </div>
+            </div>
+            
+            <div class="vinyasa-actions">
+              <button id="vinyasa-play-pause" class="btn-play">
+                <i class="bi bi-play-fill"></i> Play Flow
+              </button>
+              <button class="btn-secondary btn-small" onclick="window.location.href='/yoga.html?seq=sun-a'">
+                Try in Yoga App
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 

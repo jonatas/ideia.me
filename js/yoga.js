@@ -1393,6 +1393,13 @@ window.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowDown') { e.preventDefault(); cycleClassroomSequence(1); return; }
     }
     
+    // Quiz navigation
+    const quizView = document.getElementById('quizView');
+    if (quizView && quizView.classList.contains('active')) {
+        if (e.key === 'ArrowLeft') { e.preventDefault(); prevQuizQuestion(); return; }
+        if (e.key === 'ArrowRight') { e.preventDefault(); nextQuizQuestion(); return; }
+    }
+    
     // Fullscreen Cmd+Enter
     if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
         e.preventDefault();
@@ -1798,9 +1805,9 @@ function renderGallery() {
 }
 
 // Quiz System
-let currentQuizPose = null;
+let currentQuizIndex = -1;
+let quizHistory = [];
 let quizFormat = 'both';
-let quizOptions = [];
 let canGuess = true;
 
 window.updateQuizFormat = function(format) {
@@ -1813,8 +1820,9 @@ window.updateQuizFormat = function(format) {
     }
     const qView = document.getElementById('quizView');
     if (qView && qView.classList.contains('active')) {
-        // Rerender prompt immediately if active
-        if (currentQuizPose) setQuizPrompt(currentQuizPose);
+        if (currentQuizIndex >= 0 && quizHistory[currentQuizIndex]) {
+            setQuizPrompt(quizHistory[currentQuizIndex].correctPose);
+        }
     }
 };
 
@@ -1832,6 +1840,8 @@ function initQuizSettings() {
 
 window.initQuiz = function() {
     initQuizSettings();
+    quizHistory = [];
+    currentQuizIndex = -1;
     loadNextQuizQuestion();
 };
 
@@ -1850,34 +1860,73 @@ function setQuizPrompt(pose) {
     promptEl.innerHTML = pName;
 }
 
+window.prevQuizQuestion = function() {
+    if (quizAutoNextTimeout) clearTimeout(quizAutoNextTimeout);
+    if (currentQuizIndex > 0) {
+        currentQuizIndex--;
+        renderQuizQuestion();
+    }
+};
+
+window.nextQuizQuestion = function() {
+    if (quizAutoNextTimeout) clearTimeout(quizAutoNextTimeout);
+    if (currentQuizIndex < quizHistory.length - 1) {
+        currentQuizIndex++;
+        renderQuizQuestion();
+    } else {
+        // If we were at the last one and hadn't guessed yet, it counts as skipped
+        if (currentQuizIndex >= 0 && quizHistory[currentQuizIndex].guessedIndex === null) {
+            quizHistory[currentQuizIndex].skipped = true;
+        }
+        loadNextQuizQuestion();
+    }
+};
+
 window.loadNextQuizQuestion = function() {
     if (typeof POSES === 'undefined') return;
-    const grid = document.getElementById('quizGrid');
-    const feedback = document.getElementById('quizFeedback');
-    const nextBtn = document.getElementById('quizNextBtn');
-    if (!grid) return;
-    
-    grid.innerHTML = '';
-    if (feedback) feedback.innerHTML = '';
-    if (nextBtn) nextBtn.style.display = 'none';
-    canGuess = true;
 
     // Pick 3 random unique poses
     let options = [];
-    let availablePoses = POSES.map((p, i) => i);
-    for(let i=0; i<Math.min(3, availablePoses.length); i++) {
-        const r = Math.floor(Math.random() * availablePoses.length);
-        options.push(availablePoses.splice(r, 1)[0]);
+    let availableIndices = POSES.map((_, i) => i);
+    for(let i=0; i<Math.min(3, availableIndices.length); i++) {
+        const r = Math.floor(Math.random() * availableIndices.length);
+        options.push(availableIndices.splice(r, 1)[0]);
     }
     
     // Assign correct answer
-    const correctIndex = options[Math.floor(Math.random() * options.length)];
-    currentQuizPose = POSES[correctIndex];
-    quizOptions = options;
+    const correctOptionIndex = Math.floor(Math.random() * options.length);
+    const correctPose = POSES[options[correctOptionIndex]];
 
-    setQuizPrompt(currentQuizPose);
+    quizHistory.push({
+        options: options,
+        correctIndex: options[correctOptionIndex],
+        correctPose: correctPose,
+        guessedIndex: null,
+        skipped: false
+    });
+    
+    currentQuizIndex++;
+    renderQuizQuestion();
+};
 
-    options.forEach((optIndex) => {
+function renderQuizQuestion() {
+    const question = quizHistory[currentQuizIndex];
+    if (!question) return;
+
+    const grid = document.getElementById('quizGrid');
+    const feedback = document.getElementById('quizFeedback');
+    const prevArrow = document.getElementById('quizPrevArrow');
+    const nextArrow = document.getElementById('quizNextArrow');
+    
+    if (!grid) return;
+    grid.innerHTML = '';
+    if (feedback) feedback.innerHTML = '';
+    
+    canGuess = question.guessedIndex === null;
+
+    setQuizPrompt(question.correctPose);
+
+    question.options.forEach((optIndex) => {
         const p = POSES[optIndex];
         const match = p.name.match(/(.+?)\s*\((.+?)\)$/);
         let displayName = p.name;
@@ -1887,6 +1936,13 @@ window.loadNextQuizQuestion = function() {
 
         const card = document.createElement('div');
         card.className = 'quiz-card';
+        if (!canGuess) card.classList.add('revealed');
+        if (question.guessedIndex === optIndex) {
+            card.classList.add(optIndex === question.correctIndex ? 'correct' : 'wrong');
+        } else if (!canGuess && optIndex === question.correctIndex) {
+            card.classList.add('correct');
+        }
+
         card.innerHTML = `
             <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" style="width: 150px; height: 150px; ${getVarStyles(p.vars)}">
                 <line x1="-500" y1="368" x2="1000" y2="368" stroke="rgba(255,255,255,0.05)" stroke-width="4" />
@@ -1894,37 +1950,93 @@ window.loadNextQuizQuestion = function() {
             </svg>
             <div class="pose-card-name">${displayName}</div>
         `;
-        card.onclick = () => handleQuizGuess(card, p.id);
+        card.onclick = () => handleQuizGuess(card, optIndex);
         grid.appendChild(card);
     });
-};
 
-function handleQuizGuess(card, guessedId) {
+    // Update feedback if already guessed
+    if (!canGuess) {
+        const isCorrect = question.guessedIndex === question.correctIndex;
+        if (feedback) {
+            feedback.innerHTML = isCorrect ? 
+                '<span style="color: #10b981;">Correct!</span> <a href="/learn-yoga.html" style="color: var(--accent-color); margin-left: 10px; font-size: 0.8em;">Learn more</a>' :
+                '<span style="color: #ef4444;">Incorrect!</span> <a href="/learn-yoga.html" style="color: var(--accent-color); margin-left: 10px; font-size: 0.8em;">Review lessons</a>';
+        }
+    }
+
+    // Arrows
+    if (prevArrow) {
+        prevArrow.classList.toggle('disabled', currentQuizIndex === 0);
+    }
+    // Right arrow is always enabled as it creates new questions if needed
+
+    renderQuizDots();
+}
+
+function renderQuizDots() {
+    const container = document.getElementById('quizDots');
+    if (!container) return;
+    container.innerHTML = '';
+    
+    quizHistory.forEach((q, i) => {
+        const dot = document.createElement('div');
+        dot.className = 'quiz-dot';
+        if (i === currentQuizIndex) dot.classList.add('active');
+        
+        if (q.guessedIndex !== null) {
+            dot.classList.add(q.guessedIndex === q.correctIndex ? 'correct' : 'wrong');
+        } else if (q.skipped) {
+            dot.classList.add('skipped');
+        }
+        
+        dot.onclick = () => {
+            currentQuizIndex = i;
+            renderQuizQuestion();
+        };
+        container.appendChild(dot);
+    });
+}
+
+let quizAutoNextTimeout = null;
+
+function handleQuizGuess(card, guessedIndex) {
     if (!canGuess) return;
+    
+    const question = quizHistory[currentQuizIndex];
+    question.guessedIndex = guessedIndex;
     canGuess = false;
 
-    const isCorrect = guessedId === currentQuizPose.id;
+    const isCorrect = guessedIndex === question.correctIndex;
     const feedback = document.getElementById('quizFeedback');
-    const nextBtn = document.getElementById('quizNextBtn');
 
     if (isCorrect) {
         card.classList.add('correct');
-        if (feedback) feedback.innerHTML = '<span style="color: #10b981;">Correct!</span> <a href="/learn-yoga.html" style="color: var(--accent-color); margin-left: 10px; font-size: 0.8em;">Learn more</a>';
+        if (feedback) feedback.innerHTML = `<span style="color: #10b981;">Correct!</span> <a href="/learn-yoga.html?pose=${question.correctPose.id}" style="color: var(--accent-color); margin-left: 10px; font-size: 0.8em;">Learn more</a>`;
+        
+        // Auto-advance after 3 seconds if correct
+        if (quizAutoNextTimeout) clearTimeout(quizAutoNextTimeout);
+        quizAutoNextTimeout = setTimeout(() => {
+            // Only advance if we are still on the same question and in quiz view
+            const quizView = document.getElementById('quizView');
+            if (quizView && quizView.classList.contains('active') && quizHistory[currentQuizIndex] === question) {
+                nextQuizQuestion();
+            }
+        }, 3000);
     } else {
         card.classList.add('wrong');
-        if (feedback) feedback.innerHTML = '<span style="color: #ef4444;">Incorrect!</span> <a href="/learn-yoga.html" style="color: var(--accent-color); margin-left: 10px; font-size: 0.8em;">Review lessons</a>';
+        if (feedback) feedback.innerHTML = `<span style="color: #ef4444;">Incorrect!</span> <a href="/learn-yoga.html?pose=${question.correctPose.id}" style="color: var(--accent-color); margin-left: 10px; font-size: 0.8em;">Review lessons</a>`;
         // highlight correct
         const cards = document.querySelectorAll('.quiz-card');
-        quizOptions.forEach((optIndex, i) => {
-            if (POSES[optIndex].id === currentQuizPose.id) {
-                cards[i].classList.add('correct');
-            }
-        });
+        const correctPosInOptions = question.options.indexOf(question.correctIndex);
+        if (correctPosInOptions !== -1) {
+            cards[correctPosInOptions].classList.add('correct');
+        }
+        if (quizAutoNextTimeout) clearTimeout(quizAutoNextTimeout);
     }
 
     // Reveal all names
     document.querySelectorAll('.quiz-card').forEach(c => c.classList.add('revealed'));
-    if (nextBtn) nextBtn.style.display = 'block';
+    renderQuizDots();
 }
 
 // Init

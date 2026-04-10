@@ -28,7 +28,7 @@ permalink: /yoga.html
                 <i class="bi bi-grid-3x3-gap"></i>
             </button>
             <button id="viewQuizBtn" class="tab-btn" onclick="switchView('quiz')" title="Quiz Game">
-                🎮
+                <i class="bi bi-controller"></i>
             </button>
         </div>
         <div class="header-right">
@@ -281,10 +281,23 @@ permalink: /yoga.html
 
     <!-- Quiz View -->
     <div class="quiz-view" id="quizView">
-        <h2 class="quiz-prompt" id="quizPrompt">Identify this pose</h2>
-        <div class="quiz-grid" id="quizGrid"></div>
-        <div class="quiz-feedback" id="quizFeedback"></div>
-        <button id="quizNextBtn" class="quiz-next-btn" onclick="loadNextQuizQuestion()">Next Pose</button>
+        <div class="quiz-nav-arrow left" onclick="prevQuizQuestion()" id="quizPrevArrow">
+            <i class="bi bi-chevron-left"></i>
+        </div>
+        
+        <div class="quiz-main">
+            <h2 class="quiz-prompt" id="quizPrompt">Identify this pose</h2>
+            <div class="quiz-grid" id="quizGrid"></div>
+            <div class="quiz-feedback" id="quizFeedback"></div>
+        </div>
+
+        <div class="quiz-nav-arrow right" onclick="nextQuizQuestion()" id="quizNextArrow">
+            <i class="bi bi-chevron-right"></i>
+        </div>
+
+        <div class="quiz-dots" id="quizDots">
+            <!-- Rendered by JS -->
+        </div>
     </div>
 
     <script src="/js/profile.js"></script>
