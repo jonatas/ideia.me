@@ -140,7 +140,7 @@ const zoomOverlayText = document.getElementById('zoomOverlayText');
 
 let currentVars = {};
 let activeIndex = 0;
-let originalSearchPoseIndex = 0;
+
 let currentView = 'side';
 
 let settings = {
@@ -161,6 +161,17 @@ function getVarStyles(v) {
 // Note: POSES must be defined before this script is loaded
 const ORIGINAL_POSES = typeof POSES !== 'undefined' ? JSON.parse(JSON.stringify(POSES)) : [];
 const YOGA_PATCHES_KEY = 'yoga_pose_patches';
+const YOGA_CUSTOM_POSES_KEY = 'yoga_custom_poses';
+
+if (typeof POSES !== 'undefined') {
+    const customPoses = JSON.parse(localStorage.getItem(YOGA_CUSTOM_POSES_KEY) || '[]');
+    customPoses.forEach(cp => {
+        if (!POSES.find(p => p.id === cp.id)) {
+            POSES.push(cp);
+            ORIGINAL_POSES.push(JSON.parse(JSON.stringify(cp)));
+        }
+    });
+}
 
 function applyYogaPatches() {
     if (typeof POSES === 'undefined') return;
@@ -274,12 +285,11 @@ if (typeof POSES !== 'undefined') {
         });
         
         card.addEventListener('click', () => {
-            loadPose(i);
             const ff = document.getElementById('fuzzyFinder');
             if (ff && ff.style.display !== 'none') {
-                ff.style.display = 'none';
-                document.getElementById('fuzzyInput').value = '';
-                filterPoses('');
+                confirmSearch(i);
+            } else {
+                loadPose(i);
             }
         });
         if (navContainer) navContainer.appendChild(card);
@@ -1018,15 +1028,29 @@ function drop(ev) {
     const pId = ev.dataTransfer.getData("poseId");
     const tIndex = ev.dataTransfer.getData("timelineIndex");
 
+    let insertIndex = sequence.length;
+    if (track) {
+        const cards = Array.from(track.querySelectorAll('.timeline-card'));
+        for (let i = 0; i < cards.length; i++) {
+            const rect = cards[i].getBoundingClientRect();
+            if (ev.clientX < rect.left + rect.width / 2) {
+                insertIndex = i;
+                break;
+            }
+        }
+    }
+
     if (pId !== "") {
-        // Add new from library
-        sequence.push({ id: pId, breaths: 1 });
+        sequence.splice(insertIndex, 0, { id: pId, breaths: 1 });
         saveTimelineToCurrentSequence();
         renderTimeline();
     } else if (tIndex !== "") {
-        // Reorder to end
-        const movedItem = sequence.splice(parseInt(tIndex), 1)[0];
-        sequence.push(movedItem);
+        const fromIndex = parseInt(tIndex);
+        const movedItem = sequence.splice(fromIndex, 1)[0];
+        if (fromIndex < insertIndex) {
+            insertIndex--;
+        }
+        sequence.splice(insertIndex, 0, movedItem);
         saveTimelineToCurrentSequence();
         renderTimeline();
     }
@@ -1490,6 +1514,61 @@ window.exportPose = function() {
     }
 };
 
+window.saveAsNewPose = function() {
+    if (typeof POSES === 'undefined') return;
+    const name = prompt('Enter a name for the new pose:');
+    if (!name || !name.trim()) return;
+    const desc = prompt('Enter a description (optional):', '');
+    
+    const baseId = name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-');
+    let id = baseId;
+    let counter = 1;
+    while (POSES.find(p => p.id === id)) {
+        id = `${baseId}-${counter}`;
+        counter++;
+    }
+    
+    const newPose = {
+        id: id,
+        name: name.trim(),
+        desc: desc ? desc.trim() : '',
+        view: currentView === 'front' ? 'front' : 'side',
+        isCustom: true
+    };
+    
+    if (currentView === 'front') {
+        newPose.varsFront = JSON.parse(JSON.stringify(currentVars));
+    } else {
+        newPose.vars = JSON.parse(JSON.stringify(currentVars));
+    }
+    
+    POSES.push(newPose);
+    ORIGINAL_POSES.push(JSON.parse(JSON.stringify(newPose)));
+    
+    const customPoses = JSON.parse(localStorage.getItem(YOGA_CUSTOM_POSES_KEY) || '[]');
+    customPoses.push(newPose);
+    localStorage.setItem(YOGA_CUSTOM_POSES_KEY, JSON.stringify(customPoses));
+    
+    // Re-render gallery
+    if (typeof renderGallery === 'function') renderGallery();
+    
+    // Refresh navigation filters/UI if applicable
+    if (typeof renderPoseNav === 'function') renderPoseNav();
+    
+    // Select the new pose
+    const idx = POSES.length - 1;
+    loadPose(idx);
+    
+    setTimeout(() => {
+        const cards = document.querySelectorAll('#poseNav .pose-card');
+        if (cards[idx]) {
+            cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+    }, 100);
+    
+    alert(`Successfully saved "${newPose.name}"!`);
+};
+
 // Keyboard Shortcuts & Fuzzy Finder
 window.addEventListener('keydown', (e) => {
     if (document.body.classList.contains('classroom-mode')) {
@@ -1517,7 +1596,6 @@ window.addEventListener('keydown', (e) => {
         e.preventDefault();
         const ff = document.getElementById('fuzzyFinder');
         if (ff && ff.style.display === 'none') {
-            originalSearchPoseIndex = activeIndex;
             ff.style.display = 'flex';
             const fInp = document.getElementById('fuzzyInput');
             if (fInp) fInp.focus();
@@ -1541,7 +1619,6 @@ window.addEventListener('keydown', (e) => {
         const ff = document.getElementById('fuzzyFinder');
         if (ff && ff.style.display !== 'none') {
             ff.style.display = 'none';
-            loadPose(originalSearchPoseIndex);
             const fInp = document.getElementById('fuzzyInput');
             if (fInp) {
                 fInp.value = '';
@@ -1726,18 +1803,7 @@ if (fuzzyInp) {
         } else if (e.key === 'Enter') {
             e.preventDefault();
             const poseIndex = Array.from(document.querySelectorAll('#poseNav .pose-card')).indexOf(cards[currentIndex]);
-            if (poseIndex !== -1 && typeof POSES !== 'undefined') {
-                loadPose(poseIndex);
-                if (typeof activeSequenceKey !== 'undefined' && activeSequenceKey.startsWith('custom-')) {
-                    sequence.push({ id: POSES[poseIndex].id, breaths: 1 });
-                    saveTimelineToCurrentSequence();
-                    renderTimeline();
-                }
-            }
-            ff.style.display = 'none';
-            e.target.value = '';
-            filterPoses('');
-            e.target.blur();
+            confirmSearch(poseIndex);
         }
     });
 }
@@ -1755,7 +1821,6 @@ if (poseNavEl) {
             if (touchEndY - touchStartY > 60) {
                 const ff = document.getElementById('fuzzyFinder');
                 if (ff && ff.style.display === 'none') {
-                    originalSearchPoseIndex = activeIndex;
                     ff.style.display = 'flex';
                     const fInp = document.getElementById('fuzzyInput');
                     if (fInp) fInp.focus();
@@ -1763,6 +1828,25 @@ if (poseNavEl) {
             }
         }
     }, {passive: true});
+}
+
+function confirmSearch(poseIndex) {
+    if (poseIndex !== -1 && typeof POSES !== 'undefined') {
+        loadPose(poseIndex);
+        if (typeof activeSequenceKey !== 'undefined' && activeSequenceKey.startsWith('custom-')) {
+            sequence.push({ id: POSES[poseIndex].id, breaths: 1 });
+            saveTimelineToCurrentSequence();
+            renderTimeline();
+        }
+    }
+    const ff = document.getElementById('fuzzyFinder');
+    if (ff) ff.style.display = 'none';
+    const fInp = document.getElementById('fuzzyInput');
+    if (fInp) {
+        fInp.value = '';
+        filterPoses('');
+        fInp.blur();
+    }
 }
 
 function filterPoses(query) {
@@ -1782,17 +1866,33 @@ function filterPoses(query) {
         }
         card.classList.remove('search-selected');
     });
+
+    const timelineCards = document.querySelectorAll('#timelineTrack .timeline-card');
+    if (timelineCards.length > 0) {
+        timelineCards.forEach(tc => tc.classList.remove('match-highlight'));
+        if (query !== '') {
+            sequence.forEach((seqItem, idx) => {
+                const pose = POSES.find(p => p.id === seqItem.id);
+                if (pose) {
+                    const searchString = normalize(pose.name);
+                    if (searchString.includes(query)) {
+                        if (timelineCards[idx]) {
+                            timelineCards[idx].classList.add('match-highlight');
+                        }
+                    }
+                }
+            });
+        }
+    }
     
     // Auto-preview first match if query is not empty
     if (firstVisibleIndex !== -1 && query !== '') {
         cards[firstVisibleIndex].classList.add('search-selected');
         loadPose(firstVisibleIndex);
         cards[firstVisibleIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    } else if (query === '' && cards[originalSearchPoseIndex]) {
-        // If empty query, preview the original pose
-        loadPose(originalSearchPoseIndex);
-        cards[originalSearchPoseIndex].classList.add('search-selected');
-        cards[originalSearchPoseIndex].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    } else if (query === '' && cards[activeIndex]) {
+        // Keep the currently active pose selected
+        cards[activeIndex].classList.add('search-selected');
     }
 }
 
@@ -1800,10 +1900,13 @@ function toggleSearch() {
     const ff = document.getElementById('fuzzyFinder');
     if (!ff) return;
     if (ff.style.display === 'none') {
-        originalSearchPoseIndex = activeIndex;
         ff.style.display = 'flex';
         const fInp = document.getElementById('fuzzyInput');
-        if (fInp) fInp.focus();
+        if (fInp) {
+            fInp.value = '';
+            filterPoses('');
+            fInp.focus();
+        }
     } else {
         ff.style.display = 'none';
         const fInp = document.getElementById('fuzzyInput');

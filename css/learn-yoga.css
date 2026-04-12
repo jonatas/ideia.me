@@ -271,9 +271,13 @@ body {
   height: 100%;
 }
 
-.vinyasa-viewer .joint-group,
-.vinyasa-viewer #torso-path {
-  transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+.joint-group {
+  transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-box: view-box;
+}
+
+#torso-path {
+  transition: all 1.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .vinyasa-controls {

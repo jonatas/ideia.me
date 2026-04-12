@@ -391,6 +391,12 @@ body:not(.breathing-sync) .breath-badge {
     background: rgba(13, 148, 136, 0.2);
 }
 
+.timeline-card.match-highlight {
+    box-shadow: 0 0 8px 2px var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+    background: rgba(255, 255, 255, 0.1);
+}
+
 .timeline-card .remove-btn {
     position: absolute;
     top: -5px;

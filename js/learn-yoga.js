@@ -36,7 +36,7 @@ const LearnYoga = (() => {
 
     const varStyles = getVarStyles(pose.vars);
     viewer.innerHTML = `
-      <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" style="${varStyles}; transition: all 0.5s ease-in-out;">
+      <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" style="${varStyles}">
         <line x1="-500" y1="368" x2="1000" y2="368" stroke="rgba(255,255,255,0.1)" stroke-width="4" />
         <use href="#stickman" />
       </svg>
