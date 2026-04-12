@@ -750,6 +750,7 @@ body:not(.breathing-sync) .breath-badge {
     display: none;
     flex-direction: column;
     flex: 1;
+    min-height: 0;
     width: 100%;
     background: var(--bg-color);
     z-index: 50;
@@ -791,6 +792,7 @@ body:not(.breathing-sync) .breath-badge {
     display: none;
     flex-direction: row;
     flex: 1;
+    min-height: 0;
     width: 100%;
     background: var(--bg-color);
     z-index: 50;
@@ -799,6 +801,12 @@ body:not(.breathing-sync) .breath-badge {
     align-items: center;
     justify-content: center;
     position: relative;
+}
+
+@media (max-width: 768px) {
+    .quiz-view {
+        padding: 12px;
+    }
 }
 .quiz-view.active {
     display: flex;
@@ -810,6 +818,15 @@ body:not(.breathing-sync) .breath-badge {
     align-items: center;
     max-width: 1000px;
     padding: 0 40px;
+    max-height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+    .quiz-main {
+        padding: 0 10px;
+    }
 }
 .quiz-nav-arrow {
     width: 60px;

@@ -7,8 +7,77 @@ const LearnYoga = (() => {
     renderPosePreviews();
     renderBreathingTechniques();
     initVinyasaComponent();
+    initSunSalutationComponent();
     updateProgress();
     checkUrlParams();
+  };
+
+  let sunInterval = null;
+  let sunIndex = 0;
+  const sunPoses = ['tadasana', 'urdhva-hastasana', 'uttanasana-a', 'ardha-uttanasana', 'chaturanga-dandasana', 'urdhva-mukha-svanasana', 'adho-mukha-svanasana', 'ardha-uttanasana', 'uttanasana-a', 'urdhva-hastasana', 'tadasana'];
+
+  const initSunSalutationComponent = () => {
+    const viewer = document.getElementById('sunsalutation-viewer');
+    if (!viewer) return;
+
+    renderSunPose(sunPoses[0]);
+
+    sunInterval = setInterval(() => {
+      sunIndex = (sunIndex + 1) % sunPoses.length;
+      updateSunUI();
+    }, 1000);
+  };
+
+  const renderSunPose = (poseId) => {
+    const viewer = document.getElementById('sunsalutation-viewer');
+    if (!viewer) return;
+    const pose = POSES.find(p => p.id === poseId);
+    if (!pose) return;
+
+    const varStyles = getVarStyles(pose.vars);
+    viewer.innerHTML = `
+      <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" style="${varStyles}; transition: all 0.5s ease-in-out;">
+        <line x1="-500" y1="368" x2="1000" y2="368" stroke="rgba(255,255,255,0.1)" stroke-width="4" />
+        <use href="#stickman" />
+      </svg>
+    `;
+  };
+
+  const updateSunUI = () => {
+    const poseId = sunPoses[sunIndex];
+    updateSunPose(poseId);
+
+    const titleEl = document.getElementById('sunsalutation-step-name');
+    const descEl = document.getElementById('sunsalutation-step-desc');
+    const pose = POSES.find(p => p.id === poseId);
+    if (pose) {
+      if (titleEl) titleEl.textContent = pose.name.split(' (')[0];
+      if (descEl) descEl.textContent = `${sunIndex + 1} / ${sunPoses.length}`;
+    }
+  };
+
+  const updateSunPose = (poseId) => {
+    const viewer = document.getElementById('sunsalutation-viewer');
+    if (!viewer) return;
+    const svg = viewer.querySelector('svg');
+    const pose = POSES.find(p => p.id === poseId);
+    if (!pose || !svg) return;
+
+    const v = pose.vars;
+    Object.keys(v).forEach(k => {
+      if (k.startsWith('--torso-cx') || k.startsWith('--torso-cy')) return;
+      const val = (k.includes('rot')) ? `${v[k]}deg` : `${v[k]}px`;
+      svg.style.setProperty(k, val);
+    });
+
+    let cx = v['--torso-cx'] !== undefined ? v['--torso-cx'] : 100;
+    let cy = v['--torso-cy'] !== undefined ? v['--torso-cy'] : 150;
+    svg.style.setProperty('--torso-path', `path('M 100 200 Q ${cx} ${cy} 100 100')`);
+    
+    const torsoPath = svg.querySelector('#torso-path');
+    if (torsoPath) {
+      torsoPath.setAttribute('d', `M 100 200 Q ${cx} ${cy} 100 100`);
+    }
   };
 
   let vinyasaInterval = null;
@@ -214,7 +283,7 @@ const LearnYoga = (() => {
     // Ensure lesson section is hidden if we are going to a chapter
     document.getElementById('pose-lesson').style.display = 'none';
     document.querySelectorAll('.chapter').forEach(c => {
-        if (c.id !== 'pose-lesson') c.style.display = 'block';
+        if (c.id !== 'pose-lesson') c.style.display = '';
     });
 
     // Update active chapter in nav

@@ -844,25 +844,33 @@ setTimeout(() => {
             loadMacroSequence('sun-a');
         }
     } else if (params.has('seq')) {
-        const poses = params.get('seq').split(',').filter(p => p).map(pstr => {
-            const parts = pstr.split(':');
-            return { id: parts[0], breaths: parts[1] ? parseInt(parts[1]) : 1 };
-        });
-        const name = params.get('name') || 'Shared Sequence';
-        const color = params.get('color') || '#ffffff';
+        const seqVal = params.get('seq');
+        if (mySequences[seqVal]) {
+            if (isView) {
+                document.body.classList.add('view-mode');
+            }
+            loadMacroSequence(seqVal);
+        } else {
+            const poses = seqVal.split(',').filter(p => p).map(pstr => {
+                const parts = pstr.split(':');
+                return { id: parts[0], breaths: parts[1] ? parseInt(parts[1]) : 1 };
+            });
+            const name = params.get('name') || 'Shared Sequence';
+            const color = params.get('color') || '#ffffff';
 
-        const key = 'shared-1';
-        mySequences[key] = {
-            name: name,
-            color: color,
-            poses: poses
-        };
-        
-        if (isView) {
-            document.body.classList.add('view-mode');
+            const key = 'shared-1';
+            mySequences[key] = {
+                name: name,
+                color: color,
+                poses: poses
+            };
+            
+            if (isView) {
+                document.body.classList.add('view-mode');
+            }
+            
+            loadMacroSequence(key);
         }
-        
-        loadMacroSequence(key);
     } else if (params.has('pose')) {
         const poseId = params.get('pose');
         const poseIndex = POSES.findIndex(p => p.id === poseId);

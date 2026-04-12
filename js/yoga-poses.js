@@ -789,8 +789,8 @@ const POSES = [
             '--ub-rot': 110, '--head-rot': 60,
             '--la-rot': 90, '--le-rot': 0,
             '--ra-rot': 90, '--re-rot': 0,
-            '--ll-rot': -90, '--lk-rot': 90,
-            '--rl-rot': -90, '--rk-rot': 90,
+            '--ll-rot': -90, '--lk-rot': -90,
+            '--rl-rot': -90, '--rk-rot': -90,
             '--torso-cx': 50
         }
     },
@@ -802,8 +802,8 @@ const POSES = [
             '--ub-rot': 250, '--head-rot': -30,
             '--la-rot': 90, '--le-rot': 0,
             '--ra-rot': 90, '--re-rot': 0,
-            '--ll-rot': -90, '--lk-rot': 90,
-            '--rl-rot': -90, '--rk-rot': 90,
+            '--ll-rot': -90, '--lk-rot': -90,
+            '--rl-rot': -90, '--rk-rot': -90,
             '--torso-cx': 150
         }
     },

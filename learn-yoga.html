@@ -350,7 +350,7 @@ mermaid: true
               <button id="vinyasa-play-pause" class="btn-play">
                 <i class="bi bi-play-fill"></i> Play Flow
               </button>
-              <button class="btn-secondary btn-small" onclick="window.location.href='/yoga.html?seq=sun-a'">
+              <button class="btn-secondary btn-small" onclick="window.location.href='/yoga.html?seq=tadasana,urdhva-hastasana,uttanasana-a,ardha-uttanasana,chaturanga-dandasana,urdhva-mukha-svanasana,adho-mukha-svanasana,ardha-uttanasana,uttanasana-a,urdhva-hastasana,tadasana&name=Sun%20Salutation%20A'">
                 Try in Yoga App
               </button>
             </div>
@@ -375,34 +375,23 @@ mermaid: true
       <div class="content-card">
         <h2>Sun Salutations (Surya Namaskar)</h2>
         <p>Sun Salutations are the most famous yoga sequence, traditionally practiced at sunrise to honor the sun and energize the body.</p>
-        <div class="journey-flow">
-          <div class="flow-step">
-            <div class="step-number">1</div>
-            <div class="step-content"><h4>Tadasana</h4><p>Mountain Pose</p></div>
+        <div class="vinyasa-container" style="flex-direction: column;">
+          <div id="sunsalutation-viewer" class="vinyasa-viewer" style="margin-bottom: 1rem; width: 100%;">
+            <!-- SVG will be rendered here -->
           </div>
-          <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
-          <div class="flow-step">
-            <div class="step-number">2</div>
-            <div class="step-content"><h4>Uttanasana</h4><p>Forward Fold</p></div>
-          </div>
-          <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
-          <div class="flow-step">
-            <div class="step-number">3</div>
-            <div class="step-content"><h4>Vinyasa</h4><p>Flow transition</p></div>
-          </div>
-          <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
-          <div class="flow-step">
-            <div class="step-number">4</div>
-            <div class="step-content"><h4>Adho Mukha</h4><p>Downward Dog</p></div>
+          
+          <div style="text-align: center; margin-bottom: 1.5rem;">
+            <h3 id="sunsalutation-step-name" style="margin: 0; color: var(--accent-light);">Tadasana</h3>
+            <p id="sunsalutation-step-desc" style="margin: 5px 0 0 0; color: #94A3B8;">1 / 11</p>
           </div>
         </div>
-        <button class="btn-primary btn-large" onclick="window.location.href='/yoga.html?seq=sun-a'">Try Sun Salutation A</button>
+        <button class="btn-primary btn-large" style="width: 100%;" onclick="window.location.href='/yoga.html?seq=tadasana,urdhva-hastasana,uttanasana-a,ardha-uttanasana,chaturanga-dandasana,urdhva-mukha-svanasana,adho-mukha-svanasana,ardha-uttanasana,uttanasana-a,urdhva-hastasana,tadasana&name=Sun%20Salutation%20A'">Play the Full Sequence Practice</button>
       </div>
 
       <div class="content-card quiz-section">
-        <h2>Yoga Knowledge Check</h2>
-        <p>Test what you've learned in this journey!</p>
-        <button class="btn-primary" onclick="window.location.href='/yoga.html?view=quiz'">Launch the Interactive Quiz</button>
+        <h2>Learn & Memorize Yoga Poses</h2>
+        <p>A fun way to practice and memorize the names and Sanskrit terms. Challenge yourself to learn standard and traditional names!</p>
+        <button class="btn-primary" onclick="window.location.href='/yoga.html?view=quiz'">Play the Yoga Memory Quiz</button>
       </div>
 
       <div class="chapter-navigation">
