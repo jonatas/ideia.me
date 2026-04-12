@@ -56,6 +56,56 @@ function updateSaveButtonState() {
 
 document.addEventListener('DOMContentLoaded', updateSaveButtonState);
 
+const YogaDB = {
+    db: null,
+    async init() {
+        return new Promise((resolve, reject) => {
+            const req = indexedDB.open('YogaSequences', 1);
+            req.onupgradeneeded = (e) => {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains('sequences')) {
+                    db.createObjectStore('sequences', { keyPath: 'id' });
+                }
+            };
+            req.onsuccess = (e) => {
+                this.db = e.target.result;
+                resolve();
+            };
+            req.onerror = () => reject(req.error);
+        });
+    },
+    async saveSequence(id, seqData) {
+        if (!this.db) return;
+        return new Promise((resolve, reject) => {
+            const tx = this.db.transaction('sequences', 'readwrite');
+            const store = tx.objectStore('sequences');
+            const data = { id, ...seqData };
+            const req = store.put(data);
+            req.onsuccess = () => resolve();
+            req.onerror = () => reject(req.error);
+        });
+    },
+    async getAllSequences() {
+        if (!this.db) return [];
+        return new Promise((resolve, reject) => {
+            const tx = this.db.transaction('sequences', 'readonly');
+            const store = tx.objectStore('sequences');
+            const req = store.getAll();
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+        });
+    }
+};
+
+function saveSessionState() {
+    if (typeof activeSequenceKey !== 'undefined') {
+        localStorage.setItem('yoga-session-sequence', activeSequenceKey);
+    }
+    if (typeof activeIndex !== 'undefined') {
+        localStorage.setItem('yoga-session-pose', activeIndex);
+    }
+}
+
 const varsDef = [
     { id: '--fig-rot', min: -180, max: 180, label: 'Fig Rot' },
     { id: '--fig-x', min: -200, max: 200, label: 'Fig X' },
@@ -281,6 +331,7 @@ function loadPose(index) {
     if (cards.length > 0) {
         cards[activeIndex].classList.remove('active');
         activeIndex = index;
+        saveSessionState();
         cards[activeIndex].classList.add('active');
     }
 
@@ -557,11 +608,13 @@ function addNewSequence() {
         color: '#f43f5e',
         poses: []
     };
+    YogaDB.saveSequence(key, mySequences[key]);
     loadMacroSequence(key);
 }
 
 function loadMacroSequence(key) {
     activeSequenceKey = key;
+    saveSessionState();
     const seqData = mySequences[key];
     sequence = seqData.poses.map(p => typeof p === 'string' ? { id: p, breaths: 1 } : { ...p });
     
@@ -583,6 +636,7 @@ function loadMacroSequence(key) {
 function saveTimelineToCurrentSequence() {
     if (mySequences[activeSequenceKey]) {
         mySequences[activeSequenceKey].poses = sequence.map(p => ({ ...p }));
+        YogaDB.saveSequence(activeSequenceKey, mySequences[activeSequenceKey]);
         updateSaveButtonState();
     }
 }
@@ -608,6 +662,7 @@ function updateSeqName() {
     
     if (mySequences[activeSequenceKey]) {
         mySequences[activeSequenceKey].name = newName;
+        YogaDB.saveSequence(activeSequenceKey, mySequences[activeSequenceKey]);
     }
     renderSeqDots();
     updateSaveButtonState();
@@ -616,6 +671,7 @@ function updateSeqName() {
 function updateSeqColor(colorVal) {
     if (mySequences[activeSequenceKey]) {
         mySequences[activeSequenceKey].color = colorVal;
+        YogaDB.saveSequence(activeSequenceKey, mySequences[activeSequenceKey]);
         updateAppTheme();
         renderSeqDots();
         updateSaveButtonState();
@@ -808,7 +864,23 @@ async function exportSequence() {
 }
 
 // Initial Render
-setTimeout(() => {
+setTimeout(async () => {
+    await YogaDB.init();
+    const storedSeqs = await YogaDB.getAllSequences();
+    for (const seq of storedSeqs) {
+        mySequences[seq.id] = {
+            name: seq.name,
+            color: seq.color,
+            poses: seq.poses
+        };
+        if (seq.id.startsWith('custom-')) {
+            const num = parseInt(seq.id.split('-')[1]);
+            if (!isNaN(num) && num >= customSequenceCounter) {
+                customSequenceCounter = num + 1;
+            }
+        }
+    }
+
     const params = new URLSearchParams(window.location.search);
     const isView = params.get('view') === '1';
 
@@ -884,7 +956,32 @@ setTimeout(() => {
         }
         loadMacroSequence('sun-a');
     } else {
-        loadMacroSequence('sun-a');
+        const savedSeq = localStorage.getItem('yoga-session-sequence');
+        const savedPose = localStorage.getItem('yoga-session-pose');
+        
+        if (savedSeq && mySequences[savedSeq]) {
+            loadMacroSequence(savedSeq);
+        } else {
+            loadMacroSequence('sun-a');
+        }
+        
+        if (savedPose) {
+            const idx = parseInt(savedPose, 10);
+            if (!isNaN(idx) && typeof POSES !== 'undefined' && idx >= 0 && idx < POSES.length) {
+                loadPose(idx);
+                // Ensure the card is scrolled into view
+                setTimeout(() => {
+                    const cards = document.querySelectorAll('#poseNav .pose-card');
+                    if (cards[idx]) {
+                        cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                    }
+                }, 100);
+            } else {
+                loadPose(0);
+            }
+        } else {
+            loadPose(0);
+        }
     }
 }, 0);
 
@@ -1199,7 +1296,8 @@ if (controls) {
                 }
             }
             
-            window.updatePatchAreaLive();
+            const patchText = window.updatePatchAreaLive();
+            localStorage.setItem(YOGA_PATCHES_KEY, patchText);
         };
 
         range.addEventListener('input', (e) => update(e.target.value));
@@ -2051,7 +2149,7 @@ function handleQuizGuess(card, guessedIndex) {
 if (typeof POSES !== 'undefined') {
     const params = new URLSearchParams(window.location.search);
     if (!params.has('pose')) {
-        loadPose(0);
+        // Handled asynchronously in the initial render block
     }
 }
 initQuizSettings();

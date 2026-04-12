@@ -238,6 +238,9 @@ permalink: /yoga.html
             <button id="breathBtn" class="icon-btn" title="Toggle Breathing Sync (b)" onclick="toggleBreathing()" style="display: flex; align-items: center; justify-content: flex-start; gap: 8px; padding: 0; font-size: 1rem;">
                 <i class="bi bi-lungs"></i> Toggle Breathing
             </button>
+            <button class="icon-btn" onclick="clearPatches()" style="display: flex; align-items: center; justify-content: flex-start; gap: 8px; padding: 0; font-size: 1rem; color: #ef4444;" title="Remove all local patches and reset to original parameters">
+                <i class="bi bi-arrow-counterclockwise"></i> Reset Custom Poses
+            </button>
             <div style="display: flex; justify-content: space-between; align-items: center; color: var(--muted-color); font-size: 0.9rem; margin-top: 8px;">
                 <label for="quizFormatSelect">Quiz Name Format:</label>
                 <select id="quizFormatSelect" onchange="updateQuizFormat(this.value)" style="background: rgba(0,0,0,0.3); color: white; border: none; padding: 4px; outline: none; border-radius: 4px;">
