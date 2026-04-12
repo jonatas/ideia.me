@@ -525,7 +525,9 @@ window.showDetails = function(part, event) {
     if (zoomOverlayTitle) zoomOverlayTitle.textContent = part.charAt(0).toUpperCase() + part.slice(1);
     if (zoomOverlayText) zoomOverlayText.textContent = pose.details[part];
 
-    // Get screen coordinates
+    // Get screen coordinates safely
+    event = event || window.event;
+    if (!event) return;
     const x = event.clientX;
     const y = event.clientY;
 
@@ -706,7 +708,7 @@ function shareSequence() {
     const searchParams = new URLSearchParams();
     searchParams.set('all_seqs', exportDataJSON);
     searchParams.set('view', '1');
-    const url = window.location.origin + window.location.pathname + '?' + searchParams.toString();
+    const url = window.location.origin + window.location.pathname + '#' + searchParams.toString();
     navigator.clipboard.writeText(url).then(() => {
         alert('Shareable link copied to clipboard!');
     }).catch(err => {
@@ -891,7 +893,9 @@ setTimeout(async () => {
         }
     }
 
-    const params = new URLSearchParams(window.location.search);
+    const searchParams = new URLSearchParams(window.location.search);
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const params = new URLSearchParams([...Array.from(searchParams.entries()), ...Array.from(hashParams.entries())]);
     const isView = params.get('view') === '1';
 
     if (params.has('all_seqs')) {
@@ -1922,13 +1926,23 @@ function switchView(viewMode) {
     const viewPoseBtn = document.getElementById('viewPoseBtn');
     const viewGalleryBtn = document.getElementById('viewGalleryBtn');
     const viewQuizBtn = document.getElementById('viewQuizBtn');
+    const viewMarkdownBtn = document.getElementById('viewMarkdownBtn');
+    const animatorBtn = document.getElementById('animatorBtn');
+    
     const mainContainer = document.querySelector('.main-wrapper') || document.querySelector('main');
     const timelineArea = document.querySelector('.timeline-area');
     const galleryView = document.getElementById('galleryView');
     const quizView = document.getElementById('quizView');
+    const markdownView = document.getElementById('markdownView');
+    const animatorView = document.getElementById('animatorView');
     
-    [viewPoseBtn, viewGalleryBtn, viewQuizBtn].forEach(b => b ? b.classList.remove('active') : null);
-    [galleryView, quizView].forEach(v => v ? v.classList.remove('active') : null);
+    const poseInfoNode = document.getElementById('poseInfoNode');
+    const poseNav = document.getElementById('poseNav');
+    const debugPanel = document.getElementById('debugPanel');
+    const flowSuggestions = document.getElementById('flowSuggestions');
+    
+    [viewPoseBtn, viewGalleryBtn, viewQuizBtn, viewMarkdownBtn, animatorBtn].forEach(b => b ? b.classList.remove('active') : null);
+    [galleryView, quizView, markdownView, animatorView].forEach(v => v ? v.style.display = 'none' : null);
     
     if (viewMode === 'gallery') {
         if (viewGalleryBtn) viewGalleryBtn.classList.add('active');
@@ -1943,13 +1957,37 @@ function switchView(viewMode) {
         if (mainContainer) mainContainer.style.display = 'none';
         if (timelineArea) timelineArea.style.display = 'none';
         if (quizView) {
-            quizView.classList.add('active');
+            quizView.style.display = 'block';
             initQuiz();
         }
+    } else if (viewMode === 'markdown') {
+        if (viewMarkdownBtn) viewMarkdownBtn.classList.add('active');
+        if (mainContainer) mainContainer.style.display = 'none';
+        if (timelineArea) timelineArea.style.display = 'none';
+        if (markdownView) {
+            markdownView.style.display = 'flex';
+            renderMarkdownEditor();
+        }
+    } else if (viewMode === 'animator') {
+        if (animatorBtn) animatorBtn.classList.add('active');
+        if (mainContainer) mainContainer.style.display = ''; 
+        if (timelineArea) timelineArea.style.display = 'none';
+        if (poseInfoNode) poseInfoNode.style.display = 'none';
+        if (poseNav) poseNav.style.display = 'none';
+        if (debugPanel) debugPanel.style.display = 'none';
+        if (flowSuggestions) flowSuggestions.style.display = 'none';
+        if (animatorView) {
+            animatorView.style.display = 'flex';
+            if (typeof bootstrapAnimatorScript === 'function') window.bootstrapAnimatorScript();
+        }
     } else {
+        // default pose view
         if (viewPoseBtn) viewPoseBtn.classList.add('active');
         if (mainContainer) mainContainer.style.display = ''; 
         if (timelineArea) timelineArea.style.display = '';
+        if (poseInfoNode) poseInfoNode.style.display = '';
+        if (poseNav) poseNav.style.display = '';
+        if (flowSuggestions) flowSuggestions.style.display = '';
     }
 }
 
@@ -2256,3 +2294,103 @@ if (typeof POSES !== 'undefined') {
     }
 }
 initQuizSettings();
+
+// Markdown Integration
+window.renderMarkdownEditor = function() {
+    const textarea = document.getElementById('markdownTextArea');
+    if (!textarea) return;
+    textarea.value = sequencesToMarkdown();
+};
+
+window.sequencesToMarkdown = function() {
+    let md = '';
+    Object.keys(mySequences).forEach(key => {
+        const seq = mySequences[key];
+        md += `# ${seq.name}\n`;
+        if (seq.color) {
+            md += `Color: ${seq.color}\n`;
+        }
+        md += '\n';
+        seq.poses.forEach(poseItem => {
+            const id = typeof poseItem === 'string' ? poseItem : poseItem.id;
+            const breaths = typeof poseItem === 'string' ? 1 : (poseItem.breaths || 1);
+            if (breaths > 1) {
+                md += `- ${id}: ${breaths}\n`;
+            } else {
+                md += `- ${id}\n`;
+            }
+        });
+        md += '\n';
+    });
+    return md.trim();
+};
+
+window.applyMarkdownConfigs = function() {
+    const textarea = document.getElementById('markdownTextArea');
+    if (!textarea) return;
+    const mdContent = textarea.value;
+    
+    const lines = mdContent.split('\n');
+    let newSeqs = {};
+    let currentSeqId = null;
+
+    for (let line of lines) {
+        line = line.trim();
+        if (!line) continue;
+        
+        if (line.startsWith('# ')) {
+            const name = line.substring(2).trim();
+            currentSeqId = 'custom-' + (++customSequenceCounter);
+            newSeqs[currentSeqId] = {
+                name: name,
+                color: '#f43f5e',
+                poses: []
+            };
+        } else if (currentSeqId) {
+            if (line.toLowerCase().startsWith('color:')) {
+                newSeqs[currentSeqId].color = line.substring(6).trim();
+                continue;
+            }
+            
+            const match = line.match(/^[-*]?\s*([a-zA-Z0-9\-]+)(?:[:\s]+(\d+))?/);
+            if (match && match[1]) {
+                const poseId = match[1];
+                const breaths = parseInt(match[2]) || 1;
+                if (typeof POSES !== 'undefined' && POSES.find(p => p.id === poseId)) {
+                    newSeqs[currentSeqId].poses.push({id: poseId, breaths: breaths});
+                }
+            } else if (/^[a-z0-9\-]+$/.test(line)) {
+                if (typeof POSES !== 'undefined' && POSES.find(p => p.id === line)) {
+                     newSeqs[currentSeqId].poses.push({id: line, breaths: 1});
+                }
+            }
+        }
+    }
+    
+    if (Object.keys(newSeqs).length > 0) {
+        mySequences = newSeqs;
+        activeSequenceKey = Object.keys(mySequences)[0];
+        
+        Object.keys(mySequences).forEach(async k => {
+             await YogaDB.saveSequence(k, mySequences[k]);
+        });
+        
+        loadMacroSequence(activeSequenceKey);
+        renderSeqDots();
+        
+        alert('Sequences updated successfully!');
+    } else {
+        alert('No valid sequences found in the markdown text.');
+    }
+};
+
+window.copyMarkdown = function() {
+    const textarea = document.getElementById('markdownTextArea');
+    if (!textarea) return;
+    navigator.clipboard.writeText(textarea.value).then(() => {
+        alert('Markdown copied to clipboard!');
+    }).catch(err => {
+        console.error('Failed to copy', err);
+    });
+};
+

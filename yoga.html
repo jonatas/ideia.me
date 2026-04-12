@@ -6,6 +6,14 @@ permalink: /yoga.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NV80WM9HT0"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-NV80WM9HT0');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yoga Poses</title>
@@ -29,6 +37,9 @@ permalink: /yoga.html
             </button>
             <button id="viewQuizBtn" class="tab-btn" onclick="switchView('quiz')" title="Quiz Game">
                 <i class="bi bi-controller"></i>
+            </button>
+            <button id="viewMarkdownBtn" class="tab-btn" onclick="switchView('markdown')" title="Markdown Editor">
+                <i class="bi bi-markdown"></i>
             </button>
         </div>
         <div class="header-right">
@@ -170,6 +181,7 @@ permalink: /yoga.html
                 <input type="text" id="seqNameInput" class="seq-name-input" onblur="updateSeqName()" onkeydown="if(event.key==='Enter') this.blur();">
                 <input type="color" id="seqColorPicker" class="seq-color-picker" onchange="updateSeqColor(this.value)" title="Change Sequence Color">
                 <div class="timeline-controls">
+                    <button id="animatorBtn" class="icon-btn" title="Film Maker / Animator" onclick="switchView('animator')"><i class="bi bi-camera-reels"></i></button>
                     <button id="exportSeqBtn" class="icon-btn" title="Export GIF" onclick="exportSequence()"><i class="bi bi-filetype-gif"></i></button>
                     <button id="playSeqBtn" class="icon-btn" title="Play Sequence" onclick="togglePlaySequence()"><i class="bi bi-play-fill" id="playIcon"></i></button>
                     <button id="clearSeqBtn" class="icon-btn" title="Clear Sequence" onclick="clearSequence()"><i class="bi bi-trash"></i></button>
@@ -207,16 +219,54 @@ permalink: /yoga.html
 
         <div class="yoga-container" id="svgContainer">
             <svg viewBox="-300 -100 800 600" preserveAspectRatio="xMidYMid meet" class="yoga-man" id="yogaManSvg">
+                <g id="scene-layer" style="display: none;">
+                    <!-- Rendered by JS animator engine based on active scene -->
+                </g>
                 <g class="yoga-man-wrapper" id="yogaManWrapper">
-                    <line x1="-500" y1="368" x2="1000" y2="368" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
+                    <line class="floor-line" x1="-500" y1="368" x2="1000" y2="368" stroke="rgba(255,255,255,0.1)" stroke-width="2" />
                     <use href="#stickman" id="mainUse" />
                 </g>
             </svg>
         </div>
 
-        <div class="pose-info">
+        <div class="pose-info" id="poseInfoNode">
             <div class="pose-name" id="poseName">Mountain Pose (Tadasana)</div>
             <div class="pose-desc" id="poseDesc">Stand tall with your feet together, shoulders relaxed, weight distributed evenly through your soles, arms at sides.</div>
+        </div>
+
+        <!-- Animator Editor (Overlays/Replaces Pose Info in Animator Mode) -->
+        <div class="animator-view" id="animatorView" style="display: none; padding: 20px; flex-direction: column; background: var(--bg-color);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h3 style="margin: 0; color: var(--text-color);">Animator Studio</h3>
+                <div style="display: flex; gap: 8px;">
+                    <button class="icon-btn" onclick="previewAnimator()" title="Play Script" style="background: var(--primary-color); color: white; padding: 5px 15px; border-radius: 4px;"><i class="bi bi-play-fill"></i> Play</button>
+                    <button class="icon-btn" onclick="exportAnimatorGif()" title="Export Script GIF" style="background: var(--teal-color); color: white; padding: 5px 15px; border-radius: 4px;"><i class="bi bi-filetype-gif"></i> Export GIF</button>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-bottom: 10px; border-bottom: 2px solid #334155; padding-bottom: 5px;">
+                <button class="tab-btn active" id="animatorTimelineBtn" onclick="toggleAnimatorTab('timeline')" style="color: var(--text-color); border: none; background: transparent; cursor: pointer; padding: 5px;">Timeline</button>
+                <button class="tab-btn" id="animatorTextBtn" onclick="toggleAnimatorTab('text')" style="color: var(--muted-color); border: none; background: transparent; cursor: pointer; padding: 5px;">Text Editor</button>
+            </div>
+
+            <div id="animatorTimelineTab" style="flex: 1; display: flex; flex-direction: column; position: relative;">
+                <div style="position: absolute; right: 10px; top: -35px; display: flex; gap: 5px; z-index: 10;">
+                    <button onclick="setAnimatorTimelineZoom('in')" class="icon-btn" title="Zoom In"><i class="bi bi-zoom-in"></i></button>
+                    <button onclick="setAnimatorTimelineZoom('out')" class="icon-btn" title="Zoom Out"><i class="bi bi-zoom-out"></i></button>
+                    <button onclick="setAnimatorTimelineZoom('reset')" class="icon-btn" title="Reset Zoom"><i class="bi bi-arrows-collapse"></i></button>
+                </div>
+                <div style="background: rgba(0,0,0,0.2); border-radius: 4px; overflow-x: auto; padding-bottom: 10px; resize: vertical; min-height: 140px;">
+                    <div id="animatorTimelineRuler" style="position: relative; height: 30px; border-bottom: 1px solid #475569; min-width: 100%;"></div>
+                    <div id="animatorTimelineNodes" style="display: flex; gap: 0; flex-wrap: nowrap; padding-top: 5px; align-items: stretch;">
+                        <div style="color: var(--muted-color); font-size: 0.9rem; padding: 10px;">No frames yet. Switch to Text Editor to add scenes!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="animatorTextTab" style="display: none; flex: 1; flex-direction: column;">
+                <textarea id="animatorScriptArea" style="flex: 1; min-height: 250px; background: #222; color: #fff; border: 1px solid #444; border-radius: 4px; padding: 12px; font-family: monospace; font-size: 14px; margin-bottom: 12px;" oninput="renderAnimatorTimeline()" placeholder="@@ scene_1\nscene: hill\nduration: 1000\npose: tadasana\n--fig-x: 0\n\n@@ moving\nduration: 800\npose: tadasana\n--fig-x: 100"></textarea>
+                <div style="font-size: 12px; color: var(--muted-color);">Command script format: @@ frame_name, duration: (ms), scene: (hill|night|none), pose: (poseId), --css-vars.</div>
+            </div>
         </div>
     </main>
     </div>
@@ -298,15 +348,31 @@ permalink: /yoga.html
         <div class="quiz-nav-arrow right" onclick="nextQuizQuestion()" id="quizNextArrow">
             <i class="bi bi-chevron-right"></i>
         </div>
-
         <div class="quiz-dots" id="quizDots">
             <!-- Rendered by JS -->
         </div>
     </div>
 
+    <!-- Markdown Editor View -->
+    <div class="markdown-view" id="markdownView" style="display: none; height: 100vh; padding: 60px 20px 20px 20px; flex-direction: column; background: var(--bg-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h3 style="margin: 0; color: var(--text-color);">Sequence Markdown Editor</h3>
+            <div style="display: flex; gap: 10px;">
+                <button class="icon-btn" onclick="copyMarkdown()" title="Copy to Clipboard" style="background: rgba(255,255,255,0.1); color: white; padding: 5px 15px; border-radius: 4px;">
+                    <i class="bi bi-clipboard"></i> Copy
+                </button>
+                <button class="icon-btn" onclick="applyMarkdownConfigs()" title="Apply Changes" style="background: var(--teal-color); color: white; padding: 5px 15px; border-radius: 4px;">
+                    <i class="bi bi-check-lg"></i> Save & Apply
+                </button>
+            </div>
+        </div>
+        <textarea id="markdownTextArea" style="width: 100%; flex-grow: 1; background: #1e293b; color: #f8fafc; border: 1px solid #334155; border-radius: 8px; padding: 15px; font-family: monospace; font-size: 14px; resize: none; outline: none;"></textarea>
+    </div>
+
     <script src="/js/profile.js"></script>
     <script src="/js/yoga-poses.js"></script>
     <script src="/js/yoga.js"></script>
+    <script src="/js/yoga-animator.js"></script>
     <script src="/js/yoga-ga.js"></script>
 </body>
 </html>

@@ -831,5 +831,66 @@ const POSES = [
             '--ll-rot': 90, '--lk-rot': 0,
             '--rl-rot': -60, '--rk-rot': 120
         }
+    },
+    // NARRATIVE POSES (For Animator)
+    {
+        id: 'walking-1', name: 'Walking (Step 1)', flow: ['walking-2'],
+        desc: 'Right foot forward, left foot back. Left arm forward, right arm back.',
+        vars: {
+            '--fig-rot': 0, '--fig-x': 0, '--fig-y': -5,
+            '--ub-rot': 5, '--head-rot': 0,
+            '--la-rot': -45, '--le-rot': -20,
+            '--ra-rot': 45, '--re-rot': -20,
+            '--ll-rot': 30, '--lk-rot': 0,
+            '--rl-rot': -30, '--rk-rot': 20
+        }
+    },
+    {
+        id: 'walking-2', name: 'Walking (Step 2)', flow: ['walking-1'],
+        desc: 'Left foot forward, right foot back. Right arm forward, left arm back.',
+        vars: {
+            '--fig-rot': 0, '--fig-x': 0, '--fig-y': -5,
+            '--ub-rot': 5, '--head-rot': 0,
+            '--la-rot': 45, '--le-rot': -20,
+            '--ra-rot': -45, '--re-rot': -20,
+            '--ll-rot': -30, '--lk-rot': 20,
+            '--rl-rot': 30, '--rk-rot': 0
+        }
+    },
+    {
+        id: 'thinking', name: 'Thinking', flow: [],
+        desc: 'Standing still, hand on chin, contemplating.',
+        vars: {
+            '--fig-rot': 0, '--fig-x': 0, '--fig-y': 0,
+            '--ub-rot': 5, '--head-rot': 15,
+            '--la-rot': 0, '--le-rot': 0,
+            '--ra-rot': -140, '--re-rot': -120,
+            '--ll-rot': 0, '--lk-rot': 0,
+            '--rl-rot': -5, '--rk-rot': 5
+        }
+    },
+    {
+        id: 'looking-back', name: 'Looking Back', flow: [],
+        desc: 'Standing tall, head turned backward to see something.',
+        vars: {
+            '--fig-rot': 0, '--fig-x': 0, '--fig-y': 0,
+            '--ub-rot': 0, '--head-rot': -180,
+            '--la-rot': 0, '--le-rot': 0,
+            '--ra-rot': 0, '--re-rot': 0,
+            '--ll-rot': 0, '--lk-rot': 0,
+            '--rl-rot': 0, '--rk-rot': 0
+        }
+    },
+    {
+        id: 'namaste', name: 'Namaste', flow: [],
+        desc: 'Standing tall, hands together in prayer at the heart center.',
+        vars: {
+            '--fig-rot': 0, '--fig-x': 0, '--fig-y': -5,
+            '--ub-rot': 0, '--head-rot': 10,
+            '--la-rot': -45, '--le-rot': -90,
+            '--ra-rot': 45, '--re-rot': 90,
+            '--ll-rot': 0, '--lk-rot': 0,
+            '--rl-rot': 0, '--rk-rot': 0
+        }
     }
 ];
