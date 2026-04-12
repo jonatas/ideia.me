@@ -228,7 +228,7 @@ const POSES = [
         }
     },
     {
-        id: 'ardha-baddha-padma-paschimottanasana', name: 'Half-Bound Lotus Forward Fold', flow: ['paschimottanasana'],
+        id: 'ardha-baddha-padma-paschimottanasana', name: 'Half-Bound Lotus Forward Fold (Ardha Baddha Padma Paschimottanasana)', flow: ['paschimottanasana'],
         desc: 'One leg straight, the other folded into half lotus. Fold torso over the straight leg.',
         inherit: 'paschimottanasana',
         vars: {
@@ -237,7 +237,7 @@ const POSES = [
         }
     },
     {
-        id: 'triang-mukha-eka-pada-paschimottanasana', name: 'Three-Limbed Forward Fold', flow: ['janu-sirsasana'],
+        id: 'triang-mukha-eka-pada-paschimottanasana', name: 'Three-Limbed Forward Fold (Triang Mukha Eka Pada Paschimottanasana)', flow: ['janu-sirsasana'],
         desc: 'Fold over a straight leg with the other leg folded back beside the hip.',
         inherit: 'paschimottanasana',
         vars: {
@@ -253,7 +253,7 @@ const POSES = [
         }
     },
     {
-        id: 'marichyasana-a', name: 'Marichyasana A', flow: ['navasana'],
+        id: 'marichyasana-a', name: 'Marichyasana A (Marichyasana A)', flow: ['navasana'],
         desc: 'Seated with one leg straight, the other knee bent pointing up. Bind the bent knee and fold forward.',
         inherit: 'dandasana', // Start upright
         vars: {
@@ -287,7 +287,7 @@ const POSES = [
         }
     },
     {
-        id: 'upavistha-konasana', name: 'Wide-Angle Seated Forward Bend', flow: ['urdhva-dhanurasana', 'supta-konasana'],
+        id: 'upavistha-konasana', name: 'Wide-Angle Seated Forward Bend (Upavistha Konasana)', flow: ['urdhva-dhanurasana', 'supta-konasana'],
         desc: 'Seated with legs wide open, fold torso straight forward to the floor, grabbing big toes.',
         inherit: 'kurmasana', 
         vars: {
@@ -368,7 +368,7 @@ const POSES = [
         }
     },
     {
-        id: 'parivrtta-trikonasana-left', name: 'Revolved Triangle - Left',
+        id: 'parivrtta-trikonasana-left', name: 'Revolved Triangle - Left (Parivrtta Trikonasana)',
         desc: 'Revolve torso over the left leg. Right hand to the floor, left reaches sky.',
         inherit: 'trikonasana-left',
         vars: {
@@ -399,7 +399,7 @@ const POSES = [
         }
     },
     {
-        id: 'utthita-parsvakonasana-left', name: 'Extended Side Angle - Left', flow: ['parivrtta-parsvakonasana-left'],
+        id: 'utthita-parsvakonasana-left', name: 'Extended Side Angle - Left (Utthita Parsvakonasana)', flow: ['parivrtta-parsvakonasana-left'],
         desc: 'Deep lunge on left leg. Torso leans over the bent leg. Left hand to floor, right arm over the ear.',
         inherit: 'utthita-parsvakonasana',
         vars: {
@@ -411,7 +411,7 @@ const POSES = [
         }
     },
     {
-        id: 'parivrtta-parsvakonasana-left', name: 'Revolved Side Angle - Left',
+        id: 'parivrtta-parsvakonasana-left', name: 'Revolved Side Angle - Left (Parivrtta Parsvakonasana)',
         desc: 'Lunge on left leg, torso twisted across the knee. Right hand to floor, left arm over ear.',
         inherit: 'utthita-parsvakonasana-left',
         vars: {
