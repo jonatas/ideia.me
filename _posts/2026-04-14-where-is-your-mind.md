@@ -20,7 +20,7 @@ distance between those that are leveraging AI to become lazy and just reduce the
 working time, and on the other side, we have people that are really learning from
 it.
 
-This is a classic problem of [Time Economics](/2025/06/20/time-economics). If we're 
+This is a classic problem of [Time Economics](/time-economics). If we're 
 unloading the cognitive weight of low-level tasks, we must be intentional about 
 how we reinvest that saved time. Are we investing it in "Future Value" 
 activities—learning foundational concepts that AI still struggles with—or are we 
@@ -63,7 +63,7 @@ accurately.
 But use it for what? Now, it seems building systems will become far easier than in
 the past, so what new things are you going to build?
 
-For some of us, [programming is a drug](/2025/03/18/programming-is-a-drug). The dopamine hit 
+For some of us, [programming is a drug](/programming-is-a-drug). The dopamine hit 
 of seeing code work is now amplified by AI speed. But if we're just chasing that 
 high without deep understanding, we're not becoming better engineers; we're 
 just becoming more efficient addicts. The real challenge is maintaining 
