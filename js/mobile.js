@@ -48,7 +48,7 @@ class MobileMandalaPlayground {
       playground.addEventListener('touchstart', (e) => {
         if (e.target.classList.contains('banner-mandala') || 
             e.target.classList.contains('color-note') ||
-            e.target.classList.contains('aspiral-button')) {
+            e.target.classList.contains('spiral-button')) {
           e.preventDefault();
         }
       }, { passive: false });
@@ -138,7 +138,7 @@ class MobileMandalaPlayground {
         min-width: 60px;
       }
       
-      .mobile-device .aspiral-button {
+      .mobile-device .spiral-button {
         min-height: 50px;
         min-width: 120px;
         -webkit-tap-highlight-color: transparent;
@@ -276,18 +276,18 @@ class MobileMandalaPlayground {
   }
   
   setupMobileGestures() {
-    // Add double-tap to zoom for aspiral canvas
+    // Add double-tap to zoom for spiral canvas
     let lastTouchTime = 0;
-    const aspiralCanvas = document.getElementById('aspiral-canvas');
+    const spiralCanvas = document.getElementById('spiral-canvas');
     
-    if (aspiralCanvas) {
-      aspiralCanvas.addEventListener('touchend', (e) => {
+    if (spiralCanvas) {
+      spiralCanvas.addEventListener('touchend', (e) => {
         const currentTime = Date.now();
         const timeDiff = currentTime - lastTouchTime;
         
         if (timeDiff < 300 && timeDiff > 0) {
           // Double tap detected
-          this.handleAspiralDoubleTap(e);
+          this.handleSpiralDoubleTap(e);
         }
         
         lastTouchTime = currentTime;
@@ -295,10 +295,10 @@ class MobileMandalaPlayground {
     }
   }
   
-  handleAspiralDoubleTap(e) {
-    // Toggle aspiral playback on double tap
-    if (this.playgroundApp && this.playgroundApp.playAspiralAnimation) {
-      this.playgroundApp.playAspiralAnimation();
+  handleSpiralDoubleTap(e) {
+    // Toggle spiral playback on double tap
+    if (this.playgroundApp && this.playgroundApp.playSpiralAnimation) {
+      this.playgroundApp.playSpiralAnimation();
       this.hapticFeedback();
     }
   }

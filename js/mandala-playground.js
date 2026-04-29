@@ -19,10 +19,10 @@ class MandalaPlayground {
     this.extractedColors = [];
     this.selectedMandalaIndex = 0;
     this.bannerSpeed = 1; // Default to 1 for 1.0x speed (matches HTML default)
-    this.isAspiralPlaying = false;
-    this.aspiralDots = [];
-    this.aspiralPlayIndex = 0;
-    this.aspiralAnimationSpeed = 2;
+    this.isSpiralPlaying = false;
+    this.spiralDots = [];
+    this.spiralPlayIndex = 0;
+    this.spiralAnimationSpeed = 2;
     this.sourceImageData = null;
     this.audioEnabled = false;
     this.synth = null;
@@ -185,13 +185,13 @@ class MandalaPlayground {
     this.elements = {
       selectedMandala: document.getElementById('selected-mandala'),
       colorGrid: document.getElementById('color-grid'),
-      aspiralCanvas: document.getElementById('aspiral-canvas'),
+      spiralCanvas: document.getElementById('spiral-canvas'),
       bannerSpeedSlider: document.getElementById('banner-speed'),
       speedDisplay: document.getElementById('speed-display'),
       selectedNumber: document.getElementById('selected-number'),
-      aspiralPlayBtn: document.getElementById('aspiral-play-btn'),
-      aspiralSpeedSlider: document.getElementById('aspiral-speed'),
-      aspiralSpeedLabel: document.querySelector('label[for="aspiral-speed"]')
+      spiralPlayBtn: document.getElementById('spiral-play-btn'),
+      spiralSpeedSlider: document.getElementById('spiral-speed'),
+      spiralSpeedLabel: document.querySelector('label[for="spiral-speed"]')
     };
   }
 
@@ -382,7 +382,7 @@ class MandalaPlayground {
     this.updateMandalaSelection();
     this.updateSelectedMandalaNumber();
     this.loadSelectedMandala();
-    // Aspiral reconstruction will be called after color extraction in createColorPalette
+    // Spiral reconstruction will be called after color extraction in createColorPalette
   }
   
   // Update the selected mandala number display
@@ -658,36 +658,36 @@ class MandalaPlayground {
     // Update banner mandala rotation with colors
     this.updateMandalaRotations();
     
-    // Now that we have colors, generate aspiral reconstruction
-    this.generateAspiralReconstruction();
+    // Now that we have colors, generate spiral reconstruction
+    this.generateSpiralReconstruction();
   }
   
-  // Generate aspiral reconstruction from selected mandala
-  generateAspiralReconstruction() {
-    const canvas = this.elements.aspiralCanvas;
+  // Generate spiral reconstruction from selected mandala
+  generateSpiralReconstruction() {
+    const canvas = this.elements.spiralCanvas;
     const ctx = canvas.getContext('2d');
     
-    console.log('Starting aspiral reconstruction...');
+    console.log('Starting spiral reconstruction...');
     
     // Clear previous reconstruction
     ctx.clearRect(0, 0, 350, 350);
-    this.aspiralDots = [];
+    this.spiralDots = [];
     
     // Ensure we have extracted colors first
     if (!this.extractedColors || this.extractedColors.length === 0) {
       console.log('No extracted colors, waiting for color extraction...');
-      setTimeout(() => this.generateAspiralReconstruction(), 500);
+      setTimeout(() => this.generateSpiralReconstruction(), 500);
       return;
     }
     
-    // Load mandala image data for aspiral algorithm
+    // Load mandala image data for spiral algorithm
     this.loadMandalaImageData().then(() => {
-      console.log('Mandala image data loaded, creating aspiral dots...');
-      this.createAspiralDots();
+      console.log('Mandala image data loaded, creating spiral dots...');
+      this.createSpiralDots();
     }).catch((error) => {
-      console.error('Failed to load aspiral data:', error);
+      console.error('Failed to load spiral data:', error);
       // Create a simple fallback visualization
-      this.createFallbackAspiral();
+      this.createFallbackSpiral();
     });
   }
   
@@ -704,7 +704,7 @@ class MandalaPlayground {
       
       img.onload = () => {
         try {
-          console.log('Aspiral mandala loaded:', img.src);
+          console.log('Spiral mandala loaded:', img.src);
           // Scale and draw image
           const size = Math.min(img.width, img.height);
           const scale = 450 / size; // Leave some padding (50px total)
@@ -715,38 +715,38 @@ class MandalaPlayground {
           
           tempCtx.drawImage(img, offsetX, offsetY, scaledWidth, scaledHeight);
           this.sourceImageData = tempCtx.getImageData(0, 0, 500, 500);
-          console.log('Aspiral image data ready');
+          console.log('Spiral image data ready');
           resolve();
         } catch (error) {
-          console.error('Error processing aspiral image:', error);
+          console.error('Error processing spiral image:', error);
           reject(error);
         }
       };
       
       img.onerror = (error) => {
-        console.error('Failed to load aspiral mandala:', this.mandalas[this.selectedMandalaIndex].path, error);
+        console.error('Failed to load spiral mandala:', this.mandalas[this.selectedMandalaIndex].path, error);
         reject(error);
       };
       
       const mandalaPath = this.mandalas[this.selectedMandalaIndex].path;
-      console.log('Loading aspiral mandala:', mandalaPath);
+      console.log('Loading spiral mandala:', mandalaPath);
       img.src = mandalaPath;
     });
   }
 
-  // Create fallback aspiral if image loading fails
-  createFallbackAspiral() {
-    const canvas = this.elements.aspiralCanvas;
+  // Create fallback spiral if image loading fails
+  createFallbackSpiral() {
+    const canvas = this.elements.spiralCanvas;
     const ctx = canvas.getContext('2d');
     
-    console.log('Creating fallback aspiral with extracted colors');
+    console.log('Creating fallback spiral with extracted colors');
     
     const centerX = 250;
     const centerY = 250;
     const maxRadius = 225;
     const totalSteps = 1500;
     
-    this.aspiralDots = [];
+    this.spiralDots = [];
     
     for (let step = 0; step < totalSteps; step++) {
       const progress = step / totalSteps;
@@ -767,26 +767,26 @@ class MandalaPlayground {
       ctx.fill();
       
       // Store dot info for interactive playback
-      this.aspiralDots.push({
+      this.spiralDots.push({
         x, y, r, g, b, step,
         colorIndex: colorIndex
       });
     }
     
     // Add hover listeners to canvas
-    this.setupAspiralInteraction();
+    this.setupSpiralInteraction();
   }
 
-  // Create aspiral dots from image data
-  createAspiralDots() {
-    const canvas = this.elements.aspiralCanvas;
+  // Create spiral dots from image data
+  createSpiralDots() {
+    const canvas = this.elements.spiralCanvas;
     const ctx = canvas.getContext('2d');
     
-    console.log('Creating aspiral dots from source image data');
+    console.log('Creating spiral dots from source image data');
     
     if (!this.sourceImageData) {
       console.error('No source image data available, using fallback');
-      this.createFallbackAspiral();
+      this.createFallbackSpiral();
       return;
     }
     
@@ -816,25 +816,25 @@ class MandalaPlayground {
         ctx.fill();
         
         // Store dot info for interactive playback
-        this.aspiralDots.push({
+        this.spiralDots.push({
           x, y, r, g, b, step,
           colorIndex: this.findClosestColorIndex(r, g, b)
         });
       }
     }
     
-    console.log(`Aspiral created: ${validPixels} valid pixels out of ${totalSteps} steps`);
+    console.log(`Spiral created: ${validPixels} valid pixels out of ${totalSteps} steps`);
     
     // If very few valid pixels, use fallback
     if (validPixels < 100) {
-      console.log('Too few valid pixels, using fallback aspiral');
+      console.log('Too few valid pixels, using fallback spiral');
       ctx.clearRect(0, 0, 350, 350);
-      this.createFallbackAspiral();
+      this.createFallbackSpiral();
       return;
     }
     
     // Add hover listeners to canvas
-    this.setupAspiralInteraction();
+    this.setupSpiralInteraction();
   }
   
   // Sample pixel from source image data
@@ -869,9 +869,9 @@ class MandalaPlayground {
     return closestIndex;
   }
   
-  // Setup mouse interaction for aspiral canvas
-  setupAspiralInteraction() {
-    const canvas = this.elements.aspiralCanvas;
+  // Setup mouse interaction for spiral canvas
+  setupSpiralInteraction() {
+    const canvas = this.elements.spiralCanvas;
     let lastHighlightedDot = null;
     let throttleTimeout = null;
     
@@ -888,7 +888,7 @@ class MandalaPlayground {
         let closestDot = null;
         let minDistance = Infinity;
         
-        this.aspiralDots.forEach(dot => {
+        this.spiralDots.forEach(dot => {
           // Skip already highlighted dots
           if (dot.highlighted) return;
           
@@ -927,12 +927,12 @@ class MandalaPlayground {
     dot.highlightTime = Date.now();
     
     // Calculate timing based on animation speed
-    const baseDelay = 1000 / (this.aspiralAnimationSpeed * 20);
+    const baseDelay = 1000 / (this.spiralAnimationSpeed * 20);
     const scaleDuration = Math.max(150, Math.min(600, baseDelay * 0.8)); // 80% of note duration
     const holdDuration = Math.max(50, Math.min(300, baseDelay * 0.3));   // 30% of note duration
     
     // Create a temporary visual element for scaling effect
-    const canvas = this.elements.aspiralCanvas;
+    const canvas = this.elements.spiralCanvas;
     const scaleDot = document.createElement('div');
     scaleDot.style.cssText = `
       position: absolute;
@@ -969,29 +969,29 @@ class MandalaPlayground {
   }
   
   
-  // Play aspiral animation
-  playAspiralAnimation() {
-    if (this.isAspiralPlaying) {
-      this.stopAspiralAnimation();
+  // Play spiral animation
+  playSpiralAnimation() {
+    if (this.isSpiralPlaying) {
+      this.stopSpiralAnimation();
       return;
     }
     
-    this.isAspiralPlaying = true;
-    this.aspiralPlayIndex = 0;
-    this.elements.aspiralPlayBtn.textContent = '⏹ Stop';
-    this.elements.aspiralPlayBtn.classList.add('playing');
+    this.isSpiralPlaying = true;
+    this.spiralPlayIndex = 0;
+    this.elements.spiralPlayBtn.textContent = '⏹ Stop';
+    this.elements.spiralPlayBtn.classList.add('playing');
     
-    this.animateAspiralDots();
+    this.animateSpiralDots();
   }
   
-  // Animate through aspiral dots with proper timing
-  animateAspiralDots() {
-    if (!this.isAspiralPlaying || this.aspiralPlayIndex >= this.aspiralDots.length) {
-      this.stopAspiralAnimation();
+  // Animate through spiral dots with proper timing
+  animateSpiralDots() {
+    if (!this.isSpiralPlaying || this.spiralPlayIndex >= this.spiralDots.length) {
+      this.stopSpiralAnimation();
       return;
     }
     
-    const dot = this.aspiralDots[this.aspiralPlayIndex];
+    const dot = this.spiralDots[this.spiralPlayIndex];
     
     // Play note and highlight
     this.playColorNote(dot.colorIndex);
@@ -1003,32 +1003,32 @@ class MandalaPlayground {
       colorNotes[dot.colorIndex].classList.add('playing');
       
       // Calculate timeout based on animation speed - reduced duration for subtlety
-      const notePlayDuration = Math.max(200, 600 / (this.aspiralAnimationSpeed * 2));
+      const notePlayDuration = Math.max(200, 600 / (this.spiralAnimationSpeed * 2));
       setTimeout(() => {
         colorNotes[dot.colorIndex].classList.remove('playing');
       }, notePlayDuration);
     }
     
-    this.aspiralPlayIndex++;
+    this.spiralPlayIndex++;
     
     // Continue animation with speed control using requestAnimationFrame for smoother performance
-    const delay = Math.max(50, 1000 / (this.aspiralAnimationSpeed * 20)); // Reduced frequency to prevent timing conflicts
-    this.aspiralAnimationTimeout = setTimeout(() => {
-      if (this.isAspiralPlaying) {
-        requestAnimationFrame(() => this.animateAspiralDots());
+    const delay = Math.max(50, 1000 / (this.spiralAnimationSpeed * 20)); // Reduced frequency to prevent timing conflicts
+    this.spiralAnimationTimeout = setTimeout(() => {
+      if (this.isSpiralPlaying) {
+        requestAnimationFrame(() => this.animateSpiralDots());
       }
     }, delay);
   }
   
-  // Stop aspiral animation
-  stopAspiralAnimation() {
-    this.isAspiralPlaying = false;
-    if (this.aspiralAnimationTimeout) {
-      clearTimeout(this.aspiralAnimationTimeout);
-      this.aspiralAnimationTimeout = null;
+  // Stop spiral animation
+  stopSpiralAnimation() {
+    this.isSpiralPlaying = false;
+    if (this.spiralAnimationTimeout) {
+      clearTimeout(this.spiralAnimationTimeout);
+      this.spiralAnimationTimeout = null;
     }
-    this.elements.aspiralPlayBtn.textContent = '🎵 Play Aspiral';
-    this.elements.aspiralPlayBtn.classList.remove('playing');
+    this.elements.spiralPlayBtn.textContent = '🎵 Play Spiral';
+    this.elements.spiralPlayBtn.classList.remove('playing');
   }
   
   // Play color note with proper audio context handling
@@ -1119,25 +1119,25 @@ class MandalaPlayground {
       }, 10);
     });
     
-    // Aspiral play button
-    this.elements.aspiralPlayBtn.addEventListener('click', () => {
-      this.playAspiralAnimation();
+    // Spiral play button
+    this.elements.spiralPlayBtn.addEventListener('click', () => {
+      this.playSpiralAnimation();
     });
     
-    // Aspiral speed control
-    this.elements.aspiralSpeedSlider.addEventListener('input', (e) => {
-      this.aspiralAnimationSpeed = parseFloat(e.target.value);
-      this.updateAspiralSpeedLabel();
+    // Spiral speed control
+    this.elements.spiralSpeedSlider.addEventListener('input', (e) => {
+      this.spiralAnimationSpeed = parseFloat(e.target.value);
+      this.updateSpiralSpeedLabel();
     });
     
-    // Initialize aspiral speed label
-    this.updateAspiralSpeedLabel();
+    // Initialize spiral speed label
+    this.updateSpiralSpeedLabel();
   }
 
-  // Update aspiral speed label dynamically
-  updateAspiralSpeedLabel() {
-    if (this.elements.aspiralSpeedLabel) {
-      this.elements.aspiralSpeedLabel.textContent = `Speed: ${this.aspiralAnimationSpeed.toFixed(2)}`;
+  // Update spiral speed label dynamically
+  updateSpiralSpeedLabel() {
+    if (this.elements.spiralSpeedLabel) {
+      this.elements.spiralSpeedLabel.textContent = `Speed: ${this.spiralAnimationSpeed.toFixed(2)}`;
     }
   }
   
@@ -1160,7 +1160,7 @@ class MandalaPlayground {
   
   // Stop all animations and cleanup
   stop() {
-    this.stopAspiralAnimation();
+    this.stopSpiralAnimation();
   }
 }
 
@@ -1170,7 +1170,7 @@ document.addEventListener('keydown', (e) => {
     switch(e.key) {
       case ' ':
         e.preventDefault();
-        playgroundApp.playAspiralAnimation();
+        playgroundApp.playSpiralAnimation();
         break;
       case 'ArrowLeft':
         const prevIndex = (playgroundApp.selectedMandalaIndex - 1 + playgroundApp.mandalas.length) % playgroundApp.mandalas.length;

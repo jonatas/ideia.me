@@ -260,8 +260,8 @@ body {
   100% { transform: scale(1.4); box-shadow: 0 0 20px rgba(255, 255, 255, 0.4); }
 }
 
-/* Aspiral Reconstruction Slide */
-.aspiral-slide {
+/* Spiral Reconstruction Slide */
+.spiral-slide {
   background: linear-gradient(135deg, #2c1810 0%, #3d2817 100%);
   border-bottom: 3px solid #f39c12;
 }
@@ -269,7 +269,7 @@ body {
   padding: 2rem;
 }
 
-.aspiral-content {
+.spiral-content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -278,7 +278,7 @@ body {
   width: 100%;
 }
 
-.aspiral-title {
+.spiral-title {
   font-size: 2.2rem;
   color: #f39c12;
   margin-bottom: 1rem;
@@ -286,7 +286,7 @@ body {
   text-align: center;
 }
 
-.aspiral-container {
+.spiral-container {
   display: flex;
   align-items: center;
   gap: 3rem;
@@ -294,11 +294,11 @@ body {
   justify-content: center;
 }
 
-.aspiral-canvas-container {
+.spiral-canvas-container {
   position: relative;
 }
 
-.aspiral-canvas {
+.spiral-canvas {
   border: 4px solid #f39c12;
   border-radius: 50%;
   background: #1a1a1a;
@@ -306,18 +306,18 @@ body {
   cursor: crosshair;
 }
 
-.aspiral-canvas:hover {
+.spiral-canvas:hover {
   transform: scale(1.04);
 }
 
-.aspiral-controls {
+.spiral-controls {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   align-items: center;
 }
 
-.aspiral-button {
+.spiral-button {
   background: linear-gradient(135deg, #f39c12, #e67e22);
   border: none;
   border-radius: 12px;
@@ -330,15 +330,15 @@ body {
   font-family: inherit;
 }
 
-.aspiral-button:hover {
+.spiral-button:hover {
   transform: translateY(-2px);
 }
 
-.aspiral-button:active {
+.spiral-button:active {
   transform: translateY(0);
 }
 
-.aspiral-button.playing {
+.spiral-button.playing {
   background: linear-gradient(135deg, #e74c3c, #c0392b);
   animation: button-pulse 2s ease-in-out infinite;
 }
@@ -348,7 +348,7 @@ body {
   50% { box-shadow: 0 6px 20px rgba(231, 76, 60, 0.8); }
 }
 
-.speed-control-aspiral {
+.speed-control-spiral {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -356,13 +356,13 @@ body {
   width: 250px;
 }
 
-.speed-control-aspiral label {
+.speed-control-spiral label {
   color: #f39c12;
   font-weight: bold;
   font-size: 14px;
 }
 
-.speed-slider-aspiral {
+.speed-slider-spiral {
   width: 100%;
   height: 8px;
   -webkit-appearance: none;
@@ -372,7 +372,7 @@ body {
   outline: none;
 }
 
-.speed-slider-aspiral::-webkit-slider-thumb {
+.speed-slider-spiral::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 20px;
@@ -384,22 +384,22 @@ body {
   transition: all 0.2s ease;
 }
 
-.speed-slider-aspiral::-webkit-slider-thumb:hover {
+.speed-slider-spiral::-webkit-slider-thumb:hover {
   transform: scale(1.3);
 }
 
-.aspiral-dot {
+.spiral-dot {
   cursor: pointer;
   transition: all 0.1s ease;
 }
 
-.aspiral-dot:hover {
+.spiral-dot:hover {
   transform: scale(2);
   z-index: 1000;
   filter: brightness(1.5);
 }
 
-.aspiral-dot.highlighted {
+.spiral-dot.highlighted {
   animation: dot-highlight 0.5s ease-out;
 }
 
@@ -440,12 +440,12 @@ body {
     gap: 15px;
   }
   
-  .aspiral-container {
+  .spiral-container {
     flex-direction: column;
     gap: 2rem;
   }
   
-  .aspiral-title {
+  .spiral-title {
     font-size: 1.8rem;
   }
   
@@ -481,7 +481,7 @@ body {
     font-size: 10px;
   }
   
-  .aspiral-canvas {
+  .spiral-canvas {
     width: 350px;
     height: 350px;
   }
