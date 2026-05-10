@@ -191,15 +191,15 @@ const POSES = [
     },
     {
         id: 'balasana', name: 'Child\'s Pose (Balasana)', flow: ['dandasana', 'savasana'],
-        desc: 'Kneel on the floor, fold your torso over your thighs, and stretch your arms forward. Rest your forehead.',
+        desc: 'Kneel on the floor, fold your torso over your thighs, and stretch your arms forward. Rest your forehead on the mat.',
         vars: {
-            '--fig-rot': 0, '--fig-x': -100, '--fig-y': 168,
-            '--ub-rot': -90, '--head-rot': 0,
-            '--la-rot': 0, '--le-rot': 0,
-            '--ra-rot': 0, '--re-rot': 0,
-            '--ll-rot': -90, '--lk-rot': 180,
-            '--rl-rot': -90, '--rk-rot': 180,
-            '--torso-cx': 40
+            '--fig-rot': 21, '--fig-x': 80, '--fig-y': 143,
+            '--ub-rot': -113, '--head-rot': -9,
+            '--la-rot': 174, '--le-rot': 0,
+            '--ra-rot': 167, '--re-rot': 0,
+            '--ll-rot': 58, '--lk-rot': -158,
+            '--rl-rot': 43, '--rk-rot': -153,
+            '--torso-cx': 92
         }
     },
     {
