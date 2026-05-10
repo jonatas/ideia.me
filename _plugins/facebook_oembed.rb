@@ -1,6 +1,7 @@
 
 require 'oembed'
 require 'uri'
+require 'cgi'
 module Jekyll
   class FacebookEmbed < Liquid::Tag
 
@@ -10,7 +11,7 @@ module Jekyll
     end
 
     def render(context)
-      %{<div class="fb-post" data-href="#{@text}" data-width="500"></div>}
+      %{<div class="fb-post" data-href="#{CGI.escapeHTML(@text)}" data-width="500"></div>}
     end
   end
 end
