@@ -668,32 +668,61 @@ function initLazySlidesContainers() {
     // Create a cleaner loading indicator
     const loadingIndicator = document.createElement('div');
     loadingIndicator.className = 'slides-loading-indicator';
-    loadingIndicator.innerHTML = `
-      <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(255,255,255,0.9); 
-                 display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:5;">
-        <div style="width:40px; height:40px; border:4px solid #f3f3f3; border-top:4px solid #3498db; 
-                    border-radius:50%; animation:slides-spin 1s linear infinite;"></div>
-        <div style="margin-top:15px; font-size:16px; color:#333; font-weight:500;">Slides will load when visible</div>
-        <button id="load-now-${index}" style="margin-top:15px; padding:6px 12px; background:#3498db; color:white; 
-                border:none; border-radius:4px; cursor:pointer; font-weight:500;">Load Now</button>
-      </div>
-      <style>
-        @keyframes slides-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-      </style>
-    `;
+
+    const loadingOverlay = document.createElement('div');
+    Object.assign(loadingOverlay.style, {
+      position: 'absolute', top: '0', left: '0', right: '0', bottom: '0',
+      background: 'rgba(255,255,255,0.9)', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center', zIndex: '5'
+    });
+
+    const spinner = document.createElement('div');
+    Object.assign(spinner.style, {
+      width: '40px', height: '40px', border: '4px solid #f3f3f3',
+      borderTop: '4px solid #3498db', borderRadius: '50%',
+      animation: 'slides-spin 1s linear infinite'
+    });
+
+    const loadingText = document.createElement('div');
+    Object.assign(loadingText.style, { marginTop: '15px', fontSize: '16px', color: '#333', fontWeight: '500' });
+    loadingText.textContent = 'Slides will load when visible';
+
+    const loadNowButton = document.createElement('button');
+    loadNowButton.id = `load-now-${index}`;
+    Object.assign(loadNowButton.style, {
+      marginTop: '15px', padding: '6px 12px', background: '#3498db', color: 'white',
+      border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: '500'
+    });
+    loadNowButton.textContent = 'Load Now';
+
+    loadingOverlay.appendChild(spinner);
+    loadingOverlay.appendChild(loadingText);
+    loadingOverlay.appendChild(loadNowButton);
+    loadingIndicator.appendChild(loadingOverlay);
+
+    const style = document.createElement('style');
+    style.textContent = '@keyframes slides-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }';
+    loadingIndicator.appendChild(style);
+
     container.appendChild(loadingIndicator);
     
     // Find the iframe
     const iframe = container.querySelector('iframe');
     if (!iframe) {
       console.error(`Slides container ${index} does not have an iframe`);
-      loadingIndicator.innerHTML = `
-        <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(255,255,255,0.9); 
-                   display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:5; color:#e74c3c;">
-          <i class="fas fa-exclamation-triangle" style="font-size:24px; margin-bottom:10px;"></i>
-          <div style="font-weight:500; font-size:16px;">Error: No iframe found</div>
-        </div>
-      `;
+      loadingOverlay.innerHTML = ''; // Clear previous content safely
+      Object.assign(loadingOverlay.style, { color: '#e74c3c' });
+
+      const errorIcon = document.createElement('i');
+      errorIcon.className = 'fas fa-exclamation-triangle';
+      Object.assign(errorIcon.style, { fontSize: '24px', marginBottom: '10px' });
+
+      const errorText = document.createElement('div');
+      Object.assign(errorText.style, { fontWeight: '500', fontSize: '16px' });
+      errorText.textContent = 'Error: No iframe found';
+
+      loadingOverlay.appendChild(errorIcon);
+      loadingOverlay.appendChild(errorText);
       return;
     }
     
@@ -706,17 +735,14 @@ function initLazySlidesContainers() {
     console.log(`Stored slide ${index} iframe src for lazy loading:`, originalSrc);
 
     // Add event listener to the "Load Now" button
-    const loadNowButton = loadingIndicator.querySelector(`#load-now-${index}`);
-    if (loadNowButton) {
-      loadNowButton.addEventListener('click', function(e) {
-        e.stopPropagation(); // Prevent event bubbling
-        console.log(`Loading slide ${index} immediately on user request`);
-        loadSlide(iframe, originalSrc, loadingIndicator, index);
-        
-        // Stop observing this container
-        slidesObserver.unobserve(container);
-      });
-    }
+    loadNowButton.addEventListener('click', function(e) {
+      e.stopPropagation(); // Prevent event bubbling
+      console.log(`Loading slide ${index} immediately on user request`);
+      loadSlide(iframe, originalSrc, loadingIndicator, index);
+
+      // Stop observing this container
+      slidesObserver.unobserve(container);
+    });
     
     // Start observing this container
     slidesObserver.observe(container);
@@ -750,14 +776,29 @@ function loadSlide(iframe, src, loadingIndicator, index) {
   
   iframe.addEventListener('error', function(e) {
     console.error(`Slides iframe ${index} failed to load:`, e);
-    loadingIndicator.innerHTML = `
-      <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:rgba(255,255,255,0.9); 
-                 display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:2; color:#e74c3c;">
-        <i class="fas fa-exclamation-triangle" style="font-size:24px; margin-bottom:10px;"></i>
-        <div>Error loading slides</div>
-        <div style="font-size:12px; margin-top:5px;">Check browser console for details</div>
-      </div>
-    `;
+    loadingIndicator.innerHTML = ''; // Safe to clear
+    const errorOverlay = document.createElement('div');
+    Object.assign(errorOverlay.style, {
+      position: 'absolute', top: '0', left: '0', right: '0', bottom: '0',
+      background: 'rgba(255,255,255,0.9)', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center', zIndex: '2', color: '#e74c3c'
+    });
+
+    const errorIcon = document.createElement('i');
+    errorIcon.className = 'fas fa-exclamation-triangle';
+    Object.assign(errorIcon.style, { fontSize: '24px', marginBottom: '10px' });
+
+    const errorMsg = document.createElement('div');
+    errorMsg.textContent = 'Error loading slides';
+
+    const errorDetail = document.createElement('div');
+    Object.assign(errorDetail.style, { fontSize: '12px', marginTop: '5px' });
+    errorDetail.textContent = 'Check browser console for details';
+
+    errorOverlay.appendChild(errorIcon);
+    errorOverlay.appendChild(errorMsg);
+    errorOverlay.appendChild(errorDetail);
+    loadingIndicator.appendChild(errorOverlay);
   });
   
   // Set a timeout for loading
@@ -935,7 +976,11 @@ function initChronologicalGallery() {
   // Function to load more images
   function loadMoreImages() {
     // Show loading indicator
-    loadMoreButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+    loadMoreButton.innerHTML = '';
+    const spinner = document.createElement('i');
+    spinner.className = 'fas fa-spinner fa-spin';
+    loadMoreButton.appendChild(spinner);
+    loadMoreButton.appendChild(document.createTextNode(' Loading...'));
     loadMoreButton.disabled = true;
     
     // Use setTimeout to allow the browser to render the loading state
@@ -957,19 +1002,47 @@ function initChronologicalGallery() {
           day: 'numeric' 
         });
         
-        imageElement.innerHTML = `
-          <div class="gallery-image-container">
-            <img src="${image.src}" alt="${image.alt}" loading="lazy" class="gallery-image">
-            <div class="gallery-image-overlay">
-              <div class="gallery-image-info">
-                <div class="gallery-image-date">${formattedDate}</div>
-                <div class="gallery-image-event">${image.event}</div>
-                <div class="gallery-image-location">${image.location}</div>
-              </div>
-            </div>
-          </div>
-          <div class="gallery-image-caption">${image.caption}</div>
-        `;
+        // Create gallery structure safely
+        const container = document.createElement('div');
+        container.className = 'gallery-image-container';
+
+        const img = document.createElement('img');
+        img.src = image.src;
+        img.alt = image.alt;
+        img.loading = 'lazy';
+        img.className = 'gallery-image';
+
+        const overlay = document.createElement('div');
+        overlay.className = 'gallery-image-overlay';
+
+        const info = document.createElement('div');
+        info.className = 'gallery-image-info';
+
+        const dateDiv = document.createElement('div');
+        dateDiv.className = 'gallery-image-date';
+        dateDiv.textContent = formattedDate;
+
+        const eventDiv = document.createElement('div');
+        eventDiv.className = 'gallery-image-event';
+        eventDiv.textContent = image.event;
+
+        const locationDiv = document.createElement('div');
+        locationDiv.className = 'gallery-image-location';
+        locationDiv.textContent = image.location;
+
+        info.appendChild(dateDiv);
+        info.appendChild(eventDiv);
+        info.appendChild(locationDiv);
+        overlay.appendChild(info);
+        container.appendChild(img);
+        container.appendChild(overlay);
+
+        const captionDiv = document.createElement('div');
+        captionDiv.className = 'gallery-image-caption';
+        captionDiv.textContent = image.caption;
+
+        imageElement.appendChild(container);
+        imageElement.appendChild(captionDiv);
         
         // Add click event to open fullscreen viewer
         imageElement.addEventListener('click', (e) => {
@@ -983,7 +1056,11 @@ function initChronologicalGallery() {
       currentImagesShown = endIndex;
       
       // Reset button state
-      loadMoreButton.innerHTML = '<i class="fas fa-images"></i> Load More Images';
+      loadMoreButton.innerHTML = '';
+      const imagesIcon = document.createElement('i');
+      imagesIcon.className = 'fas fa-images';
+      loadMoreButton.appendChild(imagesIcon);
+      loadMoreButton.appendChild(document.createTextNode(' Load More Images'));
       loadMoreButton.disabled = false;
       
       // Hide load more button if all images are shown
@@ -1022,12 +1099,31 @@ function initChronologicalGallery() {
   // Add keyboard navigation hint
   const keyboardHint = document.createElement('div');
   keyboardHint.className = 'keyboard-nav-hint';
-  keyboardHint.innerHTML = `
-    <span><span class="key">←</span> Previous</span>
-    <span><span class="key">→</span> Next</span>
-    <span><span class="key">Esc</span> Close</span>
-    <span class="mobile-only"><span class="key"><i class="fas fa-hand-pointer"></i></span> Double-tap to close</span>
-  `;
+
+  const createKeyHint = (key, text, isMobile = false) => {
+    const span = document.createElement('span');
+    if (isMobile) span.className = 'mobile-only';
+
+    const keySpan = document.createElement('span');
+    keySpan.className = 'key';
+    if (typeof key === 'string') {
+      keySpan.textContent = key;
+    } else {
+      keySpan.appendChild(key);
+    }
+
+    span.appendChild(keySpan);
+    span.appendChild(document.createTextNode(` ${text}`));
+    return span;
+  };
+
+  const mobileIcon = document.createElement('i');
+  mobileIcon.className = 'fas fa-hand-pointer';
+
+  keyboardHint.appendChild(createKeyHint('←', 'Previous'));
+  keyboardHint.appendChild(createKeyHint('→', 'Next'));
+  keyboardHint.appendChild(createKeyHint('Esc', 'Close'));
+  keyboardHint.appendChild(createKeyHint(mobileIcon, 'Double-tap to close', true));
   fullscreenContent.appendChild(keyboardHint);
   
   let currentImageIndex = 0;
