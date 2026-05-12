@@ -1,5 +1,6 @@
 require 'oembed'
 require 'uri'
+require 'cgi'
 module Jekyll
   class InstagramOEmbed < Liquid::Tag
 
@@ -9,7 +10,7 @@ module Jekyll
     end
 
     def render(context)
-      %{<iframe src="//instagram.com/p/#{@text}/embed/" width="445px" height="535px" frameborder="0" scrolling="no" allowtransparency="true"></iframe>}
+      %{<iframe src="//instagram.com/p/#{CGI.escapeHTML(@text)}/embed/" width="445px" height="535px" frameborder="0" scrolling="no" allowtransparency="true"></iframe>}
     end
   end
 end

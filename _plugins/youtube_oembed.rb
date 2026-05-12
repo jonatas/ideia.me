@@ -1,8 +1,9 @@
+require 'cgi'
 class YouTube < Liquid::Tag
 
   def initialize(tagName, markup, tokens)
     super
-    @url = "https://www.youtube.com/embed/#{markup.strip.chomp}"
+    @url = "https://www.youtube.com/embed/#{CGI.escapeHTML(markup.strip.chomp)}"
     @url << (@url.include?("?") ? "&" : "?")
     @url << "color=white&theme=light"
   end
