@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Spiral: An Experiment in Geometry-Aware Storage for PostgreSQL"
+date: 2026-05-24
 categories: ['postgresql', 'rust', 'engineering']
 tags: ['spiral', 'research', 'database-internals', 'z-order', 'time-series']
 description: "A look into Spiral: my research project on multidimensional storage engines, built as a way to learn PostgreSQL internals through Rust."
@@ -12,12 +13,26 @@ image: images/postgresql-performance-workshop.webp
 
 <style>
 code {
-  background-color: rgba(14, 165, 233, 0.15) !important;
-  color: #7dd3fc !important;
-  padding: 0.11rem 0.35rem !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  padding: 0.13rem 0.4rem !important;
   border-radius: 4px !important;
-  font-weight: 500 !important;
-  border: 1px solid rgba(14, 165, 233, 0.2) !important;
+  font-weight: 700 !important;
+  border: 1px solid #cccccc !important;
+  text-shadow: none !important;
+}
+pre {
+  background-color: #f0f0f0 !important;
+  color: #111111 !important;
+  border: 2px solid #bbbbbb !important;
+  border-radius: 6px !important;
+}
+pre code {
+  background-color: transparent !important;
+  border: none !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+  padding: 0 !important;
 }
 .math-formula {
   background: rgba(15, 23, 42, 0.5);
@@ -268,13 +283,13 @@ In this advanced simulator, you can push the system to **100 concurrent tenants*
       </div>
 
       <div style="margin: 0 0 15px 15px;">
-        <label style="color: #94a3b8; display: block; margin-bottom: 5px; font-size: 0.65rem;">spiral.bundle_size = <span id="val-dist" style="color: #fbbf24;">100</span>,</label>
+        <label style="color: #475569; display: block; margin-bottom: 5px; font-size: 0.65rem;">-- bundle_size: <span id="val-dist" style="color: #94a3b8;">100</span> pts/block (internal — not a DDL option)</label>
         <input type="range" id="cfg-dist" min="50" max="1000" step="50" value="100" style="width: 100%;">
       </div>
       
       <div style="margin: 0 0 15px 15px;">
-        <label style="color: #94a3b8; display: block; margin-bottom: 5px; font-size: 0.65rem;">spiral.frames = <span id="val-width" style="color: #fbbf24;">20</span>s</label>
-        <div style="color: #64748b; font-size: 0.6rem; margin-bottom: 5px;">-- Aggregation Density</div>
+        <label style="color: #94a3b8; display: block; margin-bottom: 5px; font-size: 0.65rem;">spiral.frames = <span style="color: #fbbf24;">'1m,1h,1d'</span></label>
+        <div style="color: #64748b; font-size: 0.6rem; margin-bottom: 5px;">-- visual lane width: <span id="val-width" style="color: #94a3b8;">20</span> (simulation)</div>
         <input type="range" id="cfg-width" min="10" max="50" value="20" style="width: 100%;">
       </div>
 
@@ -420,12 +435,18 @@ PostgreSQL organizes data into fixed-size **8KB Pages**. For analytical queries 
 
 {% mermaid %}
 graph TD
-    subgraph "8KB Page Structure"
-    H[Page Header] --> L[Line Pointers]
-    L --> T1[Tuple 1]
-    L --> T2[Tuple 2]
-    L --> FS[Free Space]
-    T1 --> ST[Special Space]
+    subgraph "Spiral 8KB Page — src/storage.rs"
+    H["PageHeaderData · 24 bytes"] --> DA
+    DA["Data Area · 1018 × 8-byte slots<br/>(8192 − 24 − 24) / 8 = 1018 f64 values"] --> OP
+    OP["SpiralPageOpaque · 24 bytes<br/>window_start_t · window_end_t<br/>tenant_scale · magic 0x50495241"]
+    end
+    subgraph "Standard Heap 8KB Page"
+    PH["PageHeaderData · 24 bytes"] --> LP
+    LP["Line Pointers array"] --> T1
+    LP --> T2
+    T1["Tuple 1 (header + columns)"] --> FS
+    T2["Tuple 2"] --> FS
+    FS["Free Space (variable)"]
     end
 {% endmermaid %}
 
@@ -439,6 +460,236 @@ B-Trees are the workhorse of Postgres, but they are fundamentally one-dimensiona
 # Exploring Geometry-Aware Storage (Z-Ordering)
 
 To address this, I experimented with **Z-Ordering** (the Morton Curve). It interleaves the bits of multiple dimensions to preserve locality in a multidimensional plane.
+
+## The Toy Box Analogy
+
+Imagine you have a toy box with two kinds of toys: by **color** (red, blue, green…) and by **size** (small, medium, large). If you sort everything by color first, then size, finding "small red" is fast — but finding "all small things" means jumping to the small section in every color group. Each jump is a page load.
+
+Now imagine instead you fold the grid diagonally: first sort the tiny corner (small-red, small-blue), then the next corner (medium-red, medium-blue), and so on — tracing a **Z-shape** at every level of zoom. Suddenly, things that are close in **both** dimensions end up physically close on the shelf.
+
+Try it — sort by Color, Size, or Z-Order, then run a query and watch how many pages load:
+
+<div id="toybox-demo" class="interactive-widget" style="margin: 1.5rem 0; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; padding: 1.25rem;">
+  <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:#94a3b8;margin-bottom:0.75rem;letter-spacing:1px;">TOY BOX SORTER · 12 shapes · 4 pages · circle=red  square=blue  diamond=green  triangle=orange</div>
+  <canvas id="tb-canvas" width="576" height="200" style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;display:block;margin-bottom:0.75rem;max-width:100%;"></canvas>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;align-items:center;">
+    <span style="font-size:0.6rem;color:#64748b;font-family:monospace;min-width:55px;">SORT:</span>
+    <button id="tb-shuffle" style="background:#f1f5f9;color:#0f172a;border:1px solid #cbd5e1;padding:4px 10px;border-radius:4px;font-size:0.65rem;cursor:pointer;font-family:monospace;font-weight:700;">⇄ SHUFFLE</button>
+    <button id="tb-color"   style="background:#fef2f2;color:#b91c1c;border:1px solid #fca5a5;padding:4px 10px;border-radius:4px;font-size:0.65rem;cursor:pointer;font-family:monospace;font-weight:700;">BY COLOR</button>
+    <button id="tb-size"    style="background:#eff6ff;color:#1d4ed8;border:1px solid #93c5fd;padding:4px 10px;border-radius:4px;font-size:0.65rem;cursor:pointer;font-family:monospace;font-weight:700;">BY SIZE</button>
+    <button id="tb-zorder"  style="background:#f0fdf4;color:#15803d;border:1px solid #86efac;padding:4px 10px;border-radius:4px;font-size:0.65rem;cursor:pointer;font-family:monospace;font-weight:700;">⚡ Z-ORDER</button>
+  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center;">
+    <span style="font-size:0.6rem;color:#64748b;font-family:monospace;min-width:55px;">QUERY:</span>
+    <button id="tb-q-small" style="background:#fafafa;color:#374151;border:1px solid #d1d5db;padding:4px 10px;border-radius:4px;font-size:0.65rem;cursor:pointer;font-family:monospace;">FIND SMALL</button>
+    <button id="tb-q-red"   style="background:#fafafa;color:#374151;border:1px solid #d1d5db;padding:4px 10px;border-radius:4px;font-size:0.65rem;cursor:pointer;font-family:monospace;">FIND RED</button>
+    <button id="tb-q-both"  style="background:#fafafa;color:#374151;border:1px solid #d1d5db;padding:4px 10px;border-radius:4px;font-size:0.65rem;cursor:pointer;font-family:monospace;">FIND SMALL+RED</button>
+    <button id="tb-q-clear" style="background:#fafafa;color:#94a3b8;border:1px solid #e2e8f0;padding:4px 10px;border-radius:4px;font-size:0.65rem;cursor:pointer;font-family:monospace;">CLEAR</button>
+  </div>
+  <div id="tb-info" style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:#374151;background:#f1f5f9;padding:8px 12px;border-radius:6px;border-left:3px solid #94a3b8;min-height:2rem;line-height:1.5;"></div>
+</div>
+
+<script>
+(function() {
+  document.addEventListener('DOMContentLoaded', function() {
+    var canvas = document.getElementById('tb-canvas');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var dpr = window.devicePixelRatio || 1;
+    var W = 576, H = 200;
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    canvas.style.maxWidth = '100%';
+    ctx.scale(dpr, dpr);
+    var N = 12, PAGE_SIZE = 3, NUM_PAGES = N / PAGE_SIZE;
+    var SLOT = W / N;
+    var SY = Math.floor(H * 0.42);
+
+    var COLORS = ['#ef4444','#3b82f6','#22c55e','#f97316'];
+    var SIZE_PX = [10, 17, 25];
+
+    // 4 colors × 3 sizes = 12 shapes
+    var shapes = [];
+    for (var c = 0; c < 4; c++)
+      for (var s = 0; s < 3; s++)
+        shapes.push({ color: c, size: s });
+
+    function morton(x, y) {
+      var z = 0;
+      for (var i = 0; i < 4; i++)
+        z |= ((x & (1 << i)) << i) | ((y & (1 << i)) << (i + 1));
+      return z;
+    }
+
+    var positions = shapes.map(function(_, i) { return i; });
+    var targets   = positions.slice();
+    var raf = null, highlightFn = null, activeSort = '', activeQuery = '';
+
+    function drawShape(cx, cy, colorHex, sizeIdx, type, alpha) {
+      var r = SIZE_PX[sizeIdx];
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = colorHex;
+      ctx.strokeStyle = 'rgba(0,0,0,0.35)';
+      ctx.lineWidth = 1.5;
+      if (type === 0) {
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      } else if (type === 1) {
+        var s = r * 1.35;
+        ctx.fillRect(cx-s, cy-s, s*2, s*2); ctx.strokeRect(cx-s, cy-s, s*2, s*2);
+      } else if (type === 2) {
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - r*1.4); ctx.lineTo(cx + r*1.15, cy);
+        ctx.lineTo(cx, cy + r*1.4); ctx.lineTo(cx - r*1.15, cy);
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+      } else {
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - r*1.3);
+        ctx.lineTo(cx + r*1.2, cy + r*0.95);
+        ctx.lineTo(cx - r*1.2, cy + r*0.95);
+        ctx.closePath(); ctx.fill(); ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function render() {
+      ctx.clearRect(0, 0, W, H);
+      var loadedPages = new Set();
+      if (highlightFn)
+        shapes.forEach(function(sh, i) {
+          if (highlightFn(sh)) loadedPages.add(Math.floor(Math.round(positions[i]) / PAGE_SIZE));
+        });
+
+      for (var p = 0; p < NUM_PAGES; p++) {
+        var px = p * SLOT * PAGE_SIZE, pw = SLOT * PAGE_SIZE;
+        var hit = loadedPages.has(p);
+        ctx.fillStyle = hit ? 'rgba(251,191,36,0.18)' : (p % 2 === 0 ? '#f8fafc' : '#f1f5f9');
+        ctx.fillRect(px, 0, pw, H - 28);
+        if (hit) {
+          ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2;
+          ctx.strokeRect(px+1, 1, pw-2, H-30);
+        }
+        ctx.fillStyle = hit ? '#d97706' : '#94a3b8';
+        ctx.font = (hit ? 'bold ' : '') + '10px monospace';
+        ctx.fillText('pg' + p, px + 5, H - 10);
+      }
+      // dividers
+      for (var d = 1; d < NUM_PAGES; d++) {
+        ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1;
+        ctx.setLineDash([4,4]);
+        ctx.beginPath(); ctx.moveTo(d*SLOT*PAGE_SIZE, 0); ctx.lineTo(d*SLOT*PAGE_SIZE, H-28); ctx.stroke();
+        ctx.setLineDash([]);
+      }
+      // shapes
+      shapes.forEach(function(sh, i) {
+        var x = (positions[i] + 0.5) * SLOT;
+        var alpha = highlightFn ? (highlightFn(sh) ? 1.0 : 0.08) : 1.0;
+        drawShape(x, SY, COLORS[sh.color], sh.size, sh.color, alpha);
+      });
+      // page-load counter
+      if (highlightFn && loadedPages.size > 0) {
+        var n = loadedPages.size;
+        ctx.fillStyle = n <= 1 ? '#15803d' : n <= 2 ? '#d97706' : '#dc2626';
+        ctx.font = 'bold 12px monospace';
+        var txt = 'Pages loaded: ' + n + ' / ' + NUM_PAGES;
+        ctx.fillText(txt, W - ctx.measureText(txt).width - 8, H - 10);
+      }
+    }
+
+    function tick() {
+      var done = true;
+      shapes.forEach(function(_, i) {
+        var d = targets[i] - positions[i];
+        if (Math.abs(d) > 0.005) { positions[i] += d * 0.18; done = false; }
+        else positions[i] = targets[i];
+      });
+      render();
+      raf = done ? null : requestAnimationFrame(tick);
+    }
+
+    function startAnim() { if (!raf) raf = requestAnimationFrame(tick); }
+
+    function applySort(cmpFn) {
+      var arr = shapes.map(function(s, i) { return Object.assign({}, s, {_i: i}); }).sort(cmpFn);
+      arr.forEach(function(s, pos) { targets[s._i] = pos; });
+      startAnim();
+    }
+
+    function shuffleIt() {
+      var arr = shapes.map(function(_, i) { return i; });
+      for (var i = arr.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+      }
+      shapes.forEach(function(_, i) { targets[i] = arr[i]; });
+      startAnim();
+    }
+
+    var MSGS = {
+      shuffle: 'Shuffled — data arrives in random order (real INSERT stream). Any query scans all 4 pages.',
+      color:   'Sorted by COLOR (≈ tenant_id). "Find RED" = 1 page. "Find SMALL" must visit every color group — 4 pages.',
+      size:    'Sorted by SIZE (≈ time bucket). "Find SMALL" = 1 page. "Find RED" must visit every size group — 4 pages.',
+      zorder:  'Z-Order — no single dimension is fully contiguous, but shapes near in BOTH color+size land in the same page. "Find SMALL+RED" = 1 page.'
+    };
+
+    function updateInfo() {
+      var el = document.getElementById('tb-info');
+      if (!el) return;
+      var msg = MSGS[activeSort] || '';
+      if (highlightFn && activeSort) {
+        var lp = new Set();
+        shapes.forEach(function(sh, i) {
+          if (highlightFn(sh)) lp.add(Math.floor(Math.round(targets[i]) / PAGE_SIZE));
+        });
+        var qname = activeQuery === 'small' ? 'FIND SMALL' : activeQuery === 'red' ? 'FIND RED' : 'FIND SMALL+RED';
+        msg += '  →  [' + qname + '] loads ' + lp.size + '/' + NUM_PAGES + ' pages.';
+      }
+      el.textContent = msg;
+    }
+
+    function wire(id, sortKey, fn) {
+      var el = document.getElementById(id); if (!el) return;
+      el.onclick = function() { activeSort = sortKey; fn(); updateInfo(); };
+    }
+    function qwire(id, key, fn) {
+      var el = document.getElementById(id); if (!el) return;
+      el.onclick = function() { activeQuery = key; highlightFn = fn; startAnim(); updateInfo(); };
+    }
+
+    wire('tb-shuffle', 'shuffle', shuffleIt);
+    wire('tb-color',   'color',   function() { applySort(function(a,b){ return a.color-b.color || a.size-b.size; }); });
+    wire('tb-size',    'size',    function() { applySort(function(a,b){ return a.size-b.size   || a.color-b.color; }); });
+    wire('tb-zorder',  'zorder',  function() { applySort(function(a,b){ return morton(a.color,a.size)-morton(b.color,b.size); }); });
+
+    qwire('tb-q-small', 'small', function(s){ return s.size===0; });
+    qwire('tb-q-red',   'red',   function(s){ return s.color===0; });
+    qwire('tb-q-both',  'small+red', function(s){ return s.color===0 && s.size===0; });
+
+    var clearBtn = document.getElementById('tb-q-clear');
+    if (clearBtn) clearBtn.onclick = function() { highlightFn=null; activeQuery=''; render(); updateInfo(); };
+
+    // start sorted by color
+    activeSort = 'color';
+    applySort(function(a,b){ return a.color-b.color || a.size-b.size; });
+    updateInfo();
+  });
+})();
+</script>
+
+That is exactly what the Morton Curve does with numbers. It takes two coordinates and **shuffles their bits together**:
+
+```
+tenant = 5  →  binary  0 1 0 1
+time   = 3  →  binary  0 0 1 1
+                              ↓ interleave bit by bit
+z-order = 0 0 0 1 1 0 1 1 = 27
+```
+
+The result is a single number that encodes both dimensions. Numbers that are close in both `tenant` and `time` produce z-values that are close together on the number line. A single `BETWEEN lo AND hi` index scan can retrieve a 2D rectangle without touching unrelated rows.
+
+This is why `spiral_zorder` uses FNV-1a (not the default Rust hasher): the hash must be **stable and deterministic** across restarts so the z-order values stored in the index today still match the values computed at query time tomorrow.
 
 $$ \text{Z}(x, y) = \sum_{i=0}^{n-1} (x_i \cdot 2^{2i+1} + y_i \cdot 2^{2i}) $$
 {: .math-formula}
@@ -505,50 +756,440 @@ Compare how **Standard Row-Major** and **Z-Order Morton** handle memory access. 
 PostgreSQL 12 decoupled the internal storage from the executor through the **Table Access Method (TAM)** API. This is where the research got practical. Using **Rust and `pgrx`**, I implemented a prototype handler that bypasses the standard Heap.
 
 ```rust
-// Our TAM "Handshake" in src/tam.rs
+// src/tam.rs — TAM registration
 pub unsafe fn spiral_tam_handler(_fcinfo: pg_sys::FunctionCallInfo) -> pgrx::datum::Internal {
     let routine = PgMemoryContexts::TopMemoryContext.palloc_struct::<pg_sys::TableAmRoutine>();
     (*routine).type_ = pg_sys::NodeTag::T_TableAmRoutine;
-    
-    // Wire up our experimental callbacks
-    (*routine).tuple_insert = Some(spiral_slot_insert);
-    (*routine).scan_begin = Some(spiral_scan_begin);
+
+    // Scan path — fully implemented
+    (*routine).scan_begin       = Some(spiral_scan_begin);
     (*routine).scan_getnextslot = Some(spiral_scan_getnextslot);
-    
+    (*routine).scan_end         = Some(spiral_scan_end);
+
+    // Insert path — registered but body is an empty stub; TAM insert is not yet
+    // implemented. Live writes reach Spiral via standard heap + track_changes_stmt trigger.
+    (*routine).tuple_insert = Some(spiral_slot_insert);
+
     pgrx::datum::Internal::from(Some(pg_sys::Datum::from(routine as usize)))
 }
 ```
 
-# Low-Level Experimentation: Binary Packing & Direct Seeks
+# Binary Packing & Direct Seeks: The Real Implementation
 
-One of my experiments involved storing data in flat binary files outside the standard Postgres directory. By using `#[repr(C)]` in Rust, I could map data directly to hardware-aligned structures and use direct `seek()` operations based on mathematical offsets:
+Spiral uses **PostgreSQL's own buffer manager** — not flat files. The innovation is computing an exact `(block_number, byte_offset)` for any `(t, tenant_id)` pair in O(1), bypassing B-Tree traversal entirely.
 
-$$ \text{Offset} = (\text{TimeIndex} \times \text{BundleSize}) + (\text{TenantID} \times \text{RowSize}) $$
-{: .math-formula}
-
-This allowed for a prototype where data could be retrieved in constant time, effectively "short-circuiting" the buffer manager for specific analytical workloads.
+Two core `#[repr(C)]` structures from `src/storage.rs`:
 
 ```rust
-#[derive(Debug, Clone, Copy)]
 #[repr(C)]
-pub struct SpiralingRow {
-    pub t: i64,          // Timestamp
-    pub tenant_id: i32,  // Tenant ID
-    pub value: f64,      // Value
-    pub padding: [u8; 40], // 64-byte alignment
-}
+struct CompressedBlock {
+    first_val: f64,       // 8 bytes — anchor point
+    data: [u8; 120],      // 60 × 2-byte XOR deltas (Gorilla encoding)
+}                         // 128 bytes total → stores 64 time-series points
 
-// In src/storage.rs - Direct binary packing
-pub fn pack_delta(t: i64, tenant_id: i32, data: SpiralingRow) -> Result<(), std::io::Error> {
-    let offset = (t * BUNDLE_SIZE as i64) + (tenant_id * ROW_SIZE as i64);
-    let bytes: [u8; ROW_SIZE] = unsafe { std::mem::transmute(data) };
-    
-    let mut file = OpenOptions::new().write(true).open("spiral.dat")?;
-    file.seek(SeekFrom::Start(offset as u64))?;
-    file.write_all(&bytes)?;
-    Ok(())
+#[repr(C)]
+pub struct SpiralPageOpaque {
+    pub window_start_t: i64,  // time window covered by this page
+    pub window_end_t:   i64,
+    pub tenant_scale:   i32,  // number of tenant lanes
+    pub magic:          u32,  // 0x50495241 = 'SPRA'
 }
 ```
+
+The address formula (mode 1 — direct `f64`, single value column):
+
+$$ \text{logical\_offset} = (t_{\text{rel}} \times \text{tenant\_scale} \times 8) + (\text{tenant\_id} \times 8) $$
+{: .math-formula}
+
+Where `t_rel = spiral(t) - kickoff_epoch` normalizes any `timestamptz` to a dense integer. The offset then maps to a page via:
+
+```rust
+// src/storage.rs — exact implementation
+const DATA_PER_PAGE: usize = (8192 - 24 - 24) / 8; // = 1018 f64 values per page
+
+pub fn logical_to_physical_offset(logical_offset: i64) -> (u32, u32) {
+    let index          = logical_offset / 8;
+    let blkno          = (index / DATA_PER_PAGE as i64) as u32;
+    let offset_in_page = (24 + (index % DATA_PER_PAGE as i64) * 8) as u32;
+    (blkno, offset_in_page)
+}
+```
+
+`tenant_scale` comes from a one-character cardinality hint: `'d'`→10, `'h'`→100, `'k'`→1,000, `'M'`→1,000,000, `'B'`→1,000,000,000, `'T'`→1,000,000,000,000.
+
+# Three Storage Modes: Matching Structure to Workload
+
+Spiral ships three packing functions, each trading precision for density. The page map below shows exactly how each fills an 8KB page — and what the savings look like compared to a standard PostgreSQL heap table.
+
+**How to read the page map:** Each small square = one 8-byte slot. A full page has 1024 slots arranged in a 32×32 grid.
+
+| Cell color | Meaning |
+| :--- | :--- |
+| Gray (top-left 3 cells) | 24-byte `PageHeaderData` — PostgreSQL page header |
+| Dark blue (bottom-right 3 cells) | 24-byte `SpiralPageOpaque` — Spiral metadata (time window, tenant scale, magic) |
+| **Rainbow / colored** | Data slot occupied by a tenant. Each hue = one tenant lane. With many tenants the hues cycle, producing the rainbow gradient |
+| Near-black | Empty or wasted slot (visible in Compact mode where every other slot is overhead) |
+
+The three pages shown side-by-side let you see how the tenant pattern repeats as data fills successive 8KB blocks.
+
+<div id="storage-carousel" class="interactive-widget" style="margin: 2rem 0; background: #020617; border-radius: 12px; border: 1px solid #1e293b; overflow: hidden;">
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:0.75rem 1.25rem;border-bottom:1px solid #1e293b;background:#010409;">
+    <span style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:#64748b;letter-spacing:1px;">STORAGE MODE EXPLORER · src/storage.rs</span>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div id="sc-dots" style="display:flex;gap:6px;"></div>
+      <button id="sc-prev" style="background:#1e293b;color:#94a3b8;border:1px solid #334155;width:26px;height:26px;border-radius:4px;cursor:pointer;font-size:0.75rem;line-height:1;">&lt;</button>
+      <button id="sc-next" style="background:#1e293b;color:#94a3b8;border:1px solid #334155;width:26px;height:26px;border-radius:4px;cursor:pointer;font-size:0.75rem;line-height:1;">&gt;</button>
+    </div>
+  </div>
+  <div id="sc-content" style="padding:1.25rem;min-height:420px;"></div>
+</div>
+
+<script>
+(function() {
+  // ── Constants from src/storage.rs (exact match) ───────────────
+  var BLCKSZ        = 8192;
+  var HDR           = 24;   // sizeof(PageHeaderData)
+  var SPECIAL       = 24;   // sizeof(SpiralPageOpaque)
+  var DATA_PER_PAGE = Math.floor((BLCKSZ - HDR - SPECIAL) / 8); // 1018
+  var BLOCK_SIZE    = 128;  // sizeof(CompressedBlock)
+  var PPB           = 64;   // POINTS_PER_BLOCK
+
+  var EXAMPLES = [
+    {
+      id: 0, title: 'IoT Sensor Network', subtitle: 'Direct f64 · 8 bytes per slot',
+      accent: '#0ea5e9', mode: 'direct', S: 10, C: 1, T: 10000,
+      card: "'d' → 10 sensors",
+      ddl: 'CREATE TABLE sensor_data (\n  t           timestamptz NOT NULL,\n  sensor_id   int4        NOT NULL,\n  temperature float8\n) WITH (\n  spiral.tenant      = \'sensor_id\',\n  spiral.cardinality = \'d\'  -- 10 lanes\n);'
+    },
+    {
+      id: 1, title: 'Financial Tick Data', subtitle: 'Compact u32+f32 · 16 bytes per slot',
+      accent: '#818cf8', mode: 'compact', S: 1000, C: 1, T: 10000,
+      card: "'k' → 1 000 symbols",
+      ddl: 'CREATE TABLE asset_ticks (\n  t         timestamptz NOT NULL,\n  symbol_id int4        NOT NULL,\n  price     float8\n) WITH (\n  spiral.tenant      = \'symbol_id\',\n  spiral.cardinality = \'k\'  -- 1 000 lanes\n);'
+    },
+    {
+      id: 2, title: 'Multi-Sensor Environmental', subtitle: 'XOR Delta Blocks · 128 bytes / 64 points',
+      accent: '#10b981', mode: 'blocks', S: 100, C: 3, T: 10000,
+      card: "'h' → 100 devices · 3 cols",
+      ddl: 'CREATE TABLE env_sensors (\n  t           timestamptz NOT NULL,\n  device_id   int4        NOT NULL,\n  temperature float8,      -- Spiral: ohlcv\n  humidity    float8,      -- Spiral: stats\n  co2_ppm     float8       -- Spiral: sum\n) WITH (\n  spiral.tenant      = \'device_id\',\n  spiral.cardinality = \'h\'  -- 100 lanes\n);'
+    },
+    {
+      id: 3, title: 'Custom Configuration', subtitle: 'tune all parameters live',
+      accent: '#f59e0b', mode: null
+    }
+  ];
+
+  function spiralPages(mode, S, T, C) {
+    if (mode === 'direct')  return Math.ceil(T * S * C / DATA_PER_PAGE);
+    if (mode === 'compact') return Math.ceil(T * S * C / Math.floor(DATA_PER_PAGE / 2));
+    if (mode === 'blocks') {
+      var bpp = Math.floor(DATA_PER_PAGE / 16); // 63 blocks per page
+      return Math.ceil(Math.ceil(T / PPB) * S * C / bpp);
+    }
+    return 0;
+  }
+
+  function heapPages(S, T, C) {
+    var rowSize = 24 + 8 + 4 + 4 + C * 8; // header + t + tenant_id + pad + cols
+    var rpp = Math.floor((BLCKSZ - HDR) / (rowSize + 4));
+    return Math.ceil(T * S / rpp);
+  }
+
+  function fmt(n) {
+    if (n >= 1073741824) return (n/1073741824).toFixed(1)+' GB';
+    if (n >= 1048576)    return (n/1048576).toFixed(1)+' MB';
+    if (n >= 1024)       return (n/1024).toFixed(1)+' KB';
+    return n+' B';
+  }
+  function fmtN(n) {
+    if (n >= 1e9) return (n/1e9).toFixed(1)+'B';
+    if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
+    if (n >= 1e3) return (n/1e3).toFixed(0)+'K';
+    return n;
+  }
+
+  function drawPageMap(canvas, mode, S, T, C, accent) {
+    if (!canvas) return;
+    var dpr  = window.devicePixelRatio || 1;
+    var W    = canvas.offsetWidth  || 330;
+    var H    = canvas.offsetHeight || Math.round(W * 220 / 330);
+    canvas.width  = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    var ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+    ctx.clearRect(0, 0, W, H);
+
+    // ── Color palette: max 16 evenly-spaced hues ───────────────
+    // Cap at 16 so the audience sees clear, named lanes — not noise.
+    // With S > 16 we show "tenant_id % 16" and note groups in legend.
+    var DCAP = Math.min(S, 16);
+    function laneHue(lane) { return (lane * (360 / DCAP)) % 360; }
+    function laneColor(lane, lightness) {
+      return 'hsl('+laneHue(lane % DCAP)+',70%,'+(lightness||55)+'%)';
+    }
+
+    // ── Layout ─────────────────────────────────────────────────
+    var LEGEND_H = 30;
+    var gridH = H - LEGEND_H;
+    var PAGES = 3, gap = 4;
+    var pageW = Math.floor((W - gap*(PAGES-1)) / PAGES);
+    var COLS = 32, ROWS = 32;
+    var cs = Math.floor(Math.min(pageW/COLS, gridH/ROWS));
+
+    ctx.fillStyle = '#010409';
+    ctx.fillRect(0, 0, W, H);
+
+    for (var p = 0; p < PAGES; p++) {
+      var ox = p * (pageW + gap);
+
+      ctx.strokeStyle = '#1e3a5f';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(ox+0.5, 0.5, pageW-1, gridH-1);
+
+      for (var i = 0; i < 1024; i++) {
+        var col = i % COLS;
+        var row = Math.floor(i / COLS);
+        var x = ox + col * cs;
+        var y = row * cs;
+        var sz = Math.max(cs-1, 1);
+
+        // Header = gray, SpiralPageOpaque = dark blue
+        if (i < 3)    { ctx.fillStyle = '#475569'; ctx.fillRect(x,y,sz,sz); continue; }
+        if (i >= 1021) { ctx.fillStyle = '#1e3a8a'; ctx.fillRect(x,y,sz,sz); continue; }
+
+        var di       = i - 3;
+        var globalDi = p * DATA_PER_PAGE + di;
+        var color    = '#0a1020';
+
+        if (mode === 'direct') {
+          // Each slot = one (t, tenant_id) point. Lane cycles with period S.
+          color = laneColor(globalDi % S);
+        } else if (mode === 'compact') {
+          // Every other slot is wasted (16B logical, but only 8B used per entry).
+          if (di % 2 === 0) {
+            var eid = p * Math.floor(DATA_PER_PAGE/2) + Math.floor(di/2);
+            color = laneColor(eid % S);
+          } else {
+            color = '#12202e'; // wasted — darker, shows overhead
+          }
+        } else if (mode === 'blocks') {
+          // 16 slots = one 128B CompressedBlock (64 pts). Anchor brighter.
+          var slotGlobal = p * DATA_PER_PAGE + di;
+          var blkIdx    = Math.floor(slotGlobal / 16);
+          var posInBlk  = slotGlobal % 16;
+          var lane      = blkIdx % S;
+          color = laneColor(lane, posInBlk === 0 ? 60 : 30);
+        }
+
+        ctx.fillStyle = color;
+        ctx.fillRect(x, y, sz, sz);
+      }
+
+      // Page number label at bottom-left of each page
+      ctx.fillStyle = '#334155';
+      ctx.font = 'bold 9px monospace';
+      ctx.fillText('pg '+p, ox+3, gridH-4);
+    }
+
+    // ── Legend strip ───────────────────────────────────────────
+    var ly = gridH + 6;
+    ctx.font = '8px monospace';
+
+    // Header swatch
+    ctx.fillStyle = '#475569';
+    ctx.fillRect(2, ly, 8, 8);
+    ctx.fillStyle = '#64748b';
+    ctx.fillText('Hdr', 13, ly+8);
+
+    // SpiralPageOpaque swatch
+    ctx.fillStyle = '#1e3a8a';
+    ctx.fillRect(38, ly, 8, 8);
+    ctx.fillStyle = '#64748b';
+    ctx.fillText('Opaque', 49, ly+8);
+
+    // Total pages counter — updates with T and C
+    var totalPgs = (T && C) ? spiralPages(mode, S, T, C) : null;
+    if (totalPgs) {
+      ctx.fillStyle = '#64748b';
+      ctx.fillText('showing 3 of '+fmtN(totalPgs)+' pages'+(C>1?' × '+C+'col':''), 100, ly+8);
+    }
+
+    // Tenant lane swatches (up to 16) — right side
+    var swX = W - DCAP * 11 - 2;
+    for (var t = 0; t < DCAP; t++) {
+      ctx.fillStyle = laneColor(t);
+      ctx.fillRect(swX + t*11, ly, 10, 8);
+    }
+    ctx.fillStyle = S > DCAP ? '#f59e0b' : '#64748b';
+    ctx.font = '7px monospace';
+    ctx.fillText(S > DCAP ? 'lane groups ('+S+' total)' : S+' tenant lanes', swX - 4 - (S > DCAP ? 90 : 70), ly+8);
+  }
+
+  function statsHtml(mode, S, T, C, accent) {
+    var sp = spiralPages(mode, S, T, C);
+    var hp = heapPages(S, T, C);
+    var reduction = Math.round((1 - (sp / hp)) * 100);
+    var rowSize = 24 + 8 + 4 + 4 + C * 8;
+    var modeSlotBytes = mode==='direct'?8 : mode==='compact'?16 : 128;
+    var modePointsPer = mode==='blocks'?PPB:1;
+
+    return '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;">'
+      +'<div style="background:#0f172a;padding:10px;border-radius:6px;border-left:3px solid '+accent+';">'
+        +'<div style="font-size:0.55rem;color:#64748b;font-family:monospace;">SPIRAL PAGES</div>'
+        +'<div style="font-size:1.3rem;color:#fff;font-weight:700;">'+fmtN(sp)+'</div>'
+        +'<div style="font-size:0.5rem;color:#64748b;">'+fmt(sp*BLCKSZ)+'</div></div>'
+      +'<div style="background:#0f172a;padding:10px;border-radius:6px;border-left:3px solid #ef4444;">'
+        +'<div style="font-size:0.55rem;color:#64748b;font-family:monospace;">HEAP PAGES</div>'
+        +'<div style="font-size:1.3rem;color:#fff;font-weight:700;">'+fmtN(hp)+'</div>'
+        +'<div style="font-size:0.5rem;color:#64748b;">'+fmt(hp*BLCKSZ)+'</div></div>'
+      +'<div style="background:#0f172a;padding:10px;border-radius:6px;border-left:3px solid #4ade80;">'
+        +'<div style="font-size:0.55rem;color:#64748b;font-family:monospace;">REDUCTION</div>'
+        +'<div style="font-size:1.3rem;color:'+(reduction>0?'#4ade80':'#f87171')+';font-weight:700;">'+reduction+'%</div>'
+        +'<div style="font-size:0.5rem;color:#64748b;">'+(hp/Math.max(sp,1)).toFixed(1)+'× fewer pages</div></div>'
+      +'</div>'
+      +'<div style="font-size:0.6rem;color:#475569;font-family:monospace;border-top:1px solid #1e293b;padding-top:8px;">'
+        +'slot = '+modeSlotBytes+'B'+(modePointsPer>1?' / '+modePointsPer+' pts':'')+' · '
+        +'heap row = '+rowSize+'B · '
+        +fmtN(T*S)+' data points total'
+      +'</div>';
+  }
+
+  function renderSlide(ex) {
+    var sp = spiralPages(ex.mode, ex.S, ex.T, ex.C);
+    var hp = heapPages(ex.S, ex.T, ex.C);
+    document.getElementById('sc-content').innerHTML =
+      '<div style="display:flex;gap:1.25rem;flex-wrap:wrap;">'
+        +'<div style="flex:1;min-width:240px;">'
+          +'<div style="font-family:\'JetBrains Mono\',monospace;font-size:0.65rem;color:'+ex.accent+';margin-bottom:6px;font-weight:700;letter-spacing:1px;">'+ex.title.toUpperCase()+'</div>'
+          +'<div style="font-size:0.7rem;color:#64748b;margin-bottom:10px;">'+ex.subtitle+'</div>'
+          +'<pre style="background:#010409;border:1px solid #1e3a8a;border-radius:6px;padding:10px;font-size:0.6rem;color:#94a3b8;overflow-x:auto;margin:0 0 10px 0;white-space:pre;">'+ex.ddl+'</pre>'
+          +'<div style="font-size:0.6rem;color:#475569;font-family:monospace;">cardinality: <span style="color:#fbbf24;">'+ex.card+'</span></div>'
+        +'</div>'
+        +'<div style="flex:1;min-width:240px;">'
+          +'<div style="font-family:\'JetBrains Mono\',monospace;font-size:0.6rem;color:#64748b;margin-bottom:6px;letter-spacing:1px;">PAGE MAP — 3 × 8 KB</div>'
+          +'<canvas id="sc-canvas" width="330" height="220" style="width:100%;background:#010409;border:1px solid #1e293b;border-radius:4px;display:block;"></canvas>'
+          +'<div style="font-size:0.55rem;color:#64748b;font-family:monospace;margin-top:4px;">each cell = 8B · 32×32 grid = 1 page · '+(ex.mode==='compact'?'dark cells = wasted slots':'')+'</div>'
+        +'</div>'
+        +'<div style="flex:0 0 100%;background:#010409;border:1px solid #1e293b;border-radius:8px;padding:1rem;font-family:\'JetBrains Mono\',monospace;">'
+          +'<div style="font-size:0.6rem;color:#64748b;margin-bottom:10px;letter-spacing:1px;">STORAGE COMPARISON · '+fmtN(ex.T)+'t × '+ex.S+'s × '+ex.C+'c</div>'
+          +statsHtml(ex.mode, ex.S, ex.T, ex.C, ex.accent)
+        +'</div>'
+      +'</div>';
+    drawPageMap(document.getElementById('sc-canvas'), ex.mode, ex.S, ex.T, ex.C, ex.accent);
+  }
+
+  function renderCustom() {
+    var SCALES = [10, 100, 1000, 1000000];
+    var SKEYS  = ["'d'", "'h'", "'k'", "'M'"];
+    var SDESC  = ['10 tenants', '100 tenants', '1 000 tenants', '1 M tenants'];
+    var TIMES  = [1000, 10000, 100000, 1000000];
+    var TLABELS = ['1K', '10K', '100K', '1M'];
+
+    function cardOpt(idx, checked) {
+      return '<label style="flex:1;min-width:60px;cursor:pointer;">'
+        +'<input type="radio" name="cc-s" value="'+idx+'"'+(checked?' checked':'')+' style="display:none;">'
+        +'<div id="cc-card-'+idx+'" style="border:1px solid '+(checked?'#f59e0b':'#334155')+';border-radius:6px;padding:8px 4px;text-align:center;background:'+(checked?'#1c1407':'#0f172a')+';transition:border 0.15s,background 0.15s;font-family:monospace;">'
+          +'<div style="font-size:1rem;color:#fbbf24;font-weight:700;">'+SKEYS[idx]+'</div>'
+          +'<div style="font-size:0.5rem;color:#64748b;margin-top:2px;">'+SDESC[idx]+'</div>'
+        +'</div>'
+      +'</label>';
+    }
+
+    document.getElementById('sc-content').innerHTML =
+      '<div>'
+        +'<div style="font-family:\'JetBrains Mono\',monospace;font-size:0.65rem;color:#f59e0b;margin-bottom:12px;font-weight:700;letter-spacing:1px;">CUSTOM CONFIGURATION</div>'
+
+        +'<div style="margin-bottom:1rem;">'
+          +'<div style="font-size:0.6rem;color:#94a3b8;font-family:monospace;margin-bottom:6px;">spiral.cardinality</div>'
+          +'<div style="display:flex;gap:6px;">'
+            +cardOpt(0,false)+cardOpt(1,true)+cardOpt(2,false)+cardOpt(3,false)
+          +'</div>'
+        +'</div>'
+
+        +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">'
+          +'<div><label style="font-size:0.6rem;color:#94a3b8;font-family:monospace;display:block;margin-bottom:4px;">time_slots: <span id="cc-tv" style="color:#fbbf24;">10K</span></label><input type="range" id="cc-t" min="0" max="3" value="1" style="width:100%;"></div>'
+          +'<div><label style="font-size:0.6rem;color:#94a3b8;font-family:monospace;display:block;margin-bottom:4px;">columns: <span id="cc-cv" style="color:#fbbf24;">1</span></label><input type="range" id="cc-c" min="1" max="8" value="1" style="width:100%;"></div>'
+          +'<div style="grid-column:1/-1;"><label style="font-size:0.6rem;color:#94a3b8;font-family:monospace;display:block;margin-bottom:4px;">mode</label>'
+            +'<select id="cc-m" style="background:#1e293b;color:#fff;border:1px solid #334155;padding:4px 6px;border-radius:4px;font-family:monospace;font-size:0.65rem;width:100%;">'
+              +'<option value="direct">Direct f64 — 8B/slot · 1018 slots/page</option>'
+              +'<option value="compact">Compact u32+f32 — 16B/slot · 509 slots/page</option>'
+              +'<option value="blocks">XOR Delta Blocks — 128B/block · 63 blocks/page · 64 pts/block</option>'
+            +'</select></div>'
+        +'</div>'
+
+        +'<canvas id="cc-canvas" width="330" height="110" style="width:100%;background:#010409;border:1px solid #1e293b;border-radius:4px;display:block;margin-bottom:1rem;"></canvas>'
+        +'<div id="cc-stats" style="background:#010409;border:1px solid #1e293b;border-radius:8px;padding:1rem;font-family:\'JetBrains Mono\',monospace;"></div>'
+      +'</div>';
+
+    function getScaleIdx() {
+      var r = document.querySelector('input[name="cc-s"]:checked');
+      return r ? +r.value : 1;
+    }
+
+    function syncCardStyles(si) {
+      for (var i = 0; i < 4; i++) {
+        var el = document.getElementById('cc-card-'+i);
+        if (!el) continue;
+        el.style.border = i === si ? '1px solid #f59e0b' : '1px solid #334155';
+        el.style.background = i === si ? '#1c1407' : '#0f172a';
+      }
+    }
+
+    function update() {
+      var si   = getScaleIdx();
+      var ti   = +document.getElementById('cc-t').value;
+      var C    = +document.getElementById('cc-c').value;
+      var mode = document.getElementById('cc-m').value;
+      var S = SCALES[si], T = TIMES[ti];
+      syncCardStyles(si);
+      document.getElementById('cc-tv').textContent = TLABELS[ti];
+      document.getElementById('cc-cv').textContent = C;
+      document.getElementById('cc-stats').innerHTML = statsHtml(mode, S, T, C, '#f59e0b');
+      drawPageMap(document.getElementById('cc-canvas'), mode, S, T, C, '#f59e0b');
+    }
+
+    document.querySelectorAll('input[name="cc-s"]').forEach(function(r) {
+      r.addEventListener('change', update);
+    });
+    ['cc-t','cc-c','cc-m'].forEach(function(id) {
+      document.getElementById(id).addEventListener('input', update);
+    });
+    update();
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var dots    = document.getElementById('sc-dots');
+    var prevBtn = document.getElementById('sc-prev');
+    var nextBtn = document.getElementById('sc-next');
+    if (!dots) return;
+    var current = 0;
+    var N = EXAMPLES.length;
+
+    for (var i = 0; i < N; i++) {
+      (function(idx) {
+        var d = document.createElement('div');
+        d.style.cssText = 'width:6px;height:6px;border-radius:50%;cursor:pointer;transition:background 0.2s;background:#334155;';
+        d.onclick = function() { go(idx); };
+        dots.appendChild(d);
+      })(i);
+    }
+
+    function go(n) {
+      current = ((n % N) + N) % N;
+      var dotEls = dots.childNodes;
+      for (var i = 0; i < dotEls.length; i++) {
+        dotEls[i].style.background = i === current ? (EXAMPLES[i].accent || '#f59e0b') : '#334155';
+      }
+      var ex = EXAMPLES[current];
+      if (ex.mode) { renderSlide(ex); } else { renderCustom(); }
+    }
+
+    prevBtn.onclick = function() { go(current - 1); };
+    nextBtn.onclick = function() { go(current + 1); };
+    go(0);
+  });
+})();
+</script>
 
 # Automating the Pipeline: Hierarchical Rollups
 
@@ -574,6 +1215,32 @@ WITH (
 ) AS SELECT ... FROM ticks GROUP BY 1, 2;
 ```
 
+# Calendar-Aligned Rollup Tiers
+
+Beyond fixed-second intervals, Spiral supports **calendar-aligned** tiers that snap to month, quarter, and year boundaries — essential for financial and business reporting where "monthly" means January 1st, not "30 days ago."
+
+```sql
+CREATE TABLE asset_ticks (
+    t         timestamptz NOT NULL,
+    symbol_id int         NOT NULL,
+    price     double precision, -- Spiral: ohlcv
+    vol       bigint            -- Spiral: sum
+) WITH (
+    spiral.frames = '1h,1d,1mon,1qtr,1year',
+    spiral.tenant = 'symbol_id'
+);
+```
+
+Valid calendar suffixes:
+
+| Suffix | Meaning | Snaps to |
+| :--- | :--- | :--- |
+| `1mon` / `1month` | Calendar month | 1st of each month |
+| `1qtr` / `1quarter` | Calendar quarter | Jan 1, Apr 1, Jul 1, Oct 1 |
+| `1year` / `1Y` | Calendar year | Jan 1 |
+
+Under the hood, calendar tiers use `date_trunc('month', t)` (or `quarter`/`year`) in the rollup `GROUP BY`, so they respect timezone-aware truncation. Fixed-second tiers (like `1h`, `1d`) use epoch arithmetic and are always UTC-aligned.
+
 # The Anatomy of a Rollup (Aggregation Inheritance)
 
 How does Spiral know how to roll up your data? It uses deterministic rules for column inheritance:
@@ -584,6 +1251,7 @@ How does Spiral know how to roll up your data? It uses deterministic rules for c
 | `_l` / `_min` | `min()` | Low is low. |
 | `_sum` / `_count` | `sum()` | Accumulate totals. |
 | `_sketch` | `merge()` | Mathematically unified sketches. |
+| any `timestamptz` offset col | `range_max_end()` | Keeps the running max of a time range endpoint — used for open/close windows. |
 
 # Incremental Maintenance: Tracking Changes via Changelog
 
@@ -629,7 +1297,7 @@ pub fn perform_healing() -> Result<(), pgrx::spi::Error> {
 
 One of the most complex parts of this research was exploring the **PostgreSQL Planner Hook**. The idea is to query the raw table and have the system automatically "slice" the query between different storage tiers based on data freshness and availability.
 
-Select a time range on the timeline below, showing the last 3 days from past to present. Watch how Spiral would theoretically "slice" your query across storage tiers: **Daily**, **Hourly**, and **Minutely** rollups, with an automatic fallback to **Raw Data** for segments marked as "dirty" in the changelog. You can also simulate real-time traffic and see the background worker 'healing' the orbits.
+Select a time range on the timeline below, showing the last 7 days from past to present. Watch how Spiral would theoretically "slice" your query across storage tiers: **Daily**, **Hourly**, and **Minutely** rollups, with an automatic fallback to **Raw Data** for segments marked as "dirty" in the changelog. You can also simulate real-time traffic and see the background worker 'healing' the orbits.
 
 <div id="query-slicer-root" class="interactive-widget" style="margin: 2rem 0; background: #0f172a; padding: 2rem; border-radius: 12px; border: 1px solid #1e293b; min-height: 500px;">
   <div style="margin-bottom: 2rem;">
@@ -655,7 +1323,7 @@ Select a time range on the timeline below, showing the last 3 days from past to 
 
   <div style="margin-top: 2rem; padding: 1rem; background: #020617; border-radius: 6px; border: 1px solid #1e3a8a; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;">
     <div style="color: #64748b; border-bottom: 1px solid #1e3a8a; padding-bottom: 5px; margin-bottom: 10px; font-weight: bold;">PLANNER REWRITE: HIERARCHICAL UNION ALL</div>
-    <div id="union-sql" style="color: #4ade80; line-height: 1.4; max-height: 150px; overflow-y: auto;"></div>
+    <div id="union-sql" style="color: #4ade80; line-height: 1.4;"></div>
   </div>
 </div>
 
@@ -678,32 +1346,32 @@ Select a time range on the timeline below, showing the last 3 days from past to 
     let isDragging = false; 
     let startX = 10; 
     let currentSelect = { left: 10, width: 70 };
-    let dirtyRanges = [{s: 31, e: 35}, {s: 90, e: 98}]; 
+    let dirtyRanges = [{s: 30, e: 32}, {s: 85, e: 93}]; 
     
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const startDate = new Date(today.getTime() - 2 * 24 * 60 * 60 * 1000);
+    const startDate = new Date(today.getTime() - 6 * 24 * 60 * 60 * 1000);
 
     const formatDate = (d) => d.toISOString().split('T')[0];
     const formatFull = (d) => d.toISOString().replace('T', ' ').split('.')[0];
 
-    // Initialize Labels
-    labelsRow.innerHTML = [0, 1, 2].map(i => {
+    // Initialize Labels — one per day for 7 days
+    labelsRow.innerHTML = [0, 1, 2, 3, 4, 5, 6].map(i => {
       const d = new Date(startDate.getTime() + i * 24 * 60 * 60 * 1000);
       return `<span>${formatDate(d)}</span>`;
     }).join('');
     
-    // Initialize Hour Markers & Rule
-    for (let i = 0; i <= 72; i += 3) {
+    // Initialize Hour Markers & Rule — every 12h over 168h (7 days)
+    for (let i = 0; i <= 168; i += 6) {
       const marker = document.createElement('div');
       marker.style.width = '1px';
-      marker.style.height = i % 24 === 0 ? '100%' : (i % 6 === 0 ? '40%' : '15%');
-      marker.style.background = i % 24 === 0 ? '#334155' : (i % 6 === 0 ? '#1e3a8a' : '#1e293b');
+      marker.style.height = i % 24 === 0 ? '100%' : '25%';
+      marker.style.background = i % 24 === 0 ? '#334155' : '#1e293b';
       marker.style.position = 'relative';
       
-      if (i % 6 === 0 && i < 72) {
+      if (i % 24 === 0 && i < 168) {
         const hLabel = document.createElement('span');
-        hLabel.textContent = (i % 24).toString().padStart(2, '0') + 'h';
+        hLabel.textContent = (i / 24) + 'd';
         hLabel.style.position = 'absolute';
         hLabel.style.top = '100%';
         hLabel.style.left = '0';
@@ -736,7 +1404,7 @@ Select a time range on the timeline below, showing the last 3 days from past to 
       report.innerHTML = '';
       let sqlParts = [];
 
-      const totalMs = 3 * 24 * 60 * 60 * 1000;
+      const totalMs = 7 * 24 * 60 * 60 * 1000;
       const globalStart = startDate.getTime();
       const queryStart = globalStart + (startP / 100) * totalMs;
       const queryEnd = globalStart + (endP / 100) * totalMs;
@@ -827,9 +1495,10 @@ Select a time range on the timeline below, showing the last 3 days from past to 
         report.appendChild(div);
 
         const scanName = group.tier.table + '_scan';
-        const multirange = '{' + group.ranges.map(r => 
+        const sortedRanges = group.ranges.slice().sort((a, b) => a.start - b.start);
+        const multirange = '{' + sortedRanges.map(r => 
           `[${formatFull(new Date(r.start))}, ${formatFull(new Date(r.end))})`
-        ).join(', ') + '}';
+        ).join(',\n     ') + '}';
 
         cteParts.push(`<span style="color: #64748b;">  ${scanName} AS (</span><br>    SELECT * FROM ${group.tier.table} <br>    WHERE t <span style="color: #818cf8;"><@</span> <span style="color: #fbbf24;">'${multirange}'</span>::tstzmultirange<br><span style="color: #64748b;">  )</span>`);
       });
@@ -984,6 +1653,17 @@ FROM sensor_data_1m ORDER BY t, sensor_id;
 
 Refresh cascades to the 1-hour rollup automatically because Spiral knows the hierarchy!
 
+# Partial Refresh by Tenant Scope
+
+In high-cardinality deployments you often need to refresh only one tenant's data — e.g., after a backfill for `sensor_id = 3` without disturbing others. `spiral_refresh` accepts an optional `WHERE`-style scope predicate:
+
+```sql
+-- Refresh only sensor 3's dirty buckets
+SELECT spiral_refresh('sensor_data', 'sensor_id = 3');
+```
+
+Spiral intersects that predicate with the changelog, processes only the matching dirty buckets, and leaves every other tenant's rollup untouched. The changelog entries for other tenants survive the partial refresh and are picked up on their own schedule.
+
 # Transparent Query Acceleration
 
 Spiral intercepts queries to the base table and rewrites them to use the pre-aggregated rollups seamlessly!
@@ -998,6 +1678,18 @@ GROUP BY 1, 2;
 ```
 
 *The query hits `sensor_data_1h` or `sensor_data_1m` depending on the requested grouping.*
+
+**Multi-dimension GROUP BY acceleration.** When the query groups by both a tenant column and `date_trunc(...)`, the planner now handles both dimensions together — matching the best rollup tier for the granularity, scoped to that tenant.
+
+**Z-order index push-down.** For tenant-scoped rollup sub-queries, Spiral auto-injects a `BETWEEN` predicate on the z-order index:
+
+```sql
+-- Spiral rewrites this internally:
+WHERE spiral_zorder(t_epoch, ARRAY[sensor_id::text])
+      BETWEEN <lo> AND <hi>
+```
+
+Z-order is monotone in `t` for a fixed tenant hash, so the BETWEEN exactly covers that tenant's time range without scanning other tenants' rows. This turns full-rollup scans into tight index range scans.
 
 # Handling Late-Arriving Data
 
@@ -1053,13 +1745,109 @@ WHERE sensor_id = 1
 
 # Mathematical Engine: Welford’s Algorithm
 
-How do we "merge" a standard deviation? Spiral uses **Welford's Algorithm** to store statistical moments.
+## The Problem with Standard `stddev()`
+
+PostgreSQL’s built-in `stddev()` cannot be rolled up. Given two pre-aggregated hourly stddev values you cannot compute the combined stddev without the original rows. This breaks the rollup chain.
+
+Spiral needs a **mergeable** statistical state — one where `rollup(rollup(raw → 1m) → 1h)` gives the same answer as `rollup(raw → 1h)`.
+
+## The Solution: Store Moments, Not Final Values
+
+Welford’s online algorithm accumulates four **central moments** `(n, m1, m2, m3, m4)` rather than a computed stddev. From those moments you can derive mean, variance, stddev, skewness, and kurtosis at any time. Crucially, two `StatsState` structs can be **merged exactly** using Chan et al.’s parallel algorithm — no raw data needed.
 
 $$ \bar{x}_n = \bar{x}_{n-1} + \frac{x_n - \bar{x}_{n-1}}{n} $$
 {: .math-formula}
 
 $$ M_{2,n} = M_{2,n-1} + (x_n - \bar{x}_{n-1})(x_n - \bar{x}_n) $$
 {: .math-formula}
+
+## The Rust Implementation (`src/stats.rs`)
+
+```rust
+// src/stats.rs
+#[derive(Serialize, Deserialize, Default, Clone, Copy)]
+pub struct StatsState {
+    pub n:  f64,   // count
+    pub m1: f64,   // mean
+    pub m2: f64,   // sum of squared deviations  (→ variance)
+    pub m3: f64,   // sum of cubed deviations    (→ skewness)
+    pub m4: f64,   // sum of quartic deviations  (→ kurtosis)
+}
+
+impl StatsState {
+    pub fn add(&mut self, x: f64) {
+        let n1 = self.n;
+        self.n += 1.0;
+        let delta   = x - self.m1;
+        let delta_n = delta / self.n;
+        let term1   = delta * delta_n * n1;
+        self.m1 += delta_n;
+        self.m2 += term1;
+        // m3 and m4 updated similarly — O(1) per value, numerically stable
+    }
+
+    // Chan’s parallel algorithm: merge two independent StatsState structs
+    // Used when rolling up 1m → 1h → 1d without re-scanning raw rows.
+    pub fn merge(&mut self, other: &Self) {
+        let combined_n = self.n + other.n;
+        let delta  = other.m1 - self.m1;
+        let delta2 = delta * delta;
+        let m1 = (self.n * self.m1 + other.n * other.m1) / combined_n;
+        let m2 = self.m2 + other.m2 + delta2 * self.n * other.n / combined_n;
+        // m3, m4 follow the same pattern with higher-order delta terms
+        self.n = combined_n; self.m1 = m1; self.m2 = m2; /* ... */
+    }
+
+    pub fn mean(&self)     -> f64 { self.m1 }
+    pub fn variance(&self) -> f64 { self.m2 / (self.n - 1.0) }
+    pub fn stddev(&self)   -> f64 { self.variance().sqrt() }
+    pub fn skewness(&self) -> f64 { self.n.sqrt() * self.m3 / self.m2.powf(1.5) }
+    pub fn kurtosis(&self) -> f64 { self.n * self.m4 / (self.m2 * self.m2) - 3.0 }
+}
+```
+
+## How `pgrx` Hooks Connect Rust to PostgreSQL Aggregates
+
+`pgrx` lets Rust functions register directly as PostgreSQL functions via the `#[pg_extern]` attribute. Spiral uses two functions to form a full PostgreSQL aggregate:
+
+```rust
+// Accumulation step — called once per raw row during spiral_refresh
+#[pg_extern(immutable, parallel_safe)]
+pub fn spiral_stats_accum(state: Option<pgrx::JsonB>, val: f64) -> pgrx::JsonB {
+    let mut s = state
+        .map(|j| serde_json::from_value::<StatsState>(j.0).unwrap())
+        .unwrap_or_default();
+    s.add(val);
+    pgrx::JsonB(serde_json::to_value(s).unwrap())
+}
+
+// Combine step — called when merging two rollup tiers (1m → 1h)
+// `parallel_safe` tells PostgreSQL this can run across parallel workers
+#[pg_extern(immutable, parallel_safe)]
+pub fn spiral_stats_combine(
+    state1: Option<pgrx::JsonB>,
+    state2: Option<pgrx::JsonB>,
+) -> pgrx::JsonB {
+    let mut s1 = state1.map(|j| serde_json::from_value::<StatsState>(j.0).unwrap())
+        .unwrap_or_default();
+    let s2     = state2.map(|j| serde_json::from_value::<StatsState>(j.0).unwrap())
+        .unwrap_or_default();
+    s1.merge(&s2);
+    pgrx::JsonB(serde_json::to_value(s1).unwrap())
+}
+```
+
+Why this fits the rollup architecture perfectly:
+
+| Property | Why it matters |
+| :--- | :--- |
+| **Online** — processes one value at a time | Matches IVM: only new changelog rows need processing, not full re-scan |
+| **Mergeable** — two states combine exactly | Enables `1m → 1h → 1d` rollup chains without raw data |
+| **Numerically stable** — Welford avoids catastrophic cancellation | Large sensor datasets with tight value ranges stay accurate |
+| **`parallel_safe`** — PostgreSQL can split across workers | Rollup refreshes parallelise automatically at no cost |
+| **JSONB state** — opaque to PostgreSQL | Schema-free; adding m5 or percentiles needs no DDL change |
+
+The `-- Spiral: stats` magic comment wires this up: when building a rollup view Spiral emits `spiral_stats_accum(col)` for the 1m layer and `spiral_stats_combine(col_stats)` for every higher tier.
 
 # Experimental Results: Prototype Benchmarks
 
