@@ -12,28 +12,6 @@ image: images/postgresql-performance-workshop.webp
 ---
 
 <style>
-code {
-  background-color: #ffffff !important;
-  color: #000000 !important;
-  padding: 0.13rem 0.4rem !important;
-  border-radius: 4px !important;
-  font-weight: 700 !important;
-  border: 1px solid #cccccc !important;
-  text-shadow: none !important;
-}
-pre {
-  background-color: #f0f0f0 !important;
-  color: #111111 !important;
-  border: 2px solid #bbbbbb !important;
-  border-radius: 6px !important;
-}
-pre code {
-  background-color: transparent !important;
-  border: none !important;
-  color: #000000 !important;
-  font-weight: 600 !important;
-  padding: 0 !important;
-}
 .math-formula {
   background: rgba(15, 23, 42, 0.5);
   padding: 1.5rem;
@@ -1613,11 +1591,13 @@ FROM spiral.metadata ORDER BY frame_seconds;
 ```text
    view_name    |  parent_view   | frame_seconds | scope_columns 
 ----------------+----------------+---------------+---------------
- sensor_data_1m | sensor_data    |            60 | sensor_id
- sensor_data_1h | sensor_data_1m |          3600 | sensor_id
+ sensor_data    | BASE           |             0 | {sensor_id}
+ sensor_data_1m | sensor_data    |            60 | {sensor_id}
+ sensor_data_1h | sensor_data_1m |          3600 | {sensor_id}
+(3 rows)
 ```
 
-Notice it used the magic comments to build the 1m and 1h schema dynamically!
+Notice it registered the base table and used the magic comments to build the 1m and 1h schema dynamically!
 
 # Data Ingestion spanning Timeframes
 
@@ -1650,6 +1630,19 @@ SELECT t, sensor_id,
        humidity, power_usage_stats
 FROM sensor_data_1m ORDER BY t, sensor_id;
 ```
+
+```text
+           t            | sensor_id | temperature_ohlcv_o | temperature_ohlcv_h | temperature_ohlcv_l | temperature_ohlcv_c | humidity |                              power_usage_stats
+------------------------+-----------+---------------------+---------------------+---------------------+---------------------+----------+--------------------------------------------------------------
+ 2026-05-03 20:15:00+00 |         1 |                22.5 |                22.7 |                22.5 |                22.7 |     90.2 | {"n": 2.0, "m1": 100.75, "m2": 0.125, "m3": 0.0, ...}
+ 2026-05-03 20:15:00+00 |         2 |                19.5 |                19.5 |                19.5 |                19.5 |       50 | {"n": 1.0, "m1": 80.0, "m2": 0.0, ...}
+ 2026-05-03 20:16:00+00 |         1 |                  23 |                  23 |                  23 |                  23 |       44 | {"n": 1.0, "m1": 105.0, "m2": 0.0, ...}
+ 2026-05-03 20:16:00+00 |         2 |                19.8 |                19.8 |                19.8 |                19.8 |       51 | {"n": 1.0, "m1": 82.0, "m2": 0.0, ...}
+ 2026-05-03 21:15:00+00 |         1 |                  25 |                  25 |                  25 |                  25 |       40 | {"n": 1.0, "m1": 110.0, "m2": 0.0, ...}
+(5 rows)
+```
+
+`humidity` is summed per minute bucket. `power_usage_stats` stores the Welford moments as JSONB — mean (`m1`), variance accumulator (`m2`), etc. — ready to merge up to the hourly tier without raw data.
 
 Refresh cascades to the 1-hour rollup automatically because Spiral knows the hierarchy!
 
@@ -1713,6 +1706,18 @@ SELECT base_view, t_start, t_end, scope_values
 FROM spiral.changelog ORDER BY t_start;
 ```
 
+```text
+  base_view  |  t_start   |   t_end    |   scope_values
+-------------+------------+------------+------------------
+ sensor_data | 1777856400 | 1777856460 | {"sensor_id": 1}
+ sensor_data | 1777856520 | 1777856580 | {"sensor_id": 2}
+ sensor_data | 1777856760 | 1777856820 | {"sensor_id": 1}
+ ...
+(76 rows)
+```
+
+Each row is one 60-second bucket per tenant. Only the buckets that actually received new data are marked dirty — the rest stay clean and will continue serving from the rollup.
+
 # Smart Query Slicing in Action
 
 Spiral's planner is smart enough to know about the dirty data. It slices the query: clean segments go to the rollup, dirty segments go to the raw table!
@@ -1742,6 +1747,36 @@ WHERE sensor_id = 1
   AND t >= '2026-05-03 20:15:00'::timestamptz 
   AND t < '2026-05-03 20:25:00'::timestamptz;
 ```
+
+```sql
+SELECT base_view, t_start, t_end, scope_values 
+FROM spiral.changelog ORDER BY t_start;
+```
+
+```text
+  base_view  |  t_start   |   t_end    |   scope_values
+-------------+------------+------------+------------------
+ sensor_data | 1777850100 | 1777850160 | {"sensor_id": 1}
+ sensor_data | 1777850160 | 1777850220 | {"sensor_id": 1}
+(2 rows)
+```
+
+Only `sensor_id = 1` is dirty. `sensor_id = 2`’s rollups are completely untouched — a targeted dirty mark, not a full-table invalidation.
+
+You can inspect the lag at any time:
+
+```sql
+SELECT * FROM spiral.status;
+```
+
+```text
+  base_view  | tier_count | dirty_entries | dirty_scopes | dirty_seconds | oldest_dirty_ts        | newest_dirty_ts        | lag
+-------------+------------+---------------+--------------+---------------+------------------------+------------------------+-------------------------
+ sensor_data |          2 |             2 |            1 |           120 | 2026-05-03 20:15:00+00 | 2026-05-03 20:17:00+00 | 21 days 01:23:37
+(1 row)
+```
+
+`lag` tells you how stale your oldest dirty bucket is. A small lag means the background worker is keeping up; a growing lag is your signal to run `spiral_refresh` more aggressively or tune the refresh schedule.
 
 # Mathematical Engine: Welford’s Algorithm
 
