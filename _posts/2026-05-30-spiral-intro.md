@@ -32,6 +32,66 @@ I should start with a confession: I am not a math expert, nor am I a core Postgr
 
 Everything you see here is a **prototype**. It is an exploration of what becomes possible when we use Rust to extend the heart of the database. I'm sharing this as a research outcome, hoping to find other curious minds who might want to contribute or challenge these concepts.
 
+# Try It in Five Minutes
+
+Spiral targets PostgreSQL 16–18. Install via Homebrew on macOS:
+
+```bash
+brew install postgresql@18
+brew install --build-from-source ./Formula/spiral.rb
+```
+
+Or build from source with `cargo-pgrx`:
+
+```bash
+cargo install cargo-pgrx
+cargo pgrx init
+cargo pgrx run pg18   # drops into a psql session with spiral loaded
+```
+
+Add to `postgresql.conf` so the planner hook and background worker start at boot:
+
+```ini
+shared_preload_libraries = 'spiral'
+```
+
+Then try the short walkthrough:
+
+```bash
+cargo pgrx run pg18 < examples/short_walkthrough.sql
+```
+
+Or paste this into any psql session:
+
+```sql
+CREATE EXTENSION spiral;
+SET spiral.kickoff_date = '2026-01-01';
+
+CREATE TABLE ticks (
+    t         timestamptz NOT NULL,
+    symbol_id int         NOT NULL,
+    price     double precision, -- Spiral: ohlcv
+    vol       int               -- Spiral: sum
+) WITH (spiral.frames = '1m,1h', spiral.tenant = 'symbol_id');
+
+-- Insert some data — background worker auto-refreshes rollups
+INSERT INTO ticks SELECT
+    now() - (random() * interval '2 hours'),
+    (random() * 10)::int,
+    100 + random() * 50,
+    (random() * 1000)::int
+FROM generate_series(1, 100000);
+
+-- Manually refresh (or just wait for the bgworker)
+SELECT spiral_refresh('ticks');
+
+-- Query the 1-minute rollup
+SELECT t, symbol_id, price_ohlcv_h, price_ohlcv_l, vol
+FROM ticks_1m ORDER BY t DESC LIMIT 10;
+```
+
+The source is at [github.com/jonatas/spiral](https://github.com/jonatas/spiral).
+
 # The "Spiral" Concept: A Metaphor for Data Flow
 
 The central idea behind this project is to stop thinking of data as a flat, linear history. As datasets grow to billions of rows, the traditional model faces what I call **Data Gravity**—where the weight of the data makes every operation exponentially harder.
@@ -435,17 +495,28 @@ B-Trees are the workhorse of Postgres, but they are fundamentally one-dimensiona
 - **Query A** (`WHERE tenant_id = 1 AND t > ...`): **Fast**.
 - **Query B** (`WHERE t > ...` across multiple tenants): **Slow**.
 
-# Exploring Geometry-Aware Storage (Z-Ordering)
+# How Spiral Differs from Existing Solutions
 
-To address this, I experimented with **Z-Ordering** (the Morton Curve). It interleaves the bits of multiple dimensions to preserve locality in a multidimensional plane.
+Several mature tools address time-series at scale. Spiral explores a different set of trade-offs.
 
-## The Toy Box Analogy
+| | TimescaleDB | pg_partman | Spiral |
+| :--- | :--- | :--- | :--- |
+| **Storage** | Hypertable chunks | Native partitions | Custom TAM + standard heap |
+| **Rollups** | Continuous aggregates (explicit) | None | Auto-derived from magic comments |
+| **Query rewrite** | Manual view queries | None | Transparent planner hook |
+| **Dirty-aware slicing** | No | No | Yes — clean → rollup, dirty → raw |
+| **Mergeable stats** | Limited | None | Welford moments + sketch/tdigest |
+| **Multi-tenant isolation** | Schema-per-tenant or manual | Manual | Built-in `spiral.tenant` lane |
+| **Background maintenance** | Yes (jobs) | Yes (cron) | Yes (autonomous bgworker, 1s tick) |
+| **Extension type** | C + custom storage | Pure SQL | Rust (pgrx) + TAM + planner hook |
 
-Imagine you have a toy box with two kinds of toys: by **color** (red, blue, green…) and by **size** (small, medium, large). If you sort everything by color first, then size, finding "small red" is fast — but finding "all small things" means jumping to the small section in every color group. Each jump is a page load.
+The key architectural difference: **you never change your query**. TimescaleDB continuous aggregates are separate views that you must remember to query. Spiral intercepts the original query and routes it transparently — the application code never changes when a new rollup tier is added or a bucket becomes dirty.
 
-Now imagine instead you fold the grid diagonally: first sort the tiny corner (small-red, small-blue), then the next corner (medium-red, medium-blue), and so on — tracing a **Z-shape** at every level of zoom. Suddenly, things that are close in **both** dimensions end up physically close on the shelf.
+# Geometry-Aware Indexing with Z-Order
 
-Try it — sort by Color, Size, or Z-Order, then run a query and watch how many pages load:
+B-Trees excel at single-dimension queries, but fall apart when you filter on `tenant_id` **and** `t` together. Z-ordering maps both dimensions into one number so that rows close in both dimensions stay close in storage — turning expensive multi-column scans into tight range scans.
+
+**Try it:** sort by Color, Size, or Z-Order, then run a query and watch how many pages load:
 
 <div id="toybox-demo" class="interactive-widget" style="margin: 1.5rem 0; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0; padding: 1.25rem;">
   <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:#94a3b8;margin-bottom:0.75rem;letter-spacing:1px;">TOY BOX SORTER · 12 shapes · 4 pages · circle=red  square=blue  diamond=green  triangle=orange</div>
@@ -656,21 +727,19 @@ Try it — sort by Color, Size, or Z-Order, then run a query and watch how many 
 })();
 </script>
 
-That is exactly what the Morton Curve does with numbers. It takes two coordinates and **shuffles their bits together**:
+That is exactly what `spiral_zorder` does in SQL. It encodes both dimensions into a single number so that values close in **both** tenant and time land close together on the number line — enabling a single `BETWEEN lo AND hi` index scan to retrieve a 2D rectangle without touching unrelated rows.
 
+```sql
+-- Create a z-order index on the rollup view
+CREATE INDEX ON sensor_data_1m USING btree (
+    spiral_zorder(spiral(t), ARRAY['sensor_id'])
+);
+
+-- Spiral injects this automatically for tenant-scoped queries:
+-- WHERE spiral_zorder(spiral(t), ARRAY['sensor_id']) BETWEEN <lo> AND <hi>
 ```
-tenant = 5  →  binary  0 1 0 1
-time   = 3  →  binary  0 0 1 1
-                              ↓ interleave bit by bit
-z-order = 0 0 0 1 1 0 1 1 = 27
-```
 
-The result is a single number that encodes both dimensions. Numbers that are close in both `tenant` and `time` produce z-values that are close together on the number line. A single `BETWEEN lo AND hi` index scan can retrieve a 2D rectangle without touching unrelated rows.
-
-This is why `spiral_zorder` uses FNV-1a (not the default Rust hasher): the hash must be **stable and deterministic** across restarts so the z-order values stored in the index today still match the values computed at query time tomorrow.
-
-$$ \text{Z}(x, y) = \sum_{i=0}^{n-1} (x_i \cdot 2^{2i+1} + y_i \cdot 2^{2i}) $$
-{: .math-formula}
+`spiral_zorder` uses FNV-1a hashing — stable and deterministic across restarts, so index values written today still match values computed at query time tomorrow.
 
 # Interactive Proof of Locality
 
@@ -1599,6 +1668,39 @@ FROM spiral.metadata ORDER BY frame_seconds;
 
 Notice it registered the base table and used the magic comments to build the 1m and 1h schema dynamically!
 
+# What You Get: SQL From Day One
+
+Once the table is created and the first `spiral_refresh` runs, you get three things without writing any extra code:
+
+**1. Pre-aggregated views at every declared tier:**
+```sql
+-- Raw sub-minute ticks
+SELECT * FROM sensor_data WHERE sensor_id = 1 AND t >= now() - interval '5m';
+
+-- 1-minute rollup — columns auto-derived from magic comments
+SELECT t, sensor_id, temperature_ohlcv_o, temperature_ohlcv_h,
+       temperature_ohlcv_l, temperature_ohlcv_c, humidity, power_usage_stats
+FROM sensor_data_1m
+WHERE sensor_id = 1 AND t >= now() - interval '1h';
+
+-- 1-hour rollup for dashboards
+SELECT t, sensor_id, temperature_ohlcv_h AS max_temp, humidity
+FROM sensor_data_1h
+WHERE t >= now() - interval '7d';
+```
+
+**2. Transparent query routing** — queries against `sensor_data` automatically rewrite to the right rollup tier.
+
+**3. Dirty-aware fallback** — during a backfill or late-arriving data window, Spiral serves rollup for clean buckets and raw data for dirty buckets. Zero stale reads, zero full-table scans.
+
+```sql
+-- This is all you need to keep rollups fresh:
+SELECT spiral_refresh('sensor_data');
+
+-- Or scope to one tenant after a targeted backfill:
+SELECT spiral_refresh('sensor_data', 'sensor_id = 3');
+```
+
 # Data Ingestion spanning Timeframes
 
 Let's insert some raw data.
@@ -1659,30 +1761,67 @@ Spiral intersects that predicate with the changelog, processes only the matching
 
 # Transparent Query Acceleration
 
-Spiral intercepts queries to the base table and rewrites them to use the pre-aggregated rollups seamlessly!
+Spiral intercepts queries to the base table and rewrites them to use the pre-aggregated rollups seamlessly — no query changes needed.
 
 ```sql
-EXPLAIN (VERBOSE)
+-- You write this:
 SELECT date_trunc('hour', t) AS hour, sensor_id, max(temperature)
 FROM sensor_data
 WHERE t >= '2026-05-03 19:00:00'::timestamptz 
   AND t < '2026-05-03 23:00:00'::timestamptz
 GROUP BY 1, 2;
+
+-- Spiral rewrites it to something like:
+SELECT date_trunc('hour', t) AS hour, sensor_id, max(temperature_ohlcv_h)
+FROM sensor_data_1h
+WHERE t >= '2026-05-03 19:00:00'::timestamptz
+  AND t < '2026-05-03 23:00:00'::timestamptz
+GROUP BY 1, 2;
 ```
 
-*The query hits `sensor_data_1h` or `sensor_data_1m` depending on the requested grouping.*
+The rewrite selects the coarsest rollup tier whose granularity fits the query's `date_trunc(...)`. A 4-hour window that matches the 1h tier reads ~4 rows instead of potentially thousands of raw ticks — without any application-level change.
 
-**Multi-dimension GROUP BY acceleration.** When the query groups by both a tenant column and `date_trunc(...)`, the planner now handles both dimensions together — matching the best rollup tier for the granularity, scoped to that tenant.
+**Multi-dimension GROUP BY acceleration.** When the query groups by both a tenant column and `date_trunc(...)`, the planner handles both dimensions together — matching the best rollup tier for the granularity, scoped to that tenant.
 
 **Z-order index push-down.** For tenant-scoped rollup sub-queries, Spiral auto-injects a `BETWEEN` predicate on the z-order index:
 
 ```sql
 -- Spiral rewrites this internally:
-WHERE spiral_zorder(t_epoch, ARRAY[sensor_id::text])
+WHERE spiral_zorder(spiral(t), ARRAY['sensor_id'])
       BETWEEN <lo> AND <hi>
 ```
 
 Z-order is monotone in `t` for a fixed tenant hash, so the BETWEEN exactly covers that tenant's time range without scanning other tenants' rows. This turns full-rollup scans into tight index range scans.
+
+# Multi-Table Acceleration: Join Constraint Propagation
+
+The planner hook doesn't stop at single-table rewrites. When Spiral detects an equijoin on `t` between two tracked tables, it **propagates the time constraint** from the constrained side to the unconstrained side, accelerating both simultaneously.
+
+```sql
+-- Two independent time-series, joined by time
+SELECT s.t, s.sensor_id, s.temperature_ohlcv_h,
+       a.asset_id,       a.price_ohlcv_h
+FROM sensor_data s
+JOIN asset_ticks  a ON s.t = a.t
+WHERE s.t >= '2026-05-03 19:00:00'::timestamptz
+  AND s.t <  '2026-05-03 23:00:00'::timestamptz;
+```
+
+Without Spiral: `asset_ticks` has no time predicate — full scan.
+
+With Spiral: the planner walks the JoinTree, detects `s.t = a.t`, propagates `WHERE t >= ... AND t < ...` to `asset_ticks`, then rewrites **both** sides to their respective rollup tiers:
+
+```sql
+-- Effective plan:
+SELECT s.t, s.sensor_id, s.temperature_ohlcv_h,
+       a.asset_id,       a.price_ohlcv_h
+FROM   sensor_data_1h s          -- ← accelerated
+JOIN   asset_ticks_1h  a ON s.t = a.t   -- ← also accelerated via propagation
+WHERE  s.t >= '2026-05-03 19:00:00'::timestamptz
+  AND  s.t <  '2026-05-03 23:00:00'::timestamptz;
+```
+
+Both tables independently benefit from dirty-aware slicing. A dirty bucket in `sensor_data` does not force a raw scan of `asset_ticks` — each side is sliced independently against its own changelog.
 
 # Handling Late-Arriving Data
 
@@ -1720,7 +1859,48 @@ Each row is one 60-second bucket per tenant. Only the buckets that actually rece
 
 # Smart Query Slicing in Action
 
-Spiral's planner is smart enough to know about the dirty data. It slices the query: clean segments go to the rollup, dirty segments go to the raw table!
+Spiral's planner intercepts the query, consults the changelog, and rewrites to a `UNION ALL` that:
+- routes **clean** hour-aligned buckets to `sensor_data_1h` (pre-aggregated, fast)
+- routes **dirty** sub-minute windows back to `sensor_data` (raw, accurate)
+
+```sql
+-- You write:
+SELECT date_trunc('hour', t) AS hour, sensor_id, max(temperature)
+FROM sensor_data
+WHERE t >= '2026-05-03 19:00:00'::timestamptz 
+  AND t < '2026-05-03 23:00:00'::timestamptz
+GROUP BY 1, 2;
+```
+
+```sql
+-- Spiral actually runs (conceptual rewrite):
+SELECT date_trunc('hour', t) AS hour, sensor_id,
+       max(temperature_ohlcv_h) AS max_temperature
+FROM sensor_data_1h                       -- ← pre-aggregated tier
+WHERE t >= '2026-05-03 19:00:00'::timestamptz
+  AND t < '2026-05-03 22:00:00'::timestamptz  -- 3 clean hours
+  AND spiral_zorder(spiral(t), ARRAY['sensor_id'])
+      BETWEEN 1777843200000000 AND 1777857600999999
+GROUP BY 1, 2
+
+UNION ALL
+
+SELECT date_trunc('hour', t) AS hour, sensor_id,
+       max(temperature) AS max_temperature
+FROM sensor_data                          -- ← raw tier (dirty window)
+WHERE t >= '2026-05-03 22:00:00'::timestamptz
+  AND t < '2026-05-03 23:00:00'::timestamptz  -- 1 dirty hour
+GROUP BY 1, 2;
+```
+
+The key insight: **Spiral never re-aggregates clean data.** The 3 clean hours each contribute exactly 1 row from `sensor_data_1h`. Only the dirty hour scans raw rows. As dirty buckets are healed, they graduate back to the rollup tier automatically.
+
+**Tier selection rules:**
+- A bucket is eligible for a rollup tier if it is **aligned** to that tier's frame and **clean** in the changelog.
+- The coarsest aligned tier wins (1h beats 1m, 1m beats raw).
+- Adjacent segments from the same source are merged into one range scan to minimize plan nodes.
+
+You can force `EXPLAIN` to show the rewrite:
 
 ```sql
 EXPLAIN (VERBOSE)
@@ -1731,6 +1911,8 @@ WHERE t >= '2026-05-03 19:00:00'::timestamptz
 GROUP BY 1, 2;
 ```
 
+The plan will show a `HashAggregate` over an `Append` (the UNION ALL) with separate `SeqScan` or `IndexScan` nodes — one per segment. After `spiral_refresh`, all four hours are clean and the plan collapses to a single scan of `sensor_data_1h`.
+
 # Healing the Orbits & Handling Deletions
 
 We heal the dirty buckets. It only processes the changes!
@@ -1739,7 +1921,22 @@ We heal the dirty buckets. It only processes the changes!
 SELECT spiral_refresh('sensor_data');
 ```
 
-The entire time range is now clean, so it uses 100% rollups! If we delete data, it isolates the dirty fallback to ONLY the affected tenant (`sensor_id = 1`) for that specific time bucket.
+The entire time range is now clean. The same query now generates a single-tier plan:
+
+```sql
+-- After refresh, Spiral rewrites to a single rollup scan:
+SELECT date_trunc('hour', t) AS hour, sensor_id,
+       max(temperature_ohlcv_h) AS max_temperature
+FROM sensor_data_1h
+WHERE t >= '2026-05-03 19:00:00'::timestamptz
+  AND t < '2026-05-03 23:00:00'::timestamptz
+  AND spiral_zorder(spiral(t), ARRAY['sensor_id'])
+      BETWEEN 1777843200000000 AND 1777857600999999
+GROUP BY 1, 2;
+-- 4 rows read instead of thousands of raw ticks.
+```
+
+If we delete data, it isolates the dirty fallback to ONLY the affected tenant (`sensor_id = 1`) for that specific time bucket — other tenants' rollups stay pristine.
 
 ```sql
 DELETE FROM sensor_data 
@@ -1776,7 +1973,54 @@ SELECT * FROM spiral.status;
 (1 row)
 ```
 
-`lag` tells you how stale your oldest dirty bucket is. A small lag means the background worker is keeping up; a growing lag is your signal to run `spiral_refresh` more aggressively or tune the refresh schedule.
+`lag` tells you how stale your oldest dirty bucket is.
+
+In a multi-tenant deployment, `spiral.status` aggregates across all tenants. For per-tenant visibility, `spiral.scope_status` breaks it down:
+
+```sql
+SELECT * FROM spiral.scope_status ORDER BY lag DESC;
+```
+
+```text
+  base_view  |    scope_values    | dirty_entries | dirty_seconds | oldest_dirty_ts        | lag
+-------------+--------------------+---------------+---------------+------------------------+--------------------
+ sensor_data | {"sensor_id": "1"} |            12 |           720 | 2026-05-03 20:15:00+00 | 21 days 01:23:37
+ sensor_data | {"sensor_id": "2"} |             3 |           180 | 2026-05-03 22:10:00+00 | 20 days 23:05:12
+(2 rows)
+```
+
+Sensor 1 has more dirty buckets than sensor 2 — a targeted `spiral_refresh(‘sensor_data’, ‘sensor_id = 1’)` heals only that tenant’s backlog without touching sensor 2.
+
+For a single-number health check, `spiral_lag()` returns the lag as an `interval`:
+
+```sql
+SELECT spiral_lag(‘sensor_data’);
+-- → 21 days 01:23:37   (NULL when fully current)
+```
+
+Pipe this into any monitoring system. `NULL` means clean; a growing interval means the worker is falling behind.
+
+# Autonomous Background Worker
+
+You don’t need to call `spiral_refresh` manually. When `spiral.frames` is set, Spiral registers a **background worker** that wakes every second, claims dirty `(base_view, scope)` pairs from the changelog, and heals them — automatically.
+
+```sql
+-- postgresql.conf (or SET for session)
+spiral.worker_enabled   = on    -- default: on
+spiral.max_workers      = 2     -- parallel workers per DB
+spiral.worker_batch_size = 10   -- scopes refreshed per 1s tick
+```
+
+Workers use advisory locks to divide scopes without conflicts: worker A refreshes `sensor_id = 1`, worker B refreshes `sensor_id = 2` — no coordination overhead, no duplicate work.
+
+The planner hook is similarly tunable:
+
+```sql
+spiral.enable_planner_hook   = on    -- disable to compare plans
+spiral.planner_max_segments  = 50    -- fall back to RAW if UNION ALL would exceed N parts
+```
+
+When `planner_max_segments` is exceeded (highly fragmented dirty ranges), Spiral falls back to a full raw scan and logs a notice — trading query rewrite overhead for a simpler plan.
 
 # Mathematical Engine: Welford’s Algorithm
 
@@ -1884,6 +2128,68 @@ Why this fits the rollup architecture perfectly:
 
 The `-- Spiral: stats` magic comment wires this up: when building a rollup view Spiral emits `spiral_stats_accum(col)` for the 1m layer and `spiral_stats_combine(col_stats)` for every higher tier.
 
+# Approximate Quantiles: Sketch and T-Digest
+
+Welford gives exact moments (mean, stddev, skewness). But `percentile_cont(0.95)` cannot be rolled up — there is no exact mergeable form. Spiral provides two mergeable approximate quantile sketches instead.
+
+| Magic comment | Aggregate | Merge fn | Accuracy |
+| :--- | :--- | :--- | :--- |
+| `-- Spiral: sketch` | `spiral_sketch(col)` | `spiral_sketch_merge(col_sketch)` | DDSketch, relative error ≤ 1% |
+| `-- Spiral: tdigest` | `spiral_tdigest(col)` | `spiral_tdigest_merge(col_tdigest)` | t-digest, better tail accuracy |
+
+Like `stats`, both store a JSONB blob at the 1m tier and merge it exactly as it rolls up to 1h, 1d — no raw data needed.
+
+```sql
+CREATE TABLE api_requests (
+    t          timestamptz NOT NULL,
+    service_id int         NOT NULL,
+    latency_ms double precision -- Spiral: tdigest
+) WITH (
+    spiral.frames = '1m,1h,1d',
+    spiral.tenant = 'service_id'
+);
+```
+
+After refresh, the rollup stores `latency_ms_tdigest` at every tier. Query approximate percentiles at any granularity:
+
+```sql
+-- p50, p95, p99 from the hourly rollup — no raw rows needed
+SELECT t, service_id,
+       spiral_tdigest_quantile(latency_ms_tdigest, 0.50) AS p50,
+       spiral_tdigest_quantile(latency_ms_tdigest, 0.95) AS p95,
+       spiral_tdigest_quantile(latency_ms_tdigest, 0.99) AS p99
+FROM api_requests_1h
+WHERE t >= now() - interval '24h'
+ORDER BY t, service_id;
+```
+
+This is the key advantage over standard PostgreSQL: a 1h bucket carries a compact sketch (~1 KB) that can answer any quantile query, and two hourly sketches merge into a daily sketch in microseconds. No raw rows ever need to be re-read.
+
+# Z-Order Indexing for Existing Tables
+
+Spiral's `WITH (spiral.frames=...)` wires everything automatically for new tables. For an **existing** table without Spiral TAM, `cluster_table()` creates the z-order index in one call:
+
+```sql
+-- Add z-order index to any table:
+SELECT cluster_table('sensor_data', 't', ARRAY['sensor_id']);
+-- Creates: idx_z_sensor_data ON sensor_data
+--   USING btree (spiral_zorder(spiral(t), ARRAY['sensor_id']))
+```
+
+The planner hook then uses this index for `BETWEEN` pushdown on any query that filters by both `t` and `sensor_id`. No data migration, no DDL changes to existing schemas.
+
+The `spiral(t)` function used inside the index is an identity for `bigint` and extracts the microsecond epoch for `timestamptz`. It exists so the index expression is stable regardless of which type `t` carries:
+
+```sql
+SELECT spiral('2026-05-03 20:15:00'::timestamptz);
+-- → 1746303300000000  (microseconds since Unix epoch)
+
+SELECT to_timestamptz(1746303300000000);
+-- → 2026-05-03 20:15:00+00
+```
+
+Round-tripping through `spiral()` / `to_timestamptz()` lets you embed raw epoch arithmetic in SQL when needed — for example, to manually verify a z-order range or debug a planner rewrite.
+
 # Experimental Results: Prototype Benchmarks
 
 In my local environment, with a **10 million row dataset**, I saw results that justified continuing this research.
@@ -1892,6 +2198,55 @@ In my local environment, with a **10 million row dataset**, I saw results that j
 | :--- | :--- | :--- |
 | **Bulk Load** | 1,940,482 rows/s | 0.51s (1M sample) |
 | **Backfill** | 302,413 rows/s | 3.30s (1M sample) |
+
+# Building PostgreSQL Extensions in Rust: What I Learned
+
+Spiral is built with [`pgrx`](https://github.com/pgcentralfoundation/pgrx) — a framework that lets you write PostgreSQL extensions entirely in Rust. If you have ever wanted to extend PostgreSQL but found C intimidating, pgrx is worth serious attention.
+
+## The API Surface Spiral Uses
+
+Every major PostgreSQL extension mechanism is available through pgrx:
+
+| Mechanism | What it does | How Spiral uses it |
+| :--- | :--- | :--- |
+| `#[pg_extern]` | Export a Rust fn as a SQL function | `spiral_refresh`, `spiral_zorder`, `spiral_lag` |
+| `extension_sql!` | Embed raw SQL in the extension | `spiral.changelog`, `spiral.status`, operators |
+| `#[pg_aggregate]` / `CREATE AGGREGATE` | Custom aggregates | `spiral_stats_accum/combine`, sketch/tdigest |
+| `TableAmRoutine` (TAM) | Custom storage engine | Binary-packed page layout, O(1) seeks |
+| `planner_hook` | Intercept & rewrite query plans | UNION ALL rewrites, join propagation, z-order pushdown |
+| `BackgroundWorker` | Autonomous server processes | 1-second changelog poller + scope-affinity refresh |
+| `GucRegistry` | Custom `postgresql.conf` settings | `spiral.worker_enabled`, `spiral.max_workers`, etc. |
+| `Spi` | Execute SQL from Rust | Changelog queries, metadata lookups, rollup SQL emission |
+
+## What pgrx Makes Easy
+
+**Zero-cost type mapping.** Rust `f64` maps to PostgreSQL `float8`, `i64` to `bigint`, `Vec<Option<String>>` to `text[]`. No manual `Datum` casting needed.
+
+**Memory safety in unsafe territory.** PostgreSQL's C API is deeply unsafe — raw pointers to `pg_sys::Query`, `pg_sys::PlannedStmt`, page buffers. pgrx wraps enough to make the common paths safe, while letting you drop to `unsafe` where needed (TAM scan callbacks, page manipulation).
+
+**Aggregate functions with combine support.** The `parallel_safe` attribute on `#[pg_extern]` tells PostgreSQL the function can run across parallel workers — enabling automatic parallelism for rollup refreshes at no extra code cost.
+
+## What is Still Hard
+
+**The planner hook is raw C.** `planner_hook_type` takes an `unsafe extern "C-unwind" fn`. Traversing `pg_sys::Query`, `pg_sys::RangeTblEntry`, and the JoinTree requires pointer arithmetic and intimate knowledge of PostgreSQL internals. pgrx does not abstract this — you read the PostgreSQL source to understand the node shapes.
+
+**TAM callbacks must not panic.** Any Rust panic inside a TAM callback (`scan_getnextslot`, `tuple_insert`) crashes the backend. You must catch all errors before they unwind past the C ABI boundary.
+
+**Testing requires a running PostgreSQL.** `#[pg_test]` spins up a real Postgres instance per test run. The setup is automatic with pgrx but CI times are longer than unit tests — integration is the only meaningful test boundary.
+
+## Starting Point for Your Own Extension
+
+If you want to build a PostgreSQL extension in Rust:
+
+```bash
+cargo install cargo-pgrx
+cargo pgrx new my_extension
+cargo pgrx run pg17   # drops into psql with your extension loaded
+```
+
+The [pgrx examples](https://github.com/pgcentralfoundation/pgrx/tree/develop/pgrx-examples) cover custom types, aggregates, operators, and background workers. Spiral's source is also heavily commented — the TAM implementation in `src/tam.rs` and the planner hook in `src/hooks.rs` are good starting points for those two harder topics.
+
+The PostgreSQL extension ecosystem needs more Rust. The barrier is lower than it looks.
 
 # Open for Collaboration
 
