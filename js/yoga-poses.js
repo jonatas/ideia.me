@@ -191,15 +191,15 @@ const POSES = [
     },
     {
         id: 'balasana', name: 'Child\'s Pose (Balasana)', flow: ['dandasana', 'savasana'],
-        desc: 'Kneel on the floor, fold your torso over your thighs, and stretch your arms forward. Rest your forehead.',
+        desc: 'Kneel on the floor, fold your torso over your thighs, and stretch your arms forward. Rest your forehead on the mat.',
         vars: {
-            '--fig-rot': 0, '--fig-x': -100, '--fig-y': 168,
-            '--ub-rot': -90, '--head-rot': 0,
-            '--la-rot': 0, '--le-rot': 0,
-            '--ra-rot': 0, '--re-rot': 0,
-            '--ll-rot': -90, '--lk-rot': 180,
-            '--rl-rot': -90, '--rk-rot': 180,
-            '--torso-cx': 40
+            '--fig-rot': 21, '--fig-x': 80, '--fig-y': 143,
+            '--ub-rot': -113, '--head-rot': -9,
+            '--la-rot': 174, '--le-rot': 0,
+            '--ra-rot': 167, '--re-rot': 0,
+            '--ll-rot': 58, '--lk-rot': -158,
+            '--rl-rot': 43, '--rk-rot': -153,
+            '--torso-cx': 92
         }
     },
     {
@@ -632,8 +632,8 @@ const POSES = [
         vars: {
             '--fig-rot': 0, '--fig-x': -50, '--fig-y': 160,
             '--ub-rot': 40, '--head-rot': -20,
-            '--la-rot': -20, '--le-rot': 40,
-            '--ra-rot': -20, '--re-rot': 40,
+            '--la-rot': -60, '--le-rot': 90,
+            '--ra-rot': -60, '--re-rot': 90,
             '--ll-rot': 80, '--lk-rot': 0,
             '--rl-rot': 80, '--rk-rot': 0,
             '--torso-cx': 140
@@ -829,6 +829,78 @@ const POSES = [
             '--la-rot': 20, '--le-rot': 0,
             '--ra-rot': 20, '--re-rot': 0,
             '--ll-rot': 90, '--lk-rot': 0,
+            '--rl-rot': -60, '--rk-rot': 120
+        }
+    },
+    {
+        id: 'garudasana', name: 'Eagle Pose (Garudasana)', flow: ['tadasana', 'utkatasana'],
+        desc: 'Balance on one slightly bent leg. Cross the other leg tightly over the thigh and hook the foot behind the calf. Cross arms at elbows and wrists.',
+        view: 'front',
+        varsFront: {
+            '--fig-y': 30,
+            '--ub-rot-f': 0, '--head-rot-f': 0,
+            '--la-rot-f': 30, '--le-rot-f': -100,
+            '--ra-rot-f': -30, '--re-rot-f': 100,
+            '--ll-rot-f': 5, '--lk-rot-f': 20,
+            '--rl-rot-f': -20, '--rk-rot-f': 40
+        },
+        vars: {
+            '--fig-rot': 0, '--fig-x': 0, '--fig-y': 30,
+            '--ub-rot': 10, '--head-rot': 0,
+            '--la-rot': 30, '--le-rot': -100,
+            '--ra-rot': -30, '--re-rot': 100,
+            '--ll-rot': 5, '--lk-rot': 20,
+            '--rl-rot': -20, '--rk-rot': 40
+        }
+    },
+    {
+        id: 'utthita-hasta-padangusthasana', name: 'Hand to Big Toe Pose (Utthita Hasta Padangusthasana)', flow: ['tadasana', 'ardha-chandrasana'],
+        desc: 'Balance on one leg while extending the other leg forward or to the side, holding the big toe with your hand.',
+        vars: {
+            '--fig-rot': 0, '--fig-x': 0, '--fig-y': 0,
+            '--ub-rot': 0, '--head-rot': 0,
+            '--la-rot': 0, '--le-rot': 0,
+            '--ra-rot': -110, '--re-rot': 20,
+            '--ll-rot': 0, '--lk-rot': 0,
+            '--rl-rot': -90, '--rk-rot': 0
+        }
+    },
+    {
+        id: 'parsva-bakasana', name: 'Side Crow (Parsva Bakasana)', flow: ['bakasana', 'chaturanga-dandasana'],
+        desc: 'An arm balance where the torso is twisted to one side, with both knees resting on the outer upper arm.',
+        inherit: 'bakasana',
+        vars: {
+            '--ub-rot': 90,
+            '--ll-rot': -45, '--lk-rot': 120,
+            '--rl-rot': -45, '--rk-rot': 120
+        }
+    },
+    {
+        id: 'urdhva-prasarita-ekapadasana', name: 'Standing Split (Urdhva Prasarita Ekapadasana)', flow: ['uttanasana-a', 'virabhadrasana-iii'],
+        desc: 'A standing forward fold with one leg extended vertically toward the ceiling.',
+        inherit: 'uttanasana-a',
+        vars: {
+            '--rl-rot': 180, '--rk-rot': 0
+        }
+    },
+    {
+        id: 'gomukhasana', name: 'Cow Face Pose (Gomukhasana)', flow: ['baddha-konasana', 'paschimottanasana'],
+        desc: 'A seated pose with knees stacked and arms bound behind the back, reaching toward each other from above and below.',
+        view: 'front',
+        varsFront: {
+            '--fig-y': 150,
+            '--ub-rot-f': 0, '--head-rot-f': 0,
+            '--la-rot-f': 180, '--le-rot-f': -130,
+            '--ra-rot-f': 0, '--re-rot-f': 130,
+            '--ll-rot-f': 60, '--lk-rot-f': -120,
+            '--rl-rot-f': -60, '--rk-rot-f': 120
+        },
+        vars: {
+            '--fig-rot': 0, '--fig-x': 0, '--fig-y': 150,
+            '--ub-rot': 0, '--head-rot': 0,
+            '--la-rot': 180, '--le-rot': -130,
+            '--ra-rot': 0, '--re-rot': 130,
+            '--ll-rot': 60, '--lk-rot': -120,
             '--rl-rot': -60, '--rk-rot': 120
         }
     }

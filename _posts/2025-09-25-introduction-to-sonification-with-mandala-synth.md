@@ -445,53 +445,53 @@ spiralCtx.arc(spiralX, spiralY, 2, 0, Math.PI * 2);
 
 This technique forms the foundation of many **generative art** and **data visualization** approaches, where algorithms traverse and reinterpret existing visual data.
 
-## Advanced Aspiral Mandala Algorithm
+## Advanced Spiral Mandala Algorithm
 
-Let's explore a more sophisticated algorithm that creates an **aspiral** (Archimedean spiral) trace through a real mandala image, sampling and inheriting the original pixel colors:
+Let's explore a more sophisticated algorithm that creates an **spiral** (Archimedean spiral) trace through a real mandala image, sampling and inheriting the original pixel colors:
 
 <div style="display: flex; gap: 20px; justify-content: center; align-items: center; margin: 30px 0; flex-wrap: wrap;">
   <div style="text-align: center;">
     <div style="color: #1abc9c; font-size: 12px; font-weight: bold; margin-bottom: 5px;">Source Mandala</div>
-    <canvas id="aspiral-source" width="250" height="250" style="border: 2px solid #1abc9c; border-radius: 50%; background: #2c3e50;"></canvas>
+    <canvas id="spiral-source" width="250" height="250" style="border: 2px solid #1abc9c; border-radius: 50%; background: #2c3e50;"></canvas>
   </div>
   <div style="text-align: center;">
-    <div style="color: #e74c3c; font-size: 12px; font-weight: bold; margin-bottom: 5px;">Aspiral Reconstruction</div>
-    <canvas id="aspiral-reconstruction" width="250" height="250" style="border: 2px solid #e74c3c; border-radius: 50%; background: #2c3e50;"></canvas>
+    <div style="color: #e74c3c; font-size: 12px; font-weight: bold; margin-bottom: 5px;">Spiral Reconstruction</div>
+    <canvas id="spiral-reconstruction" width="250" height="250" style="border: 2px solid #e74c3c; border-radius: 50%; background: #2c3e50;"></canvas>
   </div>
 </div>
 
 <div style="text-align: center; margin: 20px 0;">
-  <button id="start-aspiral" style="background: #1abc9c; border: none; border-radius: 4px; color: white; padding: 10px 20px; cursor: pointer; font-family: inherit; margin: 0 5px;">Start Aspiral</button>
-  <button id="clear-aspiral" style="background: #e74c3c; border: none; border-radius: 4px; color: white; padding: 10px 20px; cursor: pointer; font-family: inherit; margin: 0 5px;">Clear</button>
-  <button id="auto-aspiral" style="background: #f39c12; border: none; border-radius: 4px; color: white; padding: 10px 20px; cursor: pointer; font-family: inherit; margin: 0 5px;">Auto Mode</button>
+  <button id="start-spiral" style="background: #1abc9c; border: none; border-radius: 4px; color: white; padding: 10px 20px; cursor: pointer; font-family: inherit; margin: 0 5px;">Start Spiral</button>
+  <button id="clear-spiral" style="background: #e74c3c; border: none; border-radius: 4px; color: white; padding: 10px 20px; cursor: pointer; font-family: inherit; margin: 0 5px;">Clear</button>
+  <button id="auto-spiral" style="background: #f39c12; border: none; border-radius: 4px; color: white; padding: 10px 20px; cursor: pointer; font-family: inherit; margin: 0 5px;">Auto Mode</button>
 </div>
 
 <div style="text-align: center; margin: 15px 0;">
   <label style="color: #1abc9c; margin-right: 10px;">Speed:</label>
-  <input type="range" id="aspiral-speed" min="1" max="10" value="5" style="width: 150px; margin-right: 15px;">
+  <input type="range" id="spiral-speed" min="1" max="10" value="5" style="width: 150px; margin-right: 15px;">
   <label style="color: #1abc9c; margin-right: 10px;">Density:</label>
-  <input type="range" id="aspiral-density" min="1" max="5" value="4" style="width: 150px;">
+  <input type="range" id="spiral-density" min="1" max="5" value="4" style="width: 150px;">
 </div>
 
-<div id="aspiral-info" style="text-align: center; color: #1abc9c; font-size: 14px; margin: 15px 0;">
-  Click "Start Aspiral" to see the algorithm trace the mandala pixels
+<div id="spiral-info" style="text-align: center; color: #1abc9c; font-size: 14px; margin: 15px 0;">
+  Click "Start Spiral" to see the algorithm trace the mandala pixels
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const aspiralSource = document.getElementById('aspiral-source');
-  const aspiralReconstruction = document.getElementById('aspiral-reconstruction');
-  const startBtn = document.getElementById('start-aspiral');
-  const clearBtn = document.getElementById('clear-aspiral');
-  const autoBtn = document.getElementById('auto-aspiral');
-  const speedSlider = document.getElementById('aspiral-speed');
-  const densitySlider = document.getElementById('aspiral-density');
-  const aspiralInfo = document.getElementById('aspiral-info');
+  const spiralSource = document.getElementById('spiral-source');
+  const spiralReconstruction = document.getElementById('spiral-reconstruction');
+  const startBtn = document.getElementById('start-spiral');
+  const clearBtn = document.getElementById('clear-spiral');
+  const autoBtn = document.getElementById('auto-spiral');
+  const speedSlider = document.getElementById('spiral-speed');
+  const densitySlider = document.getElementById('spiral-density');
+  const spiralInfo = document.getElementById('spiral-info');
   
-  if (!aspiralSource || !aspiralReconstruction) return;
+  if (!spiralSource || !spiralReconstruction) return;
   
-  const sourceCtx = aspiralSource.getContext('2d');
-  const reconstructionCtx = aspiralReconstruction.getContext('2d');
+  const sourceCtx = spiralSource.getContext('2d');
+  const reconstructionCtx = spiralReconstruction.getContext('2d');
   
   let isTracing = false;
   let autoMode = false;
@@ -519,10 +519,10 @@ document.addEventListener('DOMContentLoaded', function() {
       // Store image data for pixel sampling
       sourceImageData = sourceCtx.getImageData(0, 0, 250, 250);
       
-      aspiralInfo.textContent = 'Mandala loaded! Ready to trace aspiral pattern.';
+      spiralInfo.textContent = 'Mandala loaded! Ready to trace spiral pattern.';
     };
     img.onerror = function() {
-      aspiralInfo.textContent = 'Error loading mandala image. Please check the image path.';
+      spiralInfo.textContent = 'Error loading mandala image. Please check the image path.';
     };
     // Try loading the first mandala image
     img.src = '/images/mandalas/01b.png';
@@ -544,8 +544,8 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
   }
   
-  // Create aspiral trace
-  function createAspiralTrace() {
+  // Create spiral trace
+  function createSpiralTrace() {
     if (isTracing) return;
     
     isTracing = true;
@@ -565,11 +565,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function traceNextPoint() {
       if (!isTracing || currentStep >= totalSteps) {
         isTracing = false;
-        aspiralInfo.textContent = `Aspiral complete! ${sampledPixels.length} pixels traced and painted.`;
+        spiralInfo.textContent = `Spiral complete! ${sampledPixels.length} pixels traced and painted.`;
         return;
       }
       
-      // Calculate aspiral position (Archimedean spiral: r = a + b*θ)
+      // Calculate spiral position (Archimedean spiral: r = a + b*θ)
       const progress = currentStep / totalSteps;
       const theta = progress * Math.PI * 100; // 50 full rotations (50 laps)
       const radius = progress * maxRadius;
@@ -596,20 +596,20 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       currentStep++;
-      aspiralInfo.textContent = `Tracing aspiral... ${currentStep}/${totalSteps} points (${(progress * 100).toFixed(1)}%)`;
+      spiralInfo.textContent = `Tracing spiral... ${currentStep}/${totalSteps} points (${(progress * 100).toFixed(1)}%)`;
       
       // Continue tracing
       setTimeout(traceNextPoint, stepDelay);
     }
     
-    aspiralInfo.textContent = 'Starting aspiral trace...';
+    spiralInfo.textContent = 'Starting spiral trace...';
     traceNextPoint();
   }
   
   // Clear reconstruction
   function clearReconstruction() {
     reconstructionCtx.clearRect(0, 0, 250, 250);
-    aspiralInfo.textContent = 'Aspiral cleared. Ready for new trace.';
+    spiralInfo.textContent = 'Spiral cleared. Ready for new trace.';
     isTracing = false;
   }
   
@@ -623,12 +623,12 @@ document.addEventListener('DOMContentLoaded', function() {
       autoInterval = setInterval(() => {
         if (!isTracing) {
           clearReconstruction();
-          setTimeout(createAspiralTrace, 500);
+          setTimeout(createSpiralTrace, 500);
         }
       }, 8000);
       
       // Start first trace
-      createAspiralTrace();
+      createSpiralTrace();
     } else {
       autoBtn.textContent = 'Auto Mode';
       autoBtn.style.background = '#f39c12';
@@ -640,7 +640,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // Event listeners
-  startBtn.addEventListener('click', createAspiralTrace);
+  startBtn.addEventListener('click', createSpiralTrace);
   clearBtn.addEventListener('click', clearReconstruction);
   autoBtn.addEventListener('click', toggleAutoMode);
   
@@ -649,9 +649,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-### Mathematical Foundation of Aspiral Algorithm
+### Mathematical Foundation of Spiral Algorithm
 
-The **aspiral** (Archimedean spiral) follows the mathematical formula:
+The **spiral** (Archimedean spiral) follows the mathematical formula:
 
 ```javascript
 // Archimedean spiral: r = a + b*θ
@@ -1280,16 +1280,16 @@ function colorToFrequency(colorIndex) {
 - **Interactive Exploration**: Click colors to hear their corresponding notes
 - **Scale Comparison**: Switch between different scales to hear harmonic variations
 
-## Interactive Aspiral Reconstruction
+## Interactive Spiral Reconstruction
 
-Now let's combine the color extraction with aspiral reconstruction and real-time sonification:
+Now let's combine the color extraction with spiral reconstruction and real-time sonification:
 
 <div style="text-align: center; margin: 30px 0;">
-  <canvas id="aspiral-canvas" width="400" height="400" style="border: 3px solid #1abc9c; border-radius: 50%; background: #2c3e50; display: block; margin: 0 auto;"></canvas>
+  <canvas id="spiral-canvas" width="400" height="400" style="border: 3px solid #1abc9c; border-radius: 50%; background: #2c3e50; display: block; margin: 0 auto;"></canvas>
 </div>
 
 <div style="text-align: center; margin: 20px 0;">
-  <button id="start-reconstruction" style="background: #1abc9c; border: none; border-radius: 8px; color: white; padding: 12px 24px; cursor: pointer; font-family: inherit; font-size: 14px; margin: 0 5px;">🎵 Start Aspiral</button>
+  <button id="start-reconstruction" style="background: #1abc9c; border: none; border-radius: 8px; color: white; padding: 12px 24px; cursor: pointer; font-family: inherit; font-size: 14px; margin: 0 5px;">🎵 Start Spiral</button>
   <button id="stop-reconstruction" style="background: #e74c3c; border: none; border-radius: 8px; color: white; padding: 12px 24px; cursor: pointer; font-family: inherit; font-size: 14px; margin: 0 5px;">⏹ Stop</button>
   <button id="clear-reconstruction" style="background: #95a5a6; border: none; border-radius: 8px; color: white; padding: 12px 24px; cursor: pointer; font-family: inherit; font-size: 14px; margin: 0 5px;">🗑 Clear</button>
 </div>
@@ -1302,12 +1302,12 @@ Now let's combine the color extraction with aspiral reconstruction and real-time
 </div>
 
 <div id="reconstruction-info" style="text-align: center; color: #1abc9c; font-size: 14px; margin: 20px 0; min-height: 30px;">
-  Click "Start Aspiral" to see and hear the mandala being reconstructed pixel by pixel
+  Click "Start Spiral" to see and hear the mandala being reconstructed pixel by pixel
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-  const canvas = document.getElementById('aspiral-canvas');
+  const canvas = document.getElementById('spiral-canvas');
   const startBtn = document.getElementById('start-reconstruction');
   const stopBtn = document.getElementById('stop-reconstruction');
   const clearBtn = document.getElementById('clear-reconstruction');
@@ -1378,7 +1378,7 @@ document.addEventListener('DOMContentLoaded', function() {
         extractedPalette = sortColorsByHue(extractColorsFromImageData(sourceImageData));
       }
       
-      info.textContent = 'Mandala loaded and palette extracted. Ready for aspiral reconstruction!';
+      info.textContent = 'Mandala loaded and palette extracted. Ready for spiral reconstruction!';
     };
     img.src = '/images/mandalas/01b.png';
   }
@@ -1521,7 +1521,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return baseFreq * Math.pow(2, semitones / 12);
   }
   
-  // Start aspiral reconstruction
+  // Start spiral reconstruction
   function startReconstruction() {
     if (isPlaying || !sourceImageData) return;
     
@@ -1544,7 +1544,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
       
-      // Calculate aspiral position (Archimedean spiral: r = a + b*θ)
+      // Calculate spiral position (Archimedean spiral: r = a + b*θ)
       const progress = currentStep / totalSteps;
       const theta = progress * Math.PI * 60; // 30 rotations for comprehensive coverage
       const radius = progress * maxRadius;
@@ -1585,7 +1585,7 @@ document.addEventListener('DOMContentLoaded', function() {
       animationFrame = setTimeout(traceStep, stepDelay);
     }
     
-    info.textContent = 'Starting aspiral reconstruction with sonification...';
+    info.textContent = 'Starting spiral reconstruction with sonification...';
     traceStep();
   }
   
@@ -1601,7 +1601,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     info.innerHTML = `
       <div>🎵 Reconstruction complete!</div>
-      <div>Click "Start Aspiral" to replay or "Clear" to reset</div>
+      <div>Click "Start Spiral" to replay or "Clear" to reset</div>
     `;
   }
   
@@ -1625,10 +1625,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
-This **Interactive Aspiral Reconstruction** demonstrates the complete sonification pipeline:
+This **Interactive Spiral Reconstruction** demonstrates the complete sonification pipeline:
 
 1. **Color Extraction**: Analyzes mandala to create 12-color palette
-2. **Pixel Sampling**: Traces through image using aspiral algorithm
+2. **Pixel Sampling**: Traces through image using spiral algorithm
 3. **Color Matching**: Maps each pixel to closest palette color
 4. **Musical Mapping**: Converts palette colors to pentatonic scale notes
 5. **Real-time Synthesis**: Plays corresponding notes as pixels are drawn
