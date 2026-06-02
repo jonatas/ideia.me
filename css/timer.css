@@ -1,0 +1,450 @@
+:root {
+    --bg-color: #0f172a;
+    --text-color: #f8fafc;
+    --muted-color: #94a3b8;
+    --accent-color: #0d9488;
+    --work-color: #10b981;
+    --rest-color: #f59e0b;
+    --countdown-color: #ef4444;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.header-left, .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.back-btn {
+    color: var(--muted-color);
+    text-decoration: none;
+    font-size: 1.1rem;
+    transition: color 0.2s;
+}
+
+.timer-exercise-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-bottom: 1px dashed transparent;
+    transition: all 0.2s;
+}
+
+.timer-exercise-name:hover {
+    border-bottom-color: var(--accent-color);
+}
+
+.edit-name-input {
+    background: rgba(0,0,0,0.3);
+    border: none;
+    color: var(--accent-color);
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border-bottom: 2px solid var(--accent-color);
+    outline: none;
+    text-transform: uppercase;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: var(--muted-color);
+    cursor: pointer;
+    font-size: 1.4rem;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.icon-btn:hover {
+    color: var(--text-color);
+    transform: scale(1.1);
+}
+
+.main-wrapper {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    position: relative;
+}
+
+/* Sidebar / Sequence Nav */
+.pose-nav {
+    width: 240px;
+    background: rgba(0, 0, 0, 0.2);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    overflow-y: auto;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.exercise-item {
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.exercise-item.active {
+    background: rgba(13, 148, 136, 0.1);
+    border-color: rgba(13, 148, 136, 0.3);
+}
+
+.exercise-item.completed {
+    opacity: 0.4;
+}
+
+.exercise-item .name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.exercise-item .meta {
+    font-size: 0.75rem;
+    color: var(--muted-color);
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    position: relative;
+}
+
+.timer-container {
+    width: 100%;
+    max-width: 400px;
+    aspect-ratio: 1/1;
+    position: relative;
+    cursor: pointer;
+}
+
+.timer-svg {
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+}
+
+.timer-bg-circle {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.05);
+    stroke-width: 4;
+}
+
+.timer-progress-circle {
+    fill: none;
+    stroke: var(--accent-color);
+    stroke-width: 4;
+    stroke-dasharray: 283; /* 2 * PI * 45 */
+    stroke-dashoffset: 283;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.1s linear, stroke 0.3s ease;
+}
+
+.timer-text {
+    fill: var(--text-color);
+    font-size: 24px;
+    font-weight: 800;
+    transform: rotate(90deg);
+    transform-origin: center;
+}
+
+.timer-subtext {
+    fill: var(--muted-color);
+    font-size: 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transform: rotate(90deg);
+    transform-origin: center;
+}
+
+.timer-info {
+    text-align: center;
+    margin-top: 24px;
+}
+
+.timer-phase {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.timer-hint {
+    color: var(--muted-color);
+    font-size: 1.1rem;
+}
+
+/* Settings Panel (Debug Panel Style) */
+.debug-panel {
+    position: fixed;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 340px;
+    background: #0f172a;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+    padding: 24px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.debug-panel.active {
+    transform: translateX(0);
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.settings-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.workout-config-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 24px;
+}
+
+.config-row {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    position: relative;
+}
+
+.config-row .remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: var(--countdown-color);
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 8px;
+}
+
+.config-item label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--muted-color);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.config-item input {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.btn-add {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--muted-color);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.btn-add:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.btn-primary {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    width: 100%;
+    cursor: pointer;
+}
+
+/* Modals & Stats (Same as Breathe App) */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(8px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background: var(--bg-color);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 32px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    color: var(--muted-color);
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.stat-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: 4px;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--muted-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .pose-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        max-height: 140px;
+        flex-direction: row;
+        border-right: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        z-index: 50;
+    }
+    
+    .exercise-item {
+        min-width: 120px;
+        margin-bottom: 0;
+        margin-right: 8px;
+    }
+    
+    .debug-panel {
+        width: 100%;
+    }
+    
+    main {
+        padding-bottom: 160px;
+    }
+}
+
+/* Audio Notice */
+.audio-notice {
+    position: fixed;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent-color);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    z-index: 100;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}

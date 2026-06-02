@@ -1,0 +1,117 @@
+---
+layout: null
+title: "Workout Timer"
+permalink: /timer.html
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Timer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="/css/timer.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</head>
+<body class="layout-vertical">
+
+    <header>
+        <div class="header-left">
+            <a href="/apps/" class="back-btn" title="Back to Apps">
+                <i class="bi bi-arrow-left"></i>
+                <span class="d-none d-md-inline">Apps</span>
+            </a>
+            <div class="timer-exercise-name" id="currentExerciseName" ondblclick="timerApp.editCurrentName()" title="Double-click to edit name">PUSHUPS</div>
+            <input type="text" id="editExerciseInput" class="edit-name-input" onblur="timerApp.saveCurrentName()" onkeydown="if(event.key==='Enter') this.blur()" style="display: none;">
+        </div>
+        
+        <div class="header-right">
+            <button id="saveAppBtn" class="icon-btn" title="Save to My Space" onclick="timerApp.toggleFavorite(this)">
+                <i class="bi bi-bookmark"></i>
+            </button>
+            <button id="giftBtn" class="icon-btn gift-btn" title="View Progress" onclick="timerApp.openStats()" style="display: none; color: #FBBF24;">
+                <i class="bi bi-gift-fill"></i>
+            </button>
+            <button id="resetBtn" class="icon-btn" title="Reset Timer" onclick="resetTimer()">
+                <i class="bi bi-arrow-counterclockwise"></i>
+            </button>
+            <button id="fullscreenBtn" class="icon-btn" title="Toggle Fullscreen">
+                <i class="bi bi-arrows-fullscreen"></i>
+            </button>
+            <button id="settingsBtn" class="icon-btn" title="Settings" onclick="toggleSettings()">
+                <i class="bi bi-sliders"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <aside class="pose-nav" id="sequenceNav">
+            <!-- Populated by JS -->
+        </aside>
+
+        <main>
+            <div class="timer-container" id="timerCircle" onclick="toggleTimer()">
+                <svg viewBox="0 0 100 100" class="timer-svg">
+                    <circle cx="50" cy="50" r="45" class="timer-bg-circle"></circle>
+                    <circle cx="50" cy="50" r="45" class="timer-progress-circle" id="progressCircle"></circle>
+                    <text x="50" y="52" text-anchor="middle" class="timer-text" id="timerDisplay">5</text>
+                    <text x="50" y="70" text-anchor="middle" class="timer-subtext" id="seriesDisplay">1 / 3</text>
+                </svg>
+            </div>
+
+            <div class="timer-info">
+                <div class="timer-phase" id="timerPhase">GET READY</div>
+                <div class="timer-hint" id="timerHint">Tap to start</div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Stats Modal -->
+    <div class="modal-overlay" id="statsModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="timerApp.closeStats()"><i class="bi bi-x"></i></button>
+            <h2 style="margin-top: 0; color: white;">Your Strength</h2>
+            <lottie-player src="/images/icons/emotions/joy.json" background="transparent" speed="1" style="width: 100px; height: 100px; margin: 0 auto;" loop autoplay></lottie-player>
+            <p style="color: var(--muted-color); font-size: 0.95rem; margin-top: 16px;">
+                Consistency is key. Every set you complete builds a stronger, more resilient you.
+            </p>
+            
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="statSets">0</div>
+                    <div class="stat-label">Total Sets</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="statTime">0</div>
+                    <div class="stat-label">Time (Mins)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Panel (Like Yoga Debug Panel) -->
+    <div class="debug-panel" id="settingsPanel">
+        <div class="settings-header">
+            <h3>Workout Settings</h3>
+            <button class="icon-btn" onclick="toggleSettings()"><i class="bi bi-x-lg"></i></button>
+        </div>
+        
+        <div id="workoutList" class="workout-config-list">
+            <!-- Populated by JS -->
+        </div>
+
+        <button class="btn-add" onclick="addExercise()">
+            <i class="bi bi-plus-lg"></i> Add Exercise
+        </button>
+
+        <div class="settings-footer">
+            <button class="btn-primary" onclick="saveAndReset()">Apply Changes</button>
+        </div>
+    </div>
+
+    <script src="/js/profile.js"></script>
+    <script src="/js/timer.js"></script>
+</body>
+</html>
