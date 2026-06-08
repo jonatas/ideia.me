@@ -1,0 +1,157 @@
+---
+layout: default
+---
+
+<style>
+    /* Wood Cuts Simulator specific overrides to match site layout and dark theme */
+    
+    #wood-cuts-app {
+        background-color: transparent !important;
+        color: var(--text-color) !important;
+        font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    #wood-cuts-app .bg-white, 
+    #wood-cuts-app .bg-gray-50,
+    #wood-cuts-app .bg-gray-100 {
+        background-color: var(--card-bg-color) !important;
+        color: var(--text-color) !important;
+        border-color: var(--border-color) !important;
+    }
+
+    #wood-cuts-app .bg-blue-50,
+    #wood-cuts-app .bg-green-50,
+    #wood-cuts-app .bg-red-50,
+    #wood-cuts-app .bg-yellow-100,
+    #wood-cuts-app .bg-purple-50,
+    #wood-cuts-app .bg-blue-100 {
+        background-color: rgba(255, 255, 255, 0.03) !important;
+        color: var(--text-color) !important;
+        border-color: var(--border-color) !important;
+    }
+
+    #wood-cuts-app .text-gray-600,
+    #wood-cuts-app .text-gray-700,
+    #wood-cuts-app .text-green-700,
+    #wood-cuts-app .text-red-700,
+    #wood-cuts-app .text-blue-800,
+    #wood-cuts-app .text-green-800 {
+        color: var(--text-muted) !important;
+    }
+
+    #wood-cuts-app .border-blue-300,
+    #wood-cuts-app .border-green-300,
+    #wood-cuts-app .border-red-200,
+    #wood-cuts-app .border-blue-200,
+    #wood-cuts-app .border-yellow-500,
+    #wood-cuts-app .border-gray-200 {
+        border-color: var(--border-color) !important;
+    }
+
+    /* Buttons - make them look like site buttons */
+    #wood-cuts-app button:not(.btn-link) {
+        border-radius: 4px !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-size: 0.75rem !important;
+        font-weight: 600 !important;
+    }
+
+    #wood-cuts-app .bg-blue-500,
+    #wood-cuts-app .bg-green-500,
+    #wood-cuts-app .bg-red-500,
+    #wood-cuts-app .bg-orange-500,
+    #wood-cuts-app .bg-purple-500 {
+        background-color: transparent !important;
+        border: 1px solid currentColor !important;
+        transition: all 0.2s ease;
+    }
+
+    #wood-cuts-app .bg-blue-500 { color: var(--primary-light-blue) !important; border-color: var(--primary-light-blue) !important; }
+    #wood-cuts-app .bg-green-500 { color: #10b981 !important; border-color: #10b981 !important; }
+    #wood-cuts-app .bg-red-500 { color: #ef4444 !important; border-color: #ef4444 !important; }
+    #wood-cuts-app .bg-orange-500 { color: #f59e0b !important; border-color: #f59e0b !important; }
+    #wood-cuts-app .bg-purple-500 { color: var(--primary-purple) !important; border-color: var(--primary-purple) !important; }
+
+    #wood-cuts-app .bg-blue-500:hover:not(:disabled) { background-color: var(--primary-light-blue) !important; color: var(--bg-color) !important; }
+    #wood-cuts-app .bg-green-500:hover:not(:disabled) { background-color: #10b981 !important; color: var(--bg-color) !important; }
+    #wood-cuts-app .bg-red-500:hover:not(:disabled) { background-color: #ef4444 !important; color: var(--bg-color) !important; }
+    #wood-cuts-app .bg-orange-500:hover:not(:disabled) { background-color: #f59e0b !important; color: var(--bg-color) !important; }
+    #wood-cuts-app .bg-purple-500:hover:not(:disabled) { background-color: var(--primary-purple) !important; color: var(--bg-color) !important; }
+    
+    #wood-cuts-app .disabled\:bg-gray-300:disabled {
+        opacity: 0.3 !important;
+        background-color: transparent !important;
+        border-color: var(--border-color) !important;
+        color: var(--text-muted) !important;
+    }
+
+    /* Container adjustments for full-width app feel */
+    @media (min-width: 768px) {
+        .content-container {
+            max-width: 100% !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        body {
+            overflow: hidden;
+        }
+    }
+
+    .simulator-container {
+        touch-action: none;
+        border-radius: 4px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        background: #000 !important;
+    }
+    
+    .step-view {
+        cursor: move;
+        border-radius: 4px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        background: #000 !important;
+    }
+
+    /* Custom scrollbar to match site */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 10px;
+    }
+    
+    #wood-cuts-app .shadow-md, #wood-cuts-app .shadow-lg, #wood-cuts-app .shadow-inner {
+        box-shadow: none !important;
+    }
+    #wood-cuts-app .border, #wood-cuts-app .border-2, #wood-cuts-app .border-l, #wood-cuts-app .border-t {
+        border-color: var(--border-color) !important;
+    }
+
+    .math-formula {
+        font-family: 'JetBrains Mono', monospace;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 4px;
+        margin-bottom: 1rem;
+    }
+
+</style>
+
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<div class="wood-cuts-layout-content">
+    {{ content }}
+</div>
+
+<!-- Wood Cuts Simulator JavaScript -->
+<script src="{{ '/js/wood-cuts-simulator.js' | relative_url }}"></script>
