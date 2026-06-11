@@ -255,19 +255,48 @@ class WoodCutsSimulator {
 
         // Determine number of pieces for the star
         const N = Math.round(360 / this.cornerAngle);
-        const piecesToRender = this.showStarShape ? N : 2;
-
-        for (let i = 0; i < piecesToRender; i++) {
-            const isGhost = i >= 2;
-            const mat = isGhost ? ghostMaterial : woodMaterial;
-            const edgeMat = isGhost ? ghostEdgeMaterial : edgeMaterial;
-
+        
+        // Good Karma joints are composed of pairs of mirrored pieces (0 and 1).
+        // To build the star, we create the base pair, and then duplicate that pair 
+        // around the Y axis by (2 * cornerAngle) increments.
+        
+        // Always render the primary pair (solid)
+        for (let i = 0; i < 2; i++) {
             const geometry = this.createClippedWoodGeometry(i);
-            const mesh = new THREE.Mesh(geometry, mat);
-            const lines = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMat);
-            
+            const mesh = new THREE.Mesh(geometry, woodMaterial);
+            const lines = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
             group.add(mesh);
             group.add(lines);
+        }
+
+        // Render ghost pairs for the rest of the star if enabled
+        if (this.showStarShape && N > 2) {
+            // How many additional pairs do we need?
+            // E.g., for Hexagon (60 deg, N=6), we need 2 more pairs (4 pieces).
+            // For Pentagon (72 deg, N=5), we need 1.5 more pairs (3 pieces).
+            for (let i = 2; i < N; i++) {
+                // Determine if this ghost piece acts like Piece 0 (even) or Piece 1 (odd)
+                const basePieceIndex = i % 2; 
+                
+                // Calculate how many "pairs" we have rotated past the first pair
+                const pairRotationIndex = Math.floor(i / 2);
+                
+                const geometry = this.createClippedWoodGeometry(basePieceIndex);
+                
+                const mesh = new THREE.Mesh(geometry, ghostMaterial);
+                const lines = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), ghostEdgeMaterial);
+                
+                // Rotate this ghost piece around the Y axis to its correct position in the star
+                // We rotate by 2 * cornerAngle for every full pair we advance
+                const starRotationAngle = pairRotationIndex * (2 * this.cornerAngle) * Math.PI / 180;
+                
+                const pieceGroup = new THREE.Group();
+                pieceGroup.add(mesh);
+                pieceGroup.add(lines);
+                pieceGroup.rotation.y = starRotationAngle;
+                
+                group.add(pieceGroup);
+            }
         }
     }
 
