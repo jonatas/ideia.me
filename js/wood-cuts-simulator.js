@@ -180,7 +180,7 @@ class WoodCutsSimulator {
             
             // Camera positions for each step
             if (index === 0) camera.position.set(0, 0, 300); // Front
-            if (index === 1) camera.position.set(0, 300, 0); // Top
+            if (index === 1) camera.position.set(0, 400, 0); // Top
             if (index === 2) camera.position.set(300, 0, 0); // Side
             
             camera.lookAt(0, 0, 0);
@@ -219,30 +219,13 @@ class WoodCutsSimulator {
         const woodMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.8 });
         const edgeMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 1 });
 
-        // Create two pieces forming the joint
+        // Clip pieces at the bisector plane (Z=0) for a perfect fit
         for (let i = 0; i < 2; i++) {
-            const geometry = this.createCompoundWoodGeometry();
+            const geometry = this.createClippedWoodGeometry(i);
             const mesh = new THREE.Mesh(geometry, woodMaterial);
-            
-            const edges = new THREE.EdgesGeometry(geometry);
-            const lines = new THREE.LineSegments(edges, edgeMaterial);
-
-            const pieceGroup = new THREE.Group();
-            pieceGroup.add(mesh);
-            pieceGroup.add(lines);
-
-            // Position and rotate pieces to form the joint
-            const angle = (i === 0 ? -this.cornerAngle / 2 : this.cornerAngle / 2) * Math.PI / 180;
-            const slope = (90 - this.slopeAngle) * Math.PI / 180; // Tilt from vertical
-
-            pieceGroup.rotation.y = angle;
-            pieceGroup.rotation.z = i === 0 ? slope : -slope;
-            
-            // Offset to align ends
-            const offset = (this.woodLength / 2);
-            pieceGroup.translateX(offset);
-
-            group.add(pieceGroup);
+            const lines = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
+            group.add(mesh);
+            group.add(lines);
         }
     }
 
@@ -252,36 +235,39 @@ class WoodCutsSimulator {
         group.clear();
 
         // Table
-        const tableGeo = new THREE.BoxGeometry(300, 10, 300);
-        const tableMat = new THREE.MeshStandardMaterial({ color: 0x333333 });
+        const tableGeo = new THREE.BoxGeometry(400, 5, 400);
+        const tableMat = new THREE.MeshStandardMaterial({ color: 0x222222 });
         const table = new THREE.Mesh(tableGeo, tableMat);
-        table.position.y = -5;
+        table.position.y = -2.5;
         group.add(table);
 
         // Blade (simplified as a disc)
-        const bladeGeo = new THREE.CylinderGeometry(50, 50, 2, 32);
-        const bladeMat = new THREE.MeshStandardMaterial({ color: 0xcccccc, metalness: 0.8 });
+        const bladeRadius = 120;
+        const bladeGeo = new THREE.CylinderGeometry(bladeRadius, bladeRadius, 1, 64);
+        const bladeMat = new THREE.MeshStandardMaterial({ color: 0xef4444, metalness: 0.5, roughness: 0.2 });
         const blade = new THREE.Mesh(bladeGeo, bladeMat);
         
-        // Blade group for miter and bevel
         const bladeGroup = new THREE.Group();
         bladeGroup.add(blade);
         blade.rotation.x = Math.PI / 2;
         
-        // Apply miter and bevel to blade group
         bladeGroup.rotation.order = 'YXZ';
         bladeGroup.rotation.y = -this.miterAngle * Math.PI / 180;
         bladeGroup.rotation.x = this.bevelAngle * Math.PI / 180;
-        
-        bladeGroup.position.y = 40;
+        bladeGroup.position.y = 20;
         group.add(bladeGroup);
 
-        // Wood piece on the saw
-        const woodGeo = this.createCompoundWoodGeometry();
-        const woodMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, transparent: true, opacity: 0.7 });
-        const wood = new THREE.Mesh(woodGeo, woodMat);
-        wood.position.y = this.woodHeight / 2;
-        group.add(wood);
+        // Use the clipped geometry but transform it back to "local" space for the saw
+        const geometry = this.createClippedWoodGeometry(0, true);
+        const woodMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, transparent: true, opacity: 0.6 });
+        const wood = new THREE.Mesh(geometry, woodMat);
+        const lines = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.3, transparent: true }));
+        
+        const woodGroup = new THREE.Group();
+        woodGroup.add(wood);
+        woodGroup.add(lines);
+        woodGroup.position.y = this.woodHeight / 2;
+        group.add(woodGroup);
     }
 
     updateStepGeometry(id, index) {
@@ -289,71 +275,79 @@ class WoodCutsSimulator {
         if (!group) return;
         group.clear();
 
-        const geometry = this.createCompoundWoodGeometry();
-        const material = new THREE.MeshStandardMaterial({ color: 0xd2b48c });
+        const geometry = this.createClippedWoodGeometry(0, true);
+        const material = new THREE.MeshStandardMaterial({ color: 0x8B4513 });
         const mesh = new THREE.Mesh(geometry, material);
-        
-        const edges = new THREE.EdgesGeometry(geometry);
-        const lines = new THREE.LineSegments(edges, new THREE.LineBasicMaterial({ color: 0xffffff }));
+        const lines = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.5, transparent: true }));
         
         group.add(mesh);
         group.add(lines);
 
-        // Add visual indicators
-        if (index === 1) { // Miter - top view
-            this.addAngleIndicator(group, 'miter');
-        }
-        if (index === 2) { // Bevel - side view
-            this.addAngleIndicator(group, 'bevel');
-        }
+        if (index === 0) this.addAngleIndicator(group, 'bevel', index);
+        if (index === 1) this.addAngleIndicator(group, 'miter', index);
     }
 
-    createCompoundWoodGeometry() {
+    createClippedWoodGeometry(pieceIndex, localOnly = false) {
         const w = this.woodWidth;
         const h = this.woodHeight;
         const l = this.woodLength;
-        const miter = this.miterAngle * Math.PI / 180;
-        const bevel = this.bevelAngle * Math.PI / 180;
+        const hC = (this.cornerAngle / 2) * Math.PI / 180;
+        const S = this.slopeAngle * Math.PI / 180;
+
+        // Symmetric arrangement around Z=0
+        const angleY = (pieceIndex === 0 ? -hC : hC);
+        const roll = Math.atan(Math.tan(S) / Math.sin(hC));
+        
+        const matrix = new THREE.Matrix4();
+        matrix.makeRotationY(angleY);
+        matrix.multiply(new THREE.Matrix4().makeRotationZ(S));
+        matrix.multiply(new THREE.Matrix4().makeRotationX(pieceIndex === 0 ? -roll : roll));
 
         const geometry = new THREE.BufferGeometry();
-        
-        // Plane equation: x = offset_y * y + offset_z * z
-        // For a miter saw:
-        // offset_z (miter) = tan(miter)
-        // offset_y (bevel) = tan(bevel) / cos(miter)
-        
-        const tanM = Math.tan(miter);
-        const tanB_cosM = Math.tan(bevel) / Math.cos(miter);
+        const corners = [
+            new THREE.Vector3(0, -h/2, -w/2),
+            new THREE.Vector3(0,  h/2, -w/2),
+            new THREE.Vector3(0,  h/2,  w/2),
+            new THREE.Vector3(0, -h/2,  w/2)
+        ];
 
-        const getX = (y, z, end) => {
-            const side = end === 'right' ? 1 : -1;
-            const xBase = (l / 2) * side;
-            // For the right end, we subtract the offsets to cut into the wood
-            // For the left end, we could also cut it symmetrically or keep it flat
-            if (end === 'right') {
-                return xBase - (tanM * z) - (tanB_cosM * y);
+        const vertices = new Float32Array(24);
+        const dir = new THREE.Vector3(1, 0, 0).transformDirection(matrix);
+        const invMatrix = new THREE.Matrix4().copy(matrix).invert();
+        
+        for (let i = 0; i < 4; i++) {
+            // Far end (flat)
+            const pFar = corners[i].clone().add(new THREE.Vector3(-l, 0, 0));
+            const pFarWorld = pFar.clone().applyMatrix4(matrix);
+            
+            // Near end (clipped at Z_world = 0)
+            const pNear = corners[i].clone().applyMatrix4(matrix);
+            const t = -pNear.z / dir.z;
+            const pClippedWorld = pNear.addScaledVector(dir, t);
+
+            if (localOnly) {
+                const pFarLocal = pFarWorld.applyMatrix4(invMatrix);
+                const pClippedLocal = pClippedWorld.applyMatrix4(invMatrix);
+                // Center for previews
+                vertices[i * 3 + 0] = pFarLocal.x + l/2;
+                vertices[i * 3 + 1] = pFarLocal.y;
+                vertices[i * 3 + 2] = pFarLocal.z;
+                vertices[(i + 4) * 3 + 0] = pClippedLocal.x + l/2;
+                vertices[(i + 4) * 3 + 1] = pClippedLocal.y;
+                vertices[(i + 4) * 3 + 2] = pClippedLocal.z;
             } else {
-                return xBase; // Keep left end flat for reference
+                vertices[i * 3 + 0] = pFarWorld.x;
+                vertices[i * 3 + 1] = pFarWorld.y;
+                vertices[i * 3 + 2] = pFarWorld.z;
+                vertices[(i + 4) * 3 + 0] = pClippedWorld.x;
+                vertices[(i + 4) * 3 + 1] = pClippedWorld.y;
+                vertices[(i + 4) * 3 + 2] = pClippedWorld.z;
             }
-        };
-
-        const vertices = new Float32Array([
-            // Left end (flat)
-            getX(-h/2, -w/2, 'left'), -h/2, -w/2,  // 0
-            getX( h/2, -w/2, 'left'),  h/2, -w/2,  // 1
-            getX( h/2,  w/2, 'left'),  h/2,  w/2,  // 2
-            getX(-h/2,  w/2, 'left'), -h/2,  w/2,  // 3
-
-            // Right end (compound cut)
-            getX(-h/2, -w/2, 'right'), -h/2, -w/2, // 4
-            getX( h/2, -w/2, 'right'),  h/2, -w/2, // 5
-            getX( h/2,  w/2, 'right'),  h/2,  w/2, // 6
-            getX(-h/2,  w/2, 'right'), -h/2,  w/2  // 7
-        ]);
+        }
 
         const indices = [
-            0, 1, 2,  0, 2, 3, // Left
-            4, 6, 5,  4, 7, 6, // Right
+            0, 1, 2,  0, 2, 3, // Far
+            4, 6, 5,  4, 7, 6, // Near
             0, 4, 5,  0, 5, 1, // Front
             1, 5, 6,  1, 6, 2, // Top
             2, 6, 7,  2, 7, 3, // Back
@@ -363,32 +357,31 @@ class WoodCutsSimulator {
         geometry.setIndex(indices);
         geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
         geometry.computeVertexNormals();
-
         return geometry;
     }
 
-    addAngleIndicator(group, type) {
+    addAngleIndicator(group, type, index) {
         const material = new THREE.LineBasicMaterial({ 
-            color: type === 'miter' ? 0xff0000 : 0x00ff00, 
-            linewidth: 2 
+            color: type === 'miter' ? 0x60a5fa : 0x4ade80, 
+            linewidth: 3 
         });
         
-        const l = this.woodLength;
         const h = this.woodHeight;
         const w = this.woodWidth;
+        const l = this.woodLength;
         
         let points = [];
         if (type === 'miter') {
-            const miterOffset = h * Math.tan(this.miterAngle * Math.PI / 180);
+            const miterOffset = w * Math.tan(this.miterAngle * Math.PI / 180);
             points = [
-                new THREE.Vector3(l/2, h/2 + 10, -w/2),
-                new THREE.Vector3(l/2 - miterOffset, h/2 + 10, -w/2)
+                new THREE.Vector3(l/2, h/2 + 5, -w/2),
+                new THREE.Vector3(l/2 - miterOffset, h/2 + 5, w/2)
             ];
         } else {
-            const bevelOffset = w * Math.tan(this.bevelAngle * Math.PI / 180);
+            const bevelOffset = h * (Math.tan(this.bevelAngle * Math.PI / 180) / Math.cos(this.miterAngle * Math.PI / 180));
             points = [
-                new THREE.Vector3(l/2 + 10, -h/2, w/2),
-                new THREE.Vector3(l/2 + 10, -h/2, w/2 - bevelOffset)
+                new THREE.Vector3(l/2, -h/2, w/2 + 5),
+                new THREE.Vector3(l/2 - bevelOffset, h/2, w/2 + 5)
             ];
         }
         
