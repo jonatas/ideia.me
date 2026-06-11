@@ -9,6 +9,7 @@ class WoodCutsSimulator {
 
         this.miterAngle = 0;
         this.bevelAngle = 0;
+        this.showStarShape = false;
 
         // Three.js objects
         this.scenes = {};
@@ -50,6 +51,7 @@ class WoodCutsSimulator {
         const slopeSlider = document.getElementById('slope-angle-slider');
         const widthInput = document.getElementById('wood-width');
         const heightInput = document.getElementById('wood-height');
+        const starToggle = document.getElementById('star-shape-toggle');
 
         cornerSlider.addEventListener('input', (e) => {
             this.cornerAngle = parseFloat(e.target.value);
@@ -69,6 +71,25 @@ class WoodCutsSimulator {
         heightInput.addEventListener('change', (e) => {
             this.woodHeight = parseFloat(e.target.value);
             this.updateAll();
+        });
+
+        starToggle.addEventListener('change', (e) => {
+            this.showStarShape = e.target.checked;
+            this.updateAll();
+        });
+
+        // Presets
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.cornerAngle = parseFloat(btn.dataset.corner);
+                this.slopeAngle = parseFloat(btn.dataset.slope);
+                
+                // Update UI
+                cornerSlider.value = this.cornerAngle;
+                slopeSlider.value = this.slopeAngle;
+                
+                this.updateAll();
+            });
         });
     }
 
@@ -218,12 +239,33 @@ class WoodCutsSimulator {
 
         const woodMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.8 });
         const edgeMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 1 });
+        
+        const ghostMaterial = new THREE.MeshStandardMaterial({ 
+            color: 0x8B4513, 
+            roughness: 0.8, 
+            transparent: true, 
+            opacity: 0.15 
+        });
+        const ghostEdgeMaterial = new THREE.LineBasicMaterial({ 
+            color: 0xffffff, 
+            linewidth: 1, 
+            transparent: true, 
+            opacity: 0.1 
+        });
 
-        // Clip pieces at the bisector plane (Z=0) for a perfect fit
-        for (let i = 0; i < 2; i++) {
+        // Determine number of pieces for the star
+        const N = Math.round(360 / this.cornerAngle);
+        const piecesToRender = this.showStarShape ? N : 2;
+
+        for (let i = 0; i < piecesToRender; i++) {
+            const isGhost = i >= 2;
+            const mat = isGhost ? ghostMaterial : woodMaterial;
+            const edgeMat = isGhost ? ghostEdgeMaterial : edgeMaterial;
+
             const geometry = this.createClippedWoodGeometry(i);
-            const mesh = new THREE.Mesh(geometry, woodMaterial);
-            const lines = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
+            const mesh = new THREE.Mesh(geometry, mat);
+            const lines = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMat);
+            
             group.add(mesh);
             group.add(lines);
         }
@@ -294,14 +336,17 @@ class WoodCutsSimulator {
         const hC = (this.cornerAngle / 2) * Math.PI / 180;
         const S = this.slopeAngle * Math.PI / 180;
 
-        // Symmetric arrangement around Z=0
-        const angleY = (pieceIndex === 0 ? -hC : hC);
+        // Arrangement around Z=0 for a Good Karma joint
+        const angleY = -hC + pieceIndex * (this.cornerAngle * Math.PI / 180);
         const roll = Math.atan(Math.tan(S) / Math.sin(hC));
         
         const matrix = new THREE.Matrix4();
+        const isOdd = pieceIndex % 2 === 1;
+        const currentRoll = isOdd ? roll : -roll;
+        
         matrix.makeRotationY(angleY);
         matrix.multiply(new THREE.Matrix4().makeRotationZ(S));
-        matrix.multiply(new THREE.Matrix4().makeRotationX(pieceIndex === 0 ? -roll : roll));
+        matrix.multiply(new THREE.Matrix4().makeRotationX(currentRoll));
 
         const geometry = new THREE.BufferGeometry();
         const corners = [
@@ -315,20 +360,27 @@ class WoodCutsSimulator {
         const dir = new THREE.Vector3(1, 0, 0).transformDirection(matrix);
         const invMatrix = new THREE.Matrix4().copy(matrix).invert();
         
+        // Good Karma joints meet side-by-side.
+        // We clip exactly at the bisector plane shared with the *previous* piece.
+        // Piece 0 and 1 meet at Z=0 (bisectorAngle = 0).
+        // Piece 2 and 3 meet at 2*cornerAngle, etc.
+        const bisectorAngle = (pieceIndex % 2 === 0) ? (angleY + hC) : (angleY - hC);
+        const planeNormal = new THREE.Vector3(0, 0, 1).applyAxisAngle(new THREE.Vector3(0, 1, 0), bisectorAngle);
+
         for (let i = 0; i < 4; i++) {
             // Far end (flat)
             const pFar = corners[i].clone().add(new THREE.Vector3(-l, 0, 0));
             const pFarWorld = pFar.clone().applyMatrix4(matrix);
             
-            // Near end (clipped at Z_world = 0)
             const pNear = corners[i].clone().applyMatrix4(matrix);
-            const t = -pNear.z / dir.z;
+            
+            // Single plane clipping for the Good Karma style
+            const t = -pNear.dot(planeNormal) / dir.dot(planeNormal);
             const pClippedWorld = pNear.addScaledVector(dir, t);
 
             if (localOnly) {
                 const pFarLocal = pFarWorld.applyMatrix4(invMatrix);
                 const pClippedLocal = pClippedWorld.applyMatrix4(invMatrix);
-                // Center for previews
                 vertices[i * 3 + 0] = pFarLocal.x + l/2;
                 vertices[i * 3 + 1] = pFarLocal.y;
                 vertices[i * 3 + 2] = pFarLocal.z;
