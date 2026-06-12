@@ -4,8 +4,10 @@ class CamperSimulator {
         this.frequency = 3;
         this.apexHeight = 900;
         this.taperStrength = 0.45;
-        this.totalStretch = 3500;
+        this.bedLength = 2000;
+        this.caboverOverhang = 1500;
         this.cabinClearance = 600;
+        this.rearSquaring = 0.8;
         
         this.truckWidth = 1860;
         this.truckLength = 1560;
@@ -46,8 +48,10 @@ class CamperSimulator {
 
         bind('param-apex', 'apexHeight', 'val-apex');
         bind('param-taper', 'taperStrength', 'val-taper', 100);
-        bind('param-stretch', 'totalStretch', 'val-stretch');
+        bind('param-stretch', 'bedLength', 'val-stretch');
+        bind('param-overhang', 'caboverOverhang', 'val-overhang');
         bind('param-clearance', 'cabinClearance', 'val-clearance');
+        bind('param-squaring', 'rearSquaring', 'val-squaring', 100);
     }
 
     calculate() {
@@ -98,20 +102,49 @@ class CamperSimulator {
     }
 
     applyOverlanderTransform() {
-        const totalZ = this.totalStretch;
-        const zScale = totalZ / 2000;
         const yScale = this.apexHeight / 1000;
+        
+        // Front stretches for cabover, back stretches for bed
+        const frontStretch = this.caboverOverhang + (this.bedLength / 2);
+        const rearStretch = this.bedLength / 2;
 
         this.vertices.forEach(v => {
-            v.z *= zScale;
+            // Non-uniform Z stretch
+            if (v.z < 0) {
+                v.z *= (frontStretch / 1000); 
+            } else {
+                v.z *= (rearStretch / 1000);
+            }
+
+            // Apply Y scaling
             v.y *= yScale;
-            const zNorm = (v.z + totalZ/2) / totalZ;
+            
+            // Taper logic (mostly affecting the front cabover)
+            const totalZ = frontStretch + rearStretch;
+            const zNorm = (v.z + frontStretch) / totalZ; // 0 at front, 1 at back
             const taper = 1.0 - (Math.max(0, 1.0 - zNorm) * this.taperStrength);
             v.y *= taper;
+
+            // Rear Squaring logic
+            if (v.z > 0 && this.rearSquaring > 0) {
+                // Determine how far this point is from the center plane
+                const zFactor = v.z / rearStretch; // 0 to 1
+                
+                // We want to pull the back surface outward. 
+                // A sphere naturally curves in. We pull it toward the bounding box (rearStretch).
+                // The effect should be strongest near the back and top.
+                // We interpolate v.z toward the rearStretch boundary.
+                const targetZ = rearStretch * Math.pow(zFactor, 1.0 - this.rearSquaring * 0.9);
+                v.z = v.z * (1 - this.rearSquaring) + targetZ * this.rearSquaring;
+            }
         });
 
-        const zStartCabin = -500; // aligns with front edge of bed where cabin starts
-        const zFullCabin = -900; // slope up over the cabin windshield
+        // The bed starts at Z=0 (center of our original sphere roughly) and goes to +bedLength/2.
+        // The cabin starts at some offset. Let's base it on the new coordinates.
+        // We know Z=0 is the middle of the bed. The bed rail extends from -bedLength/2 to +bedLength/2.
+        // The cabover starts at -bedLength/2.
+        const zStartCabin = -this.bedLength / 2; 
+        const zFullCabin = zStartCabin - 400; // 400mm slope up
 
         this.vertices.forEach(v => {
             let minY = -100; // base drops 100mm below rail
@@ -242,6 +275,11 @@ class CamperSimulator {
         const offsetY = 600; 
 
         // --- 1. Draw Ford Ranger 2021 Profile (Stylized SVG) ---
+        // Center the bed horizontally. Bed length = this.bedLength.
+        // We will make the bed draw from offsetX to offsetX + this.bedLength*scale.
+        // So the back of the cabin is at offsetX.
+        const bedLengthScaled = this.bedLength * scale;
+
         const rangerSVG = `
             <!-- Background Outline -->
             <path d="M -2800 0 L -2700 -200 L -2500 -250 L -2000 -250 L -1800 -400 
@@ -250,11 +288,11 @@ class CamperSimulator {
                   fill="#1e293b" stroke="#334155" stroke-width="5" transform="translate(${offsetX}, ${offsetY}) scale(${scale})"/>
 
             <!-- Bed Detail -->
-            <rect x="${offsetX + 300*scale}" y="${offsetY - 600*scale}" width="${2000*scale}" height="${600*scale}" fill="#334155" opacity="0.3" stroke="#475569" stroke-width="1" />
+            <rect x="${offsetX}" y="${offsetY - 600*scale}" width="${bedLengthScaled}" height="${600*scale}" fill="#334155" opacity="0.3" stroke="#475569" stroke-width="1" />
 
             <!-- Cabin Detail -->
-            <path d="M 0 0 L -1800 0 L -1800 -400 L -1500 -${this.cabinClearance} L 0 -${this.cabinClearance} Z" 
-                  fill="#334155" opacity="0.4" stroke="#475569" stroke-width="1" transform="translate(${offsetX + 300*scale}, ${offsetY - 600*scale})"/>
+            <path d="M 0 0 L -1800 0 L -1800 -400 L -1500 -${this.cabinClearance + 100} L 0 -${this.cabinClearance + 100} Z" 
+                  fill="#334155" opacity="0.4" stroke="#475569" stroke-width="1" transform="translate(${offsetX}, ${offsetY - 500*scale})"/>
 
             <!-- Wheels -->
             <circle cx="${offsetX - 1800*scale}" cy="${offsetY}" r="${380*scale}" fill="#0f172a" stroke="#334155" stroke-width="4" />
@@ -266,13 +304,13 @@ class CamperSimulator {
         truckGroup.innerHTML = rangerSVG;
 
         // --- 2. Draw Geodesic Shell ---
-        const railX = offsetX + 300*scale; // Alignment with bed start
+        const railX = offsetX + (this.bedLength / 2) * scale; // The center of our geodesic Z=0 is the center of the bed
         const railY = offsetY - 600*scale;
 
         this.faces.forEach(face => {
             const points = face.map(vIdx => {
                 const v = this.vertices[vIdx];
-                const x = railX + (v.z + 500) * scale; 
+                const x = railX + v.z * scale; 
                 const y = railY - v.y * scale;
                 return `${x},${y}`;
             });
