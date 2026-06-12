@@ -198,64 +198,119 @@ class CamperSimulator {
                 const perpendicular = new THREE.Vector3().crossVectors(dir, faceNormal).normalize();
                 miter = Math.abs(perpendicular.angleTo(vertexNormal) * 180 / Math.PI - 90);
             }
-
             strutData.push({ length, bevel, miter });
         });
 
-        const types = [];
+        // Group into Cut Families
+        const families = [];
         strutData.forEach(s => {
-            const existing = types.find(t => Math.abs(t.length - s.length) < 2);
-            if (existing) {
-                existing.count++;
+            // Find existing family with matching cuts (tolerance 0.5 degrees)
+            const existingFamily = families.find(f => Math.abs(f.miter - s.miter) < 0.5 && Math.abs(f.bevel - s.bevel) < 0.5);
+            if (existingFamily) {
+                const existingLength = existingFamily.lengths.find(l => Math.abs(l.length - s.length) < 2);
+                if (existingLength) {
+                    existingLength.count++;
+                } else {
+                    existingFamily.lengths.push({ length: s.length, count: 1 });
+                }
             } else {
-                types.push({ ...s, count: 1, id: String.fromCharCode(65 + types.length) });
+                families.push({
+                    miter: s.miter,
+                    bevel: s.bevel,
+                    lengths: [{ length: s.length, count: 1 }]
+                });
             }
         });
 
-        this.strutTypes = types.sort((a, b) => a.length - b.length);
-        this.struts = strutData;
+        // Sort families by miter angle (or total count)
+        families.sort((a, b) => a.miter - b.miter);
+
+        let totalStruts = 0;
+        let totalLengths = 0;
+
+        families.forEach((f, fIdx) => {
+            f.id = String.fromCharCode(65 + fIdx); // A, B, C...
+            // Sort lengths within family descending (longest is A1)
+            f.lengths.sort((a, b) => b.length - a.length);
+            
+            totalLengths += f.lengths.length;
+            f.lengths.forEach(l => {
+                totalStruts += l.count;
+            });
+        });
+
+        this.cutFamilies = families;
+        this.stats = { families: families.length, lengths: totalLengths, struts: totalStruts, cuts: totalStruts * 2 };
     }
 
     updateUI() {
         this.renderSVG();
-        const inventory = document.getElementById('inventory-body');
-        if (inventory) {
-            inventory.innerHTML = '';
-            this.strutTypes.forEach(t => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><span class="badge-type type-${t.id.toLowerCase()}">${t.id}</span></td>
-                    <td class="font-mono">${t.length.toFixed(1)}mm</td>
-                    <td>${t.count}</td>
-                    <td class="text-xs text-slate-500">${t.miter.toFixed(1)}° / ${t.bevel.toFixed(1)}°</td>
-                `;
-                inventory.appendChild(row);
-            });
+        
+        const summary = document.getElementById('fabrication-summary');
+        if (summary) {
+            summary.innerHTML = `
+                <div class="grid grid-cols-4 gap-4 text-center">
+                    <div>
+                        <div class="text-xs text-primary mb-1">FAMILIES</div>
+                        <div class="text-xl font-bold text-white">${this.stats.families}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-primary mb-1">LENGTHS</div>
+                        <div class="text-xl font-bold text-white">${this.stats.lengths}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-primary mb-1">STRUTS</div>
+                        <div class="text-xl font-bold text-white">${this.stats.struts}</div>
+                    </div>
+                    <div>
+                        <div class="text-xs text-primary mb-1">TOTAL CUTS</div>
+                        <div class="text-xl font-bold text-white">${this.stats.cuts}</div>
+                    </div>
+                </div>
+            `;
         }
 
-        const guide = document.getElementById('cutting-guide-container');
-        if (guide) {
-            guide.innerHTML = '';
-            this.strutTypes.forEach(t => {
+        const container = document.getElementById('inventory-container');
+        if (container) {
+            container.innerHTML = '';
+            this.cutFamilies.forEach(f => {
                 const card = document.createElement('div');
-                card.className = 'data-card';
+                card.className = 'data-card mb-4';
+
+                let rows = '';
+                f.lengths.forEach((l, i) => {
+                    const id = `${f.id}${i+1}`;
+                    rows += `
+                        <tr>
+                            <td><span class="badge-type type-${f.id.toLowerCase()}">${id}</span></td>
+                            <td class="font-mono text-white">${l.length.toFixed(1)}mm</td>
+                            <td>${l.count}</td>
+                        </tr>
+                    `;
+                });
+
                 card.innerHTML = `
-                    <div class="flex justify-between items-center mb-3">
-                        <span class="font-bold text-primary">STRUT TYPE ${t.id}</span>
-                        <span class="text-xs bg-slate-800 px-2 py-1 rounded">QTY: ${t.count}</span>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4 text-xs">
-                        <div>
-                            <div class="text-slate-500 mb-1">Miter Saw Setting</div>
-                            <div class="text-lg font-mono text-white">${t.miter.toFixed(1)}°</div>
-                        </div>
-                        <div>
-                            <div class="text-slate-500 mb-1">Bevel (Tilt) Setting</div>
-                            <div class="text-lg font-mono text-white">${t.bevel.toFixed(1)}°</div>
+                    <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-700">
+                        <span class="font-bold text-primary">CUT FAMILY ${f.id}</span>
+                        <div class="flex gap-3 text-xs bg-slate-800 px-3 py-1 rounded text-slate-300">
+                            <span>Miter: <strong class="text-white">${f.miter.toFixed(1)}°</strong></span>
+                            <span>Bevel: <strong class="text-white">${f.bevel.toFixed(1)}°</strong></span>
                         </div>
                     </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Length</th>
+                                <th>Qty</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows}
+                        </tbody>
+                    </table>
                 `;
-                guide.appendChild(card);
+                container.appendChild(card);
             });
         }
     }

@@ -279,75 +279,64 @@
                     <div class="param-item">
                         <div class="param-row">
                             <span class="param-label">Max Height (Apex)</span>
-                            <span class="param-value" id="val-apex">900mm</span>
+                            <span class="param-value" id="val-apex">1931mm</span>
                         </div>
-                        <input type="range" id="param-apex" min="700" max="2300" value="900" class="slider">
+                        <input type="range" id="param-apex" min="700" max="2300" value="1931" class="slider">
                     </div>
                     <div class="param-item">
                         <div class="param-row">
                             <span class="param-label">Front Taper Strength</span>
-                            <span class="param-value" id="val-taper">0.45</span>
+                            <span class="param-value" id="val-taper">0.00</span>
                         </div>
-                        <input type="range" id="param-taper" min="0" max="100" value="45" class="slider">
+                        <input type="range" id="param-taper" min="0" max="100" value="0" class="slider">
                     </div>
                     <div class="param-item">
                         <div class="param-row">
                             <span class="param-label">Bed Length (Z)</span>
-                            <span class="param-value" id="val-stretch">2000mm</span>
+                            <span class="param-value" id="val-stretch">3000mm</span>
                         </div>
-                        <input type="range" id="param-stretch" min="1500" max="3000" value="2000" class="slider">
+                        <input type="range" id="param-stretch" min="1500" max="3500" value="3000" class="slider">
                     </div>
                     <div class="param-item">
                         <div class="param-row">
                             <span class="param-label">Cabover Overhang</span>
-                            <span class="param-value" id="val-overhang">1500mm</span>
+                            <span class="param-value" id="val-overhang">1626mm</span>
                         </div>
-                        <input type="range" id="param-overhang" min="500" max="2500" value="1500" class="slider">
+                        <input type="range" id="param-overhang" min="500" max="2500" value="1626" class="slider">
                     </div>
                     <div class="param-item">
                         <div class="param-row">
                             <span class="param-label">Cabin Clearance</span>
-                            <span class="param-value" id="val-clearance">600mm</span>
+                            <span class="param-value" id="val-clearance">738mm</span>
                         </div>
-                        <input type="range" id="param-clearance" min="0" max="1500" value="600" class="slider">
+                        <input type="range" id="param-clearance" min="0" max="1500" value="738" class="slider">
                     </div>
                     <div class="param-item">
                         <div class="param-row">
                             <span class="param-label">Rear Squaring</span>
-                            <span class="param-value" id="val-squaring">0.8</span>
+                            <span class="param-value" id="val-squaring">0.43</span>
                         </div>
-                        <input type="range" id="param-squaring" min="0" max="100" value="80" class="slider">
+                        <input type="range" id="param-squaring" min="0" max="100" value="43" class="slider">
                     </div>
                 </div>
             </div>
 
             <div class="panel-content">
-                <div class="section-title"><i class="bi bi-box-seam"></i> Strut Inventory (Material List)</div>
-                <div class="data-card">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Type</th>
-                                <th>Length</th>
-                                <th>Qty</th>
-                                <th>Cuts</th>
-                            </tr>
-                        </thead>
-                        <tbody id="inventory-body">
-                            <!-- Populated by JS -->
-                        </tbody>
-                    </table>
-                </div>
+                <div class="section-title"><i class="bi bi-tools"></i> Fabrication Guide (Grouped by Cuts)</div>
 
-                <div class="section-title"><i class="bi bi-scissors"></i> Precision Cutting Guide</div>
-                <div id="cutting-guide-container">
+                <!-- Fabrication Summary -->
+                <div id="fabrication-summary" class="data-card mb-4" style="background: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.2);">
                     <!-- Populated by JS -->
                 </div>
 
-                <div class="footer-info">
+                <div id="inventory-container">
+                    <!-- Populated by JS -->
+                </div>
+
+                <div class="footer-info mt-6">
                     <i class="bi bi-info-circle-fill text-primary"></i>
-                    <strong>Good Karma Note:</strong> Each strut requires a compound cut on both ends. 
-                    The <strong>Miter</strong> is the angle across the face (width), and the <strong>Bevel</strong> is the tilt of the blade (thickness).
+                    <strong>Good Karma Note:</strong> Set your saw to the Miter/Bevel angles for a family, then cut all lengths for that group. 
+                    <strong>Miter</strong> is the angle across the face (width), and <strong>Bevel</strong> is the tilt of the blade (thickness).
                 </div>
             </div>
         </div>
