@@ -60,7 +60,7 @@ layout: page
   
   <div class="mb-4">
     <h3 class="h4 text-primary"><i class="bi bi-magic me-2"></i> Apps & Playgrounds</h3>
-    <p>Check out the interactive tools directory, featuring the Semantic Learning journey, full-screen Drawing Recorder, and the 7m Geodesic Dome Builder.</p>
+    <p>Check out the interactive tools directory, featuring the Semantic Learning journey, full-screen Drawing Recorder, 7m Geodesic Dome Builder, and the new Truck Camper Bamboo Builder.</p>
     <a href="/apps/" class="btn btn-outline-primary animated-link">Explore Apps <i class="bi bi-grid-3x3-gap"></i></a>
   </div>
   
