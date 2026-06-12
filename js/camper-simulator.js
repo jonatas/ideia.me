@@ -1,7 +1,7 @@
 
 class CamperSimulator {
     constructor() {
-        this.frequency = 3;
+        this.frequency = 2;
         this.apexHeight = 1931;
         this.taperStrength = 0.00;
         this.bedLength = 3000;
@@ -357,129 +357,160 @@ class CamperSimulator {
     }
 
     renderSVG() {
-        const truckGroup = document.getElementById('truck-group');
-        const geodesicGroup = document.getElementById('geodesic-group');
-        const dimGroup = document.getElementById('dimensions-group');
-        if (!truckGroup || !geodesicGroup) return;
+        const sideTruck = document.getElementById('view-side-truck');
+        const sideGeo = document.getElementById('view-side-geodesic');
+        const sideDim = document.getElementById('view-side-dim');
 
-        truckGroup.innerHTML = '';
-        geodesicGroup.innerHTML = '';
-        dimGroup.innerHTML = '';
+        const frontTruck = document.getElementById('view-front-truck');
+        const frontGeo = document.getElementById('view-front-geodesic');
+
+        const backTruck = document.getElementById('view-back-truck');
+        const backGeo = document.getElementById('view-back-geodesic');
+
+        if (!sideTruck || !sideGeo) return;
+
+        sideTruck.innerHTML = ''; sideGeo.innerHTML = ''; sideDim.innerHTML = '';
+        frontTruck.innerHTML = ''; frontGeo.innerHTML = '';
+        backTruck.innerHTML = ''; backGeo.innerHTML = '';
 
         const scale = 0.22; 
-        const offsetX = 800; 
-        const offsetY = 600; 
 
-        // --- 1. Draw Ford Ranger 2021 Profile (Stylized SVG) ---
-        // Center the bed horizontally. Bed length = this.bedLength.
-        // We will make the bed draw from offsetX to offsetX + this.bedLength*scale.
-        // So the back of the cabin is at offsetX.
+        // Side View
+        const sideOx = 1100; 
+        const sideOy = 550; 
+        this.renderTruckSide(sideTruck, sideOx, sideOy, scale);
+        this.renderGeodesic(sideGeo, sideOx + (this.bedLength / 2) * scale, sideOy - 600 * scale, scale, 'side');
+
+        const apexY = sideOy - 600*scale - this.apexHeight * scale;
+        const dimX = sideOx + (this.bedLength / 2) * scale + 1000*scale;
+
+        sideDim.innerHTML = `
+            <line x1="${dimX}" y1="${sideOy - 600*scale}" x2="${dimX}" y2="${apexY}" stroke="#fb7185" stroke-width="2" />
+            <text x="${dimX + 10}" y="${(sideOy - 600*scale + apexY)/2}" fill="#fb7185" font-size="14" font-weight="bold">${Math.round(this.apexHeight)}mm</text>
+        `;
+
+        // Front View
+        const frontOx = 500;
+        const frontOy = 1100;
+        this.renderTruckFront(frontTruck, frontOx, frontOy, scale);
+        this.renderGeodesic(frontGeo, frontOx, frontOy - 600 * scale, scale, 'front');
+
+        // Back View
+        const backOx = 1700;
+        const backOy = 1100;
+        this.renderTruckBack(backTruck, backOx, backOy, scale);
+        this.renderGeodesic(backGeo, backOx, backOy - 600 * scale, scale, 'back');
+    }
+
+    renderTruckSide(group, ox, oy, scale) {
         const bedLengthScaled = this.bedLength * scale;
-
-        const rangerSVG = `
-            <!-- Background Outline -->
+        group.innerHTML = `
             <path d="M -2800 0 L -2700 -200 L -2500 -250 L -2000 -250 L -1800 -400 
                      L -1500 -1200 L -800 -1250 L 0 -1250 L 200 -1200 L 300 -600 
                      L 2200 -600 L 2300 0 Z" 
-                  fill="#1e293b" stroke="#334155" stroke-width="5" transform="translate(${offsetX}, ${offsetY}) scale(${scale})"/>
-
-            <!-- Bed Detail -->
-            <rect x="${offsetX}" y="${offsetY - 600*scale}" width="${bedLengthScaled}" height="${600*scale}" fill="#334155" opacity="0.3" stroke="#475569" stroke-width="1" />
-
-            <!-- Cabin Detail -->
+                  fill="#1e293b" stroke="#334155" stroke-width="5" transform="translate(${ox}, ${oy}) scale(${scale})"/>
+            <rect x="${ox}" y="${oy - 600*scale}" width="${bedLengthScaled}" height="${600*scale}" fill="#334155" opacity="0.3" stroke="#475569" stroke-width="1" />
             <path d="M 0 0 L -1800 0 L -1800 -400 L -1500 -${this.cabinClearance + 100} L 0 -${this.cabinClearance + 100} Z" 
-                  fill="#334155" opacity="0.4" stroke="#475569" stroke-width="1" transform="translate(${offsetX}, ${offsetY - 500*scale})"/>
-
-            <!-- Wheels -->
-            <circle cx="${offsetX - 1800*scale}" cy="${offsetY}" r="${380*scale}" fill="#0f172a" stroke="#334155" stroke-width="4" />
-            <circle cx="${offsetX + 1500*scale}" cy="${offsetY}" r="${380*scale}" fill="#0f172a" stroke="#334155" stroke-width="4" />
-
-            <!-- Bed Rail Reference Line -->
-            <line x1="${offsetX - 3000*scale}" y1="${offsetY - 600*scale}" x2="${offsetX + 3000*scale}" y2="${offsetY - 600*scale}" stroke="#334155" stroke-dasharray="10,10" />
+                  fill="#334155" opacity="0.4" stroke="#475569" stroke-width="1" transform="translate(${ox}, ${oy - 500*scale})"/>
+            <circle cx="${ox - 1800*scale}" cy="${oy}" r="${380*scale}" fill="#0f172a" stroke="#334155" stroke-width="4" />
+            <circle cx="${ox + 1500*scale}" cy="${oy}" r="${380*scale}" fill="#0f172a" stroke="#334155" stroke-width="4" />
+            <line x1="${ox - 3000*scale}" y1="${oy - 600*scale}" x2="${ox + 3000*scale}" y2="${oy - 600*scale}" stroke="#334155" stroke-dasharray="10,10" />
+            <text x="${ox}" y="${oy + 150}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">SIDE VIEW</text>
         `;
-        truckGroup.innerHTML = rangerSVG;
+    }
 
-        // --- 2. Draw Geodesic Shell ---
-        const railX = offsetX + (this.bedLength / 2) * scale; // The center of our geodesic Z=0 is the center of the bed
-        const railY = offsetY - 600*scale;
+    renderTruckFront(group, ox, oy, scale) {
+        const w = this.truckWidth * scale;
+        const tW = 265 * scale;
+        const tR = 380 * scale;
+        group.innerHTML = `
+            <rect x="${ox - w/2}" y="${oy - tR}" width="${tW}" height="${tR*2}" rx="5" fill="#0f172a" stroke="#334155" stroke-width="3" />
+            <rect x="${ox + w/2 - tW}" y="${oy - tR}" width="${tW}" height="${tR*2}" rx="5" fill="#0f172a" stroke="#334155" stroke-width="3" />
+            <path d="M ${ox - w/2} ${oy - 500*scale} 
+                     L ${ox + w/2} ${oy - 500*scale} 
+                     L ${ox + w/2 - 100*scale} ${oy - 1200*scale} 
+                     L ${ox - w/2 + 100*scale} ${oy - 1200*scale} Z" 
+                  fill="#1e293b" stroke="#334155" stroke-width="4" />
+            <rect x="${ox - w/2 - 50*scale}" y="${oy - 800*scale}" width="${50*scale}" height="${80*scale}" rx="5" fill="#1e293b" stroke="#334155" stroke-width="2" />
+            <rect x="${ox + w/2}" y="${oy - 800*scale}" width="${50*scale}" height="${80*scale}" rx="5" fill="#1e293b" stroke="#334155" stroke-width="2" />
+            <text x="${ox - 50}" y="${oy + 150}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">FRONT VIEW</text>
+        `;
+    }
 
-        // Draw translucent faces first
+    renderTruckBack(group, ox, oy, scale) {
+        const w = this.truckWidth * scale;
+        const tW = 265 * scale;
+        const tR = 380 * scale;
+        group.innerHTML = `
+            <rect x="${ox - w/2}" y="${oy - tR}" width="${tW}" height="${tR*2}" rx="5" fill="#0f172a" stroke="#334155" stroke-width="3" />
+            <rect x="${ox + w/2 - tW}" y="${oy - tR}" width="${tW}" height="${tR*2}" rx="5" fill="#0f172a" stroke="#334155" stroke-width="3" />
+            <path d="M ${ox - w/2 + 50*scale} ${oy - 600*scale} 
+                     L ${ox + w/2 - 50*scale} ${oy - 600*scale} 
+                     L ${ox + w/2 - 100*scale} ${oy - 1200*scale} 
+                     L ${ox - w/2 + 100*scale} ${oy - 1200*scale} Z" 
+                  fill="#0f172a" stroke="#1e293b" stroke-width="2" />
+            <rect x="${ox - w/2}" y="${oy - 900*scale}" width="${w}" height="${400*scale}" fill="#1e293b" stroke="#334155" stroke-width="4" />
+            <rect x="${ox - w/2 + 20*scale}" y="${oy - 800*scale}" width="${50*scale}" height="${150*scale}" rx="5" fill="#7f1d1d" opacity="0.8" />
+            <rect x="${ox + w/2 - 70*scale}" y="${oy - 800*scale}" width="${50*scale}" height="${150*scale}" rx="5" fill="#7f1d1d" opacity="0.8" />
+            <text x="${ox - 50}" y="${oy + 150}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">BACK VIEW</text>
+        `;
+    }
+
+    renderGeodesic(group, ox, oy, scale, viewType) {
+        const isHighlighting = this.highlightedFamily !== null || this.highlightedStrutId !== null;
+
+        const mapCoords = (v) => {
+            if (viewType === 'side') return { x: ox + v.z * scale, y: oy - v.y * scale };
+            if (viewType === 'front') return { x: ox + v.x * scale, y: oy - v.y * scale };
+            if (viewType === 'back') return { x: ox - v.x * scale, y: oy - v.y * scale };
+        };
+
+        // Draw faces
         this.faces.forEach(face => {
             const points = face.map(vIdx => {
-                const v = this.vertices[vIdx];
-                const x = railX + v.z * scale; 
-                const y = railY - v.y * scale;
-                return `${x},${y}`;
+                const c = mapCoords(this.vertices[vIdx]);
+                return `${c.x},${c.y}`;
             });
-
             const poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
             poly.setAttribute("points", points.join(" "));
-            
-            // Dim the faces if highlighting is active to make struts pop
-            const isHighlighting = this.highlightedFamily !== null || this.highlightedStrutId !== null;
             poly.setAttribute("fill", isHighlighting ? "rgba(56, 189, 248, 0.05)" : "rgba(56, 189, 248, 0.15)");
-            poly.setAttribute("stroke", "none"); // Remove polygon stroke, we'll draw strut lines
-            geodesicGroup.appendChild(poly);
+            poly.setAttribute("stroke", "none");
+            group.appendChild(poly);
         });
 
-        // Draw individual struts to allow highlighting
+        // Draw struts
         this.struts.forEach(strut => {
-            const v1 = this.vertices[strut.v1Idx];
-            const v2 = this.vertices[strut.v2Idx];
-            
-            const x1 = railX + v1.z * scale;
-            const y1 = railY - v1.y * scale;
-            const x2 = railX + v2.z * scale;
-            const y2 = railY - v2.y * scale;
+            const c1 = mapCoords(this.vertices[strut.v1Idx]);
+            const c2 = mapCoords(this.vertices[strut.v2Idx]);
 
-            let strokeColor = "#38bdf8"; // Default primary blue
+            let strokeColor = "#38bdf8"; 
             let strokeWidth = "1.5";
             let opacity = "0.5";
 
-            const isHighlighting = this.highlightedFamily !== null || this.highlightedStrutId !== null;
-            
             if (isHighlighting) {
                 if (this.highlightedStrutId === strut.strutId) {
-                    strokeColor = "#fbbf24"; // Yellow for specific strut length
+                    strokeColor = "#fbbf24"; 
                     strokeWidth = "3";
                     opacity = "1";
                 } else if (this.highlightedFamily === strut.familyId && this.highlightedStrutId === null) {
-                    strokeColor = "#f472b6"; // Rose for family
+                    strokeColor = "#f472b6"; 
                     strokeWidth = "2.5";
                     opacity = "1";
                 } else {
-                    strokeColor = "#334155"; // Dark gray for others
+                    strokeColor = "#334155"; 
                     opacity = "0.3";
                 }
             }
 
             const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-            line.setAttribute("x1", x1);
-            line.setAttribute("y1", y1);
-            line.setAttribute("x2", x2);
-            line.setAttribute("y2", y2);
+            line.setAttribute("x1", c1.x); line.setAttribute("y1", c1.y);
+            line.setAttribute("x2", c2.x); line.setAttribute("y2", c2.y);
             line.setAttribute("stroke", strokeColor);
             line.setAttribute("stroke-width", strokeWidth);
             line.setAttribute("opacity", opacity);
-            geodesicGroup.appendChild(line);
+            group.appendChild(line);
         });
-
-        // --- 3. Dynamic Dimensions ---
-        const apexY = railY - this.apexHeight * scale;
-        const dimX = railX + 1000*scale;
-
-        const hLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
-        hLine.setAttribute("x1", dimX); hLine.setAttribute("y1", railY);
-        hLine.setAttribute("x2", dimX); hLine.setAttribute("y2", apexY);
-        hLine.setAttribute("stroke", "#fb7185"); hLine.setAttribute("stroke-width", "2");
-        dimGroup.appendChild(hLine);
-
-        const hText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        hText.setAttribute("x", dimX + 10); hText.setAttribute("y", (railY + apexY)/2);
-        hText.setAttribute("fill", "#fb7185"); hText.setAttribute("font-size", "14"); hText.setAttribute("font-weight", "bold");
-        hText.textContent = `${Math.round(this.apexHeight)}mm`;
-        dimGroup.appendChild(hText);
     }
-}
+    }
 
 new CamperSimulator();

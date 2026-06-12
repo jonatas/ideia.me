@@ -245,7 +245,7 @@
     <main>
         <div class="visual-area">
             <div class="blueprint-container">
-                <svg id="blueprint-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet">
+                <svg id="blueprint-svg" viewBox="0 0 2400 1200" preserveAspectRatio="xMidYMid meet">
                     <!-- Background Grid -->
                     <defs>
                         <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -254,14 +254,18 @@
                     </defs>
                     <rect width="100%" height="100%" fill="url(#grid)" />
                     
-                    <!-- Truck Group (Layered) -->
-                    <g id="truck-group"></g>
-                    
-                    <!-- Geodesic Group (Layered) -->
-                    <g id="geodesic-group"></g>
+                    <!-- Side View -->
+                    <g id="view-side-truck"></g>
+                    <g id="view-side-geodesic"></g>
+                    <g id="view-side-dim"></g>
 
-                    <!-- Dimension Lines Group -->
-                    <g id="dimensions-group"></g>
+                    <!-- Front View -->
+                    <g id="view-front-truck"></g>
+                    <g id="view-front-geodesic"></g>
+
+                    <!-- Back View -->
+                    <g id="view-back-truck"></g>
+                    <g id="view-back-geodesic"></g>
                 </svg>
             </div>
             <div class="mt-8 text-center max-w-2xl">
@@ -281,7 +285,7 @@
                             <span class="param-label">Geodesic Frequency</span>
                             <span class="param-value" id="val-freq">V3</span>
                         </div>
-                        <input type="range" id="param-freq" min="1" max="4" value="3" class="slider" step="1">
+                        <input type="range" id="param-freq" min="1" max="4" value="2" class="slider" step="1">
                     </div>
                     <div class="param-item">
                         <div class="param-row">
