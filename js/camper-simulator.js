@@ -201,7 +201,7 @@ class CamperSimulator {
                 const perpendicular = new THREE.Vector3().crossVectors(dir, faceNormal).normalize();
                 miter = Math.abs(perpendicular.angleTo(vertexNormal) * 180 / Math.PI - 90);
             }
-            strutData.push({ length, bevel, miter });
+            strutData.push({ length, bevel, miter, v1Idx: edge.v1Idx, v2Idx: edge.v2Idx });
         });
 
         // Group into Cut Families
@@ -403,6 +403,7 @@ class CamperSimulator {
         const railX = offsetX + (this.bedLength / 2) * scale; // The center of our geodesic Z=0 is the center of the bed
         const railY = offsetY - 600*scale;
 
+        // Draw translucent faces first
         this.faces.forEach(face => {
             const points = face.map(vIdx => {
                 const v = this.vertices[vIdx];
@@ -413,10 +414,54 @@ class CamperSimulator {
 
             const poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
             poly.setAttribute("points", points.join(" "));
-            poly.setAttribute("fill", "rgba(56, 189, 248, 0.15)");
-            poly.setAttribute("stroke", "#38bdf8");
-            poly.setAttribute("stroke-width", "1.5");
+            
+            // Dim the faces if highlighting is active to make struts pop
+            const isHighlighting = this.highlightedFamily !== null || this.highlightedStrutId !== null;
+            poly.setAttribute("fill", isHighlighting ? "rgba(56, 189, 248, 0.05)" : "rgba(56, 189, 248, 0.15)");
+            poly.setAttribute("stroke", "none"); // Remove polygon stroke, we'll draw strut lines
             geodesicGroup.appendChild(poly);
+        });
+
+        // Draw individual struts to allow highlighting
+        this.struts.forEach(strut => {
+            const v1 = this.vertices[strut.v1Idx];
+            const v2 = this.vertices[strut.v2Idx];
+            
+            const x1 = railX + v1.z * scale;
+            const y1 = railY - v1.y * scale;
+            const x2 = railX + v2.z * scale;
+            const y2 = railY - v2.y * scale;
+
+            let strokeColor = "#38bdf8"; // Default primary blue
+            let strokeWidth = "1.5";
+            let opacity = "0.5";
+
+            const isHighlighting = this.highlightedFamily !== null || this.highlightedStrutId !== null;
+            
+            if (isHighlighting) {
+                if (this.highlightedStrutId === strut.strutId) {
+                    strokeColor = "#fbbf24"; // Yellow for specific strut length
+                    strokeWidth = "3";
+                    opacity = "1";
+                } else if (this.highlightedFamily === strut.familyId && this.highlightedStrutId === null) {
+                    strokeColor = "#f472b6"; // Rose for family
+                    strokeWidth = "2.5";
+                    opacity = "1";
+                } else {
+                    strokeColor = "#334155"; // Dark gray for others
+                    opacity = "0.3";
+                }
+            }
+
+            const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+            line.setAttribute("x1", x1);
+            line.setAttribute("y1", y1);
+            line.setAttribute("x2", x2);
+            line.setAttribute("y2", y2);
+            line.setAttribute("stroke", strokeColor);
+            line.setAttribute("stroke-width", strokeWidth);
+            line.setAttribute("opacity", opacity);
+            geodesicGroup.appendChild(line);
         });
 
         // --- 3. Dynamic Dimensions ---
