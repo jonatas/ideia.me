@@ -289,6 +289,13 @@ class CamperSimulator {
         const container = document.getElementById('inventory-container');
         if (container) {
             container.innerHTML = '';
+            // Expose a method to the global scope for the inline onclick handlers in the HTML string
+            window.selectCamperStrut = (id) => {
+                this.highlightedStrutId = this.highlightedStrutId === id ? null : id;
+                this.highlightedFamily = null;
+                this.updateUI();
+            };
+
             this.cutFamilies.forEach(f => {
                 const card = document.createElement('div');
                 card.className = `data-card mb-4 cursor-pointer border-2 transition-colors ${this.highlightedFamily === f.id ? 'border-primary' : 'border-slate-700 hover:border-slate-500'}`;
@@ -307,7 +314,7 @@ class CamperSimulator {
                     const isSelected = this.highlightedStrutId === id;
                     rows += `
                         <tr class="cursor-pointer transition-colors ${isSelected ? 'bg-primary/20' : 'hover:bg-slate-800'}" 
-                            onclick="event.stopPropagation(); document.getElementById('camper-app').__vue__.selectStrut('${id}')">
+                            onclick="event.stopPropagation(); window.selectCamperStrut('${id}')">
                             <td class="py-2 px-2 rounded-l"><span class="badge-type type-${f.id.toLowerCase()}">${id}</span></td>
                             <td class="font-mono text-white py-2">${l.length.toFixed(1)}mm</td>
                             <td class="py-2">${l.count}</td>
@@ -342,17 +349,6 @@ class CamperSimulator {
                 `;
                 container.appendChild(card);
             });
-            
-            // Expose a method to the global scope for the inline onclick handlers in the HTML string
-            // A bit hacky but works for vanilla JS without a framework
-            document.getElementById('camper-app') || document.body; 
-            document.body.__vue__ = {
-                selectStrut: (id) => {
-                    this.highlightedStrutId = this.highlightedStrutId === id ? null : id;
-                    this.highlightedFamily = null;
-                    this.updateUI();
-                }
-            };
         }
     }
 
