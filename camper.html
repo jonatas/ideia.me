@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ranger Geodesic Overlander - Manufacturing Guide</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Three.js for math only (Vector3) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f1f5f9;
+            --primary-color: #38bdf8;
+            --accent-color: #fb7185;
+            --header-height: 60px;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        header {
+            height: var(--header-height);
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 24px;
+            border-bottom: 1px solid #334155;
+            z-index: 100;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.25rem;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 12px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--primary-color);
+        }
+
+        main {
+            height: calc(100vh - var(--header-height));
+            display: grid;
+            grid-template-columns: 1fr 450px;
+            overflow: hidden;
+        }
+
+        .visual-area {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            overflow-y: auto;
+        }
+
+        .blueprint-container {
+            position: relative;
+            width: 100%;
+            max-width: 1100px;
+            background: #0f172a;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid #334155;
+            aspect-ratio: 16 / 9;
+        }
+
+        #blueprint-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .blueprint-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        #blueprint-canvas {
+            width: 100%;
+            height: 100%;
+        }
+
+        .side-panel {
+            background: #1e293b;
+            border-left: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-header {
+            padding: 24px;
+            border-bottom: 1px solid #334155;
+        }
+
+        .panel-content {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .data-card {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th {
+            text-align: left;
+            color: #64748b;
+            padding-bottom: 8px;
+            font-weight: 500;
+        }
+
+        td {
+            padding: 8px 0;
+            border-top: 1px solid #1e293b;
+            color: #e2e8f0;
+        }
+
+        .badge-type {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            line-height: 24px;
+            text-align: center;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            margin-right: 8px;
+        }
+
+        .type-a { background: #38bdf8; color: #0c4a6e; }
+        .type-b { background: #fb7185; color: #4c0519; }
+        .type-c { background: #34d399; color: #064e3b; }
+        .type-d { background: #fbbf24; color: #451a03; }
+
+        .param-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .param-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .param-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        .param-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .slider {
+            width: 100%;
+            accent-color: var(--primary-color);
+            margin-top: 4px;
+        }
+
+        .footer-info {
+            font-size: 0.75rem;
+            color: #64748b;
+            line-height: 1.5;
+            padding: 16px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <a href="/apps/" class="icon-btn" title="Back to Apps">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <h1 class="text-lg font-bold ml-2">V3 1100R Manufacturing Guide</h1>
+        </div>
+        <div class="header-right">
+            <button class="icon-btn" title="Copy JSON Data" onclick="copyData()"><i class="bi bi-file-earmark-code"></i></button>
+            <button class="icon-btn" title="Export CSV" onclick="exportCSV()"><i class="bi bi-file-earmark-spreadsheet"></i></button>
+        </div>
+    </header>
+
+    <main>
+        <div class="visual-area">
+            <div class="blueprint-container">
+                <svg id="blueprint-svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid meet">
+                    <!-- Background Grid -->
+                    <defs>
+                        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="1"/>
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#grid)" />
+                    
+                    <!-- Truck Group (Layered) -->
+                    <g id="truck-group"></g>
+                    
+                    <!-- Geodesic Group (Layered) -->
+                    <g id="geodesic-group"></g>
+
+                    <!-- Dimension Lines Group -->
+                    <g id="dimensions-group"></g>
+                </svg>
+            </div>
+            <div class="mt-8 text-center max-w-2xl">
+                <p class="text-slate-400 text-sm">
+                    This guide calculates the precise geometry for the <strong>Ranger Geodesic Overlander V3 1100R</strong>. 
+                    The model accounts for the ellipsoidal stretch, aerodynamic cabover taper, and bed rail mounting limits.
+                </p>
+            </div>
+        </div>
+
+        <div class="side-panel">
+            <div class="panel-header">
+                <div class="section-title"><i class="bi bi-sliders2"></i> Refinement Parameters</div>
+                <div class="param-group">
+                    <div class="param-item">
+                        <div class="param-row">
+                            <span class="param-label">Max Height (Apex)</span>
+                            <span class="param-value" id="val-apex">900mm</span>
+                        </div>
+                        <input type="range" id="param-apex" min="700" max="1500" value="900" class="slider">
+                    </div>
+                    <div class="param-item">
+                        <div class="param-row">
+                            <span class="param-label">Front Taper Strength</span>
+                            <span class="param-value" id="val-taper">0.45</span>
+                        </div>
+                        <input type="range" id="param-taper" min="0" max="100" value="45" class="slider">
+                    </div>
+                    <div class="param-item">
+                        <div class="param-row">
+                            <span class="param-label">Total Stretch (Z)</span>
+                            <span class="param-value" id="val-stretch">3500mm</span>
+                        </div>
+                        <input type="range" id="param-stretch" min="3000" max="4500" value="3500" class="slider">
+                    </div>
+                    <div class="param-item">
+                        <div class="param-row">
+                            <span class="param-label">Cabin Clearance</span>
+                            <span class="param-value" id="val-clearance">600mm</span>
+                        </div>
+                        <input type="range" id="param-clearance" min="0" max="1500" value="600" class="slider">
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-content">
+                <div class="section-title"><i class="bi bi-box-seam"></i> Strut Inventory (Material List)</div>
+                <div class="data-card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Length</th>
+                                <th>Qty</th>
+                                <th>Cuts</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-body">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-title"><i class="bi bi-scissors"></i> Precision Cutting Guide</div>
+                <div id="cutting-guide-container">
+                    <!-- Populated by JS -->
+                </div>
+
+                <div class="footer-info">
+                    <i class="bi bi-info-circle-fill text-primary"></i>
+                    <strong>Good Karma Note:</strong> Each strut requires a compound cut on both ends. 
+                    The <strong>Miter</strong> is the angle across the face (width), and the <strong>Bevel</strong> is the tilt of the blade (thickness).
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/camper-simulator.js"></script>
+    <script>
+        function copyData() {
+            // Placeholder for data copy function
+            alert("Data copied to clipboard!");
+        }
+        function exportCSV() {
+            // Placeholder for CSV export
+            alert("CSV exported successfully!");
+        }
+    </script>
+</body>
+</html>
