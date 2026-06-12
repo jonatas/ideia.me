@@ -2,12 +2,12 @@
 class CamperSimulator {
     constructor() {
         this.frequency = 3;
-        this.apexHeight = 900;
-        this.taperStrength = 0.45;
-        this.bedLength = 2000;
-        this.caboverOverhang = 1500;
-        this.cabinClearance = 600;
-        this.rearSquaring = 0.8;
+        this.apexHeight = 1931;
+        this.taperStrength = 0.00;
+        this.bedLength = 3000;
+        this.caboverOverhang = 1626;
+        this.cabinClearance = 738;
+        this.rearSquaring = 0.43;
         
         this.truckWidth = 1860;
         this.truckLength = 1560;
