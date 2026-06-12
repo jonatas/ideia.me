@@ -18,6 +18,8 @@ class CamperSimulator {
         this.faces = [];
         this.struts = [];
         this.strutTypes = [];
+        this.highlightedFamily = null;
+        this.highlightedStrutId = null;
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.init());
@@ -33,19 +35,20 @@ class CamperSimulator {
     }
 
     setupEventListeners() {
-        const bind = (id, prop, valId, scale = 1) => {
+        const bind = (id, prop, valId, scale = 1, prefix = "") => {
             const el = document.getElementById(id);
             if (!el) return;
             el.addEventListener('input', (e) => {
                 this[prop] = parseFloat(e.target.value) / scale;
                 const displayEl = document.getElementById(valId);
                 if (displayEl) {
-                    displayEl.textContent = (scale === 1 ? Math.round(this[prop]) : this[prop].toFixed(2)) + (scale === 1 ? "mm" : "");
+                    displayEl.textContent = prefix + (scale === 1 ? Math.round(this[prop]) : this[prop].toFixed(2)) + (scale === 1 && prefix === "" ? "mm" : "");
                 }
                 this.calculate();
             });
         };
 
+        bind('param-freq', 'frequency', 'val-freq', 1, "V");
         bind('param-apex', 'apexHeight', 'val-apex');
         bind('param-taper', 'taperStrength', 'val-taper', 100);
         bind('param-stretch', 'bedLength', 'val-stretch');
@@ -241,6 +244,19 @@ class CamperSimulator {
 
         this.cutFamilies = families;
         this.stats = { families: families.length, lengths: totalLengths, struts: totalStruts, cuts: totalStruts * 2 };
+
+        // Assign derived IDs back to individual struts for highlighting
+        strutData.forEach(s => {
+            const family = families.find(f => Math.abs(f.miter - s.miter) < 0.5 && Math.abs(f.bevel - s.bevel) < 0.5);
+            if (family) {
+                s.familyId = family.id;
+                const lengthIndex = family.lengths.findIndex(l => Math.abs(l.length - s.length) < 2);
+                if (lengthIndex !== -1) {
+                    s.strutId = `${family.id}${lengthIndex + 1}`;
+                }
+            }
+        });
+        this.struts = strutData; // Now includes .v1, .v2, .familyId, .strutId
     }
 
     updateUI() {
@@ -275,16 +291,29 @@ class CamperSimulator {
             container.innerHTML = '';
             this.cutFamilies.forEach(f => {
                 const card = document.createElement('div');
-                card.className = 'data-card mb-4';
+                card.className = `data-card mb-4 cursor-pointer border-2 transition-colors ${this.highlightedFamily === f.id ? 'border-primary' : 'border-slate-700 hover:border-slate-500'}`;
+                
+                card.onclick = (e) => {
+                    // Stop propagation so row clicks don't also trigger card clicks
+                    if (e.target.tagName === 'TD' || e.target.closest('tr')) return;
+                    this.highlightedFamily = this.highlightedFamily === f.id ? null : f.id;
+                    this.highlightedStrutId = null;
+                    this.updateUI();
+                };
 
                 let rows = '';
                 f.lengths.forEach((l, i) => {
                     const id = `${f.id}${i+1}`;
+                    const isSelected = this.highlightedStrutId === id;
                     rows += `
-                        <tr>
-                            <td><span class="badge-type type-${f.id.toLowerCase()}">${id}</span></td>
-                            <td class="font-mono text-white">${l.length.toFixed(1)}mm</td>
-                            <td>${l.count}</td>
+                        <tr class="cursor-pointer transition-colors ${isSelected ? 'bg-primary/20' : 'hover:bg-slate-800'}" 
+                            onclick="event.stopPropagation(); document.getElementById('camper-app').__vue__.selectStrut('${id}')">
+                            <td class="py-2 px-2 rounded-l"><span class="badge-type type-${f.id.toLowerCase()}">${id}</span></td>
+                            <td class="font-mono text-white py-2">${l.length.toFixed(1)}mm</td>
+                            <td class="py-2">${l.count}</td>
+                            <td class="py-2 px-2 rounded-r text-right">
+                                <i class="bi bi-eye${isSelected ? '-fill text-primary' : ''}"></i>
+                            </td>
                         </tr>
                     `;
                 });
@@ -297,12 +326,13 @@ class CamperSimulator {
                             <span>Bevel: <strong class="text-white">${f.bevel.toFixed(1)}°</strong></span>
                         </div>
                     </div>
-                    <table>
+                    <table class="w-full">
                         <thead>
                             <tr>
-                                <th>Type</th>
+                                <th class="px-2">Type</th>
                                 <th>Length</th>
                                 <th>Qty</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -312,6 +342,17 @@ class CamperSimulator {
                 `;
                 container.appendChild(card);
             });
+            
+            // Expose a method to the global scope for the inline onclick handlers in the HTML string
+            // A bit hacky but works for vanilla JS without a framework
+            document.getElementById('camper-app') || document.body; 
+            document.body.__vue__ = {
+                selectStrut: (id) => {
+                    this.highlightedStrutId = this.highlightedStrutId === id ? null : id;
+                    this.highlightedFamily = null;
+                    this.updateUI();
+                }
+            };
         }
     }
 
