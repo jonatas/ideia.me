@@ -277,13 +277,22 @@
         </div>
 
         <div class="side-panel">
-            <div class="panel-header">
+            <div class="flex border-b border-slate-700">
+                <button id="btn-tab-design" class="flex-1 py-4 text-xs font-bold uppercase tracking-widest text-primary border-b-2 border-primary bg-slate-800/50">
+                    <i class="bi bi-sliders2 mr-2"></i> Design
+                </button>
+                <button id="btn-tab-inventory" class="flex-1 py-4 text-xs font-bold uppercase tracking-widest text-slate-400 border-b-2 border-transparent hover:bg-slate-800/30">
+                    <i class="bi bi-list-ul mr-2"></i> Inventory
+                </button>
+            </div>
+
+            <div id="tab-design" class="panel-content">
                 <div class="section-title"><i class="bi bi-sliders2"></i> Refinement Parameters</div>
                 <div class="param-group">
                     <div class="param-item">
                         <div class="param-row">
                             <span class="param-label">Geodesic Frequency</span>
-                            <span class="param-value" id="val-freq">V3</span>
+                            <span class="param-value" id="val-freq">V2</span>
                         </div>
                         <input type="range" id="param-freq" min="1" max="4" value="2" class="slider" step="1">
                     </div>
@@ -304,9 +313,9 @@
                     <div class="param-item">
                         <div class="param-row">
                             <span class="param-label">Bed Length (Z)</span>
-                            <span class="param-value" id="val-stretch">3000mm</span>
+                            <span class="param-value" id="val-stretch">1500mm</span>
                         </div>
-                        <input type="range" id="param-stretch" min="1500" max="3500" value="3000" class="slider">
+                        <input type="range" id="param-stretch" min="1500" max="3500" value="1500" class="slider">
                     </div>
                     <div class="param-item">
                         <div class="param-row">
@@ -346,8 +355,8 @@
                 </div>
             </div>
 
-            <div class="panel-content">
-                <div class="section-title"><i class="bi bi-tools"></i> Fabrication Guide (Grouped by Cuts)</div>
+            <div id="tab-inventory" class="panel-content hidden">
+                <div class="section-title"><i class="bi bi-tools"></i> Fabrication Guide</div>
 
                 <!-- Fabrication Summary -->
                 <div id="fabrication-summary" class="data-card mb-4" style="background: rgba(56, 189, 248, 0.05); border-color: rgba(56, 189, 248, 0.2);">
@@ -361,7 +370,6 @@
                 <div class="footer-info mt-6">
                     <i class="bi bi-info-circle-fill text-primary"></i>
                     <strong>Good Karma Note:</strong> Set your saw to the Miter/Bevel angles for a family, then cut all lengths for that group. 
-                    <strong>Miter</strong> is the angle across the face (width), and <strong>Bevel</strong> is the tilt of the blade (thickness).
                 </div>
             </div>
         </div>

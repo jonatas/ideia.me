@@ -4,7 +4,7 @@ class CamperSimulator {
         this.frequency = 2;
         this.apexHeight = 1931;
         this.taperStrength = 0.00;
-        this.bedLength = 3000;
+        this.bedLength = 1500;
         this.caboverOverhang = 1626;
         this.cabinClearance = 738;
         this.rearSquaring = 0.43;
@@ -60,6 +60,30 @@ class CamperSimulator {
         bind('param-squaring', 'rearSquaring', 'val-squaring', 100);
         bind('param-door-w', 'doorWidth', 'val-door-w');
         bind('param-door-h', 'doorHeight', 'val-door-h');
+
+        // Tab Switching
+        const btnDesign = document.getElementById('btn-tab-design');
+        const btnInventory = document.getElementById('btn-tab-inventory');
+        const tabDesign = document.getElementById('tab-design');
+        const tabInventory = document.getElementById('tab-inventory');
+
+        if (btnDesign && btnInventory && tabDesign && tabInventory) {
+            const switchTab = (activeTab) => {
+                if (activeTab === 'design') {
+                    tabDesign.classList.remove('hidden');
+                    tabInventory.classList.add('hidden');
+                    btnDesign.className = "flex-1 py-4 text-xs font-bold uppercase tracking-widest text-primary border-b-2 border-primary bg-slate-800/50";
+                    btnInventory.className = "flex-1 py-4 text-xs font-bold uppercase tracking-widest text-slate-400 border-b-2 border-transparent hover:bg-slate-800/30";
+                } else {
+                    tabDesign.classList.add('hidden');
+                    tabInventory.classList.remove('hidden');
+                    btnDesign.className = "flex-1 py-4 text-xs font-bold uppercase tracking-widest text-slate-400 border-b-2 border-transparent hover:bg-slate-800/30";
+                    btnInventory.className = "flex-1 py-4 text-xs font-bold uppercase tracking-widest text-primary border-b-2 border-primary bg-slate-800/50";
+                }
+            };
+            btnDesign.onclick = () => switchTab('design');
+            btnInventory.onclick = () => switchTab('inventory');
+        }
     }
 
     calculate() {
@@ -177,7 +201,7 @@ class CamperSimulator {
             }
         });
 
-        // 3. Main Room (Cylinder)
+        // 3. Main Room (Cylinder with multiple rings for uniformity)
         // Find vertices on the boundary (Z=0 in sphere)
         const boundaryIndices = [];
         sphereVertices.forEach((v, i) => {
@@ -191,20 +215,48 @@ class CamperSimulator {
             return angA - angB;
         });
 
-        // Create cylinder faces connecting the two dome boundaries
+        // Calculate average boundary edge length for uniform ring spacing
+        let totalEdgeLen = 0;
         for (let i = 0; i < boundaryIndices.length; i++) {
-            const v1Idx = boundaryIndices[i];
-            const v2Idx = boundaryIndices[(i + 1) % boundaryIndices.length];
+            totalEdgeLen += sphereVertices[boundaryIndices[i]].distanceTo(sphereVertices[boundaryIndices[(i + 1) % boundaryIndices.length]]);
+        }
+        const avgEdgeLen = totalEdgeLen / boundaryIndices.length;
+        const numRings = Math.max(1, Math.round(mainRoomLength / avgEdgeLen));
+        const ringSpacing = mainRoomLength / numRings;
 
-            const f1 = frontVertexMap.get(v1Idx);
-            const f2 = frontVertexMap.get(v2Idx);
-            const b1 = backVertexMap.get(v1Idx);
-            const b2 = backVertexMap.get(v2Idx);
+        let prevRingIndices = boundaryIndices.map(vIdx => frontVertexMap.get(vIdx));
 
-            if (f1 !== undefined && f2 !== undefined && b1 !== undefined && b2 !== undefined) {
-                this.faces.push([f1, b1, b2], [f1, b2, f2]);
-                this.faceSegments.push('main', 'main');
+        for (let r = 1; r <= numRings; r++) {
+            const currentZ = frontZOffset + (r * ringSpacing);
+            let currentRingIndices = [];
+
+            if (r === numRings) {
+                // Last ring is the back dome boundary
+                currentRingIndices = boundaryIndices.map(vIdx => backVertexMap.get(vIdx));
+            } else {
+                // Create new intermediate ring of vertices
+                boundaryIndices.forEach(vIdx => {
+                    let v = sphereVertices[vIdx].clone();
+                    v.y *= yScale;
+                    v.z = currentZ;
+                    this.vertices.push(v);
+                    currentRingIndices.push(this.vertices.length - 1);
+                });
             }
+
+            // Triangulate between prevRing and currentRing
+            for (let i = 0; i < boundaryIndices.length; i++) {
+                const p1 = prevRingIndices[i];
+                const p2 = prevRingIndices[(i + 1) % boundaryIndices.length];
+                const c1 = currentRingIndices[i];
+                const c2 = currentRingIndices[(i + 1) % boundaryIndices.length];
+
+                if (p1 !== undefined && p2 !== undefined && c1 !== undefined && c2 !== undefined) {
+                    this.faces.push([p1, c1, c2], [p1, c2, p2]);
+                    this.faceSegments.push('main', 'main');
+                }
+            }
+            prevRingIndices = currentRingIndices;
         }
 
         // Apply Bed Rail / Cabin Clearance logic
@@ -268,6 +320,7 @@ class CamperSimulator {
         // Group into Cut Families
         const families = [];
         strutData.forEach(s => {
+            if (s.length < 5) return; // Skip invalid/unbuildable pieces
             // Find existing family with matching cuts (tolerance 0.5 degrees)
             const existingFamily = families.find(f => Math.abs(f.miter - s.miter) < 0.5 && Math.abs(f.bevel - s.bevel) < 0.5);
             if (existingFamily) {
@@ -347,11 +400,14 @@ class CamperSimulator {
                 } else if (clip.status === 'clipped') {
                     // If clipped, we add the segments that are outside
                     clip.segments.forEach(seg => {
+                        const len = seg.p1.distanceTo(seg.p2);
+                        if (len < 5) return;
+
                         const v1Idx = this.vertices.length;
                         this.vertices.push(seg.p1);
                         const v2Idx = this.vertices.length;
                         this.vertices.push(seg.p2);
-                        newStruts.push({ ...s, v1Idx, v2Idx, length: seg.p1.distanceTo(seg.p2) });
+                        newStruts.push({ ...s, v1Idx, v2Idx, length: len });
                         
                         // Collect points that hit the door boundary to form the frame
                         if (seg.isIntersectionP1) doorFramePoints.push(seg.p1);
@@ -373,18 +429,29 @@ class CamperSimulator {
         ];
 
         frameEdges.forEach(edge => {
-            const pts = doorFramePoints.filter(p => Math.abs(p[edge.axis] - edge.val) < threshold);
+            let pts = doorFramePoints.filter(p => Math.abs(p[edge.axis] - edge.val) < threshold);
+            
+            // Deduplicate points
+            const uniquePts = [];
+            pts.forEach(p => {
+                if (!uniquePts.some(up => up.distanceTo(p) < 2)) uniquePts.push(p);
+            });
+            pts = uniquePts;
+
             // Sort by the other axis to connect them in order
             const otherAxis = edge.axis === 'x' ? 'y' : 'x';
             pts.sort((a, b) => a[otherAxis] - b[otherAxis]);
 
             for (let i = 0; i < pts.length - 1; i++) {
+                const len = pts[i].distanceTo(pts[i+1]);
+                if (len < 5) continue;
+
                 const v1Idx = this.vertices.length;
                 this.vertices.push(pts[i]);
                 const v2Idx = this.vertices.length;
                 this.vertices.push(pts[i+1]);
                 newStruts.push({
-                    length: pts[i].distanceTo(pts[i+1]),
+                    length: len,
                     bevel: 0, miter: 0, // Frame is usually square-cut or special
                     v1Idx, v2Idx, segment: 'back', isFrame: true
                 });
@@ -662,6 +729,7 @@ class CamperSimulator {
             // Filter by view segment
             if (viewType === 'front' && segment !== 'front') return;
             if (viewType === 'back' && segment !== 'back') return;
+            // Side view shows all segments
 
             // Cull faces that are in the door area (back view)
             if (segment === 'back') {
@@ -698,6 +766,7 @@ class CamperSimulator {
         this.struts.forEach(strut => {
             if (viewType === 'front' && strut.segment !== 'front') return;
             if (viewType === 'back' && strut.segment !== 'back') return;
+            // Side view shows all segments
 
             if (viewType === 'side') {
                 // Only show struts on the positive X side for side view
