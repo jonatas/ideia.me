@@ -244,8 +244,8 @@
 
     <main>
         <div class="visual-area">
-            <div class="blueprint-container">
-                <svg id="blueprint-svg" viewBox="0 0 2400 1200" preserveAspectRatio="xMidYMid meet">
+            <div class="blueprint-container" style="aspect-ratio: 16/10;">
+                <svg id="blueprint-main" viewBox="0 0 2000 1400" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
                     <!-- Background Grid -->
                     <defs>
                         <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -254,21 +254,35 @@
                     </defs>
                     <rect width="100%" height="100%" fill="url(#grid)" />
                     
-                    <!-- Side View -->
-                    <g id="view-side-truck"></g>
-                    <g id="view-side-geodesic"></g>
-                    <g id="view-side-dim"></g>
-
-                    <!-- Front View -->
-                    <g id="view-front-truck"></g>
-                    <g id="view-front-geodesic"></g>
-
-                    <!-- Back View -->
-                    <g id="view-back-truck"></g>
-                    <g id="view-back-geodesic"></g>
+                    <g id="main-truck"></g>
+                    <g id="main-geodesic"></g>
+                    <g id="main-dim"></g>
                 </svg>
             </div>
-            <div class="mt-8 text-center max-w-2xl">
+            
+            <!-- Thumbnails -->
+            <div class="flex gap-4 mt-4 w-full max-w-[1100px] justify-center">
+                <div id="thumb-btn-side" class="w-40 h-28 bg-[#0f172a] border-2 border-primary rounded-xl overflow-hidden cursor-pointer hover:bg-slate-800 transition-colors shadow-lg" onclick="window.setCamperView('side')">
+                    <svg viewBox="0 0 2000 1400" class="w-full h-full pointer-events-none">
+                        <g id="thumb-side-truck"></g>
+                        <g id="thumb-side-geodesic"></g>
+                    </svg>
+                </div>
+                <div id="thumb-btn-front" class="w-40 h-28 bg-[#0f172a] border-2 border-slate-700 rounded-xl overflow-hidden cursor-pointer hover:bg-slate-800 transition-colors shadow-lg" onclick="window.setCamperView('front')">
+                    <svg viewBox="0 0 2000 1400" class="w-full h-full pointer-events-none">
+                        <g id="thumb-front-truck"></g>
+                        <g id="thumb-front-geodesic"></g>
+                    </svg>
+                </div>
+                <div id="thumb-btn-back" class="w-40 h-28 bg-[#0f172a] border-2 border-slate-700 rounded-xl overflow-hidden cursor-pointer hover:bg-slate-800 transition-colors shadow-lg" onclick="window.setCamperView('back')">
+                    <svg viewBox="0 0 2000 1400" class="w-full h-full pointer-events-none">
+                        <g id="thumb-back-truck"></g>
+                        <g id="thumb-back-geodesic"></g>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="mt-6 text-center max-w-2xl">
                 <p class="text-slate-400 text-sm">
                     This guide calculates the precise geometry for the <strong>Ranger Geodesic Overlander V3 1100R</strong>. 
                     The model accounts for the ellipsoidal stretch, aerodynamic cabover taper, and bed rail mounting limits.
@@ -375,7 +389,7 @@
         </div>
     </main>
 
-    <script src="/js/camper-simulator.js"></script>
+    <script src="/js/camper-simulator.js?v=2"></script>
     <script>
         function copyData() {
             // Placeholder for data copy function
