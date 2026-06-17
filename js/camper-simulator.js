@@ -23,6 +23,7 @@ class CamperSimulator {
         this.strutTypes = [];
         this.highlightedFamily = null;
         this.highlightedStrutId = null;
+        this.activeView = 'side';
 
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.init());
@@ -35,6 +36,27 @@ class CamperSimulator {
         this.setupEventListeners();
         this.calculate();
         window.addEventListener('resize', () => this.renderSVG());
+        
+        // Define view switcher globally
+        window.setCamperView = (view) => {
+            this.activeView = view;
+            
+            // Highlight active thumbnail
+            ['side', 'front', 'back'].forEach(v => {
+                const thumb = document.getElementById(`thumb-btn-${v}`);
+                if (thumb) {
+                    if (v === this.activeView) {
+                        thumb.classList.add('border-primary');
+                        thumb.classList.remove('border-slate-700');
+                    } else {
+                        thumb.classList.add('border-slate-700');
+                        thumb.classList.remove('border-primary');
+                    }
+                }
+            });
+            
+            this.renderSVG();
+        };
     }
 
     setupEventListeners() {
@@ -278,7 +300,7 @@ class CamperSimulator {
 
     decomposeStruts() {
         const edgeMap = new Map();
-        const faceNormals = this.faces.map(face => {
+        this.faceNormals = this.faces.map(face => {
             const v1 = this.vertices[face[0]], v2 = this.vertices[face[1]], v3 = this.vertices[face[2]];
             return new THREE.Vector3().subVectors(v2, v1).cross(new THREE.Vector3().subVectors(v3, v1)).normalize();
         });
@@ -302,7 +324,7 @@ class CamperSimulator {
 
             let bevel = 0, miter = 0;
             if (edge.faces.length === 2) {
-                const n1 = faceNormals[edge.faces[0]], n2 = faceNormals[edge.faces[1]];
+                const n1 = this.faceNormals[edge.faces[0]], n2 = this.faceNormals[edge.faces[1]];
                 const dihedral = n1.angleTo(n2) * 180 / Math.PI;
                 bevel = dihedral / 2; 
 
@@ -381,9 +403,9 @@ class CamperSimulator {
         const backZ = this.bedLength / 2 + 1000; // rough back boundary
 
         // Door bounding box in 3D
-        // Centered on X=0, Y from 0 to doorH, Z at the very back
-        const boxMin = { x: -doorW / 2, y: 0, z: this.bedLength / 2 };
-        const boxMax = { x: doorW / 2, y: doorH, z: backZ + 500 };
+        // Centered on X=0, Y from floor (-100) to doorH-100, Z at the very back
+        const boxMin = { x: -doorW / 2, y: -100, z: this.bedLength / 2 };
+        const boxMax = { x: doorW / 2, y: doorH - 100, z: backZ + 500 };
 
         const newStruts = [];
         const doorFramePoints = [];
@@ -624,43 +646,143 @@ class CamperSimulator {
         const backTruck = document.getElementById('view-back-truck');
         const backGeo = document.getElementById('view-back-geodesic');
 
-        if (!sideTruck || !sideGeo) return;
+        if (sideTruck && sideGeo) {
+            sideTruck.innerHTML = ''; sideGeo.innerHTML = ''; sideDim.innerHTML = '';
+            frontTruck.innerHTML = ''; frontGeo.innerHTML = '';
+            backTruck.innerHTML = ''; backGeo.innerHTML = '';
 
-        sideTruck.innerHTML = ''; sideGeo.innerHTML = ''; sideDim.innerHTML = '';
-        frontTruck.innerHTML = ''; frontGeo.innerHTML = '';
-        backTruck.innerHTML = ''; backGeo.innerHTML = '';
+            const scale = 0.22; 
 
-        const scale = 0.22; 
+            // Side View
+            const sideOx = 1100; 
+            const sideOy = 550; 
+            this.renderTruckSide(sideTruck, sideOx, sideOy, scale);
+            this.renderGeodesic(sideGeo, sideOx + (this.bedLength / 2) * scale, sideOy - 600 * scale, scale, 'side');
 
-        // Side View
-        const sideOx = 1100; 
-        const sideOy = 550; 
-        this.renderTruckSide(sideTruck, sideOx, sideOy, scale);
-        this.renderGeodesic(sideGeo, sideOx + (this.bedLength / 2) * scale, sideOy - 600 * scale, scale, 'side');
+            const apexY = sideOy - 600*scale - this.apexHeight * scale;
+            const dimX = sideOx + (this.bedLength / 2) * scale + 1000*scale;
 
-        const apexY = sideOy - 600*scale - this.apexHeight * scale;
-        const dimX = sideOx + (this.bedLength / 2) * scale + 1000*scale;
+            sideDim.innerHTML = `
+                <line x1="${dimX}" y1="${sideOy - 600*scale}" x2="${dimX}" y2="${apexY}" stroke="#fb7185" stroke-width="2" />
+                <text x="${dimX + 10}" y="${(sideOy - 600*scale + apexY)/2}" fill="#fb7185" font-size="14" font-weight="bold">${Math.round(this.apexHeight)}mm</text>
+            `;
 
-        sideDim.innerHTML = `
-            <line x1="${dimX}" y1="${sideOy - 600*scale}" x2="${dimX}" y2="${apexY}" stroke="#fb7185" stroke-width="2" />
-            <text x="${dimX + 10}" y="${(sideOy - 600*scale + apexY)/2}" fill="#fb7185" font-size="14" font-weight="bold">${Math.round(this.apexHeight)}mm</text>
-        `;
+            // Front View
+            const frontOx = 500;
+            const frontOy = 1100;
+            this.renderTruckFront(frontTruck, frontOx, frontOy, scale);
+            this.renderGeodesic(frontGeo, frontOx, frontOy - 600 * scale, scale, 'front');
 
-        // Front View
-        const frontOx = 500;
-        const frontOy = 1100;
-        this.renderTruckFront(frontTruck, frontOx, frontOy, scale);
-        this.renderGeodesic(frontGeo, frontOx, frontOy - 600 * scale, scale, 'front');
+            // Back View
+            const backOx = 1700;
+            const backOy = 1100;
+            this.renderTruckBack(backTruck, backOx, backOy, scale);
+            this.renderGeodesic(backGeo, backOx, backOy - 600 * scale, scale, 'back');
+        }
 
-        // Back View
-        const backOx = 1700;
-        const backOy = 1100;
-        this.renderTruckBack(backTruck, backOx, backOy, scale);
-        this.renderGeodesic(backGeo, backOx, backOy - 600 * scale, scale, 'back');
+        // Clear the new main groups if they exist
+        const mainTruck = document.getElementById('main-truck');
+        const mainGeo = document.getElementById('main-geodesic');
+        const mainDim = document.getElementById('main-dim');
+        
+        if (mainTruck) {
+            mainTruck.innerHTML = ''; 
+            mainGeo.innerHTML = ''; 
+            mainDim.innerHTML = '';
+
+            // Calculate Dynamic Scale (Auto-zoom)
+            // Total height in model units: apex + 600 (bed height) + 380 (wheel drop)
+            const totalModelHeight = this.apexHeight + 600 + 380;
+            const viewBoxHeight = 1400;
+            const verticalPadding = 100; // Total top+bottom padding
+            
+            let mainScale = 0.45;
+            if (totalModelHeight * mainScale > (viewBoxHeight - verticalPadding)) {
+                mainScale = (viewBoxHeight - verticalPadding) / totalModelHeight;
+            }
+            
+            const mainOx = 1000; 
+            // mainOy is the baseline (wheel center). 
+            // We want it as low as possible: viewBoxHeight - (wheel drop * scale) - bottom margin
+            const mainOy = viewBoxHeight - (400 * mainScale); 
+            
+            const thumbScale = 0.35;
+            const thumbOx = 1000;
+            const thumbOy = 1000;
+
+            // Draw Main View
+            if (this.activeView === 'side') {
+                this.renderTruckSide(mainTruck, mainOx, mainOy, mainScale, false);
+                this.renderGeodesic(mainGeo, mainOx + (this.bedLength / 2) * mainScale, mainOy - 600 * mainScale, mainScale, 'side');
+
+                // Apex Dimension (at center of bed)
+                const apexY = mainOy - 600*mainScale - this.apexHeight * mainScale;
+                const dimApexX = mainOx + (this.bedLength / 2) * mainScale;
+
+                // Door Dimension (at the back)
+                const doorY = mainOy - 600*mainScale - (this.doorHeight - 100) * mainScale;
+                const dimDoorX = mainOx + (this.bedLength / 2 + 1000) * mainScale + 100 * mainScale;
+
+                mainDim.innerHTML = `
+                    <!-- Apex Dimension -->
+                    <line x1="${dimApexX}" y1="${mainOy - 600*mainScale}" x2="${dimApexX}" y2="${apexY}" stroke="#fb7185" stroke-width="2" stroke-dasharray="4,2" />
+                    <circle cx="${dimApexX}" cy="${apexY}" r="4" fill="#fb7185" />
+                    <text x="${dimApexX + 10}" y="${apexY + 20}" fill="#fb7185" font-size="14" font-weight="bold" font-family="monospace">APEX: ${Math.round(this.apexHeight)}mm</text>
+                    
+                    <!-- Door Dimension -->
+                    <line x1="${dimDoorX}" y1="${mainOy - 500*mainScale}" x2="${dimDoorX}" y2="${doorY}" stroke="#38bdf8" stroke-width="2" />
+                    <line x1="${dimDoorX - 10}" y1="${mainOy - 500*mainScale}" x2="${dimDoorX + 10}" y2="${mainOy - 500*mainScale}" stroke="#38bdf8" stroke-width="2" />
+                    <line x1="${dimDoorX - 10}" y1="${doorY}" x2="${dimDoorX + 10}" y2="${doorY}" stroke="#38bdf8" stroke-width="2" />
+                    <text x="${dimDoorX + 15}" y="${(mainOy - 500*mainScale + doorY)/2}" fill="#38bdf8" font-size="14" font-weight="bold" font-family="monospace">DOOR: ${Math.round(this.doorHeight)}mm</text>
+                `;
+            } else if (this.activeView === 'front') {
+                this.renderTruckFront(mainTruck, mainOx, mainOy, mainScale, false);
+                this.renderGeodesic(mainGeo, mainOx, mainOy - 600 * mainScale, mainScale, 'front');
+            } else if (this.activeView === 'back') {
+                this.renderTruckBack(mainTruck, mainOx, mainOy, mainScale, false);
+                this.renderGeodesic(mainGeo, mainOx, mainOy - 600 * mainScale, mainScale, 'back');
+
+                // Door Dimension (in back view)
+                const w = this.truckWidth * mainScale;
+                const doorY = mainOy - 600*mainScale - (this.doorHeight - 100) * mainScale;
+                const dimDoorX = mainOx + w/2 + 50*mainScale;
+
+                mainDim.innerHTML = `
+                    <line x1="${dimDoorX}" y1="${mainOy - 500*mainScale}" x2="${dimDoorX}" y2="${doorY}" stroke="#38bdf8" stroke-width="2" />
+                    <line x1="${dimDoorX - 10}" y1="${mainOy - 500*mainScale}" x2="${dimDoorX + 10}" y2="${mainOy - 500*mainScale}" stroke="#38bdf8" stroke-width="2" />
+                    <line x1="${dimDoorX - 10}" y1="${doorY}" x2="${dimDoorX + 10}" y2="${doorY}" stroke="#38bdf8" stroke-width="2" />
+                    <text x="${dimDoorX + 15}" y="${(mainOy - 500*mainScale + doorY)/2}" fill="#38bdf8" font-size="14" font-weight="bold" font-family="monospace">DOOR: ${Math.round(this.doorHeight)}mm</text>
+                `;
+            }
+
+            // Draw Thumbnails using the old IDs but mapping them to the new thumb layout
+            const thumbSideTruckNode = document.getElementById('thumb-side-truck');
+            const thumbSideGeoNode = document.getElementById('thumb-side-geodesic');
+            const thumbFrontTruckNode = document.getElementById('thumb-front-truck');
+            const thumbFrontGeoNode = document.getElementById('thumb-front-geodesic');
+            const thumbBackTruckNode = document.getElementById('thumb-back-truck');
+            const thumbBackGeoNode = document.getElementById('thumb-back-geodesic');
+
+            if (thumbSideTruckNode) {
+                thumbSideTruckNode.innerHTML = ''; thumbSideGeoNode.innerHTML = '';
+                thumbFrontTruckNode.innerHTML = ''; thumbFrontGeoNode.innerHTML = '';
+                thumbBackTruckNode.innerHTML = ''; thumbBackGeoNode.innerHTML = '';
+
+                this.renderTruckSide(thumbSideTruckNode, thumbOx, thumbOy, thumbScale, true);
+                this.renderGeodesic(thumbSideGeoNode, thumbOx + (this.bedLength / 2) * thumbScale, thumbOy - 600 * thumbScale, thumbScale, 'side');
+
+                this.renderTruckFront(thumbFrontTruckNode, thumbOx, thumbOy, thumbScale, true);
+                this.renderGeodesic(thumbFrontGeoNode, thumbOx, thumbOy - 600 * thumbScale, thumbScale, 'front');
+
+                this.renderTruckBack(thumbBackTruckNode, thumbOx, thumbOy, thumbScale, true);
+                this.renderGeodesic(thumbBackGeoNode, thumbOx, thumbOy - 600 * thumbScale, thumbScale, 'back');
+            }
+        }
     }
 
-    renderTruckSide(group, ox, oy, scale) {
+    renderTruckSide(group, ox, oy, scale, showText = true) {
         const bedLengthScaled = this.bedLength * scale;
+        const textLabel = showText ? `<text x="${ox}" y="${oy + 150}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">SIDE VIEW</text>` : '';
         group.innerHTML = `
             <path d="M -2800 0 L -2700 -200 L -2500 -250 L -2000 -250 L -1800 -400 
                      L -1500 -1200 L -800 -1250 L 0 -1250 L 200 -1200 L 300 -600 
@@ -672,14 +794,15 @@ class CamperSimulator {
             <circle cx="${ox - 1800*scale}" cy="${oy}" r="${380*scale}" fill="#0f172a" stroke="#334155" stroke-width="4" />
             <circle cx="${ox + 1500*scale}" cy="${oy}" r="${380*scale}" fill="#0f172a" stroke="#334155" stroke-width="4" />
             <line x1="${ox - 3000*scale}" y1="${oy - 600*scale}" x2="${ox + 3000*scale}" y2="${oy - 600*scale}" stroke="#334155" stroke-dasharray="10,10" />
-            <text x="${ox}" y="${oy + 150}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">SIDE VIEW</text>
+            ${textLabel}
         `;
     }
 
-    renderTruckFront(group, ox, oy, scale) {
+    renderTruckFront(group, ox, oy, scale, showText = true) {
         const w = this.truckWidth * scale;
         const tW = 265 * scale;
         const tR = 380 * scale;
+        const textLabel = showText ? `<text x="${ox - 50}" y="${oy + 150}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">FRONT VIEW</text>` : '';
         group.innerHTML = `
             <rect x="${ox - w/2}" y="${oy - tR}" width="${tW}" height="${tR*2}" rx="5" fill="#0f172a" stroke="#334155" stroke-width="3" />
             <rect x="${ox + w/2 - tW}" y="${oy - tR}" width="${tW}" height="${tR*2}" rx="5" fill="#0f172a" stroke="#334155" stroke-width="3" />
@@ -690,14 +813,15 @@ class CamperSimulator {
                   fill="#1e293b" stroke="#334155" stroke-width="4" />
             <rect x="${ox - w/2 - 50*scale}" y="${oy - 800*scale}" width="${50*scale}" height="${80*scale}" rx="5" fill="#1e293b" stroke="#334155" stroke-width="2" />
             <rect x="${ox + w/2}" y="${oy - 800*scale}" width="${50*scale}" height="${80*scale}" rx="5" fill="#1e293b" stroke="#334155" stroke-width="2" />
-            <text x="${ox - 50}" y="${oy + 150}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">FRONT VIEW</text>
+            ${textLabel}
         `;
     }
 
-    renderTruckBack(group, ox, oy, scale) {
+    renderTruckBack(group, ox, oy, scale, showText = true) {
         const w = this.truckWidth * scale;
         const tW = 265 * scale;
         const tR = 380 * scale;
+        const textLabel = showText ? `<text x="${ox - 50}" y="${oy + 150}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">BACK VIEW</text>` : '';
         group.innerHTML = `
             <rect x="${ox - w/2}" y="${oy - tR}" width="${tW}" height="${tR*2}" rx="5" fill="#0f172a" stroke="#334155" stroke-width="3" />
             <rect x="${ox + w/2 - tW}" y="${oy - tR}" width="${tW}" height="${tR*2}" rx="5" fill="#0f172a" stroke="#334155" stroke-width="3" />
@@ -709,7 +833,7 @@ class CamperSimulator {
             <rect x="${ox - w/2}" y="${oy - 900*scale}" width="${w}" height="${400*scale}" fill="#1e293b" stroke="#334155" stroke-width="4" />
             <rect x="${ox - w/2 + 20*scale}" y="${oy - 800*scale}" width="${50*scale}" height="${150*scale}" rx="5" fill="#7f1d1d" opacity="0.8" />
             <rect x="${ox + w/2 - 70*scale}" y="${oy - 800*scale}" width="${50*scale}" height="${150*scale}" rx="5" fill="#7f1d1d" opacity="0.8" />
-            <text x="${ox - 50}" y="${oy + 150}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">BACK VIEW</text>
+            ${textLabel}
         `;
     }
 
@@ -722,35 +846,53 @@ class CamperSimulator {
             if (viewType === 'back') return { x: ox - v.x * scale, y: oy - v.y * scale };
         };
 
-        // Draw faces
+        // 1. Prepare and Sort Faces
+        const visibleFaces = [];
         this.faces.forEach((face, fIdx) => {
             const segment = this.faceSegments[fIdx];
+            const normal = this.faceNormals[fIdx];
             
-            // Filter by view segment
-            if (viewType === 'front' && segment !== 'front') return;
-            if (viewType === 'back' && segment !== 'back') return;
-            // Side view shows all segments
+            // Back-face Culling per view
+            let isVisible = false;
+            if (viewType === 'side') {
+                if (normal.x >= 0) isVisible = true; // Show right side
+            } else if (viewType === 'front') {
+                if (normal.z <= 0) isVisible = true; // Show front
+            } else if (viewType === 'back') {
+                if (normal.z >= 0) isVisible = true; // Show back
+            }
 
-            // Cull faces that are in the door area (back view)
+            if (!isVisible) return;
+
+            // Door Cutout Culling
             if (segment === 'back') {
-                const doorW = this.doorWidth;
-                const doorH = this.doorHeight;
                 const centroid = new THREE.Vector3();
                 face.forEach(vIdx => centroid.add(this.vertices[vIdx]));
                 centroid.divideScalar(3);
-
-                if (Math.abs(centroid.x) < doorW / 2 && centroid.y < doorH && centroid.y > 0) {
+                // Cutout starts from floor (-100)
+                if (Math.abs(centroid.x) < this.doorWidth / 2 && centroid.y < this.doorHeight - 100 && centroid.y > -100) {
                     return;
                 }
             }
 
-            // Simple back-face culling for side view (don't show faces pointing away)
-            if (viewType === 'side') {
-                const v1 = this.vertices[face[0]], v2 = this.vertices[face[1]], v3 = this.vertices[face[2]];
-                const normal = new THREE.Vector3().subVectors(v2, v1).cross(new THREE.Vector3().subVectors(v3, v1));
-                if (normal.x < 0) return; // Only show right side
-            }
+            // Calculate Depth for sorting
+            const depthCentroid = new THREE.Vector3();
+            face.forEach(vIdx => depthCentroid.add(this.vertices[vIdx]));
+            depthCentroid.divideScalar(3);
+            
+            let depthValue = 0;
+            if (viewType === 'side') depthValue = -depthCentroid.x;
+            else if (viewType === 'front') depthValue = depthCentroid.z;
+            else if (viewType === 'back') depthValue = -depthCentroid.z;
 
+            visibleFaces.push({ face, fIdx, depthValue });
+        });
+
+        // Sort faces: Painters Algorithm (far to near)
+        visibleFaces.sort((a, b) => b.depthValue - a.depthValue);
+
+        // Draw sorted faces
+        visibleFaces.forEach(({ face, fIdx }) => {
             const points = face.map(vIdx => {
                 const c = mapCoords(this.vertices[vIdx]);
                 return `${c.x},${c.y}`;
@@ -762,18 +904,35 @@ class CamperSimulator {
             group.appendChild(poly);
         });
 
-        // Draw struts
+        // 2. Prepare and Sort Struts
+        const visibleStruts = [];
         this.struts.forEach(strut => {
-            if (viewType === 'front' && strut.segment !== 'front') return;
-            if (viewType === 'back' && strut.segment !== 'back') return;
-            // Side view shows all segments
+            const p1 = this.vertices[strut.v1Idx];
+            const p2 = this.vertices[strut.v2Idx];
 
+            let isVisible = false;
             if (viewType === 'side') {
-                // Only show struts on the positive X side for side view
-                const p1 = this.vertices[strut.v1Idx], p2 = this.vertices[strut.v2Idx];
-                if (p1.x < -10 && p2.x < -10) return; 
+                if (p1.x >= -10 || p2.x >= -10) isVisible = true;
+            } else if (viewType === 'front') {
+                if (p1.z <= 10 || p2.z <= 10) isVisible = true;
+            } else if (viewType === 'back') {
+                if (p1.z >= this.bedLength / 2 - 10 || p2.z >= this.bedLength / 2 - 10) isVisible = true;
             }
 
+            if (!isVisible) return;
+
+            let depthValue = 0;
+            if (viewType === 'side') depthValue = -(p1.x + p2.x) / 2;
+            else if (viewType === 'front') depthValue = (p1.z + p2.z) / 2;
+            else if (viewType === 'back') depthValue = -(p1.z + p2.z) / 2;
+
+            visibleStruts.push({ strut, depthValue });
+        });
+
+        visibleStruts.sort((a, b) => b.depthValue - a.depthValue);
+
+        // Draw sorted struts
+        visibleStruts.forEach(({ strut }) => {
             const c1 = mapCoords(this.vertices[strut.v1Idx]);
             const c2 = mapCoords(this.vertices[strut.v2Idx]);
 
@@ -797,8 +956,8 @@ class CamperSimulator {
             }
 
             if (strut.isFrame) {
-                strokeColor = "#fb7185"; // Accent color for door frame
-                strokeWidth = "2";
+                strokeColor = "#fb7185"; 
+                strokeWidth = "2.5";
                 opacity = "1";
             }
 
