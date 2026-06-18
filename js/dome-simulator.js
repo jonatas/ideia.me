@@ -25,7 +25,13 @@ class DomeSimulator {
         this.assemblyInventory = new Map(); // Track component counts and states
         this.groundTriangles = []; // Base layer triangles
         this.assemblyLayers = []; // Organized layers for construction
+        this.assemblySegments = []; // New: more granular segments for construction
         this.selectedTriangleType = null; // Currently selected triangle type
+        this.walkthroughStage = 0; // Initialize walkthrough stage
+        
+        // Door definition
+        this.doorAzimuth = 0; // Front is at 0 degrees (positive Z)
+        this.doorWidth = Math.PI / 4; // Width of the door area
         
         // Three.js objects
         this.camera = null;
@@ -51,6 +57,52 @@ class DomeSimulator {
         this.updateUI();
     }
     
+    switchTab(tabId) {
+        // Update tab buttons
+        const tabs = ['design', 'inventory', 'assembly'];
+        tabs.forEach(t => {
+            const btn = document.getElementById(`btn-tab-${t}`);
+            const content = document.getElementById(`tab-${t}`);
+            if (btn && content) {
+                if (t === tabId) {
+                    btn.classList.add('active');
+                    content.classList.remove('hidden');
+                } else {
+                    btn.classList.remove('active');
+                    content.classList.add('hidden');
+                }
+            }
+        });
+        
+        if (tabId === 'assembly' && !this.assemblyMode) {
+            this.startAssemblyMode();
+        } else if (tabId !== 'assembly' && this.assemblyMode) {
+            this.exitAssemblyMode();
+        }
+    }
+
+    showDetails(title, contentHtml) {
+        const modal = document.getElementById('details-modal');
+        const titleEl = document.getElementById('details-title');
+        const contentEl = document.getElementById('details-content');
+        
+        if (modal && titleEl && contentEl) {
+            titleEl.textContent = title;
+            contentEl.innerHTML = contentHtml;
+            modal.classList.remove('hidden');
+            
+            // If content contains step views, initialize them
+            if (contentHtml.includes('step-view')) {
+                setTimeout(() => this.updateStrutViews(), 100);
+            }
+        }
+    }
+
+    closeDetails() {
+        const modal = document.getElementById('details-modal');
+        if (modal) modal.classList.add('hidden');
+    }
+
     setupEventListeners() {
         // Frequency slider
         const frequencySlider = document.getElementById('frequency-slider');
@@ -73,96 +125,77 @@ class DomeSimulator {
         strutWidthSlider.addEventListener('input', (e) => {
             this.strutWidth = parseInt(e.target.value);
             this.updateUI();
-            this.updateStrutViews();
         });
         
         const strutHeightSlider = document.getElementById('strut-height');
         strutHeightSlider.addEventListener('input', (e) => {
             this.strutHeight = parseInt(e.target.value);
             this.updateUI();
-            this.updateStrutViews();
         });
         
         // Clear selection button
         const clearButton = document.getElementById('clear-selection');
-        clearButton.addEventListener('click', () => {
-            this.selectedTriangle = null;
-            this.selectedStrut = null;
-            this.selectedJoint = null;
-            this.updateUI();
-            this.initMainDomeView();
-        });
+        if (clearButton) {
+            clearButton.addEventListener('click', () => {
+                this.selectedTriangle = null;
+                this.selectedStrut = null;
+                this.selectedJoint = null;
+                this.updateUI();
+                this.initMainDomeView();
+            });
+        }
         
         // Assembly mode controls
         const assemblyToggle = document.getElementById('assembly-mode-toggle');
         assemblyToggle.addEventListener('click', () => {
             this.toggleAssemblyMode();
-        });
-        
-        const assemblyExit = document.getElementById('assembly-mode-exit');
-        assemblyExit.addEventListener('click', () => {
-            this.exitAssemblyMode();
-        });
-        
-        const assemblyPrev = document.getElementById('assembly-prev');
-        assemblyPrev.addEventListener('click', () => {
-            this.previousAssemblyStep();
-        });
-        
-        const assemblyNext = document.getElementById('assembly-next');
-        assemblyNext.addEventListener('click', () => {
-            this.nextAssemblyStep();
+            if (this.assemblyMode) this.switchTab('assembly');
         });
         
         const assemblyAuto = document.getElementById('assembly-auto');
         assemblyAuto.addEventListener('click', () => {
             this.toggleAutoAssembly();
         });
-        
-        // Phase navigation controls
-        const assemblyPhasePrev = document.getElementById('assembly-phase-prev');
-        assemblyPhasePrev.addEventListener('click', () => {
-            this.previousAssemblyPhase();
-        });
-        
-        const assemblyPhaseNext = document.getElementById('assembly-phase-next');
-        assemblyPhaseNext.addEventListener('click', () => {
-            this.nextAssemblyPhase();
-        });
+
+        // View mode cycle
+        const viewModeCycle = document.getElementById('view-mode-cycle');
+        if (viewModeCycle) {
+            viewModeCycle.addEventListener('click', () => {
+                const modes = ['full', 'hexagon', 'inner', 'sky'];
+                const currentIdx = modes.indexOf(this.viewMode);
+                this.viewMode = modes[(currentIdx + 1) % modes.length];
+                this.updateUI();
+            });
+        }
+
+        const resetView = document.getElementById('reset-view');
+        if (resetView) {
+            resetView.addEventListener('click', () => {
+                this.viewMode = 'full';
+                this.zoom = 1.0;
+                document.getElementById('zoom-slider').value = 1.0;
+                this.cameraControls?.setCameraTarget(new THREE.Vector3(0, 2, 0));
+                this.updateUI();
+            });
+        }
     }
     
     updateUI() {
         // Update frequency display
         document.getElementById('frequency-display').textContent = this.frequency;
-        document.getElementById('sidebar-frequency').textContent = this.frequency;
         
         // Update zoom display
-        document.getElementById('zoom-display').textContent = this.zoom.toFixed(1);
+        document.getElementById('zoom-display').textContent = `${this.zoom.toFixed(1)}x`;
         
         // Update strut dimensions display
         document.getElementById('strut-width-display').textContent = `${this.strutWidth}mm`;
         document.getElementById('strut-height-display').textContent = `${this.strutHeight}mm`;
         
-        // Update strut types count
-        document.getElementById('strut-types-count').textContent = this.strutTypes.length;
-        
-        // Update view mode info
-        const viewModeInfo = {
-            full: '🏠 Full Dome View',
-            hexagon: '⬡ Top View (Hexagon Pattern)',
-            inner: '👁️ Inside View',
-            sky: '☁️ Sky View (Looking Up)'
-        };
-        document.getElementById('view-mode-info').textContent = viewModeInfo[this.viewMode];
-        
         // Show/hide selection info
         const triangleInfo = document.getElementById('triangle-info');
-        const clearButton = document.getElementById('clear-selection');
         
         if (this.selectedTriangle || this.selectedStrut || this.selectedJoint) {
             triangleInfo.classList.remove('hidden');
-            clearButton.classList.remove('hidden');
-            
             if (this.selectedTriangle) {
                 this.updateTriangleInfo();
             } else if (this.selectedStrut) {
@@ -172,16 +205,6 @@ class DomeSimulator {
             }
         } else {
             triangleInfo.classList.add('hidden');
-            clearButton.classList.add('hidden');
-        }
-        
-        // Show/hide cutting guide
-        const cuttingGuide = document.getElementById('cutting-guide');
-        if (this.selectedStrutType) {
-            cuttingGuide.classList.remove('hidden');
-            this.updateCuttingGuide();
-        } else {
-            cuttingGuide.classList.add('hidden');
         }
         
         // Update strut types list
@@ -195,117 +218,126 @@ class DomeSimulator {
     }
     
     updateAssemblyControls() {
-        const assemblyControls = document.getElementById('assembly-controls');
+        const assemblyProgressBar = document.getElementById('assembly-progress-bar');
+        const assemblyProgressPercent = document.getElementById('assembly-progress-percent');
         const assemblyToggle = document.getElementById('assembly-mode-toggle');
+        const stepsContainer = document.getElementById('assembly-steps-container');
         
         if (this.assemblyMode) {
-            assemblyControls.classList.remove('hidden');
-            assemblyToggle.textContent = '🏠 Normal Mode';
-            assemblyToggle.className = 'px-6 py-3 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 active:bg-blue-700 shadow-md';
+            assemblyToggle.textContent = 'Exit Assembly Mode';
+            assemblyToggle.className = 'flex-1 py-2 bg-red-500 text-white text-[10px] font-black uppercase rounded hover:bg-red-600 transition-colors';
             
-            document.getElementById('assembly-step-display').textContent = this.assemblyStep;
-            document.getElementById('assembly-total-display').textContent = this.maxAssemblySteps;
+            const progress = (this.assemblyStep / Math.max(1, this.maxAssemblySteps)) * 100;
+            if (assemblyProgressBar) assemblyProgressBar.style.width = `${progress}%`;
+            if (assemblyProgressPercent) assemblyProgressPercent.textContent = `${Math.round(progress)}%`;
             
-            // Update phase display
-            const phaseNames = [
-                "Phase 1: Strut Collection",
-                "Phase 2: Triangle Assembly", 
-                "Phase 3: Component Integration"
-            ];
-            document.getElementById('assembly-phase-display').textContent = 
-                phaseNames[this.assemblyPhase] || `Phase ${this.assemblyPhase + 1}`;
-            
-            // Update button states
-            document.getElementById('assembly-prev').disabled = this.assemblyStep <= 0;
-            document.getElementById('assembly-next').disabled = this.assemblyStep >= this.maxAssemblySteps;
-            document.getElementById('assembly-phase-prev').disabled = this.assemblyPhase <= 0;
-            document.getElementById('assembly-phase-next').disabled = this.assemblyPhase >= this.maxAssemblyPhases - 1;
-            
-            // Update phase and step descriptions
-            const phaseDescNames = [
-                "Phase 1: Strut Collection & Organization",
-                "Phase 2: Triangle Assembly",
-                "Phase 3: Component Integration & Construction"
-            ];
-            
-            const phaseDescriptions = [
-                [
-                    "Organize struts by type (A, B, C, etc.)",
-                    "Cut compound angles: 18° miter + 27.8° bevel",
-                    "Prepare Good Karma hubless joint system",
-                    "Sort components for efficient assembly"
-                ],
-                [
-                    "Assemble triangles with overlapping struts",
-                    "Create triangle type A (using struts A-A-B)",
-                    "Create triangle type B (using struts A-B-C)", 
-                    "Stack completed triangles by type for integration"
-                ],
-                [
-                    "Start with ground foundation triangles",
-                    "Connect overlapping struts at compound angles",
-                    "Build rings with Good Karma joint system",
-                    "Complete dome with hubless overlapping joints"
-                ]
-            ];
-            
-            const currentPhase = Math.min(this.assemblyPhase, phaseDescNames.length - 1);
-            const currentPhaseDesc = phaseDescriptions[currentPhase];
-            const stepDesc = currentPhaseDesc[Math.min(this.assemblyStep, currentPhaseDesc.length - 1)] || 
-                           `${phaseDescNames[currentPhase]} - Step ${this.assemblyStep + 1}`;
-            
-            document.getElementById('assembly-description').textContent = stepDesc;
+            // Populate segments
+            if (stepsContainer) {
+                stepsContainer.innerHTML = '';
+                
+                // Add Phase selector
+                const phaseNames = ["Component Prep", "Unit Assembly", "Final Construction"];
+                const phaseSelector = document.createElement('div');
+                phaseSelector.className = 'flex gap-1 mb-4 bg-slate-800 p-1 rounded-lg';
+                phaseNames.forEach((name, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = `flex-1 py-1.5 text-[9px] font-bold uppercase rounded ${this.assemblyPhase === idx ? 'bg-primary text-slate-900' : 'text-slate-400 hover:text-white'}`;
+                    btn.textContent = name;
+                    btn.onclick = () => {
+                        this.assemblyPhase = idx;
+                        this.assemblyStep = 0;
+                        this.maxAssemblySteps = this.getMaxStepsForCurrentPhase();
+                        this.updateUI();
+                        this.initMainDomeView();
+                    };
+                    phaseSelector.appendChild(btn);
+                });
+                stepsContainer.appendChild(phaseSelector);
+
+                // Add Step items based on current phase
+                if (this.assemblyPhase === 2) { // Final Construction
+                    this.assemblySegments.forEach((segment, idx) => {
+                        const card = document.createElement('div');
+                        const isActive = this.assemblyStep === idx;
+                        card.className = `data-card ${isActive ? 'active' : ''}`;
+                        card.innerHTML = `
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold ${isActive ? 'text-primary' : 'text-slate-300'}">${segment.name}</span>
+                                ${idx <= this.assemblyStep ? '<i class="bi bi-check-circle-fill text-primary text-xs"></i>' : '<i class="bi bi-circle text-slate-600 text-xs"></i>'}
+                            </div>
+                            <div class="flex justify-between items-center mt-1">
+                                <div class="text-[10px] text-slate-500">${segment.triangles.length} units to integrate</div>
+                                <div class="text-[10px] text-primary/60">Details <i class="bi bi-chevron-right"></i></div>
+                            </div>
+                        `;
+                        card.onclick = () => {
+                            this.assemblyStep = idx;
+                            this.updateUI();
+                            this.initMainDomeView();
+                            this.showSegmentDetails(segment);
+                        };
+                        stepsContainer.appendChild(card);
+                    });
+                } else {
+                    // Placeholder for other phases or simple step list
+                    const stepCount = this.maxAssemblySteps + 1;
+                    for (let i = 0; i < stepCount; i++) {
+                        const card = document.createElement('div');
+                        const isActive = this.assemblyStep === i;
+                        card.className = `data-card ${isActive ? 'active' : ''}`;
+                        card.innerHTML = `
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold ${isActive ? 'text-primary' : 'text-slate-300'}">Step ${i + 1}</span>
+                                ${i <= this.assemblyStep ? '<i class="bi bi-check-circle-fill text-primary text-xs"></i>' : '<i class="bi bi-circle text-slate-600 text-xs"></i>'}
+                            </div>
+                        `;
+                        card.onclick = () => {
+                            this.assemblyStep = i;
+                            this.updateUI();
+                            this.initMainDomeView();
+                        };
+                        stepsContainer.appendChild(card);
+                    }
+                }
+            }
         } else {
-            assemblyControls.classList.add('hidden');
-            assemblyToggle.textContent = '🔧 Assembly Mode';
-            assemblyToggle.className = 'px-6 py-3 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 active:bg-green-700 shadow-md';
+            assemblyToggle.textContent = 'Enter Assembly Mode';
+            assemblyToggle.className = 'flex-1 py-2 bg-primary text-slate-900 text-[10px] font-black uppercase rounded hover:bg-white transition-colors';
+            if (stepsContainer) stepsContainer.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs italic">Enable assembly mode to see construction steps</div>';
         }
     }
     
     updateTriangleInventory() {
-        const triangleInventory = document.getElementById('triangle-inventory');
         const triangleTypesGrid = document.getElementById('triangle-types-grid');
-        
-        if (this.assemblyMode && this.triangleTypes.size > 0) {
-            triangleInventory.classList.remove('hidden');
-            triangleTypesGrid.innerHTML = '';
+        if (!triangleTypesGrid) return;
+
+        triangleTypesGrid.innerHTML = '';
+        this.triangleTypes.forEach((typeData, typeKey) => {
+            const card = document.createElement('div');
+            const isSelected = this.selectedTriangleType === typeKey;
+            card.className = `data-card ${isSelected ? 'active' : ''}`;
             
-            this.triangleTypes.forEach((typeData, typeKey) => {
-                const inventoryData = this.assemblyInventory.get(typeKey);
-                const isSelected = this.selectedTriangleType === typeKey;
-                
-                const typeCard = document.createElement('div');
-                typeCard.className = `p-2 rounded border-2 cursor-pointer transition-all ${
-                    isSelected ? 'border-blue-500 bg-blue-100' : 'border-gray-200 bg-white hover:border-gray-300'
-                }`;
-                
-                typeCard.innerHTML = `
-                    <div class="flex items-center gap-2 mb-1">
-                        <div class="w-3 h-3 rounded" style="background-color: ${typeData.color}"></div>
-                        <span class="font-bold text-xs">${typeKey}</span>
+            card.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-xs font-black" style="background-color: ${typeData.color}22; color: ${typeData.color}">
+                        ${typeKey.split('-').length}
                     </div>
-                    <div class="text-xs text-gray-600">
-                        <div>Struts: ${typeData.strutTypes.join('-')}</div>
-                        <div>Count: ${typeData.count}</div>
-                        ${inventoryData ? `
-                            <div class="mt-1">
-                                <div class="text-xs">
-                                    ${this.getPhaseProgressText(inventoryData)}
-                                </div>
-                            </div>
-                        ` : ''}
+                    <div class="flex-1">
+                        <div class="flex justify-between">
+                            <span class="text-xs font-bold text-slate-200">${typeKey}</span>
+                            <span class="text-xs font-mono text-primary">${typeData.count} Units</span>
+                        </div>
+                        <div class="text-[10px] text-slate-500 mt-0.5">Struts: ${typeData.strutTypes.join(', ')}</div>
                     </div>
-                `;
-                
-                typeCard.addEventListener('click', () => {
-                    this.selectTriangleType(isSelected ? null : typeKey);
-                });
-                
-                triangleTypesGrid.appendChild(typeCard);
-            });
-        } else {
-            triangleInventory.classList.add('hidden');
-        }
+                </div>
+            `;
+            
+            card.onclick = () => {
+                this.selectTriangleType(isSelected ? null : typeKey);
+            };
+            
+            triangleTypesGrid.appendChild(card);
+        });
     }
     
     getPhaseProgressText(inventoryData) {
@@ -389,8 +421,8 @@ class DomeSimulator {
             case 1: // Triangle Assembly Phase
                 // Show all triangles one by one from ground up
                 return Math.max(1, this.allTriangles.length - 1);
-            case 2: // Component Integration Phase
-                return Math.max(1, this.assemblyLayers.length - 1);
+            case 2: // Component Integration Phase (Segments)
+                return Math.max(1, this.assemblySegments.length - 1);
             default:
                 return Math.min(this.allTriangles.length, 20);
         }
@@ -440,27 +472,25 @@ class DomeSimulator {
         strutsList.innerHTML = '';
         
         this.selectedTriangle.struts.forEach((strut, i) => {
-            const button = document.createElement('button');
-            button.className = `flex items-center gap-2 p-3 rounded transition-all ${
-                this.selectedStrutType?.type === strut.type 
-                    ? 'bg-blue-500 text-white shadow-lg' 
-                    : 'bg-white hover:bg-gray-100'
+            const btn = document.createElement('button');
+            const isSelected = this.selectedStrutType?.type === strut.type;
+            btn.className = `w-full flex items-center gap-3 p-2.5 rounded-lg transition-all border ${
+                isSelected ? 'bg-primary/20 border-primary text-primary' : 'bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-800 hover:border-slate-600'
             }`;
             
-            button.innerHTML = `
-                <div class="w-4 h-4 rounded flex-shrink-0" style="background-color: ${strut.color}"></div>
-                <span class="font-medium">Strut ${i + 1}: Type ${strut.type}</span>
-                <span class="ml-auto font-bold">${strut.length.toFixed(1)}mm</span>
-                ${this.selectedStrutType?.type === strut.type ? '<span class="text-xs">← Selected</span>' : ''}
+            btn.innerHTML = `
+                <div class="w-2 h-2 rounded-full" style="background-color: ${strut.color}"></div>
+                <span class="text-[10px] font-bold uppercase tracking-wider">Strut ${i + 1} (${strut.type})</span>
+                <span class="ml-auto font-mono text-[10px]">${strut.length.toFixed(1)}mm</span>
             `;
             
-            button.addEventListener('click', () => {
+            btn.addEventListener('click', () => {
                 this.selectedStrutType = strut;
                 this.updateUI();
-                this.initStrutViews();
+                this.showStrutDetails(strut);
             });
             
-            strutsList.appendChild(button);
+            strutsList.appendChild(btn);
         });
     }
     
@@ -468,32 +498,23 @@ class DomeSimulator {
         if (!this.selectedStrut) return;
         
         const strutInfo = this.selectedStrut.strutInfo;
-        document.getElementById('triangle-number').textContent = `Good Karma Strut Type ${strutInfo.type}`;
+        document.getElementById('triangle-number').textContent = `Strut Type ${strutInfo.type}`;
         
         const strutsList = document.getElementById('struts-list');
         strutsList.innerHTML = `
-            <div class="bg-gradient-to-r from-amber-500 to-orange-600 text-white p-4 rounded-lg">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-6 h-6 rounded" style="background-color: ${strutInfo.color}"></div>
-                    <h3 class="font-bold text-lg">Good Karma Hubless Strut</h3>
+            <div class="bg-primary/10 border border-primary/20 p-3 rounded-lg">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-3 h-3 rounded-full" style="background-color: ${strutInfo.color}"></div>
+                    <span class="text-xs font-bold text-primary">Good Karma Strut ${strutInfo.type}</span>
                 </div>
-                <div class="grid grid-cols-2 gap-3 text-sm">
-                    <div>
-                        <p class="font-semibold">Type: ${strutInfo.type}</p>
-                        <p>Length: ${strutInfo.length.toFixed(1)}mm</p>
-                        <p>Width: ${this.strutWidth}mm</p>
-                        <p>Height: ${this.strutHeight}mm</p>
-                    </div>
-                    <div>
-                        <p class="font-semibold">Hubless Cuts:</p>
-                        <p>Miter: ${strutInfo.miterAngle.toFixed(1)}° (horizontal)</p>
-                        <p>Bevel: ${strutInfo.bevelAngle.toFixed(1)}° (vertical)</p>
-                        <p>Cross-section: Rectangular</p>
-                    </div>
+                <div class="grid grid-cols-2 gap-y-2 text-[10px]">
+                    <span class="text-slate-500">Length</span><span class="text-slate-200 font-mono">${strutInfo.length.toFixed(1)}mm</span>
+                    <span class="text-slate-500">Miter</span><span style="color: #fb7185" class="font-mono">${strutInfo.miterAngle.toFixed(1)}°</span>
+                    <span class="text-slate-500">Bevel</span><span style="color: #34d399" class="font-mono">${strutInfo.bevelAngle.toFixed(1)}°</span>
                 </div>
-                <div class="mt-3 p-2 bg-white bg-opacity-20 rounded">
-                    <p class="text-xs">🔨 <strong>Good Karma Method:</strong> Rectangular strut with compound cuts - overlaps with other struts for hubless connections!</p>
-                </div>
+                <button onclick="domeSimulator.showStrutDetails({type:'${strutInfo.type}', length:${strutInfo.length}, miterAngle:${strutInfo.miterAngle}, bevelAngle:${strutInfo.bevelAngle}, color:'${strutInfo.color}'})" class="w-full mt-3 py-1.5 bg-primary/20 text-primary text-[9px] font-bold uppercase rounded border border-primary/30 hover:bg-primary/30">
+                    View Cutting Guide
+                </button>
             </div>
         `;
     }
@@ -502,36 +523,24 @@ class DomeSimulator {
         if (!this.selectedJoint) return;
         
         const connections = this.selectedJoint.connections;
-        const jointType = connections === 5 ? 'Pentagon Vertex' : 
-                         connections === 6 ? 'Hexagon Vertex' : 
-                         'Edge Vertex';
-        const jointColor = connections === 5 ? 'Gold' : 
-                          connections === 6 ? 'Silver' : 'Red';
+        const jointType = connections === 5 ? 'Pentagon' : 
+                         connections === 6 ? 'Hexagon' : 
+                         'Foundation';
         
-        document.getElementById('triangle-number').textContent = `${jointType} (Hubless)`;
+        document.getElementById('triangle-number').textContent = `${jointType} Node`;
         
         const strutsList = document.getElementById('struts-list');
         strutsList.innerHTML = `
-            <div class="bg-gradient-to-r from-amber-600 to-orange-700 text-white p-4 rounded-lg">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-6 h-6 rounded-full bg-amber-300"></div>
-                    <h3 class="font-bold text-lg">Good Karma Hubless Joint</h3>
+            <div class="bg-slate-800/80 border border-slate-700 p-3 rounded-lg">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"></div>
+                    <span class="text-xs font-bold text-amber-400">Hubless Connection</span>
                 </div>
-                <div class="grid grid-cols-2 gap-3 text-sm">
-                    <div>
-                        <p class="font-semibold">Type: ${jointType}</p>
-                        <p>Connections: ${connections} struts</p>
-                        <p>Method: Overlapping cuts</p>
-                    </div>
-                    <div>
-                        <p class="font-semibold">Hubless System:</p>
-                        <p>No metal hubs needed!</p>
-                        <p>Miter + Bevel cuts create fit</p>
-                        <p>${connections === 5 ? 'Creates dome curvature' : connections === 6 ? 'Maintains structure' : 'Edge connection'}</p>
-                    </div>
-                </div>
-                <div class="mt-3 p-2 bg-white bg-opacity-20 rounded">
-                    <p class="text-xs">🔨 <strong>Good Karma Method:</strong> ${connections} rectangular struts overlap at precise compound angles - no complex hubs required!</p>
+                <p class="text-[10px] text-slate-400 leading-relaxed">
+                    This node connects <strong>${connections} struts</strong> using precise overlapping miter and bevel cuts.
+                </p>
+                <div class="mt-2 text-[9px] text-slate-500 italic">
+                    * No metal hubs required in the Good Karma system.
                 </div>
             </div>
         `;
@@ -581,37 +590,194 @@ class DomeSimulator {
     }
     
     updateStrutTypesList() {
-        const strutTypesList = document.getElementById('strut-types-list');
-        strutTypesList.innerHTML = '';
+        const list = document.getElementById('strut-types-list');
+        if (!list) return;
         
-        this.strutTypes.forEach((strut) => {
-            const button = document.createElement('button');
-            button.className = `w-full text-left p-3 rounded border-2 transition-all ${
-                this.selectedStrutType?.type === strut.type
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 bg-white hover:border-gray-300'
-            }`;
+        list.innerHTML = '';
+        
+        const createSection = (title, filterFn) => {
+            const struts = this.strutTypes.filter(filterFn);
+            if (struts.length === 0) return;
             
-            button.innerHTML = `
-                <div class="flex items-center gap-2">
-                    <div class="w-4 h-4 rounded" style="background-color: ${strut.color}"></div>
-                    <span class="font-bold">Type ${strut.type}</span>
-                    <div class="ml-auto text-right">
-                        <div class="text-sm font-medium">${strut.length.toFixed(1)}mm</div>
-                        <div class="text-xs text-gray-600">${strut.count} struts</div>
+            const header = document.createElement('div');
+            header.className = 'text-xs font-bold text-slate-400 uppercase tracking-widest mt-6 mb-3 border-b border-slate-700 pb-2';
+            header.textContent = title;
+            list.appendChild(header);
+            
+            struts.forEach(strut => {
+                const card = document.createElement('div');
+                const isSelected = this.selectedStrutType?.type === strut.type;
+                card.className = `data-card mb-3 cursor-pointer transition-colors ${isSelected ? 'active border-primary' : 'border-slate-700 hover:border-slate-500'}`;
+                
+                let qtyText = strut.count + ' Total';
+                if (title === 'Base Ring') qtyText = strut.baseCount + ' Pieces';
+                else if (title === 'Verticals (Standing on Base)') qtyText = strut.standCount + ' Pieces';
+                else qtyText = (strut.count - strut.baseCount - strut.standCount) + ' Pieces';
+
+                card.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-black" style="background-color: ${strut.color}22; color: ${strut.color}">
+                            ${strut.type}
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex justify-between items-center mb-1">
+                                <span class="text-sm font-bold text-slate-100">${strut.length.toFixed(1)}mm</span>
+                                <span class="text-xs font-mono text-primary">${qtyText}</span>
+                            </div>
+                            <div class="flex gap-3 text-[10px] text-slate-400">
+                                <span style="color: #fb7185">M: ${strut.miterAngle.toFixed(1)}°</span>
+                                <span style="color: #34d399">B: ${strut.bevelAngle.toFixed(1)}°</span>
+                                <span class="ml-auto text-primary/50">Details <i class="bi bi-chevron-right"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                card.onclick = () => {
+                    this.selectedStrutType = strut;
+                    this.updateUI();
+                    this.showStrutDetails(strut);
+                };
+                
+                list.appendChild(card);
+            });
+        };
+
+        createSection('Base Ring', s => s.baseCount > 0);
+        createSection('Verticals (Standing on Base)', s => s.standCount > 0);
+        createSection('Dome Canopy', s => (s.count - s.baseCount - s.standCount) > 0);
+    }
+
+    showStrutDetails(strut) {
+        const miterLoss = (this.strutHeight * Math.tan(strut.miterAngle * Math.PI / 180)).toFixed(1);
+        const bevelLoss = (this.strutWidth * Math.tan(strut.bevelAngle * Math.PI / 180)).toFixed(1);
+        
+        const content = `
+            <div class="space-y-6">
+                <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-widest flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full" style="background-color: #fb7185"></span>
+                        1. Miter Cut (Horizontal)
+                    </h3>
+                    <div id="step2-view" class="w-full aspect-video bg-black rounded-lg step-view"></div>
+                    <div class="mt-4 grid grid-cols-2 gap-4">
+                        <div class="text-[10px]">
+                            <span class="block text-slate-500">Angle</span>
+                            <span style="color: #fb7185" class="font-mono text-sm">${strut.miterAngle.toFixed(1)}°</span>
+                        </div>
+                        <div class="text-[10px]">
+                            <span class="block text-slate-500">Material Loss</span>
+                            <span style="color: #fb7185" class="font-mono text-sm">${miterLoss}mm</span>
+                        </div>
                     </div>
                 </div>
-            `;
-            
-            button.addEventListener('click', () => {
-                this.selectedStrutType = strut;
-                this.updateUI();
-                this.initStrutViews();
-            });
-            
-            strutTypesList.appendChild(button);
-        });
-    }
+                <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-widest flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full" style="background-color: #34d399"></span>
+                        2. Bevel Cut (Vertical)
+                    </h3>
+                    <div id="step3-view" class="w-full aspect-video bg-black rounded-lg step-view"></div>
+                    <div class="mt-4 grid grid-cols-2 gap-4">
+                        <div class="text-[10px]">
+                            <span class="block text-slate-500">Angle</span>
+                            <span style="color: #34d399" class="font-mono text-sm">${strut.bevelAngle.toFixed(1)}°</span>
+                        </div>
+                        <div class="text-[10px]">
+                            <span class="block text-slate-500">Material Loss</span>
+                            <span style="color: #34d399" class="font-mono text-sm">${bevelLoss}mm</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 h-full">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-6 tracking-widest">Good Karma Fabrication</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between border-b border-slate-700 pb-2">
+                            <span class="text-xs text-slate-400">Total Length</span>
+                            <span class="text-xs font-bold text-white">${strut.length.toFixed(1)}mm</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-700 pb-2">
+                            <span class="text-xs text-slate-400">Stock Width</span>
+                            <span class="text-xs font-bold text-white">${this.strutWidth}mm</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-700 pb-2">
+                            <span class="text-xs text-slate-400">Stock Height</span>
+                            <span class="text-xs font-bold text-white">${this.strutHeight}mm</span>
+                        </div>
+                    </div>
+                    <div class="mt-8 p-4 bg-primary/10 rounded-lg border border-primary/20">
+                        <p class="text-[10px] text-primary leading-relaxed">
+                            <i class="bi bi-info-circle-fill mr-1"></i>
+                            <strong>Important:</strong> Each strut receives BOTH miter and bevel cuts on BOTH ends. The rectangular cross-section with compound cuts creates perfect overlapping joints without metal hubs.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        this.showDetails(`Strut Type ${strut.type} Manufacturing Guide`, content);
+        }
+
+        showSegmentDetails(segment) {
+        const isDoor = segment.name.includes('Door');
+
+        let content = `
+            <div class="space-y-6">
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 h-full">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-widest">Segment Information</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between border-b border-slate-700 pb-2">
+                            <span class="text-xs text-slate-400">Segment Name</span>
+                            <span class="text-xs font-bold text-white">${segment.name}</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-700 pb-2">
+                            <span class="text-xs text-slate-400">Total Units</span>
+                            <span class="text-xs font-bold text-white">${segment.triangles.length}</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-700 pb-2">
+                            <span class="text-xs text-slate-400">Level</span>
+                            <span class="text-xs font-bold text-white">${segment.level}</span>
+                        </div>
+                    </div>
+                    <div class="mt-6 p-4 ${isDoor ? 'bg-amber-500/10 border-amber-500/20' : 'bg-primary/10 border-primary/20'} rounded-lg border">
+                        <p class="text-[10px] ${isDoor ? 'text-amber-400' : 'text-primary'} leading-relaxed">
+                            <i class="bi ${isDoor ? 'bi-exclamation-triangle-fill' : 'bi-info-circle-fill'} mr-1"></i>
+                            <strong>Construction Note:</strong> ${
+                                isDoor 
+                                ? 'The door segment is installed last to maintain the structural integrity of the lower rings during assembly.'
+                                : 'Follow the bottom-up, front-to-back sequence. Ensure all hubs are tightly fitted using the Good Karma overlapping system before moving to the next segment.'
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="space-y-6">
+                <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 h-full">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-widest">Walkthrough Connection</h3>
+                    <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                        Review the 3D walkthrough stages below to understand how the units in this segment connect.
+                    </p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="domeSimulator.closeDetails(); document.getElementById('stage-1').click();" class="p-3 bg-slate-800 border border-slate-600 rounded-lg hover:bg-slate-700 text-left transition-colors">
+                            <span class="block text-[10px] font-bold text-slate-400">Stage 2</span>
+                            <span class="block text-xs font-bold text-white mt-1">Joints Forming</span>
+                        </button>
+                        <button onclick="domeSimulator.closeDetails(); document.getElementById('stage-2').click();" class="p-3 bg-slate-800 border border-slate-600 rounded-lg hover:bg-slate-700 text-left transition-colors">
+                            <span class="block text-[10px] font-bold text-slate-400">Stage 3</span>
+                            <span class="block text-xs font-bold text-white mt-1">Complete Triangle</span>
+                        </button>
+                        <button onclick="domeSimulator.closeDetails(); document.getElementById('stage-3').click();" class="p-3 bg-slate-800 border border-slate-600 rounded-lg hover:bg-slate-700 text-left transition-colors col-span-2">
+                            <span class="block text-[10px] font-bold text-slate-400">Stage 4</span>
+                            <span class="block text-xs font-bold text-white mt-1">Star Pattern Assembly</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        this.showDetails(`Assembly Details: ${segment.name}`, content);
+        }
     
     initMainDomeView() {
         const mountElement = document.getElementById('main-dome-view');
@@ -624,7 +790,7 @@ class DomeSimulator {
         
         // Create scene
         this.scene = new THREE.Scene();
-        this.scene.background = new THREE.Color(0x87ceeb);
+        this.scene.background = new THREE.Color(0x0f172a);
         
         // Create camera
         this.camera = new THREE.PerspectiveCamera(
@@ -642,17 +808,18 @@ class DomeSimulator {
         mountElement.appendChild(this.renderer.domElement);
         
         // Add lighting
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
         this.scene.add(ambientLight);
         
-        const sunLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        const sunLight = new THREE.DirectionalLight(0xffffff, 0.6);
         sunLight.position.set(10, 10, 5);
         this.scene.add(sunLight);
         
         // Add ground
         const groundGeometry = new THREE.CircleGeometry(6, 32);
         const groundMaterial = new THREE.MeshStandardMaterial({ 
-            color: 0x228b22,
+            color: 0x1e293b,
+            wireframe: true,
             roughness: 0.8
         });
         const ground = new THREE.Mesh(groundGeometry, groundMaterial);
@@ -660,8 +827,8 @@ class DomeSimulator {
         this.scene.add(ground);
         
         // Generate geodesic dome
-        this.generateGeodесicDome();
-        
+        this.generateGeodesicDome();
+
         // Setup interaction
         this.setupMainViewInteraction();
         
@@ -672,7 +839,7 @@ class DomeSimulator {
         window.addEventListener('resize', () => this.handleResize());
     }
     
-    generateGeodесicDome() {
+    generateGeodesicDome() {
         const radius = 3.5;
         const phi = (1 + Math.sqrt(5)) / 2;
         
@@ -708,10 +875,82 @@ class DomeSimulator {
             this.allTriangles.push(...this.subdivideTriangle(v1, v2, v3, this.frequency, radius));
         });
 
-        // Filter triangles (keep only upper hemisphere)
+        // Apply Kruschke magic fix for flat base
+        if (this.frequency === 3 || this.frequency === 4) {
+            const MAGIC_FIX_RATIO = this.frequency === 3 ? 0.9442890204731844 : (0.22219 / 0.253185 * 0.9983958444733023);
+            
+            const vertexMap = new Map();
+            const getVertexKey = (v) => `${v.x.toFixed(6)},${v.y.toFixed(6)},${v.z.toFixed(6)}`;
+            
+            baseVertices.forEach(v => {
+                vertexMap.set(getVertexKey(v), { v: v.clone(), isPPT: true });
+            });
+
+            this.allTriangles.forEach(tri => {
+                tri.forEach((v, i) => {
+                    const key = getVertexKey(v);
+                    if (!vertexMap.has(key)) {
+                        vertexMap.set(key, { v: v.clone(), isPPT: false });
+                    }
+                    tri[i] = vertexMap.get(key).v;
+                });
+            });
+
+            const ppts = Array.from(vertexMap.values()).filter(o => o.isPPT).map(o => o.v);
+            const connections = new Map();
+            
+            this.allTriangles.forEach(tri => {
+                for (let i = 0; i < 3; i++) {
+                    const a = tri[i];
+                    const b = tri[(i+1)%3];
+                    const keyA = getVertexKey(a);
+                    const keyB = getVertexKey(b);
+                    if (!connections.has(keyA)) connections.set(keyA, new Set());
+                    if (!connections.has(keyB)) connections.set(keyB, new Set());
+                    connections.get(keyA).add(b);
+                    connections.get(keyB).add(a);
+                }
+            });
+
+            Array.from(vertexMap.values()).forEach(obj => {
+                if (obj.isPPT) return;
+                const v = obj.v;
+                const key = getVertexKey(v);
+                const connected = Array.from(connections.get(key));
+                const connectedPPT = connected.find(n => ppts.some(p => getVertexKey(p) === getVertexKey(n)));
+                
+                if (connectedPPT) {
+                    const E = connectedPPT;
+                    const S = v;
+                    const mr = MAGIC_FIX_RATIO;
+                    const newPos = E.clone().multiplyScalar(1 - mr).add(S.clone().multiplyScalar(mr)).normalize().multiplyScalar(radius);
+                    S.copy(newPos);
+                }
+            });
+        }
+
+        // Filter triangles (keep upper 5/9 hemisphere)
+        // For V3, the 5/9 cut ring is perfectly flat at approximately y = -0.191 * radius.
+        // We use a threshold of -0.2 * radius to cleanly slice exactly at that ring.
         this.allTriangles = this.allTriangles.filter(tri => {
-            const avgY = (tri[0].y + tri[1].y + tri[2].y) / 3;
-            return avgY > -0.5;
+            const minY = Math.min(tri[0].y, tri[1].y, tri[2].y);
+            return minY >= -0.2 * radius;
+        });
+
+        // Set the floor to exactly Y=0 for visual alignment
+        // The lowest Y coordinate after the 5/9 cut should be set to 0.
+        let lowestY = Infinity;
+        this.allTriangles.forEach(tri => {
+            tri.forEach(v => {
+                if (v.y < lowestY) lowestY = v.y;
+            });
+        });
+        
+        // Offset all points so the base sits exactly on the floor (Y=0)
+        this.allTriangles.forEach(tri => {
+            tri.forEach(v => {
+                v.y -= lowestY;
+            });
         });
 
         // Calculate Y range for proper height level calculation
@@ -765,95 +1004,83 @@ class DomeSimulator {
     }
     
     calculateStrutTypes() {
-        const strutLengthMap = new Map();
-        const strutCountMap = new Map();
+        const strutMap = new Map(); // Key: length_miter_bevel
         
-        // Track all struts to avoid counting duplicates
-        const processedStruts = new Set();
-        
-        // Map to store faces adjacent to each edge to calculate Dihedral Angles (Bevel)
-        const edgeFacesMap = new Map();
-        // Map to accumulate face angles adjacent to each strut type (Miter)
-        const strutFaceAnglesMap = new Map();
-        
-        this.allTriangles.forEach((tri) => {
-            // Calculate face normal
+        // Map to find adjacent faces for dihedral (bevel) calculation
+        const edgeToFaces = new Map();
+        const faceNormals = this.allTriangles.map(tri => {
             const vA = new THREE.Vector3().subVectors(tri[1], tri[0]);
             const vB = new THREE.Vector3().subVectors(tri[2], tri[0]);
-            const normal = new THREE.Vector3().crossVectors(vA, vB).normalize();
-            
-            // Calculate interior angles of the triangle
-            const angles = [
-                vA.clone().normalize().angleTo(vB.clone().normalize()),
-                new THREE.Vector3().subVectors(tri[2], tri[1]).normalize().angleTo(new THREE.Vector3().subVectors(tri[0], tri[1]).normalize()),
-                new THREE.Vector3().subVectors(tri[0], tri[2]).normalize().angleTo(new THREE.Vector3().subVectors(tri[1], tri[2]).normalize())
-            ];
-            
+            return new THREE.Vector3().crossVectors(vA, vB).normalize();
+        });
+
+        this.allTriangles.forEach((tri, fIdx) => {
             for (let i = 0; i < 3; i++) {
                 const v1 = tri[i];
                 const v2 = tri[(i + 1) % 3];
-                const length = v1.distanceTo(v2) * 1000;
-                const roundedLength = Math.round(length);
-                
-                const strutKeyPos = this.getStrutKey(v1, v2);
-                
-                if (!edgeFacesMap.has(strutKeyPos)) {
-                    edgeFacesMap.set(strutKeyPos, { roundedLength, normals: [] });
-                }
-                edgeFacesMap.get(strutKeyPos).normals.push(normal);
-                
-                if (!strutFaceAnglesMap.has(roundedLength)) {
-                    strutFaceAnglesMap.set(roundedLength, []);
-                }
-                // Save the angles at the endpoints of this strut
-                strutFaceAnglesMap.get(roundedLength).push(angles[i]);
-                strutFaceAnglesMap.get(roundedLength).push(angles[(i + 1) % 3]);
-                
-                if (!strutLengthMap.has(roundedLength)) {
-                    strutLengthMap.set(roundedLength, length);
-                }
-                
-                if (!processedStruts.has(strutKeyPos)) {
-                    processedStruts.add(strutKeyPos);
-                    strutCountMap.set(roundedLength, (strutCountMap.get(roundedLength) || 0) + 1);
-                }
+                const key = this.getStrutKey(v1, v2);
+                if (!edgeToFaces.has(key)) edgeToFaces.set(key, []);
+                edgeToFaces.get(key).push(fIdx);
             }
         });
 
-        // Compute Dihedral angles (Bevels) per strut length
-        const strutBevelsMap = new Map();
-        edgeFacesMap.forEach((data, key) => {
-            if (data.normals.length === 2) {
-                // Dihedral angle between the two adjacent faces
-                const angleRad = data.normals[0].angleTo(data.normals[1]);
-                const angleDeg = angleRad * 180 / Math.PI;
-                // Accumulate bevel angles (half of dihedral)
-                if (!strutBevelsMap.has(data.roundedLength)) strutBevelsMap.set(data.roundedLength, []);
-                strutBevelsMap.get(data.roundedLength).push(angleDeg / 2);
+        this.allTriangles.forEach((tri, fIdx) => {
+            const v = tri.map(vert => vert.clone());
+            const sides = [
+                v[0].distanceTo(v[1]),
+                v[1].distanceTo(v[2]),
+                v[2].distanceTo(v[0])
+            ];
+
+            const angles = [
+                Math.acos((sides[0]**2 + sides[2]**2 - sides[1]**2) / (2 * sides[0] * sides[2])),
+                Math.acos((sides[0]**2 + sides[1]**2 - sides[2]**2) / (2 * sides[0] * sides[1])),
+                Math.acos((sides[1]**2 + sides[2]**2 - sides[0]**2) / (2 * sides[1] * sides[2]))
+            ];
+
+            for (let i = 0; i < 3; i++) {
+                const v1 = tri[i], v2 = tri[(i + 1) % 3];
+                const edgeKey = this.getStrutKey(v1, v2);
+                const adjacentFaces = edgeToFaces.get(edgeKey);
+                
+                let bevel = 0;
+                if (adjacentFaces.length === 2) {
+                    const n1 = faceNormals[adjacentFaces[0]];
+                    const n2 = faceNormals[adjacentFaces[1]];
+                    bevel = (n1.angleTo(n2) * 180 / Math.PI) / 2;
+                } else if (adjacentFaces.length === 1) {
+                    // Base struts usually have a 0 bevel or a specific angle for the foundation
+                    bevel = 0;
+                }
+
+                const angleAtVertex = angles[i] * 180 / Math.PI;
+                const miter = Math.abs(90 - angleAtVertex);
+                const length = sides[i] * 1000;
+                
+                // Round values for grouping
+                const rLen = Math.round(length);
+                const rMiter = Math.round(miter * 10) / 10;
+                const rBevel = Math.round(bevel * 10) / 10;
+                const key = `${rLen}_${rMiter}_${rBevel}`;
+
+                if (!strutMap.has(key)) {
+                    strutMap.set(key, { length, miter, bevel, count: 0 });
+                }
+                strutMap.get(key).count++;
             }
         });
 
-        const uniqueLengths = Array.from(strutLengthMap.keys()).sort((a, b) => a - b);
-        this.strutTypes = uniqueLengths.map((roundedLen, idx) => {
-            const exactLen = strutLengthMap.get(roundedLen);
-            const bevels = strutBevelsMap.get(roundedLen) || [0];
-            const avgBevel = bevels.reduce((a, b) => a + b, 0) / Math.max(1, bevels.length);
-            
-            // Approximate Miter based on average interior angles adjacent to this strut
-            const faceAngles = strutFaceAnglesMap.get(roundedLen) || [0];
-            const avgFaceAngle = faceAngles.reduce((a, b) => a + b, 0) / Math.max(1, faceAngles.length);
-            // The Miter angle corresponds to the cut off square: 90 - (angle in degrees) [usually closely modeling geodesic points]
-            let miter = Math.max(0, 90 - (avgFaceAngle * 180 / Math.PI));
-
-            return {
-                type: String.fromCharCode(65 + idx), // A, B, C etc.
-                length: exactLen,
-                count: strutCountMap.get(roundedLen) || 0,
-                color: ['#4361ee', '#f72585', '#7209b7', '#4ECDC4', '#FBBF24', '#0EA5E9', '#EF4444', '#10b981', '#f78c6b', '#8338ec'][idx % 10],
-                miterAngle: miter,
-                bevelAngle: avgBevel
-            };
-        });
+        // Convert Map to sorted array of families
+        const families = Array.from(strutMap.values()).sort((a, b) => b.length - a.length);
+        
+        this.strutTypes = families.map((f, idx) => ({
+            type: String.fromCharCode(65 + idx),
+            length: f.length,
+            count: f.count,
+            color: ['#4361ee', '#f72585', '#7209b7', '#4ECDC4', '#FBBF24', '#0EA5E9', '#EF4444', '#10b981', '#f78c6b', '#8338ec'][idx % 10],
+            miterAngle: f.miter,
+            bevelAngle: f.bevel
+        }));
     }
     
     organizeTrianglesByType() {
@@ -862,12 +1089,15 @@ class DomeSimulator {
         this.assemblyInventory.clear();
         this.groundTriangles = [];
         this.assemblyLayers = [];
+        this.assemblySegments = [];
         
         // Analyze each triangle's strut composition
         this.allTriangles.forEach((tri, idx) => {
             const strutComposition = this.analyzeTriangleStrutComposition(tri, idx);
             const triangleTypeKey = strutComposition.typeSignature;
             const heightLevel = this.getTriangleHeightLevel(tri);
+            const azimuth = this.getTriangleAzimuth(tri);
+            const isDoor = heightLevel === 0 && Math.abs(azimuth - this.doorAzimuth) < this.doorWidth;
             
             // Group triangles by type
             if (!this.triangleTypes.has(triangleTypeKey)) {
@@ -881,30 +1111,40 @@ class DomeSimulator {
             }
             
             const triangleType = this.triangleTypes.get(triangleTypeKey);
-            triangleType.triangles.push({
+            const triangleData = {
                 index: idx,
                 triangle: tri,
                 heightLevel: heightLevel,
+                azimuth: azimuth,
+                isDoor: isDoor,
                 strutComposition: strutComposition
-            });
+            };
+            
+            triangleType.triangles.push(triangleData);
             triangleType.count++;
             
             // Organize by height for ground-up assembly
             if (heightLevel === 0) {
-                this.groundTriangles.push({
-                    index: idx,
-                    triangle: tri,
-                    type: triangleTypeKey,
-                    strutComposition: strutComposition
-                });
+                this.groundTriangles.push(triangleData);
             }
         });
         
-        // Create assembly layers
+        // Create assembly layers and segments
         this.createAssemblyLayers();
+        this.createAssemblySegments();
         
         // Initialize assembly inventory
         this.initializeAssemblyInventory();
+    }
+
+    getTriangleAzimuth(tri) {
+        const center = new THREE.Vector3(
+            (tri[0].x + tri[1].x + tri[2].x) / 3,
+            0,
+            (tri[0].z + tri[1].z + tri[2].z) / 3
+        );
+        // atan2(x, z) gives angle from Z axis. 0 is Front (+Z).
+        return Math.atan2(center.x, center.z);
     }
     
     analyzeTriangleStrutComposition(tri, triangleIndex) {
@@ -1016,6 +1256,63 @@ class DomeSimulator {
         ];
         return names[level] || `Layer ${level}`;
     }
+
+    createAssemblySegments() {
+        // Organize triangles into more granular segments: Bottom-Up, Front-to-Back, Door Last
+        const normalTriangles = [];
+        const doorTriangles = [];
+
+        this.triangleTypes.forEach(typeData => {
+            typeData.triangles.forEach(triData => {
+                if (triData.isDoor) {
+                    doorTriangles.push(triData);
+                } else {
+                    normalTriangles.push(triData);
+                }
+            });
+        });
+
+        // Sort normal triangles: height level (bottom up) -> azimuth (front to back)
+        // For front-to-back, we want to start from the "back" (-PI) and go to "front" (0) 
+        // OR start from 0 and go circular. 
+        // Let's go circular from door position + width to door position - width.
+        normalTriangles.sort((a, b) => {
+            if (a.heightLevel !== b.heightLevel) {
+                return a.heightLevel - b.heightLevel;
+            }
+            // Sort by azimuth, shifted so door is at the end of the circular loop
+            const adjA = (a.azimuth - this.doorAzimuth + Math.PI) % (2 * Math.PI);
+            const adjB = (b.azimuth - this.doorAzimuth + Math.PI) % (2 * Math.PI);
+            return adjA - adjB;
+        });
+
+        // Group into segments (e.g., each level is divided into 4 segments)
+        const segmentsPerLevel = 4;
+        for (let level = 0; level <= 4; level++) {
+            const levelTriangles = normalTriangles.filter(t => t.heightLevel === level);
+            const chunkSize = Math.ceil(levelTriangles.length / segmentsPerLevel);
+            
+            for (let i = 0; i < segmentsPerLevel; i++) {
+                const chunk = levelTriangles.slice(i * chunkSize, (i + 1) * chunkSize);
+                if (chunk.length > 0) {
+                    this.assemblySegments.push({
+                        name: `${this.getLayerName(level)} - Segment ${i + 1}`,
+                        triangles: chunk.map(t => t.triangle),
+                        level: level
+                    });
+                }
+            }
+        }
+
+        // Add door triangles as the last segment
+        if (doorTriangles.length > 0) {
+            this.assemblySegments.push({
+                name: 'Final Step: The Door 🚪',
+                triangles: doorTriangles.map(t => t.triangle),
+                level: 0
+            });
+        }
+    }
     
     initializeAssemblyInventory() {
         // Initialize inventory tracking for each triangle type
@@ -1085,17 +1382,24 @@ class DomeSimulator {
                 allTrianglesByHeight.push({
                     triangle: triangleData.triangle,
                     heightLevel: triangleData.heightLevel,
+                    azimuth: triangleData.azimuth,
+                    isDoor: triangleData.isDoor,
                     type: typeKey
                 });
             });
         });
         
-        // Sort by height level (ground first) then by type for consistent ordering
+        // Sort by height level (ground first), then door last, then azimuth
         allTrianglesByHeight.sort((a, b) => {
             if (a.heightLevel !== b.heightLevel) {
                 return a.heightLevel - b.heightLevel;
             }
-            return a.type.localeCompare(b.type);
+            if (a.isDoor !== b.isDoor) {
+                return a.isDoor ? 1 : -1;
+            }
+            const adjA = (a.azimuth - this.doorAzimuth + Math.PI) % (2 * Math.PI);
+            const adjB = (b.azimuth - this.doorAzimuth + Math.PI) % (2 * Math.PI);
+            return adjA - adjB;
         });
         
         // Show triangles up to current assembly step
@@ -1108,14 +1412,12 @@ class DomeSimulator {
     }
     
     getTrianglesForIntegration() {
-        // Show layer-by-layer construction
+        // Show segment-by-segment construction
         const integratedTriangles = [];
         
-        for (let layerIndex = 0; layerIndex <= this.assemblyStep && layerIndex < this.assemblyLayers.length; layerIndex++) {
-            const layer = this.assemblyLayers[layerIndex];
-            layer.triangleGroups.forEach(group => {
-                integratedTriangles.push(...group.triangles.map(t => t.triangle));
-            });
+        for (let segmentIndex = 0; segmentIndex <= this.assemblyStep && segmentIndex < this.assemblySegments.length; segmentIndex++) {
+            const segment = this.assemblySegments[segmentIndex];
+            integratedTriangles.push(...segment.triangles);
         }
         
         return integratedTriangles;
@@ -1179,14 +1481,14 @@ class DomeSimulator {
             let opacity = 0.3;
             
             if (isHighlighted) {
-                color = 0xffff00; // Yellow for selected triangle
+                color = 0x38bdf8; // Primary blue for selected triangle
                 opacity = 0.9;
             } else if (this.assemblyMode && triangleTypeInfo) {
                 // Color by triangle type in assembly mode
                 color = new THREE.Color(triangleTypeInfo.color).getHex();
                 opacity = isSelectedType ? 0.8 : 0.5;
             } else if (this.assemblyMode) {
-                color = 0x00ff00; // Green for newly added (fallback)
+                color = 0x334155; // Slate for newly added (fallback)
                 opacity = 0.6;
             }
             
@@ -1241,7 +1543,8 @@ class DomeSimulator {
                 
                 // Only create strut if we haven't already created it
                 if (!this.strutMeshes.has(strutKey)) {
-                    const strutMesh = this.createRealStrut(strut);
+                    const isBase = strut.vertices[0].y < 0.01 && strut.vertices[1].y < 0.01;
+                    const strutMesh = this.createRealStrut(strut, isBase);
                     this.strutMeshes.set(strutKey, strutMesh);
                     this.domeGroup.add(strutMesh);
                 }
@@ -1261,7 +1564,7 @@ class DomeSimulator {
         return key1 < key2 ? `${key1}-${key2}` : `${key2}-${key1}`;
     }
     
-    createRealStrut(strutInfo) {
+    createRealStrut(strutInfo, isBase = false) {
         const v1 = strutInfo.vertices[0];
         const v2 = strutInfo.vertices[1];
         const length = v1.distanceTo(v2);
@@ -1271,11 +1574,26 @@ class DomeSimulator {
         const extendedLength = length * extendFactor;
         
         // Create strut geometry with Good Karma overlapping system
-        const strutGeometry = this.createStrutGeometryForDome(extendedLength, strutInfo);
+        const strutGeometry = this.createStrutGeometryForDome(extendedLength, strutInfo, isBase);
+        
+        let color = strutInfo.color;
+        let metalness = 0.3;
+        let roughness = 0.4;
+        let emissive = 0x000000;
+        
+        // Boost contrast for base struts so they visually ground the dome
+        if (isBase) {
+            metalness = 0.1;
+            roughness = 0.8;
+            // Optionally add a slight emissive glow or darken
+            color = new THREE.Color(strutInfo.color).lerp(new THREE.Color(0xffffff), 0.2);
+        }
+        
         const strutMaterial = new THREE.MeshStandardMaterial({
-            color: new THREE.Color(strutInfo.color),
-            metalness: 0.3,
-            roughness: 0.4
+            color: new THREE.Color(color),
+            metalness: metalness,
+            roughness: roughness,
+            emissive: emissive
         });
         
         const strutMesh = new THREE.Mesh(strutGeometry, strutMaterial);
@@ -1298,25 +1616,10 @@ class DomeSimulator {
         // The lookAt method aligns the Z-axis, so we need to rotate to align Y-axis
         strutMesh.rotateX(Math.PI / 2);
         
-        // Apply hubless rotation around the strut's length axis for proper joint assembly
-        const heightFactor = (midPoint.y + 3.5) / 7.0; // Normalize height
-        const radialDistance = Math.sqrt(midPoint.x * midPoint.x + midPoint.z * midPoint.z);
-        
-        // Calculate rotation angle based on position for optimal joint fit
-        // This creates the compound angle cuts effect for hubless joints
-        let rotationAngle = 0;
-        
-        // Base rotation for hubless system
-        const baseRotation = Math.PI / 6; // 30 degrees
-        
-        // Add variation based on height and radial position
-        const heightVariation = Math.sin(heightFactor * Math.PI) * 0.2; // Varies with height
-        const radialVariation = (radialDistance / 3.5) * 0.1; // Varies with distance from center
-        
-        rotationAngle = baseRotation + heightVariation + radialVariation;
-        
         // Apply the rotation around the strut's length axis (now Y-axis after correction)
-        strutMesh.rotateY(rotationAngle);
+        // In Good Karma, the strut is rotated by the Bevel angle to meet flush with neighbor
+        const bevelRotation = (strutInfo.bevelAngle || 0) * Math.PI / 180;
+        strutMesh.rotateY(bevelRotation);
         
         // Store strut info for interaction
         strutMesh.userData = {
@@ -1327,9 +1630,7 @@ class DomeSimulator {
             extendedLength: extendedLength,
             midPoint: midPoint,
             direction: direction,
-            rotationApplied: rotationAngle,
-            heightFactor: heightFactor,
-            radialDistance: radialDistance,
+            bevelApplied: bevelRotation,
             isGoodKarmaOverlap: true
         };
         
@@ -1354,7 +1655,7 @@ class DomeSimulator {
         borderGeometry.setAttribute('position', new THREE.BufferAttribute(borderVertices, 3));
         
         // Use a darker version of the triangle type color for borders
-        let borderColor = 0x000000; // Default black
+        let borderColor = 0x334155; // Default slate border
         if (triangleTypeInfo && triangleTypeInfo.color) {
             const typeColor = new THREE.Color(triangleTypeInfo.color);
             // Darken the color for border
@@ -1372,12 +1673,15 @@ class DomeSimulator {
         triangleMesh.add(borderLines);
     }
     
-    createStrutGeometryForDome(length, strutInfo) {
+    createStrutGeometryForDome(length, strutInfo, isBase = false) {
         // Create rectangular strut geometry matching actual dimensions (Good Karma hubless style)
         // Scale down strut cross-section to be more proportional to dome size
         const scaleFactor = 0.5; // Make struts thinner for better visualization
-        const width = (this.strutWidth / 1000) * scaleFactor; // Convert mm to meters and scale
-        const height = (this.strutHeight / 1000) * scaleFactor; // Convert mm to meters and scale
+        
+        // Base struts can be drawn slightly thicker for visual grounding
+        const visualThickness = isBase ? 1.5 : 1.0;
+        const width = (this.strutWidth / 1000) * scaleFactor * visualThickness; // Convert mm to meters and scale
+        const height = (this.strutHeight / 1000) * scaleFactor * visualThickness; // Convert mm to meters and scale
         
         // Create box geometry with proper rectangular cross-section
         const geometry = new THREE.BoxGeometry(width, length, height);
@@ -1870,7 +2174,7 @@ class DomeSimulator {
         element.innerHTML = '';
         
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0xf5f5f5);
+        scene.background = new THREE.Color(0x0f172a);
 
         const camera = new THREE.PerspectiveCamera(45, element.clientWidth / element.clientHeight, 0.1, 1000);
         
@@ -1917,7 +2221,7 @@ class DomeSimulator {
         strutGroup.add(strut);
 
         const edges = new THREE.EdgesGeometry(strutGeometry);
-        const edgesMaterial = new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2 });
+        const edgesMaterial = new THREE.LineBasicMaterial({ color: 0x94a3b8, linewidth: 2 });
         const edgeLines = new THREE.LineSegments(edges, edgesMaterial);
         strutGroup.add(edgeLines);
 
@@ -1934,7 +2238,7 @@ class DomeSimulator {
                 new THREE.Vector3(-l/2 + miterOffset, 0, 0),
                 new THREE.Vector3(-l/2 + miterOffset, 0, w/2)
             ]);
-            const angleLine = new THREE.Line(angleGeometry, new THREE.LineBasicMaterial({ color: 0xff0000, linewidth: 3 }));
+            const angleLine = new THREE.Line(angleGeometry, new THREE.LineBasicMaterial({ color: 0xfb7185, linewidth: 3 }));
             strutGroup.add(angleLine);
         }
 
@@ -1950,7 +2254,7 @@ class DomeSimulator {
                 new THREE.Vector3(l/2 - bevelOffset, 0, 0),
                 new THREE.Vector3(l/2 - bevelOffset, h/2, 0)
             ]);
-            const angleLine = new THREE.Line(angleGeometry, new THREE.LineBasicMaterial({ color: 0x00ff00, linewidth: 3 }));
+            const angleLine = new THREE.Line(angleGeometry, new THREE.LineBasicMaterial({ color: 0x34d399, linewidth: 3 }));
             strutGroup.add(angleLine);
         }
 
@@ -2113,7 +2417,7 @@ class DomeSimulator {
         element.innerHTML = '';
         
         const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x2c3e50); // Brighter background
+        scene.background = new THREE.Color(0x0f172a); // Match dark theme
 
         const camera = new THREE.PerspectiveCamera(60, element.clientWidth / element.clientHeight, 0.1, 1000);
         camera.position.set(2.5, 2, 2.5);
@@ -2156,6 +2460,76 @@ class DomeSimulator {
         
         animate();
     }
+
+    setupStageSelection(scene, camera, renderer) {
+        this.walkthroughStage = 0;
+        for (let i = 0; i < 4; i++) {
+            const el = document.getElementById(`stage-${i}`);
+            if (el) {
+                el.addEventListener('click', () => {
+                    this.walkthroughStage = i;
+                    this.updateWalkthroughStage();
+                    this.updateWalkthroughScene(scene, this.walkthroughStage, 0);
+                });
+            }
+        }
+    }
+
+    setupWalkthroughCameraControls(domElement, camera, scene, renderer) {
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let cameraRotationY = Math.PI / 4;
+        let cameraRotationX = Math.PI / 6;
+        const cameraDistance = 3.5;
+
+        const updateCamera = () => {
+            camera.position.x = cameraDistance * Math.cos(cameraRotationX) * Math.sin(cameraRotationY);
+            camera.position.y = cameraDistance * Math.sin(cameraRotationX);
+            camera.position.z = cameraDistance * Math.cos(cameraRotationX) * Math.cos(cameraRotationY);
+            camera.lookAt(0, 0, 0);
+        };
+
+        domElement.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        domElement.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const deltaMove = {
+                x: e.clientX - previousMousePosition.x,
+                y: e.clientY - previousMousePosition.y
+            };
+            cameraRotationY -= deltaMove.x * 0.01;
+            cameraRotationX = Math.max(-Math.PI/2 + 0.1, Math.min(Math.PI/2 - 0.1, cameraRotationX + deltaMove.y * 0.01));
+            updateCamera();
+            previousMousePosition = { x: e.clientX, y: e.clientY };
+        });
+
+        domElement.addEventListener('mouseup', () => isDragging = false);
+        
+        // Touch support
+        domElement.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        });
+
+        domElement.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            const deltaMove = {
+                x: e.touches[0].clientX - previousMousePosition.x,
+                y: e.touches[0].clientY - previousMousePosition.y
+            };
+            cameraRotationY -= deltaMove.x * 0.01;
+            cameraRotationX = Math.max(-Math.PI/2 + 0.1, Math.min(Math.PI/2 - 0.1, cameraRotationX + deltaMove.y * 0.01));
+            updateCamera();
+            previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        });
+
+        domElement.addEventListener('touchend', () => isDragging = false);
+
+        updateCamera();
+    }
     
     updateWalkthroughStage() {
         // Update stage indicators
@@ -2189,7 +2563,7 @@ class DomeSimulator {
                 title: '🪵 Stage 1: Single Strut & Cuts',
                 points: [
                     '• See the compound angle cuts in 3D',
-                    '• Red spheres mark cut locations',
+                    '• Accent spheres mark cut locations',
                     '• Both ends get identical cuts',
                     '• 18° miter + 27.8° bevel = compound',
                     '• Labels show cut angles and measurements'
@@ -2254,15 +2628,15 @@ class DomeSimulator {
         const currentStage = stageData[this.walkthroughStage];
         
         stageContent.innerHTML = `
-            <div class="bg-purple-800 bg-opacity-50 p-4 rounded-lg">
-                <p class="font-semibold text-yellow-300 mb-2">${currentStage.title}</p>
-                <ul class="space-y-1">
+            <div class="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+                <p class="font-semibold text-primary mb-2">${currentStage.title}</p>
+                <ul class="space-y-1 text-slate-300 text-sm">
                     ${currentStage.points.map(point => `<li>${point}</li>`).join('')}
                 </ul>
             </div>
-            <div class="bg-purple-800 bg-opacity-50 p-4 rounded-lg">
-                <p class="font-semibold text-green-300 mb-2">💡 Interactive Tips:</p>
-                <ul class="space-y-1">
+            <div class="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+                <p class="font-semibold text-accent mb-2" style="color: var(--accent-color);">💡 Interactive Tips:</p>
+                <ul class="space-y-1 text-slate-300 text-sm">
                     ${currentStage.tips.map(tip => `<li>${tip}</li>`).join('')}
                 </ul>
             </div>
@@ -2299,19 +2673,26 @@ class DomeSimulator {
         // Single strut with cut indicators
         const strutGeometry = this.createStrutGeometry();
         const strutMaterial = new THREE.MeshStandardMaterial({
-            color: new THREE.Color('#3498db'), // Bright blue like dome
+            color: new THREE.Color('#1e293b'), // Slate background strut
             metalness: 0.2,
             roughness: 0.4
         });
         
         const strut = new THREE.Mesh(strutGeometry, strutMaterial);
+        
+        // Add edges to make the dark strut visible
+        const edges = new THREE.EdgesGeometry(strutGeometry);
+        const edgesMaterial = new THREE.LineBasicMaterial({ color: 0x38bdf8, linewidth: 1 }); // Primary blue edges
+        const edgeLines = new THREE.LineSegments(edges, edgesMaterial);
+        strut.add(edgeLines);
+        
         scene.add(strut);
         
         // Add bright spheres at cut locations
         const sphereGeometry = new THREE.SphereGeometry(0.08, 16, 16);
         const sphereMaterial = new THREE.MeshStandardMaterial({
-            color: 0xff4444,
-            emissive: 0xff2222,
+            color: 0xfb7185, // Accent color for cut marks
+            emissive: 0xfb7185,
             emissiveIntensity: 0.3
         });
         

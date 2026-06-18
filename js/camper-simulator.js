@@ -135,25 +135,89 @@ class CamperSimulator {
             [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]
         ];
 
-        for (let f = 1; f < this.frequency; f++) {
-            let newFaces = [];
-            let midpoints = new Map();
-            const getMid = (v1, v2) => {
-                const k = v1 < v2 ? `${v1}_${v2}` : `${v2}_${v1}`;
-                if (midpoints.has(k)) return midpoints.get(k);
-                const mid = new THREE.Vector3().addVectors(sphereVertices[v1], sphereVertices[v2]).normalize().multiplyScalar(radius);
-                sphereVertices.push(mid);
-                midpoints.set(k, sphereVertices.length - 1);
-                return sphereVertices.length - 1;
-            };
-            sphereFaces.forEach(face => {
-                const m01 = getMid(face[0], face[1]);
-                const m12 = getMid(face[1], face[2]);
-                const m20 = getMid(face[2], face[0]);
-                newFaces.push([face[0], m01, m20], [face[1], m12, m01], [face[2], m20, m12], [m01, m12, m20]);
+        let newSphereFaces = [];
+        let newSphereVertices = [...sphereVertices];
+
+        const getPoint = (v1, v2, v3, c1, c2) => {
+            const c3 = this.frequency - c1 - c2;
+            const p = new THREE.Vector3(0,0,0);
+            p.addScaledVector(sphereVertices[v1], c1/this.frequency);
+            p.addScaledVector(sphereVertices[v2], c2/this.frequency);
+            p.addScaledVector(sphereVertices[v3], c3/this.frequency);
+            return p.normalize().multiplyScalar(radius);
+        };
+
+        const vertexMap = new Map();
+        const getVertexKey = (v) => `${v.x.toFixed(6)},${v.y.toFixed(6)},${v.z.toFixed(6)}`;
+        
+        sphereVertices.forEach((v, idx) => {
+            vertexMap.set(getVertexKey(v), { v: v, idx: idx, isPPT: true });
+        });
+
+        const addVertex = (p, isPPT) => {
+            const key = getVertexKey(p);
+            if (!vertexMap.has(key)) {
+                vertexMap.set(key, { v: p, idx: newSphereVertices.length, isPPT: isPPT });
+                newSphereVertices.push(p);
+            }
+            return vertexMap.get(key).idx;
+        };
+
+        sphereFaces.forEach(face => {
+            const v1 = face[0];
+            const v2 = face[1];
+            const v3 = face[2];
+            
+            for (let c1 = 0; c1 < this.frequency; c1++) {
+                for (let c2 = 0; c2 < this.frequency - c1; c2++) {
+                    const p1 = addVertex(getPoint(v1, v2, v3, c1 + 1, c2), false);
+                    const p2 = addVertex(getPoint(v1, v2, v3, c1, c2 + 1), false);
+                    const p3 = addVertex(getPoint(v1, v2, v3, c1, c2), false);
+                    newSphereFaces.push([p1, p2, p3]);
+                    
+                    if (c1 + c2 < this.frequency - 1) {
+                        const p4 = addVertex(getPoint(v1, v2, v3, c1 + 1, c2 + 1), false);
+                        newSphereFaces.push([p1, p4, p2]);
+                    }
+                }
+            }
+        });
+
+        // Apply Kruschke magic
+        if (this.frequency === 3 || this.frequency === 4) {
+            const MAGIC_FIX_RATIO = this.frequency === 3 ? 0.9442890204731844 : (0.22219 / 0.253185 * 0.9983958444733023);
+            const ppts = Array.from(vertexMap.values()).filter(o => o.isPPT).map(o => o.idx);
+            
+            const connections = new Map();
+            newSphereFaces.forEach(tri => {
+                for (let i = 0; i < 3; i++) {
+                    const a = tri[i];
+                    const b = tri[(i+1)%3];
+                    if (!connections.has(a)) connections.set(a, new Set());
+                    if (!connections.has(b)) connections.set(b, new Set());
+                    connections.get(a).add(b);
+                    connections.get(b).add(a);
+                }
             });
-            sphereFaces = newFaces;
+
+            Array.from(vertexMap.values()).forEach(obj => {
+                if (obj.isPPT) return;
+                const idx = obj.idx;
+                const connected = Array.from(connections.get(idx));
+                const connectedPPTIdx = connected.find(n => ppts.includes(n));
+                
+                if (connectedPPTIdx !== undefined) {
+                    const E = newSphereVertices[connectedPPTIdx];
+                    const S = newSphereVertices[idx];
+                    const mr = MAGIC_FIX_RATIO;
+                    const newPos = E.clone().multiplyScalar(1 - mr).add(S.clone().multiplyScalar(mr)).normalize().multiplyScalar(radius);
+                    S.copy(newPos);
+                }
+            });
         }
+        
+        sphereVertices = newSphereVertices;
+        sphereFaces = newSphereFaces;
 
         this.vertices = [];
         this.faces = [];
@@ -299,65 +363,100 @@ class CamperSimulator {
     }
 
     decomposeStruts() {
-        const edgeMap = new Map();
         this.faceNormals = this.faces.map(face => {
             const v1 = this.vertices[face[0]], v2 = this.vertices[face[1]], v3 = this.vertices[face[2]];
             return new THREE.Vector3().subVectors(v2, v1).cross(new THREE.Vector3().subVectors(v3, v1)).normalize();
         });
 
+        // Map to find adjacent faces for dihedral (bevel) calculation
+        const edgeToFaces = new Map();
+        this.faces.forEach((face, fIdx) => {
+            for (let i = 0; i < 3; i++) {
+                const v1 = face[i], v2 = face[(i + 1) % 3];
+                const key = v1 < v2 ? `${v1}_${v2}` : `${v2}_${v1}`;
+                if (!edgeToFaces.has(key)) edgeToFaces.set(key, []);
+                edgeToFaces.get(key).push(fIdx);
+            }
+        });
+
+        const strutData = [];
         this.faces.forEach((face, fIdx) => {
             const segment = this.faceSegments[fIdx];
+            const normal = this.faceNormals[fIdx];
+            const v = face.map(idx => this.vertices[idx]);
+
+            // Calculate internal angles of the triangle
+            const sides = [
+                v[0].distanceTo(v[1]),
+                v[1].distanceTo(v[2]),
+                v[2].distanceTo(v[0])
+            ];
+
+            const angles = [
+                Math.acos((sides[0]**2 + sides[2]**2 - sides[1]**2) / (2 * sides[0] * sides[2])),
+                Math.acos((sides[0]**2 + sides[1]**2 - sides[2]**2) / (2 * sides[0] * sides[1])),
+                Math.acos((sides[1]**2 + sides[2]**2 - sides[0]**2) / (2 * sides[1] * sides[2]))
+            ];
+
             for (let i = 0; i < 3; i++) {
                 const v1Idx = face[i], v2Idx = face[(i + 1) % 3];
-                const key = v1Idx < v2Idx ? `${v1Idx}_${v2Idx}` : `${v2Idx}_${v1Idx}`;
-                if (!edgeMap.has(key)) {
-                    edgeMap.set(key, { v1Idx, v2Idx, faces: [], segment });
+                const edgeKey = v1Idx < v2Idx ? `${v1Idx}_${v2Idx}` : `${v2Idx}_${v1Idx}`;
+                const adjacentFaces = edgeToFaces.get(edgeKey);
+                
+                let bevel = 0;
+                if (adjacentFaces.length === 2) {
+                    const n1 = this.faceNormals[adjacentFaces[0]];
+                    const n2 = this.faceNormals[adjacentFaces[1]];
+                    bevel = (n1.angleTo(n2) * 180 / Math.PI) / 2;
                 }
-                edgeMap.get(key).faces.push(fIdx);
+
+                // Good Karma Miter is 90 - (Interior Angle / 2) if it were equilateral
+                // But since they overlap, it's 90 - Angle at the vertex.
+                // For a "spinning" joint, each end of the strut has a different miter if the triangle isn't equilateral.
+                // However, for simplicity in most guides, we use the average or the specific vertex angle.
+                // Let's use the angle at the vertex for this specific strut end.
+                const angleAtVertex = angles[i] * 180 / Math.PI;
+                const miter = Math.abs(90 - angleAtVertex);
+
+                const length = sides[i];
+                // Inside length accounts for the "spinning" overlap: L - (Width / tan(Angle))
+                const width = 40; // Default width
+                const insideLength = length - (width / Math.tan(angles[i]));
+
+                strutData.push({
+                    length: length * 1000,
+                    insideLength: insideLength * 1000,
+                    bevel,
+                    miter,
+                    v1Idx,
+                    v2Idx,
+                    segment,
+                    fIdx
+                });
             }
         });
 
-        let strutData = [];
-        edgeMap.forEach((edge) => {
-            const p1 = this.vertices[edge.v1Idx], p2 = this.vertices[edge.v2Idx];
-            const length = p1.distanceTo(p2);
-
-            let bevel = 0, miter = 0;
-            if (edge.faces.length === 2) {
-                const n1 = this.faceNormals[edge.faces[0]], n2 = this.faceNormals[edge.faces[1]];
-                const dihedral = n1.angleTo(n2) * 180 / Math.PI;
-                bevel = dihedral / 2; 
-
-                const dir = p2.clone().sub(p1).normalize();
-                const faceNormal = n1.clone().add(n2).normalize();
-                const vertexNormal = p1.clone().normalize();
-                const perpendicular = new THREE.Vector3().crossVectors(dir, faceNormal).normalize();
-                miter = Math.abs(perpendicular.angleTo(vertexNormal) * 180 / Math.PI - 90);
-            }
-            strutData.push({ length, bevel, miter, v1Idx: edge.v1Idx, v2Idx: edge.v2Idx, segment: edge.segment });
-        });
-
-        strutData = this.applyDoorCutout(strutData);
+        // Apply Door Cutout (filtering out struts that intersect the door)
+        let filteredStruts = this.applyDoorCutout(strutData);
 
         // Group into Cut Families
         const families = [];
-        strutData.forEach(s => {
-            if (s.length < 5) return; // Skip invalid/unbuildable pieces
-            // Find existing family with matching cuts (tolerance 0.5 degrees)
+        filteredStruts.forEach(s => {
+            if (s.length < 5) return; 
             const existingFamily = families.find(f => Math.abs(f.miter - s.miter) < 0.5 && Math.abs(f.bevel - s.bevel) < 0.5);
             if (existingFamily) {
                 const existingLength = existingFamily.lengths.find(l => Math.abs(l.length - s.length) < 2);
                 if (existingLength) {
                     existingLength.count++;
                 } else {
-                    existingFamily.lengths.push({ length: s.length, count: 1 });
+                    existingFamily.lengths.push({ length: s.length, insideLength: s.insideLength, count: 1 });
                 }
                 existingFamily.segments[s.segment] = (existingFamily.segments[s.segment] || 0) + 1;
             } else {
                 families.push({
                     miter: s.miter,
                     bevel: s.bevel,
-                    lengths: [{ length: s.length, count: 1 }],
+                    lengths: [{ length: s.length, insideLength: s.insideLength, count: 1 }],
                     segments: { [s.segment]: 1 }
                 });
             }
@@ -384,7 +483,7 @@ class CamperSimulator {
         this.stats = { families: families.length, lengths: totalLengths, struts: totalStruts, cuts: totalStruts * 2 };
 
         // Assign derived IDs back to individual struts for highlighting
-        strutData.forEach(s => {
+        filteredStruts.forEach(s => {
             const family = families.find(f => Math.abs(f.miter - s.miter) < 0.5 && Math.abs(f.bevel - s.bevel) < 0.5);
             if (family) {
                 s.familyId = family.id;
@@ -394,7 +493,7 @@ class CamperSimulator {
                 }
             }
         });
-        this.struts = strutData; // Now includes .v1, .v2, .familyId, .strutId
+        this.struts = filteredStruts; // Now includes .v1, .v2, .familyId, .strutId
     }
 
     applyDoorCutout(strutData) {
@@ -543,7 +642,7 @@ class CamperSimulator {
                         <div class="text-xl font-bold text-white">${this.stats.families}</div>
                     </div>
                     <div>
-                        <div class="text-xs text-primary mb-1">LENGTHS</div>
+                        <div class="text-xs text-primary mb-1">UNIQUE</div>
                         <div class="text-xl font-bold text-white">${this.stats.lengths}</div>
                     </div>
                     <div>
@@ -588,7 +687,10 @@ class CamperSimulator {
                         <tr class="cursor-pointer transition-colors ${isSelected ? 'bg-primary/20' : 'hover:bg-slate-800'}" 
                             onclick="event.stopPropagation(); window.selectCamperStrut('${id}')">
                             <td class="py-2 px-2 rounded-l"><span class="badge-type type-${f.id.toLowerCase()}">${id}</span></td>
-                            <td class="font-mono text-white py-2">${l.length.toFixed(1)}mm</td>
+                            <td class="font-mono text-white py-2">
+                                <span class="text-primary">${l.insideLength.toFixed(1)}</span>
+                                <span class="text-slate-500 text-[10px] ml-1">(${l.length.toFixed(0)})</span>
+                            </td>
                             <td class="py-2">${l.count}</td>
                             <td class="py-2 px-2 rounded-r text-right">
                                 <i class="bi bi-eye${isSelected ? '-fill text-primary' : ''}"></i>
@@ -609,8 +711,8 @@ class CamperSimulator {
                     <div class="flex justify-between items-center mb-1 pb-1">
                         <span class="font-bold text-primary">CUT FAMILY ${f.id}</span>
                         <div class="flex gap-3 text-xs bg-slate-800 px-3 py-1 rounded text-slate-300">
-                            <span>Miter: <strong class="text-white">${f.miter.toFixed(1)}°</strong></span>
-                            <span>Bevel: <strong class="text-white">${f.bevel.toFixed(1)}°</strong></span>
+                            <span>Sway (Miter): <strong class="text-white">${f.miter.toFixed(1)}°</strong></span>
+                            <span>Tilt (Bevel): <strong class="text-white">${f.bevel.toFixed(1)}°</strong></span>
                         </div>
                     </div>
                     <div class="flex gap-2 text-[10px] mb-3 opacity-80">
@@ -620,7 +722,7 @@ class CamperSimulator {
                         <thead>
                             <tr>
                                 <th class="px-2">Type</th>
-                                <th>Length</th>
+                                <th>Length (mm)</th>
                                 <th>Qty</th>
                                 <th></th>
                             </tr>
