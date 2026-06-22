@@ -657,10 +657,7 @@ class DomeSimulator {
                 const isSelected = this.selectedStrutType?.type === strut.type;
                 card.className = `data-card mb-3 cursor-pointer transition-colors ${isSelected ? 'active border-primary' : 'border-slate-700 hover:border-slate-500'}`;
                 
-                let qtyText = strut.count + ' Total';
-                if (title === 'Base Ring') qtyText = strut.baseCount + ' Pieces';
-                else if (title === 'Verticals (Standing on Base)') qtyText = strut.standCount + ' Pieces';
-                else qtyText = (strut.count - (strut.baseCount || 0) - (strut.standCount || 0)) + ' Pieces';
+                let qtyText = strut.count + ' Pieces';
 
                 const insideLength = strut.length - (this.strutWidth / Math.tan((90 - strut.miterAngle) * Math.PI / 180));
 
