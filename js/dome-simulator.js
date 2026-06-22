@@ -280,7 +280,6 @@ class DomeSimulator {
                             this.assemblyStep = idx;
                             this.updateUI();
                             this.initMainDomeView();
-                            this.showSegmentDetails(segment);
                         };
                         stepsContainer.appendChild(card);
                     });
@@ -411,6 +410,15 @@ class DomeSimulator {
     
     selectTriangleType(typeKey) {
         this.selectedTriangleType = typeKey;
+        this.selectedStrutType = null;
+        if (typeKey) {
+            this.highlightTriangleTypeUntil = Date.now() + 3000;
+            setTimeout(() => {
+                if (this.selectedTriangleType === typeKey) {
+                    this.initMainDomeView();
+                }
+            }, 3000);
+        }
         this.updateUI();
         this.initMainDomeView();
     }
@@ -493,7 +501,6 @@ class DomeSimulator {
             btn.addEventListener('click', () => {
                 this.selectedStrutType = strut;
                 this.updateUI();
-                this.showStrutDetails(strut);
             });
             
             strutsList.appendChild(btn);
@@ -521,9 +528,6 @@ class DomeSimulator {
                     <span class="text-slate-500">Sway (Miter)</span><span style="color: #fb7185" class="font-mono">${strutInfo.miterAngle.toFixed(1)}°</span>
                     <span class="text-slate-500">Tilt (Bevel)</span><span style="color: #34d399" class="font-mono">${strutInfo.bevelAngle.toFixed(1)}°</span>
                 </div>
-                <button onclick="domeSimulator.showStrutDetails({type:'${strutInfo.type}', length:${strutInfo.length}, miterAngle:${strutInfo.miterAngle}, bevelAngle:${strutInfo.bevelAngle}, color:'${strutInfo.color}'})" class="w-full mt-3 py-1.5 bg-primary/20 text-primary text-[9px] font-bold uppercase rounded border border-primary/30 hover:bg-primary/30">
-                    View Cutting Guide
-                </button>
             </div>
         `;
     }
@@ -611,7 +615,7 @@ class DomeSimulator {
                 color: s.color || '#94a3b8',
                 count: s.count,
                 length: s.length,
-                miter: Math.abs(90 - (s.angle * 180 / Math.PI)),
+                miter: s.miterAngle || 0,
                 bevel: s.bevelAngle || 0
             }));
             
@@ -664,16 +668,32 @@ class DomeSimulator {
                             <div class="flex gap-3 text-[10px] text-slate-400">
                                 <span style="color: #fb7185">Sway: ${strut.miterAngle.toFixed(1)}°</span>
                                 <span style="color: #34d399">Tilt: ${strut.bevelAngle.toFixed(1)}°</span>
-                                <span class="ml-auto text-primary/50">Details <i class="bi bi-chevron-right"></i></span>
                             </div>
                         </div>
                     </div>
+                    ${isSelected ? `
+                    <div class="mt-4 pt-4 border-t border-slate-700/50">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
+                                <span class="block text-[10px] text-slate-400 mb-1">1. Miter Cut (Sway)</span>
+                                <span style="color: #fb7185" class="font-mono text-sm">${strut.miterAngle.toFixed(1)}°</span>
+                                <div class="mt-1 text-[10px] text-slate-500">Both Ends</div>
+                            </div>
+                            <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
+                                <span class="block text-[10px] text-slate-400 mb-1">2. Bevel Cut (Tilt)</span>
+                                <span style="color: #34d399" class="font-mono text-sm">${strut.bevelAngle.toFixed(1)}°</span>
+                                <div class="mt-1 text-[10px] text-slate-500">Rip full edge</div>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
                 `;
                 
                 card.onclick = () => {
-                    this.selectedStrutType = strut;
+                    this.selectedStrutType = isSelected ? null : strut;
+                    this.selectedTriangleType = null;
                     this.updateUI();
-                    this.showStrutDetails(strut);
+                    this.initMainDomeView();
                 };
                 
                 list.appendChild(card);
@@ -689,141 +709,6 @@ class DomeSimulator {
             createSection('All Struts', s => true);
         }
     }
-
-    showStrutDetails(strut) {
-        const miterLoss = (this.strutWidth / Math.tan((90 - strut.miterAngle) * Math.PI / 180)).toFixed(1);
-        const insideLength = (strut.length - parseFloat(miterLoss)).toFixed(1);
-        
-        const content = `
-            <div class="space-y-6">
-                <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-widest flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full" style="background-color: #fb7185"></span>
-                        1. Miter Cut (Sway)
-                    </h3>
-                    <div id="step2-view" class="w-full aspect-video bg-black rounded-lg step-view"></div>
-                    <div class="mt-4 grid grid-cols-2 gap-4">
-                        <div class="text-[10px]">
-                            <span class="block text-slate-500">Angle</span>
-                            <span style="color: #fb7185" class="font-mono text-sm">${strut.miterAngle.toFixed(1)}°</span>
-                        </div>
-                        <div class="text-[10px]">
-                            <span class="block text-slate-500">Material Loss</span>
-                            <span style="color: #fb7185" class="font-mono text-sm">${miterLoss}mm</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-widest flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full" style="background-color: #34d399"></span>
-                        2. Bevel Cut (Tilt)
-                    </h3>
-                    <div id="step3-view" class="w-full aspect-video bg-black rounded-lg step-view"></div>
-                    <div class="mt-4 grid grid-cols-2 gap-4">
-                        <div class="text-[10px]">
-                            <span class="block text-slate-500">Angle</span>
-                            <span style="color: #34d399" class="font-mono text-sm">${strut.bevelAngle.toFixed(1)}°</span>
-                        </div>
-                        <div class="text-[10px]">
-                            <span class="block text-slate-500">Note</span>
-                            <span style="color: #34d399" class="font-mono text-xs">Rip along full edge</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="space-y-6">
-                <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 h-full">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-6 tracking-widest">Good Karma Fabrication</h3>
-                    <div class="space-y-4">
-                        <div class="flex justify-between border-b border-slate-700 pb-2">
-                            <span class="text-xs text-slate-400">Inside Length (Short)</span>
-                            <span class="text-xs font-bold text-primary">${insideLength}mm</span>
-                        </div>
-                        <div class="flex justify-between border-b border-slate-700 pb-2">
-                            <span class="text-xs text-slate-400">Outside Length (Long)</span>
-                            <span class="text-xs font-bold text-white">${strut.length.toFixed(1)}mm</span>
-                        </div>
-                        <div class="flex justify-between border-b border-slate-700 pb-2">
-                            <span class="text-xs text-slate-400">Stock Width</span>
-                            <span class="text-xs font-bold text-white">${this.strutWidth}mm</span>
-                        </div>
-                        <div class="flex justify-between border-b border-slate-700 pb-2">
-                            <span class="text-xs text-slate-400">Stock Height</span>
-                            <span class="text-xs font-bold text-white">${this.strutHeight}mm</span>
-                        </div>
-                    </div>
-                    <div class="mt-8 p-4 bg-primary/10 rounded-lg border border-primary/20">
-                        <p class="text-[10px] text-primary leading-relaxed">
-                            <i class="bi bi-info-circle-fill mr-1"></i>
-                            <strong>Important:</strong> Each strut receives BOTH miter and bevel cuts on BOTH ends. The rectangular cross-section with compound cuts creates perfect overlapping joints without metal hubs.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        `;
-        
-        this.showDetails(`Strut Type ${strut.type} Manufacturing Guide`, content);
-        }
-
-        showSegmentDetails(segment) {
-        const isDoor = segment.name.includes('Door');
-
-        let content = `
-            <div class="space-y-6">
-                <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 h-full">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-widest">Segment Information</h3>
-                    <div class="space-y-4">
-                        <div class="flex justify-between border-b border-slate-700 pb-2">
-                            <span class="text-xs text-slate-400">Segment Name</span>
-                            <span class="text-xs font-bold text-white">${segment.name}</span>
-                        </div>
-                        <div class="flex justify-between border-b border-slate-700 pb-2">
-                            <span class="text-xs text-slate-400">Total Units</span>
-                            <span class="text-xs font-bold text-white">${segment.triangles.length}</span>
-                        </div>
-                        <div class="flex justify-between border-b border-slate-700 pb-2">
-                            <span class="text-xs text-slate-400">Level</span>
-                            <span class="text-xs font-bold text-white">${segment.level}</span>
-                        </div>
-                    </div>
-                    <div class="mt-6 p-4 ${isDoor ? 'bg-amber-500/10 border-amber-500/20' : 'bg-primary/10 border-primary/20'} rounded-lg border">
-                        <p class="text-[10px] ${isDoor ? 'text-amber-400' : 'text-primary'} leading-relaxed">
-                            <i class="bi ${isDoor ? 'bi-exclamation-triangle-fill' : 'bi-info-circle-fill'} mr-1"></i>
-                            <strong>Construction Note:</strong> ${
-                                isDoor 
-                                ? 'The door segment is installed last to maintain the structural integrity of the lower rings during assembly.'
-                                : 'Follow the bottom-up, front-to-back sequence. Ensure all hubs are tightly fitted using the Good Karma overlapping system before moving to the next segment.'
-                            }
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="space-y-6">
-                <div class="bg-slate-800/50 p-6 rounded-xl border border-slate-700 h-full">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-widest">Walkthrough Connection</h3>
-                    <p class="text-xs text-slate-300 leading-relaxed mb-4">
-                        Review the 3D walkthrough stages below to understand how the units in this segment connect.
-                    </p>
-                    <div class="grid grid-cols-2 gap-3">
-                        <button onclick="domeSimulator.closeDetails(); document.getElementById('stage-1').click();" class="p-3 bg-slate-800 border border-slate-600 rounded-lg hover:bg-slate-700 text-left transition-colors">
-                            <span class="block text-[10px] font-bold text-slate-400">Stage 2</span>
-                            <span class="block text-xs font-bold text-white mt-1">Joints Forming</span>
-                        </button>
-                        <button onclick="domeSimulator.closeDetails(); document.getElementById('stage-2').click();" class="p-3 bg-slate-800 border border-slate-600 rounded-lg hover:bg-slate-700 text-left transition-colors">
-                            <span class="block text-[10px] font-bold text-slate-400">Stage 3</span>
-                            <span class="block text-xs font-bold text-white mt-1">Complete Triangle</span>
-                        </button>
-                        <button onclick="domeSimulator.closeDetails(); document.getElementById('stage-3').click();" class="p-3 bg-slate-800 border border-slate-600 rounded-lg hover:bg-slate-700 text-left transition-colors col-span-2">
-                            <span class="block text-[10px] font-bold text-slate-400">Stage 4</span>
-                            <span class="block text-xs font-bold text-white mt-1">Star Pattern Assembly</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-
-        this.showDetails(`Assembly Details: ${segment.name}`, content);
-        }
     
     initMainDomeView() {
         const mountElement = document.getElementById('main-dome-view');
@@ -1530,6 +1415,7 @@ class DomeSimulator {
         this.domeGroup = new THREE.Group();
         this.strutMeshes = new Map(); // Track strut meshes to avoid duplicates
         this.jointMeshes = new Map(); // Track joint meshes
+        this.highlightedStrutMoved = false;
         
         // In assembly mode, show triangles based on phase and step
         const trianglesToShow = this.assemblyMode ? 
@@ -1579,10 +1465,17 @@ class DomeSimulator {
                 roughness: 0.5
             });
 
+            // Bright highlight for 3 seconds if newly selected
+            if (isSelectedType && this.highlightTriangleTypeUntil && Date.now() < this.highlightTriangleTypeUntil) {
+                material.opacity = 0.5;
+                material.emissive.setHex(color);
+                material.emissiveIntensity = 0.8;
+            }
+
             const mesh = new THREE.Mesh(geometry, material);
             
             // Do not add borders by default so the wooden struts stand out
-            if (this.assemblyMode) {
+            if (this.assemblyMode || (isSelectedType && this.highlightTriangleTypeUntil && Date.now() < this.highlightTriangleTypeUntil)) {
                 this.addTriangleBorders(mesh, tri, triangleTypeInfo);
             }
             
@@ -1639,6 +1532,20 @@ class DomeSimulator {
                 // Track strut mesh per face
                 const strutKey = `${originalIdx}-${strutIdx}`;
                 this.strutMeshes.set(strutKey, strutMesh);
+                
+                if (this.selectedStrutType && strut.type === this.selectedStrutType.type) {
+                    strutMesh.material.emissive.setHex(new THREE.Color(strut.color).getHex());
+                    strutMesh.material.emissiveIntensity = 0.6;
+                    
+                    if (!this.highlightedStrutMoved) {
+                        // Move this specific strut out to inspect it
+                        const centerOut = strutMesh.position.clone().setY(0).normalize();
+                        strutMesh.position.add(centerOut.multiplyScalar(0.5));
+                        strutMesh.position.y += 0.2;
+                        this.highlightedStrutMoved = true;
+                    }
+                }
+                
                 this.domeGroup.add(strutMesh);
             });
         });

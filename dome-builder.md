@@ -131,18 +131,4 @@ permalink: /dome-builder/
         </div>
     </div>
 
-    <!-- Details Modal / Panel -->
-    <div id="details-modal" class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur hidden">
-        <div class="bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] flex flex-col overflow-hidden">
-            <div class="p-4 border-b border-slate-800 flex justify-between items-center">
-                <h2 id="details-title" class="text-lg font-bold text-white">Strut Details</h2>
-                <button onclick="domeSimulator.closeDetails()" class="icon-btn hover:text-white"><i class="bi bi-x-lg"></i></button>
-            </div>
-            <div class="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                <div id="details-content" class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Dynamic Content -->
-                </div>
-            </div>
-        </div>
-    </div>
 </main>

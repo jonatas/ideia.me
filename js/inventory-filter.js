@@ -14,9 +14,9 @@ class InventoryFilter {
 
     render() {
         this.container.innerHTML = '';
-        this.container.className = 'flex flex-wrap gap-2 mb-4';
+        this.container.className = 'flex overflow-x-auto gap-2 mb-4 pb-2 custom-scrollbar';
 
-        this.strutTypes.forEach(type => {
+        this.strutTypes.filter(type => type.count > 0).forEach(type => {
             const btn = document.createElement('button');
             const isActive = this.activeFilter === type.id;
             
