@@ -604,8 +604,31 @@ class DomeSimulator {
         
         list.innerHTML = '';
         
+        const filterContainer = document.getElementById('inventory-filters');
+        if (filterContainer && typeof InventoryFilter !== 'undefined') {
+            const filterTypes = this.strutTypes.map(s => ({
+                id: s.type,
+                color: s.color || '#94a3b8',
+                count: s.count,
+                length: s.length,
+                miter: Math.abs(90 - (s.angle * 180 / Math.PI)),
+                bevel: s.bevelAngle || 0
+            }));
+            
+            if (!this.inventoryFilter) {
+                this.inventoryFilter = new InventoryFilter(filterContainer, filterTypes, (activeId) => {
+                    this.inventoryActiveFilter = activeId;
+                    this.updateStrutTypesList();
+                });
+            } else {
+                this.inventoryFilter.strutTypes = filterTypes;
+                this.inventoryFilter.activeFilter = this.inventoryActiveFilter;
+                this.inventoryFilter.render();
+            }
+        }
+
         const createSection = (title, filterFn) => {
-            const struts = this.strutTypes.filter(filterFn);
+            const struts = this.strutTypes.filter(filterFn).filter(s => !this.inventoryActiveFilter || s.type === this.inventoryActiveFilter);
             if (struts.length === 0) return;
             
             const header = document.createElement('div');
@@ -1550,15 +1573,18 @@ class DomeSimulator {
                 color: color,
                 side: THREE.DoubleSide,
                 transparent: true,
-                opacity: opacity,
+                opacity: 0.0, // Make completely transparent so struts are fully visible
+                depthWrite: false, // Prevent it from blocking struts
                 metalness: 0.1,
                 roughness: 0.5
             });
 
             const mesh = new THREE.Mesh(geometry, material);
             
-            // Add triangle border edges for better visualization
-            this.addTriangleBorders(mesh, tri, triangleTypeInfo);
+            // Do not add borders by default so the wooden struts stand out
+            if (this.assemblyMode) {
+                this.addTriangleBorders(mesh, tri, triangleTypeInfo);
+            }
             
             // Calculate strut info
             const sides = [
@@ -1586,7 +1612,8 @@ class DomeSimulator {
                     color: typeData?.color || '#000000',
                     miterAngle: Math.abs(90 - (strut.angle * 180 / Math.PI)),
                     bevelAngle: typeData?.bevelAngle || 0,
-                    vertices: strut.vertices
+                    vertices: strut.vertices,
+                    angle: strut.angle
                 };
             });
 
@@ -1616,8 +1643,8 @@ class DomeSimulator {
             });
         });
 
-        // Create joints at all vertices
-        this.createJoints();
+        // Create joints at all vertices (disabled to show clean good karma intersections)
+        // this.createJoints();
 
         this.scene.add(this.domeGroup);
     }
@@ -1648,9 +1675,8 @@ class DomeSimulator {
         const I = N.clone().cross(U).normalize();
         
         // Shift board inwards by half its width
-        const scaleFactor = 0.5; // Matches scaleFactor in createStrutGeometryForDome
         const visualThickness = isBase ? 1.5 : 1.0;
-        const width = (this.strutWidth / 1000) * scaleFactor * visualThickness;
+        const width = (this.strutWidth / 1000) * visualThickness;
         
         // In the Good Karma system, the butt end is shortened by width / tan(alpha)
         const alpha = strutInfo.angle; // Corner angle at v1 in radians
@@ -1753,13 +1779,11 @@ class DomeSimulator {
     
     createStrutGeometryForDome(boardLength, miterAngleRad, bevelAngleRad, isBase = false) {
         // Create rectangular strut geometry matching actual dimensions (Good Karma hubless style)
-        // Scale down strut cross-section to be more proportional to dome size
-        const scaleFactor = 0.5; // Make struts thinner for better visualization
         
         // Base struts can be drawn slightly thicker for visual grounding
         const visualThickness = isBase ? 1.5 : 1.0;
-        const width = (this.strutWidth / 1000) * scaleFactor * visualThickness; // Convert mm to meters and scale
-        const height = (this.strutHeight / 1000) * scaleFactor * visualThickness; // Convert mm to meters and scale
+        const width = (this.strutWidth / 1000) * visualThickness; // Convert mm to meters
+        const height = (this.strutHeight / 1000) * visualThickness; // Convert mm to meters
         
         // Create box geometry with proper rectangular cross-section
         const geometry = new THREE.BoxGeometry(width, boardLength, height);

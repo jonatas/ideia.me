@@ -92,6 +92,7 @@ permalink: /dome-builder/
         <!-- Inventory Tab -->
         <div id="tab-inventory" class="panel-content hidden">
             <div class="section-title"><i class="bi bi-list-check"></i> Strut Cutting List</div>
+            <div id="inventory-filters"></div>
             <div id="strut-types-list" class="space-y-3 mb-8">
                 <!-- Populated by JS -->
             </div>

@@ -688,8 +688,34 @@ class CamperSimulator {
                 this.highlightedFamily = null;
                 this.updateUI();
             };
+            
+            const filterContainer = document.getElementById('inventory-filters');
+            if (filterContainer && typeof InventoryFilter !== 'undefined') {
+                const colors = { 'A': '#38bdf8', 'B': '#fb7185', 'C': '#34d399', 'D': '#fbbf24' };
+                const filterTypes = this.cutFamilies.map(f => ({
+                    id: f.id,
+                    color: colors[f.id] || '#94a3b8',
+                    count: f.totalCount,
+                    length: f.lengths[0]?.length || 0,
+                    miter: f.miter,
+                    bevel: f.bevel
+                }));
+                
+                if (!this.inventoryFilter) {
+                    this.inventoryFilter = new InventoryFilter(filterContainer, filterTypes, (activeId) => {
+                        this.highlightedFamily = activeId;
+                        this.highlightedStrutId = null;
+                        this.updateUI();
+                    });
+                } else {
+                    this.inventoryFilter.strutTypes = filterTypes;
+                    this.inventoryFilter.activeFilter = this.highlightedFamily;
+                    this.inventoryFilter.render();
+                }
+            }
 
             this.cutFamilies.forEach(f => {
+                if (this.highlightedFamily && this.highlightedFamily !== f.id) return;
                 const card = document.createElement('div');
                 card.className = `data-card mb-4 cursor-pointer border-2 transition-colors ${this.highlightedFamily === f.id ? 'border-primary' : 'border-slate-700 hover:border-slate-500'}`;
                 
