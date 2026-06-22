@@ -11,7 +11,7 @@ permalink: /dome-builder/
         <div id="selection-overlay" class="absolute bottom-8 left-8 right-8 pointer-events-none">
             <div id="triangle-info" class="bg-slate-900/90 backdrop-blur border border-slate-700 p-4 rounded-xl shadow-2xl max-w-md pointer-events-auto hidden">
                 <div class="flex justify-between items-start mb-2">
-                    <h3 class="text-sm font-bold text-primary uppercase tracking-wider">Triangle #<span id="triangle-number"></span></h3>
+                    <h3 class="text-sm font-bold text-sky-400 uppercase tracking-wider">Triangle #<span id="triangle-number"></span></h3>
                     <button id="clear-selection" class="text-slate-400 hover:text-white"><i class="bi bi-x-lg"></i></button>
                 </div>
                 <div id="struts-list" class="space-y-2">
@@ -87,7 +87,7 @@ permalink: /dome-builder/
             <div class="param-group mt-6">
                 <div class="param-item">
                     <label class="flex items-center gap-3 cursor-pointer">
-                        <input type="checkbox" id="flat-base-toggle" class="w-4 h-4 text-primary bg-slate-900 border-slate-700 rounded" checked>
+                        <input type="checkbox" id="flat-base-toggle" class="w-4 h-4 text-sky-400 bg-slate-900 border-slate-700 rounded" checked>
                         <span class="param-label !mb-0" style="margin-bottom: 0;">Flat Base (Bevel 0°)</span>
                     </label>
                 </div>
@@ -119,13 +119,13 @@ permalink: /dome-builder/
             <div class="bg-slate-900 border border-slate-700 rounded-xl p-4 mb-6">
                 <div class="flex justify-between items-center mb-3">
                     <span class="text-xs font-bold text-slate-400 uppercase tracking-widest">Global Progress</span>
-                    <span id="assembly-progress-percent" class="text-xs font-mono text-primary">0%</span>
+                    <span id="assembly-progress-percent" class="text-xs font-mono text-sky-400">0%</span>
                 </div>
                 <div class="w-full bg-slate-800 rounded-full h-1.5 mb-4">
-                    <div id="assembly-progress-bar" class="bg-primary h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    <div id="assembly-progress-bar" class="bg-sky-400 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                 </div>
                 <div class="flex gap-2">
-                    <button id="assembly-mode-toggle" class="flex-1 py-2 border border-primary text-primary text-[10px] font-black uppercase tracking-tighter rounded hover:bg-primary hover:text-slate-900 transition-colors">
+                    <button id="assembly-mode-toggle" class="flex-1 py-2 border border-sky-400 text-sky-400 text-[10px] font-black uppercase tracking-tighter rounded hover:bg-sky-400 hover:text-slate-900 transition-colors">
                         Enter Assembly Mode
                     </button>
                     <button id="assembly-auto" class="px-4 py-2 border border-slate-700 text-slate-400 text-[10px] font-bold rounded hover:bg-slate-800">
