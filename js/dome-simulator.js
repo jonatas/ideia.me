@@ -498,6 +498,8 @@ class DomeSimulator {
         if (!this.selectedStrut) return;
         
         const strutInfo = this.selectedStrut.strutInfo;
+        const insideLength = strutInfo.length - (this.strutWidth / Math.tan((90 - strutInfo.miterAngle) * Math.PI / 180));
+
         document.getElementById('triangle-number').textContent = `Strut Type ${strutInfo.type}`;
         
         const strutsList = document.getElementById('struts-list');
@@ -508,9 +510,10 @@ class DomeSimulator {
                     <span class="text-xs font-bold text-primary">Good Karma Strut ${strutInfo.type}</span>
                 </div>
                 <div class="grid grid-cols-2 gap-y-2 text-[10px]">
-                    <span class="text-slate-500">Length</span><span class="text-slate-200 font-mono">${strutInfo.length.toFixed(1)}mm</span>
-                    <span class="text-slate-500">Miter</span><span style="color: #fb7185" class="font-mono">${strutInfo.miterAngle.toFixed(1)}°</span>
-                    <span class="text-slate-500">Bevel</span><span style="color: #34d399" class="font-mono">${strutInfo.bevelAngle.toFixed(1)}°</span>
+                    <span class="text-slate-500">Inside L</span><span class="text-primary font-bold font-mono">${insideLength.toFixed(1)}mm</span>
+                    <span class="text-slate-500">Outside L</span><span class="text-slate-200 font-mono">${strutInfo.length.toFixed(1)}mm</span>
+                    <span class="text-slate-500">Sway (Miter)</span><span style="color: #fb7185" class="font-mono">${strutInfo.miterAngle.toFixed(1)}°</span>
+                    <span class="text-slate-500">Tilt (Bevel)</span><span style="color: #34d399" class="font-mono">${strutInfo.bevelAngle.toFixed(1)}°</span>
                 </div>
                 <button onclick="domeSimulator.showStrutDetails({type:'${strutInfo.type}', length:${strutInfo.length}, miterAngle:${strutInfo.miterAngle}, bevelAngle:${strutInfo.bevelAngle}, color:'${strutInfo.color}'})" class="w-full mt-3 py-1.5 bg-primary/20 text-primary text-[9px] font-bold uppercase rounded border border-primary/30 hover:bg-primary/30">
                     View Cutting Guide
@@ -612,7 +615,9 @@ class DomeSimulator {
                 let qtyText = strut.count + ' Total';
                 if (title === 'Base Ring') qtyText = strut.baseCount + ' Pieces';
                 else if (title === 'Verticals (Standing on Base)') qtyText = strut.standCount + ' Pieces';
-                else qtyText = (strut.count - strut.baseCount - strut.standCount) + ' Pieces';
+                else qtyText = (strut.count - (strut.baseCount || 0) - (strut.standCount || 0)) + ' Pieces';
+
+                const insideLength = strut.length - (this.strutWidth / Math.tan((90 - strut.miterAngle) * Math.PI / 180));
 
                 card.innerHTML = `
                     <div class="flex items-center gap-3">
@@ -621,12 +626,15 @@ class DomeSimulator {
                         </div>
                         <div class="flex-1">
                             <div class="flex justify-between items-center mb-1">
-                                <span class="text-sm font-bold text-slate-100">${strut.length.toFixed(1)}mm</span>
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-sm font-bold text-slate-100">${insideLength.toFixed(1)}</span>
+                                    <span class="text-[10px] text-slate-500">(${strut.length.toFixed(0)})</span>
+                                </div>
                                 <span class="text-xs font-mono text-primary">${qtyText}</span>
                             </div>
                             <div class="flex gap-3 text-[10px] text-slate-400">
-                                <span style="color: #fb7185">M: ${strut.miterAngle.toFixed(1)}°</span>
-                                <span style="color: #34d399">B: ${strut.bevelAngle.toFixed(1)}°</span>
+                                <span style="color: #fb7185">Sway: ${strut.miterAngle.toFixed(1)}°</span>
+                                <span style="color: #34d399">Tilt: ${strut.bevelAngle.toFixed(1)}°</span>
                                 <span class="ml-auto text-primary/50">Details <i class="bi bi-chevron-right"></i></span>
                             </div>
                         </div>
@@ -643,21 +651,26 @@ class DomeSimulator {
             });
         };
 
-        createSection('Base Ring', s => s.baseCount > 0);
-        createSection('Verticals (Standing on Base)', s => s.standCount > 0);
-        createSection('Dome Canopy', s => (s.count - s.baseCount - s.standCount) > 0);
+        // If baseCount isn't calculated in the new face-based logic, just show all
+        if (this.strutTypes.some(s => s.baseCount > 0)) {
+            createSection('Base Ring', s => s.baseCount > 0);
+            createSection('Verticals (Standing on Base)', s => s.standCount > 0);
+            createSection('Dome Canopy', s => (s.count - s.baseCount - s.standCount) > 0);
+        } else {
+            createSection('All Struts', s => true);
+        }
     }
 
     showStrutDetails(strut) {
-        const miterLoss = (this.strutHeight * Math.tan(strut.miterAngle * Math.PI / 180)).toFixed(1);
-        const bevelLoss = (this.strutWidth * Math.tan(strut.bevelAngle * Math.PI / 180)).toFixed(1);
+        const miterLoss = (this.strutWidth / Math.tan((90 - strut.miterAngle) * Math.PI / 180)).toFixed(1);
+        const insideLength = (strut.length - parseFloat(miterLoss)).toFixed(1);
         
         const content = `
             <div class="space-y-6">
                 <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
                     <h3 class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-widest flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full" style="background-color: #fb7185"></span>
-                        1. Miter Cut (Horizontal)
+                        1. Miter Cut (Sway)
                     </h3>
                     <div id="step2-view" class="w-full aspect-video bg-black rounded-lg step-view"></div>
                     <div class="mt-4 grid grid-cols-2 gap-4">
@@ -674,7 +687,7 @@ class DomeSimulator {
                 <div class="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
                     <h3 class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-widest flex items-center gap-2">
                         <span class="w-2 h-2 rounded-full" style="background-color: #34d399"></span>
-                        2. Bevel Cut (Vertical)
+                        2. Bevel Cut (Tilt)
                     </h3>
                     <div id="step3-view" class="w-full aspect-video bg-black rounded-lg step-view"></div>
                     <div class="mt-4 grid grid-cols-2 gap-4">
@@ -683,8 +696,8 @@ class DomeSimulator {
                             <span style="color: #34d399" class="font-mono text-sm">${strut.bevelAngle.toFixed(1)}°</span>
                         </div>
                         <div class="text-[10px]">
-                            <span class="block text-slate-500">Material Loss</span>
-                            <span style="color: #34d399" class="font-mono text-sm">${bevelLoss}mm</span>
+                            <span class="block text-slate-500">Note</span>
+                            <span style="color: #34d399" class="font-mono text-xs">Rip along full edge</span>
                         </div>
                     </div>
                 </div>
@@ -694,7 +707,11 @@ class DomeSimulator {
                     <h3 class="text-xs font-bold text-slate-400 uppercase mb-6 tracking-widest">Good Karma Fabrication</h3>
                     <div class="space-y-4">
                         <div class="flex justify-between border-b border-slate-700 pb-2">
-                            <span class="text-xs text-slate-400">Total Length</span>
+                            <span class="text-xs text-slate-400">Inside Length (Short)</span>
+                            <span class="text-xs font-bold text-primary">${insideLength}mm</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-700 pb-2">
+                            <span class="text-xs text-slate-400">Outside Length (Long)</span>
                             <span class="text-xs font-bold text-white">${strut.length.toFixed(1)}mm</span>
                         </div>
                         <div class="flex justify-between border-b border-slate-700 pb-2">
@@ -859,6 +876,14 @@ class DomeSimulator {
             new THREE.Vector3(-phi * t, 0, t)
         ];
 
+        // Rotate the icosahedron so that vertex 0 is at the top (0, radius, 0)
+        // to align with the Kruschke method (zenith is a pentagon hub and base is flat)
+        const q = new THREE.Quaternion().setFromUnitVectors(
+            baseVertices[0].clone().normalize(),
+            new THREE.Vector3(0, 1, 0)
+        );
+        baseVertices.forEach(v => v.applyQuaternion(q));
+
         const baseFaces = [
             [0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11],
             [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8],
@@ -929,16 +954,21 @@ class DomeSimulator {
             });
         }
 
-        // Filter triangles (keep upper 5/9 hemisphere)
-        // For V3, the 5/9 cut ring is perfectly flat at approximately y = -0.191 * radius.
-        // We use a threshold of -0.2 * radius to cleanly slice exactly at that ring.
+        // Filter triangles (keep upper hemisphere / 5/8 dome for odd frequencies)
+        // Even frequencies have a flat equator at Y=0.
+        // Odd frequencies have a zig-zag equator, extending below Y=0 (creating a 5/8 dome).
+        let cutoff = -0.01 * radius;
+        if (this.frequency % 2 !== 0) {
+            cutoff = this.frequency === 1 ? -0.5 * radius : -0.25 * radius;
+        }
+
         this.allTriangles = this.allTriangles.filter(tri => {
             const minY = Math.min(tri[0].y, tri[1].y, tri[2].y);
-            return minY >= -0.2 * radius;
+            return minY >= cutoff;
         });
 
         // Set the floor to exactly Y=0 for visual alignment
-        // The lowest Y coordinate after the 5/9 cut should be set to 0.
+        // The lowest Y coordinate after the cut should be set to 0.
         let lowestY = Infinity;
         this.allTriangles.forEach(tri => {
             tri.forEach(v => {
@@ -947,10 +977,15 @@ class DomeSimulator {
         });
         
         // Offset all points so the base sits exactly on the floor (Y=0)
+        // Use a Set to ensure we only offset each unique vertex object once, preventing multiple-subtraction warping.
+        const uniqueVertices = new Set();
         this.allTriangles.forEach(tri => {
             tri.forEach(v => {
-                v.y -= lowestY;
+                uniqueVertices.add(v);
             });
+        });
+        uniqueVertices.forEach(v => {
+            v.y -= lowestY;
         });
 
         // Calculate Y range for proper height level calculation
@@ -1064,9 +1099,20 @@ class DomeSimulator {
                 const key = `${rLen}_${rMiter}_${rBevel}`;
 
                 if (!strutMap.has(key)) {
-                    strutMap.set(key, { length, miter, bevel, count: 0 });
+                    strutMap.set(key, { length, miter, bevel, count: 0, baseCount: 0, standCount: 0 });
                 }
-                strutMap.get(key).count++;
+                const entry = strutMap.get(key);
+                entry.count++;
+
+                // Determine if this edge is on the base or stands on the base
+                const isBase = v1.y < 0.01 && v2.y < 0.01;
+                const isStand = (v1.y < 0.01 && v2.y >= 0.01) || (v2.y < 0.01 && v1.y >= 0.01);
+
+                if (isBase) {
+                    entry.baseCount++;
+                } else if (isStand) {
+                    entry.standCount++;
+                }
             }
         });
 
@@ -1079,7 +1125,9 @@ class DomeSimulator {
             count: f.count,
             color: ['#4361ee', '#f72585', '#7209b7', '#4ECDC4', '#FBBF24', '#0EA5E9', '#EF4444', '#10b981', '#f78c6b', '#8338ec'][idx % 10],
             miterAngle: f.miter,
-            bevelAngle: f.bevel
+            bevelAngle: f.bevel,
+            baseCount: f.baseCount,
+            standCount: f.standCount
         }));
     }
     
@@ -1507,20 +1555,31 @@ class DomeSimulator {
             this.addTriangleBorders(mesh, tri, triangleTypeInfo);
             
             // Calculate strut info
-            const side1 = tri[0].distanceTo(tri[1]) * 1000;
-            const side2 = tri[1].distanceTo(tri[2]) * 1000;
-            const side3 = tri[2].distanceTo(tri[0]) * 1000;
+            const sides = [
+                tri[0].distanceTo(tri[1]) * 1000,
+                tri[1].distanceTo(tri[2]) * 1000,
+                tri[2].distanceTo(tri[0]) * 1000
+            ];
             
+            const angles = [
+                Math.acos((sides[0]**2 + sides[2]**2 - sides[1]**2) / (2 * sides[0] * sides[2])),
+                Math.acos((sides[0]**2 + sides[1]**2 - sides[2]**2) / (2 * sides[0] * sides[1])),
+                Math.acos((sides[1]**2 + sides[2]**2 - sides[0]**2) / (2 * sides[1] * sides[2]))
+            ];
+
             const strutInfo = [
-                { length: side1, vertices: [tri[0], tri[1]] },
-                { length: side2, vertices: [tri[1], tri[2]] },
-                { length: side3, vertices: [tri[2], tri[0]] }
+                { length: sides[0], angle: angles[0], vertices: [tri[0], tri[1]] },
+                { length: sides[1], angle: angles[1], vertices: [tri[1], tri[2]] },
+                { length: sides[2], angle: angles[2], vertices: [tri[2], tri[0]] }
             ].map(strut => {
                 const matchIdx = this.strutTypes.findIndex(st => Math.abs(st.length - strut.length) < 1);
+                const typeData = this.strutTypes[matchIdx];
                 return {
                     length: strut.length,
-                    type: this.strutTypes[matchIdx]?.type || 'A',
-                    color: this.strutTypes[matchIdx]?.color || '#000000',
+                    type: typeData?.type || 'A',
+                    color: typeData?.color || '#000000',
+                    miterAngle: Math.abs(90 - (strut.angle * 180 / Math.PI)),
+                    bevelAngle: typeData?.bevelAngle || 0,
                     vertices: strut.vertices
                 };
             });
@@ -1537,17 +1596,17 @@ class DomeSimulator {
             };
             this.domeGroup.add(mesh);
 
-            // Create real 3D struts instead of just lines
+            // Create real 3D struts for each triangle face
             strutInfo.forEach((strut, strutIdx) => {
-                const strutKey = this.getStrutKey(strut.vertices[0], strut.vertices[1]);
+                const isBase = strut.vertices[0].y < 0.01 && strut.vertices[1].y < 0.01;
+                // The third vertex of this triangle face (opposite to this strut)
+                const thirdVertex = tri[(strutIdx + 2) % 3];
+                const strutMesh = this.createRealStrut(strut, thirdVertex, isBase);
                 
-                // Only create strut if we haven't already created it
-                if (!this.strutMeshes.has(strutKey)) {
-                    const isBase = strut.vertices[0].y < 0.01 && strut.vertices[1].y < 0.01;
-                    const strutMesh = this.createRealStrut(strut, isBase);
-                    this.strutMeshes.set(strutKey, strutMesh);
-                    this.domeGroup.add(strutMesh);
-                }
+                // Track strut mesh per face
+                const strutKey = `${originalIdx}-${strutIdx}`;
+                this.strutMeshes.set(strutKey, strutMesh);
+                this.domeGroup.add(strutMesh);
             });
         });
 
@@ -1564,17 +1623,38 @@ class DomeSimulator {
         return key1 < key2 ? `${key1}-${key2}` : `${key2}-${key1}`;
     }
     
-    createRealStrut(strutInfo, isBase = false) {
-        const v1 = strutInfo.vertices[0];
-        const v2 = strutInfo.vertices[1];
+    createRealStrut(strutInfo, thirdVertex, isBase = false) {
+        const v1 = strutInfo.vertices[0]; // The butt end
+        const v2 = strutInfo.vertices[1]; // The lap end
+        const v3 = thirdVertex;
         const length = v1.distanceTo(v2);
         
-        // Extend strut for Good Karma overlapping joint system
-        const extendFactor = 1.05; // 5% extension to create overlap at joints
-        const extendedLength = length * extendFactor;
+        // Calculate basis vectors for the strut orientation
+        const U = v2.clone().sub(v1).normalize();
+        const N = v2.clone().sub(v1).cross(v3.clone().sub(v1)).normalize();
         
-        // Create strut geometry with Good Karma overlapping system
-        const strutGeometry = this.createStrutGeometryForDome(extendedLength, strutInfo, isBase);
+        // X_basis: points outwards in the plane of the face (perpendicular to edge)
+        const X_basis = U.clone().cross(N).normalize();
+        const Y_basis = U;
+        const Z_basis = N;
+        
+        // Inward direction points from the edge to the center of the triangle
+        const I = N.clone().cross(U).normalize();
+        
+        // Shift board inwards by half its width
+        const scaleFactor = 0.5; // Matches scaleFactor in createStrutGeometryForDome
+        const visualThickness = isBase ? 1.5 : 1.0;
+        const width = (this.strutWidth / 1000) * scaleFactor * visualThickness;
+        
+        // In the Good Karma system, the butt end is shortened by width / tan(alpha)
+        const alpha = strutInfo.angle; // Corner angle at v1 in radians
+        const shortening = width / Math.tan(alpha);
+        const boardLength = length - shortening;
+        
+        const miterAngleRad = (strutInfo.miterAngle || 0) * Math.PI / 180;
+        const bevelAngleRad = (strutInfo.bevelAngle || 0) * Math.PI / 180;
+        
+        const strutGeometry = this.createStrutGeometryForDome(boardLength, miterAngleRad, bevelAngleRad, isBase);
         
         let color = strutInfo.color;
         let metalness = 0.3;
@@ -1585,7 +1665,6 @@ class DomeSimulator {
         if (isBase) {
             metalness = 0.1;
             roughness = 0.8;
-            // Optionally add a slight emissive glow or darken
             color = new THREE.Color(strutInfo.color).lerp(new THREE.Color(0xffffff), 0.2);
         }
         
@@ -1598,28 +1677,21 @@ class DomeSimulator {
         
         const strutMesh = new THREE.Mesh(strutGeometry, strutMaterial);
         
-        // Position strut with Good Karma overlapping system - struts extend to vertices for overlap
-        const direction = v2.clone().sub(v1);
-        // For Good Karma system, struts should overlap at joints, not have gaps
-        const extendedV1 = v1.clone().sub(direction.clone().multiplyScalar((extendFactor - 1) / 2));
-        const extendedV2 = v2.clone().add(direction.clone().multiplyScalar((extendFactor - 1) / 2));
-        const midPoint = extendedV1.clone().add(extendedV2).multiplyScalar(0.5);
+        // Shift along the edge by shortening / 2 towards the lap end (v2)
+        const shiftAlongEdge = U.clone().multiplyScalar(shortening / 2);
+        // Shift inwards by width / 2
+        const shiftInwards = I.clone().multiplyScalar(width / 2);
+        
+        const midPoint = v1.clone().add(v2).multiplyScalar(0.5).add(shiftAlongEdge).add(shiftInwards);
         strutMesh.position.copy(midPoint);
         
-        // Simplified and corrected strut orientation for proper yaw rotation
-        const normalizedDirection = direction.clone().normalize();
+        // Create rotation matrix to align local axes (X, Y, Z) with (X_basis, Y_basis, Z_basis)
+        const matrix = new THREE.Matrix4();
+        matrix.makeBasis(X_basis, Y_basis, Z_basis);
+        strutMesh.rotation.setFromRotationMatrix(matrix);
         
-        // Position strut along the direction vector using extended endpoints for overlap
-        strutMesh.lookAt(extendedV2);
-        
-        // Correct the orientation - struts should align along their length (Y-axis in geometry)
-        // The lookAt method aligns the Z-axis, so we need to rotate to align Y-axis
-        strutMesh.rotateX(Math.PI / 2);
-        
-        // Apply the rotation around the strut's length axis (now Y-axis after correction)
-        // In Good Karma, the strut is rotated by the Bevel angle to meet flush with neighbor
-        const bevelRotation = (strutInfo.bevelAngle || 0) * Math.PI / 180;
-        strutMesh.rotateY(bevelRotation);
+        // Rotate around local Y-axis (length) by bevel angle to meet neighboring board flush
+        strutMesh.rotateY(bevelAngleRad);
         
         // Store strut info for interaction
         strutMesh.userData = {
@@ -1627,10 +1699,10 @@ class DomeSimulator {
             strutInfo: strutInfo,
             vertices: [v1, v2],
             length: length,
-            extendedLength: extendedLength,
+            extendedLength: boardLength,
             midPoint: midPoint,
-            direction: direction,
-            bevelApplied: bevelRotation,
+            direction: v2.clone().sub(v1),
+            bevelApplied: bevelAngleRad,
             isGoodKarmaOverlap: true
         };
         
@@ -1673,7 +1745,7 @@ class DomeSimulator {
         triangleMesh.add(borderLines);
     }
     
-    createStrutGeometryForDome(length, strutInfo, isBase = false) {
+    createStrutGeometryForDome(boardLength, miterAngleRad, bevelAngleRad, isBase = false) {
         // Create rectangular strut geometry matching actual dimensions (Good Karma hubless style)
         // Scale down strut cross-section to be more proportional to dome size
         const scaleFactor = 0.5; // Make struts thinner for better visualization
@@ -1684,45 +1756,23 @@ class DomeSimulator {
         const height = (this.strutHeight / 1000) * scaleFactor * visualThickness; // Convert mm to meters and scale
         
         // Create box geometry with proper rectangular cross-section
-        const geometry = new THREE.BoxGeometry(width, length, height);
-        
-        // Apply Good Karma compound cuts for hubless joints - enhanced for overlapping system
-        const miterAngle = (strutInfo ? strutInfo.miterAngle : 18) * Math.PI / 180; // Horizontal cut angle
-        const bevelAngle = (strutInfo ? strutInfo.bevelAngle : 27.8) * Math.PI / 180; // Vertical cut angle
-        // Enhanced cuts for better overlap visualization
+        const geometry = new THREE.BoxGeometry(width, boardLength, height);
         
         const positions = geometry.attributes.position;
         const vertex = new THREE.Vector3();
         
-        // Apply compound cuts at both ends with better joint assembly
+        // Apply flat compound cuts to vertices: lap end at y > 0 (miter=0) and butt end at y < 0 (miter=miterAngle)
         for (let i = 0; i < positions.count; i++) {
             vertex.fromBufferAttribute(positions, i);
             
-            // Apply cuts to vertices near the ends (more precise cut zone)
-            if (Math.abs(vertex.y) > length * 0.35) {
-                const endSign = Math.sign(vertex.y);
-                const distanceFromEnd = Math.abs(Math.abs(vertex.y) - length * 0.5);
-                const cutIntensity = Math.max(0, 1 - (distanceFromEnd / (length * 0.15)));
-                
-                // Apply miter cut (18° horizontal angle) - improved for geodesic alignment
-                const miterOffset = Math.abs(vertex.z) * Math.tan(miterAngle) * endSign;
-                vertex.x += miterOffset * 0.8 * cutIntensity;
-                
-                // Apply bevel cut (27.8° vertical angle) - improved for joint assembly
-                const bevelOffset = Math.abs(vertex.x) * Math.tan(bevelAngle) * endSign;
-                vertex.z += bevelOffset * 0.8 * cutIntensity;
-                
-                // Additional fine-tuning for smooth joint assembly
-                // Slightly chamfer the edges for better fit
-                const chamferAmount = 0.001 * cutIntensity;
-                if (Math.abs(vertex.x) > width * 0.4) {
-                    vertex.x -= Math.sign(vertex.x) * chamferAmount;
-                }
-                if (Math.abs(vertex.z) > height * 0.4) {
-                    vertex.z -= Math.sign(vertex.z) * chamferAmount;
-                }
-                
-                positions.setXYZ(i, vertex.x, vertex.y, vertex.z);
+            if (vertex.y > 0) {
+                // Lap end: miter = 0, bevel = bevelAngle
+                const newY = boardLength / 2 + vertex.z * Math.tan(bevelAngleRad);
+                positions.setY(i, newY);
+            } else {
+                // Butt end: miter = miterAngle, bevel = bevelAngle
+                const newY = -boardLength / 2 - vertex.x * Math.tan(miterAngleRad) - vertex.z * Math.tan(bevelAngleRad);
+                positions.setY(i, newY);
             }
         }
         
