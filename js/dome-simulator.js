@@ -109,8 +109,8 @@ class DomeSimulator {
         frequencySlider.addEventListener('input', (e) => {
             this.frequency = parseInt(e.target.value);
             this.selectedTriangle = null;
-            this.updateUI();
             this.initMainDomeView();
+            this.updateUI();
         });
         
         // Zoom slider
@@ -124,12 +124,14 @@ class DomeSimulator {
         const strutWidthSlider = document.getElementById('strut-width');
         strutWidthSlider.addEventListener('input', (e) => {
             this.strutWidth = parseInt(e.target.value);
+            this.initMainDomeView();
             this.updateUI();
         });
         
         const strutHeightSlider = document.getElementById('strut-height');
         strutHeightSlider.addEventListener('input', (e) => {
             this.strutHeight = parseInt(e.target.value);
+            this.initMainDomeView();
             this.updateUI();
         });
         
@@ -140,8 +142,8 @@ class DomeSimulator {
                 this.selectedTriangle = null;
                 this.selectedStrut = null;
                 this.selectedJoint = null;
-                this.updateUI();
                 this.initMainDomeView();
+                this.updateUI();
             });
         }
         
