@@ -2,6 +2,7 @@
 class DomeSimulator {
     constructor() {
         this.frequency = 3;
+        this.diameter = 7;
         this.selectedTriangle = null;
         this.selectedStrutType = null;
         this.selectedStrut = null;
@@ -135,6 +136,7 @@ class DomeSimulator {
 
         // Bind all sliders
         bind('frequency-slider', 'frequency', false, true);
+        bind('diameter-slider', 'diameter', true, true);
         bind('zoom-slider', 'zoom', true, false);
         bind('strut-width', 'strutWidth', false, true);
         bind('strut-height', 'strutHeight', false, true);
@@ -214,6 +216,14 @@ class DomeSimulator {
     updateUI() {
         // Update frequency display
         document.getElementById('frequency-display').textContent = this.frequency;
+        
+        // Update diameter display
+        const diaDisplay = document.getElementById('diameter-display');
+        if (diaDisplay) diaDisplay.textContent = `${this.diameter}m`;
+        
+        // Update app title
+        const appTitle = document.getElementById('app-title');
+        if (appTitle) appTitle.textContent = `${this.diameter}m Geodesic Dome Builder`;
         
         // Update zoom display
         document.getElementById('zoom-display').textContent = `${this.zoom.toFixed(1)}x`;
@@ -807,9 +817,17 @@ class DomeSimulator {
     }
     
     generateGeodesicDome() {
-        const radius = 3.5;
-        const phi = (1 + Math.sqrt(5)) / 2;
+        this.calculateGeometry();
+        this.createDomeGeometry();
+    }
+    
+    calculateGeometry() {
+        this.allTriangles = [];
+        this.yRange = null; // Reset cached range
         
+        // Calculate initial icosahedron vertices
+        const phi = (1 + Math.sqrt(5)) / 2;
+        const radius = this.diameter / 2;
         const t = radius / Math.sqrt(1 + phi * phi);
         const baseVertices = [
             new THREE.Vector3(-t, phi * t, 0),

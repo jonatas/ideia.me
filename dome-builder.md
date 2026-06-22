@@ -57,7 +57,14 @@ permalink: /dome-builder/
                     </div>
                     <input type="range" id="frequency-slider" min="1" max="6" value="3" class="slider" step="1">
                 </div>
-                <div class="param-item">
+                <div class="param-item mt-4">
+                    <div class="param-row">
+                        <span class="param-label">Diameter (m)</span>
+                        <span class="param-value" id="diameter-display">7m</span>
+                    </div>
+                    <input type="range" id="diameter-slider" min="2" max="20" value="7" class="slider" step="0.5">
+                </div>
+                <div class="param-item mt-4">
                     <div class="param-row">
                         <span class="param-label">Camera Zoom</span>
                         <span class="param-value" id="zoom-display">1.0x</span>
