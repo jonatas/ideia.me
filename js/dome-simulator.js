@@ -104,36 +104,40 @@ class DomeSimulator {
     }
 
     setupEventListeners() {
-        // Frequency slider
-        const frequencySlider = document.getElementById('frequency-slider');
-        frequencySlider.addEventListener('input', (e) => {
-            this.frequency = parseInt(e.target.value);
-            this.selectedTriangle = null;
-            this.initMainDomeView();
-            this.updateUI();
-        });
-        
-        // Zoom slider
-        const zoomSlider = document.getElementById('zoom-slider');
-        zoomSlider.addEventListener('input', (e) => {
-            this.zoom = parseFloat(e.target.value);
-            this.updateUI();
-        });
-        
-        // Strut dimensions
-        const strutWidthSlider = document.getElementById('strut-width');
-        strutWidthSlider.addEventListener('input', (e) => {
-            this.strutWidth = parseInt(e.target.value);
-            this.initMainDomeView();
-            this.updateUI();
-        });
-        
-        const strutHeightSlider = document.getElementById('strut-height');
-        strutHeightSlider.addEventListener('input', (e) => {
-            this.strutHeight = parseInt(e.target.value);
-            this.initMainDomeView();
-            this.updateUI();
-        });
+        const bind = (id, prop, isFloat = false, needsInit = true) => {
+            const el = document.getElementById(id);
+            if (!el) return;
+            
+            const shortParam = id.replace('-slider', '');
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.has(shortParam)) {
+                let val = parseFloat(urlParams.get(shortParam));
+                if (!isNaN(val)) {
+                    el.value = val;
+                    this[prop] = isFloat ? val : parseInt(val);
+                }
+            }
+            
+            el.addEventListener('input', (e) => {
+                this[prop] = isFloat ? parseFloat(e.target.value) : parseInt(e.target.value);
+                if (id === 'frequency-slider') this.selectedTriangle = null;
+                
+                // Update URL
+                const newUrlParams = new URLSearchParams(window.location.search);
+                newUrlParams.set(shortParam, e.target.value);
+                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+                
+                if (needsInit) this.initMainDomeView();
+                this.updateUI();
+            });
+        };
+
+        // Bind all sliders
+        bind('frequency-slider', 'frequency', false, true);
+        bind('zoom-slider', 'zoom', true, false);
+        bind('strut-width', 'strutWidth', false, true);
+        bind('strut-height', 'strutHeight', false, true);
         
         // Clear selection button
         const clearButton = document.getElementById('clear-selection');

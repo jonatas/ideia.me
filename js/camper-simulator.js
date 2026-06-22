@@ -33,11 +33,7 @@ class CamperSimulator {
     }
 
     init() {
-        this.setupEventListeners();
-        this.calculate();
-        window.addEventListener('resize', () => this.renderSVG());
-        
-        // Define view switcher globally
+        // Define view switcher globally early so it's available even if calculate throws
         window.setCamperView = (view) => {
             this.activeView = view;
             
@@ -57,18 +53,44 @@ class CamperSimulator {
             
             this.renderSVG();
         };
+
+        this.setupEventListeners();
+        this.calculate();
+        window.addEventListener('resize', () => this.renderSVG());
     }
 
     setupEventListeners() {
         const bind = (id, prop, valId, scale = 1, prefix = "") => {
             const el = document.getElementById(id);
             if (!el) return;
+            
+            const shortParam = id.replace('param-', '');
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            if (urlParams.has(shortParam)) {
+                let val = parseFloat(urlParams.get(shortParam));
+                if (!isNaN(val)) {
+                    el.value = val;
+                    this[prop] = val / scale;
+                    const displayEl = document.getElementById(valId);
+                    if (displayEl) {
+                        displayEl.textContent = prefix + (scale === 1 ? Math.round(this[prop]) : this[prop].toFixed(2)) + (scale === 1 && prefix === "" ? "mm" : "");
+                    }
+                }
+            }
+            
             el.addEventListener('input', (e) => {
                 this[prop] = parseFloat(e.target.value) / scale;
                 const displayEl = document.getElementById(valId);
                 if (displayEl) {
                     displayEl.textContent = prefix + (scale === 1 ? Math.round(this[prop]) : this[prop].toFixed(2)) + (scale === 1 && prefix === "" ? "mm" : "");
                 }
+                
+                // Update URL
+                const newUrlParams = new URLSearchParams(window.location.search);
+                newUrlParams.set(shortParam, e.target.value);
+                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+                
                 this.calculate();
             });
         };
@@ -688,7 +710,7 @@ class CamperSimulator {
                             onclick="event.stopPropagation(); window.selectCamperStrut('${id}')">
                             <td class="py-2 px-2 rounded-l"><span class="badge-type type-${f.id.toLowerCase()}">${id}</span></td>
                             <td class="font-mono text-white py-2">
-                                <span class="text-primary">${l.insideLength.toFixed(1)}</span>
+                                <span class="text-primary">${(l.insideLength || l.length).toFixed(1)}</span>
                                 <span class="text-slate-500 text-[10px] ml-1">(${l.length.toFixed(0)})</span>
                             </td>
                             <td class="py-2">${l.count}</td>
