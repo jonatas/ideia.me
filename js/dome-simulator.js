@@ -139,6 +139,31 @@ class DomeSimulator {
         bind('strut-width', 'strutWidth', false, true);
         bind('strut-height', 'strutHeight', false, true);
         
+        // Bind flat base toggle
+        const flatBaseToggle = document.getElementById('flat-base-toggle');
+        if (flatBaseToggle) {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('fb')) {
+                const fbVal = urlParams.get('fb') === '1';
+                flatBaseToggle.checked = fbVal;
+                this.flatBase = fbVal;
+            } else {
+                this.flatBase = flatBaseToggle.checked;
+            }
+            
+            flatBaseToggle.addEventListener('change', (e) => {
+                this.flatBase = e.target.checked;
+                const newUrlParams = new URLSearchParams(window.location.search);
+                newUrlParams.set('fb', this.flatBase ? '1' : '0');
+                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+                
+                this.initMainDomeView();
+                this.updateUI();
+            });
+        } else {
+            this.flatBase = true;
+        }
+        
         // Clear selection button
         const clearButton = document.getElementById('clear-selection');
         if (clearButton) {
@@ -1008,7 +1033,7 @@ class DomeSimulator {
                     const n1 = faceNormals[adjacentFaces[0]];
                     const n2 = faceNormals[adjacentFaces[1]];
                     bevel = (n1.angleTo(n2) * 180 / Math.PI) / 2;
-                } else if (adjacentFaces.length === 1) {
+                } else if (this.flatBase && adjacentFaces.length === 1) {
                     // Base struts usually have a 0 bevel or a specific angle for the foundation
                     bevel = 0;
                 }
@@ -1017,10 +1042,11 @@ class DomeSimulator {
                 const miter = Math.abs(90 - angleAtVertex);
                 const length = sides[i] * 1000;
                 
-                // Round values for grouping (ignore bevel to avoid V1 duplicate groups)
+                // Round values for grouping
                 const rLen = Math.round(length);
                 const rMiter = Math.round(miter * 10) / 10;
-                const key = `${rLen}_${rMiter}`;
+                const rBevel = Math.round(bevel * 10) / 10;
+                const key = `${rLen}_${rMiter}_${rBevel}`;
 
                 if (!strutMap.has(key)) {
                     strutMap.set(key, { length, miter, bevel, count: 0, baseCount: 0, standCount: 0 });

@@ -84,6 +84,15 @@ permalink: /dome-builder/
                 </div>
             </div>
 
+            <div class="param-group mt-6">
+                <div class="param-item">
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" id="flat-base-toggle" class="w-4 h-4 text-primary bg-slate-900 border-slate-700 rounded" checked>
+                        <span class="param-label !mb-0" style="margin-bottom: 0;">Flat Base (Bevel 0°)</span>
+                    </label>
+                </div>
+            </div>
+
             <div class="footer-info mt-8">
                 <p><strong>Note:</strong> Adjusting frequency recalculates all geodesic points. Strut dimensions affect the compound angle calculations for the hubless system.</p>
             </div>
@@ -116,7 +125,7 @@ permalink: /dome-builder/
                     <div id="assembly-progress-bar" class="bg-primary h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
                 </div>
                 <div class="flex gap-2">
-                    <button id="assembly-mode-toggle" class="flex-1 py-2 bg-primary text-slate-900 text-[10px] font-black uppercase tracking-tighter rounded hover:bg-white transition-colors">
+                    <button id="assembly-mode-toggle" class="flex-1 py-2 border border-primary text-primary text-[10px] font-black uppercase tracking-tighter rounded hover:bg-primary hover:text-slate-900 transition-colors">
                         Enter Assembly Mode
                     </button>
                     <button id="assembly-auto" class="px-4 py-2 border border-slate-700 text-slate-400 text-[10px] font-bold rounded hover:bg-slate-800">
