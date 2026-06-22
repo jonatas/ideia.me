@@ -62,7 +62,7 @@ permalink: /dome-builder/
                         <span class="param-label">Diameter (m)</span>
                         <span class="param-value" id="diameter-display">7m</span>
                     </div>
-                    <input type="range" id="diameter-slider" min="2" max="20" value="7" class="slider" step="0.5">
+                    <input type="range" id="diameter-slider" min="0.5" max="20" value="7" class="slider" step="0.5">
                 </div>
                 <div class="param-item mt-4">
                     <div class="param-row">
