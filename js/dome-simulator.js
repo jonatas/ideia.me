@@ -332,7 +332,7 @@ class DomeSimulator {
             }
         } else {
             assemblyToggle.textContent = 'Enter Assembly Mode';
-            assemblyToggle.className = 'flex-1 py-2 bg-primary text-slate-900 text-[10px] font-black uppercase rounded hover:bg-white transition-colors';
+            assemblyToggle.className = 'flex-1 py-2 border border-sky-400 text-sky-400 text-[10px] font-black uppercase tracking-tighter rounded hover:bg-sky-400 hover:text-slate-900 transition-colors';
             if (stepsContainer) stepsContainer.innerHTML = '<div class="text-center py-8 text-slate-500 text-xs italic">Enable assembly mode to see construction steps</div>';
         }
     }
