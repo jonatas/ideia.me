@@ -622,7 +622,19 @@ class DomeSimulator {
             if (!this.inventoryFilter) {
                 this.inventoryFilter = new InventoryFilter(filterContainer, filterTypes, (activeId) => {
                     this.inventoryActiveFilter = activeId;
+                    if (activeId) {
+                        this.selectedStrutType = this.strutTypes.find(s => s.type === activeId);
+                        this.highlightStrutTypeUntil = Date.now() + 3000;
+                        setTimeout(() => {
+                            if (this.selectedStrutType?.type === activeId) {
+                                this.initMainDomeView();
+                            }
+                        }, 3000);
+                    } else {
+                        this.selectedStrutType = null;
+                    }
                     this.updateStrutTypesList();
+                    this.initMainDomeView();
                 });
             } else {
                 this.inventoryFilter.strutTypes = filterTypes;
@@ -660,8 +672,8 @@ class DomeSimulator {
                         <div class="flex-1">
                             <div class="flex justify-between items-center mb-1">
                                 <div class="flex items-baseline gap-2">
-                                    <span class="text-sm font-bold text-slate-100">${insideLength.toFixed(1)}</span>
-                                    <span class="text-[10px] text-slate-500">(${strut.length.toFixed(0)})</span>
+                                    <span class="text-sm font-bold text-slate-100">Inner: ${insideLength.toFixed(1)}</span>
+                                    <span class="text-[10px] text-slate-500">(Outer: ${strut.length.toFixed(0)})</span>
                                 </div>
                                 <span class="text-xs font-mono text-primary">${qtyText}</span>
                             </div>
@@ -691,6 +703,14 @@ class DomeSimulator {
                 
                 card.onclick = () => {
                     this.selectedStrutType = isSelected ? null : strut;
+                    if (this.selectedStrutType) {
+                        this.highlightStrutTypeUntil = Date.now() + 3000;
+                        setTimeout(() => {
+                            if (this.selectedStrutType?.type === strut.type) {
+                                this.initMainDomeView();
+                            }
+                        }, 3000);
+                    }
                     this.selectedTriangleType = null;
                     this.updateUI();
                     this.initMainDomeView();
@@ -700,14 +720,8 @@ class DomeSimulator {
             });
         };
 
-        // If baseCount isn't calculated in the new face-based logic, just show all
-        if (this.strutTypes.some(s => s.baseCount > 0)) {
-            createSection('Base Ring', s => s.baseCount > 0);
-            createSection('Verticals (Standing on Base)', s => s.standCount > 0);
-            createSection('Dome Canopy', s => (s.count - s.baseCount - s.standCount) > 0);
-        } else {
-            createSection('All Struts', s => true);
-        }
+        // Just show all struts as one list to avoid duplication
+        createSection('All Struts', s => true);
     }
     
     initMainDomeView() {
@@ -1006,11 +1020,10 @@ class DomeSimulator {
                 const miter = Math.abs(90 - angleAtVertex);
                 const length = sides[i] * 1000;
                 
-                // Round values for grouping
+                // Round values for grouping (ignore bevel to avoid V1 duplicate groups)
                 const rLen = Math.round(length);
                 const rMiter = Math.round(miter * 10) / 10;
-                const rBevel = Math.round(bevel * 10) / 10;
-                const key = `${rLen}_${rMiter}_${rBevel}`;
+                const key = `${rLen}_${rMiter}`;
 
                 if (!strutMap.has(key)) {
                     strutMap.set(key, { length, miter, bevel, count: 0, baseCount: 0, standCount: 0 });
@@ -1534,9 +1547,15 @@ class DomeSimulator {
                 this.strutMeshes.set(strutKey, strutMesh);
                 
                 if (this.selectedStrutType && strut.type === this.selectedStrutType.type) {
+                    const isFlashing = this.highlightStrutTypeUntil && Date.now() < this.highlightStrutTypeUntil;
                     strutMesh.material.emissive.setHex(new THREE.Color(strut.color).getHex());
-                    strutMesh.material.emissiveIntensity = 0.6;
+                    strutMesh.material.emissiveIntensity = isFlashing ? 0.8 : 0.3;
                     
+                    if (isFlashing) {
+                        strutMesh.material.opacity = 0.9;
+                        strutMesh.material.transparent = true;
+                    }
+
                     if (!this.highlightedStrutMoved) {
                         // Move this specific strut out to inspect it
                         const centerOut = strutMesh.position.clone().setY(0).normalize();
