@@ -1398,7 +1398,7 @@ class DomeSimulator {
                 }
 
                 const angleAtVertex = angles[i] * 180 / Math.PI;
-                const miter = Math.abs(90 - (angleAtVertex / 2));
+                const miter = Math.abs(90 - angleAtVertex);
                 const length = sides[i] * 1000;
                 
                 // Round values for grouping
@@ -1926,7 +1926,7 @@ class DomeSimulator {
                     length: strut.length,
                     type: typeData?.type || 'A',
                     color: typeData?.color || '#000000',
-                    miterAngle: Math.abs(90 - ((strut.angle * 180 / Math.PI) / 2)),
+                    miterAngle: Math.abs(90 - (strut.angle * 180 / Math.PI)),
                     bevelAngle: typeData?.bevelAngle || 0,
                     vertices: strut.vertices,
                     angle: strut.angle
@@ -2020,12 +2020,15 @@ class DomeSimulator {
         const visualThickness = isBase ? 1.5 : 1.0;
         const width = (this.strutWidth / 1000) * visualThickness;
         
-        const boardLength = length;
+        // In the Good Karma system, the butt end is shortened by width / tan(alpha)
+        const alpha = strutInfo.angle; // Corner angle at v1 in radians
+        const shortening = width / Math.tan(alpha);
+        const boardLength = length - shortening;
         
         const miterAngleRad = (strutInfo.miterAngle || 0) * Math.PI / 180;
         const bevelAngleRad = (strutInfo.bevelAngle || 0) * Math.PI / 180;
         
-        const strutGeometry = this.createStrutGeometryForDome(boardLength, miterAngleRad, miterAngleRad, bevelAngleRad, isBase);
+        const strutGeometry = this.createStrutGeometryForDome(boardLength, miterAngleRad, 0, bevelAngleRad, isBase);
         
         let color = strutInfo.color;
         let metalness = 0.3;
@@ -2048,8 +2051,8 @@ class DomeSimulator {
         
         const strutMesh = new THREE.Mesh(strutGeometry, strutMaterial);
         
-        // No shortening shift needed for point cuts
-        const shiftAlongEdge = new THREE.Vector3(0, 0, 0);
+        // Shift along the edge by shortening / 2 towards the lap end (v2)
+        const shiftAlongEdge = U.clone().multiplyScalar(shortening / 2);
         // Do not shift inwards for standard centered geodesic edges
         const shiftInwards = new THREE.Vector3(0, 0, 0);
         
@@ -2129,23 +2132,23 @@ class DomeSimulator {
         const width = (this.strutWidth / 1000) * visualThickness; // Convert mm to meters
         const height = (this.strutHeight / 1000) * visualThickness; // Convert mm to meters
         
-        // Create box geometry with 2 width segments to have a centerline of vertices for the double miter point
-        const geometry = new THREE.BoxGeometry(width, boardLength, height, 2, 1, 1);
+        // Create box geometry (widthSegments = 1 is fine for single miter)
+        const geometry = new THREE.BoxGeometry(width, boardLength, height, 1, 1, 1);
         
         const positions = geometry.attributes.position;
         const vertex = new THREE.Vector3();
         
-        // Apply flat compound cuts to vertices: lap end at y > 0 (miter=0) and butt end at y < 0 (miter=miterAngle)
+        // Apply flat compound cuts to vertices: lap end at y > 0 (miter=miterAngle2Rad) and butt end at y < 0 (miter=miterAngle1Rad)
         for (let i = 0; i < positions.count; i++) {
             vertex.fromBufferAttribute(positions, i);
             
             if (vertex.y > 0) {
-                // Top end: Double miter to form a point
-                const newY = boardLength / 2 - Math.abs(vertex.x) * Math.tan(miterAngle2Rad) + vertex.z * Math.tan(bevelAngleRad);
+                // Top end: Single miter cut
+                const newY = boardLength / 2 - vertex.x * Math.tan(miterAngle2Rad) + vertex.z * Math.tan(bevelAngleRad);
                 positions.setY(i, newY);
             } else {
-                // Bottom end: Double miter to form a point
-                const newY = -boardLength / 2 + Math.abs(vertex.x) * Math.tan(miterAngle1Rad) - vertex.z * Math.tan(bevelAngleRad);
+                // Bottom end: Single miter cut
+                const newY = -boardLength / 2 + vertex.x * Math.tan(miterAngle1Rad) - vertex.z * Math.tan(bevelAngleRad);
                 positions.setY(i, newY);
             }
         }
