@@ -288,9 +288,14 @@ class DomeSimulator {
         // Bind explode joints toggle
         const explodeJointsToggle = document.getElementById('explode-joints-toggle');
         if (explodeJointsToggle) {
-            this.explodeJoints = explodeJointsToggle.checked;
-            explodeJointsToggle.addEventListener('change', (e) => {
-                this.explodeJoints = e.target.checked;
+            this.explodeJoints = false;
+            explodeJointsToggle.addEventListener('click', (e) => {
+                this.explodeJoints = !this.explodeJoints;
+                if(this.explodeJoints) {
+                    explodeJointsToggle.classList.add('text-sky-400');
+                } else {
+                    explodeJointsToggle.classList.remove('text-sky-400');
+                }
                 this.initMainDomeView();
             });
         } else {
@@ -2004,7 +2009,7 @@ class DomeSimulator {
         const miterAngleRad = (strutInfo.miterAngle || 0) * Math.PI / 180;
         const bevelAngleRad = (strutInfo.bevelAngle || 0) * Math.PI / 180;
         
-        const strutGeometry = this.createStrutGeometryForDome(boardLength, miterAngleRad, bevelAngleRad, isBase);
+        const strutGeometry = this.createStrutGeometryForDome(boardLength, miterAngleRad, miterAngleRad, bevelAngleRad, isBase);
         
         let color = strutInfo.color;
         let metalness = 0.3;
@@ -2100,7 +2105,7 @@ class DomeSimulator {
         triangleMesh.add(borderLines);
     }
     
-    createStrutGeometryForDome(boardLength, miterAngleRad, bevelAngleRad, isBase = false) {
+    createStrutGeometryForDome(boardLength, miterAngle1Rad, miterAngle2Rad, bevelAngleRad, isBase = false) {
         // Create rectangular strut geometry matching actual dimensions (Good Karma hubless style)
         
         // Base struts can be drawn slightly thicker for visual grounding
@@ -2108,8 +2113,8 @@ class DomeSimulator {
         const width = (this.strutWidth / 1000) * visualThickness; // Convert mm to meters
         const height = (this.strutHeight / 1000) * visualThickness; // Convert mm to meters
         
-        // Create box geometry with proper rectangular cross-section
-        const geometry = new THREE.BoxGeometry(width, boardLength, height);
+        // Create box geometry with 2 width segments to have a centerline of vertices for the double miter point
+        const geometry = new THREE.BoxGeometry(width, boardLength, height, 2, 1, 1);
         
         const positions = geometry.attributes.position;
         const vertex = new THREE.Vector3();
@@ -2119,12 +2124,12 @@ class DomeSimulator {
             vertex.fromBufferAttribute(positions, i);
             
             if (vertex.y > 0) {
-                // Lap end: miter = 0, bevel = bevelAngle
-                const newY = boardLength / 2 + vertex.z * Math.tan(bevelAngleRad);
+                // Top end: Double miter to form a point
+                const newY = boardLength / 2 - Math.abs(vertex.x) * Math.tan(miterAngle2Rad) + vertex.z * Math.tan(bevelAngleRad);
                 positions.setY(i, newY);
             } else {
-                // Butt end: miter = miterAngle, bevel = bevelAngle
-                const newY = -boardLength / 2 - vertex.x * Math.tan(miterAngleRad) - vertex.z * Math.tan(bevelAngleRad);
+                // Bottom end: Double miter to form a point
+                const newY = -boardLength / 2 + Math.abs(vertex.x) * Math.tan(miterAngle1Rad) - vertex.z * Math.tan(bevelAngleRad);
                 positions.setY(i, newY);
             }
         }
