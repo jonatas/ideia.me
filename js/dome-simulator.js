@@ -17,6 +17,9 @@ class DomeSimulator {
         this.minZoom = 0.1;
         this.strutWidth = 40;
         this.strutHeight = 90;
+        this.baseShape = 'icosahedron';
+        this.spherePortion = 'auto';
+        this.structure = 'geodesic'; // geodesic or fullerene
         this.lastTap = 0; // For double-tap detection
         
         // Enhanced Assembly Mode Properties
@@ -39,7 +42,7 @@ class DomeSimulator {
         this.scene = null;
         this.renderer = null;
         this.domeGroup = null;
-        this.allTriangles = [];
+        this.allFaces = [];
         
         // Animation frames
         this.animationId = null;
@@ -141,6 +144,124 @@ class DomeSimulator {
         bind('strut-width', 'strutWidth', false, true);
         bind('strut-height', 'strutHeight', false, true);
         
+        // Bind base shape buttons
+        const btnShapeIcosahedron = document.getElementById('btn-shape-icosahedron');
+        const btnShapeOctahedron = document.getElementById('btn-shape-octahedron');
+        
+        const updateShapeButtons = () => {
+            if (btnShapeIcosahedron) {
+                btnShapeIcosahedron.classList.toggle('text-sky-400', this.baseShape === 'icosahedron');
+                btnShapeIcosahedron.classList.toggle('border-sky-400', this.baseShape === 'icosahedron');
+                btnShapeIcosahedron.classList.toggle('bg-slate-800', this.baseShape === 'icosahedron');
+                btnShapeIcosahedron.classList.toggle('text-slate-400', this.baseShape !== 'icosahedron');
+                btnShapeIcosahedron.classList.toggle('border-slate-700', this.baseShape !== 'icosahedron');
+            }
+            if (btnShapeOctahedron) {
+                btnShapeOctahedron.classList.toggle('text-sky-400', this.baseShape === 'octahedron');
+                btnShapeOctahedron.classList.toggle('border-sky-400', this.baseShape === 'octahedron');
+                btnShapeOctahedron.classList.toggle('bg-slate-800', this.baseShape === 'octahedron');
+                btnShapeOctahedron.classList.toggle('text-slate-400', this.baseShape !== 'octahedron');
+                btnShapeOctahedron.classList.toggle('border-slate-700', this.baseShape !== 'octahedron');
+            }
+        };
+
+        if (btnShapeIcosahedron && btnShapeOctahedron) {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('shape')) {
+                this.baseShape = urlParams.get('shape');
+            }
+            updateShapeButtons();
+
+            const setShape = (shape) => {
+                if (this.baseShape === shape) return;
+                this.baseShape = shape;
+                // Revert structure appropriately based on user expectation
+                this.structure = shape === 'octahedron' ? 'fullerene' : 'geodesic';
+                this.selectedTriangle = null;
+                updateShapeButtons();
+                
+                const newUrlParams = new URLSearchParams(window.location.search);
+                newUrlParams.set('shape', this.baseShape);
+                newUrlParams.set('structure', this.structure);
+                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+                
+                // Manually trigger the struct buttons update
+                const btnStructGeodesic = document.getElementById('btn-struct-geodesic');
+                const btnStructFullerene = document.getElementById('btn-struct-fullerene');
+                if (btnStructGeodesic) {
+                    btnStructGeodesic.classList.toggle('border-sky-400', this.structure === 'geodesic');
+                    btnStructGeodesic.classList.toggle('text-sky-400', this.structure === 'geodesic');
+                    btnStructGeodesic.classList.toggle('border-slate-700', this.structure !== 'geodesic');
+                    btnStructGeodesic.classList.toggle('text-slate-400', this.structure !== 'geodesic');
+                }
+                if (btnStructFullerene) {
+                    btnStructFullerene.classList.toggle('border-sky-400', this.structure === 'fullerene');
+                    btnStructFullerene.classList.toggle('text-sky-400', this.structure === 'fullerene');
+                    btnStructFullerene.classList.toggle('border-slate-700', this.structure !== 'fullerene');
+                    btnStructFullerene.classList.toggle('text-slate-400', this.structure !== 'fullerene');
+                }
+
+                this.initMainDomeView();
+                this.updateUI();
+            };
+
+            btnShapeIcosahedron.addEventListener('click', () => setShape('icosahedron'));
+            btnShapeOctahedron.addEventListener('click', () => setShape('octahedron'));
+        }
+        
+        // Bind sphere portion buttons
+        const btnPortionAuto = document.getElementById('btn-portion-auto');
+        const btnPortionFull = document.getElementById('btn-portion-full');
+
+        const updatePortionButtons = () => {
+            if (btnPortionAuto) {
+                btnPortionAuto.classList.toggle('text-sky-400', this.spherePortion === 'auto');
+                btnPortionAuto.classList.toggle('border-sky-400', this.spherePortion === 'auto');
+                btnPortionAuto.classList.toggle('bg-slate-800', this.spherePortion === 'auto');
+                btnPortionAuto.classList.toggle('text-slate-400', this.spherePortion !== 'auto');
+                btnPortionAuto.classList.toggle('border-slate-700', this.spherePortion !== 'auto');
+            }
+            if (btnPortionFull) {
+                btnPortionFull.classList.toggle('text-sky-400', this.spherePortion === '1/1');
+                btnPortionFull.classList.toggle('border-sky-400', this.spherePortion === '1/1');
+                btnPortionFull.classList.toggle('bg-slate-800', this.spherePortion === '1/1');
+                btnPortionFull.classList.toggle('text-slate-400', this.spherePortion !== '1/1');
+                btnPortionFull.classList.toggle('border-slate-700', this.spherePortion !== '1/1');
+            }
+        };
+
+        if (btnPortionAuto && btnPortionFull) {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('shape')) {
+                this.baseShape = urlParams.get('shape');
+                if (this.baseShape === 'octahedron') {
+                    this.structure = 'fullerene'; // User expectation for octahedron based on acidome
+                }
+            }
+            if (urlParams.has('portion')) {
+                this.spherePortion = urlParams.get('portion');
+            }
+            if (urlParams.has('structure')) {
+                this.structure = urlParams.get('structure');
+            }
+            updatePortionButtons();
+
+            const setPortion = (portion) => {
+                if (this.spherePortion === portion) return;
+                this.spherePortion = portion;
+                this.selectedTriangle = null;
+                updatePortionButtons();
+                const newUrlParams = new URLSearchParams(window.location.search);
+                newUrlParams.set('portion', this.spherePortion);
+                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+                this.initMainDomeView();
+                this.updateUI();
+            };
+
+            btnPortionAuto.addEventListener('click', () => setPortion('auto'));
+            btnPortionFull.addEventListener('click', () => setPortion('1/1'));
+        }
+        
         // Bind flat base toggle
         const flatBaseToggle = document.getElementById('flat-base-toggle');
         if (flatBaseToggle) {
@@ -209,6 +330,50 @@ class DomeSimulator {
                 document.getElementById('zoom-slider').value = 1.0;
                 this.cameraControls?.setCameraTarget(new THREE.Vector3(0, 2, 0));
                 this.updateUI();
+            });
+        }
+
+        const btnStructGeodesic = document.getElementById('btn-struct-geodesic');
+        const btnStructFullerene = document.getElementById('btn-struct-fullerene');
+
+        const updateStructButtons = () => {
+            if (btnStructGeodesic) {
+                btnStructGeodesic.classList.toggle('border-sky-400', this.structure === 'geodesic');
+                btnStructGeodesic.classList.toggle('text-sky-400', this.structure === 'geodesic');
+                btnStructGeodesic.classList.toggle('border-slate-700', this.structure !== 'geodesic');
+                btnStructGeodesic.classList.toggle('text-slate-400', this.structure !== 'geodesic');
+            }
+            if (btnStructFullerene) {
+                btnStructFullerene.classList.toggle('border-sky-400', this.structure === 'fullerene');
+                btnStructFullerene.classList.toggle('text-sky-400', this.structure === 'fullerene');
+                btnStructFullerene.classList.toggle('border-slate-700', this.structure !== 'fullerene');
+                btnStructFullerene.classList.toggle('text-slate-400', this.structure !== 'fullerene');
+            }
+        };
+
+        if (btnStructGeodesic && btnStructFullerene) {
+            updateStructButtons();
+            
+            const setStructureUrlParam = (struct) => {
+                const newUrlParams = new URLSearchParams(window.location.search);
+                newUrlParams.set('structure', struct);
+                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+            };
+
+            btnStructGeodesic.addEventListener('click', () => {
+                this.structure = 'geodesic';
+                this.selectedTriangle = null;
+                setStructureUrlParam('geodesic');
+                updateStructButtons();
+                this.generateGeodesicDome();
+            });
+            
+            btnStructFullerene.addEventListener('click', () => {
+                this.structure = 'fullerene';
+                this.selectedTriangle = null;
+                setStructureUrlParam('fullerene');
+                updateStructButtons();
+                this.generateGeodesicDome();
             });
         }
     }
@@ -469,11 +634,11 @@ class DomeSimulator {
                 return Math.max(1, totalExamples - 1);
             case 1: // Triangle Assembly Phase
                 // Show all triangles one by one from ground up
-                return Math.max(1, this.allTriangles.length - 1);
+                return Math.max(1, this.allFaces.length - 1);
             case 2: // Component Integration Phase (Segments)
                 return Math.max(1, this.assemblySegments.length - 1);
             default:
-                return Math.min(this.allTriangles.length, 20);
+                return Math.min(this.allFaces.length, 20);
         }
     }
     
@@ -760,8 +925,13 @@ class DomeSimulator {
         const mountElement = document.getElementById('main-dome-view');
         if (!mountElement) return;
         
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+            this.animationId = null;
+        }
+        
         // Clear previous renderer
-        if (this.renderer) {
+        if (this.renderer && this.renderer.domElement && this.renderer.domElement.parentNode === mountElement) {
             mountElement.removeChild(this.renderer.domElement);
         }
         
@@ -822,54 +992,75 @@ class DomeSimulator {
     }
     
     calculateGeometry() {
-        this.allTriangles = [];
+        this.allFaces = [];
         this.yRange = null; // Reset cached range
         
-        // Calculate initial icosahedron vertices
-        const phi = (1 + Math.sqrt(5)) / 2;
+        // Calculate initial vertices
         const radius = this.diameter / 2;
-        const t = radius / Math.sqrt(1 + phi * phi);
-        const baseVertices = [
-            new THREE.Vector3(-t, phi * t, 0),
-            new THREE.Vector3(t, phi * t, 0),
-            new THREE.Vector3(-t, -phi * t, 0),
-            new THREE.Vector3(t, -phi * t, 0),
-            new THREE.Vector3(0, -t, phi * t),
-            new THREE.Vector3(0, t, phi * t),
-            new THREE.Vector3(0, -t, -phi * t),
-            new THREE.Vector3(0, t, -phi * t),
-            new THREE.Vector3(phi * t, 0, -t),
-            new THREE.Vector3(phi * t, 0, t),
-            new THREE.Vector3(-phi * t, 0, -t),
-            new THREE.Vector3(-phi * t, 0, t)
-        ];
+        let baseVertices = [];
+        let baseFaces = [];
 
-        // Rotate the icosahedron so that vertex 0 is at the top (0, radius, 0)
-        // to align with the Kruschke method (zenith is a pentagon hub and base is flat)
-        const q = new THREE.Quaternion().setFromUnitVectors(
-            baseVertices[0].clone().normalize(),
-            new THREE.Vector3(0, 1, 0)
-        );
-        baseVertices.forEach(v => v.applyQuaternion(q));
+        if (this.baseShape === 'octahedron') {
+            baseVertices = [
+                new THREE.Vector3(0, radius, 0),    // Top (0)
+                new THREE.Vector3(0, -radius, 0),   // Bottom (1)
+                new THREE.Vector3(radius, 0, 0),    // Right (2)
+                new THREE.Vector3(-radius, 0, 0),   // Left (3)
+                new THREE.Vector3(0, 0, radius),    // Front (4)
+                new THREE.Vector3(0, 0, -radius)    // Back (5)
+            ];
 
-        const baseFaces = [
-            [0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11],
-            [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8],
-            [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9],
-            [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]
-        ];
+            baseFaces = [
+                // Top hemisphere (counter-clockwise looking from outside for outward normal)
+                [0, 4, 2], [0, 3, 4], [0, 5, 3], [0, 2, 5],
+                // Bottom hemisphere
+                [1, 2, 4], [1, 4, 3], [1, 3, 5], [1, 5, 2]
+            ];
+        } else {
+            const phi = (1 + Math.sqrt(5)) / 2;
+            const t = radius / Math.sqrt(1 + phi * phi);
+            baseVertices = [
+                new THREE.Vector3(-t, phi * t, 0),
+                new THREE.Vector3(t, phi * t, 0),
+                new THREE.Vector3(-t, -phi * t, 0),
+                new THREE.Vector3(t, -phi * t, 0),
+                new THREE.Vector3(0, -t, phi * t),
+                new THREE.Vector3(0, t, phi * t),
+                new THREE.Vector3(0, -t, -phi * t),
+                new THREE.Vector3(0, t, -phi * t),
+                new THREE.Vector3(phi * t, 0, -t),
+                new THREE.Vector3(phi * t, 0, t),
+                new THREE.Vector3(-phi * t, 0, -t),
+                new THREE.Vector3(-phi * t, 0, t)
+            ];
+
+            // Rotate the icosahedron so that vertex 0 is at the top (0, radius, 0)
+            // to align with the Kruschke method (zenith is a pentagon hub and base is flat)
+            const q = new THREE.Quaternion().setFromUnitVectors(
+                baseVertices[0].clone().normalize(),
+                new THREE.Vector3(0, 1, 0)
+            );
+            baseVertices.forEach(v => v.applyQuaternion(q));
+
+            baseFaces = [
+                [0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11],
+                [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8],
+                [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9],
+                [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]
+            ];
+        }
 
         // Generate all triangles through subdivision
-        this.allTriangles = [];
+        this.allFaces = [];
         baseFaces.forEach(face => {
             const v1 = baseVertices[face[0]];
             const v2 = baseVertices[face[1]];
             const v3 = baseVertices[face[2]];
-            this.allTriangles.push(...this.subdivideTriangle(v1, v2, v3, this.frequency, radius));
+            this.allFaces.push(...this.subdivideTriangle(v1, v2, v3, this.frequency, radius));
         });
 
         // Apply Kruschke magic fix for flat base
-        if (this.frequency === 3 || this.frequency === 4) {
+        if (this.baseShape === 'icosahedron' && (this.frequency === 3 || this.frequency === 4)) {
             const MAGIC_FIX_RATIO = this.frequency === 3 ? 0.9442890204731844 : (0.22219 / 0.253185 * 0.9983958444733023);
             
             const vertexMap = new Map();
@@ -879,7 +1070,7 @@ class DomeSimulator {
                 vertexMap.set(getVertexKey(v), { v: v.clone(), isPPT: true });
             });
 
-            this.allTriangles.forEach(tri => {
+            this.allFaces.forEach(tri => {
                 tri.forEach((v, i) => {
                     const key = getVertexKey(v);
                     if (!vertexMap.has(key)) {
@@ -892,7 +1083,7 @@ class DomeSimulator {
             const ppts = Array.from(vertexMap.values()).filter(o => o.isPPT).map(o => o.v);
             const connections = new Map();
             
-            this.allTriangles.forEach(tri => {
+            this.allFaces.forEach(tri => {
                 for (let i = 0; i < 3; i++) {
                     const a = tri[i];
                     const b = tri[(i+1)%3];
@@ -922,23 +1113,33 @@ class DomeSimulator {
             });
         }
 
+        // Apply Fullerene transform if selected
+        if (this.structure === 'fullerene') {
+            this.applyFullereneTransform(radius);
+        }
+
         // Filter triangles (keep upper hemisphere / 5/8 dome for odd frequencies)
         // Even frequencies have a flat equator at Y=0.
         // Odd frequencies have a zig-zag equator, extending below Y=0 (creating a 5/8 dome).
         let cutoff = -0.01 * radius;
-        if (this.frequency % 2 !== 0) {
+        if (this.spherePortion === '1/1') {
+            cutoff = -Infinity;
+        } else if (this.baseShape === 'icosahedron' && this.frequency % 2 !== 0) {
             cutoff = this.frequency === 1 ? -0.5 * radius : -0.25 * radius;
         }
 
-        this.allTriangles = this.allTriangles.filter(tri => {
-            const minY = Math.min(tri[0].y, tri[1].y, tri[2].y);
+        this.allFaces = this.allFaces.filter(tri => {
+            let minY = Infinity;
+            tri.forEach(v => {
+                if (v.y < minY) minY = v.y;
+            });
             return minY >= cutoff;
         });
 
         // Set the floor to exactly Y=0 for visual alignment
         // The lowest Y coordinate after the cut should be set to 0.
         let lowestY = Infinity;
-        this.allTriangles.forEach(tri => {
+        this.allFaces.forEach(tri => {
             tri.forEach(v => {
                 if (v.y < lowestY) lowestY = v.y;
             });
@@ -947,7 +1148,7 @@ class DomeSimulator {
         // Offset all points so the base sits exactly on the floor (Y=0)
         // Use a Set to ensure we only offset each unique vertex object once, preventing multiple-subtraction warping.
         const uniqueVertices = new Set();
-        this.allTriangles.forEach(tri => {
+        this.allFaces.forEach(tri => {
             tri.forEach(v => {
                 uniqueVertices.add(v);
             });
@@ -969,6 +1170,105 @@ class DomeSimulator {
         this.createDomeGeometry();
     }
     
+    applyFullereneTransform(radius) {
+        // Acidome's "Fullerene" mode is actually a Truncation operation!
+        const getVertexKey = (v) => `${v.x.toFixed(5)},${v.y.toFixed(5)},${v.z.toFixed(5)}`;
+        const getEdgeKey = (v1, v2) => {
+            const k1 = getVertexKey(v1);
+            const k2 = getVertexKey(v2);
+            return k1 < k2 ? `${k1}-${k2}` : `${k2}-${k1}`;
+        };
+
+        // 1. Generate truncated vertices on every edge
+        const edgeMap = new Map(); // edgeKey -> { v1, v2, pt1, pt2 }
+        this.allFaces.forEach(face => {
+            for (let i = 0; i < face.length; i++) {
+                const v1 = face[i];
+                const v2 = face[(i+1)%face.length];
+                const key = getEdgeKey(v1, v2);
+                if (!edgeMap.has(key)) {
+                    // Create points 1/3 and 2/3 along the edge, normalized
+                    const pt1 = v1.clone().lerp(v2, 1/3).normalize().multiplyScalar(radius);
+                    const pt2 = v1.clone().lerp(v2, 2/3).normalize().multiplyScalar(radius);
+                    edgeMap.set(key, { v1, v2, pt1, pt2 });
+                }
+            }
+        });
+
+        const newFaces = [];
+
+        // 2. Create Hexagon faces for each original triangle
+        this.allFaces.forEach(face => {
+            if (face.length !== 3) return;
+            const A = face[0], B = face[1], C = face[2];
+            const getEdgePoints = (start, end) => {
+                const edge = edgeMap.get(getEdgeKey(start, end));
+                if (getVertexKey(edge.v1) === getVertexKey(start)) {
+                    return { close: edge.pt1, far: edge.pt2 };
+                } else {
+                    return { close: edge.pt2, far: edge.pt1 };
+                }
+            };
+            
+            const edgeAB = getEdgePoints(A, B);
+            const edgeBC = getEdgePoints(B, C);
+            const edgeCA = getEdgePoints(C, A);
+            
+            // Hexagon: A_B, B_A, B_C, C_B, C_A, A_C
+            newFaces.push([
+                edgeAB.close, edgeAB.far,
+                edgeBC.close, edgeBC.far,
+                edgeCA.close, edgeCA.far
+            ]);
+        });
+
+        // 3. Create Polygon faces for each original vertex
+        const vertexEdges = new Map(); // vertexKey -> { V, edges: [{otherV, pt}] }
+        edgeMap.forEach(edge => {
+            const k1 = getVertexKey(edge.v1);
+            if (!vertexEdges.has(k1)) vertexEdges.set(k1, { V: edge.v1, edges: [] });
+            vertexEdges.get(k1).edges.push({ otherV: edge.v2, pt: edge.pt1 });
+            
+            const k2 = getVertexKey(edge.v2);
+            if (!vertexEdges.has(k2)) vertexEdges.set(k2, { V: edge.v2, edges: [] });
+            vertexEdges.get(k2).edges.push({ otherV: edge.v1, pt: edge.pt2 });
+        });
+        
+        vertexEdges.forEach(vData => {
+            const V = vData.V;
+            const edges = vData.edges;
+            if (edges.length < 3) return;
+            
+            const N = V.clone().normalize();
+            const temp = Math.abs(N.x) < 0.9 ? new THREE.Vector3(1,0,0) : new THREE.Vector3(0,1,0);
+            const U = new THREE.Vector3().crossVectors(N, temp).normalize();
+            const V_basis = new THREE.Vector3().crossVectors(N, U).normalize();
+
+            edges.sort((a, b) => {
+                const cA = a.otherV.clone().sub(V);
+                const cB = b.otherV.clone().sub(V);
+                const angleA = Math.atan2(cA.dot(V_basis), cA.dot(U));
+                const angleB = Math.atan2(cB.dot(V_basis), cB.dot(U));
+                return angleA - angleB;
+            });
+            
+            const newFace = edges.map(e => e.pt.clone());
+            // Make sure normal points outward
+            const center = new THREE.Vector3();
+            newFace.forEach(v => center.add(v));
+            center.multiplyScalar(1 / newFace.length);
+            const vA = new THREE.Vector3().subVectors(newFace[1], newFace[0]);
+            const vB = new THREE.Vector3().subVectors(newFace[2], newFace[0]);
+            if (new THREE.Vector3().crossVectors(vA, vB).dot(center) < 0) {
+                newFace.reverse();
+            }
+
+            newFaces.push(newFace);
+        });
+
+        this.allFaces = newFaces;
+    }
+
     subdivideTriangle(v1, v2, v3, frequency, radius) {
         if (frequency === 1) {
             return [[v1.clone(), v2.clone(), v3.clone()]];
@@ -1011,39 +1311,49 @@ class DomeSimulator {
         
         // Map to find adjacent faces for dihedral (bevel) calculation
         const edgeToFaces = new Map();
-        const faceNormals = this.allTriangles.map(tri => {
+        const faceNormals = this.allFaces.map(tri => {
             const vA = new THREE.Vector3().subVectors(tri[1], tri[0]);
             const vB = new THREE.Vector3().subVectors(tri[2], tri[0]);
-            return new THREE.Vector3().crossVectors(vA, vB).normalize();
+            let normal = new THREE.Vector3().crossVectors(vA, vB).normalize();
+            if (normal.dot(tri[0]) < 0) normal.negate();
+            return normal;
         });
 
-        this.allTriangles.forEach((tri, fIdx) => {
-            for (let i = 0; i < 3; i++) {
+        this.allFaces.forEach((tri, fIdx) => {
+            for (let i = 0; i < tri.length; i++) {
                 const v1 = tri[i];
-                const v2 = tri[(i + 1) % 3];
+                const v2 = tri[(i + 1) % tri.length];
                 const key = this.getStrutKey(v1, v2);
                 if (!edgeToFaces.has(key)) edgeToFaces.set(key, []);
                 edgeToFaces.get(key).push(fIdx);
             }
         });
 
-        this.allTriangles.forEach((tri, fIdx) => {
+        const processedEdges = new Set();
+        this.allFaces.forEach((tri, fIdx) => {
             const v = tri.map(vert => vert.clone());
-            const sides = [
-                v[0].distanceTo(v[1]),
-                v[1].distanceTo(v[2]),
-                v[2].distanceTo(v[0])
-            ];
+            const sides = [];
+            const angles = [];
+            for (let i = 0; i < tri.length; i++) {
+                sides.push(v[i].distanceTo(v[(i + 1) % tri.length]));
+            }
+            for (let i = 0; i < tri.length; i++) {
+                const prev = v[(i - 1 + tri.length) % tri.length];
+                const curr = v[i];
+                const next = v[(i + 1) % tri.length];
+                const v1 = new THREE.Vector3().subVectors(prev, curr).normalize();
+                const v2 = new THREE.Vector3().subVectors(next, curr).normalize();
+                angles.push(Math.acos(v1.dot(v2)));
+            }
 
-            const angles = [
-                Math.acos((sides[0]**2 + sides[2]**2 - sides[1]**2) / (2 * sides[0] * sides[2])),
-                Math.acos((sides[0]**2 + sides[1]**2 - sides[2]**2) / (2 * sides[0] * sides[1])),
-                Math.acos((sides[1]**2 + sides[2]**2 - sides[0]**2) / (2 * sides[1] * sides[2]))
-            ];
-
-            for (let i = 0; i < 3; i++) {
-                const v1 = tri[i], v2 = tri[(i + 1) % 3];
+            for (let i = 0; i < tri.length; i++) {
+                const v1 = tri[i], v2 = tri[(i + 1) % tri.length];
                 const edgeKey = this.getStrutKey(v1, v2);
+                
+                // Deduplicate edges so each strut is only counted once
+                if (processedEdges.has(edgeKey)) continue;
+                processedEdges.add(edgeKey);
+
                 const adjacentFaces = edgeToFaces.get(edgeKey);
                 
                 let bevel = 0;
@@ -1064,7 +1374,9 @@ class DomeSimulator {
                 const rLen = Math.round(length);
                 const rMiter = Math.round(miter * 10) / 10;
                 const rBevel = Math.round(bevel * 10) / 10;
-                const key = `${rLen}_${rMiter}_${rBevel}`;
+                
+                // Group strictly by length to get correct A, B, etc. types for geodesic domes
+                const key = `${rLen}`;
 
                 if (!strutMap.has(key)) {
                     strutMap.set(key, { length, miter, bevel, count: 0, baseCount: 0, standCount: 0 });
@@ -1108,7 +1420,7 @@ class DomeSimulator {
         this.assemblySegments = [];
         
         // Analyze each triangle's strut composition
-        this.allTriangles.forEach((tri, idx) => {
+        this.allFaces.forEach((tri, idx) => {
             const strutComposition = this.analyzeTriangleStrutComposition(tri, idx);
             const triangleTypeKey = strutComposition.typeSignature;
             const heightLevel = this.getTriangleHeightLevel(tri);
@@ -1154,21 +1466,18 @@ class DomeSimulator {
     }
 
     getTriangleAzimuth(tri) {
-        const center = new THREE.Vector3(
-            (tri[0].x + tri[1].x + tri[2].x) / 3,
-            0,
-            (tri[0].z + tri[1].z + tri[2].z) / 3
-        );
+        let x = 0, z = 0;
+        tri.forEach(v => { x += v.x; z += v.z; });
+        const center = new THREE.Vector3(x / tri.length, 0, z / tri.length);
         // atan2(x, z) gives angle from Z axis. 0 is Front (+Z).
         return Math.atan2(center.x, center.z);
     }
     
     analyzeTriangleStrutComposition(tri, triangleIndex) {
-        const side1 = tri[0].distanceTo(tri[1]) * 1000;
-        const side2 = tri[1].distanceTo(tri[2]) * 1000;
-        const side3 = tri[2].distanceTo(tri[0]) * 1000;
-        
-        const sides = [side1, side2, side3];
+        const sides = [];
+        for (let i = 0; i < tri.length; i++) {
+            sides.push(tri[i].distanceTo(tri[(i + 1) % tri.length]) * 1000);
+        }
         const strutTypes = sides.map(length => {
             const matchIdx = this.strutTypes.findIndex(st => Math.abs(st.length - length) < 1);
             return this.strutTypes[matchIdx]?.type || 'A';
@@ -1187,7 +1496,9 @@ class DomeSimulator {
     }
     
     getTriangleHeightLevel(tri) {
-        const avgY = (tri[0].y + tri[1].y + tri[2].y) / 3;
+        let avgY = 0;
+        tri.forEach(v => avgY += v.y);
+        avgY /= tri.length;
         
         // Find the actual Y range of all triangles for proper normalization
         if (!this.yRange) {
@@ -1205,14 +1516,14 @@ class DomeSimulator {
     }
     
     calculateYRange() {
-        if (!this.allTriangles || this.allTriangles.length === 0) {
+        if (!this.allFaces || this.allFaces.length === 0) {
             return { min: -0.5, max: 3.5 }; // Fallback
         }
         
         let minY = Infinity;
         let maxY = -Infinity;
         
-        this.allTriangles.forEach(tri => {
+        this.allFaces.forEach(tri => {
             tri.forEach(vertex => {
                 minY = Math.min(minY, vertex.y);
                 maxY = Math.max(maxY, vertex.y);
@@ -1352,7 +1663,7 @@ class DomeSimulator {
             case 2: // Component Integration Phase
                 return this.getTrianglesForIntegration();
             default:
-                return this.allTriangles.slice(0, this.assemblyStep);
+                return this.allFaces.slice(0, this.assemblyStep);
         }
     }
     
@@ -1390,12 +1701,12 @@ class DomeSimulator {
         const assembledTriangles = [];
         
         // Start with ground triangles and build up layer by layer
-        const allTrianglesByHeight = [];
+        const allFacesByHeight = [];
         
         // Collect all triangles with their height levels
         this.triangleTypes.forEach((typeData, typeKey) => {
             typeData.triangles.forEach(triangleData => {
-                allTrianglesByHeight.push({
+                allFacesByHeight.push({
                     triangle: triangleData.triangle,
                     heightLevel: triangleData.heightLevel,
                     azimuth: triangleData.azimuth,
@@ -1406,7 +1717,7 @@ class DomeSimulator {
         });
         
         // Sort by height level (ground first), then door last, then azimuth
-        allTrianglesByHeight.sort((a, b) => {
+        allFacesByHeight.sort((a, b) => {
             if (a.heightLevel !== b.heightLevel) {
                 return a.heightLevel - b.heightLevel;
             }
@@ -1419,9 +1730,9 @@ class DomeSimulator {
         });
         
         // Show triangles up to current assembly step
-        const trianglesToShow = Math.min(this.assemblyStep + 1, allTrianglesByHeight.length);
+        const trianglesToShow = Math.min(this.assemblyStep + 1, allFacesByHeight.length);
         for (let i = 0; i < trianglesToShow; i++) {
-            assembledTriangles.push(allTrianglesByHeight[i].triangle);
+            assembledTriangles.push(allFacesByHeight[i].triangle);
         }
         
         return assembledTriangles;
@@ -1453,9 +1764,10 @@ class DomeSimulator {
     }
     
     trianglesEqual(tri1, tri2) {
+        if (tri1.length !== tri2.length) return false;
         // Check if two triangles are the same (within tolerance)
         const tolerance = 0.001;
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < tri1.length; i++) {
             if (Math.abs(tri1[i].x - tri2[i].x) > tolerance ||
                 Math.abs(tri1[i].y - tri2[i].y) > tolerance ||
                 Math.abs(tri1[i].z - tri2[i].z) > tolerance) {
@@ -1466,6 +1778,21 @@ class DomeSimulator {
     }
     
     createDomeGeometry() {
+        if (this.domeGroup && this.scene) {
+            this.scene.remove(this.domeGroup);
+            // Dispose of materials and geometries to prevent memory leaks
+            this.domeGroup.traverse((child) => {
+                if (child.geometry) child.geometry.dispose();
+                if (child.material) {
+                    if (Array.isArray(child.material)) {
+                        child.material.forEach(m => m.dispose());
+                    } else {
+                        child.material.dispose();
+                    }
+                }
+            });
+        }
+        
         this.domeGroup = new THREE.Group();
         this.strutMeshes = new Map(); // Track strut meshes to avoid duplicates
         this.jointMeshes = new Map(); // Track joint meshes
@@ -1474,20 +1801,25 @@ class DomeSimulator {
         // In assembly mode, show triangles based on phase and step
         const trianglesToShow = this.assemblyMode ? 
             this.getTrianglesToShowInAssembly() : 
-            this.allTriangles;
+            this.allFaces;
+        
+        const renderedEdges = new Set();
         
         trianglesToShow.forEach((tri, displayIdx) => {
-            // Find the original index of this triangle in allTriangles
-            const originalIdx = this.allTriangles.findIndex(originalTri => 
+            // Find the original index of this triangle in allFaces
+            const originalIdx = this.allFaces.findIndex(originalTri => 
                 this.trianglesEqual(tri, originalTri)
             );
             const geometry = new THREE.BufferGeometry();
-            const vertices = new Float32Array([
-                tri[0].x, tri[0].y, tri[0].z,
-                tri[1].x, tri[1].y, tri[1].z,
-                tri[2].x, tri[2].y, tri[2].z
-            ]);
-            geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+            const vertices = [];
+            for (let i = 1; i < tri.length - 1; i++) {
+                vertices.push(
+                    tri[0].x, tri[0].y, tri[0].z,
+                    tri[i].x, tri[i].y, tri[i].z,
+                    tri[i+1].x, tri[i+1].y, tri[i+1].z
+                );
+            }
+            geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(vertices), 3));
             geometry.computeVertexNormals();
 
             const isHighlighted = this.selectedTriangle?.triangleIndex === originalIdx;
@@ -1534,23 +1866,26 @@ class DomeSimulator {
             }
             
             // Calculate strut info
-            const sides = [
-                tri[0].distanceTo(tri[1]) * 1000,
-                tri[1].distanceTo(tri[2]) * 1000,
-                tri[2].distanceTo(tri[0]) * 1000
-            ];
+            const sides = [];
+            const angles = [];
+            for (let i = 0; i < tri.length; i++) {
+                sides.push(tri[i].distanceTo(tri[(i + 1) % tri.length]) * 1000);
+            }
+            for (let i = 0; i < tri.length; i++) {
+                const prev = tri[(i - 1 + tri.length) % tri.length];
+                const curr = tri[i];
+                const next = tri[(i + 1) % tri.length];
+                const v1 = new THREE.Vector3().subVectors(prev, curr).normalize();
+                const v2 = new THREE.Vector3().subVectors(next, curr).normalize();
+                angles.push(Math.acos(v1.dot(v2)));
+            }
             
-            const angles = [
-                Math.acos((sides[0]**2 + sides[2]**2 - sides[1]**2) / (2 * sides[0] * sides[2])),
-                Math.acos((sides[0]**2 + sides[1]**2 - sides[2]**2) / (2 * sides[0] * sides[1])),
-                Math.acos((sides[1]**2 + sides[2]**2 - sides[0]**2) / (2 * sides[1] * sides[2]))
-            ];
+            const strutInfoRaw = [];
+            for (let i = 0; i < tri.length; i++) {
+                strutInfoRaw.push({ length: sides[i], angle: angles[i], vertices: [tri[i], tri[(i+1)%tri.length]] });
+            }
 
-            const strutInfo = [
-                { length: sides[0], angle: angles[0], vertices: [tri[0], tri[1]] },
-                { length: sides[1], angle: angles[1], vertices: [tri[1], tri[2]] },
-                { length: sides[2], angle: angles[2], vertices: [tri[2], tri[0]] }
-            ].map(strut => {
+            const strutInfo = strutInfoRaw.map(strut => {
                 const matchIdx = this.strutTypes.findIndex(st => Math.abs(st.length - strut.length) < 1);
                 const typeData = this.strutTypes[matchIdx];
                 return {
@@ -1567,20 +1902,26 @@ class DomeSimulator {
             mesh.userData = { 
                 triangleIndex: originalIdx, 
                 vertices: tri,
-                center: new THREE.Vector3(
-                    (tri[0].x + tri[1].x + tri[2].x) / 3,
-                    (tri[0].y + tri[1].y + tri[2].y) / 3,
-                    (tri[0].z + tri[1].z + tri[2].z) / 3
-                ),
+                center: (() => {
+                    const c = new THREE.Vector3();
+                    tri.forEach(v => c.add(v));
+                    return c.multiplyScalar(1 / tri.length);
+                })(),
                 struts: strutInfo
             };
             this.domeGroup.add(mesh);
 
             // Create real 3D struts for each triangle face
             strutInfo.forEach((strut, strutIdx) => {
+                const edgeKey = this.getStrutKey(strut.vertices[0], strut.vertices[1]);
+                if (renderedEdges.has(edgeKey)) return;
+                renderedEdges.add(edgeKey);
+
                 const isBase = strut.vertices[0].y < 0.01 && strut.vertices[1].y < 0.01;
-                // The third vertex of this triangle face (opposite to this strut)
-                const thirdVertex = tri[(strutIdx + 2) % 3];
+                // The third vertex used to define the face normal (inward)
+                const c = new THREE.Vector3();
+                tri.forEach(v => c.add(v));
+                const thirdVertex = c.multiplyScalar(1 / tri.length);
                 const strutMesh = this.createRealStrut(strut, thirdVertex, isBase);
                 
                 // Track strut mesh per face
@@ -1678,8 +2019,8 @@ class DomeSimulator {
         
         // Shift along the edge by shortening / 2 towards the lap end (v2)
         const shiftAlongEdge = U.clone().multiplyScalar(shortening / 2);
-        // Shift inwards by width / 2
-        const shiftInwards = I.clone().multiplyScalar(width / 2);
+        // Do not shift inwards for standard centered geodesic edges
+        const shiftInwards = new THREE.Vector3(0, 0, 0);
         
         const midPoint = v1.clone().add(v2).multiplyScalar(0.5).add(shiftAlongEdge).add(shiftInwards);
         strutMesh.position.copy(midPoint);
@@ -1782,8 +2123,8 @@ class DomeSimulator {
         
         // Collect unique vertices from visible triangles only
         const trianglesToShow = this.assemblyMode ? 
-            this.allTriangles.slice(0, this.assemblyStep) : 
-            this.allTriangles;
+            this.allFaces.slice(0, this.assemblyStep) : 
+            this.allFaces;
             
         trianglesToShow.forEach(tri => {
             tri.forEach(vertex => {
