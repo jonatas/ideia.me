@@ -124,7 +124,7 @@ permalink: /dome-builder/
                 </div>
             </div>
 
-            <div class="param-group mt-6">
+            <div class="param-group mt-6" id="flat-base-container">
                 <div class="param-item">
                     <label class="flex items-center gap-3 cursor-pointer">
                         <input type="checkbox" id="flat-base-toggle" class="w-4 h-4 text-sky-400 bg-slate-900 border-slate-700 rounded" checked>

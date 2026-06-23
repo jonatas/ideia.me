@@ -432,6 +432,14 @@ class DomeSimulator {
             triangleInfo.classList.add('hidden');
         }
         
+        // Show/hide Flat Base option based on compatibility
+        const flatBaseContainer = document.getElementById('flat-base-container');
+        if (flatBaseContainer) {
+            const hasFlatBase = (this.structure === 'fullerene' && this.spherePortion === '1/1') ||
+                                (this.spherePortion === '1/2' && (this.frequency % 2 === 0 || this.baseShape === 'octahedron'));
+            flatBaseContainer.style.display = hasFlatBase ? 'block' : 'none';
+        }
+        
         // Update strut types list
         this.updateStrutTypesList();
         
@@ -1394,17 +1402,18 @@ class DomeSimulator {
                 
                 // Round values for grouping
                 const rLen = Math.round(length);
-                const rMiter = Math.round(miter * 10) / 10;
                 const rBevel = Math.round(bevel * 10) / 10;
                 
-                // Group strictly by length to get correct A, B, etc. types for geodesic domes
-                const key = `${rLen}`;
+                // Group by length and bevel to separate flat base struts from internal struts
+                const key = `${rLen}-${rBevel}`;
 
                 if (!strutMap.has(key)) {
                     strutMap.set(key, { length, miter, bevel, count: 0, baseCount: 0, standCount: 0 });
                 }
                 const entry = strutMap.get(key);
                 entry.count++;
+                
+                this.edgeToType.set(edgeKey, entry);
 
                 if (isBase) {
                     entry.baseCount++;
@@ -1417,16 +1426,20 @@ class DomeSimulator {
         // Convert Map to sorted array of families
         const families = Array.from(strutMap.values()).sort((a, b) => b.length - a.length);
         
-        this.strutTypes = families.map((f, idx) => ({
-            type: String.fromCharCode(65 + idx),
-            length: f.length,
-            count: f.count,
-            color: ['#4361ee', '#f72585', '#7209b7', '#4ECDC4', '#FBBF24', '#0EA5E9', '#EF4444', '#10b981', '#f78c6b', '#8338ec'][idx % 10],
-            miterAngle: f.miter,
-            bevelAngle: f.bevel,
-            baseCount: f.baseCount,
-            standCount: f.standCount
-        }));
+        this.strutTypes = families.map((f, idx) => {
+            const typeLetter = String.fromCharCode(65 + idx);
+            f.type = typeLetter; // Save type back to entry for edgeToType reference
+            return {
+                type: typeLetter,
+                length: f.length,
+                count: f.count,
+                color: ['#4361ee', '#f72585', '#7209b7', '#4ECDC4', '#FBBF24', '#0EA5E9', '#EF4444', '#10b981', '#f78c6b', '#8338ec'][idx % 10],
+                miterAngle: f.miter,
+                bevelAngle: f.bevel,
+                baseCount: f.baseCount,
+                standCount: f.standCount
+            };
+        });
     }
     
     organizeTrianglesByType() {
@@ -1904,15 +1917,16 @@ class DomeSimulator {
             }
 
             const strutInfo = strutInfoRaw.map(strut => {
-                const isBaseStrut = strut.vertices[0].y < 0.01 && strut.vertices[1].y < 0.01;
-                const matchIdx = this.strutTypes.findIndex(st => Math.abs(st.length - strut.length) < 1);
-                const typeData = this.strutTypes[matchIdx];
+                const edgeKey = this.getStrutKey(strut.vertices[0], strut.vertices[1]);
+                const typeEntry = this.edgeToType.get(edgeKey);
+                const typeData = typeEntry ? this.strutTypes.find(t => t.type === typeEntry.type) : null;
+                
                 return {
                     length: strut.length,
                     type: typeData?.type || 'A',
                     color: typeData?.color || '#000000',
                     miterAngle: Math.abs(90 - ((strut.angle * 180 / Math.PI) / 2)),
-                    bevelAngle: (this.flatBase && isBaseStrut) ? 0 : (typeData?.bevelAngle || 0),
+                    bevelAngle: typeData?.bevelAngle || 0,
                     vertices: strut.vertices,
                     angle: strut.angle
                 };
@@ -2956,6 +2970,7 @@ class DomeSimulator {
                     stageElement.className = 'flex flex-col items-center p-3 rounded-lg transition-all bg-gray-700 text-gray-400 cursor-pointer hover:scale-110 hover:bg-gray-600';
                 }
             }
+            
         }
         
         // Update progress bar
