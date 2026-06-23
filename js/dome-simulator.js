@@ -1335,6 +1335,7 @@ class DomeSimulator {
     
     calculateStrutTypes() {
         const strutMap = new Map(); // Key: length_miter_bevel
+        this.edgeToType = new Map();
         
         // Map to find adjacent faces for dihedral (bevel) calculation
         const edgeToFaces = new Map();
