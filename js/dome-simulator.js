@@ -20,6 +20,7 @@ class DomeSimulator {
         this.baseShape = 'icosahedron';
         this.spherePortion = 'auto';
         this.structure = 'geodesic'; // geodesic or fullerene
+        this.jointStyle = 'karma'; // karma or double
         this.lastTap = 0; // For double-tap detection
         
         // Enhanced Assembly Mode Properties
@@ -262,6 +263,28 @@ class DomeSimulator {
             btnPortionFull.addEventListener('click', () => setPortion('1/1'));
         }
         
+        // Bind joint styles
+        const jointKarma = document.getElementById('joint-karma');
+        const jointDouble = document.getElementById('joint-double');
+        if (jointKarma && jointDouble) {
+            const updateJointParams = (style) => {
+                this.jointStyle = style;
+                const newUrlParams = new URLSearchParams(window.location.search);
+                newUrlParams.set('joint', style);
+                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+                this.initMainDomeView();
+                this.updateUI();
+            };
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('joint')) {
+                this.jointStyle = urlParams.get('joint');
+            }
+            
+            jointKarma.addEventListener('click', () => updateJointParams('karma'));
+            jointDouble.addEventListener('click', () => updateJointParams('double'));
+        }
+        
         // Bind flat base toggle
         const flatBaseToggle = document.getElementById('flat-base-toggle');
         if (flatBaseToggle) {
@@ -430,6 +453,19 @@ class DomeSimulator {
             }
         } else {
             triangleInfo.classList.add('hidden');
+        }
+        
+        // Update joint style buttons
+        const jointKarma = document.getElementById('joint-karma');
+        const jointDouble = document.getElementById('joint-double');
+        if (jointKarma && jointDouble) {
+            if (this.jointStyle === 'double') {
+                jointDouble.className = 'flex-1 py-1.5 px-2 text-[10px] font-bold rounded border border-sky-400 bg-sky-400/10 text-sky-400 transition-colors';
+                jointKarma.className = 'flex-1 py-1.5 px-2 text-[10px] font-bold rounded border border-slate-700 bg-slate-800 text-slate-400 transition-colors';
+            } else {
+                jointKarma.className = 'flex-1 py-1.5 px-2 text-[10px] font-bold rounded border border-sky-400 bg-sky-400/10 text-sky-400 transition-colors';
+                jointDouble.className = 'flex-1 py-1.5 px-2 text-[10px] font-bold rounded border border-slate-700 bg-slate-800 text-slate-400 transition-colors';
+            }
         }
         
         // Show/hide Flat Base option based on compatibility
@@ -913,7 +949,7 @@ class DomeSimulator {
                             <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
                                 <span class="block text-[10px] text-slate-400 mb-1">1. Miter Cut (Sway)</span>
                                 <span style="color: #fb7185" class="font-mono text-sm">${strut.miterAngle.toFixed(1)}°</span>
-                                <div class="mt-1 text-[10px] text-slate-500">Both Ends</div>
+                                <div class="mt-1 text-[10px] text-slate-500">${this.jointStyle === 'double' ? 'Both Ends (Point/V-Cut)' : 'One End Only (Butt)'}</div>
                             </div>
                             <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
                                 <span class="block text-[10px] text-slate-400 mb-1">2. Bevel Cut (Tilt)</span>
@@ -1398,7 +1434,7 @@ class DomeSimulator {
                 }
 
                 const angleAtVertex = angles[i] * 180 / Math.PI;
-                const miter = Math.abs(90 - angleAtVertex);
+                const miter = this.jointStyle === 'double' ? Math.abs(90 - (angleAtVertex / 2)) : Math.abs(90 - angleAtVertex);
                 const length = sides[i] * 1000;
                 
                 // Round values for grouping
@@ -1921,13 +1957,14 @@ class DomeSimulator {
                 const edgeKey = this.getStrutKey(strut.vertices[0], strut.vertices[1]);
                 const typeEntry = this.edgeToType.get(edgeKey);
                 const typeData = typeEntry ? this.strutTypes.find(t => t.type === typeEntry.type) : null;
+                const isBaseStrut = strut.vertices[0].y < 0.01 && strut.vertices[1].y < 0.01;
                 
                 return {
                     length: strut.length,
                     type: typeData?.type || 'A',
                     color: typeData?.color || '#000000',
-                    miterAngle: Math.abs(90 - (strut.angle * 180 / Math.PI)),
-                    bevelAngle: typeData?.bevelAngle || 0,
+                    miterAngle: this.jointStyle === 'double' ? Math.abs(90 - ((strut.angle * 180 / Math.PI) / 2)) : Math.abs(90 - (strut.angle * 180 / Math.PI)),
+                    bevelAngle: (this.flatBase && isBaseStrut) ? 0 : (typeData?.bevelAngle || 0),
                     vertices: strut.vertices,
                     angle: strut.angle
                 };
@@ -2020,15 +2057,21 @@ class DomeSimulator {
         const visualThickness = isBase ? 1.5 : 1.0;
         const width = (this.strutWidth / 1000) * visualThickness;
         
+        let boardLength = length;
+        let shortening = 0;
+        
         // In the Good Karma system, the butt end is shortened by width / tan(alpha)
-        const alpha = strutInfo.angle; // Corner angle at v1 in radians
-        const shortening = width / Math.tan(alpha);
-        const boardLength = length - shortening;
+        if (this.jointStyle === 'karma') {
+            const alpha = strutInfo.angle; // Corner angle at v1 in radians
+            shortening = width / Math.tan(alpha);
+            boardLength = length - shortening;
+        }
         
         const miterAngleRad = (strutInfo.miterAngle || 0) * Math.PI / 180;
         const bevelAngleRad = (strutInfo.bevelAngle || 0) * Math.PI / 180;
         
-        const strutGeometry = this.createStrutGeometryForDome(boardLength, miterAngleRad, 0, bevelAngleRad, isBase);
+        const lapMiter = this.jointStyle === 'double' ? miterAngleRad : 0;
+        const strutGeometry = this.createStrutGeometryForDome(boardLength, lapMiter, miterAngleRad, bevelAngleRad, isBase);
         
         let color = strutInfo.color;
         let metalness = 0.3;
@@ -2132,24 +2175,36 @@ class DomeSimulator {
         const width = (this.strutWidth / 1000) * visualThickness; // Convert mm to meters
         const height = (this.strutHeight / 1000) * visualThickness; // Convert mm to meters
         
-        // Create box geometry (widthSegments = 1 is fine for single miter)
-        const geometry = new THREE.BoxGeometry(width, boardLength, height, 1, 1, 1);
+        const wSegs = this.jointStyle === 'double' ? 2 : 1;
+        const geometry = new THREE.BoxGeometry(width, boardLength, height, wSegs, 1, 1);
         
         const positions = geometry.attributes.position;
         const vertex = new THREE.Vector3();
         
-        // Apply flat compound cuts to vertices: lap end at y > 0 (miter=miterAngle2Rad) and butt end at y < 0 (miter=miterAngle1Rad)
+        // Apply flat compound cuts to vertices
         for (let i = 0; i < positions.count; i++) {
             vertex.fromBufferAttribute(positions, i);
             
-            if (vertex.y > 0) {
-                // Top end: Single miter cut
-                const newY = boardLength / 2 - vertex.x * Math.tan(miterAngle2Rad) + vertex.z * Math.tan(bevelAngleRad);
-                positions.setY(i, newY);
+            if (this.jointStyle === 'double') {
+                if (vertex.y > 0) {
+                    // Top end: Double miter to form a point
+                    const newY = boardLength / 2 - Math.abs(vertex.x) * Math.tan(miterAngle2Rad) + vertex.z * Math.tan(bevelAngleRad);
+                    positions.setY(i, newY);
+                } else {
+                    // Bottom end: Double miter to form a point
+                    const newY = -boardLength / 2 + Math.abs(vertex.x) * Math.tan(miterAngle1Rad) - vertex.z * Math.tan(bevelAngleRad);
+                    positions.setY(i, newY);
+                }
             } else {
-                // Bottom end: Single miter cut
-                const newY = -boardLength / 2 + vertex.x * Math.tan(miterAngle1Rad) - vertex.z * Math.tan(bevelAngleRad);
-                positions.setY(i, newY);
+                if (vertex.y > 0) {
+                    // Top end: Single miter cut
+                    const newY = boardLength / 2 - vertex.x * Math.tan(miterAngle2Rad) + vertex.z * Math.tan(bevelAngleRad);
+                    positions.setY(i, newY);
+                } else {
+                    // Bottom end: Single miter cut
+                    const newY = -boardLength / 2 + vertex.x * Math.tan(miterAngle1Rad) - vertex.z * Math.tan(bevelAngleRad);
+                    positions.setY(i, newY);
+                }
             }
         }
         

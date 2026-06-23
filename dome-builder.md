@@ -124,6 +124,16 @@ permalink: /dome-builder/
                 </div>
             </div>
 
+            <div class="param-group mt-6">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="param-label">Joint Style</span>
+                </div>
+                <div class="flex gap-2">
+                    <button id="joint-karma" class="flex-1 py-1.5 px-2 text-[10px] font-bold rounded border border-sky-400 bg-sky-400/10 text-sky-400 transition-colors">Good Karma</button>
+                    <button id="joint-double" class="flex-1 py-1.5 px-2 text-[10px] font-bold rounded border border-slate-700 bg-slate-800 text-slate-400 transition-colors">Double Cut</button>
+                </div>
+            </div>
+
             <div class="param-group mt-6" id="flat-base-container">
                 <div class="param-item">
                     <label class="flex items-center gap-3 cursor-pointer">
