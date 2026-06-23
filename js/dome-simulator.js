@@ -1389,7 +1389,7 @@ class DomeSimulator {
                 }
 
                 const angleAtVertex = angles[i] * 180 / Math.PI;
-                const miter = Math.abs(90 - angleAtVertex);
+                const miter = Math.abs(90 - (angleAtVertex / 2));
                 const length = sides[i] * 1000;
                 
                 // Round values for grouping
@@ -1904,14 +1904,15 @@ class DomeSimulator {
             }
 
             const strutInfo = strutInfoRaw.map(strut => {
+                const isBaseStrut = strut.vertices[0].y < 0.01 && strut.vertices[1].y < 0.01;
                 const matchIdx = this.strutTypes.findIndex(st => Math.abs(st.length - strut.length) < 1);
                 const typeData = this.strutTypes[matchIdx];
                 return {
                     length: strut.length,
                     type: typeData?.type || 'A',
                     color: typeData?.color || '#000000',
-                    miterAngle: Math.abs(90 - (strut.angle * 180 / Math.PI)),
-                    bevelAngle: typeData?.bevelAngle || 0,
+                    miterAngle: Math.abs(90 - ((strut.angle * 180 / Math.PI) / 2)),
+                    bevelAngle: (this.flatBase && isBaseStrut) ? 0 : (typeData?.bevelAngle || 0),
                     vertices: strut.vertices,
                     angle: strut.angle
                 };
@@ -2004,10 +2005,7 @@ class DomeSimulator {
         const visualThickness = isBase ? 1.5 : 1.0;
         const width = (this.strutWidth / 1000) * visualThickness;
         
-        // In the Good Karma system, the butt end is shortened by width / tan(alpha)
-        const alpha = strutInfo.angle; // Corner angle at v1 in radians
-        const shortening = width / Math.tan(alpha);
-        const boardLength = length - shortening;
+        const boardLength = length;
         
         const miterAngleRad = (strutInfo.miterAngle || 0) * Math.PI / 180;
         const bevelAngleRad = (strutInfo.bevelAngle || 0) * Math.PI / 180;
@@ -2035,8 +2033,8 @@ class DomeSimulator {
         
         const strutMesh = new THREE.Mesh(strutGeometry, strutMaterial);
         
-        // Shift along the edge by shortening / 2 towards the lap end (v2)
-        const shiftAlongEdge = U.clone().multiplyScalar(shortening / 2);
+        // No shortening shift needed for point cuts
+        const shiftAlongEdge = new THREE.Vector3(0, 0, 0);
         // Do not shift inwards for standard centered geodesic edges
         const shiftInwards = new THREE.Vector3(0, 0, 0);
         
