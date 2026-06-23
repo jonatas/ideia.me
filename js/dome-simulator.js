@@ -343,7 +343,11 @@ class DomeSimulator {
                 this.viewMode = 'full';
                 this.zoom = 1.0;
                 document.getElementById('zoom-slider').value = 1.0;
-                this.cameraControls?.setCameraTarget(new THREE.Vector3(0, 2, 0));
+                this.cameraTarget = undefined;
+                this.cameraDistance = undefined;
+                this.cameraTheta = undefined;
+                this.cameraPhi = undefined;
+                this.initMainDomeView();
                 this.updateUI();
             });
         }
@@ -1371,14 +1375,17 @@ class DomeSimulator {
 
                 const adjacentFaces = edgeToFaces.get(edgeKey);
                 
+                const isBase = v1.y < 0.01 && v2.y < 0.01;
+                const isStand = (v1.y < 0.01 && v2.y >= 0.01) || (v2.y < 0.01 && v1.y >= 0.01);
+
                 let bevel = 0;
-                if (adjacentFaces.length === 2) {
+                if (this.flatBase && isBase) {
+                    // Base struts usually have a 0 bevel or a specific angle for the foundation
+                    bevel = 0;
+                } else if (adjacentFaces.length === 2) {
                     const n1 = faceNormals[adjacentFaces[0]];
                     const n2 = faceNormals[adjacentFaces[1]];
                     bevel = (n1.angleTo(n2) * 180 / Math.PI) / 2;
-                } else if (this.flatBase && adjacentFaces.length === 1) {
-                    // Base struts usually have a 0 bevel or a specific angle for the foundation
-                    bevel = 0;
                 }
 
                 const angleAtVertex = angles[i] * 180 / Math.PI;
@@ -1398,10 +1405,6 @@ class DomeSimulator {
                 }
                 const entry = strutMap.get(key);
                 entry.count++;
-
-                // Determine if this edge is on the base or stands on the base
-                const isBase = v1.y < 0.01 && v2.y < 0.01;
-                const isStand = (v1.y < 0.01 && v2.y >= 0.01) || (v2.y < 0.01 && v1.y >= 0.01);
 
                 if (isBase) {
                     entry.baseCount++;
@@ -2248,12 +2251,17 @@ class DomeSimulator {
         let isDragging = false;
         let isRightDragging = false;
         let previousMousePosition = { x: 0, y: 0 };
-        let cameraTarget = new THREE.Vector3(0, 2, 0);
-        let cameraDistance = 12;
-        let cameraTheta = Math.PI / 4; // Horizontal rotation
-        let cameraPhi = Math.PI / 3; // Vertical rotation
+        let cameraTarget = this.cameraTarget || new THREE.Vector3(0, 2, 0);
+        let cameraDistance = this.cameraDistance || 12;
+        let cameraTheta = this.cameraTheta !== undefined ? this.cameraTheta : Math.PI / 4; // Horizontal rotation
+        let cameraPhi = this.cameraPhi !== undefined ? this.cameraPhi : Math.PI / 3; // Vertical rotation
 
         const updateCameraPosition = () => {
+            this.cameraTarget = cameraTarget;
+            this.cameraDistance = cameraDistance;
+            this.cameraTheta = cameraTheta;
+            this.cameraPhi = cameraPhi;
+            
             if (this.viewMode === 'full') {
                 // Handle selection-based camera positioning
                 if (this.selectedJoint) {
