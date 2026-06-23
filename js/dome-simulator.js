@@ -283,6 +283,16 @@ class DomeSimulator {
                 this.initMainDomeView();
                 this.updateUI();
             });
+        }
+
+        // Bind explode joints toggle
+        const explodeJointsToggle = document.getElementById('explode-joints-toggle');
+        if (explodeJointsToggle) {
+            this.explodeJoints = explodeJointsToggle.checked;
+            explodeJointsToggle.addEventListener('change', (e) => {
+                this.explodeJoints = e.target.checked;
+                this.initMainDomeView();
+            });
         } else {
             this.flatBase = true;
         }
@@ -2023,6 +2033,11 @@ class DomeSimulator {
         const shiftInwards = new THREE.Vector3(0, 0, 0);
         
         const midPoint = v1.clone().add(v2).multiplyScalar(0.5).add(shiftAlongEdge).add(shiftInwards);
+        
+        if (this.explodeJoints) {
+            midPoint.multiplyScalar(1.08); // Radially scale position outward by 8% to detach joints
+        }
+        
         strutMesh.position.copy(midPoint);
         
         // Create rotation matrix to align local axes (X, Y, Z) with (X_basis, Y_basis, Z_basis)
