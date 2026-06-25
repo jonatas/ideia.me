@@ -21,7 +21,8 @@ class DomeSimulator {
         this.spherePortion = 'auto';
         this.structure = 'geodesic'; // geodesic or fullerene
         this.jointStyle = 'karma'; // karma or double
-        this.independentTriangles = this.jointStyle === 'karma'; // Good Karma uses panelized double struts
+
+        this.independentTriangles = this.jointStyle === 'karma';
         this.lastTap = 0; // For double-tap detection
         
         // Enhanced Assembly Mode Properties
@@ -2030,7 +2031,7 @@ class DomeSimulator {
                     color: typeData?.color || '#000000',
                     miterAngleStart: this.jointStyle === 'double' ? Math.abs(90 - ((strut.angleStart * 180 / Math.PI) / 2)) : Math.abs(90 - (strut.angleStart * 180 / Math.PI)),
                     miterAngleEnd: this.jointStyle === 'double' ? Math.abs(90 - ((strut.angleEnd * 180 / Math.PI) / 2)) : Math.abs(90 - (strut.angleEnd * 180 / Math.PI)),
-                    bevelAngle: (this.flatBase && isBaseStrut) ? 0 : (typeData?.bevelAngle || 0),
+                    bevelAngle: typeData?.bevelAngle || 0,
                     vertices: strut.vertices,
                     angleStart: strut.angleStart,
                     angleEnd: strut.angleEnd
@@ -2134,7 +2135,8 @@ class DomeSimulator {
         const miterAngleEndRad = (strutInfo.miterAngleEnd || 0) * Math.PI / 180;
         const bevelAngleRad = (strutInfo.bevelAngle || 0) * Math.PI / 180;
         
-        const effWidth = width + height * Math.abs(Math.tan(bevelAngleRad));
+        // True projected width on the bisecting plane (or face plane)
+        const apparentWidth = width * Math.cos(bevelAngleRad) + height * Math.abs(Math.sin(bevelAngleRad));
         
         if (this.jointStyle === 'karma') {
             if (this.independentTriangles) {
@@ -2144,18 +2146,19 @@ class DomeSimulator {
                 const alphaEnd = strutInfo.angleEnd;
                 
                 // Lap end (v1): Outer corner exactly touches the vertex. 
-                shorteningV1 = (effWidth / 2) * Math.tan(miterAngleStartRad);
+                shorteningV1 = (apparentWidth / 2) * Math.tan(miterAngleStartRad);
                 
                 // Butt end (v2): Outer corner touches the inner corner of the adjacent Lap strut.
-                shorteningV2 = (effWidth / Math.sin(alphaEnd)) + (effWidth / 2) * Math.tan(miterAngleEndRad);
+                shorteningV2 = (apparentWidth / Math.sin(alphaEnd)) + (apparentWidth / 2) * Math.tan(miterAngleEndRad);
+                
+                // Add clearance to prevent raycaster false positives due to simple miter geometric overlap
+                shorteningV1 += 0.025;
+                shorteningV2 += 0.025;
             } else {
                 // Original single-layer karma (centered square cuts)
-                const alpha = strutInfo.angleStart || strutInfo.angle; 
-                // Exact formula considering bevel rotation: 
-                // The apparent width from the centerline is (W/2)*cos(B) + (H/2)*sin(B).
-                const apparentWidth = (width / 2) * Math.cos(bevelAngleRad) + (height / 2) * Math.abs(Math.sin(bevelAngleRad));
+                const alpha = strutInfo.angleStart || strutInfo.angle;
                 // Add a tiny tolerance to prevent floating point intersection detection in raycaster
-                const short = apparentWidth / Math.tan(alpha / 2) + 0.002;
+                const short = (apparentWidth / 2) / Math.tan(alpha / 2) + 0.002;
                 shorteningV1 = short;
                 shorteningV2 = short;
             }
@@ -2165,17 +2168,22 @@ class DomeSimulator {
         
         // For independent triangles, use negative miter to make the outside edge longer.
         // For single-lattice double, use positive miter to make the center the longest point.
+        // miter1 is applied to +z (which is v2), miter2 is applied to -z (which is v1)
+        // Therefore, lapMiter (for v1) must be passed as miter2, and buttMiter (for v2) as miter1.
         let lapMiter = this.independentTriangles ? -miterAngleStartRad : miterAngleStartRad;
         let buttMiter = this.independentTriangles ? miterAngleEndRad : miterAngleEndRad;
         
-        let bevelCutAngle = bevelAngleRad;
-        
-        // Single-lattice karma uses centered square cuts, so miters must be 0, but end-bevels must remain to make the cut vertical
         if (this.jointStyle === 'karma' && !this.independentTriangles) {
             lapMiter = 0;
             buttMiter = 0;
         }
-        const strutGeometry = this.createStrutGeometryForDome(boardLength, lapMiter, buttMiter, bevelCutAngle, isBase);
+        
+        let strutGeometry = null;
+        if (this.structure === 'fullerene') {
+            strutGeometry = this.createStrutGeometryForFullerene(boardLength, bevelAngleRad);
+        } else {
+            strutGeometry = this.createStrutGeometryForDome(boardLength, buttMiter, lapMiter, bevelAngleRad, isBase);
+        }
         
         let color = strutInfo.color;
         let metalness = 0.1; // Reduced metalness to avoid washed-out white highlights
@@ -2199,11 +2207,14 @@ class DomeSimulator {
         const strutMesh = new THREE.Mesh(strutGeometry, strutMaterial);
         
         // Shift along the edge to center the board between the two shortenings
-        // Center of the physical board = v1 + shorteningV1 * U + (boardLength / 2) * U
-        const physicalCenterDist = shorteningV1 + boardLength / 2;
-        const mathematicalCenterDist = length / 2;
-        const shiftAmount = physicalCenterDist - mathematicalCenterDist;
-        const shiftAlongEdge = U.clone().multiplyScalar(shiftAmount);
+        // shiftAlongEdge shifts the midpoint. 
+        // If we want +z (v2) to have gap S2, and -z (v1) to have gap S1:
+        // The +z end is at midPoint + boardLength/2.
+        // We want it to be at v2 - S2 = v1 + L - S2.
+        // midPoint = v1 + L - S2 - (L - S1 - S2)/2 = v1 + L/2 + (S1 - S2)/2.
+        // So shift from center (v1 + L/2) is (S1 - S2)/2.
+        const shiftMag = (shorteningV1 - shorteningV2) / 2;
+        const shiftAlongEdge = U.clone().multiplyScalar(shiftMag);
         
         // For independent triangles, shift inwards so the outer face is on the mathematical edge
         const shiftInwards = this.independentTriangles ? X_basis.clone().multiplyScalar(-width / 2) : new THREE.Vector3(0, 0, 0);
@@ -3744,7 +3755,7 @@ class DomeSimulator {
                 dir.normalize();
 
                 raycaster.set(p1, dir);
-                raycaster.far = length;
+                raycaster.far = 0.0001;
                 const intersects = raycaster.intersectObject(meshB, false);
 
                 if (intersects.length > 0) {
@@ -3788,3 +3799,4 @@ class DomeSimulator {
 
 // Initialize the dome simulator when the page loads
 const domeSimulator = new DomeSimulator();
+window.sim = domeSimulator;
