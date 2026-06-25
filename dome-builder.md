@@ -31,6 +31,24 @@ permalink: /dome-builder/
                 <span class="w-2 h-2 rounded-full bg-slate-700"></span> Zoom: Scroll
             </div>
         </div>
+
+        <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur p-2 rounded-xl border border-slate-700/80 flex gap-2 shadow-lg z-10">
+            <button onclick="domeSimulator.setView('front')" class="w-10 h-10 rounded bg-slate-800 hover:bg-sky-900 border border-slate-600 hover:border-sky-400 flex items-center justify-center text-slate-300 hover:text-white transition-all" title="Front View">
+                <i class="bi bi-box-arrow-in-right"></i>
+            </button>
+            <button onclick="domeSimulator.setView('top')" class="w-10 h-10 rounded bg-slate-800 hover:bg-sky-900 border border-slate-600 hover:border-sky-400 flex items-center justify-center text-slate-300 hover:text-white transition-all" title="Top View">
+                <i class="bi bi-caret-down-square"></i>
+            </button>
+            <button onclick="domeSimulator.setView('diagonal')" class="w-10 h-10 rounded bg-slate-800 hover:bg-sky-900 border border-slate-600 hover:border-sky-400 flex items-center justify-center text-slate-300 hover:text-white transition-all" title="Diagonal View">
+                <i class="bi bi-box"></i>
+            </button>
+            <button onclick="domeSimulator.setView('inner')" class="w-10 h-10 rounded bg-slate-800 hover:bg-sky-900 border border-slate-600 hover:border-sky-400 flex items-center justify-center text-slate-300 hover:text-white transition-all" title="Inner View">
+                <i class="bi bi-bullseye"></i>
+            </button>
+            <button onclick="domeSimulator.setView('joint')" class="w-10 h-10 rounded bg-slate-800 hover:bg-sky-900 border border-slate-600 hover:border-sky-400 flex items-center justify-center text-slate-300 hover:text-white transition-all" title="Joint Focus">
+                <i class="bi bi-zoom-in"></i>
+            </button>
+        </div>
     </div>
 
     <div class="side-panel">

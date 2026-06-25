@@ -2623,6 +2623,14 @@ class DomeSimulator {
             setCameraDistance: (distance) => {
                 cameraDistance = distance;
                 updateCameraPosition();
+            },
+            setCameraTheta: (theta) => {
+                cameraTheta = theta;
+                updateCameraPosition();
+            },
+            setCameraPhi: (phi) => {
+                cameraPhi = phi;
+                updateCameraPosition();
             }
         };
         
@@ -2630,6 +2638,65 @@ class DomeSimulator {
         updateCameraPosition();
     }
     
+    setView(viewName) {
+        if (!this.cameraControls) return;
+        
+        // Reset selections
+        this.selectedJoint = null;
+        this.selectedStrut = null;
+        this.selectedTriangle = null;
+        
+        switch(viewName) {
+            case 'front':
+                this.viewMode = 'full';
+                this.cameraControls.setCameraTheta(Math.PI / 2);
+                this.cameraControls.setCameraPhi(Math.PI / 2);
+                this.cameraControls.setCameraTarget(new THREE.Vector3(0, this.diameter / 2, 0));
+                this.zoom = 1.0;
+                break;
+            case 'top':
+                this.viewMode = 'full';
+                this.cameraControls.setCameraTheta(0);
+                this.cameraControls.setCameraPhi(0.1);
+                this.cameraControls.setCameraTarget(new THREE.Vector3(0, 0, 0));
+                this.zoom = 1.2;
+                break;
+            case 'diagonal':
+                this.viewMode = 'full';
+                this.cameraControls.setCameraTheta(Math.PI / 4);
+                this.cameraControls.setCameraPhi(Math.PI / 3);
+                this.cameraControls.setCameraTarget(new THREE.Vector3(0, this.diameter / 2, 0));
+                this.zoom = 1.0;
+                break;
+            case 'inner':
+                this.viewMode = 'inner';
+                this.zoom = 1.0;
+                break;
+            case 'joint':
+                this.viewMode = 'full';
+                if (this.geometry && this.geometry.joints && this.geometry.joints.length > 0) {
+                    // Find a joint near the front to focus on
+                    let targetJoint = this.geometry.joints[0];
+                    for (let j of this.geometry.joints) {
+                        if (j.position.z > targetJoint.position.z && j.position.y > this.diameter / 4) {
+                            targetJoint = j;
+                        }
+                    }
+                    this.selectedJoint = targetJoint;
+                    this.zoom = 15.0;
+                }
+                break;
+        }
+        
+        const zoomSlider = document.getElementById('zoom-slider');
+        if (zoomSlider) zoomSlider.value = this.zoom;
+        
+        if (this.viewMode === 'full') {
+            this.cameraControls.updateCameraPosition();
+        }
+        this.updateUI();
+    }
+
     animate() {
         this.animationId = requestAnimationFrame(() => this.animate());
         
