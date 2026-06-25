@@ -2026,6 +2026,10 @@ class DomeSimulator {
         // this.createJoints();
 
         this.scene.add(this.domeGroup);
+        if (this.jointStyle === 'karma') {
+            this.validateJointOverlaps();
+        }
+
     }
     
     getStrutKey(v1, v2) {
@@ -2060,15 +2064,27 @@ class DomeSimulator {
         let boardLength = length;
         let shortening = 0;
         
-        // In the Good Karma system, the butt end is shortened by width / tan(alpha)
-        if (this.jointStyle === 'karma') {
-            const alpha = strutInfo.angle; // Corner angle at v1 in radians
-            shortening = width / Math.tan(alpha);
-            boardLength = length - shortening;
-        }
-        
         const miterAngleRad = (strutInfo.miterAngle || 0) * Math.PI / 180;
         const bevelAngleRad = (strutInfo.bevelAngle || 0) * Math.PI / 180;
+        const height = (this.strutHeight / 1000) * visualThickness;
+        
+        // Good Karma style with square cuts (centered):
+        // To prevent square corners from overlapping at the center, we must shorten
+        // BOTH ends by the exact geometry required to kiss the adjacent struts.
+        if (this.jointStyle === 'karma') {
+            const alpha = strutInfo.angle; // Corner angle in radians
+            
+            // Exact distance from vertex to clear a centered square cut without overlap
+            shortening = (width / 2) / Math.tan(alpha / 2);
+            
+            // Prevent bevel overlap: The strut's thickness (height) causes the inner 
+            // bottom edges to collide due to the bevel tilt.
+            const extraShortening = height * Math.tan(bevelAngleRad);
+            shortening += extraShortening;
+            
+            // Shorten BOTH ends of the strut
+            boardLength = length - (2 * shortening);
+        }
         
         const lapMiter = this.jointStyle === 'double' ? miterAngleRad : 0;
         const strutGeometry = this.createStrutGeometryForDome(boardLength, lapMiter, miterAngleRad, bevelAngleRad, isBase);
@@ -2094,8 +2110,9 @@ class DomeSimulator {
         
         const strutMesh = new THREE.Mesh(strutGeometry, strutMaterial);
         
-        // Shift along the edge by shortening / 2 towards the lap end (v2)
-        const shiftAlongEdge = U.clone().multiplyScalar(shortening / 2);
+        // Shift along the edge by shortening / 2 towards the lap end (v2) ONLY if we shortened one end.
+        // For karma, we shortened BOTH ends equally, so the visual center is exactly the edge midpoint.
+        const shiftAlongEdge = (this.jointStyle === 'karma') ? new THREE.Vector3(0, 0, 0) : U.clone().multiplyScalar(shortening / 2);
         // Do not shift inwards for standard centered geodesic edges
         const shiftInwards = new THREE.Vector3(0, 0, 0);
         
@@ -2322,8 +2339,8 @@ class DomeSimulator {
         let isDragging = false;
         let isRightDragging = false;
         let previousMousePosition = { x: 0, y: 0 };
-        let cameraTarget = this.cameraTarget || new THREE.Vector3(0, 2, 0);
-        let cameraDistance = this.cameraDistance || 12;
+        let cameraTarget = this.cameraTarget || new THREE.Vector3(0, this.diameter / 2, 0);
+        let cameraDistance = this.cameraDistance || Math.max(2, this.diameter * 1.5);
         let cameraTheta = this.cameraTheta !== undefined ? this.cameraTheta : Math.PI / 4; // Horizontal rotation
         let cameraPhi = this.cameraPhi !== undefined ? this.cameraPhi : Math.PI / 3; // Vertical rotation
 
@@ -3523,6 +3540,80 @@ class DomeSimulator {
         this.renderer.setSize(mountElement.clientWidth, mountElement.clientHeight);
     }
     
+    validateJointOverlaps() {
+        console.log('Validating overlaps...');
+        const struts = Array.from(this.strutMeshes.values());
+        let overlapFound = false;
+
+        const vertexToStruts = new Map();
+        struts.forEach(strut => {
+            if (!strut.userData || !strut.userData.vertices) return;
+            const v1 = strut.userData.vertices[0];
+            const v2 = strut.userData.vertices[1];
+            const k1 = `${v1.x.toFixed(2)},${v1.y.toFixed(2)},${v1.z.toFixed(2)}`;
+            const k2 = `${v2.x.toFixed(2)},${v2.y.toFixed(2)},${v2.z.toFixed(2)}`;
+            
+            if (!vertexToStruts.has(k1)) vertexToStruts.set(k1, []);
+            if (!vertexToStruts.has(k2)) vertexToStruts.set(k2, []);
+            vertexToStruts.get(k1).push(strut);
+            vertexToStruts.get(k2).push(strut);
+        });
+
+        const overlapMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000, transparent: true, opacity: 0.9, depthTest: false });
+        const overlapGeometry = new THREE.SphereGeometry(0.015, 8, 8);
+
+        const checkPair = (meshA, meshB) => {
+            if (meshA.uuid === meshB.uuid) return;
+            if (!meshA.userData.checkedWith) meshA.userData.checkedWith = new Set();
+            if (!meshB.userData.checkedWith) meshB.userData.checkedWith = new Set();
+            if (meshA.userData.checkedWith.has(meshB.uuid)) return;
+            
+            meshA.userData.checkedWith.add(meshB.uuid);
+            meshB.userData.checkedWith.add(meshA.uuid);
+
+            const edgesA = new THREE.EdgesGeometry(meshA.geometry);
+            const posA = edgesA.attributes.position;
+            const matrixWorldA = meshA.matrixWorld;
+
+            const raycaster = new THREE.Raycaster();
+            
+            for (let i = 0; i < posA.count; i += 2) {
+                const p1 = new THREE.Vector3().fromBufferAttribute(posA, i).applyMatrix4(matrixWorldA);
+                const p2 = new THREE.Vector3().fromBufferAttribute(posA, i + 1).applyMatrix4(matrixWorldA);
+                
+                const dir = new THREE.Vector3().subVectors(p2, p1);
+                const length = dir.length();
+                if (length < 0.001) continue;
+                dir.normalize();
+
+                raycaster.set(p1, dir);
+                raycaster.far = length;
+                const intersects = raycaster.intersectObject(meshB, false);
+
+                if (intersects.length > 0) {
+                    overlapFound = true;
+                    const overlapMesh = new THREE.Mesh(overlapGeometry, overlapMaterial);
+                    overlapMesh.position.copy(intersects[0].point);
+                    this.scene.add(overlapMesh);
+                }
+            }
+        };
+
+        vertexToStruts.forEach((connectedStruts) => {
+            for (let i = 0; i < connectedStruts.length; i++) {
+                for (let j = i + 1; j < connectedStruts.length; j++) {
+                    checkPair(connectedStruts[i], connectedStruts[j]);
+                }
+            }
+        });
+
+        if (overlapFound) {
+            console.log('Overlap detected! Visualizing with red dots.');
+        } else {
+            console.log('Perfect joining! No overlap.');
+        }
+    }
+
     destroy() {
         // Cleanup method
         if (this.animationId) {

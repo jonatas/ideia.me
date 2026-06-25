@@ -102,7 +102,7 @@ permalink: /dome-builder/
                         <span class="param-label">Camera Zoom</span>
                         <span class="param-value" id="zoom-display">1.0x</span>
                     </div>
-                    <input type="range" id="zoom-slider" min="0.1" max="5.0" value="1.0" class="slider" step="0.1">
+                    <input type="range" id="zoom-slider" min="0.1" max="50.0" value="1.0" class="slider" step="0.1">
                 </div>
             </div>
 
