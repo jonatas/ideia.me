@@ -1,10 +1,14 @@
 
 class CamperSimulator {
     constructor() {
+        this.truckBedLength = 1549;
+        this.truckBedWidth = 1410;
+        this.truckBedDepth = 528;
+
         this.frequency = 2;
         this.apexHeight = 1931;
         this.taperStrength = 0.00;
-        this.bedLength = 1500;
+        this.bedLength = 1549;
         this.caboverOverhang = 1626;
         this.cabinClearance = 738;
         this.rearSquaring = 0.43;
@@ -12,7 +16,6 @@ class CamperSimulator {
         this.doorHeight = 1600;
         
         this.truckWidth = 1860;
-        this.truckLength = 1560;
         this.cabinExtension = 1850;
         this.bedRailHeightFromGround = 1370;
 
@@ -95,6 +98,26 @@ class CamperSimulator {
             });
         };
 
+        bind('param-truck-bed-l', 'truckBedLength', 'val-truck-bed-l');
+        bind('param-truck-bed-w', 'truckBedWidth', 'val-truck-bed-w');
+        bind('param-truck-bed-d', 'truckBedDepth', 'val-truck-bed-d');
+
+        const vehicleModelSelect = document.getElementById('param-vehicle-model');
+        if (vehicleModelSelect) {
+            vehicleModelSelect.addEventListener('change', (e) => {
+                if (e.target.value === 'ranger-2021') {
+                    document.getElementById('param-truck-bed-l').value = 1549;
+                    document.getElementById('param-truck-bed-l').dispatchEvent(new Event('input'));
+                    document.getElementById('param-truck-bed-w').value = 1410;
+                    document.getElementById('param-truck-bed-w').dispatchEvent(new Event('input'));
+                    document.getElementById('param-truck-bed-d').value = 528;
+                    document.getElementById('param-truck-bed-d').dispatchEvent(new Event('input'));
+                    document.getElementById('param-stretch').value = 1549;
+                    document.getElementById('param-stretch').dispatchEvent(new Event('input'));
+                }
+            });
+        }
+
         bind('param-freq', 'frequency', 'val-freq', 1, "V");
         bind('param-apex', 'apexHeight', 'val-apex');
         bind('param-taper', 'taperStrength', 'val-taper', 100);
@@ -137,7 +160,7 @@ class CamperSimulator {
     }
 
     generatePillGeometry() {
-        const radius = 1000;
+        const radius = this.truckBedWidth / 2;
         const phi = (1 + Math.sqrt(5)) / 2;
         
         // 1. Generate standard Geodesic Sphere
@@ -250,8 +273,8 @@ class CamperSimulator {
         const frontZOffset = -mainRoomLength / 2;
         const backZOffset = mainRoomLength / 2;
 
-        const yScale = this.apexHeight / 1000;
-        const overhangScale = this.caboverOverhang / 1000;
+        const yScale = this.apexHeight / radius;
+        const overhangScale = this.caboverOverhang / radius;
 
         // Front Dome (Hemisphere Z < 0)
         const frontVertexMap = new Map();
@@ -807,27 +830,27 @@ class CamperSimulator {
             const sideOx = 1100; 
             const sideOy = 550; 
             this.renderTruckSide(sideTruck, sideOx, sideOy, scale);
-            this.renderGeodesic(sideGeo, sideOx + (this.bedLength / 2) * scale, sideOy - 600 * scale, scale, 'side');
+            this.renderGeodesic(sideGeo, sideOx + (this.bedLength / 2) * scale, sideOy - this.truckBedDepth * scale, scale, 'side');
 
-            const apexY = sideOy - 600*scale - this.apexHeight * scale;
+            const apexY = sideOy - this.truckBedDepth*scale - this.apexHeight * scale;
             const dimX = sideOx + (this.bedLength / 2) * scale + 1000*scale;
 
             sideDim.innerHTML = `
-                <line x1="${dimX}" y1="${sideOy - 600*scale}" x2="${dimX}" y2="${apexY}" stroke="#fb7185" stroke-width="2" />
-                <text x="${dimX + 10}" y="${(sideOy - 600*scale + apexY)/2}" fill="#fb7185" font-size="14" font-weight="bold">${Math.round(this.apexHeight)}mm</text>
+                <line x1="${dimX}" y1="${sideOy - this.truckBedDepth*scale}" x2="${dimX}" y2="${apexY}" stroke="#fb7185" stroke-width="2" />
+                <text x="${dimX + 10}" y="${(sideOy - this.truckBedDepth*scale + apexY)/2}" fill="#fb7185" font-size="14" font-weight="bold">${Math.round(this.apexHeight)}mm</text>
             `;
 
             // Front View
             const frontOx = 500;
             const frontOy = 1100;
             this.renderTruckFront(frontTruck, frontOx, frontOy, scale);
-            this.renderGeodesic(frontGeo, frontOx, frontOy - 600 * scale, scale, 'front');
+            this.renderGeodesic(frontGeo, frontOx, frontOy - this.truckBedDepth * scale, scale, 'front');
 
             // Back View
             const backOx = 1700;
             const backOy = 1100;
             this.renderTruckBack(backTruck, backOx, backOy, scale);
-            this.renderGeodesic(backGeo, backOx, backOy - 600 * scale, scale, 'back');
+            this.renderGeodesic(backGeo, backOx, backOy - this.truckBedDepth * scale, scale, 'back');
         }
 
         // Clear the new main groups if they exist
@@ -840,9 +863,8 @@ class CamperSimulator {
             mainGeo.innerHTML = ''; 
             mainDim.innerHTML = '';
 
-            // Calculate Dynamic Scale (Auto-zoom)
-            // Total height in model units: apex + 600 (bed height) + 380 (wheel drop)
-            const totalModelHeight = this.apexHeight + 600 + 380;
+            // Auto-zoom calculation based on dynamic bed depth
+            const totalModelHeight = this.apexHeight + this.truckBedDepth + 380;
             const viewBoxHeight = 1400;
             const verticalPadding = 100; // Total top+bottom padding
             
@@ -863,45 +885,45 @@ class CamperSimulator {
             // Draw Main View
             if (this.activeView === 'side') {
                 this.renderTruckSide(mainTruck, mainOx, mainOy, mainScale, false);
-                this.renderGeodesic(mainGeo, mainOx + (this.bedLength / 2) * mainScale, mainOy - 600 * mainScale, mainScale, 'side');
+                this.renderGeodesic(mainGeo, mainOx + (this.bedLength / 2) * mainScale, mainOy - this.truckBedDepth * mainScale, mainScale, 'side');
 
                 // Apex Dimension (at center of bed)
-                const apexY = mainOy - 600*mainScale - this.apexHeight * mainScale;
+                const apexY = mainOy - this.truckBedDepth*mainScale - this.apexHeight * mainScale;
                 const dimApexX = mainOx + (this.bedLength / 2) * mainScale;
 
                 // Door Dimension (at the back)
-                const doorY = mainOy - 600*mainScale - (this.doorHeight - 100) * mainScale;
+                const doorY = mainOy - this.truckBedDepth*mainScale - (this.doorHeight - 100) * mainScale;
                 const dimDoorX = mainOx + (this.bedLength / 2 + 1000) * mainScale + 100 * mainScale;
 
                 mainDim.innerHTML = `
                     <!-- Apex Dimension -->
-                    <line x1="${dimApexX}" y1="${mainOy - 600*mainScale}" x2="${dimApexX}" y2="${apexY}" stroke="#fb7185" stroke-width="2" stroke-dasharray="4,2" />
+                    <line x1="${dimApexX}" y1="${mainOy - this.truckBedDepth*mainScale}" x2="${dimApexX}" y2="${apexY}" stroke="#fb7185" stroke-width="2" stroke-dasharray="4,2" />
                     <circle cx="${dimApexX}" cy="${apexY}" r="4" fill="#fb7185" />
                     <text x="${dimApexX + 10}" y="${apexY + 20}" fill="#fb7185" font-size="14" font-weight="bold" font-family="monospace">APEX: ${Math.round(this.apexHeight)}mm</text>
                     
                     <!-- Door Dimension -->
-                    <line x1="${dimDoorX}" y1="${mainOy - 500*mainScale}" x2="${dimDoorX}" y2="${doorY}" stroke="#38bdf8" stroke-width="2" />
-                    <line x1="${dimDoorX - 10}" y1="${mainOy - 500*mainScale}" x2="${dimDoorX + 10}" y2="${mainOy - 500*mainScale}" stroke="#38bdf8" stroke-width="2" />
+                    <line x1="${dimDoorX}" y1="${mainOy - (this.truckBedDepth - 100)*mainScale}" x2="${dimDoorX}" y2="${doorY}" stroke="#38bdf8" stroke-width="2" />
+                    <line x1="${dimDoorX - 10}" y1="${mainOy - (this.truckBedDepth - 100)*mainScale}" x2="${dimDoorX + 10}" y2="${mainOy - (this.truckBedDepth - 100)*mainScale}" stroke="#38bdf8" stroke-width="2" />
                     <line x1="${dimDoorX - 10}" y1="${doorY}" x2="${dimDoorX + 10}" y2="${doorY}" stroke="#38bdf8" stroke-width="2" />
-                    <text x="${dimDoorX + 15}" y="${(mainOy - 500*mainScale + doorY)/2}" fill="#38bdf8" font-size="14" font-weight="bold" font-family="monospace">DOOR: ${Math.round(this.doorHeight)}mm</text>
+                    <text x="${dimDoorX + 15}" y="${(mainOy - (this.truckBedDepth - 100)*mainScale + doorY)/2}" fill="#38bdf8" font-size="14" font-weight="bold" font-family="monospace">DOOR: ${Math.round(this.doorHeight)}mm</text>
                 `;
             } else if (this.activeView === 'front') {
                 this.renderTruckFront(mainTruck, mainOx, mainOy, mainScale, false);
-                this.renderGeodesic(mainGeo, mainOx, mainOy - 600 * mainScale, mainScale, 'front');
+                this.renderGeodesic(mainGeo, mainOx, mainOy - this.truckBedDepth * mainScale, mainScale, 'front');
             } else if (this.activeView === 'back') {
                 this.renderTruckBack(mainTruck, mainOx, mainOy, mainScale, false);
-                this.renderGeodesic(mainGeo, mainOx, mainOy - 600 * mainScale, mainScale, 'back');
+                this.renderGeodesic(mainGeo, mainOx, mainOy - this.truckBedDepth * mainScale, mainScale, 'back');
 
                 // Door Dimension (in back view)
                 const w = this.truckWidth * mainScale;
-                const doorY = mainOy - 600*mainScale - (this.doorHeight - 100) * mainScale;
+                const doorY = mainOy - this.truckBedDepth*mainScale - (this.doorHeight - 100) * mainScale;
                 const dimDoorX = mainOx + w/2 + 50*mainScale;
 
                 mainDim.innerHTML = `
-                    <line x1="${dimDoorX}" y1="${mainOy - 500*mainScale}" x2="${dimDoorX}" y2="${doorY}" stroke="#38bdf8" stroke-width="2" />
-                    <line x1="${dimDoorX - 10}" y1="${mainOy - 500*mainScale}" x2="${dimDoorX + 10}" y2="${mainOy - 500*mainScale}" stroke="#38bdf8" stroke-width="2" />
+                    <line x1="${dimDoorX}" y1="${mainOy - (this.truckBedDepth - 100)*mainScale}" x2="${dimDoorX}" y2="${doorY}" stroke="#38bdf8" stroke-width="2" />
+                    <line x1="${dimDoorX - 10}" y1="${mainOy - (this.truckBedDepth - 100)*mainScale}" x2="${dimDoorX + 10}" y2="${mainOy - (this.truckBedDepth - 100)*mainScale}" stroke="#38bdf8" stroke-width="2" />
                     <line x1="${dimDoorX - 10}" y1="${doorY}" x2="${dimDoorX + 10}" y2="${doorY}" stroke="#38bdf8" stroke-width="2" />
-                    <text x="${dimDoorX + 15}" y="${(mainOy - 500*mainScale + doorY)/2}" fill="#38bdf8" font-size="14" font-weight="bold" font-family="monospace">DOOR: ${Math.round(this.doorHeight)}mm</text>
+                    <text x="${dimDoorX + 15}" y="${(mainOy - (this.truckBedDepth - 100)*mainScale + doorY)/2}" fill="#38bdf8" font-size="14" font-weight="bold" font-family="monospace">DOOR: ${Math.round(this.doorHeight)}mm</text>
                 `;
             }
 
@@ -919,13 +941,13 @@ class CamperSimulator {
                 thumbBackTruckNode.innerHTML = ''; thumbBackGeoNode.innerHTML = '';
 
                 this.renderTruckSide(thumbSideTruckNode, thumbOx, thumbOy, thumbScale, true);
-                this.renderGeodesic(thumbSideGeoNode, thumbOx + (this.bedLength / 2) * thumbScale, thumbOy - 600 * thumbScale, thumbScale, 'side');
+                this.renderGeodesic(thumbSideGeoNode, thumbOx + (this.bedLength / 2) * thumbScale, thumbOy - this.truckBedDepth * thumbScale, thumbScale, 'side');
 
                 this.renderTruckFront(thumbFrontTruckNode, thumbOx, thumbOy, thumbScale, true);
-                this.renderGeodesic(thumbFrontGeoNode, thumbOx, thumbOy - 600 * thumbScale, thumbScale, 'front');
+                this.renderGeodesic(thumbFrontGeoNode, thumbOx, thumbOy - this.truckBedDepth * thumbScale, thumbScale, 'front');
 
                 this.renderTruckBack(thumbBackTruckNode, thumbOx, thumbOy, thumbScale, true);
-                this.renderGeodesic(thumbBackGeoNode, thumbOx, thumbOy - 600 * thumbScale, thumbScale, 'back');
+                this.renderGeodesic(thumbBackGeoNode, thumbOx, thumbOy - this.truckBedDepth * thumbScale, thumbScale, 'back');
             }
         }
     }
@@ -935,15 +957,15 @@ class CamperSimulator {
         const textLabel = showText ? `<text x="${ox}" y="${oy + 150}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">SIDE VIEW</text>` : '';
         group.innerHTML = `
             <path d="M -2800 0 L -2700 -200 L -2500 -250 L -2000 -250 L -1800 -400 
-                     L -1500 -1200 L -800 -1250 L 0 -1250 L 200 -1200 L 300 -600 
-                     L 2200 -600 L 2300 0 Z" 
+                     L -1500 -1200 L -800 -1250 L 0 -1250 L 200 -1200 L 300 -${this.truckBedDepth} 
+                     L 2200 -${this.truckBedDepth} L 2300 0 Z" 
                   fill="#1e293b" stroke="#334155" stroke-width="5" transform="translate(${ox}, ${oy}) scale(${scale})"/>
-            <rect x="${ox}" y="${oy - 600*scale}" width="${bedLengthScaled}" height="${600*scale}" fill="#334155" opacity="0.3" stroke="#475569" stroke-width="1" />
+            <rect x="${ox}" y="${oy - this.truckBedDepth*scale}" width="${bedLengthScaled}" height="${this.truckBedDepth*scale}" fill="#334155" opacity="0.3" stroke="#475569" stroke-width="1" />
             <path d="M 0 0 L -1800 0 L -1800 -400 L -1500 -${this.cabinClearance + 100} L 0 -${this.cabinClearance + 100} Z" 
-                  fill="#334155" opacity="0.4" stroke="#475569" stroke-width="1" transform="translate(${ox}, ${oy - 500*scale})"/>
+                  fill="#334155" opacity="0.4" stroke="#475569" stroke-width="1" transform="translate(${ox}, ${oy - (this.truckBedDepth - 100)*scale})"/>
             <circle cx="${ox - 1800*scale}" cy="${oy}" r="${380*scale}" fill="#0f172a" stroke="#334155" stroke-width="4" />
             <circle cx="${ox + 1500*scale}" cy="${oy}" r="${380*scale}" fill="#0f172a" stroke="#334155" stroke-width="4" />
-            <line x1="${ox - 3000*scale}" y1="${oy - 600*scale}" x2="${ox + 3000*scale}" y2="${oy - 600*scale}" stroke="#334155" stroke-dasharray="10,10" />
+            <line x1="${ox - 3000*scale}" y1="${oy - this.truckBedDepth*scale}" x2="${ox + 3000*scale}" y2="${oy - this.truckBedDepth*scale}" stroke="#334155" stroke-dasharray="10,10" />
             ${textLabel}
         `;
     }
@@ -975,8 +997,8 @@ class CamperSimulator {
         group.innerHTML = `
             <rect x="${ox - w/2}" y="${oy - tR}" width="${tW}" height="${tR*2}" rx="5" fill="#0f172a" stroke="#334155" stroke-width="3" />
             <rect x="${ox + w/2 - tW}" y="${oy - tR}" width="${tW}" height="${tR*2}" rx="5" fill="#0f172a" stroke="#334155" stroke-width="3" />
-            <path d="M ${ox - w/2 + 50*scale} ${oy - 600*scale} 
-                     L ${ox + w/2 - 50*scale} ${oy - 600*scale} 
+            <path d="M ${ox - w/2 + 50*scale} ${oy - this.truckBedDepth*scale} 
+                     L ${ox + w/2 - 50*scale} ${oy - this.truckBedDepth*scale} 
                      L ${ox + w/2 - 100*scale} ${oy - 1200*scale} 
                      L ${ox - w/2 + 100*scale} ${oy - 1200*scale} Z" 
                   fill="#0f172a" stroke="#1e293b" stroke-width="2" />

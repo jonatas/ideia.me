@@ -2166,7 +2166,7 @@ class DomeSimulator {
         // For independent triangles, use negative miter to make the outside edge longer.
         // For single-lattice double, use positive miter to make the center the longest point.
         let lapMiter = this.independentTriangles ? -miterAngleStartRad : miterAngleStartRad;
-        let buttMiter = this.independentTriangles ? -miterAngleEndRad : miterAngleEndRad;
+        let buttMiter = this.independentTriangles ? miterAngleEndRad : miterAngleEndRad;
         
         let bevelCutAngle = bevelAngleRad;
         

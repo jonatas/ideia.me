@@ -301,7 +301,39 @@
             </div>
 
             <div id="tab-design" class="panel-content">
-                <div class="section-title"><i class="bi bi-sliders2"></i> Refinement Parameters</div>
+                <div class="section-title"><i class="bi bi-truck"></i> Base Vehicle</div>
+                <div class="param-group border-b border-slate-700 pb-4 mb-4">
+                    <div class="mb-4">
+                        <label class="param-label mb-2 block">Vehicle Model</label>
+                        <select id="param-vehicle-model" class="w-full bg-[#0f172a] border border-slate-700 text-white p-2 rounded text-sm outline-none focus:border-primary">
+                            <option value="ranger-2021">Ford Ranger (2021-2023)</option>
+                            <option value="custom">Custom Dimensions</option>
+                        </select>
+                    </div>
+                    <div class="param-item">
+                        <div class="param-row">
+                            <span class="param-label">Truck Bed Length</span>
+                            <span class="param-value" id="val-truck-bed-l">1549mm</span>
+                        </div>
+                        <input type="range" id="param-truck-bed-l" min="1200" max="2500" value="1549" class="slider">
+                    </div>
+                    <div class="param-item">
+                        <div class="param-row">
+                            <span class="param-label">Truck Bed Width</span>
+                            <span class="param-value" id="val-truck-bed-w">1410mm</span>
+                        </div>
+                        <input type="range" id="param-truck-bed-w" min="1000" max="2000" value="1410" class="slider">
+                    </div>
+                    <div class="param-item">
+                        <div class="param-row">
+                            <span class="param-label">Truck Bed Depth</span>
+                            <span class="param-value" id="val-truck-bed-d">528mm</span>
+                        </div>
+                        <input type="range" id="param-truck-bed-d" min="400" max="800" value="528" class="slider">
+                    </div>
+                </div>
+
+                <div class="section-title"><i class="bi bi-sliders2"></i> Camper Parameters</div>
                 <div class="param-group">
                     <div class="param-item">
                         <div class="param-row">
