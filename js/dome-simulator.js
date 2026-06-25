@@ -2170,11 +2170,10 @@ class DomeSimulator {
         
         let bevelCutAngle = bevelAngleRad;
         
-        // Single-lattice karma uses centered square cuts, so miters and end-bevels must be 0
+        // Single-lattice karma uses centered square cuts, so miters must be 0, but end-bevels must remain to make the cut vertical
         if (this.jointStyle === 'karma' && !this.independentTriangles) {
             lapMiter = 0;
             buttMiter = 0;
-            bevelCutAngle = 0;
         }
         const strutGeometry = this.createStrutGeometryForDome(boardLength, lapMiter, buttMiter, bevelCutAngle, isBase);
         
