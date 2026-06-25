@@ -2712,8 +2712,8 @@ class DomeSimulator {
                     this.camera.lookAt(0, 0, 0);
                     break;
                 case 'inner':
-                    this.camera.position.set(0, 1, 0);
-                    this.camera.lookAt(0, 3, 0);
+                    this.camera.position.set(0, 0.1, 0);
+                    this.camera.lookAt(0, this.diameter, 0);
                     break;
                 case 'sky':
                     this.camera.position.set(0, -2, 0);
