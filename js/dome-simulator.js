@@ -21,6 +21,7 @@ class DomeSimulator {
         this.spherePortion = 'auto';
         this.structure = 'geodesic'; // geodesic or fullerene
         this.jointStyle = 'karma'; // karma or double
+        this.independentTriangles = this.jointStyle === 'karma'; // Good Karma uses panelized double struts
         this.lastTap = 0; // For double-tap detection
         
         // Enhanced Assembly Mode Properties
@@ -269,6 +270,7 @@ class DomeSimulator {
         if (jointKarma && jointDouble) {
             const updateJointParams = (style) => {
                 this.jointStyle = style;
+                this.independentTriangles = this.jointStyle === 'karma';
                 const newUrlParams = new URLSearchParams(window.location.search);
                 newUrlParams.set('joint', style);
                 window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
@@ -279,6 +281,7 @@ class DomeSimulator {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('joint')) {
                 this.jointStyle = urlParams.get('joint');
+                this.independentTriangles = this.jointStyle === 'karma';
             }
             
             jointKarma.addEventListener('click', () => updateJointParams('karma'));
@@ -878,6 +881,8 @@ class DomeSimulator {
                 color: s.color || '#94a3b8',
                 count: s.count,
                 length: s.length,
+                miter1: s.miter1 || s.miterAngle || 0,
+                miter2: s.miter2 || s.miterAngle || 0,
                 miter: s.miterAngle || 0,
                 bevel: s.bevelAngle || 0
             }));
@@ -922,7 +927,15 @@ class DomeSimulator {
                 
                 let qtyText = strut.count + ' Pieces';
 
-                const insideLength = strut.length - (this.strutWidth / Math.tan((90 - strut.miterAngle) * Math.PI / 180));
+                let insideLength;
+                if (this.independentTriangles) {
+                    const short1 = (this.strutWidth / 2) * Math.tan(strut.miter1 * Math.PI / 180);
+                    const short2 = (this.strutWidth / 2) * Math.tan(strut.miter2 * Math.PI / 180);
+                    // For asymmetric pinwheel, inner length is just shorter by the two miters since outer corners are far out
+                    insideLength = strut.length - short1 - short2;
+                } else {
+                    insideLength = strut.length - (this.strutWidth / Math.tan((90 - strut.miterAngle) * Math.PI / 180));
+                }
 
                 card.innerHTML = `
                     <div class="flex items-center gap-3">
@@ -938,7 +951,7 @@ class DomeSimulator {
                                 <span class="text-xs font-mono text-primary">${qtyText}</span>
                             </div>
                             <div class="flex gap-3 text-[10px] text-slate-400">
-                                <span style="color: #fb7185">Sway: ${strut.miterAngle.toFixed(1)}°</span>
+                                <span style="color: #fb7185">Sway: ${this.independentTriangles ? `${strut.miter1?.toFixed(1)}° / ${strut.miter2?.toFixed(1)}°` : strut.miterAngle.toFixed(1) + '°'}</span>
                                 <span style="color: #34d399">Tilt: ${strut.bevelAngle.toFixed(1)}°</span>
                             </div>
                         </div>
@@ -948,8 +961,8 @@ class DomeSimulator {
                         <div class="grid grid-cols-2 gap-4">
                             <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
                                 <span class="block text-[10px] text-slate-400 mb-1">1. Miter Cut (Sway)</span>
-                                <span style="color: #fb7185" class="font-mono text-sm">${strut.miterAngle.toFixed(1)}°</span>
-                                <div class="mt-1 text-[10px] text-slate-500">${this.jointStyle === 'double' ? 'Both Ends (Point/V-Cut)' : 'One End Only (Butt)'}</div>
+                                <span style="color: #fb7185" class="font-mono text-sm">${this.independentTriangles ? `${strut.miter1?.toFixed(1)}° & ${strut.miter2?.toFixed(1)}°` : strut.miterAngle.toFixed(1) + '°'}</span>
+                                <div class="mt-1 text-[10px] text-slate-500">${this.independentTriangles ? 'Asymmetric Pinwheel Cuts' : 'Both Ends (Point/V-Cut)'}</div>
                             </div>
                             <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
                                 <span class="block text-[10px] text-slate-400 mb-1">2. Bevel Cut (Tilt)</span>
@@ -1414,8 +1427,9 @@ class DomeSimulator {
                 const v1 = tri[i], v2 = tri[(i + 1) % tri.length];
                 const edgeKey = this.getStrutKey(v1, v2);
                 
-                // Deduplicate edges so each strut is only counted once
-                if (processedEdges.has(edgeKey)) continue;
+                // Deduplicate edges so each strut is only counted once (for single layer lattices).
+                // For independent triangles, we want to count every strut (which doubles shared edges).
+                if (!this.independentTriangles && processedEdges.has(edgeKey)) continue;
                 processedEdges.add(edgeKey);
 
                 const adjacentFaces = edgeToFaces.get(edgeKey);
@@ -1437,20 +1451,37 @@ class DomeSimulator {
                 const miter = this.jointStyle === 'double' ? Math.abs(90 - (angleAtVertex / 2)) : Math.abs(90 - angleAtVertex);
                 const length = sides[i] * 1000;
                 
-                // Round values for grouping
                 const rLen = Math.round(length);
                 const rBevel = Math.round(bevel * 10) / 10;
                 
-                // Group by length and bevel to separate flat base struts from internal struts
-                const key = `${rLen}-${rBevel}`;
+                let miter1 = miter;
+                let miter2 = miter;
+                if (this.independentTriangles) {
+                    const angleAtNextVertex = angles[(i+1) % tri.length] * 180 / Math.PI;
+                    miter2 = Math.abs(90 - angleAtNextVertex);
+                }
+                
+                // Order miters so A->B is equivalent to B->A for identical boards
+                const minMiter = Math.round(Math.min(miter1, miter2) * 10) / 10;
+                const maxMiter = Math.round(Math.max(miter1, miter2) * 10) / 10;
+                
+                // Group by length, bevel, and both miters to perfectly distinguish asymmetric cuts
+                const key = `${rLen}-${rBevel}-${minMiter}-${maxMiter}`;
 
                 if (!strutMap.has(key)) {
-                    strutMap.set(key, { length, miter, bevel, count: 0, baseCount: 0, standCount: 0 });
+                    strutMap.set(key, { length, miter, bevel, miter1: minMiter, miter2: maxMiter, count: 0, baseCount: 0, standCount: 0 });
                 }
                 const entry = strutMap.get(key);
                 entry.count++;
                 
-                this.edgeToType.set(edgeKey, entry);
+                // Store by face AND edge index to perfectly map independent struts
+                const faceEdgeKey = `${fIdx}-${i}`;
+                this.edgeToType.set(faceEdgeKey, entry);
+                
+                // Keep the old edgeKey mapping as fallback for single-lattice
+                if (!this.independentTriangles) {
+                    this.edgeToType.set(edgeKey, entry);
+                }
 
                 if (isBase) {
                     entry.baseCount++;
@@ -1466,12 +1497,29 @@ class DomeSimulator {
         this.strutTypes = families.map((f, idx) => {
             const typeLetter = String.fromCharCode(65 + idx);
             f.type = typeLetter; // Save type back to entry for edgeToType reference
+            
+            // High-contrast, vibrant palette specifically designed for dark backgrounds
+            const palette = [
+                '#FF1493', // Deep Pink
+                '#00FF00', // Lime
+                '#00FFFF', // Cyan
+                '#FFD700', // Gold
+                '#FF4500', // Orange Red
+                '#8A2BE2', // Blue Violet
+                '#FF00FF', // Magenta
+                '#1E90FF', // Dodger Blue
+                '#32CD32', // Lime Green
+                '#FF8C00'  // Dark Orange
+            ];
+            
             return {
                 type: typeLetter,
                 length: f.length,
                 count: f.count,
-                color: ['#4361ee', '#f72585', '#7209b7', '#4ECDC4', '#FBBF24', '#0EA5E9', '#EF4444', '#10b981', '#f78c6b', '#8338ec'][idx % 10],
+                color: palette[idx % palette.length],
                 miterAngle: f.miter,
+                miter1: f.miter1,
+                miter2: f.miter2,
                 bevelAngle: f.bevel,
                 baseCount: f.baseCount,
                 standCount: f.standCount
@@ -1546,9 +1594,15 @@ class DomeSimulator {
         for (let i = 0; i < tri.length; i++) {
             sides.push(tri[i].distanceTo(tri[(i + 1) % tri.length]) * 1000);
         }
-        const strutTypes = sides.map(length => {
-            const matchIdx = this.strutTypes.findIndex(st => Math.abs(st.length - length) < 1);
-            return this.strutTypes[matchIdx]?.type || 'A';
+        const strutTypes = sides.map((length, i) => {
+            const faceEdgeKey = `${triangleIndex}-${i}`;
+            const v1 = tri[i];
+            const v2 = tri[(i+1)%tri.length];
+            const edgeKey = this.getStrutKey(v1, v2);
+            
+            // Try faceEdgeKey first (perfect mapping for independent panels), fallback to edgeKey (single lattice)
+            const typeEntry = this.edgeToType.get(faceEdgeKey) || this.edgeToType.get(edgeKey);
+            return typeEntry ? typeEntry.type : 'A';
         });
         
         // Create a normalized signature (sorted to group similar triangles)
@@ -1603,9 +1657,18 @@ class DomeSimulator {
     
     generateTriangleTypeColor(typeSignature) {
         // Generate consistent colors based on strut type signature matching brand colors
+        // High-contrast, vibrant palette specifically designed for dark backgrounds
         const colors = [
-            '#4361ee', '#f72585', '#7209b7', '#4ECDC4', '#FBBF24',
-            '#0EA5E9', '#EF4444', '#10b981', '#f78c6b', '#8338ec'
+            '#FF1493', // Deep Pink
+            '#00FF00', // Lime
+            '#00FFFF', // Cyan
+            '#FFD700', // Gold
+            '#FF4500', // Orange Red
+            '#8A2BE2', // Blue Violet
+            '#FF00FF', // Magenta
+            '#1E90FF', // Dodger Blue
+            '#32CD32', // Lime Green
+            '#FF8C00'  // Dark Orange
         ];
         
         let hash = 0;
@@ -1950,12 +2013,14 @@ class DomeSimulator {
             
             const strutInfoRaw = [];
             for (let i = 0; i < tri.length; i++) {
-                strutInfoRaw.push({ length: sides[i], angle: angles[i], vertices: [tri[i], tri[(i+1)%tri.length]] });
+                strutInfoRaw.push({ length: sides[i], angleStart: angles[i], angleEnd: angles[(i+1)%tri.length], vertices: [tri[i], tri[(i+1)%tri.length]] });
             }
 
-            const strutInfo = strutInfoRaw.map(strut => {
+            const strutInfo = strutInfoRaw.map((strut, i) => {
+                const faceEdgeKey = `${originalIdx}-${i}`;
                 const edgeKey = this.getStrutKey(strut.vertices[0], strut.vertices[1]);
-                const typeEntry = this.edgeToType.get(edgeKey);
+                
+                const typeEntry = this.edgeToType.get(faceEdgeKey) || this.edgeToType.get(edgeKey);
                 const typeData = typeEntry ? this.strutTypes.find(t => t.type === typeEntry.type) : null;
                 const isBaseStrut = strut.vertices[0].y < 0.01 && strut.vertices[1].y < 0.01;
                 
@@ -1963,10 +2028,12 @@ class DomeSimulator {
                     length: strut.length,
                     type: typeData?.type || 'A',
                     color: typeData?.color || '#000000',
-                    miterAngle: this.jointStyle === 'double' ? Math.abs(90 - ((strut.angle * 180 / Math.PI) / 2)) : Math.abs(90 - (strut.angle * 180 / Math.PI)),
+                    miterAngleStart: this.jointStyle === 'double' ? Math.abs(90 - ((strut.angleStart * 180 / Math.PI) / 2)) : Math.abs(90 - (strut.angleStart * 180 / Math.PI)),
+                    miterAngleEnd: this.jointStyle === 'double' ? Math.abs(90 - ((strut.angleEnd * 180 / Math.PI) / 2)) : Math.abs(90 - (strut.angleEnd * 180 / Math.PI)),
                     bevelAngle: (this.flatBase && isBaseStrut) ? 0 : (typeData?.bevelAngle || 0),
                     vertices: strut.vertices,
-                    angle: strut.angle
+                    angleStart: strut.angleStart,
+                    angleEnd: strut.angleEnd
                 };
             });
 
@@ -1985,7 +2052,9 @@ class DomeSimulator {
             // Create real 3D struts for each triangle face
             strutInfo.forEach((strut, strutIdx) => {
                 const edgeKey = this.getStrutKey(strut.vertices[0], strut.vertices[1]);
-                if (renderedEdges.has(edgeKey)) return;
+                // For independent triangles (panelized), we DO NOT skip already rendered edges!
+                // We want double struts layered side-by-side.
+                if (!this.independentTriangles && renderedEdges.has(edgeKey)) return;
                 renderedEdges.add(edgeKey);
 
                 const isBase = strut.vertices[0].y < 0.01 && strut.vertices[1].y < 0.01;
@@ -2047,57 +2116,77 @@ class DomeSimulator {
         
         // Calculate basis vectors for the strut orientation
         const U = v2.clone().sub(v1).normalize();
-        const N = v2.clone().sub(v1).cross(v3.clone().sub(v1)).normalize();
+        const N = v2.clone().sub(v1).cross(thirdVertex.clone().sub(v1)).normalize();
         
         // X_basis: points outwards in the plane of the face (perpendicular to edge)
         const X_basis = U.clone().cross(N).normalize();
         const Y_basis = U;
         const Z_basis = N;
         
-        // Inward direction points from the edge to the center of the triangle
-        const I = N.clone().cross(U).normalize();
-        
-        // Shift board inwards by half its width
-        const visualThickness = isBase ? 1.5 : 1.0;
-        const width = (this.strutWidth / 1000) * visualThickness;
+        const width = this.strutWidth / 1000;
+        const height = this.strutHeight / 1000;
         
         let boardLength = length;
-        let shortening = 0;
+        let shorteningV1 = 0;
+        let shorteningV2 = 0;
         
-        const miterAngleRad = (strutInfo.miterAngle || 0) * Math.PI / 180;
+        const miterAngleStartRad = (strutInfo.miterAngleStart || 0) * Math.PI / 180;
+        const miterAngleEndRad = (strutInfo.miterAngleEnd || 0) * Math.PI / 180;
         const bevelAngleRad = (strutInfo.bevelAngle || 0) * Math.PI / 180;
-        const height = (this.strutHeight / 1000) * visualThickness;
         
-        // Good Karma style with square cuts (centered):
-        // To prevent square corners from overlapping at the center, we must shorten
-        // BOTH ends by the exact geometry required to kiss the adjacent struts.
+        const effWidth = width + height * Math.abs(Math.tan(bevelAngleRad));
+        
         if (this.jointStyle === 'karma') {
-            const alpha = strutInfo.angle; // Corner angle in radians
-            
-            // Exact distance from vertex to clear a centered square cut without overlap
-            shortening = (width / 2) / Math.tan(alpha / 2);
-            
-            // Prevent bevel overlap: The strut's thickness (height) causes the inner 
-            // bottom edges to collide due to the bevel tilt.
-            const extraShortening = height * Math.tan(bevelAngleRad);
-            shortening += extraShortening;
-            
-            // Shorten BOTH ends of the strut
-            boardLength = length - (2 * shortening);
+            if (this.independentTriangles) {
+                // Good Karma Panelized (Independent Triangles):
+                // Forms a 2D pinwheel on the triangle face. v1 is LAP, v2 is BUTT.
+                const alphaStart = strutInfo.angleStart;
+                const alphaEnd = strutInfo.angleEnd;
+                
+                // Lap end (v1): Outer corner exactly touches the vertex. 
+                shorteningV1 = (effWidth / 2) * Math.tan(miterAngleStartRad);
+                
+                // Butt end (v2): Outer corner touches the inner corner of the adjacent Lap strut.
+                shorteningV2 = (effWidth / Math.sin(alphaEnd)) + (effWidth / 2) * Math.tan(miterAngleEndRad);
+            } else {
+                // Original single-layer karma (centered square cuts)
+                const alpha = strutInfo.angleStart || strutInfo.angle; 
+                // Exact formula considering bevel rotation: 
+                // The apparent width from the centerline is (W/2)*cos(B) + (H/2)*sin(B).
+                const apparentWidth = (width / 2) * Math.cos(bevelAngleRad) + (height / 2) * Math.abs(Math.sin(bevelAngleRad));
+                // Add a tiny tolerance to prevent floating point intersection detection in raycaster
+                const short = apparentWidth / Math.tan(alpha / 2) + 0.002;
+                shorteningV1 = short;
+                shorteningV2 = short;
+            }
         }
         
-        const lapMiter = this.jointStyle === 'double' ? miterAngleRad : 0;
-        const strutGeometry = this.createStrutGeometryForDome(boardLength, lapMiter, miterAngleRad, bevelAngleRad, isBase);
+        boardLength = length - shorteningV1 - shorteningV2;
+        
+        // For independent triangles, use negative miter to make the outside edge longer.
+        // For single-lattice double, use positive miter to make the center the longest point.
+        let lapMiter = this.independentTriangles ? -miterAngleStartRad : miterAngleStartRad;
+        let buttMiter = this.independentTriangles ? -miterAngleEndRad : miterAngleEndRad;
+        
+        let bevelCutAngle = bevelAngleRad;
+        
+        // Single-lattice karma uses centered square cuts, so miters and end-bevels must be 0
+        if (this.jointStyle === 'karma' && !this.independentTriangles) {
+            lapMiter = 0;
+            buttMiter = 0;
+            bevelCutAngle = 0;
+        }
+        const strutGeometry = this.createStrutGeometryForDome(boardLength, lapMiter, buttMiter, bevelCutAngle, isBase);
         
         let color = strutInfo.color;
-        let metalness = 0.3;
-        let roughness = 0.4;
+        let metalness = 0.1; // Reduced metalness to avoid washed-out white highlights
+        let roughness = 0.7; // Matte finish to make the vibrant colors pop
         let emissive = 0x000000;
         
         // Boost contrast for base struts so they visually ground the dome
         if (isBase) {
-            metalness = 0.1;
-            roughness = 0.8;
+            metalness = 0.0;
+            roughness = 0.9;
             color = new THREE.Color(strutInfo.color).lerp(new THREE.Color(0xffffff), 0.2);
         }
         
@@ -2110,11 +2199,15 @@ class DomeSimulator {
         
         const strutMesh = new THREE.Mesh(strutGeometry, strutMaterial);
         
-        // Shift along the edge by shortening / 2 towards the lap end (v2) ONLY if we shortened one end.
-        // For karma, we shortened BOTH ends equally, so the visual center is exactly the edge midpoint.
-        const shiftAlongEdge = (this.jointStyle === 'karma') ? new THREE.Vector3(0, 0, 0) : U.clone().multiplyScalar(shortening / 2);
-        // Do not shift inwards for standard centered geodesic edges
-        const shiftInwards = new THREE.Vector3(0, 0, 0);
+        // Shift along the edge to center the board between the two shortenings
+        // Center of the physical board = v1 + shorteningV1 * U + (boardLength / 2) * U
+        const physicalCenterDist = shorteningV1 + boardLength / 2;
+        const mathematicalCenterDist = length / 2;
+        const shiftAmount = physicalCenterDist - mathematicalCenterDist;
+        const shiftAlongEdge = U.clone().multiplyScalar(shiftAmount);
+        
+        // For independent triangles, shift inwards so the outer face is on the mathematical edge
+        const shiftInwards = this.independentTriangles ? X_basis.clone().multiplyScalar(-width / 2) : new THREE.Vector3(0, 0, 0);
         
         const midPoint = v1.clone().add(v2).multiplyScalar(0.5).add(shiftAlongEdge).add(shiftInwards);
         
@@ -2187,10 +2280,8 @@ class DomeSimulator {
     createStrutGeometryForDome(boardLength, miterAngle1Rad, miterAngle2Rad, bevelAngleRad, isBase = false) {
         // Create rectangular strut geometry matching actual dimensions (Good Karma hubless style)
         
-        // Base struts can be drawn slightly thicker for visual grounding
-        const visualThickness = isBase ? 1.5 : 1.0;
-        const width = (this.strutWidth / 1000) * visualThickness; // Convert mm to meters
-        const height = (this.strutHeight / 1000) * visualThickness; // Convert mm to meters
+        const width = this.strutWidth / 1000; // Convert mm to meters
+        const height = this.strutHeight / 1000; // Convert mm to meters
         
         const wSegs = this.jointStyle === 'double' ? 2 : 1;
         const geometry = new THREE.BoxGeometry(width, boardLength, height, wSegs, 1, 1);
@@ -2202,7 +2293,7 @@ class DomeSimulator {
         for (let i = 0; i < positions.count; i++) {
             vertex.fromBufferAttribute(positions, i);
             
-            if (this.jointStyle === 'double') {
+            if (this.jointStyle === 'double' && !this.independentTriangles) {
                 if (vertex.y > 0) {
                     // Top end: Double miter to form a point
                     const newY = boardLength / 2 - Math.abs(vertex.x) * Math.tan(miterAngle2Rad) + vertex.z * Math.tan(bevelAngleRad);
