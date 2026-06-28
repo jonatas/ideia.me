@@ -20,9 +20,8 @@ class DomeSimulator {
         this.baseShape = 'icosahedron';
         this.spherePortion = 'auto';
         this.structure = 'geodesic'; // geodesic or fullerene
-        this.jointStyle = 'karma'; // karma or double
-
-        this.independentTriangles = this.jointStyle === 'karma';
+        this.jointStyle = 'karma'; // standard, double, karma
+        this.independentTriangles = false; // We use true single-layer hubless GoodKarma now
         this.lastTap = 0; // For double-tap detection
         
         // Enhanced Assembly Mode Properties
@@ -66,7 +65,7 @@ class DomeSimulator {
     
     switchTab(tabId) {
         // Update tab buttons
-        const tabs = ['design', 'inventory', 'assembly'];
+        const tabs = ['design', 'inventory', 'assembly', 'panels'];
         tabs.forEach(t => {
             const btn = document.getElementById(`btn-tab-${t}`);
             const content = document.getElementById(`tab-${t}`);
@@ -420,6 +419,25 @@ class DomeSimulator {
                 setStructureUrlParam('fullerene');
                 updateStructButtons();
                 this.generateGeodesicDome();
+            });
+        }
+
+        const blueprintScaleSlider = document.getElementById('blueprint-scale-slider');
+        if (blueprintScaleSlider) {
+            blueprintScaleSlider.addEventListener('input', (e) => {
+                document.getElementById('blueprint-scale-display').textContent = `1:${e.target.value}`;
+                if (this.blueprintMode) {
+                    this.renderBlueprint();
+                }
+            });
+        }
+        
+        const blueprintFlapsToggle = document.getElementById('blueprint-flaps-toggle');
+        if (blueprintFlapsToggle) {
+            blueprintFlapsToggle.addEventListener('change', () => {
+                if (this.blueprintMode) {
+                    this.renderBlueprint();
+                }
             });
         }
     }
@@ -2152,15 +2170,13 @@ class DomeSimulator {
                 shorteningV2 = (apparentWidth / Math.sin(alphaEnd)) + (apparentWidth / 2) * Math.tan(miterAngleEndRad);
                 
                 // Add clearance to prevent raycaster false positives due to simple miter geometric overlap
-                shorteningV1 += 0.025;
-                shorteningV2 += 0.025;
+                shorteningV1 += 0.002;
+                shorteningV2 += 0.002;
             } else {
-                // Original single-layer karma (centered square cuts)
-                const alpha = strutInfo.angleStart || strutInfo.angle;
-                // Add a tiny tolerance to prevent floating point intersection detection in raycaster
-                const short = (apparentWidth / 2) / Math.tan(alpha / 2) + 0.002;
-                shorteningV1 = short;
-                shorteningV2 = short;
+                // True single-layer GoodKarma swirl (hubless)
+                // Left edge touches V2, Right edge touches V1
+                shorteningV1 = -(apparentWidth / 2) * Math.tan(miterAngleStartRad);
+                shorteningV2 = (apparentWidth / 2) * Math.tan(miterAngleEndRad);
             }
         }
         
@@ -2173,17 +2189,7 @@ class DomeSimulator {
         let lapMiter = this.independentTriangles ? -miterAngleStartRad : miterAngleStartRad;
         let buttMiter = this.independentTriangles ? miterAngleEndRad : miterAngleEndRad;
         
-        if (this.jointStyle === 'karma' && !this.independentTriangles) {
-            lapMiter = 0;
-            buttMiter = 0;
-        }
-        
-        let strutGeometry = null;
-        if (this.structure === 'fullerene') {
-            strutGeometry = this.createStrutGeometryForFullerene(boardLength, bevelAngleRad);
-        } else {
-            strutGeometry = this.createStrutGeometryForDome(boardLength, buttMiter, lapMiter, bevelAngleRad, isBase);
-        }
+        let strutGeometry = this.createStrutGeometryForDome(boardLength, buttMiter, lapMiter, bevelAngleRad, isBase);
         
         let color = strutInfo.color;
         let metalness = 0.1; // Reduced metalness to avoid washed-out white highlights
@@ -2216,8 +2222,8 @@ class DomeSimulator {
         const shiftMag = (shorteningV1 - shorteningV2) / 2;
         const shiftAlongEdge = U.clone().multiplyScalar(shiftMag);
         
-        // For independent triangles, shift inwards so the outer face is on the mathematical edge
-        const shiftInwards = this.independentTriangles ? X_basis.clone().multiplyScalar(-width / 2) : new THREE.Vector3(0, 0, 0);
+        // For independent triangles and true single-layer GoodKarma, shift inwards so the outer face is on the mathematical edge
+        const shiftInwards = (this.independentTriangles || this.jointStyle === 'karma') ? X_basis.clone().multiplyScalar(-width / 2) : new THREE.Vector3(0, 0, 0);
         
         const midPoint = v1.clone().add(v2).multiplyScalar(0.5).add(shiftAlongEdge).add(shiftInwards);
         
@@ -2286,7 +2292,8 @@ class DomeSimulator {
         const borderLines = new THREE.LineSegments(borderGeometry, borderMaterial);
         triangleMesh.add(borderLines);
     }
-    
+
+
     createStrutGeometryForDome(boardLength, miterAngle1Rad, miterAngle2Rad, bevelAngleRad, isBase = false) {
         // Create rectangular strut geometry matching actual dimensions (Good Karma hubless style)
         
@@ -3780,6 +3787,477 @@ class DomeSimulator {
         } else {
             console.log('Perfect joining! No overlap.');
         }
+    }
+
+    toggleBlueprintMode() {
+        this.blueprintMode = !this.blueprintMode;
+        
+        const bpView = document.getElementById('blueprint-view');
+        const btnBp = document.getElementById('btn-blueprint-mode');
+        
+        if (this.blueprintMode) {
+            bpView.classList.remove('hidden');
+            btnBp.classList.add('bg-pink-900', 'border-pink-400', 'text-white');
+            this.renderBlueprint();
+        } else {
+            bpView.classList.add('hidden');
+            btnBp.classList.remove('bg-pink-900', 'border-pink-400', 'text-white');
+        }
+    }
+    
+    flattenPolygon(points3D) {
+        if(points3D.length < 3) return [];
+        
+        let nx = 0, ny = 0, nz = 0;
+        for(let i=0; i<points3D.length; i++) {
+            let p1 = points3D[i];
+            let p2 = points3D[(i+1)%points3D.length];
+            nx += (p1.y - p2.y) * (p1.z + p2.z);
+            ny += (p1.z - p2.z) * (p1.x + p2.x);
+            nz += (p1.x - p2.x) * (p1.y + p2.y);
+        }
+        const len = Math.hypot(nx, ny, nz);
+        nx /= len; ny /= len; nz /= len;
+        
+        const v0 = points3D[0];
+        const v1 = points3D[1];
+        
+        let ux = v1.x - v0.x;
+        let uy = v1.y - v0.y;
+        let uz = v1.z - v0.z;
+        const ulen = Math.hypot(ux, uy, uz);
+        ux /= ulen; uy /= ulen; uz /= ulen;
+        
+        let vx = ny * uz - nz * uy;
+        let vy = nz * ux - nx * uz;
+        let vz = nx * uy - ny * ux;
+        
+        const points2D = points3D.map(p => {
+            let dx = p.x - v0.x;
+            let dy = p.y - v0.y;
+            let dz = p.z - v0.z;
+            return {
+                x: dx * ux + dy * uy + dz * uz,
+                y: dx * vx + dy * vy + dz * vz
+            };
+        });
+        
+        let area = 0;
+        for(let i=0; i<points2D.length; i++) {
+            let p1 = points2D[i];
+            let p2 = points2D[(i+1)%points2D.length];
+            area += (p2.x - p1.x) * (p2.y + p1.y);
+        }
+        if (area < 0) {
+            points2D.reverse();
+        }
+        
+        return points2D.map(p => ({ x: p.x * 1000, y: p.y * 1000 }));
+    }
+
+    renderBlueprint() {
+        const container = document.getElementById('blueprint-container');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        const scaleInput = document.getElementById('blueprint-scale-slider');
+        const scale = scaleInput ? parseFloat(scaleInput.value) : 20;
+        const flapsInput = document.getElementById('blueprint-flaps-toggle');
+        const includeFlaps = flapsInput ? flapsInput.checked : true;
+        
+        this.triangleTypes.forEach((typeData, typeKey) => {
+            if (typeData.triangles.length === 0) return;
+            
+            const tri = typeData.triangles[0];
+            const pts2D = this.flattenPolygon(tri.triangle);
+            
+            if (pts2D.length < 3) return;
+            
+            const ptsScaled = pts2D.map(p => ({ x: p.x / scale, y: p.y / scale }));
+            
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+            ptsScaled.forEach(p => {
+                if (p.x < minX) minX = p.x;
+                if (p.y < minY) minY = p.y;
+                if (p.x > maxX) maxX = p.x;
+                if (p.y > maxY) maxY = p.y;
+            });
+            
+            const margin = includeFlaps ? 15 : 5;
+            const svgWidth = (maxX - minX) + margin * 2;
+            const svgHeight = (maxY - minY) + margin * 2;
+            
+            let svgContent = `<svg viewBox="${minX - margin} ${minY - margin} ${svgWidth} ${svgHeight}" class="w-full h-auto bg-slate-900 rounded-xl border border-slate-700 shadow-inner">`;
+            
+            const ptsString = ptsScaled.map(p => `${p.x},${p.y}`).join(' ');
+            svgContent += `<polygon points="${ptsString}" fill="${typeData.color}33" stroke="${typeData.color}" stroke-width="1" ${includeFlaps ? 'stroke-dasharray="2,2"' : ''}/>`;
+            
+            if (includeFlaps) {
+                const flapDepth = 10;
+                const inset = 3;
+                
+                for(let i=0; i<ptsScaled.length; i++) {
+                    let p1 = ptsScaled[i];
+                    let p2 = ptsScaled[(i+1)%ptsScaled.length];
+                    
+                    let dx = p2.x - p1.x;
+                    let dy = p2.y - p1.y;
+                    let len = Math.hypot(dx, dy);
+                    let nx = -dy / len;
+                    let ny = dx / len;
+                    
+                    let f1x = p1.x + nx * flapDepth;
+                    let f1y = p1.y + ny * flapDepth;
+                    let f2x = p2.x + nx * flapDepth;
+                    let f2y = p2.y + ny * flapDepth;
+                    
+                    let insetDx = dx * (inset/len);
+                    let insetDy = dy * (inset/len);
+                    
+                    svgContent += `<polygon points="${p1.x},${p1.y} ${p2.x},${p2.y} ${f2x - insetDx},${f2y - insetDy} ${f1x + insetDx},${f1y + insetDy}" fill="none" stroke="white" stroke-width="0.5"/>`;
+                }
+            }
+            
+            for(let i=0; i<ptsScaled.length; i++) {
+                let p1 = ptsScaled[i];
+                let p2 = ptsScaled[(i+1)%ptsScaled.length];
+                let dx = p2.x - p1.x;
+                let dy = p2.y - p1.y;
+                let len = Math.hypot(dx, dy);
+                let cx = (p1.x + p2.x) / 2;
+                let cy = (p1.y + p2.y) / 2;
+                let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                if(angle > 90 || angle < -90) {
+                    angle += 180;
+                }
+                let dist = tri.strutComposition.lengths[i] || (len * scale);
+                svgContent += `<text x="${cx}" y="${cy}" font-size="3" fill="#94a3b8" text-anchor="middle" transform="rotate(${angle}, ${cx}, ${cy}) translate(0, -2)">${dist.toFixed(0)}mm</text>`;
+            }
+            
+            const cx = (minX + maxX) / 2;
+            const cy = (minY + maxY) / 2;
+            svgContent += `<text x="${cx}" y="${cy}" font-size="6" fill="${typeData.color}" font-weight="bold" text-anchor="middle">Type ${typeKey}</text>`;
+            svgContent += `<text x="${cx}" y="${cy + 8}" font-size="4" fill="white" text-anchor="middle">${typeData.count}x</text>`;
+            
+            svgContent += `</svg>`;
+            
+            const card = document.createElement('div');
+            card.className = 'bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 backdrop-blur shadow';
+            card.innerHTML = `<div class="text-sm font-bold text-slate-300 mb-4 flex justify-between"><span>Panel Type ${typeKey}</span><span class="text-pink-400">${typeData.count} pieces</span></div>${svgContent}`;
+            container.appendChild(card);
+        });
+    }
+
+    exportBlueprintSVG() {
+        const scaleInput = document.getElementById('blueprint-scale-slider');
+        const scale = scaleInput ? parseFloat(scaleInput.value) : 20;
+        const flapsInput = document.getElementById('blueprint-flaps-toggle');
+        const includeFlaps = flapsInput ? flapsInput.checked : true;
+        
+        let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 297" width="210mm" height="297mm">`;
+        svgContent += `<style>
+            .cut { stroke: #ff0000; stroke-width: 0.2; fill: none; }
+            .fold { stroke: #0000ff; stroke-width: 0.2; fill: none; stroke-dasharray: 2,2; }
+            .text { font-family: sans-serif; font-size: 3px; fill: #000; }
+        </style>`;
+        
+        let offsetY = 10;
+        
+        this.triangleTypes.forEach((typeData, typeKey) => {
+            if (typeData.triangles.length === 0) return;
+            
+            const tri = typeData.triangles[0];
+            const pts2D = this.flattenPolygon(tri.triangle);
+            if (pts2D.length < 3) return;
+            
+            const ptsScaled = pts2D.map(p => ({ x: p.x / scale, y: p.y / scale }));
+            
+            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+            ptsScaled.forEach(p => {
+                if (p.x < minX) minX = p.x;
+                if (p.y < minY) minY = p.y;
+                if (p.x > maxX) maxX = p.x;
+                if (p.y > maxY) maxY = p.y;
+            });
+            
+            const flapDepth = 10;
+            const inset = 3;
+            const startX = 20 - minX;
+            const startY = offsetY - minY + (includeFlaps ? flapDepth : 5);
+            
+            let g = `<g transform="translate(${startX}, ${startY})">`;
+            
+            const ptsString = ptsScaled.map(p => `${p.x},${p.y}`).join(' ');
+            g += `<polygon points="${ptsString}" class="${includeFlaps ? 'fold' : 'cut'}"/>`;
+            
+            if (includeFlaps) {
+                for(let i=0; i<ptsScaled.length; i++) {
+                    let p1 = ptsScaled[i];
+                    let p2 = ptsScaled[(i+1)%ptsScaled.length];
+                    let dx = p2.x - p1.x, dy = p2.y - p1.y;
+                    let len = Math.hypot(dx, dy);
+                    let nx = -dy / len, ny = dx / len;
+                    let f1x = p1.x + nx * flapDepth, f1y = p1.y + ny * flapDepth;
+                    let f2x = p2.x + nx * flapDepth, f2y = p2.y + ny * flapDepth;
+                    let insetDx = dx * (inset/len), insetDy = dy * (inset/len);
+                    g += `<polygon points="${p1.x},${p1.y} ${p2.x},${p2.y} ${f2x - insetDx},${f2y - insetDy} ${f1x + insetDx},${f1y + insetDy}" class="cut"/>`;
+                }
+            }
+            
+            const cx = (minX + maxX) / 2;
+            const cy = (minY + maxY) / 2;
+            g += `<text x="${cx}" y="${cy}" class="text" text-anchor="middle">Type ${typeKey} (${typeData.count}x)</text>`;
+            g += `</g>`;
+            
+            svgContent += g;
+            
+            offsetY += (maxY - minY) + (includeFlaps ? flapDepth * 2 : 10) + 10;
+        });
+        
+        svgContent += `</svg>`;
+        
+        const blob = new Blob([svgContent], {type: 'image/svg+xml'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `dome_panels_scale_1_${scale}.svg`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+    
+    destroy() {
+        document.getElementById('btn-blueprint-mode')?.removeEventListener('click', this.toggleBlueprintMode);
+        document.getElementById('blueprint-scale-slider')?.removeEventListener('input', this.renderBlueprint);
+        document.getElementById('blueprint-flaps-toggle')?.removeEventListener('change', this.renderBlueprint);
+        document.getElementById('btn-export-blueprint')?.removeEventListener('click', this.exportBlueprintSVG);
+    }
+
+    initBlueprintListeners() {
+        document.getElementById('btn-blueprint-mode').addEventListener('click', () => this.toggleBlueprintMode());
+        document.getElementById('blueprint-scale-slider').addEventListener('input', () => this.renderBlueprint());
+        document.getElementById('blueprint-flaps-toggle').addEventListener('change', () => this.renderBlueprint());
+        document.getElementById('btn-export-blueprint').addEventListener('click', () => this.exportBlueprintSVG());
+    }
+
+    exportOrigamiSVG() {
+        const scaleInput = document.getElementById('panel-scale-slider');
+        const scale = scaleInput ? parseFloat(scaleInput.value) : 20;
+
+        const getEdgeKey = (v1, v2) => {
+            const k1 = `${v1.x.toFixed(3)},${v1.y.toFixed(3)},${v1.z.toFixed(3)}`;
+            const k2 = `${v2.x.toFixed(3)},${v2.y.toFixed(3)},${v2.z.toFixed(3)}`;
+            return k1 < k2 ? `${k1}-${k2}` : `${k2}-${k1}`;
+        };
+
+        const edgeMap = new Map();
+        this.allFaces.forEach((face, fIdx) => {
+            for (let i = 0; i < face.length; i++) {
+                const v1 = face[i];
+                const v2 = face[(i + 1) % face.length];
+                const key = getEdgeKey(v1, v2);
+                if (!edgeMap.has(key)) edgeMap.set(key, []);
+                edgeMap.get(key).push({ fIdx, v1, v2 });
+            }
+        });
+
+        const faceAdj = this.allFaces.map(() => []);
+        edgeMap.forEach(edges => {
+            if (edges.length === 2) {
+                faceAdj[edges[0].fIdx].push({ neighbor: edges[1].fIdx, sharedV1: edges[0].v1, sharedV2: edges[0].v2 });
+                faceAdj[edges[1].fIdx].push({ neighbor: edges[0].fIdx, sharedV1: edges[1].v1, sharedV2: edges[1].v2 });
+            }
+        });
+
+        const visited = new Set();
+        const nets = [];
+
+        const ccw = (A, B, C) => (C.y - A.y) * (B.x - A.x) > (B.y - A.y) * (C.x - A.x);
+        const intersectSegments = (p1, p2, p3, p4) => {
+            return ccw(p1, p3, p4) !== ccw(p2, p3, p4) && ccw(p1, p2, p3) !== ccw(p1, p2, p4);
+        };
+
+        const pointInPoly = (pt, poly) => {
+            let inside = false;
+            for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+                const xi = poly[i].x, yi = poly[i].y;
+                const xj = poly[j].x, yj = poly[j].y;
+                const intersect = ((yi > pt.y) !== (yj > pt.y)) && (pt.x < (xj - xi) * (pt.y - yi) / (yj - yi) + xi);
+                if (intersect) inside = !inside;
+            }
+            return inside;
+        };
+
+        const polyIntersect = (polyA, polyB) => {
+            let minXa = Infinity, maxXa = -Infinity, minYa = Infinity, maxYa = -Infinity;
+            polyA.forEach(p => { minXa = Math.min(minXa, p.x); maxXa = Math.max(maxXa, p.x); minYa = Math.min(minYa, p.y); maxYa = Math.max(maxYa, p.y); });
+            let minXb = Infinity, maxXb = -Infinity, minYb = Infinity, maxYb = -Infinity;
+            polyB.forEach(p => { minXb = Math.min(minXb, p.x); maxXb = Math.max(maxXb, p.x); minYb = Math.min(minYb, p.y); maxYb = Math.max(maxYb, p.y); });
+            if (maxXa < minXb - 1e-3 || minXa > maxXb + 1e-3 || maxYa < minYb - 1e-3 || minYa > maxYb + 1e-3) return false;
+
+            const centerB = { x: 0, y: 0 };
+            polyB.forEach(p => { centerB.x += p.x; centerB.y += p.y; });
+            centerB.x /= polyB.length; centerB.y /= polyB.length;
+            const shrunkB = polyB.map(p => ({ x: p.x * 0.98 + centerB.x * 0.02, y: p.y * 0.98 + centerB.y * 0.02 }));
+
+            for (let i = 0; i < polyA.length; i++) {
+                const a1 = polyA[i], a2 = polyA[(i + 1) % polyA.length];
+                for (let j = 0; j < shrunkB.length; j++) {
+                    const b1 = shrunkB[j], b2 = shrunkB[(j + 1) % shrunkB.length];
+                    if (intersectSegments(a1, a2, b1, b2)) return true;
+                }
+            }
+            
+            if (shrunkB.some(p => pointInPoly(p, polyA))) return true;
+            if (polyA.some(p => pointInPoly(p, shrunkB))) return true;
+            
+            return false;
+        };
+
+        const isSame = (a, b) => a.distanceTo(b) < 1e-4;
+
+        for (let startIdx = 0; startIdx < this.allFaces.length; startIdx++) {
+            if (visited.has(startIdx)) continue;
+
+            const net = { faces: [], folds: [], cuts: [] };
+            const facePts = new Map();
+
+            const startFace = this.allFaces[startIdx];
+            const xAxis = startFace[1].clone().sub(startFace[0]).normalize();
+            
+            const v0 = startFace[0], v1 = startFace[1], v2 = startFace[2];
+            let normal = new THREE.Vector3().crossVectors(v1.clone().sub(v0), v2.clone().sub(v0)).normalize();
+            if (normal.dot(v0) < 0) normal.negate();
+            const yAxis = new THREE.Vector3().crossVectors(normal, xAxis).normalize();
+
+            const pts2D = startFace.map(pt => {
+                const d = pt.clone().sub(startFace[0]);
+                return { x: d.dot(xAxis) * 1000 / scale, y: d.dot(yAxis) * 1000 / scale };
+            });
+
+            net.faces.push({ fIdx: startIdx, pts2D });
+            facePts.set(startIdx, pts2D);
+            visited.add(startIdx);
+
+            const queue = [];
+            faceAdj[startIdx].forEach(adj => queue.push({ parent: startIdx, current: adj.neighbor, sv1: adj.sharedV1, sv2: adj.sharedV2 }));
+
+            while (queue.length > 0) {
+                const item = queue.shift();
+                if (visited.has(item.current)) continue;
+
+                const pFace2D = facePts.get(item.parent);
+                const pFace3D = this.allFaces[item.parent];
+                const cFace3D = this.allFaces[item.current];
+
+                let p1_2d, p2_2d;
+                for (let i = 0; i < pFace3D.length; i++) {
+                    if (isSame(pFace3D[i], item.sv1)) p1_2d = pFace2D[i];
+                    if (isSame(pFace3D[i], item.sv2)) p2_2d = pFace2D[i];
+                }
+                if (!p1_2d || !p2_2d) continue;
+
+                const cxAxis = item.sv1.clone().sub(item.sv2).normalize();
+                const cv0 = cFace3D[0], cv1 = cFace3D[1], cv2 = cFace3D[2];
+                let cNormal = new THREE.Vector3().crossVectors(cv1.clone().sub(cv0), cv2.clone().sub(cv0)).normalize();
+                if (cNormal.dot(cv0) < 0) cNormal.negate();
+                let cyAxis = new THREE.Vector3().crossVectors(cNormal, cxAxis).normalize();
+
+                const localPts = cFace3D.map(pt => {
+                    const d = pt.clone().sub(item.sv2);
+                    return { x: d.dot(cxAxis) * 1000 / scale, y: d.dot(cyAxis) * 1000 / scale };
+                });
+
+                const targetX = { x: p1_2d.x - p2_2d.x, y: p1_2d.y - p2_2d.y };
+                const len = Math.hypot(targetX.x, targetX.y);
+                const ux = { x: targetX.x / len, y: targetX.y / len };
+                const uy = { x: -targetX.y / len, y: targetX.x / len };
+
+                const transformedPts = localPts.map(pt => ({
+                    x: p2_2d.x + pt.x * ux.x + pt.y * uy.x,
+                    y: p2_2d.y + pt.x * ux.y + pt.y * uy.y
+                }));
+
+                let overlap = false;
+                for (let placedPts of facePts.values()) {
+                    if (polyIntersect(transformedPts, placedPts)) { overlap = true; break; }
+                }
+
+                if (!overlap) {
+                    net.faces.push({ fIdx: item.current, pts2D: transformedPts });
+                    facePts.set(item.current, transformedPts);
+                    visited.add(item.current);
+                    net.folds.push({ p1: p1_2d, p2: p2_2d });
+                    
+                    faceAdj[item.current].forEach(adj => {
+                        if (!visited.has(adj.neighbor)) {
+                            queue.push({ parent: item.current, current: adj.neighbor, sv1: adj.sharedV1, sv2: adj.sharedV2 });
+                        }
+                    });
+                } else {
+                    net.cuts.push({ p1: p1_2d, p2: p2_2d });
+                }
+            }
+            nets.push(net);
+        }
+
+        let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="2000mm" height="2000mm" viewBox="-1000 -1000 2000 2000">\n`;
+        svgContent += `<style>
+            .cut { stroke: #ff0000; stroke-width: 0.5; fill: #f8fafc; }
+            .fold { stroke: #0000ff; stroke-width: 0.5; stroke-dasharray: 4,4; fill: none; }
+            .text { font-family: sans-serif; font-size: 8px; fill: #64748b; }
+        </style>\n`;
+
+        let offsetX = -900;
+        let offsetY = -900;
+
+        nets.forEach((net, idx) => {
+            let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+            net.faces.forEach(f => {
+                f.pts2D.forEach(p => {
+                    minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x);
+                    minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y);
+                });
+            });
+            const w = maxX - minX;
+            const h = maxY - minY;
+            
+            if (offsetX + w > 900) {
+                offsetX = -900;
+                offsetY += h + 20;
+            }
+
+            const dx = offsetX - minX;
+            const dy = offsetY - minY;
+
+            svgContent += `<g transform="translate(${dx}, ${dy})">\n`;
+            
+            net.faces.forEach(f => {
+                const ptsStr = f.pts2D.map(p => `${p.x},${p.y}`).join(' ');
+                svgContent += `<polygon points="${ptsStr}" class="cut"/>\n`;
+            });
+
+            net.folds.forEach(fold => {
+                svgContent += `<line x1="${fold.p1.x}" y1="${fold.p1.y}" x2="${fold.p2.x}" y2="${fold.p2.y}" class="fold"/>\n`;
+            });
+
+            svgContent += `</g>\n`;
+            offsetX += w + 20;
+        });
+
+        svgContent += `</svg>`;
+
+        const blob = new Blob([svgContent], {type: 'image/svg+xml'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `origami_net_scale_1_${scale}.svg`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     }
 
     destroy() {

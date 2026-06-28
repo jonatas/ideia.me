@@ -66,8 +66,29 @@
         main {
             height: calc(100vh - var(--header-height));
             display: grid;
-            grid-template-columns: 1fr 450px;
+            grid-template-columns: 1fr 340px;
             overflow: hidden;
+        }
+
+        @media (max-width: 1024px) {
+            main {
+                grid-template-columns: 1fr 300px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            main {
+                display: flex;
+                flex-direction: column;
+            }
+            .visual-area {
+                height: 50vh;
+            }
+            .side-panel {
+                height: 50vh;
+                border-left: none;
+                border-top: 1px solid #334155;
+            }
         }
 
         .visual-area {
