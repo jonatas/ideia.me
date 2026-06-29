@@ -24,7 +24,42 @@ class WoodCutsSimulator {
         }
     }
 
+    parseUrlParams() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has('miter') && params.has('bevel')) {
+            const miterDeg = parseFloat(params.get('miter'));
+            const bevelDeg = parseFloat(params.get('bevel'));
+            
+            const M = miterDeg * Math.PI / 180;
+            const B = bevelDeg * Math.PI / 180;
+            
+            // Inverse formulas:
+            // sin(C/2) = sqrt(sin^2(M) + sin^2(B)*cos^2(M))
+            // cos(S) = sin(B) / sin(C/2)
+            
+            const sinSqHalfC = Math.pow(Math.sin(M), 2) + Math.pow(Math.sin(B), 2) * Math.pow(Math.cos(M), 2);
+            const halfC = Math.asin(Math.sqrt(Math.max(0, Math.min(1, sinSqHalfC))));
+            const C = halfC * 2 * 180 / Math.PI;
+            
+            let S = 0;
+            if (halfC > 0.0001) {
+                const cosS = Math.sin(B) / Math.sin(halfC);
+                S = Math.acos(Math.max(-1, Math.min(1, cosS))) * 180 / Math.PI;
+            }
+            
+            this.cornerAngle = isNaN(C) ? 90 : C;
+            this.slopeAngle = isNaN(S) ? 0 : S;
+            
+            // Update UI sliders
+            const cornerSlider = document.getElementById('corner-angle-slider');
+            const slopeSlider = document.getElementById('slope-angle-slider');
+            if (cornerSlider) cornerSlider.value = this.cornerAngle;
+            if (slopeSlider) slopeSlider.value = this.slopeAngle;
+        }
+    }
+
     init() {
+        this.parseUrlParams();
         this.setupEventListeners();
         this.calculateAngles();
         this.init3DViews();

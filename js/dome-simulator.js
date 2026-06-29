@@ -64,6 +64,8 @@ class DomeSimulator {
     }
     
     switchTab(tabId) {
+        this.currentTab = tabId;
+        
         // Update tab buttons
         const tabs = ['design', 'inventory', 'assembly', 'panels'];
         tabs.forEach(t => {
@@ -85,6 +87,8 @@ class DomeSimulator {
         } else if (tabId !== 'assembly' && this.assemblyMode) {
             this.exitAssemblyMode();
         }
+
+
     }
 
     showDetails(title, contentHtml) {
@@ -424,8 +428,15 @@ class DomeSimulator {
 
         const blueprintScaleSlider = document.getElementById('blueprint-scale-slider');
         if (blueprintScaleSlider) {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('scale')) blueprintScaleSlider.value = urlParams.get('scale');
+            document.getElementById('blueprint-scale-display').textContent = `1:${blueprintScaleSlider.value}`;
+            
             blueprintScaleSlider.addEventListener('input', (e) => {
                 document.getElementById('blueprint-scale-display').textContent = `1:${e.target.value}`;
+                const newUrlParams = new URLSearchParams(window.location.search);
+                newUrlParams.set('scale', e.target.value);
+                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
                 if (this.blueprintMode) {
                     this.renderBlueprint();
                 }
@@ -434,11 +445,44 @@ class DomeSimulator {
         
         const blueprintFlapsToggle = document.getElementById('blueprint-flaps-toggle');
         if (blueprintFlapsToggle) {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('flaps')) blueprintFlapsToggle.checked = urlParams.get('flaps') === '1';
+            
             blueprintFlapsToggle.addEventListener('change', () => {
+                const newUrlParams = new URLSearchParams(window.location.search);
+                newUrlParams.set('flaps', blueprintFlapsToggle.checked ? '1' : '0');
+                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
                 if (this.blueprintMode) {
                     this.renderBlueprint();
                 }
             });
+        }
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('origami_style')) {
+            this.blueprintViewMode = urlParams.get('origami_style');
+            // update UI button
+            const btnStyle = document.getElementById('btn-blueprint-style');
+            if (btnStyle) {
+                if (this.blueprintViewMode === 'panels') {
+                    btnStyle.innerHTML = '<i class="bi bi-scissors"></i>';
+                    btnStyle.title = "Switch to Panels (Scissors)";
+                } else {
+                    btnStyle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                    <polygon points="8,12 16,12 12,18.93" />
+                    <polygon points="8,12 16,12 12,5.07" />
+                    <polygon points="8,12 12,18.93 4,18.93" />
+                    <polygon points="16,12 12,18.93 20,18.93" />
+                </svg>`;
+                    btnStyle.title = "Switch to Origami Net";
+                }
+            }
+        }
+        
+        if (urlParams.has('origami') && urlParams.get('origami') === '1') {
+            setTimeout(() => {
+                if (!this.blueprintMode) this.toggleOrigamiMode();
+            }, 100);
         }
     }
     
@@ -506,6 +550,11 @@ class DomeSimulator {
         
         // Update triangle inventory
         this.updateTriangleInventory();
+        
+        // Refresh blueprint if in origami mode
+        if (this.blueprintMode) {
+            this.renderBlueprint();
+        }
     }
     
     updateAssemblyControls() {
@@ -988,6 +1037,11 @@ class DomeSimulator {
                                 <span style="color: #34d399" class="font-mono text-sm">${strut.bevelAngle.toFixed(1)}°</span>
                                 <div class="mt-1 text-[10px] text-slate-500">Rip full edge</div>
                             </div>
+                        </div>
+                        <div class="mt-3">
+                            <a href="/wood-cuts/?miter=${this.independentTriangles ? strut.miter1.toFixed(1) : strut.miterAngle.toFixed(1)}&bevel=${strut.bevelAngle.toFixed(1)}" target="_blank" class="block text-center py-2 bg-blue-600/20 text-blue-400 border border-blue-500/30 text-[10px] font-bold rounded hover:bg-blue-600 hover:text-white transition-colors" onclick="event.stopPropagation();">
+                                <i class="bi bi-box-arrow-up-right mr-1"></i> Open in Miter Saw Simulator
+                            </a>
                         </div>
                     </div>
                     ` : ''}
@@ -2027,7 +2081,15 @@ class DomeSimulator {
                 const next = tri[(i + 1) % tri.length];
                 const v1 = new THREE.Vector3().subVectors(prev, curr).normalize();
                 const v2 = new THREE.Vector3().subVectors(next, curr).normalize();
-                angles.push(Math.acos(v1.dot(v2)));
+                
+                if (this.independentTriangles) {
+                    angles.push(Math.acos(v1.dot(v2)));
+                } else {
+                    const normal = curr.clone().normalize();
+                    const v1_proj = v1.clone().projectOnPlane(normal).normalize();
+                    const v2_proj = v2.clone().projectOnPlane(normal).normalize();
+                    angles.push(Math.acos(Math.max(-1, Math.min(1, v1_proj.dot(v2_proj)))));
+                }
             }
             
             const strutInfoRaw = [];
@@ -3789,21 +3851,7 @@ class DomeSimulator {
         }
     }
 
-    toggleBlueprintMode() {
-        this.blueprintMode = !this.blueprintMode;
-        
-        const bpView = document.getElementById('blueprint-view');
-        const btnBp = document.getElementById('btn-blueprint-mode');
-        
-        if (this.blueprintMode) {
-            bpView.classList.remove('hidden');
-            btnBp.classList.add('bg-pink-900', 'border-pink-400', 'text-white');
-            this.renderBlueprint();
-        } else {
-            bpView.classList.add('hidden');
-            btnBp.classList.remove('bg-pink-900', 'border-pink-400', 'text-white');
-        }
-    }
+
     
     flattenPolygon(points3D) {
         if(points3D.length < 3) return [];
@@ -3855,23 +3903,46 @@ class DomeSimulator {
         return points2D.map(p => ({ x: p.x * 1000, y: p.y * 1000 }));
     }
 
+
+
+
     renderBlueprint() {
         const container = document.getElementById('blueprint-container');
         if (!container) return;
         
-        container.innerHTML = '';
+        const mode = this.blueprintViewMode || 'origami';
+        let svgContent = '';
+        if (mode === 'panels') {
+            svgContent = this.generateBlueprintSVG();
+        } else {
+            svgContent = this.generateOrigamiSVG();
+        }
         
+        container.innerHTML = `<div class="w-full flex justify-center bg-slate-900 rounded-xl border border-slate-700 shadow-inner p-4">${svgContent}</div>`;
+    }
+
+    generateBlueprintSVG() {
         const scaleInput = document.getElementById('blueprint-scale-slider');
         const scale = scaleInput ? parseFloat(scaleInput.value) : 20;
         const flapsInput = document.getElementById('blueprint-flaps-toggle');
         const includeFlaps = flapsInput ? flapsInput.checked : true;
+        
+        let allGroups = '';
+        const PAGE_WIDTH = 210; // A4 width in mm
+        const margin = 5;
+        const flapDepth = includeFlaps ? 10 : 0;
+        const inset = 3;
+        
+        let currentX = margin;
+        let currentY = margin;
+        let currentRowHeight = 0;
+        let isRotated = false;
         
         this.triangleTypes.forEach((typeData, typeKey) => {
             if (typeData.triangles.length === 0) return;
             
             const tri = typeData.triangles[0];
             const pts2D = this.flattenPolygon(tri.triangle);
-            
             if (pts2D.length < 3) return;
             
             const ptsScaled = pts2D.map(p => ({ x: p.x / scale, y: p.y / scale }));
@@ -3884,150 +3955,158 @@ class DomeSimulator {
                 if (p.y > maxY) maxY = p.y;
             });
             
-            const margin = includeFlaps ? 15 : 5;
-            const svgWidth = (maxX - minX) + margin * 2;
-            const svgHeight = (maxY - minY) + margin * 2;
-            
-            let svgContent = `<svg viewBox="${minX - margin} ${minY - margin} ${svgWidth} ${svgHeight}" class="w-full h-auto bg-slate-900 rounded-xl border border-slate-700 shadow-inner">`;
-            
-            const ptsString = ptsScaled.map(p => `${p.x},${p.y}`).join(' ');
-            svgContent += `<polygon points="${ptsString}" fill="${typeData.color}33" stroke="${typeData.color}" stroke-width="1" ${includeFlaps ? 'stroke-dasharray="2,2"' : ''}/>`;
-            
-            if (includeFlaps) {
-                const flapDepth = 10;
-                const inset = 3;
-                
-                for(let i=0; i<ptsScaled.length; i++) {
-                    let p1 = ptsScaled[i];
-                    let p2 = ptsScaled[(i+1)%ptsScaled.length];
-                    
-                    let dx = p2.x - p1.x;
-                    let dy = p2.y - p1.y;
-                    let len = Math.hypot(dx, dy);
-                    let nx = -dy / len;
-                    let ny = dx / len;
-                    
-                    let f1x = p1.x + nx * flapDepth;
-                    let f1y = p1.y + ny * flapDepth;
-                    let f2x = p2.x + nx * flapDepth;
-                    let f2y = p2.y + ny * flapDepth;
-                    
-                    let insetDx = dx * (inset/len);
-                    let insetDy = dy * (inset/len);
-                    
-                    svgContent += `<polygon points="${p1.x},${p1.y} ${p2.x},${p2.y} ${f2x - insetDx},${f2y - insetDy} ${f1x + insetDx},${f1y + insetDy}" fill="none" stroke="white" stroke-width="0.5"/>`;
-                }
-            }
-            
-            for(let i=0; i<ptsScaled.length; i++) {
-                let p1 = ptsScaled[i];
-                let p2 = ptsScaled[(i+1)%ptsScaled.length];
-                let dx = p2.x - p1.x;
-                let dy = p2.y - p1.y;
-                let len = Math.hypot(dx, dy);
-                let cx = (p1.x + p2.x) / 2;
-                let cy = (p1.y + p2.y) / 2;
-                let angle = Math.atan2(dy, dx) * 180 / Math.PI;
-                if(angle > 90 || angle < -90) {
-                    angle += 180;
-                }
-                let dist = tri.strutComposition.lengths[i] || (len * scale);
-                svgContent += `<text x="${cx}" y="${cy}" font-size="3" fill="#94a3b8" text-anchor="middle" transform="rotate(${angle}, ${cx}, ${cy}) translate(0, -2)">${dist.toFixed(0)}mm</text>`;
-            }
+            const bbWidth = (maxX - minX) + flapDepth * 2;
+            const bbHeight = (maxY - minY) + flapDepth * 2;
+            const L = ptsScaled[1].x - ptsScaled[0].x; // Base length for stepping
+            const stepX = (L / 2) + flapDepth * 2.5 + 5;
             
             const cx = (minX + maxX) / 2;
             const cy = (minY + maxY) / 2;
-            svgContent += `<text x="${cx}" y="${cy}" font-size="6" fill="${typeData.color}" font-weight="bold" text-anchor="middle">Type ${typeKey}</text>`;
-            svgContent += `<text x="${cx}" y="${cy + 8}" font-size="4" fill="white" text-anchor="middle">${typeData.count}x</text>`;
+            const ptsString = ptsScaled.map(p => `${p.x},${p.y}`).join(' ');
             
-            svgContent += `</svg>`;
-            
-            const card = document.createElement('div');
-            card.className = 'bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 backdrop-blur shadow';
-            card.innerHTML = `<div class="text-sm font-bold text-slate-300 mb-4 flex justify-between"><span>Panel Type ${typeKey}</span><span class="text-pink-400">${typeData.count} pieces</span></div>${svgContent}`;
-            container.appendChild(card);
+            for (let i = 0; i < typeData.count; i++) {
+                if (currentX + bbWidth > PAGE_WIDTH - margin) {
+                    currentX = margin;
+                    currentY += currentRowHeight + margin;
+                    currentRowHeight = 0;
+                    isRotated = false; // Reset rotation for new row
+                }
+                
+                if (bbHeight > currentRowHeight) currentRowHeight = bbHeight;
+                
+                const startX = currentX - minX + flapDepth;
+                const startY = currentY - minY + flapDepth;
+                
+                let transform = `translate(${startX}, ${startY})`;
+                if (isRotated) {
+                    transform += ` rotate(180, ${cx}, ${cy})`;
+                }
+                
+                let g = `<g transform="${transform}">`;
+                g += `<polygon points="${ptsString}" class="${includeFlaps ? 'fold' : 'cut'}" fill="${typeData.color}33" stroke="${typeData.color}" stroke-width="0.5" onmouseenter="window.sim.selectTriangleType('${typeKey}')" onmouseleave="window.sim.selectTriangleType(null)"/>`;
+                
+                if (includeFlaps) {
+                    for(let j=0; j<ptsScaled.length; j++) {
+                        let p1 = ptsScaled[j];
+                        let p2 = ptsScaled[(j+1)%ptsScaled.length];
+                        let dx = p2.x - p1.x, dy = p2.y - p1.y;
+                        let len = Math.hypot(dx, dy);
+                        let nx = -dy / len, ny = dx / len;
+                        let f1x = p1.x + nx * flapDepth, f1y = p1.y + ny * flapDepth;
+                        let f2x = p2.x + nx * flapDepth, f2y = p2.y + ny * flapDepth;
+                        let insetDx = dx * (inset/len), insetDy = dy * (inset/len);
+                        g += `<polygon points="${p1.x},${p1.y} ${p2.x},${p2.y} ${f2x - insetDx},${f2y - insetDy} ${f1x + insetDx},${f1y + insetDy}" class="cut" fill="none" stroke="white" stroke-width="0.3"/>`;
+                    }
+                }
+                g += `</g>`;
+                
+                const textX = startX + cx;
+                const textY = startY + cy;
+                g += `<text x="${textX}" y="${textY}" class="text" text-anchor="middle">T${typeKey}</text>`;
+                
+                allGroups += g;
+                
+                currentX += stepX;
+                isRotated = !isRotated;
+            }
         });
-    }
-
-    exportBlueprintSVG() {
-        const scaleInput = document.getElementById('blueprint-scale-slider');
-        const scale = scaleInput ? parseFloat(scaleInput.value) : 20;
-        const flapsInput = document.getElementById('blueprint-flaps-toggle');
-        const includeFlaps = flapsInput ? flapsInput.checked : true;
         
-        let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 297" width="210mm" height="297mm">`;
+        const totalHeight = currentY + currentRowHeight + margin;
+        
+        let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${PAGE_WIDTH} ${totalHeight}" width="${PAGE_WIDTH}mm" height="${totalHeight}mm" class="max-w-full h-auto">`;
         svgContent += `<style>
             .cut { stroke: #ff0000; stroke-width: 0.2; fill: none; }
             .fold { stroke: #0000ff; stroke-width: 0.2; fill: none; stroke-dasharray: 2,2; }
-            .text { font-family: sans-serif; font-size: 3px; fill: #000; }
+            .text { font-family: sans-serif; font-size: 3px; fill: #000; pointer-events: none; }
+            polygon { cursor: pointer; transition: opacity 0.2s; }
+            polygon:hover { opacity: 0.8; }
         </style>`;
         
-        let offsetY = 10;
-        
-        this.triangleTypes.forEach((typeData, typeKey) => {
-            if (typeData.triangles.length === 0) return;
-            
-            const tri = typeData.triangles[0];
-            const pts2D = this.flattenPolygon(tri.triangle);
-            if (pts2D.length < 3) return;
-            
-            const ptsScaled = pts2D.map(p => ({ x: p.x / scale, y: p.y / scale }));
-            
-            let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-            ptsScaled.forEach(p => {
-                if (p.x < minX) minX = p.x;
-                if (p.y < minY) minY = p.y;
-                if (p.x > maxX) maxX = p.x;
-                if (p.y > maxY) maxY = p.y;
-            });
-            
-            const flapDepth = 10;
-            const inset = 3;
-            const startX = 20 - minX;
-            const startY = offsetY - minY + (includeFlaps ? flapDepth : 5);
-            
-            let g = `<g transform="translate(${startX}, ${startY})">`;
-            
-            const ptsString = ptsScaled.map(p => `${p.x},${p.y}`).join(' ');
-            g += `<polygon points="${ptsString}" class="${includeFlaps ? 'fold' : 'cut'}"/>`;
-            
-            if (includeFlaps) {
-                for(let i=0; i<ptsScaled.length; i++) {
-                    let p1 = ptsScaled[i];
-                    let p2 = ptsScaled[(i+1)%ptsScaled.length];
-                    let dx = p2.x - p1.x, dy = p2.y - p1.y;
-                    let len = Math.hypot(dx, dy);
-                    let nx = -dy / len, ny = dx / len;
-                    let f1x = p1.x + nx * flapDepth, f1y = p1.y + ny * flapDepth;
-                    let f2x = p2.x + nx * flapDepth, f2y = p2.y + ny * flapDepth;
-                    let insetDx = dx * (inset/len), insetDy = dy * (inset/len);
-                    g += `<polygon points="${p1.x},${p1.y} ${p2.x},${p2.y} ${f2x - insetDx},${f2y - insetDy} ${f1x + insetDx},${f1y + insetDy}" class="cut"/>`;
-                }
-            }
-            
-            const cx = (minX + maxX) / 2;
-            const cy = (minY + maxY) / 2;
-            g += `<text x="${cx}" y="${cy}" class="text" text-anchor="middle">Type ${typeKey} (${typeData.count}x)</text>`;
-            g += `</g>`;
-            
-            svgContent += g;
-            
-            offsetY += (maxY - minY) + (includeFlaps ? flapDepth * 2 : 10) + 10;
-        });
-        
+        svgContent += allGroups;
         svgContent += `</svg>`;
+        
+        return svgContent;
+    }
+
+    exportBlueprintSVG() {
+        const mode = this.blueprintViewMode || 'origami';
+        const svgContent = mode === 'panels' ? this.generateBlueprintSVG() : this.generateOrigamiSVG();
+        const scaleInput = document.getElementById('blueprint-scale-slider');
+        const scale = scaleInput ? parseFloat(scaleInput.value) : 20;
+        const prefix = mode === 'panels' ? 'dome_panels' : 'origami_net';
         
         const blob = new Blob([svgContent], {type: 'image/svg+xml'});
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `dome_panels_scale_1_${scale}.svg`;
+        a.download = `${prefix}_scale_1_${scale}.svg`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
     }
-    
+
+    toggleOrigamiMode() {
+        this.blueprintMode = !this.blueprintMode;
+        if (!this.blueprintViewMode) this.blueprintViewMode = 'origami';
+        
+        const newUrlParams = new URLSearchParams(window.location.search);
+        if (this.blueprintMode) {
+            newUrlParams.set('origami', '1');
+            newUrlParams.set('origami_style', this.blueprintViewMode);
+        } else {
+            newUrlParams.delete('origami');
+            // optionally leave origami_style or remove it. We'll leave it in case they re-open.
+        }
+        window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+        
+        const bpView = document.getElementById('blueprint-view');
+        const btnBp = document.getElementById('btn-blueprint-mode');
+        const btnDownload = document.getElementById('btn-blueprint-download');
+        const btnStyle = document.getElementById('btn-blueprint-style');
+        
+        if (this.blueprintMode) {
+            bpView.classList.remove('hidden');
+            btnBp.classList.add('bg-pink-900', 'border-pink-400', 'text-white');
+            if (btnDownload) { btnDownload.classList.remove('hidden'); btnDownload.classList.add('flex'); }
+            if (btnStyle) { btnStyle.classList.remove('hidden'); btnStyle.classList.add('flex'); }
+            this.renderBlueprint();
+        } else {
+            bpView.classList.add('hidden');
+            btnBp.classList.remove('bg-pink-900', 'border-pink-400', 'text-white');
+            if (btnDownload) { btnDownload.classList.add('hidden'); btnDownload.classList.remove('flex'); }
+            if (btnStyle) { btnStyle.classList.add('hidden'); btnStyle.classList.remove('flex'); }
+        }
+    }
+
+    toggleBlueprintStyle() {
+        if (this.blueprintViewMode === 'origami') {
+            this.blueprintViewMode = 'panels';
+            const btnStyle = document.getElementById('btn-blueprint-style');
+            if (btnStyle) {
+                btnStyle.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                    <polygon points="8,12 16,12 12,18.93" />
+                    <polygon points="8,12 16,12 12,5.07" />
+                    <polygon points="8,12 12,18.93 4,18.93" />
+                    <polygon points="16,12 12,18.93 20,18.93" />
+                </svg>`;
+                btnStyle.title = "Switch to Origami Net";
+            }
+        } else {
+            this.blueprintViewMode = 'origami';
+            const btnStyle = document.getElementById('btn-blueprint-style');
+            if (btnStyle) {
+                btnStyle.innerHTML = '<i class="bi bi-scissors"></i>';
+                btnStyle.title = "Switch to Panels (Scissors)";
+            }
+        }
+        
+        const newUrlParams = new URLSearchParams(window.location.search);
+        newUrlParams.set('origami_style', this.blueprintViewMode);
+        window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+        
+        this.renderBlueprint();
+    }
     destroy() {
         document.getElementById('btn-blueprint-mode')?.removeEventListener('click', this.toggleBlueprintMode);
         document.getElementById('blueprint-scale-slider')?.removeEventListener('input', this.renderBlueprint);
@@ -4035,15 +4114,11 @@ class DomeSimulator {
         document.getElementById('btn-export-blueprint')?.removeEventListener('click', this.exportBlueprintSVG);
     }
 
-    initBlueprintListeners() {
-        document.getElementById('btn-blueprint-mode').addEventListener('click', () => this.toggleBlueprintMode());
-        document.getElementById('blueprint-scale-slider').addEventListener('input', () => this.renderBlueprint());
-        document.getElementById('blueprint-flaps-toggle').addEventListener('change', () => this.renderBlueprint());
-        document.getElementById('btn-export-blueprint').addEventListener('click', () => this.exportBlueprintSVG());
-    }
+    // Removed unused initBlueprintListeners
 
-    exportOrigamiSVG() {
-        const scaleInput = document.getElementById('panel-scale-slider');
+
+    generateOrigamiSVG() {
+        const scaleInput = document.getElementById('blueprint-scale-slider');
         const scale = scaleInput ? parseFloat(scaleInput.value) : 20;
 
         const getEdgeKey = (v1, v2) => {
@@ -4203,15 +4278,15 @@ class DomeSimulator {
             nets.push(net);
         }
 
-        let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="2000mm" height="2000mm" viewBox="-1000 -1000 2000 2000">\n`;
-        svgContent += `<style>
-            .cut { stroke: #ff0000; stroke-width: 0.5; fill: #f8fafc; }
-            .fold { stroke: #0000ff; stroke-width: 0.5; stroke-dasharray: 4,4; fill: none; }
-            .text { font-family: sans-serif; font-size: 8px; fill: #64748b; }
-        </style>\n`;
-
-        let offsetX = -900;
-        let offsetY = -900;
+        let globalMinX = Infinity;
+        let globalMinY = Infinity;
+        let globalMaxX = -Infinity;
+        let globalMaxY = -Infinity;
+        
+        let offsetX = 0;
+        let offsetY = 0;
+        
+        let allNetsSvg = "";
 
         nets.forEach((net, idx) => {
             let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
@@ -4223,43 +4298,60 @@ class DomeSimulator {
             });
             const w = maxX - minX;
             const h = maxY - minY;
-            
-            if (offsetX + w > 900) {
-                offsetX = -900;
-                offsetY += h + 20;
-            }
-
             const dx = offsetX - minX;
             const dy = offsetY - minY;
+            
+            globalMinX = Math.min(globalMinX, offsetX);
+            globalMinY = Math.min(globalMinY, offsetY);
+            globalMaxX = Math.max(globalMaxX, offsetX + w);
+            globalMaxY = Math.max(globalMaxY, offsetY + h);
 
-            svgContent += `<g transform="translate(${dx}, ${dy})">\n`;
+            allNetsSvg += `<g transform="translate(${dx}, ${dy})">\n`;
             
             net.faces.forEach(f => {
                 const ptsStr = f.pts2D.map(p => `${p.x},${p.y}`).join(' ');
-                svgContent += `<polygon points="${ptsStr}" class="cut"/>\n`;
+                
+                const face = this.allFaces[f.fIdx];
+                let typeKey = null, typeData = null;
+                for (const [key, data] of this.triangleTypes) {
+                    if (data.triangles.find(t => t.triangle === face || this.trianglesEqual(t.triangle, face))) {
+                        typeKey = key;
+                        typeData = data;
+                        break;
+                    }
+                }
+                const color = typeData ? typeData.color : '#ffffff';
+                
+                allNetsSvg += `<polygon points="${ptsStr}" class="cut" fill="${color}33" stroke="${color}" onmouseenter="window.sim.selectTriangleType('${typeKey}')" onmouseleave="window.sim.selectTriangleType(null)"/>\n`;
             });
 
             net.folds.forEach(fold => {
-                svgContent += `<line x1="${fold.p1.x}" y1="${fold.p1.y}" x2="${fold.p2.x}" y2="${fold.p2.y}" class="fold"/>\n`;
+                allNetsSvg += `<line x1="${fold.p1.x}" y1="${fold.p1.y}" x2="${fold.p2.x}" y2="${fold.p2.y}" class="fold"/>\n`;
             });
 
-            svgContent += `</g>\n`;
+            allNetsSvg += `</g>\n`;
             offsetX += w + 20;
         });
 
+        // Add padding
+        globalMinX -= 20;
+        globalMinY -= 20;
+        const viewBoxWidth = (globalMaxX - globalMinX) + 40;
+        const viewBoxHeight = (globalMaxY - globalMinY) + 40;
+
+        let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="auto" viewBox="${globalMinX} ${globalMinY} ${viewBoxWidth} ${viewBoxHeight}">\n`;
+        svgContent += `<style>
+            .cut { stroke: #ff0000; stroke-width: 0.5; }
+            .fold { stroke: #0000ff; stroke-width: 0.5; stroke-dasharray: 4,4; fill: none; pointer-events: none; }
+            .text { font-family: sans-serif; font-size: 8px; fill: #64748b; pointer-events: none; }
+            polygon { cursor: pointer; transition: opacity 0.2s; }
+            polygon:hover { opacity: 0.7; }
+        </style>\n`;
+        
+        svgContent += allNetsSvg;
         svgContent += `</svg>`;
-
-        const blob = new Blob([svgContent], {type: 'image/svg+xml'});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `origami_net_scale_1_${scale}.svg`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        return svgContent;
     }
-
     destroy() {
         // Cleanup method
         if (this.animationId) {

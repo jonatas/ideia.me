@@ -32,7 +32,7 @@ permalink: /dome-builder/
             </div>
         </div>
 
-        <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur p-2 rounded-xl border border-slate-700/80 flex gap-2 shadow-lg z-10">
+        <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur p-2 rounded-xl border border-slate-700/80 flex gap-2 shadow-lg z-30">
             <button onclick="domeSimulator.setView('front')" class="w-10 h-10 rounded bg-slate-800 hover:bg-sky-900 border border-slate-600 hover:border-sky-400 flex items-center justify-center text-slate-300 hover:text-white transition-all" title="Front View">
                 <i class="bi bi-box-arrow-in-right"></i>
             </button>
@@ -40,7 +40,7 @@ permalink: /dome-builder/
                 <i class="bi bi-caret-down-square"></i>
             </button>
             <button onclick="domeSimulator.setView('diagonal')" class="w-10 h-10 rounded bg-slate-800 hover:bg-sky-900 border border-slate-600 hover:border-sky-400 flex items-center justify-center text-slate-300 hover:text-white transition-all" title="Diagonal View">
-                <i class="bi bi-box"></i>
+                <i class="bi bi-arrows-move"></i>
             </button>
             <button onclick="domeSimulator.setView('inner')" class="w-10 h-10 rounded bg-slate-800 hover:bg-sky-900 border border-slate-600 hover:border-sky-400 flex items-center justify-center text-slate-300 hover:text-white transition-all" title="Inner View">
                 <i class="bi bi-bullseye"></i>
@@ -49,55 +49,53 @@ permalink: /dome-builder/
                 <i class="bi bi-zoom-in"></i>
             </button>
             <div class="w-px h-6 bg-slate-700/50 my-auto mx-1"></div>
-            <button onclick="domeSimulator.toggleBlueprintMode()" id="btn-blueprint-mode" class="w-10 h-10 rounded bg-slate-800 hover:bg-pink-900 border border-slate-600 hover:border-pink-400 flex items-center justify-center text-slate-300 hover:text-white transition-all" title="2D Blueprint / Cut Pattern">
-                <i class="bi bi-printer"></i>
+            <button onclick="domeSimulator.toggleOrigamiMode()" id="btn-blueprint-mode" class="w-10 h-10 rounded bg-slate-800 hover:bg-pink-900 border border-slate-600 hover:border-pink-400 flex items-center justify-center text-slate-300 hover:text-white transition-all" title="Origami View">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5">
+                    <polygon points="8,12 16,12 12,18.93" />
+                    <polygon points="8,12 16,12 12,5.07" />
+                    <polygon points="8,12 12,18.93 4,18.93" />
+                    <polygon points="16,12 12,18.93 20,18.93" />
+                </svg>
             </button>
-            <button onclick="domeSimulator.switchTab('assembly')" id="btn-top-assembly" class="w-10 h-10 rounded bg-slate-800 hover:bg-emerald-900 border border-slate-600 hover:border-emerald-400 flex items-center justify-center text-slate-300 hover:text-white transition-all" title="Assembly Instructions">
-                <i class="bi bi-tools"></i>
+            <button onclick="domeSimulator.exportBlueprintSVG()" id="btn-blueprint-download" class="w-10 h-10 rounded bg-slate-800 hover:bg-pink-900 border border-slate-600 hover:border-pink-400 hidden items-center justify-center text-slate-300 hover:text-white transition-all" title="Download SVG">
+                <i class="bi bi-download"></i>
+            </button>
+            <button onclick="domeSimulator.toggleBlueprintStyle()" id="btn-blueprint-style" class="w-10 h-10 rounded bg-slate-800 hover:bg-pink-900 border border-slate-600 hover:border-pink-400 hidden items-center justify-center text-slate-300 hover:text-white transition-all" title="Switch to Panels (Scissors)">
+                <i class="bi bi-scissors"></i>
             </button>
         </div>
 
-        <div id="blueprint-view" class="absolute inset-0 bg-slate-900 z-20 overflow-auto hidden p-8">
-            <div class="max-w-4xl mx-auto">
-                <div class="flex justify-between items-center mb-8 bg-slate-800/80 backdrop-blur p-4 rounded-xl border border-slate-700 sticky top-0 z-30 shadow-2xl">
-                    <h2 class="text-xl font-bold text-pink-400"><i class="bi bi-printer mr-2"></i> 2D Laser Cut & Fold Patterns</h2>
-                    <div class="flex items-center gap-6">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs text-slate-400">Scale:</span>
-                            <span class="text-xs font-mono text-sky-400 w-10" id="blueprint-scale-display">1:20</span>
-                            <input type="range" id="blueprint-scale-slider" min="1" max="100" value="20" class="w-24 slider" step="1">
-                        </div>
-                        <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-300">
-                            <input type="checkbox" id="blueprint-flaps-toggle" class="w-4 h-4 text-pink-400 bg-slate-900 border-slate-700 rounded" checked>
-                            Include Flaps
-                        </label>
-                        <button onclick="domeSimulator.exportBlueprintSVG()" class="px-4 py-2 bg-pink-600 hover:bg-pink-500 text-white text-xs font-bold rounded-lg shadow transition-colors">
-                            <i class="bi bi-download mr-1"></i> Export SVG
-                        </button>
-                        <button onclick="domeSimulator.toggleBlueprintMode()" class="w-8 h-8 rounded-full bg-slate-700 hover:bg-slate-600 flex items-center justify-center text-white transition-colors">
-                            <i class="bi bi-x-lg"></i>
-                        </button>
-                    </div>
+        <div id="blueprint-view" class="absolute inset-0 bg-slate-900 z-20 overflow-auto hidden p-8 pt-24">
+            <div id="blueprint-controls" class="absolute bottom-8 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur p-4 rounded-xl border border-slate-700/80 flex gap-6 shadow-2xl z-30 pointer-events-auto">
+                <div class="flex items-center gap-3 text-sm font-bold text-slate-300">
+                    <span>Scale 1:</span>
+                    <span id="blueprint-scale-display" class="font-mono text-sky-400 w-8">20</span>
+                    <input type="range" id="blueprint-scale-slider" min="1" max="100" value="20" class="w-32 accent-pink-500">
                 </div>
-                
-                <div id="blueprint-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 pb-12">
-                    <!-- SVG layouts generated by JS -->
-                </div>
+                <div class="w-px h-6 bg-slate-700 my-auto"></div>
+                <label class="flex items-center gap-2 text-sm font-bold text-slate-300 cursor-pointer">
+                    <input type="checkbox" id="blueprint-flaps-toggle" class="w-4 h-4 text-pink-400 bg-slate-900 border-slate-700 rounded accent-pink-500" checked>
+                    Flaps
+                </label>
+            </div>
+            <div id="blueprint-container" class="max-w-4xl mx-auto flex items-center justify-center h-full">
+                <!-- SVG layouts generated by JS -->
             </div>
         </div>
     </div>
 
     <div class="side-panel">
-        <div class="flex border-b border-slate-700 text-center">
-            <button id="btn-tab-design" class="tab-btn active" onclick="domeSimulator.switchTab('design')" title="Design">
+        <div class="flex border-b border-slate-700 text-center text-xs">
+            <button id="btn-tab-design" class="tab-btn active flex-1 py-3" onclick="domeSimulator.switchTab('design')" title="Design">
                 <i class="bi bi-sliders2"></i><span class="hidden md:inline ml-1">Design</span>
             </button>
-            <button id="btn-tab-inventory" class="tab-btn" onclick="domeSimulator.switchTab('inventory')" title="Inventory">
+            <button id="btn-tab-inventory" class="tab-btn flex-1 py-3" onclick="domeSimulator.switchTab('inventory')" title="Inventory">
                 <i class="bi bi-box"></i><span class="hidden md:inline ml-1">Inventory</span>
             </button>
-            <button id="btn-tab-assembly" class="tab-btn" onclick="domeSimulator.switchTab('assembly')" title="Assembly">
+            <button id="btn-tab-assembly" class="tab-btn flex-1 py-3" onclick="domeSimulator.switchTab('assembly')" title="Assembly">
                 <i class="bi bi-tools"></i><span class="hidden md:inline ml-1">Assembly</span>
             </button>
+
         </div>
 
         <!-- Design Tab -->
@@ -216,6 +214,7 @@ permalink: /dome-builder/
                 <!-- Populated by JS -->
             </div>
         </div>
+
 
         <!-- Assembly Tab -->
         <div id="tab-assembly" class="panel-content hidden">
