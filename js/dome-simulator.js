@@ -399,6 +399,29 @@ class DomeSimulator {
                 btnStructFullerene.classList.toggle('text-slate-400', this.structure !== 'fullerene');
             }
         };
+        
+        const btnSaveDesign = document.getElementById('save-design-btn');
+        if (btnSaveDesign) {
+            btnSaveDesign.addEventListener('click', () => {
+                if (window.userProfile) {
+                    const id = window.location.pathname + window.location.search;
+                    
+                    if (window.userProfile.isSaved(id)) {
+                        window.userProfile.toggleFavorite('app', id, id, 'Dome Config');
+                        this.updateSaveButtonState();
+                        return;
+                    }
+
+                    const name = prompt("Name this configuration:", `Dome v${this.frequency} ${this.baseShape}`);
+                    if (name) {
+                        window.userProfile.saveItem('app', id, id, name, 'bi-hexagon');
+                        this.updateSaveButtonState();
+                    }
+                } else {
+                    alert("Profile system not loaded.");
+                }
+            });
+        }
 
         if (btnStructGeodesic && btnStructFullerene) {
             updateStructButtons();
@@ -486,7 +509,23 @@ class DomeSimulator {
         }
     }
     
+    updateSaveButtonState() {
+        const btnSaveDesign = document.getElementById('save-design-btn');
+        if (btnSaveDesign && window.userProfile) {
+            const id = window.location.pathname + window.location.search;
+            if (window.userProfile.isSaved(id)) {
+                btnSaveDesign.querySelector('i').className = 'bi bi-bookmark-fill';
+                btnSaveDesign.classList.add('text-sky-400');
+            } else {
+                btnSaveDesign.querySelector('i').className = 'bi bi-bookmark';
+                btnSaveDesign.classList.remove('text-sky-400');
+            }
+        }
+    }
+
     updateUI() {
+        this.updateSaveButtonState();
+        
         // Update frequency display
         document.getElementById('frequency-display').textContent = this.frequency;
         
@@ -1039,7 +1078,7 @@ class DomeSimulator {
                             </div>
                         </div>
                         <div class="mt-3">
-                            <a href="/wood-cuts/?miter=${this.independentTriangles ? strut.miter1.toFixed(1) : strut.miterAngle.toFixed(1)}&bevel=${strut.bevelAngle.toFixed(1)}&width=${this.strutWidth}&height=${this.strutHeight}" target="_blank" class="block text-center py-2 bg-blue-600/20 text-blue-400 border border-blue-500/30 text-[10px] font-bold rounded hover:bg-blue-600 hover:text-white transition-colors" onclick="event.stopPropagation();">
+                            <a href="/wood-cuts/?miter=${this.independentTriangles ? strut.miter1.toFixed(1) : strut.miterAngle.toFixed(1)}&bevel=${strut.bevelAngle.toFixed(1)}&width=${this.strutWidth}&height=${this.strutHeight}&joint=${this.jointStyle}" target="_blank" class="block text-center py-2 bg-blue-600/20 text-blue-400 border border-blue-500/30 text-[10px] font-bold rounded hover:bg-blue-600 hover:text-white transition-colors" onclick="event.stopPropagation();">
                                 <i class="bi bi-box-arrow-up-right mr-1"></i> Open in Miter Saw Simulator
                             </a>
                         </div>
