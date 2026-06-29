@@ -1039,7 +1039,7 @@ class DomeSimulator {
                             </div>
                         </div>
                         <div class="mt-3">
-                            <a href="/wood-cuts/?miter=${this.independentTriangles ? strut.miter1.toFixed(1) : strut.miterAngle.toFixed(1)}&bevel=${strut.bevelAngle.toFixed(1)}" target="_blank" class="block text-center py-2 bg-blue-600/20 text-blue-400 border border-blue-500/30 text-[10px] font-bold rounded hover:bg-blue-600 hover:text-white transition-colors" onclick="event.stopPropagation();">
+                            <a href="/wood-cuts/?miter=${this.independentTriangles ? strut.miter1.toFixed(1) : strut.miterAngle.toFixed(1)}&bevel=${strut.bevelAngle.toFixed(1)}&width=${this.strutWidth}&height=${this.strutHeight}" target="_blank" class="block text-center py-2 bg-blue-600/20 text-blue-400 border border-blue-500/30 text-[10px] font-bold rounded hover:bg-blue-600 hover:text-white transition-colors" onclick="event.stopPropagation();">
                                 <i class="bi bi-box-arrow-up-right mr-1"></i> Open in Miter Saw Simulator
                             </a>
                         </div>

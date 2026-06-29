@@ -56,6 +56,24 @@ class WoodCutsSimulator {
             if (cornerSlider) cornerSlider.value = this.cornerAngle;
             if (slopeSlider) slopeSlider.value = this.slopeAngle;
         }
+        
+        if (params.has('width')) {
+            const w = parseFloat(params.get('width'));
+            if (!isNaN(w)) {
+                this.woodWidth = w;
+                const widthInput = document.getElementById('wood-width');
+                if (widthInput) widthInput.value = this.woodWidth;
+            }
+        }
+        
+        if (params.has('height')) {
+            const h = parseFloat(params.get('height'));
+            if (!isNaN(h)) {
+                this.woodHeight = h;
+                const heightInput = document.getElementById('wood-height');
+                if (heightInput) heightInput.value = this.woodHeight;
+            }
+        }
     }
 
     init() {
