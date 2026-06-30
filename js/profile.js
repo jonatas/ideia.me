@@ -11,6 +11,14 @@ class LocalProfile {
     this.pingInterval = 5000; // Update time every 5 seconds
     this.listeners = [];
     
+    // Listen for changes from other tabs
+    window.addEventListener('storage', (e) => {
+      if (e.key === this.storageKey && e.newValue) {
+        this.data = JSON.parse(e.newValue);
+        this.notifyListeners();
+      }
+    });
+    
     this.init();
   }
   
