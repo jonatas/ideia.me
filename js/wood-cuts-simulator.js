@@ -32,23 +32,30 @@ class WoodCutsSimulator {
             
             const M = miterDeg * Math.PI / 180;
             const B = bevelDeg * Math.PI / 180;
+            this.jointStyle = params.get('joint') || 'karma';
             
-            // Inverse formulas:
-            // sin(C/2) = sqrt(sin^2(M) + sin^2(B)*cos^2(M))
-            // cos(S) = sin(B) / sin(C/2)
-            
-            const sinSqHalfC = Math.pow(Math.sin(M), 2) + Math.pow(Math.sin(B), 2) * Math.pow(Math.cos(M), 2);
-            const halfC = Math.asin(Math.sqrt(Math.max(0, Math.min(1, sinSqHalfC))));
-            const C = halfC * 2 * 180 / Math.PI;
-            
-            let S = 0;
-            if (halfC > 0.0001) {
-                const cosS = Math.sin(B) / Math.sin(halfC);
-                S = Math.acos(Math.max(-1, Math.min(1, cosS))) * 180 / Math.PI;
+            // For double cut, M and B directly define the geometry relative to bisector
+            if (this.jointStyle === 'double') {
+                this.cornerAngle = miterDeg * 2;
+                this.slopeAngle = bevelDeg;
+            } else {
+                // Inverse formulas for Karma:
+                // sin(C/2) = sqrt(sin^2(M) + sin^2(B)*cos^2(M))
+                // cos(S) = sin(B) / sin(C/2)
+                
+                const sinSqHalfC = Math.pow(Math.sin(M), 2) + Math.pow(Math.sin(B), 2) * Math.pow(Math.cos(M), 2);
+                const halfC = Math.asin(Math.sqrt(Math.max(0, Math.min(1, sinSqHalfC))));
+                const C = halfC * 2 * 180 / Math.PI;
+                
+                let S = 0;
+                if (halfC > 0.0001) {
+                    const cosS = Math.sin(B) / Math.sin(halfC);
+                    S = Math.acos(Math.max(-1, Math.min(1, cosS))) * 180 / Math.PI;
+                }
+                
+                this.cornerAngle = isNaN(C) ? 90 : C;
+                this.slopeAngle = isNaN(S) ? 0 : S;
             }
-            
-            this.cornerAngle = isNaN(C) ? 90 : C;
-            this.slopeAngle = isNaN(S) ? 0 : S;
             
             // Update UI sliders
             const cornerSlider = document.getElementById('corner-angle-slider');
@@ -146,15 +153,20 @@ class WoodCutsSimulator {
     }
 
     calculateAngles() {
-        // C = Corner Angle, S = Slope Angle (from horizontal)
-        // M = atan(tan(C/2) * sin(S))
-        // B = asin(sin(C/2) * cos(S))
-        
-        const halfC = (this.cornerAngle / 2) * Math.PI / 180;
-        const S = this.slopeAngle * Math.PI / 180;
+        if (this.jointStyle === 'double') {
+            this.miterAngle = this.cornerAngle / 2;
+            this.bevelAngle = this.slopeAngle;
+        } else {
+            // C = Corner Angle, S = Slope Angle (from horizontal)
+            // M = atan(tan(C/2) * sin(S))
+            // B = asin(sin(C/2) * cos(S))
+            
+            const halfC = (this.cornerAngle / 2) * Math.PI / 180;
+            const S = this.slopeAngle * Math.PI / 180;
 
-        this.miterAngle = Math.atan(Math.tan(halfC) * Math.sin(S)) * 180 / Math.PI;
-        this.bevelAngle = Math.asin(Math.sin(halfC) * Math.cos(S)) * 180 / Math.PI;
+            this.miterAngle = Math.atan(Math.tan(halfC) * Math.sin(S)) * 180 / Math.PI;
+            this.bevelAngle = Math.asin(Math.sin(halfC) * Math.cos(S)) * 180 / Math.PI;
+        }
     }
 
     updateUI() {
@@ -164,6 +176,16 @@ class WoodCutsSimulator {
         document.getElementById('calc-bevel').textContent = `${this.bevelAngle.toFixed(1)}°`;
         document.getElementById('saw-miter-val').textContent = `${this.miterAngle.toFixed(1)}°`;
         document.getElementById('saw-bevel-val').textContent = `${this.bevelAngle.toFixed(1)}°`;
+        
+        // Update formula text based on joint style
+        const formulaContainer = document.querySelector('.math-formula') || document.querySelector('section:nth-of-type(4) .text-\\[9px\\]');
+        if (formulaContainer) {
+            if (this.jointStyle === 'double') {
+                formulaContainer.innerHTML = '<p>Miter = CornerAngle / 2</p><p>Bevel = SlopeAngle</p><p class="mt-2 text-[8px] text-gray-500">Double cuts are mirrored cuts meeting perfectly at a hubless center. Cuts are applied symmetrically on both ends of each strut.</p>';
+            } else {
+                formulaContainer.innerHTML = '<p>M = atan(tan(C/2) * sin(S))</p><p>B = asin(sin(C/2) * cos(S))</p><p class="mt-2 text-[8px] text-gray-500">Good Karma cuts create self-supporting panels with overlapping pinwheel joints.</p>';
+            }
+        }
     }
 
     init3DViews() {
@@ -361,17 +383,49 @@ class WoodCutsSimulator {
         const hC = (this.cornerAngle / 2) * Math.PI / 180;
         const S = this.slopeAngle * Math.PI / 180;
 
-        // Arrangement around Z=0 for a Good Karma joint
-        const angleY = -hC + pieceIndex * (this.cornerAngle * Math.PI / 180);
-        const roll = Math.atan(Math.tan(S) / Math.sin(hC));
-        
         const matrix = new THREE.Matrix4();
-        const isOdd = pieceIndex % 2 === 1;
-        const currentRoll = isOdd ? roll : -roll;
-        
-        matrix.makeRotationY(angleY);
-        matrix.multiply(new THREE.Matrix4().makeRotationZ(S));
-        matrix.multiply(new THREE.Matrix4().makeRotationX(currentRoll));
+        let bisectorAngle = 0;
+        let planeNormal = new THREE.Vector3(0, 0, 1);
+
+        if (this.jointStyle === 'double') {
+            // In double cut, the pieces lay flat (no roll) and are mirrored across the Z=0 plane.
+            // The slope (bevel) is the angle the strut dives down relative to the node normal (Y-axis).
+            const angleY = pieceIndex === 0 ? -hC : hC;
+            matrix.makeRotationY(angleY);
+            
+            // For a strut meeting the node, the strut's axis plunges by the bevel angle (S)
+            matrix.multiply(new THREE.Matrix4().makeRotationZ(S));
+            
+            // The bisector plane is the YZ plane (normal is X-axis), but since the pieces are
+            // meeting at an angle in the XZ plane, the bisector of their V-shape is Z=0.
+            // But wait, if they are rotated Y, the bisector is the Z axis if we are on the XY plane?
+            // Actually, if they are on XZ plane, the bisector is the X axis. So cut plane is Z=0.
+            planeNormal = new THREE.Vector3(0, 0, 1);
+            
+            // Wait, we need to consider the bevel tilt. The cut is made such that the top faces are flush.
+            // The normal of the bisector plane needs to account for the tilt.
+            // Actually, if we just use the saw blade normal, that is the exact cut plane!
+            // In the saw view, blade is rotated Y by -M, and X by B.
+            // Let's use the local blade normal transformed by the piece's inverse orientation.
+            // For simplicity, since the cuts are symmetric, the global cut plane for piece 0 is exactly 
+            // the YZ plane if they were along X, but they are along X rotated.
+            // Let's just use the exact saw cut logic:
+            // The saw blade in local space: normal = (0,0,1) rotated by X(B) and Y(-M).
+        } else {
+            // Arrangement around Z=0 for a Good Karma joint
+            const angleY = -hC + pieceIndex * (this.cornerAngle * Math.PI / 180);
+            const roll = Math.atan(Math.tan(S) / Math.sin(hC));
+            
+            const isOdd = pieceIndex % 2 === 1;
+            const currentRoll = isOdd ? roll : -roll;
+            
+            matrix.makeRotationY(angleY);
+            matrix.multiply(new THREE.Matrix4().makeRotationZ(S));
+            matrix.multiply(new THREE.Matrix4().makeRotationX(currentRoll));
+            
+            bisectorAngle = (pieceIndex % 2 === 0) ? (angleY + hC) : (angleY - hC);
+            planeNormal = new THREE.Vector3(0, 0, 1).applyAxisAngle(new THREE.Vector3(0, 1, 0), bisectorAngle);
+        }
 
         const geometry = new THREE.BufferGeometry();
         const corners = [
@@ -385,12 +439,20 @@ class WoodCutsSimulator {
         const dir = new THREE.Vector3(1, 0, 0).transformDirection(matrix);
         const invMatrix = new THREE.Matrix4().copy(matrix).invert();
         
-        // Good Karma joints meet side-by-side.
-        // We clip exactly at the bisector plane shared with the *previous* piece.
-        // Piece 0 and 1 meet at Z=0 (bisectorAngle = 0).
-        // Piece 2 and 3 meet at 2*cornerAngle, etc.
-        const bisectorAngle = (pieceIndex % 2 === 0) ? (angleY + hC) : (angleY - hC);
-        const planeNormal = new THREE.Vector3(0, 0, 1).applyAxisAngle(new THREE.Vector3(0, 1, 0), bisectorAngle);
+        if (this.jointStyle === 'double') {
+            // The saw blade normal in world space is (1,0,0) (since saw blade is flat on YZ).
+            // Actually, in initSawView, the blade is flat on XZ (rotation.x = PI/2), 
+            // then rotated Y by -M, and X by B.
+            // Let's directly calculate the local cut plane normal for a double cut.
+            // A double cut is simply miter M, bevel B.
+            const localCutNormal = new THREE.Vector3(1, 0, 0); // Cut face normal is along X
+            // Wait, if it's cut by a miter saw, the blade comes down.
+            // We can just use the YZ plane as the global meeting plane.
+            planeNormal = new THREE.Vector3(0, 0, 1);
+            // Actually, if both pieces meet at Z=0, and they plunge down by S, their intersection IS the Z=0 plane (if Y is up).
+            // Yes! The global meeting plane is just Z=0.
+            planeNormal = new THREE.Vector3(0, 0, 1);
+        }
 
         for (let i = 0; i < 4; i++) {
             // Far end (flat)
