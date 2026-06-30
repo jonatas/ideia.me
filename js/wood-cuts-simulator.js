@@ -144,6 +144,36 @@ class WoodCutsSimulator {
                 this.updateAll();
             });
         });
+        
+        const btnSaveDesign = document.getElementById('save-wood-cuts-btn');
+        if (btnSaveDesign) {
+            btnSaveDesign.addEventListener('click', () => {
+                if (window.userProfile) {
+                    // Rebuild the URL params to ensure it captures the exact current state
+                    const params = new URLSearchParams();
+                    params.set('miter', this.miterAngle.toFixed(1));
+                    params.set('bevel', this.bevelAngle.toFixed(1));
+                    params.set('width', this.woodWidth);
+                    params.set('height', this.woodHeight);
+                    
+                    const id = window.location.pathname + '?' + params.toString();
+                    
+                    if (window.userProfile.isSaved(id)) {
+                        window.userProfile.toggleFavorite('app', id, id, 'Wood Cut Config');
+                        this.updateSaveButtonState();
+                        return;
+                    }
+
+                    const name = prompt("Name this configuration:", `Wood Cut M${this.miterAngle.toFixed(1)}° B${this.bevelAngle.toFixed(1)}°`);
+                    if (name) {
+                        window.userProfile.saveItem('app', id, id, name, 'bi-scissors');
+                        this.updateSaveButtonState();
+                    }
+                } else {
+                    alert("Profile system not loaded.");
+                }
+            });
+        }
     }
 
     updateAll() {
@@ -184,6 +214,30 @@ class WoodCutsSimulator {
                 formulaContainer.innerHTML = '<p>Miter = CornerAngle / 2</p><p>Bevel = SlopeAngle</p><p class="mt-2 text-[8px] text-gray-500">Double cuts are mirrored cuts meeting perfectly at a hubless center. Cuts are applied symmetrically on both ends of each strut.</p>';
             } else {
                 formulaContainer.innerHTML = '<p>M = atan(tan(C/2) * sin(S))</p><p>B = asin(sin(C/2) * cos(S))</p><p class="mt-2 text-[8px] text-gray-500">Good Karma cuts create self-supporting panels with overlapping pinwheel joints.</p>';
+            }
+        }
+        
+        this.updateSaveButtonState();
+    }
+    
+    updateSaveButtonState() {
+        const btnSaveDesign = document.getElementById('save-wood-cuts-btn');
+        if (btnSaveDesign && window.userProfile) {
+            const params = new URLSearchParams();
+            params.set('miter', this.miterAngle.toFixed(1));
+            params.set('bevel', this.bevelAngle.toFixed(1));
+            params.set('width', this.woodWidth);
+            params.set('height', this.woodHeight);
+            const id = window.location.pathname + '?' + params.toString();
+            
+            if (window.userProfile.isSaved(id)) {
+                btnSaveDesign.querySelector('i').className = 'bi bi-bookmark-fill text-lg';
+                btnSaveDesign.classList.add('text-blue-400');
+                btnSaveDesign.classList.remove('text-gray-400');
+            } else {
+                btnSaveDesign.querySelector('i').className = 'bi bi-bookmark text-lg';
+                btnSaveDesign.classList.remove('text-blue-400');
+                btnSaveDesign.classList.add('text-gray-400');
             }
         }
     }
