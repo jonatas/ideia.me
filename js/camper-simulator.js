@@ -10,7 +10,7 @@ class CamperSimulator {
         this.taperStrength = 0.00;
         this.bedLength = 1549;
         this.caboverOverhang = 1626;
-        this.cabinClearance = 738;
+        this.cabinClearance = 500;
         this.rearSquaring = 0.43;
         this.doorWidth = 800;
         this.doorHeight = 1600;
@@ -864,7 +864,7 @@ class CamperSimulator {
             mainDim.innerHTML = '';
 
             // Auto-zoom calculation based on dynamic bed depth
-            const totalModelHeight = this.apexHeight + this.truckBedDepth + 380;
+            const totalModelHeight = this.apexHeight + this.truckBedDepth + 830;
             const viewBoxHeight = 1400;
             const verticalPadding = 100; // Total top+bottom padding
             
@@ -873,13 +873,13 @@ class CamperSimulator {
                 mainScale = (viewBoxHeight - verticalPadding) / totalModelHeight;
             }
             
-            const mainOx = 1000; 
-            // mainOy is the baseline (wheel center). 
+            const mainOx = 1100; 
+            // mainOy is the baseline (bed floor). 
             // We want it as low as possible: viewBoxHeight - (wheel drop * scale) - bottom margin
-            const mainOy = viewBoxHeight - (400 * mainScale); 
+            const mainOy = viewBoxHeight - (830 * mainScale) - 50; 
             
             const thumbScale = 0.35;
-            const thumbOx = 1000;
+            const thumbOx = 1200;
             const thumbOy = 1000;
 
             // Draw Main View
@@ -953,58 +953,130 @@ class CamperSimulator {
     }
 
     renderTruckSide(group, ox, oy, scale, showText = true) {
-        const bedLengthScaled = this.bedLength * scale;
-        const textLabel = showText ? `<text x="${ox}" y="${oy + 150}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">SIDE VIEW</text>` : '';
+        const bedD = this.truckBedDepth;
+        const bedL = this.truckBedLength;
+        const wcY = 450;
+        const wR = 380;
+        const rWcX = 850;
+        const fWcX = -2370;
+
+        const truckPath = `
+            M 0 -${bedD}
+            L ${bedL} -${bedD}
+            L ${bedL} -100
+            L ${bedL + 50} -100
+            L ${bedL + 50} 300
+            L ${rWcX + 450} 300
+            A 450 450 0 0 0 ${rWcX - 450} 300
+            L ${fWcX + 450} 300
+            A 450 450 0 0 0 ${fWcX - 450} 300
+            L -3170 300
+            L -3270 200
+            L -3270 -100
+            Q -3270 -380 -2970 -380
+            L -2020 -430
+            L -1400 -960
+            Q -800 -1000 -200 -975
+            L -50 -${bedD}
+            Z
+        `;
+        
+        const windowPath = `M -1850 -450 L -1350 -920 L -300 -920 L -150 -450 Z`;
+
+        const textLabel = showText ? `<text x="${ox}" y="${oy + 950*scale}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">SIDE VIEW</text>` : '';
         group.innerHTML = `
-            <path d="M -2800 0 L -2700 -200 L -2500 -250 L -2000 -250 L -1800 -400 
-                     L -1500 -1200 L -800 -1250 L 0 -1250 L 200 -1200 L 300 -${this.truckBedDepth} 
-                     L 2200 -${this.truckBedDepth} L 2300 0 Z" 
-                  fill="#1e293b" stroke="#334155" stroke-width="5" transform="translate(${ox}, ${oy}) scale(${scale})"/>
-            <rect x="${ox}" y="${oy - this.truckBedDepth*scale}" width="${bedLengthScaled}" height="${this.truckBedDepth*scale}" fill="#334155" opacity="0.3" stroke="#475569" stroke-width="1" />
-            <path d="M 0 0 L -1800 0 L -1800 -400 L -1500 -${this.cabinClearance + 100} L 0 -${this.cabinClearance + 100} Z" 
-                  fill="#334155" opacity="0.4" stroke="#475569" stroke-width="1" transform="translate(${ox}, ${oy - (this.truckBedDepth - 100)*scale})"/>
-            <circle cx="${ox - 1800*scale}" cy="${oy}" r="${380*scale}" fill="#0f172a" stroke="#334155" stroke-width="4" />
-            <circle cx="${ox + 1500*scale}" cy="${oy}" r="${380*scale}" fill="#0f172a" stroke="#334155" stroke-width="4" />
-            <line x1="${ox - 3000*scale}" y1="${oy - this.truckBedDepth*scale}" x2="${ox + 3000*scale}" y2="${oy - this.truckBedDepth*scale}" stroke="#334155" stroke-dasharray="10,10" />
+            <path d="${truckPath}" fill="#1e293b" stroke="#334155" stroke-width="5" transform="translate(${ox}, ${oy}) scale(${scale})"/>
+            
+            <rect x="${ox}" y="${oy - bedD*scale}" width="${this.bedLength*scale}" height="${bedD*scale}" fill="#334155" opacity="0.3" stroke="#475569" stroke-width="1" />
+            
+            <path d="${windowPath}" fill="#0f172a" stroke="#334155" stroke-width="3" transform="translate(${ox}, ${oy}) scale(${scale})"/>
+            <path d="M -900 -920 L -900 -450" stroke="#334155" stroke-width="5" transform="translate(${ox}, ${oy}) scale(${scale})"/>
+
+            <circle cx="${ox + fWcX*scale}" cy="${oy + wcY*scale}" r="${wR*scale}" fill="#0f172a" stroke="#334155" stroke-width="8" />
+            <circle cx="${ox + rWcX*scale}" cy="${oy + wcY*scale}" r="${wR*scale}" fill="#0f172a" stroke="#334155" stroke-width="8" />
+            
+            <line x1="${ox - 3500*scale}" y1="${oy + (wcY + wR)*scale}" x2="${ox + 2000*scale}" y2="${oy + (wcY + wR)*scale}" stroke="#334155" stroke-dasharray="10,10" />
             ${textLabel}
         `;
     }
 
     renderTruckFront(group, ox, oy, scale, showText = true) {
-        const w = this.truckWidth * scale;
-        const tW = 265 * scale;
-        const tR = 380 * scale;
-        const textLabel = showText ? `<text x="${ox - 50}" y="${oy + 150}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">FRONT VIEW</text>` : '';
+        const w = this.truckWidth;
+        const rW = 1300; // roof width
+        const wcY = 450;
+        const wR = 380;
+        const tW = 265;
+        const textLabel = showText ? `<text x="${ox - 50}" y="${oy + 950*scale}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">FRONT VIEW</text>` : '';
+        
         group.innerHTML = `
-            <rect x="${ox - w/2}" y="${oy - tR}" width="${tW}" height="${tR*2}" rx="5" fill="#0f172a" stroke="#334155" stroke-width="3" />
-            <rect x="${ox + w/2 - tW}" y="${oy - tR}" width="${tW}" height="${tR*2}" rx="5" fill="#0f172a" stroke="#334155" stroke-width="3" />
-            <path d="M ${ox - w/2} ${oy - 500*scale} 
-                     L ${ox + w/2} ${oy - 500*scale} 
-                     L ${ox + w/2 - 100*scale} ${oy - 1200*scale} 
-                     L ${ox - w/2 + 100*scale} ${oy - 1200*scale} Z" 
-                  fill="#1e293b" stroke="#334155" stroke-width="4" />
-            <rect x="${ox - w/2 - 50*scale}" y="${oy - 800*scale}" width="${50*scale}" height="${80*scale}" rx="5" fill="#1e293b" stroke="#334155" stroke-width="2" />
-            <rect x="${ox + w/2}" y="${oy - 800*scale}" width="${50*scale}" height="${80*scale}" rx="5" fill="#1e293b" stroke="#334155" stroke-width="2" />
+            <!-- Tires -->
+            <rect x="${ox - (w/2)*scale}" y="${oy + (wcY - wR)*scale}" width="${tW*scale}" height="${(wR*2)*scale}" rx="10" fill="#0f172a" stroke="#334155" stroke-width="4" />
+            <rect x="${ox + (w/2 - tW)*scale}" y="${oy + (wcY - wR)*scale}" width="${tW*scale}" height="${(wR*2)*scale}" rx="10" fill="#0f172a" stroke="#334155" stroke-width="4" />
+            
+            <!-- Main Body -->
+            <path d="M ${-w/2} 300 
+                     L ${w/2} 300 
+                     L ${w/2} -100 
+                     L ${w/2 - 50} -430 
+                     L ${rW/2} -960 
+                     L ${-rW/2} -960 
+                     L ${-w/2 + 50} -430 
+                     L ${-w/2} -100 Z" 
+                  fill="#1e293b" stroke="#334155" stroke-width="4" transform="translate(${ox}, ${oy}) scale(${scale})"/>
+                  
+            <!-- Grille / Headlights -->
+            <rect x="${ox - (w/2 - 100)*scale}" y="${oy - 300*scale}" width="${(w - 200)*scale}" height="${200*scale}" rx="10" fill="#0f172a" stroke="#334155" stroke-width="3" />
+            <rect x="${ox - (w/2 - 120)*scale}" y="${oy - 280*scale}" width="${150*scale}" height="${100*scale}" rx="5" fill="#334155" />
+            <rect x="${ox + (w/2 - 270)*scale}" y="${oy - 280*scale}" width="${150*scale}" height="${100*scale}" rx="5" fill="#334155" />
+            
+            <!-- Windshield -->
+            <path d="M ${-w/2 + 150} -450 
+                     L ${w/2 - 150} -450 
+                     L ${rW/2 - 50} -900 
+                     L ${-rW/2 + 50} -900 Z" 
+                  fill="#0f172a" stroke="#334155" stroke-width="3" transform="translate(${ox}, ${oy}) scale(${scale})"/>
+                  
+            <!-- Mirrors -->
+            <rect x="${ox - (w/2 + 80)*scale}" y="${oy - 400*scale}" width="${80*scale}" height="${120*scale}" rx="10" fill="#1e293b" stroke="#334155" stroke-width="3" />
+            <rect x="${ox + (w/2)*scale}" y="${oy - 400*scale}" width="${80*scale}" height="${120*scale}" rx="10" fill="#1e293b" stroke="#334155" stroke-width="3" />
+            
             ${textLabel}
         `;
     }
 
     renderTruckBack(group, ox, oy, scale, showText = true) {
-        const w = this.truckWidth * scale;
-        const tW = 265 * scale;
-        const tR = 380 * scale;
-        const textLabel = showText ? `<text x="${ox - 50}" y="${oy + 150}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">BACK VIEW</text>` : '';
+        const w = this.truckWidth;
+        const rW = 1300;
+        const wcY = 450;
+        const wR = 380;
+        const tW = 265;
+        const bedD = this.truckBedDepth;
+        
+        const textLabel = showText ? `<text x="${ox - 50}" y="${oy + 950*scale}" fill="#64748b" font-size="16" font-weight="bold" font-family="monospace">BACK VIEW</text>` : '';
         group.innerHTML = `
-            <rect x="${ox - w/2}" y="${oy - tR}" width="${tW}" height="${tR*2}" rx="5" fill="#0f172a" stroke="#334155" stroke-width="3" />
-            <rect x="${ox + w/2 - tW}" y="${oy - tR}" width="${tW}" height="${tR*2}" rx="5" fill="#0f172a" stroke="#334155" stroke-width="3" />
-            <path d="M ${ox - w/2 + 50*scale} ${oy - this.truckBedDepth*scale} 
-                     L ${ox + w/2 - 50*scale} ${oy - this.truckBedDepth*scale} 
-                     L ${ox + w/2 - 100*scale} ${oy - 1200*scale} 
-                     L ${ox - w/2 + 100*scale} ${oy - 1200*scale} Z" 
-                  fill="#0f172a" stroke="#1e293b" stroke-width="2" />
-            <rect x="${ox - w/2}" y="${oy - 900*scale}" width="${w}" height="${400*scale}" fill="#1e293b" stroke="#334155" stroke-width="4" />
-            <rect x="${ox - w/2 + 20*scale}" y="${oy - 800*scale}" width="${50*scale}" height="${150*scale}" rx="5" fill="#7f1d1d" opacity="0.8" />
-            <rect x="${ox + w/2 - 70*scale}" y="${oy - 800*scale}" width="${50*scale}" height="${150*scale}" rx="5" fill="#7f1d1d" opacity="0.8" />
+            <!-- Tires -->
+            <rect x="${ox - (w/2)*scale}" y="${oy + (wcY - wR)*scale}" width="${tW*scale}" height="${(wR*2)*scale}" rx="10" fill="#0f172a" stroke="#334155" stroke-width="4" />
+            <rect x="${ox + (w/2 - tW)*scale}" y="${oy + (wcY - wR)*scale}" width="${tW*scale}" height="${(wR*2)*scale}" rx="10" fill="#0f172a" stroke="#334155" stroke-width="4" />
+            
+            <!-- Cabin Silhouette (Visible through bed / sides) -->
+            <path d="M ${-w/2 + 50} -430 L ${w/2 - 50} -430 L ${rW/2} -960 L ${-rW/2} -960 Z" 
+                  fill="#0f172a" stroke="#1e293b" stroke-width="2" transform="translate(${ox}, ${oy}) scale(${scale})"/>
+                  
+            <!-- Truck Bed and Tailgate -->
+            <!-- Bumper -->
+            <rect x="${ox - (w/2)*scale}" y="${oy - 100*scale}" width="${w*scale}" height="${400*scale}" fill="#1e293b" stroke="#334155" stroke-width="4" />
+            
+            <!-- Tailgate -->
+            <rect x="${ox - (w/2 - 30)*scale}" y="${oy - bedD*scale}" width="${(w - 60)*scale}" height="${(bedD - 100)*scale}" fill="#1e293b" stroke="#334155" stroke-width="3" />
+            
+            <!-- Taillights -->
+            <rect x="${ox - (w/2 - 40)*scale}" y="${oy - 300*scale}" width="${70*scale}" height="${180*scale}" rx="5" fill="#7f1d1d" stroke="#ef4444" stroke-width="2" opacity="0.8" />
+            <rect x="${ox + (w/2 - 110)*scale}" y="${oy - 300*scale}" width="${70*scale}" height="${180*scale}" rx="5" fill="#7f1d1d" stroke="#ef4444" stroke-width="2" opacity="0.8" />
+            
+            <!-- Mirrors -->
+            <rect x="${ox - (w/2 + 80)*scale}" y="${oy - 400*scale}" width="${80*scale}" height="${120*scale}" rx="10" fill="#1e293b" stroke="#334155" stroke-width="3" />
+            <rect x="${ox + (w/2)*scale}" y="${oy - 400*scale}" width="${80*scale}" height="${120*scale}" rx="10" fill="#1e293b" stroke="#334155" stroke-width="3" />
+            
             ${textLabel}
         `;
     }
