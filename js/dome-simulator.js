@@ -3977,6 +3977,8 @@ class DomeSimulator {
         let currentRowHeight = 0;
         let isRotated = false;
         
+        let maxDrawnX = PAGE_WIDTH;
+        
         this.triangleTypes.forEach((typeData, typeKey) => {
             if (typeData.triangles.length === 0) return;
             
@@ -4016,6 +4018,10 @@ class DomeSimulator {
                 const startX = currentX - minX + flapDepth;
                 const startY = currentY - minY + flapDepth;
                 
+                if (currentX + bbWidth > maxDrawnX) {
+                    maxDrawnX = currentX + bbWidth;
+                }
+                
                 let transform = `translate(${startX}, ${startY})`;
                 if (isRotated) {
                     transform += ` rotate(180, ${cx}, ${cy})`;
@@ -4051,8 +4057,9 @@ class DomeSimulator {
         });
         
         const totalHeight = currentY + currentRowHeight + margin;
+        const viewBoxWidth = maxDrawnX + margin;
         
-        let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${PAGE_WIDTH} ${totalHeight}" width="${PAGE_WIDTH}mm" height="${totalHeight}mm" class="max-w-full h-auto">`;
+        let svgContent = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${viewBoxWidth} ${totalHeight}" width="${viewBoxWidth}mm" height="${totalHeight}mm" class="max-w-full h-auto">`;
         svgContent += `<style>
             .cut { stroke: #ff0000; stroke-width: 0.2; fill: none; }
             .fold { stroke: #0000ff; stroke-width: 0.2; fill: none; stroke-dasharray: 2,2; }
