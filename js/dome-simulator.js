@@ -20,8 +20,8 @@ class DomeSimulator {
         this.baseShape = 'icosahedron';
         this.spherePortion = 'auto';
         this.structure = 'geodesic'; // geodesic or fullerene
-        this.jointStyle = 'karma'; // standard, double, karma
-        this.independentTriangles = false; // We use true single-layer hubless GoodKarma now
+        this.jointStyle = 'karma'; // Default joint style
+        this.independentTriangles = true; // Use panelized for perfect joints
         this.lastTap = 0; // For double-tap detection
         
         // Enhanced Assembly Mode Properties
@@ -2215,7 +2215,7 @@ class DomeSimulator {
         // this.createJoints();
 
         this.scene.add(this.domeGroup);
-        if (this.jointStyle === 'karma') {
+        if (this.jointStyle === 'karma' && !this.independentTriangles) {
             this.validateJointOverlaps();
         }
 
@@ -2264,15 +2264,15 @@ class DomeSimulator {
                 const alphaStart = strutInfo.angleStart;
                 const alphaEnd = strutInfo.angleEnd;
                 
-                // Lap end (v1): Outer corner exactly touches the vertex. 
-                shorteningV1 = (apparentWidth / 2) * Math.tan(miterAngleStartRad);
+                // For a mathematically perfect panelized Good Karma joint (where all struts stay strictly within their triangle):
+                // Lap end (v1): Outer corner extends to meet the adjacent Butt strut's outer corner.
+                // Shortening = W / tan(alpha / 2)
+                shorteningV1 = apparentWidth / Math.tan(alphaStart / 2);
                 
-                // Butt end (v2): Outer corner touches the inner corner of the adjacent Lap strut.
-                shorteningV2 = (apparentWidth / Math.sin(alphaEnd)) + (apparentWidth / 2) * Math.tan(miterAngleEndRad);
+                // Butt end (v2): Outer corner touches the inner face of the adjacent Lap strut.
+                // Shortening = W / tan(alpha)
+                shorteningV2 = apparentWidth / Math.tan(alphaEnd);
                 
-                // Add clearance to prevent raycaster false positives due to simple miter geometric overlap
-                shorteningV1 += 0.002;
-                shorteningV2 += 0.002;
             } else {
                 // True single-layer GoodKarma swirl (hubless)
                 // Left edge touches V2, Right edge touches V1
@@ -2285,12 +2285,84 @@ class DomeSimulator {
         
         // For independent triangles, use negative miter to make the outside edge longer.
         // For single-lattice double, use positive miter to make the center the longest point.
-        // miter1 is applied to +z (which is v2), miter2 is applied to -z (which is v1)
-        // Therefore, lapMiter (for v1) must be passed as miter2, and buttMiter (for v2) as miter1.
         let lapMiter = this.independentTriangles ? -miterAngleStartRad : miterAngleStartRad;
         let buttMiter = this.independentTriangles ? miterAngleEndRad : miterAngleEndRad;
         
-        let strutGeometry = this.createStrutGeometryForDome(boardLength, buttMiter, lapMiter, bevelAngleRad, isBase);
+        let strutGeometry;
+        
+        if (this.jointStyle === 'karma' && this.independentTriangles && thirdVertex) {
+            // Create base box geometry
+            strutGeometry = new THREE.BoxGeometry(width, length, height);
+            
+            // We need the true 3D normals of the bisecting planes for the adjacent edges
+            // n_e1 = current edge (v1 to v2)
+            const n_e1 = new THREE.Vector3().crossVectors(v1, v2).normalize();
+            if (n_e1.dot(v3) < 0) n_e1.negate(); // ensure it points inward
+            
+            // For a mathematically exact joint, the side of the strut MUST lie on the true bisecting plane (n_e1).
+            // We compute the true geometric bevel angle instead of relying on the inexact user-provided bevel.
+            const trueLocX = n_e1.clone().negate(); // trueLocX points OUTWARD
+            const trueBevelAngleRad = X_basis.angleTo(trueLocX);
+            
+            // n_e2 = next edge (v2 to v3)
+            const n_e2 = new THREE.Vector3().crossVectors(v2, v3).normalize();
+            if (n_e2.dot(v1) < 0) n_e2.negate(); // ensure it points inward
+            
+            // n_e3 = prev edge (v3 to v1)
+            const n_e3 = new THREE.Vector3().crossVectors(v3, v1).normalize();
+            if (n_e3.dot(v2) < 0) n_e3.negate(); // ensure it points inward
+            
+            // We will manually deform the vertices in the geometry
+            const posAttr = strutGeometry.attributes.position;
+            
+            // To project correctly, we need the local axes of the strut
+            // The strut is rotated by `trueBevelAngleRad` around its local Y axis.
+            const localMatrix = new THREE.Matrix4().makeBasis(X_basis, Y_basis, Z_basis);
+            localMatrix.multiply(new THREE.Matrix4().makeRotationY(trueBevelAngleRad));
+            
+            // The strut position (midPoint)
+            const actualShift = width / 2 / Math.cos(trueBevelAngleRad);
+            // X_basis points OUTWARD from the triangle (U x N). To shift inwards, we must subtract!
+            const shiftInwards = X_basis.clone().multiplyScalar(-actualShift);
+            const midPoint = v1.clone().add(v2).multiplyScalar(0.5).add(shiftInwards);
+            
+            // Extract the local axes
+            const locX = new THREE.Vector3().setFromMatrixColumn(localMatrix, 0);
+            const locY = new THREE.Vector3().setFromMatrixColumn(localMatrix, 1);
+            const locZ = new THREE.Vector3().setFromMatrixColumn(localMatrix, 2);
+            
+            for (let i = 0; i < posAttr.count; i++) {
+                const lx = posAttr.getX(i);
+                const lz = posAttr.getZ(i);
+                const isButt = posAttr.getY(i) > 0; // v2 end
+                
+                // Point on the longitudinal line at Y=0 (relative to midPoint)
+                const p0 = midPoint.clone()
+                    .addScaledVector(locX, lx)
+                    .addScaledVector(locZ, lz);
+                
+                let t = 0;
+                if (isButt) {
+                    // Butt end touches the INNER face of the adjacent Lap strut (S2)
+                    // The inner face of S2 is at distance `width` from its bisecting plane
+                    const d = width;
+                    const denom = locY.dot(n_e2);
+                    t = (d - p0.dot(n_e2)) / denom;
+                } else {
+                    // Lap end completely covers the adjacent Butt strut (S3)
+                    // So it goes all the way to S3's OUTER face, which is exactly the bisecting plane (distance 0)
+                    const d = 0;
+                    const denom = locY.dot(n_e3);
+                    t = (d - p0.dot(n_e3)) / denom;
+                }
+                
+                posAttr.setXYZ(i, p0.x + t * locY.x, p0.y + t * locY.y, p0.z + t * locY.z);
+            }
+            strutGeometry.computeVertexNormals();
+            
+        } else {
+            strutGeometry = this.createStrutGeometryForDome(boardLength, buttMiter, lapMiter, bevelAngleRad, isBase);
+        }
         
         let color = strutInfo.color;
         let metalness = 0.1; // Reduced metalness to avoid washed-out white highlights
@@ -2314,17 +2386,13 @@ class DomeSimulator {
         const strutMesh = new THREE.Mesh(strutGeometry, strutMaterial);
         
         // Shift along the edge to center the board between the two shortenings
-        // shiftAlongEdge shifts the midpoint. 
-        // If we want +z (v2) to have gap S2, and -z (v1) to have gap S1:
-        // The +z end is at midPoint + boardLength/2.
-        // We want it to be at v2 - S2 = v1 + L - S2.
-        // midPoint = v1 + L - S2 - (L - S1 - S2)/2 = v1 + L/2 + (S1 - S2)/2.
-        // So shift from center (v1 + L/2) is (S1 - S2)/2.
-        const shiftMag = (shorteningV1 - shorteningV2) / 2;
-        const shiftAlongEdge = U.clone().multiplyScalar(shiftMag);
-        
-        // For independent triangles and true single-layer GoodKarma, shift inwards so the outer face is on the mathematical edge
-        const shiftInwards = (this.independentTriangles || this.jointStyle === 'karma') ? X_basis.clone().multiplyScalar(-width / 2) : new THREE.Vector3(0, 0, 0);
+        const shiftAlongEdge = (this.jointStyle === 'karma' && this.independentTriangles) ? 
+            new THREE.Vector3(0, 0, 0) : 
+            U.clone().multiplyScalar((shorteningV1 - shorteningV2) / 2);
+            
+        const actualShift = width / 2 / Math.cos(bevelAngleRad);
+        // X_basis points OUTWARD from the triangle. To shift inwards, we multiply by -actualShift.
+        const shiftInwards = (this.independentTriangles || this.jointStyle === 'karma') ? X_basis.clone().multiplyScalar(-actualShift) : new THREE.Vector3(0, 0, 0);
         
         const midPoint = v1.clone().add(v2).multiplyScalar(0.5).add(shiftAlongEdge).add(shiftInwards);
         
@@ -2332,15 +2400,17 @@ class DomeSimulator {
             midPoint.multiplyScalar(1.08); // Radially scale position outward by 8% to detach joints
         }
         
-        strutMesh.position.copy(midPoint);
-        
-        // Create rotation matrix to align local axes (X, Y, Z) with (X_basis, Y_basis, Z_basis)
-        const matrix = new THREE.Matrix4();
-        matrix.makeBasis(X_basis, Y_basis, Z_basis);
-        strutMesh.rotation.setFromRotationMatrix(matrix);
-        
-        // Rotate around local Y-axis (length) by bevel angle to meet neighboring board flush
-        strutMesh.rotateY(bevelAngleRad);
+        if (!(this.jointStyle === 'karma' && this.independentTriangles)) {
+            strutMesh.position.copy(midPoint);
+            
+            // Create rotation matrix to align local axes (X, Y, Z) with (X_basis, Y_basis, Z_basis)
+            const matrix = new THREE.Matrix4();
+            matrix.makeBasis(X_basis, Y_basis, Z_basis);
+            strutMesh.rotation.setFromRotationMatrix(matrix);
+            
+            // Rotate around local Y-axis (length) by bevel angle to meet neighboring board flush
+            strutMesh.rotateY(bevelAngleRad);
+        }
         
         // Store strut info for interaction
         strutMesh.userData = {
@@ -3852,22 +3922,33 @@ class DomeSimulator {
             const matrixWorldA = meshA.matrixWorld;
 
             const raycaster = new THREE.Raycaster();
-            
-            for (let i = 0; i < posA.count; i += 2) {
-                const p1 = new THREE.Vector3().fromBufferAttribute(posA, i).applyMatrix4(matrixWorldA);
-                const p2 = new THREE.Vector3().fromBufferAttribute(posA, i + 1).applyMatrix4(matrixWorldA);
-                
-                const dir = new THREE.Vector3().subVectors(p2, p1);
-                const length = dir.length();
-                if (length < 0.001) continue;
-                dir.normalize();
+            const centroid = new THREE.Vector3();
+            meshA.geometry.computeBoundingBox();
+            meshA.geometry.boundingBox.getCenter(centroid);
+            centroid.applyMatrix4(matrixWorldA);
 
-                raycaster.set(p1, dir);
-                raycaster.far = 0.0001;
+            for (let i = 0; i < posA.count; i += 2) {
+                let p1 = new THREE.Vector3().fromBufferAttribute(posA, i).applyMatrix4(matrixWorldA);
+                let p2 = new THREE.Vector3().fromBufferAttribute(posA, i + 1).applyMatrix4(matrixWorldA);
+                
+                const originalDir = new THREE.Vector3().subVectors(p2, p1);
+                const originalLength = originalDir.length();
+                if (originalLength < 0.001) continue;
+                originalDir.normalize();
+                
+                // Nudge p1 and p2 slightly towards the centroid to avoid flush face-to-face false positives
+                p1.lerp(centroid, 0.02);
+                p2.lerp(centroid, 0.02);
+                
+                const length = p1.distanceTo(p2);
+
+                raycaster.set(p1, originalDir);
+                raycaster.far = length;
                 const intersects = raycaster.intersectObject(meshB, false);
 
-                if (intersects.length > 0) {
+                if (intersects.length > 0 && intersects[0].distance > 0.0001 && intersects[0].distance < length - 0.0001) {
                     overlapFound = true;
+                    console.log(`Overlap between struts ${meshA.uuid} and ${meshB.uuid}: distance ${intersects[0].distance}`);
                     const overlapMesh = new THREE.Mesh(overlapGeometry, overlapMaterial);
                     overlapMesh.position.copy(intersects[0].point);
                     this.scene.add(overlapMesh);
