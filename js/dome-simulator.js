@@ -19,6 +19,7 @@ class DomeSimulator {
         this.strutHeight = 90;
         this.baseShape = 'icosahedron';
         this.spherePortion = 'auto';
+        this.domeStyle = 'dome'; // dome or zome
         this.structure = 'geodesic'; // geodesic or fullerene
         this.jointStyle = 'karma'; // Default joint style
         this.independentTriangles = true; // Use panelized for perfect joints
@@ -215,9 +216,11 @@ class DomeSimulator {
             btnShapeOctahedron.addEventListener('click', () => setShape('octahedron'));
         }
         
-        // Bind sphere portion buttons
+        // Bind sphere portion and style buttons
         const btnPortionAuto = document.getElementById('btn-portion-auto');
         const btnPortionFull = document.getElementById('btn-portion-full');
+        const btnStyleDome = document.getElementById('btn-style-dome');
+        const btnStyleZome = document.getElementById('btn-style-zome');
 
         const updatePortionButtons = () => {
             if (btnPortionAuto) {
@@ -234,6 +237,20 @@ class DomeSimulator {
                 btnPortionFull.classList.toggle('text-slate-400', this.spherePortion !== '1/1');
                 btnPortionFull.classList.toggle('border-slate-700', this.spherePortion !== '1/1');
             }
+            if (btnStyleDome) {
+                btnStyleDome.classList.toggle('text-sky-400', this.domeStyle === 'dome');
+                btnStyleDome.classList.toggle('border-sky-400', this.domeStyle === 'dome');
+                btnStyleDome.classList.toggle('bg-slate-800', this.domeStyle === 'dome');
+                btnStyleDome.classList.toggle('text-slate-400', this.domeStyle !== 'dome');
+                btnStyleDome.classList.toggle('border-slate-700', this.domeStyle !== 'dome');
+            }
+            if (btnStyleZome) {
+                btnStyleZome.classList.toggle('text-sky-400', this.domeStyle === 'zome');
+                btnStyleZome.classList.toggle('border-sky-400', this.domeStyle === 'zome');
+                btnStyleZome.classList.toggle('bg-slate-800', this.domeStyle === 'zome');
+                btnStyleZome.classList.toggle('text-slate-400', this.domeStyle !== 'zome');
+                btnStyleZome.classList.toggle('border-slate-700', this.domeStyle !== 'zome');
+            }
         };
 
         if (btnPortionAuto && btnPortionFull) {
@@ -246,6 +263,9 @@ class DomeSimulator {
             }
             if (urlParams.has('portion')) {
                 this.spherePortion = urlParams.get('portion');
+            }
+            if (urlParams.has('style')) {
+                this.domeStyle = urlParams.get('style');
             }
             if (urlParams.has('structure')) {
                 this.structure = urlParams.get('structure');
@@ -264,8 +284,22 @@ class DomeSimulator {
                 this.updateUI();
             };
 
+            const setStyle = (style) => {
+                if (this.domeStyle === style) return;
+                this.domeStyle = style;
+                this.selectedTriangle = null;
+                updatePortionButtons();
+                const newUrlParams = new URLSearchParams(window.location.search);
+                newUrlParams.set('style', this.domeStyle);
+                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+                this.initMainDomeView();
+                this.updateUI();
+            };
+
             btnPortionAuto.addEventListener('click', () => setPortion('auto'));
             btnPortionFull.addEventListener('click', () => setPortion('1/1'));
+            if (btnStyleDome) btnStyleDome.addEventListener('click', () => setStyle('dome'));
+            if (btnStyleZome) btnStyleZome.addEventListener('click', () => setStyle('zome'));
         }
         
         // Bind joint styles
@@ -1030,7 +1064,7 @@ class DomeSimulator {
             struts.forEach(strut => {
                 const card = document.createElement('div');
                 const isSelected = this.selectedStrutType?.type === strut.type;
-                card.className = `data-card mb-3 cursor-pointer transition-colors ${isSelected ? 'active border-primary' : 'border-slate-700 hover:border-slate-500'}`;
+                card.className = `data-card relative mb-3 cursor-pointer transition-colors ${isSelected ? 'active border-primary' : 'border-slate-700 hover:border-slate-500'}`;
                 
                 let qtyText = strut.count + ' Pieces';
 
@@ -1044,30 +1078,48 @@ class DomeSimulator {
                     insideLength = strut.length - (this.strutWidth / Math.tan((90 - strut.miterAngle) * Math.PI / 180));
                 }
 
+                let miter1 = this.independentTriangles ? (strut.miter1 || 0) : strut.miterAngle;
+                let miter2 = this.independentTriangles ? (strut.miter2 || 0) : strut.miterAngle;
+                
+                let H = 40; // height in px of the visual strut
+                let indent1 = H * Math.tan(miter1 * Math.PI / 180);
+                let indent2 = H * Math.tan(miter2 * Math.PI / 180);
+
                 card.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-black" style="background-color: ${strut.color}22; color: ${strut.color}">
-                            ${strut.type}
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex justify-between items-center mb-1">
-                                <div class="flex items-baseline gap-2">
-                                    <span class="text-sm font-bold text-slate-100">Inner: ${insideLength.toFixed(1)}</span>
-                                    <span class="text-[10px] text-slate-500">(Outer: ${strut.length.toFixed(0)})</span>
-                                </div>
-                                <span class="text-xs font-mono text-primary">${qtyText}</span>
+                    <div class="absolute -top-[5px] left-[5px] px-2 py-0.5 rounded flex items-center justify-center text-xs font-black z-10 bg-slate-900 shadow" style="color: ${strut.color}; border: 1px solid ${strut.color}44;">
+                        <span class="mr-1 opacity-80">${strut.count}</span> ${strut.type}
+                    </div>
+                    <div class="flex items-center w-full p-2 pt-3">
+                        <div class="flex-1 flex flex-col justify-center w-full min-w-0">
+                            <div class="flex justify-end items-center mb-1 px-1">
+                                <span class="text-[10px] text-emerald-400">Tilt: ${strut.bevelAngle.toFixed(1)}°</span>
                             </div>
-                            <div class="flex gap-3 text-[10px] text-slate-400">
-                                <span style="color: #fb7185">Sway: ${this.independentTriangles ? `${strut.miter1?.toFixed(1)}° / ${strut.miter2?.toFixed(1)}°` : strut.miterAngle.toFixed(1) + '°'}</span>
-                                <span style="color: #34d399">Tilt: ${strut.bevelAngle.toFixed(1)}°</span>
+                            
+                            <!-- Visual Strut -->
+                            <div class="relative w-full h-[40px] group" 
+                                 style="clip-path: polygon(0 0, 100% 0, calc(100% - ${indent2}px) 100%, ${indent1}px 100%); background-color: ${strut.color}22; border-top: 2px solid ${strut.color};">
+                                 
+                                <div class="peer/left absolute left-0 top-0 bottom-0 w-[40%] z-10 cursor-pointer"></div>
+                                <div class="peer/right absolute right-0 top-0 bottom-0 w-[40%] z-10 cursor-pointer"></div>
+
+                                <div class="absolute inset-0 pointer-events-none">
+                                    <div class="absolute left-1/2 -translate-x-1/2 bottom-1 flex flex-col items-center">
+                                        <span class="text-[10px] font-bold text-slate-100 mb-[5px] leading-none">${strut.length.toFixed(1)}</span>
+                                        <span class="text-[10px] font-bold text-slate-100 leading-none">${insideLength.toFixed(1)}</span>
+                                    </div>
+                                    <div class="absolute bottom-1 w-full flex justify-between items-end px-1 leading-none">
+                                        <span class="text-[9px] font-mono transition-all duration-200 text-white peer-hover/left:text-pink-400 peer-hover/left:font-bold" style="padding-left: ${indent1}px">${miter1.toFixed(1)}°</span>
+                                        <span class="text-[9px] font-mono transition-all duration-200 text-white peer-hover/right:text-pink-400 peer-hover/right:font-bold" style="padding-right: ${indent2}px">${miter2.toFixed(1)}°</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     ${isSelected ? `
-                    <div class="mt-4 pt-4 border-t border-slate-700/50">
+                    <div class="mt-2 pt-4 border-t border-slate-700/50 px-2 pb-2">
                         <div class="grid grid-cols-2 gap-4">
                             <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
-                                <span class="block text-[10px] text-slate-400 mb-1">1. Miter Cut (Sway)</span>
+                                <span class="block text-[10px] text-slate-400 mb-1">1. Miter Cut</span>
                                 <span style="color: #fb7185" class="font-mono text-sm">${this.independentTriangles ? `${strut.miter1?.toFixed(1)}° & ${strut.miter2?.toFixed(1)}°` : strut.miterAngle.toFixed(1) + '°'}</span>
                                 <div class="mt-1 text-[10px] text-slate-500">${this.independentTriangles ? 'Asymmetric Pinwheel Cuts' : 'Both Ends (Point/V-Cut)'}</div>
                             </div>
@@ -1078,7 +1130,7 @@ class DomeSimulator {
                             </div>
                         </div>
                         <div class="mt-3">
-                            <a href="/wood-cuts/?miter=${this.independentTriangles ? strut.miter1.toFixed(1) : strut.miterAngle.toFixed(1)}&bevel=${strut.bevelAngle.toFixed(1)}&width=${this.strutWidth}&height=${this.strutHeight}&joint=${this.jointStyle}" target="_blank" class="block text-center py-2 bg-blue-600/20 text-blue-400 border border-blue-500/30 text-[10px] font-bold rounded hover:bg-blue-600 hover:text-white transition-colors" onclick="event.stopPropagation();">
+                            <a href="/wood-cuts/?${this.independentTriangles ? `miter1=${strut.miter1.toFixed(1)}&miter2=${strut.miter2.toFixed(1)}` : `miter=${strut.miterAngle.toFixed(1)}`}&bevel=${strut.bevelAngle.toFixed(1)}&width=${this.strutWidth}&height=${this.strutHeight}&joint=${this.jointStyle}" target="_blank" class="block text-center py-2 bg-blue-600/20 text-blue-400 border border-blue-500/30 text-[10px] font-bold rounded hover:bg-blue-600 hover:text-white transition-colors" onclick="event.stopPropagation();">
                                 <i class="bi bi-box-arrow-up-right mr-1"></i> Open in Miter Saw Simulator
                             </a>
                         </div>
@@ -1182,6 +1234,72 @@ class DomeSimulator {
     calculateGeometry() {
         this.allFaces = [];
         this.yRange = null; // Reset cached range
+
+        if (this.domeStyle === 'zome') {
+            const radius = this.diameter / 2;
+            let N = this.frequency * 2 + 4; // Freq 1 -> 6, Freq 2 -> 8, Freq 3 -> 10
+            if (this.baseShape === 'icosahedron') {
+                N = this.frequency * 2 + 4;
+            }
+            if (N % 2 !== 0) N += 1;
+            
+            const M = Math.floor(N / 2);
+            let maxI = this.spherePortion === '1/1' ? N - 2 : M - 1;
+            let maxLayer = this.spherePortion === '1/1' ? N : M + 1;
+            
+            const stretch = 1.3;
+            const H_gen = (2 * stretch) / (N * Math.sin(Math.PI / N));
+            const scale = radius * Math.sin(Math.PI / N);
+            
+            const vertices = [];
+            for (let i = 0; i <= maxLayer; i++) {
+                const layer = [];
+                for (let j = 0; j < N; j++) {
+                    if (i === 0) {
+                        layer.push(new THREE.Vector3(0, 0, 0));
+                    } else if (i === N) {
+                        layer.push(new THREE.Vector3(0, -N * H_gen * scale, 0));
+                    } else {
+                        let sumX = 0, sumZ = 0, sumY = 0;
+                        for (let k = 0; k < i; k++) {
+                            const angle = (j + k) * 2 * Math.PI / N;
+                            sumX += Math.cos(angle);
+                            sumZ += Math.sin(angle);
+                            sumY += -H_gen;
+                        }
+                        layer.push(new THREE.Vector3(sumX * scale, sumY * scale, sumZ * scale));
+                    }
+                }
+                vertices.push(layer);
+            }
+
+            for (let i = 0; i <= maxI; i++) {
+                for (let j = 0; j < N; j++) {
+                    const top = vertices[i][j];
+                    const right = vertices[i + 1][j];
+                    const left = vertices[i + 1][(j - 1 + N) % N];
+                    const bottom = vertices[i + 2][(j - 1 + N) % N];
+                    
+                    // Triangle 1 (UP pointing)
+                    this.allFaces.push([
+                        top.clone(),
+                        right.clone(), // vLeft
+                        left.clone()   // vRight
+                    ]);
+                    
+                    // Triangle 2 (DOWN pointing)
+                    // If portion is 'auto' (M - 1), we skip the downward pointing triangle at the equator
+                    // to give the dome a perfectly flat base with a horizontal ring.
+                    if (!(this.spherePortion !== '1/1' && i === maxI)) {
+                        this.allFaces.push([
+                            right.clone(), // vLeft
+                            bottom.clone(),
+                            left.clone()   // vRight
+                        ]);
+                    }
+                }
+            }
+        } else {
         
         // Calculate initial vertices
         const radius = this.diameter / 2;
@@ -1344,6 +1462,21 @@ class DomeSimulator {
         uniqueVertices.forEach(v => {
             v.y -= lowestY;
         });
+        this.domeCenterY = -lowestY;
+        }
+
+        // Offset Zome if necessary to floor
+        if (this.domeStyle === 'zome') {
+            let lowestY = Infinity;
+            this.allFaces.forEach(face => face.forEach(v => { if (v.y < lowestY) lowestY = v.y; }));
+            const uniqueVertices = new Set();
+            this.allFaces.forEach(face => face.forEach(v => uniqueVertices.add(v)));
+            uniqueVertices.forEach(v => v.y -= lowestY);
+            // The Zome originally generates from Y=0 (top) to Y=lowestY (bottom).
+            // After shifting by -lowestY, the top is -lowestY and the bottom is 0.
+            // The geometric center is halfway between them.
+            this.domeCenterY = -lowestY / 2;
+        }
 
         // Calculate Y range for proper height level calculation
         this.yRange = this.calculateYRange();
@@ -1532,7 +1665,7 @@ class DomeSimulator {
                 const next = v[(i + 1) % tri.length];
                 const v1 = new THREE.Vector3().subVectors(prev, curr).normalize();
                 const v2 = new THREE.Vector3().subVectors(next, curr).normalize();
-                angles.push(Math.acos(v1.dot(v2)));
+                angles.push(Math.acos(Math.max(-1, Math.min(1, v1.dot(v2)))));
             }
 
             for (let i = 0; i < tri.length; i++) {
@@ -2122,7 +2255,7 @@ class DomeSimulator {
                 const v2 = new THREE.Vector3().subVectors(next, curr).normalize();
                 
                 if (this.independentTriangles) {
-                    angles.push(Math.acos(v1.dot(v2)));
+                    angles.push(Math.acos(Math.max(-1, Math.min(1, v1.dot(v2)))));
                 } else {
                     const normal = curr.clone().normalize();
                     const v1_proj = v1.clone().projectOnPlane(normal).normalize();
@@ -2290,14 +2423,20 @@ class DomeSimulator {
         
         let strutGeometry;
         
-        if (this.jointStyle === 'karma' && this.independentTriangles && thirdVertex) {
+        if (this.jointStyle === 'karma' && this.independentTriangles && thirdVertex && this.domeStyle !== 'zome') {
             // Create base box geometry
             strutGeometry = new THREE.BoxGeometry(width, length, height);
             
+            // Sphere center to compute correct face/edge normals since vertices were shifted
+            const center = new THREE.Vector3(0, this.domeCenterY || 0, 0);
+            const v1_c = v1.clone().sub(center);
+            const v2_c = v2.clone().sub(center);
+            const v3_c = thirdVertex.clone().sub(center);
+            
             // We need the true 3D normals of the bisecting planes for the adjacent edges
             // n_e1 = current edge (v1 to v2)
-            const n_e1 = new THREE.Vector3().crossVectors(v1, v2).normalize();
-            if (n_e1.dot(v3) < 0) n_e1.negate(); // ensure it points inward
+            const n_e1 = new THREE.Vector3().crossVectors(v1_c, v2_c).normalize();
+            if (n_e1.dot(v3_c) < 0) n_e1.negate(); // ensure it points inward
             
             // For a mathematically exact joint, the side of the strut MUST lie on the true bisecting plane (n_e1).
             // We compute the true geometric bevel angle instead of relying on the inexact user-provided bevel.
@@ -2305,12 +2444,12 @@ class DomeSimulator {
             const trueBevelAngleRad = X_basis.angleTo(trueLocX);
             
             // n_e2 = next edge (v2 to v3)
-            const n_e2 = new THREE.Vector3().crossVectors(v2, v3).normalize();
-            if (n_e2.dot(v1) < 0) n_e2.negate(); // ensure it points inward
+            const n_e2 = new THREE.Vector3().crossVectors(v2_c, v3_c).normalize();
+            if (n_e2.dot(v1_c) < 0) n_e2.negate(); // ensure it points inward
             
             // n_e3 = prev edge (v3 to v1)
-            const n_e3 = new THREE.Vector3().crossVectors(v3, v1).normalize();
-            if (n_e3.dot(v2) < 0) n_e3.negate(); // ensure it points inward
+            const n_e3 = new THREE.Vector3().crossVectors(v3_c, v1_c).normalize();
+            if (n_e3.dot(v2_c) < 0) n_e3.negate(); // ensure it points inward
             
             // We will manually deform the vertices in the geometry
             const posAttr = strutGeometry.attributes.position;
@@ -2347,13 +2486,13 @@ class DomeSimulator {
                     // The inner face of S2 is at distance `width` from its bisecting plane
                     const d = width;
                     const denom = locY.dot(n_e2);
-                    t = (d - p0.dot(n_e2)) / denom;
+                    t = Math.abs(denom) > 1e-6 ? (d - p0.dot(n_e2)) / denom : 0;
                 } else {
                     // Lap end completely covers the adjacent Butt strut (S3)
                     // So it goes all the way to S3's OUTER face, which is exactly the bisecting plane (distance 0)
                     const d = 0;
                     const denom = locY.dot(n_e3);
-                    t = (d - p0.dot(n_e3)) / denom;
+                    t = Math.abs(denom) > 1e-6 ? (d - p0.dot(n_e3)) / denom : 0;
                 }
                 
                 posAttr.setXYZ(i, p0.x + t * locY.x, p0.y + t * locY.y, p0.z + t * locY.z);
@@ -2400,7 +2539,7 @@ class DomeSimulator {
             midPoint.multiplyScalar(1.08); // Radially scale position outward by 8% to detach joints
         }
         
-        if (!(this.jointStyle === 'karma' && this.independentTriangles)) {
+        if (!(this.jointStyle === 'karma' && this.independentTriangles && this.domeStyle !== 'zome')) {
             strutMesh.position.copy(midPoint);
             
             // Create rotation matrix to align local axes (X, Y, Z) with (X_basis, Y_basis, Z_basis)
