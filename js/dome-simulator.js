@@ -24,6 +24,8 @@ class DomeSimulator {
         this.jointStyle = 'karma'; // Default joint style
         this.independentTriangles = true; // Use panelized for perfect joints
         this.lastTap = 0; // For double-tap detection
+        this.isFocusMode = false;
+        this.todoProgress = {};
         
         // Enhanced Assembly Mode Properties
         this.assemblyPhase = 0; // 0: strut collection, 1: triangle assembly, 2: component integration
@@ -59,9 +61,44 @@ class DomeSimulator {
     }
     
     init() {
+        this.loadTodoProgress();
         this.setupEventListeners();
         this.initMainDomeView();
         this.updateUI();
+    }
+    
+    loadTodoProgress() {
+        const configId = window.location.pathname + window.location.search;
+        const savedTodo = localStorage.getItem('todo_' + configId);
+        this.todoProgress = savedTodo ? JSON.parse(savedTodo) : {};
+    }
+    
+    saveTodoProgress() {
+        const configId = window.location.pathname + window.location.search;
+        localStorage.setItem('todo_' + configId, JSON.stringify(this.todoProgress));
+        
+        // Auto-save favorite dome settings if not saved
+        if (window.userProfile && !window.userProfile.isSaved(configId)) {
+            const name = `Dome v${this.frequency} ${this.baseShape}`;
+            window.userProfile.saveItem('app', configId, configId, name, 'bi-hexagon');
+            this.updateSaveButtonState();
+        }
+    }
+    
+    toggleFocusMode() {
+        this.isFocusMode = !this.isFocusMode;
+        if (this.isFocusMode) {
+            document.body.classList.add('focus-mode');
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen().catch(e => console.log(e));
+            }
+        } else {
+            document.body.classList.remove('focus-mode');
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(e => console.log(e));
+            }
+        }
+        this.updateStrutTypesList();
     }
     
     switchTab(tabId) {
@@ -375,6 +412,16 @@ class DomeSimulator {
                 this.selectedJoint = null;
                 this.initMainDomeView();
                 this.updateUI();
+            });
+        }
+        
+        const focusModeToggle = document.getElementById('focus-mode-toggle');
+        if (focusModeToggle) {
+            focusModeToggle.addEventListener('click', () => {
+                this.toggleFocusMode();
+                if (this.isFocusMode) {
+                    this.switchTab('inventory');
+                }
             });
         }
         
@@ -1115,7 +1162,7 @@ class DomeSimulator {
                             </div>
                         </div>
                     </div>
-                    ${isSelected ? `
+                    ${isSelected && !this.isFocusMode ? `
                     <div class="mt-2 pt-4 border-t border-slate-700/50 px-2 pb-2">
                         <div class="grid grid-cols-2 gap-4">
                             <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
@@ -1133,6 +1180,22 @@ class DomeSimulator {
                             <a href="/wood-cuts/?${this.independentTriangles ? `miter1=${strut.miter1.toFixed(1)}&miter2=${strut.miter2.toFixed(1)}` : `miter=${strut.miterAngle.toFixed(1)}`}&bevel=${strut.bevelAngle.toFixed(1)}&width=${this.strutWidth}&height=${this.strutHeight}&joint=${this.jointStyle}" target="_blank" class="block text-center py-2 bg-blue-600/20 text-blue-400 border border-blue-500/30 text-[10px] font-bold rounded hover:bg-blue-600 hover:text-white transition-colors" onclick="event.stopPropagation();">
                                 <i class="bi bi-box-arrow-up-right mr-1"></i> Open in Miter Saw Simulator
                             </a>
+                        </div>
+                    </div>
+                    ` : ''}
+                    ${this.isFocusMode ? `
+                    <div class="mt-3 pt-3 border-t border-slate-700/50 px-2 pb-2 todo-progress" onclick="event.stopPropagation();">
+                        <div class="text-[10px] font-bold text-slate-400 mb-2">PROGRESS: <span id="todo-count-${strut.type}">${this.todoProgress[strut.type] || 0}</span> / ${strut.count}</div>
+                        <div class="flex flex-wrap gap-1">
+                            ${Array.from({ length: strut.count }).map((_, i) => `
+                                <div class="w-6 h-6 rounded border ${ (this.todoProgress[strut.type] || 0) > i ? 'bg-sky-500 border-sky-400' : 'bg-slate-800 border-slate-600' } cursor-pointer hover:border-sky-400 flex items-center justify-center transition-colors" onclick="
+                                    sim.todoProgress['${strut.type}'] = ${ (this.todoProgress[strut.type] || 0) > i ? i : i + 1 };
+                                    sim.saveTodoProgress();
+                                    sim.updateStrutTypesList();
+                                ">
+                                    ${ (this.todoProgress[strut.type] || 0) > i ? '<i class="bi bi-check text-white text-lg"></i>' : ''}
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
                     ` : ''}
@@ -1280,21 +1343,19 @@ class DomeSimulator {
                     const left = vertices[i + 1][(j - 1 + N) % N];
                     const bottom = vertices[i + 2][(j - 1 + N) % N];
                     
-                    // Triangle 1 (UP pointing)
+                    // Triangle 1 (UP pointing) - Counter-clockwise
                     this.allFaces.push([
                         top.clone(),
-                        right.clone(), // vLeft
-                        left.clone()   // vRight
+                        left.clone(),  // vRight (from inside view)
+                        right.clone()  // vLeft
                     ]);
                     
-                    // Triangle 2 (DOWN pointing)
-                    // If portion is 'auto' (M - 1), we skip the downward pointing triangle at the equator
-                    // to give the dome a perfectly flat base with a horizontal ring.
+                    // Triangle 2 (DOWN pointing) - Counter-clockwise
                     if (!(this.spherePortion !== '1/1' && i === maxI)) {
                         this.allFaces.push([
-                            right.clone(), // vLeft
+                            left.clone(),  // vRight
                             bottom.clone(),
-                            left.clone()   // vRight
+                            right.clone()  // vLeft
                         ]);
                     }
                 }
@@ -1650,6 +1711,9 @@ class DomeSimulator {
                 edgeToFaces.get(key).push(fIdx);
             }
         });
+        
+        this.edgeToFaces = edgeToFaces;
+        this.faceNormals = faceNormals;
 
         const processedEdges = new Set();
         this.allFaces.forEach((tri, fIdx) => {
@@ -2315,7 +2379,7 @@ class DomeSimulator {
                 const c = new THREE.Vector3();
                 tri.forEach(v => c.add(v));
                 const thirdVertex = c.multiplyScalar(1 / tri.length);
-                const strutMesh = this.createRealStrut(strut, thirdVertex, isBase);
+                const strutMesh = this.createRealStrut(strut, thirdVertex, isBase, originalIdx, tri);
                 
                 // Track strut mesh per face
                 const strutKey = `${originalIdx}-${strutIdx}`;
@@ -2361,10 +2425,17 @@ class DomeSimulator {
         return key1 < key2 ? `${key1}-${key2}` : `${key2}-${key1}`;
     }
     
-    createRealStrut(strutInfo, thirdVertex, isBase = false) {
+    createRealStrut(strutInfo, thirdVertex, isBase = false, originalIdx = null, tri = null) {
         const v1 = strutInfo.vertices[0]; // The butt end
         const v2 = strutInfo.vertices[1]; // The lap end
-        const v3 = thirdVertex;
+        const v3 = thirdVertex; // Used for face normal calculation (centroid)
+        
+        // Find the actual 3rd vertex if tri is provided
+        let v3_real = v3;
+        if (tri) {
+            v3_real = tri.find(v => v !== v1 && v !== v2) || v3;
+        }
+        
         const length = v1.distanceTo(v2);
         
         // Calculate basis vectors for the strut orientation
@@ -2423,20 +2494,44 @@ class DomeSimulator {
         
         let strutGeometry;
         
-        if (this.jointStyle === 'karma' && this.independentTriangles && thirdVertex && this.domeStyle !== 'zome') {
+        if (this.jointStyle === 'karma' && this.independentTriangles && thirdVertex) {
             // Create base box geometry
             strutGeometry = new THREE.BoxGeometry(width, length, height);
             
-            // Sphere center to compute correct face/edge normals since vertices were shifted
-            const center = new THREE.Vector3(0, this.domeCenterY || 0, 0);
-            const v1_c = v1.clone().sub(center);
-            const v2_c = v2.clone().sub(center);
-            const v3_c = thirdVertex.clone().sub(center);
-            
-            // We need the true 3D normals of the bisecting planes for the adjacent edges
+            // Helper to get true bisecting plane using adjacent face normals
+            const getEdgePlane = (vA, vB, vC) => {
+                const edgeKey = this.getStrutKey(vA, vB);
+                const adjacentFaceIndices = this.edgeToFaces ? this.edgeToFaces.get(edgeKey) : null;
+                
+                let n_e;
+                if (adjacentFaceIndices && adjacentFaceIndices.length === 2 && this.faceNormals) {
+                    const idx1 = adjacentFaceIndices[0];
+                    const idx2 = adjacentFaceIndices[1];
+                    const N1 = this.faceNormals[idx1];
+                    const N2 = this.faceNormals[idx2];
+                    
+                    // The bisecting plane normal is proportional to N1 + N2
+                    const M = new THREE.Vector3().addVectors(N1, N2).normalize();
+                    const E = new THREE.Vector3().subVectors(vB, vA).normalize();
+                    n_e = new THREE.Vector3().crossVectors(M, E).normalize();
+                    
+                    // Ensure it points inward (towards vC)
+                    const vC_dir = new THREE.Vector3().subVectors(vC, vA).normalize();
+                    if (n_e.dot(vC_dir) < 0) n_e.negate();
+                } else {
+                    // Fallback to center-based logic if no adjacent face (like base of dome)
+                    const center = new THREE.Vector3(0, this.domeCenterY || 0, 0);
+                    const vA_c = vA.clone().sub(center);
+                    const vB_c = vB.clone().sub(center);
+                    n_e = new THREE.Vector3().crossVectors(vA_c, vB_c).normalize();
+                    const vC_c = vC.clone().sub(center);
+                    if (n_e.dot(vC_c) < 0) n_e.negate();
+                }
+                return n_e;
+            };
+
             // n_e1 = current edge (v1 to v2)
-            const n_e1 = new THREE.Vector3().crossVectors(v1_c, v2_c).normalize();
-            if (n_e1.dot(v3_c) < 0) n_e1.negate(); // ensure it points inward
+            const n_e1 = getEdgePlane(v1, v2, v3_real);
             
             // For a mathematically exact joint, the side of the strut MUST lie on the true bisecting plane (n_e1).
             // We compute the true geometric bevel angle instead of relying on the inexact user-provided bevel.
@@ -2444,12 +2539,10 @@ class DomeSimulator {
             const trueBevelAngleRad = X_basis.angleTo(trueLocX);
             
             // n_e2 = next edge (v2 to v3)
-            const n_e2 = new THREE.Vector3().crossVectors(v2_c, v3_c).normalize();
-            if (n_e2.dot(v1_c) < 0) n_e2.negate(); // ensure it points inward
+            const n_e2 = getEdgePlane(v2, v3_real, v1);
             
             // n_e3 = prev edge (v3 to v1)
-            const n_e3 = new THREE.Vector3().crossVectors(v3_c, v1_c).normalize();
-            if (n_e3.dot(v2_c) < 0) n_e3.negate(); // ensure it points inward
+            const n_e3 = getEdgePlane(v3_real, v1, v2);
             
             // We will manually deform the vertices in the geometry
             const posAttr = strutGeometry.attributes.position;
@@ -2486,13 +2579,13 @@ class DomeSimulator {
                     // The inner face of S2 is at distance `width` from its bisecting plane
                     const d = width;
                     const denom = locY.dot(n_e2);
-                    t = Math.abs(denom) > 1e-6 ? (d - p0.dot(n_e2)) / denom : 0;
+                    t = Math.abs(denom) > 1e-6 ? (d + v2.dot(n_e2) - p0.dot(n_e2)) / denom : 0;
                 } else {
                     // Lap end completely covers the adjacent Butt strut (S3)
                     // So it goes all the way to S3's OUTER face, which is exactly the bisecting plane (distance 0)
                     const d = 0;
                     const denom = locY.dot(n_e3);
-                    t = Math.abs(denom) > 1e-6 ? (d - p0.dot(n_e3)) / denom : 0;
+                    t = Math.abs(denom) > 1e-6 ? (d + v1.dot(n_e3) - p0.dot(n_e3)) / denom : 0;
                 }
                 
                 posAttr.setXYZ(i, p0.x + t * locY.x, p0.y + t * locY.y, p0.z + t * locY.z);
@@ -2539,7 +2632,7 @@ class DomeSimulator {
             midPoint.multiplyScalar(1.08); // Radially scale position outward by 8% to detach joints
         }
         
-        if (!(this.jointStyle === 'karma' && this.independentTriangles && this.domeStyle !== 'zome')) {
+        if (!(this.jointStyle === 'karma' && this.independentTriangles)) {
             strutMesh.position.copy(midPoint);
             
             // Create rotation matrix to align local axes (X, Y, Z) with (X_basis, Y_basis, Z_basis)
