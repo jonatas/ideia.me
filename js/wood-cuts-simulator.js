@@ -9,6 +9,10 @@ class WoodCutsSimulator {
 
         this.miterAngle = 0;
         this.bevelAngle = 0;
+        this.miterAngle2 = 0;
+        this.bevelAngle2 = 0;
+        this.mode = 'joint';
+        this.highlightedSide = null;
 
         // Three.js objects
         this.scenes = {};
@@ -26,7 +30,15 @@ class WoodCutsSimulator {
 
     parseUrlParams() {
         const params = new URLSearchParams(window.location.search);
-        if (params.has('miter') && params.has('bevel')) {
+        if (params.has('miter1') && params.has('miter2')) {
+            this.mode = 'strut';
+            this.miterAngle = parseFloat(params.get('miter1'));
+            this.miterAngle2 = parseFloat(params.get('miter2'));
+            this.bevelAngle = parseFloat(params.has('bevel1') ? params.get('bevel1') : params.get('bevel'));
+            this.bevelAngle2 = params.has('bevel2') ? parseFloat(params.get('bevel2')) : this.bevelAngle;
+            this.jointStyle = params.get('joint') || 'karma';
+        } else if (params.has('miter') && params.has('bevel')) {
+            this.mode = 'joint';
             const miterDeg = parseFloat(params.get('miter'));
             const bevelDeg = parseFloat(params.get('bevel'));
             
@@ -174,6 +186,93 @@ class WoodCutsSimulator {
                 }
             });
         }
+        
+        document.querySelectorAll('.view-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                this.setMainView(e.target.dataset.view);
+            });
+        });
+
+        const highlightSide = (side) => {
+            this.highlightedSide = this.highlightedSide === side ? null : side;
+            
+            ['header-side-a', 'saw-side-a'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.toggle('ring-2', this.highlightedSide === 'A');
+                    el.classList.toggle('ring-blue-500', this.highlightedSide === 'A');
+                }
+            });
+            ['header-side-b', 'saw-side-b'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.toggle('ring-2', this.highlightedSide === 'B');
+                    el.classList.toggle('ring-orange-500', this.highlightedSide === 'B');
+                }
+            });
+            
+            this.updateJointGeometry();
+        };
+
+        ['header-side-a', 'saw-side-a'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('click', () => highlightSide('A'));
+        });
+        
+        ['header-side-b', 'saw-side-b'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener('click', () => highlightSide('B'));
+        });
+
+        const sawViewContainer = document.getElementById('saw-view-container');
+        if (sawViewContainer) {
+            sawViewContainer.addEventListener('click', () => {
+                this.setMainView('saw');
+            });
+        }
+    }
+
+    setMainView(viewType) {
+        const camera = this.cameras['main'];
+        const group = this.groups['main'];
+        if (!camera || !group) return;
+
+        group.rotation.set(0, 0, 0);
+        const dist = 600;
+        
+        switch(viewType) {
+            case 'front':
+                camera.position.set(0, 0, dist);
+                break;
+            case 'top':
+                camera.position.set(0, dist, 0);
+                break;
+            case 'bottom':
+                camera.position.set(0, -dist, 0);
+                break;
+            case 'iso':
+                camera.position.set(400, 300, 400);
+                break;
+            case 'saw':
+                if (this.mode === 'joint') {
+                    const hC = (this.cornerAngle / 2) * Math.PI / 180;
+                    const S = this.slopeAngle * Math.PI / 180;
+                    const roll = Math.atan(Math.tan(S) / Math.sin(hC));
+                    
+                    const m = new THREE.Matrix4();
+                    m.makeRotationY(-hC);
+                    m.multiply(new THREE.Matrix4().makeRotationZ(S));
+                    m.multiply(new THREE.Matrix4().makeRotationX(-roll));
+                    m.invert();
+                    
+                    group.setRotationFromMatrix(m);
+                }
+                camera.position.set(0, 300, 400);
+                break;
+        }
+        
+        camera.lookAt(0, 0, 0);
+        camera.updateProjectionMatrix();
     }
 
     updateAll() {
@@ -183,6 +282,8 @@ class WoodCutsSimulator {
     }
 
     calculateAngles() {
+        if (this.mode === 'strut') return;
+        
         if (this.jointStyle === 'double') {
             this.miterAngle = this.cornerAngle / 2;
             this.bevelAngle = this.slopeAngle;
@@ -206,6 +307,25 @@ class WoodCutsSimulator {
         document.getElementById('calc-bevel').textContent = `${this.bevelAngle.toFixed(1)}°`;
         document.getElementById('saw-miter-val').textContent = `${this.miterAngle.toFixed(1)}°`;
         document.getElementById('saw-bevel-val').textContent = `${this.bevelAngle.toFixed(1)}°`;
+        
+        if (this.mode === 'strut') {
+            const mB = document.getElementById('calc-miter-b');
+            const bB = document.getElementById('calc-bevel-b');
+            const smB = document.getElementById('saw-miter-val-b');
+            const sbB = document.getElementById('saw-bevel-val-b');
+            if (mB) mB.textContent = `${this.miterAngle2.toFixed(1)}°`;
+            if (bB) bB.textContent = `${this.bevelAngle2.toFixed(1)}°`;
+            if (smB) smB.textContent = `${this.miterAngle2.toFixed(1)}°`;
+            if (sbB) sbB.textContent = `${this.bevelAngle2.toFixed(1)}°`;
+            
+            const headB = document.getElementById('header-side-b');
+            const sawB = document.getElementById('saw-side-b');
+            const cfg = document.getElementById('config-section');
+            if (headB) headB.classList.remove('hidden');
+            if (sawB) sawB.classList.remove('hidden');
+            document.querySelectorAll('.side-a-label').forEach(el => el.classList.remove('hidden'));
+            if (cfg) cfg.classList.add('hidden');
+        }
         
         // Update formula text based on joint style
         const formulaContainer = document.querySelector('.math-formula') || document.querySelector('section:nth-of-type(4) .text-\\[9px\\]');
@@ -362,14 +482,154 @@ class WoodCutsSimulator {
         const woodMaterial = new THREE.MeshStandardMaterial({ color: 0x8B4513, roughness: 0.8 });
         const edgeMaterial = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 1 });
 
-        for (let i = 0; i < 2; i++) {
-            const geometry = this.createClippedWoodGeometry(i);
+        if (this.mode === 'strut') {
+            const geometry = this.createDoubleCutStrutGeometry();
             const mesh = new THREE.Mesh(geometry, woodMaterial);
             const lines = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
-            
             group.add(mesh);
             group.add(lines);
+            
+            if (geometry.userData.highlightLine) {
+                group.add(geometry.userData.highlightLine);
+            }
+        } else {
+            for (let i = 0; i < 2; i++) {
+                const geometry = this.createClippedWoodGeometry(i);
+                const mesh = new THREE.Mesh(geometry, woodMaterial);
+                const lines = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), edgeMaterial);
+                
+                group.add(mesh);
+                group.add(lines);
+            }
         }
+    }
+
+    createDoubleCutStrutGeometry() {
+        const w = this.woodWidth;
+        const h = this.woodHeight;
+        const l = this.woodLength;
+
+        const geometry = new THREE.BufferGeometry();
+        const corners = [
+            new THREE.Vector3(-l/2, -h/2, -w/2),
+            new THREE.Vector3(-l/2,  h/2, -w/2),
+            new THREE.Vector3(-l/2,  h/2,  w/2),
+            new THREE.Vector3(-l/2, -h/2,  w/2),
+            new THREE.Vector3( l/2, -h/2, -w/2),
+            new THREE.Vector3( l/2,  h/2, -w/2),
+            new THREE.Vector3( l/2,  h/2,  w/2),
+            new THREE.Vector3( l/2, -h/2,  w/2)
+        ];
+
+        const applyCut = (verts, isRightSide, miter, bevel) => {
+            const M = miter * Math.PI / 180;
+            const B = bevel * Math.PI / 180;
+            
+            // For Miter (Y-axis):
+            // Right side cuts Front (-Z). signM = M.
+            // Left side cuts Front (-Z) for Standard (Trapezoid), so signM = -M.
+            // We apply Twin Dihedral for all modes to ensure both angles point to inner center.
+            const signM = isRightSide ? M : -M;
+            
+            // For Bevel (Z-axis):
+            // We want both ends to cut the TOP (+Y) so the top (inside of dome) is shorter.
+            // Right side: normal needs +Y component to remove Top -> signB = B
+            // Left side: normal needs -Y component to remove Top -> signB = -B
+            const signB = isRightSide ? B : -B;
+            
+            const normal = new THREE.Vector3(1, 0, 0); 
+            normal.applyAxisAngle(new THREE.Vector3(0, 0, 1), signB);
+            normal.applyAxisAngle(new THREE.Vector3(0, 1, 0), signM);
+            
+            const planePt = new THREE.Vector3(isRightSide ? l/2 : -l/2, 0, 0);
+            
+            // Find the maximum t to shift the plane so the longest point stays at l/2
+            let maxT = -Infinity;
+            const dir = new THREE.Vector3(isRightSide ? -1 : 1, 0, 0); 
+            const denom = dir.dot(normal);
+            
+            if (Math.abs(denom) > 0.0001) {
+                for(let i=0; i<4; i++) {
+                    const idx = isRightSide ? (i+4) : i;
+                    const basePt = corners[idx];
+                    const t = planePt.clone().sub(basePt).dot(normal) / denom;
+                    if (t > maxT) maxT = t;
+                }
+                
+                // We want the minimum t (most negative) to be 0 so we don't extend the wood?
+                // Actually, if we just shift the plane by maxT?
+                // Wait, if t > 0, it means it moves INWARD. If t < 0, it moves OUTWARD.
+                // We want the outermost corner to not move outward. So we want the minimum t to be 0.
+                // Let's find minT.
+                let minT = Infinity;
+                for(let i=0; i<4; i++) {
+                    const idx = isRightSide ? (i+4) : i;
+                    const basePt = corners[idx];
+                    const t = planePt.clone().sub(basePt).dot(normal) / denom;
+                    if (t < minT) minT = t;
+                }
+                
+                // Shift plane so minT becomes 0
+                for(let i=0; i<4; i++) {
+                    const idx = isRightSide ? (i+4) : i;
+                    const t = planePt.clone().sub(corners[idx]).dot(normal) / denom - minT;
+                    verts[idx].addScaledVector(dir, t);
+                }
+            }
+            
+            return { verts: verts, isRightSide: isRightSide, idxOffset: isRightSide ? 4 : 0 };
+        };
+
+        const verts = corners.map(v => v.clone());
+        const cutA = applyCut(verts, true, this.miterAngle, this.bevelAngle);
+        const cutB = applyCut(verts, false, this.miterAngle2, this.bevelAngle2);
+        
+        const vertices = new Float32Array(24);
+        for(let i=0; i<8; i++) {
+            vertices[i*3] = verts[i].x;
+            vertices[i*3+1] = verts[i].y;
+            vertices[i*3+2] = verts[i].z;
+        }
+
+        const indices = [
+            0, 1, 2,  0, 2, 3, // Left
+            4, 6, 5,  4, 7, 6, // Right
+            0, 4, 5,  0, 5, 1, // Front
+            1, 5, 6,  1, 6, 2, // Top
+            2, 6, 7,  2, 7, 3, // Back
+            3, 7, 4,  3, 4, 0  // Bottom
+        ];
+
+        geometry.setIndex(indices);
+        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+        geometry.computeVertexNormals();
+        
+        // Highlight logic
+        if (this.highlightedSide === 'A' || this.highlightedSide === 'B') {
+            const isRightSide = (this.highlightedSide === 'A');
+            const offset = isRightSide ? 4 : 0;
+            const hlColor = isRightSide ? 0x3b82f6 : 0xf97316; // blue or orange
+            
+            const hlVerts = [
+                verts[offset + 0].clone(),
+                verts[offset + 1].clone(),
+                verts[offset + 2].clone(),
+                verts[offset + 3].clone(),
+                verts[offset + 0].clone() // close loop
+            ];
+            
+            const hlGeo = new THREE.BufferGeometry().setFromPoints(hlVerts);
+            // Translate slightly to avoid z-fighting
+            hlGeo.translate(isRightSide ? 0.5 : -0.5, 0, 0);
+            
+            const hlMat = new THREE.LineBasicMaterial({ color: hlColor, linewidth: 3 });
+            const hlLine = new THREE.Line(hlGeo, hlMat);
+            // We can attach it directly to the mesh or group, but in updateJointGeometry we just return it or add to group
+            // We need to pass it back to be added to group, so let's attach it as user data
+            geometry.userData.highlightLine = hlLine;
+        }
+        
+        return geometry;
     }
 
     updateSawGeometry() {
@@ -394,14 +654,44 @@ class WoodCutsSimulator {
         bladeGroup.add(blade);
         blade.rotation.x = Math.PI / 2;
         
+        const isSideB = this.mode === 'strut' && this.highlightedSide === 'B';
+        const miter = isSideB ? this.miterAngle2 : this.miterAngle;
+        const bevel = isSideB ? this.bevelAngle2 : this.bevelAngle;
+        
+        // Determine how the saw makes the cut based on joint style
+        // For Karma, we flip the wood 180 degrees and keep the saw at M, B
+        // For Standard, we slide the wood and swing the saw miter to -M
+        let bladeMiter = miter;
+        let bladeBevel = bevel;
+        let woodRotY = 0;
+        
+        if (isSideB) {
+            if (this.jointStyle === 'karma') {
+                bladeMiter = miter; // Saw stays the same
+                woodRotY = Math.PI; // Flip wood 180 degrees
+            } else {
+                bladeMiter = -miter; // Swing saw to other side
+                woodRotY = 0; // Wood just slides
+            }
+        }
+        
         bladeGroup.rotation.order = 'YXZ';
-        bladeGroup.rotation.y = -this.miterAngle * Math.PI / 180;
-        bladeGroup.rotation.x = this.bevelAngle * Math.PI / 180;
+        bladeGroup.rotation.y = -bladeMiter * Math.PI / 180;
+        bladeGroup.rotation.x = bladeBevel * Math.PI / 180;
         bladeGroup.position.y = 20;
         group.add(bladeGroup);
 
-        // Use the clipped geometry but transform it back to "local" space for the saw
+        // Use the clipped geometry for the cut face
+        // We always show the right side cut in local space, but we use the specific angles
+        // So we temporarily override the piece angles for the local geometry generation
+        const oldM = this.miterAngle;
+        const oldB = this.bevelAngle;
+        this.miterAngle = miter;
+        this.bevelAngle = bevel;
         const geometry = this.createClippedWoodGeometry(0, true);
+        this.miterAngle = oldM;
+        this.bevelAngle = oldB;
+        
         const woodMat = new THREE.MeshStandardMaterial({ color: 0x8B4513, transparent: true, opacity: 0.6 });
         const wood = new THREE.Mesh(geometry, woodMat);
         const lines = new THREE.LineSegments(new THREE.EdgesGeometry(geometry), new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 0.3, transparent: true }));
@@ -410,6 +700,7 @@ class WoodCutsSimulator {
         woodGroup.add(wood);
         woodGroup.add(lines);
         woodGroup.position.y = this.woodHeight / 2;
+        woodGroup.rotation.y = woodRotY;
         group.add(woodGroup);
     }
 
