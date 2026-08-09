@@ -90,7 +90,6 @@ class GeodesicMath {
 
         return { miter, bevel };
     }
-}
 
     static createStrutGeometry(boardLength, miterAngle1Rad, miterAngle2Rad, bevelAngleRad, jointStyle, independentTriangles, strutWidth, strutHeight, wSegsOverride) {
         const width = strutWidth / 1000; // Convert mm to meters

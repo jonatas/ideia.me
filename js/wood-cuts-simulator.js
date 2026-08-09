@@ -509,127 +509,74 @@ class WoodCutsSimulator {
         const h = this.woodHeight;
         const l = this.woodLength;
 
-        const geometry = new THREE.BufferGeometry();
-        const corners = [
-            new THREE.Vector3(-l/2, -h/2, -w/2),
-            new THREE.Vector3(-l/2,  h/2, -w/2),
-            new THREE.Vector3(-l/2,  h/2,  w/2),
-            new THREE.Vector3(-l/2, -h/2,  w/2),
-            new THREE.Vector3( l/2, -h/2, -w/2),
-            new THREE.Vector3( l/2,  h/2, -w/2),
-            new THREE.Vector3( l/2,  h/2,  w/2),
-            new THREE.Vector3( l/2, -h/2,  w/2)
-        ];
+        // In dome math: boardLength=l, width=w, height=h
+        // Note: GeodesicMath expects meters, so we must pass the unscaled units if it's already in mm, 
+        // Wait, GeodesicMath divides by 1000! We are in mm here, so we should just pass our mm values directly, 
+        // But wait! GeodesicMath returns a geometry scaled by 1/1000! 
+        // We need to scale it back by 1000 to match our scene!
+        const domeGeo = GeodesicMath.createStrutGeometry(
+            l, this.miterAngle * Math.PI / 180, this.miterAngle2 * Math.PI / 180, this.bevelAngle * Math.PI / 180,
+            this.jointStyle, false, w, h
+        );
 
-        const applyCut = (verts, isRightSide, miter, bevel) => {
-            const M = miter * Math.PI / 180;
-            const B = bevel * Math.PI / 180;
-            
-            // For Miter (Y-axis):
-            // Right side cuts Front (-Z). signM = M.
-            // Left side cuts Front (-Z) for Standard (Trapezoid), so signM = -M.
-            // We apply Twin Dihedral for all modes to ensure both angles point to inner center.
-            const signM = isRightSide ? M : -M;
-            
-            // For Bevel (Z-axis):
-            // We want both ends to cut the TOP (+Y) so the top (inside of dome) is shorter.
-            // Right side: normal needs +Y component to remove Top -> signB = B
-            // Left side: normal needs -Y component to remove Top -> signB = -B
-            const signB = isRightSide ? B : -B;
-            
-            const normal = new THREE.Vector3(1, 0, 0); 
-            normal.applyAxisAngle(new THREE.Vector3(0, 0, 1), signB);
-            normal.applyAxisAngle(new THREE.Vector3(0, 1, 0), signM);
-            
-            const planePt = new THREE.Vector3(isRightSide ? l/2 : -l/2, 0, 0);
-            
-            // Find the maximum t to shift the plane so the longest point stays at l/2
-            let maxT = -Infinity;
-            const dir = new THREE.Vector3(isRightSide ? -1 : 1, 0, 0); 
-            const denom = dir.dot(normal);
-            
-            if (Math.abs(denom) > 0.0001) {
-                for(let i=0; i<4; i++) {
-                    const idx = isRightSide ? (i+4) : i;
-                    const basePt = corners[idx];
-                    const t = planePt.clone().sub(basePt).dot(normal) / denom;
-                    if (t > maxT) maxT = t;
-                }
-                
-                // We want the minimum t (most negative) to be 0 so we don't extend the wood?
-                // Actually, if we just shift the plane by maxT?
-                // Wait, if t > 0, it means it moves INWARD. If t < 0, it moves OUTWARD.
-                // We want the outermost corner to not move outward. So we want the minimum t to be 0.
-                // Let's find minT.
-                let minT = Infinity;
-                for(let i=0; i<4; i++) {
-                    const idx = isRightSide ? (i+4) : i;
-                    const basePt = corners[idx];
-                    const t = planePt.clone().sub(basePt).dot(normal) / denom;
-                    if (t < minT) minT = t;
-                }
-                
-                // Shift plane so minT becomes 0
-                for(let i=0; i<4; i++) {
-                    const idx = isRightSide ? (i+4) : i;
-                    const t = planePt.clone().sub(corners[idx]).dot(normal) / denom - minT;
-                    verts[idx].addScaledVector(dir, t);
-                }
-            }
-            
-            return { verts: verts, isRightSide: isRightSide, idxOffset: isRightSide ? 4 : 0 };
-        };
+        domeGeo.scale(1000, 1000, 1000);
 
-        const verts = corners.map(v => v.clone());
-        const cutA = applyCut(verts, true, this.miterAngle, this.bevelAngle);
-        const cutB = applyCut(verts, false, this.miterAngle2, this.bevelAngle2);
-        
-        const vertices = new Float32Array(24);
-        for(let i=0; i<8; i++) {
-            vertices[i*3] = verts[i].x;
-            vertices[i*3+1] = verts[i].y;
-            vertices[i*3+2] = verts[i].z;
-        }
+        // Apply rotation to map from Dome space to Wood Cuts space:
+        // Dome space: Y=length, X=width, Z=height
+        // Wood space: X=length, Z=width, Y=height
+        // So: newX = oldY, newY = oldZ, newZ = oldX
+        const matrix = new THREE.Matrix4().set(
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            1, 0, 0, 0,
+            0, 0, 0, 1
+        );
+        domeGeo.applyMatrix4(matrix);
+        domeGeo.computeVertexNormals();
 
-        const indices = [
-            0, 1, 2,  0, 2, 3, // Left
-            4, 6, 5,  4, 7, 6, // Right
-            0, 4, 5,  0, 5, 1, // Front
-            1, 5, 6,  1, 6, 2, // Top
-            2, 6, 7,  2, 7, 3, // Back
-            3, 7, 4,  3, 4, 0  // Bottom
-        ];
-
-        geometry.setIndex(indices);
-        geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-        geometry.computeVertexNormals();
-        
         // Highlight logic
         if (this.highlightedSide === 'A' || this.highlightedSide === 'B') {
             const isRightSide = (this.highlightedSide === 'A');
-            const offset = isRightSide ? 4 : 0;
             const hlColor = isRightSide ? 0x3b82f6 : 0xf97316; // blue or orange
             
-            const hlVerts = [
-                verts[offset + 0].clone(),
-                verts[offset + 1].clone(),
-                verts[offset + 2].clone(),
-                verts[offset + 3].clone(),
-                verts[offset + 0].clone() // close loop
-            ];
+            // Find unique vertices on the selected side
+            const pos = domeGeo.attributes.position;
+            const uniqueVerts = [];
+            for (let i = 0; i < pos.count; i++) {
+                const v = new THREE.Vector3().fromBufferAttribute(pos, i);
+                // The right side in wood space is X > 0, left side is X < 0
+                if ((isRightSide && v.x > 0) || (!isRightSide && v.x < 0)) {
+                    if (!uniqueVerts.some(uv => uv.distanceTo(v) < 0.1)) {
+                        uniqueVerts.push(v);
+                    }
+                }
+            }
             
-            const hlGeo = new THREE.BufferGeometry().setFromPoints(hlVerts);
-            // Translate slightly to avoid z-fighting
-            hlGeo.translate(isRightSide ? 0.5 : -0.5, 0, 0);
-            
-            const hlMat = new THREE.LineBasicMaterial({ color: hlColor, linewidth: 3 });
-            const hlLine = new THREE.Line(hlGeo, hlMat);
-            // We can attach it directly to the mesh or group, but in updateJointGeometry we just return it or add to group
-            // We need to pass it back to be added to group, so let's attach it as user data
-            geometry.userData.highlightLine = hlLine;
+            // Sort radially around X axis to draw a clean loop
+            if (uniqueVerts.length >= 3) {
+                const center = new THREE.Vector3();
+                uniqueVerts.forEach(v => center.add(v));
+                center.divideScalar(uniqueVerts.length);
+                
+                uniqueVerts.sort((a, b) => {
+                    const angleA = Math.atan2(a.z - center.z, a.y - center.y);
+                    const angleB = Math.atan2(b.z - center.z, b.y - center.y);
+                    return angleA - angleB;
+                });
+                
+                uniqueVerts.push(uniqueVerts[0].clone()); // close loop
+                
+                const hlGeo = new THREE.BufferGeometry().setFromPoints(uniqueVerts);
+                // Translate slightly to avoid z-fighting
+                hlGeo.translate(isRightSide ? 0.5 : -0.5, 0, 0);
+                
+                const hlMat = new THREE.LineBasicMaterial({ color: hlColor, linewidth: 3 });
+                const hlLine = new THREE.Line(hlGeo, hlMat);
+                domeGeo.userData.highlightLine = hlLine;
+            }
         }
         
-        return geometry;
+        return domeGeo;
     }
 
     updateSawGeometry() {

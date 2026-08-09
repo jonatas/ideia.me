@@ -23,9 +23,11 @@ class DomeSimulator {
         this.structure = 'geodesic'; // geodesic or fullerene
         this.jointStyle = 'karma'; // Default joint style
         this.independentTriangles = true; // Use panelized for perfect joints
-        this.lastTap = 0; // For double-tap detection
         this.isFocusMode = false;
+        this.focusTab = 'struts';
         this.todoProgress = {};
+        this.todoProgressTriangle = {};
+        this.lastTap = 0; // For double-tap detection
         
         // Enhanced Assembly Mode Properties
         this.assemblyPhase = 0; // 0: strut collection, 1: triangle assembly, 2: component integration
@@ -68,14 +70,17 @@ class DomeSimulator {
     }
     
     loadTodoProgress() {
-        const configId = window.location.pathname + window.location.search;
+        const configId = `${this.frequency}v_${this.baseShape}_${this.spherePortion}_${this.independentTriangles}`;
         const savedTodo = localStorage.getItem('todo_' + configId);
+        const savedTodoTri = localStorage.getItem('todo_tri_' + configId);
         this.todoProgress = savedTodo ? JSON.parse(savedTodo) : {};
+        this.todoProgressTriangle = savedTodoTri ? JSON.parse(savedTodoTri) : {};
     }
     
     saveTodoProgress() {
-        const configId = window.location.pathname + window.location.search;
+        const configId = `${this.frequency}v_${this.baseShape}_${this.spherePortion}_${this.independentTriangles}`;
         localStorage.setItem('todo_' + configId, JSON.stringify(this.todoProgress));
+        localStorage.setItem('todo_tri_' + configId, JSON.stringify(this.todoProgressTriangle));
         
         // Auto-save favorite dome settings if not saved
         if (window.userProfile && !window.userProfile.isSaved(configId)) {
@@ -85,10 +90,32 @@ class DomeSimulator {
         }
     }
     
+    switchFocusTab(tab) {
+        this.focusTab = tab;
+        const btnStruts = document.getElementById('btn-focus-struts');
+        const btnTriangles = document.getElementById('btn-focus-triangles');
+        if (btnStruts) btnStruts.classList.toggle('active', tab === 'struts');
+        if (btnTriangles) btnTriangles.classList.toggle('active', tab === 'triangles');
+        
+        const strutsContainer = document.getElementById('inventory-struts-container');
+        const trianglesContainer = document.getElementById('inventory-triangles-container');
+        
+        if (strutsContainer && trianglesContainer) {
+            if (this.isFocusMode) {
+                strutsContainer.style.display = tab === 'struts' ? 'block' : 'none';
+                trianglesContainer.style.display = tab === 'triangles' ? 'block' : 'none';
+            } else {
+                strutsContainer.style.display = 'block';
+                trianglesContainer.style.display = 'block';
+            }
+        }
+    }
+    
     toggleFocusMode() {
         this.isFocusMode = !this.isFocusMode;
         if (this.isFocusMode) {
             document.body.classList.add('focus-mode');
+            this.switchTab('inventory');
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen().catch(e => console.log(e));
             }
@@ -98,7 +125,10 @@ class DomeSimulator {
                 document.exitFullscreen().catch(e => console.log(e));
             }
         }
+        this.switchFocusTab(this.focusTab);
         this.updateStrutTypesList();
+        this.updateTriangleInventory();
+        this.initMainDomeView();
     }
     
     switchTab(tabId) {
@@ -789,6 +819,22 @@ class DomeSimulator {
                         <div class="text-[10px] text-slate-500 mt-0.5">Struts: ${typeData.strutTypes.join(', ')}</div>
                     </div>
                 </div>
+                ${this.isFocusMode ? `
+                <div class="mt-3 pt-3 border-t border-slate-700/50 px-2 pb-2 todo-progress" onclick="event.stopPropagation();">
+                    <div class="text-[10px] font-bold text-slate-400 mb-2">PROGRESS: <span id="todo-count-tri-${typeKey}">${this.todoProgressTriangle[typeKey] || 0}</span> / ${typeData.count}</div>
+                    <div class="flex flex-wrap gap-1">
+                        ${Array.from({ length: typeData.count }).map((_, i) => `
+                            <div class="w-6 h-6 rounded border ${ (this.todoProgressTriangle[typeKey] || 0) > i ? 'bg-sky-500 border-sky-400' : 'bg-slate-800 border-slate-600' } cursor-pointer hover:border-sky-400 flex items-center justify-center transition-colors" onclick="
+                                sim.todoProgressTriangle['${typeKey}'] = ${ (this.todoProgressTriangle[typeKey] || 0) > i ? i : i + 1 };
+                                sim.saveTodoProgress();
+                                sim.updateTriangleInventory();
+                            ">
+                                ${ (this.todoProgressTriangle[typeKey] || 0) > i ? '<i class="bi bi-check text-white text-lg"></i>' : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                ` : ''}
             `;
             
             card.onclick = () => {
@@ -1138,7 +1184,8 @@ class DomeSimulator {
                     </div>
                     <div class="flex items-center w-full p-2 pt-3">
                         <div class="flex-1 flex flex-col justify-center w-full min-w-0">
-                            <div class="flex justify-end items-center mb-1 px-1">
+                            <div class="flex justify-between items-center mb-1 px-1">
+                                <span class="text-[10px] font-bold text-slate-100">${strut.length.toFixed(1)}</span>
                                 <span class="text-[10px] text-emerald-400">Tilt: ${strut.bevelAngle.toFixed(1)}°</span>
                             </div>
                             
@@ -1150,15 +1197,15 @@ class DomeSimulator {
                                 <div class="peer/right absolute right-0 top-0 bottom-0 w-[40%] z-10 cursor-pointer"></div>
 
                                 <div class="absolute inset-0 pointer-events-none">
-                                    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center space-y-1">
-                                        <span class="text-[10px] font-bold text-slate-100 leading-none">${strut.length.toFixed(1)}</span>
-                                        <span class="text-[10px] font-bold text-slate-100 leading-none">${insideLength.toFixed(1)}</span>
-                                    </div>
                                     <div class="absolute bottom-1 w-full flex justify-between items-end px-1 leading-none">
                                         <span class="text-[9px] font-mono transition-all duration-200 text-white peer-hover/left:text-pink-400 peer-hover/left:font-bold" style="padding-left: ${indent1}px">${miter1.toFixed(1)}°</span>
                                         <span class="text-[9px] font-mono transition-all duration-200 text-white peer-hover/right:text-pink-400 peer-hover/right:font-bold" style="padding-right: ${indent2}px">${miter2.toFixed(1)}°</span>
                                     </div>
                                 </div>
+                            </div>
+                            
+                            <div class="mt-1 px-1 flex justify-start">
+                                <span class="text-[10px] font-bold text-slate-100">${insideLength.toFixed(1)}</span>
                             </div>
                         </div>
                     </div>
@@ -2731,46 +2778,11 @@ class DomeSimulator {
 
 
     createStrutGeometryForDome(boardLength, miterAngle1Rad, miterAngle2Rad, bevelAngleRad, isBase = false) {
-        // Create rectangular strut geometry matching actual dimensions (Good Karma hubless style)
-        
-        const width = this.strutWidth / 1000; // Convert mm to meters
-        const height = this.strutHeight / 1000; // Convert mm to meters
-        
-        const wSegs = this.jointStyle === 'double' ? 2 : 1;
-        const geometry = new THREE.BoxGeometry(width, boardLength, height, wSegs, 1, 1);
-        
-        const positions = geometry.attributes.position;
-        const vertex = new THREE.Vector3();
-        
-        // Apply flat compound cuts to vertices
-        for (let i = 0; i < positions.count; i++) {
-            vertex.fromBufferAttribute(positions, i);
-            
-            if (this.jointStyle === 'double' && !this.independentTriangles) {
-                if (vertex.y > 0) {
-                    // Top end: Double miter to form a point
-                    const newY = boardLength / 2 - Math.abs(vertex.x) * Math.tan(miterAngle2Rad) + vertex.z * Math.tan(bevelAngleRad);
-                    positions.setY(i, newY);
-                } else {
-                    // Bottom end: Double miter to form a point
-                    const newY = -boardLength / 2 + Math.abs(vertex.x) * Math.tan(miterAngle1Rad) - vertex.z * Math.tan(bevelAngleRad);
-                    positions.setY(i, newY);
-                }
-            } else {
-                if (vertex.y > 0) {
-                    // Top end: Single miter cut
-                    const newY = boardLength / 2 - vertex.x * Math.tan(miterAngle2Rad) + vertex.z * Math.tan(bevelAngleRad);
-                    positions.setY(i, newY);
-                } else {
-                    // Bottom end: Single miter cut
-                    const newY = -boardLength / 2 + vertex.x * Math.tan(miterAngle1Rad) - vertex.z * Math.tan(bevelAngleRad);
-                    positions.setY(i, newY);
-                }
-            }
-        }
-        
-        geometry.computeVertexNormals();
-        return geometry;
+        return GeodesicMath.createStrutGeometry(
+            boardLength, miterAngle1Rad, miterAngle2Rad, bevelAngleRad, 
+            this.jointStyle, this.independentTriangles, 
+            this.strutWidth, this.strutHeight
+        );
     }
     
     createJoints() {
