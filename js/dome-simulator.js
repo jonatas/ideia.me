@@ -1694,11 +1694,14 @@ class DomeSimulator {
         
         // Map to find adjacent faces for dihedral (bevel) calculation
         const edgeToFaces = new Map();
+        const center = new THREE.Vector3(0, this.domeCenterY || 0, 0);
         const faceNormals = this.allFaces.map(tri => {
             const vA = new THREE.Vector3().subVectors(tri[1], tri[0]);
             const vB = new THREE.Vector3().subVectors(tri[2], tri[0]);
             let normal = new THREE.Vector3().crossVectors(vA, vB).normalize();
-            if (normal.dot(tri[0]) < 0) normal.negate();
+            // Vector from center to face vertex
+            const toFace = new THREE.Vector3().subVectors(tri[0], center);
+            if (normal.dot(toFace) < 0) normal.negate();
             return normal;
         });
 
@@ -1733,7 +1736,7 @@ class DomeSimulator {
             }
 
             for (let i = 0; i < tri.length; i++) {
-                const v1 = tri[i], v2 = tri[(i + 1) % tri.length];
+                let v1 = tri[i], v2 = tri[(i + 1) % tri.length];
                 const edgeKey = this.getStrutKey(v1, v2);
                 
                 // Deduplicate edges so each strut is only counted once (for single layer lattices).
@@ -1763,12 +1766,10 @@ class DomeSimulator {
                 const rLen = Math.round(length);
                 const rBevel = Math.round(bevel * 10) / 10;
                 
+                const angleAtNextVertex = angles[(i+1) % tri.length] * 180 / Math.PI;
                 let miter1 = miter;
-                let miter2 = miter;
-                if (this.independentTriangles) {
-                    const angleAtNextVertex = angles[(i+1) % tri.length] * 180 / Math.PI;
-                    miter2 = Math.abs(90 - angleAtNextVertex);
-                }
+                let miter2 = this.jointStyle === 'double' ? Math.abs(90 - (angleAtNextVertex / 2)) : Math.abs(90 - angleAtNextVertex);
+
                 
                 // Order miters so A->B is equivalent to B->A for identical boards
                 const minMiter = Math.round(Math.min(miter1, miter2) * 10) / 10;
@@ -2330,7 +2331,24 @@ class DomeSimulator {
             
             const strutInfoRaw = [];
             for (let i = 0; i < tri.length; i++) {
-                strutInfoRaw.push({ length: sides[i], angleStart: angles[i], angleEnd: angles[(i+1)%tri.length], vertices: [tri[i], tri[(i+1)%tri.length]] });
+                let v1 = tri[i];
+                let v2 = tri[(i+1)%tri.length];
+                let a1 = angles[i];
+                let a2 = angles[(i+1)%tri.length];
+                
+                // Force v1 to be the "higher" vertex to ensure a globally consistent edge direction.
+                // This is absolutely critical for Good Karma joints to form a perfect turbine/swirl at the poles!
+                if (v2.y > v1.y + 0.001 || (Math.abs(v2.y - v1.y) <= 0.001 && v2.x > v1.x + 0.001)) {
+                    const tempV = v1; v1 = v2; v2 = tempV;
+                    const tempA = a1; a1 = a2; a2 = tempA;
+                }
+                
+                strutInfoRaw.push({ 
+                    length: sides[i], 
+                    angleStart: a1, 
+                    angleEnd: a2, 
+                    vertices: [v1, v2] 
+                });
             }
 
             const strutInfo = strutInfoRaw.map((strut, i) => {
