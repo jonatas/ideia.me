@@ -221,6 +221,25 @@
             border-radius: 8px;
             overflow: hidden;
         }
+
+        body.focus-mode main {
+            grid-template-columns: 1fr;
+        }
+        body.focus-mode .visual-area,
+        body.focus-mode .side-panel > .flex.border-b,
+        body.focus-mode #tab-design,
+        body.focus-mode #tab-assembly {
+            display: none !important;
+        }
+        body.focus-mode #tab-inventory {
+            display: block !important;
+            height: 100%;
+            overflow-y: auto;
+        }
+        body.focus-mode #tab-inventory > .section-title:nth-of-type(2),
+        body.focus-mode #triangle-types-grid {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
@@ -232,6 +251,7 @@
             <h1 id="app-title" class="text-lg font-bold ml-2">7m Geodesic Dome Builder</h1>
         </div>
         <div class="flex items-center gap-2">
+            <button class="icon-btn" title="Focus Mode" id="focus-mode-toggle"><i class="bi bi-arrows-fullscreen"></i></button>
             <button class="icon-btn" title="Save Design" id="save-design-btn"><i class="bi bi-bookmark"></i></button>
             <button class="icon-btn" title="Explode Joints (Detached)" id="explode-joints-toggle"><i class="bi bi-arrows-expand"></i></button>
             <button class="icon-btn" title="Toggle View Mode" id="view-mode-cycle"><i class="bi bi-eye"></i></button>
@@ -244,6 +264,7 @@
     <!-- Dome Simulator JavaScript -->
     <script src="{{ '/js/profile.js' | relative_url }}"></script>
     <script src="{{ '/js/inventory-filter.js' | relative_url }}"></script>
+    <script src="{{ '/js/geodesic-math.js' | relative_url }}"></script>
     <script src="{{ '/js/dome-simulator.js' | relative_url }}"></script>
 </body>
 </html>

@@ -16,13 +16,25 @@ permalink: /wood-cuts/
             <a href="/profile/" class="icon-btn text-gray-400 hover:text-blue-400" title="My Collection"><i class="bi bi-person text-lg"></i></a>
         </div>
         <div class="flex gap-4">
-            <div class="text-right">
-                <p class="text-[10px] text-gray-500 uppercase">Miter</p>
-                <p id="calc-miter" class="text-sm font-bold text-blue-400">0.0°</p>
+            <div class="flex gap-4 cursor-pointer hover:bg-white hover:bg-opacity-5 p-1 rounded transition-colors" id="header-side-a" title="Highlight Side A Cuts">
+                <div class="text-right">
+                    <p class="text-[10px] text-gray-500 uppercase"><span class="side-a-label hidden text-blue-500 mr-1 font-bold">A</span>Miter</p>
+                    <p id="calc-miter" class="text-sm font-bold text-blue-400">0.0°</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] text-gray-500 uppercase">Bevel</p>
+                    <p id="calc-bevel" class="text-sm font-bold text-green-400">0.0°</p>
+                </div>
             </div>
-            <div class="text-right">
-                <p class="text-[10px] text-gray-500 uppercase">Bevel</p>
-                <p id="calc-bevel" class="text-sm font-bold text-green-400">0.0°</p>
+            <div class="flex gap-4 hidden pl-4 border-l border-gray-700 cursor-pointer hover:bg-white hover:bg-opacity-5 p-1 rounded transition-colors" id="header-side-b" title="Highlight Side B Cuts">
+                <div class="text-right">
+                    <p class="text-[10px] text-gray-500 uppercase"><span class="text-orange-500 mr-1 font-bold">B</span>Miter</p>
+                    <p id="calc-miter-b" class="text-sm font-bold text-orange-400">0.0°</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-[10px] text-gray-500 uppercase">Bevel</p>
+                    <p id="calc-bevel-b" class="text-sm font-bold text-green-400">0.0°</p>
+                </div>
             </div>
         </div>
     </header>
@@ -42,7 +54,7 @@ permalink: /wood-cuts/
                 </section>
 
                 <!-- Controls -->
-                <section>
+                <section id="config-section">
                     <h2 class="text-[10px] font-bold text-gray-500 uppercase mb-3 tracking-tighter">Configuration</h2>
                     <div class="space-y-4">
                         <div>
@@ -93,14 +105,26 @@ permalink: /wood-cuts/
                     <i class="bi bi-tools text-gray-500"></i>
                     <span class="text-[9px] font-bold uppercase text-gray-500">Saw Settings</span>
                 </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <div class="text-center p-1 border border-blue-900 rounded bg-blue-900 bg-opacity-10">
+                <div class="grid grid-cols-2 gap-2 cursor-pointer hover:opacity-80 transition-opacity" id="saw-side-a" title="Highlight Side A Cuts">
+                    <div class="text-center p-1 border border-blue-900 rounded bg-blue-900 bg-opacity-10 relative">
+                        <span class="side-a-label hidden absolute top-1 left-1 text-[8px] font-bold text-blue-500">A</span>
                         <p class="text-[8px] text-gray-500">MITER</p>
                         <p id="saw-miter-val" class="text-[10px] font-bold text-blue-400">35.3°</p>
                     </div>
-                    <div class="text-center p-1 border border-green-900 rounded bg-green-900 bg-opacity-10">
+                    <div class="text-center p-1 border border-green-900 rounded bg-green-900 bg-opacity-10 relative">
                         <p class="text-[8px] text-gray-500">BEVEL</p>
                         <p id="saw-bevel-val" class="text-[10px] font-bold text-green-400">30.0°</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2 mt-2 hidden cursor-pointer hover:opacity-80 transition-opacity" id="saw-side-b" title="Highlight Side B Cuts">
+                    <div class="text-center p-1 border border-orange-900 rounded bg-orange-900 bg-opacity-10 relative">
+                        <span class="absolute top-1 left-1 text-[8px] font-bold text-orange-500">B</span>
+                        <p class="text-[8px] text-gray-500">MITER</p>
+                        <p id="saw-miter-val-b" class="text-[10px] font-bold text-orange-400">35.3°</p>
+                    </div>
+                    <div class="text-center p-1 border border-green-900 rounded bg-green-900 bg-opacity-10 relative">
+                        <p class="text-[8px] text-gray-500">BEVEL</p>
+                        <p id="saw-bevel-val-b" class="text-[10px] font-bold text-green-400">30.0°</p>
                     </div>
                 </div>
             </div>
@@ -108,31 +132,39 @@ permalink: /wood-cuts/
 
         <!-- Main Workspace -->
         <main class="flex-1 flex flex-col relative overflow-hidden">
+            <!-- View Controls -->
+            <div class="absolute top-4 left-4 flex gap-2 z-10 opacity-70 hover:opacity-100 transition-opacity">
+                <button class="view-btn px-3 py-1.5 rounded border border-gray-700 bg-black bg-opacity-80 text-[10px] font-bold text-gray-300 hover:text-white hover:bg-blue-900 transition-colors uppercase shadow" data-view="front">Front</button>
+                <button class="view-btn px-3 py-1.5 rounded border border-gray-700 bg-black bg-opacity-80 text-[10px] font-bold text-gray-300 hover:text-white hover:bg-blue-900 transition-colors uppercase shadow" data-view="top">Top</button>
+                <button class="view-btn px-3 py-1.5 rounded border border-gray-700 bg-black bg-opacity-80 text-[10px] font-bold text-gray-300 hover:text-white hover:bg-blue-900 transition-colors uppercase shadow" data-view="bottom">Bottom</button>
+                <button class="view-btn px-3 py-1.5 rounded border border-gray-700 bg-black bg-opacity-80 text-[10px] font-bold text-gray-300 hover:text-white hover:bg-blue-900 transition-colors uppercase shadow" data-view="iso">Angles</button>
+            </div>
+
             <!-- 3D Preview (Largest) -->
             <div id="main-canvas-container" class="flex-1 bg-black"></div>
             
             <!-- Bottom Panel: Multi-view -->
             <div class="h-48 border-t border-gray-800 flex bg-black bg-opacity-30 overflow-hidden">
                 <!-- Saw View -->
-                <div class="w-1/4 border-r border-gray-800 flex flex-col">
-                    <div class="p-1 px-2 border-b border-gray-800 text-[8px] font-bold text-gray-500 uppercase flex justify-between">
+                <div class="w-1/4 border-r border-gray-800 flex flex-col cursor-pointer group" id="saw-view-container" title="Click to reposition piece to saw position in main view">
+                    <div class="p-1 px-2 border-b border-gray-800 text-[8px] font-bold text-gray-500 uppercase flex justify-between group-hover:text-blue-400 group-hover:bg-blue-900 group-hover:bg-opacity-20 transition-colors">
                         <span>Saw Preview</span>
-                        <i class="bi bi-aspect-ratio"></i>
+                        <i class="bi bi-arrows-fullscreen"></i>
                     </div>
                     <div id="saw-view" class="flex-1"></div>
                 </div>
                 
                 <!-- Step Views -->
                 <div class="flex-1 flex overflow-x-auto custom-scrollbar">
-                    <div class="w-1/3 min-w-[150px] border-r border-gray-800 flex flex-col">
+                    <div class="w-1/3 min-w-[150px] border-r border-gray-800 flex flex-col relative">
                         <div class="p-1 px-2 border-b border-gray-800 text-[8px] font-bold text-gray-500 uppercase">Front View</div>
                         <div id="step1-view" class="flex-1"></div>
                     </div>
-                    <div class="w-1/3 min-w-[150px] border-r border-gray-800 flex flex-col">
+                    <div class="w-1/3 min-w-[150px] border-r border-gray-800 flex flex-col relative">
                         <div class="p-1 px-2 border-b border-gray-800 text-[8px] font-bold text-gray-500 uppercase">Miter (Top)</div>
                         <div id="step2-view" class="flex-1"></div>
                     </div>
-                    <div class="w-1/3 min-w-[150px] flex flex-col">
+                    <div class="w-1/3 min-w-[150px] flex flex-col relative">
                         <div class="p-1 px-2 border-b border-gray-800 text-[8px] font-bold text-gray-500 uppercase">Bevel (Side)</div>
                         <div id="step3-view" class="flex-1"></div>
                     </div>
