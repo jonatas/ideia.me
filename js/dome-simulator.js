@@ -1150,8 +1150,8 @@ class DomeSimulator {
                                 <div class="peer/right absolute right-0 top-0 bottom-0 w-[40%] z-10 cursor-pointer"></div>
 
                                 <div class="absolute inset-0 pointer-events-none">
-                                    <div class="absolute left-1/2 -translate-x-1/2 bottom-1 flex flex-col items-center">
-                                        <span class="text-[10px] font-bold text-slate-100 mb-[5px] leading-none">${strut.length.toFixed(1)}</span>
+                                    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center space-y-1">
+                                        <span class="text-[10px] font-bold text-slate-100 leading-none">${strut.length.toFixed(1)}</span>
                                         <span class="text-[10px] font-bold text-slate-100 leading-none">${insideLength.toFixed(1)}</span>
                                     </div>
                                     <div class="absolute bottom-1 w-full flex justify-between items-end px-1 leading-none">
@@ -2440,12 +2440,27 @@ class DomeSimulator {
         
         // Calculate basis vectors for the strut orientation
         const U = v2.clone().sub(v1).normalize();
-        const N = v2.clone().sub(v1).cross(thirdVertex.clone().sub(v1)).normalize();
         
-        // X_basis: points outwards in the plane of the face (perpendicular to edge)
-        const X_basis = U.clone().cross(N).normalize();
-        const Y_basis = U;
+        let N;
+        const edgeKey = this.getStrutKey(v1, v2);
+        const adjacentFaceIndices = this.edgeToFaces ? this.edgeToFaces.get(edgeKey) : null;
+        
+        if (!this.independentTriangles && adjacentFaceIndices && adjacentFaceIndices.length === 2 && this.faceNormals) {
+            // For shared struts (e.g. double cut), the outward normal is the exact bisector of the two faces
+            const N1 = this.faceNormals[adjacentFaceIndices[0]];
+            const N2 = this.faceNormals[adjacentFaceIndices[1]];
+            N = new THREE.Vector3().addVectors(N1, N2).normalize();
+        } else {
+            // For independent panels or boundary edges, use the face's own normal
+            N = v2.clone().sub(v1).cross(thirdVertex.clone().sub(v1)).normalize();
+        }
+        
+        // Z_basis: points outwards, exactly bisecting the two faces
         const Z_basis = N;
+        // Y_basis: points along the edge
+        const Y_basis = U;
+        // X_basis: perpendicular to edge and outward normal (points "inward" into the face plane)
+        const X_basis = new THREE.Vector3().crossVectors(Y_basis, Z_basis).normalize();
         
         const width = this.strutWidth / 1000;
         const height = this.strutHeight / 1000;
@@ -2640,8 +2655,8 @@ class DomeSimulator {
             matrix.makeBasis(X_basis, Y_basis, Z_basis);
             strutMesh.rotation.setFromRotationMatrix(matrix);
             
-            // Rotate around local Y-axis (length) by bevel angle to meet neighboring board flush
-            strutMesh.rotateY(bevelAngleRad);
+            // The strut is already perfectly bisecting the two faces thanks to Z_basis = N1 + N2.
+            // We no longer need to rotateY by bevelAngleRad.
         }
         
         // Store strut info for interaction

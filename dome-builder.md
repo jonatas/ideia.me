@@ -109,12 +109,13 @@ permalink: /dome-builder/
                     <input type="range" id="frequency-slider" min="1" max="6" value="3" class="slider" step="1">
                 </div>
                 <div class="param-item mt-4">
-                    <div class="grid grid-cols-3 gap-2 text-center mb-1">
+                    <div class="grid grid-cols-4 gap-2 text-center mb-1">
                         <div class="text-[10px] font-bold text-slate-400 uppercase">Base Shape</div>
                         <div class="text-[10px] font-bold text-slate-400 uppercase">Structure</div>
                         <div class="text-[10px] font-bold text-slate-400 uppercase">Geometry</div>
+                        <div class="text-[10px] font-bold text-slate-400 uppercase">Style</div>
                     </div>
-                    <div class="grid grid-cols-3 gap-2">
+                    <div class="grid grid-cols-4 gap-2">
                         <div class="flex gap-1" id="shape-toggle-group">
                             <button id="btn-shape-icosahedron" class="flex-1 py-1 bg-slate-900 border border-slate-700 rounded text-slate-400 hover:text-white hover:border-sky-400 transition-colors" title="Icosahedron">
                                 <i class="bi bi-hexagon-fill text-sm"></i>
@@ -137,6 +138,14 @@ permalink: /dome-builder/
                             </button>
                             <button id="btn-portion-full" class="flex-1 py-1 bg-slate-900 border border-slate-700 rounded text-slate-400 hover:text-white hover:border-sky-400 transition-colors" title="Full Sphere (1/1)">
                                 <i class="bi bi-circle-fill text-sm"></i>
+                            </button>
+                        </div>
+                        <div class="flex gap-1" id="style-toggle-group">
+                            <button id="btn-style-dome" class="flex-1 py-1 bg-slate-900 border border-slate-700 rounded text-slate-400 hover:text-white hover:border-sky-400 transition-colors" title="Dome Style">
+                                <i class="bi bi-circle text-sm"></i>
+                            </button>
+                            <button id="btn-style-zome" class="flex-1 py-1 bg-slate-900 border border-slate-700 rounded text-slate-400 hover:text-white hover:border-sky-400 transition-colors" title="Zome Style">
+                                <i class="bi bi-capsule text-sm"></i>
                             </button>
                         </div>
                     </div>

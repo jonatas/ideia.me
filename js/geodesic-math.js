@@ -91,3 +91,45 @@ class GeodesicMath {
         return { miter, bevel };
     }
 }
+
+    static createStrutGeometry(boardLength, miterAngle1Rad, miterAngle2Rad, bevelAngleRad, jointStyle, independentTriangles, strutWidth, strutHeight, wSegsOverride) {
+        const width = strutWidth / 1000; // Convert mm to meters
+        const height = strutHeight / 1000; // Convert mm to meters
+        
+        const wSegs = wSegsOverride !== undefined ? wSegsOverride : (jointStyle === 'double' ? 2 : 1);
+        const geometry = new THREE.BoxGeometry(width, boardLength, height, wSegs, 1, 1);
+        
+        const positions = geometry.attributes.position;
+        const vertex = new THREE.Vector3();
+        
+        // Apply flat compound cuts to vertices
+        for (let i = 0; i < positions.count; i++) {
+            vertex.fromBufferAttribute(positions, i);
+            
+            if (jointStyle === 'double' && !independentTriangles) {
+                if (vertex.y > 0) {
+                    // Top end: Double miter to form a point
+                    const newY = boardLength / 2 - Math.abs(vertex.x) * Math.tan(miterAngle2Rad) + vertex.z * Math.tan(bevelAngleRad);
+                    positions.setY(i, newY);
+                } else {
+                    // Bottom end: Double miter to form a point
+                    const newY = -boardLength / 2 + Math.abs(vertex.x) * Math.tan(miterAngle1Rad) - vertex.z * Math.tan(bevelAngleRad);
+                    positions.setY(i, newY);
+                }
+            } else {
+                if (vertex.y > 0) {
+                    // Top end: Single miter cut
+                    const newY = boardLength / 2 - vertex.x * Math.tan(miterAngle2Rad) + vertex.z * Math.tan(bevelAngleRad);
+                    positions.setY(i, newY);
+                } else {
+                    // Bottom end: Single miter cut
+                    const newY = -boardLength / 2 + vertex.x * Math.tan(miterAngle1Rad) - vertex.z * Math.tan(bevelAngleRad);
+                    positions.setY(i, newY);
+                }
+            }
+        }
+        
+        geometry.computeVertexNormals();
+        return geometry;
+    }
+}
