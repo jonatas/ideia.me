@@ -135,6 +135,26 @@ document.addEventListener('DOMContentLoaded', () => {
         ? '<span class="badge bg-danger bg-opacity-25 text-danger border border-danger border-opacity-25 mt-2 d-inline-block">Presentation</span>'
         : `<span class="badge bg-primary bg-opacity-25 text-primary border border-primary border-opacity-25 mt-2 d-inline-block">${item.category}</span>`;
       
+      let statsHtml = '';
+      if (item.category === 'app') {
+          const statsStr = localStorage.getItem('stats_' + item.id);
+          if (statsStr) {
+              try {
+                  const stats = JSON.parse(statsStr);
+                  let totalTime = 0;
+                  let totalPieces = 0;
+                  Object.values(stats).forEach(s => {
+                      totalTime += s.totalSeconds;
+                      totalPieces += s.piecesDone;
+                  });
+                  if (totalPieces > 0) {
+                      const avg = Math.round(totalTime / totalPieces);
+                      statsHtml = `<div class="mt-2 text-xs text-info d-flex align-items-center gap-1"><i class="bi bi-stopwatch"></i> ${totalPieces} built (avg ${avg}s/u)</div>`;
+                  }
+              } catch(e) {}
+          }
+      }
+
       col.innerHTML = `
         <div class="card h-100 glass-card position-relative overflow-hidden group">
           <div class="card-body p-4 d-flex flex-column">
@@ -148,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
              </div>
              <h5 class="card-title text-white mb-1"><a href="${item.url}" class="text-white text-decoration-none stretched-link">${item.title}</a></h5>
              <div>${categoryBadge}</div>
+             ${statsHtml}
              <div class="mt-auto pt-3 text-muted small"><i class="bi bi-clock-history me-1"></i> Saved ${new Date(item.savedAt).toLocaleDateString()}</div>
           </div>
         </div>

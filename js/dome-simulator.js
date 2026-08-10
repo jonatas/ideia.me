@@ -28,6 +28,10 @@ class DomeSimulator {
         this.todoProgress = {};
         this.todoProgressTriangle = {};
         this.lastTap = 0; // For double-tap detection
+        this.activeTimer = null;
+        this.timerStartTime = null;
+        this.itemStats = {};
+        this.timerInterval = null;
         
         // Enhanced Assembly Mode Properties
         this.assemblyPhase = 0; // 0: strut collection, 1: triangle assembly, 2: component integration
@@ -69,18 +73,27 @@ class DomeSimulator {
         this.updateUI();
     }
     
+    getConfigHash() {
+        // Create a unique hash for the current dome configuration to save progress against
+        const str = `${this.frequency}v_${this.baseShape}_${this.diameter}_${this.strutWidth}_${this.strutHeight}_${this.independentTriangles}`;
+        return btoa(str).replace(/=/g, '');
+    }
+
     loadTodoProgress() {
-        const configId = `${this.frequency}v_${this.baseShape}_${this.spherePortion}_${this.independentTriangles}`;
+        const configId = this.getConfigHash();
         const savedTodo = localStorage.getItem('todo_' + configId);
         const savedTodoTri = localStorage.getItem('todo_tri_' + configId);
+        const savedStats = localStorage.getItem('stats_' + configId);
         this.todoProgress = savedTodo ? JSON.parse(savedTodo) : {};
         this.todoProgressTriangle = savedTodoTri ? JSON.parse(savedTodoTri) : {};
+        this.itemStats = savedStats ? JSON.parse(savedStats) : {};
     }
     
     saveTodoProgress() {
-        const configId = `${this.frequency}v_${this.baseShape}_${this.spherePortion}_${this.independentTriangles}`;
+        const configId = this.getConfigHash();
         localStorage.setItem('todo_' + configId, JSON.stringify(this.todoProgress));
         localStorage.setItem('todo_tri_' + configId, JSON.stringify(this.todoProgressTriangle));
+        localStorage.setItem('stats_' + configId, JSON.stringify(this.itemStats));
         
         // Auto-save favorite dome settings if not saved
         if (window.userProfile && !window.userProfile.isSaved(configId)) {
@@ -96,6 +109,11 @@ class DomeSimulator {
         const btnTriangles = document.getElementById('btn-focus-triangles');
         if (btnStruts) btnStruts.classList.toggle('active', tab === 'struts');
         if (btnTriangles) btnTriangles.classList.toggle('active', tab === 'triangles');
+        
+        // Stop timer when switching tabs
+        if (this.activeTimer) {
+            this.toggleTimer(this.activeTimer, this.focusTab !== 'triangles');
+        }
         
         const strutsContainer = document.getElementById('inventory-struts-container');
         const trianglesContainer = document.getElementById('inventory-triangles-container');
@@ -796,6 +814,79 @@ class DomeSimulator {
         }
     }
     
+    formatTime(seconds) {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = seconds % 60;
+        if (h > 0) return `${h}h ${m}m ${s}s`;
+        if (m > 0) return `${m}m ${s}s`;
+        return `${s}s`;
+    }
+
+    toggleTimer(itemType, isTriangle = false) {
+        if (this.activeTimer === itemType) {
+            clearInterval(this.timerInterval);
+            this.activeTimer = null;
+            this.timerStartTime = null;
+            document.body.classList.remove('active-timer');
+        } else {
+            if (this.timerInterval) clearInterval(this.timerInterval);
+            this.activeTimer = itemType;
+            this.activeTimerIsTriangle = isTriangle;
+            this.timerStartTime = Date.now();
+            document.body.classList.add('active-timer');
+            
+            this.timerInterval = setInterval(() => {
+                const el = document.getElementById('timer-display-' + itemType);
+                if (el) {
+                    const elapsed = Math.floor((Date.now() - this.timerStartTime) / 1000);
+                    const prevSecs = (this.itemStats[itemType]?.totalSeconds || 0);
+                    el.innerText = this.formatTime(prevSecs + elapsed);
+                }
+            }, 1000);
+        }
+        
+        if (isTriangle) {
+            this.updateTriangleInventory();
+        } else {
+            this.updateStrutTypesList();
+        }
+    }
+
+    markProgress(itemType, newProgress, isTriangle) {
+        const currentProgress = isTriangle ? (this.todoProgressTriangle[itemType] || 0) : (this.todoProgress[itemType] || 0);
+        
+        if (isTriangle) {
+            this.todoProgressTriangle[itemType] = newProgress;
+        } else {
+            this.todoProgress[itemType] = newProgress;
+        }
+        
+        if (this.activeTimer === itemType) {
+            const now = Date.now();
+            const timeSpentSec = Math.floor((now - this.timerStartTime) / 1000);
+            
+            if (!this.itemStats[itemType]) {
+                this.itemStats[itemType] = { totalSeconds: 0, piecesDone: 0 };
+            }
+            
+            if (newProgress > currentProgress) {
+                const diff = newProgress - currentProgress;
+                this.itemStats[itemType].totalSeconds += timeSpentSec;
+                this.itemStats[itemType].piecesDone += diff;
+            }
+            
+            this.timerStartTime = now;
+        }
+        
+        this.saveTodoProgress();
+        if (isTriangle) {
+            this.updateTriangleInventory();
+        } else {
+            this.updateStrutTypesList();
+        }
+    }
+
     updateTriangleInventory() {
         const triangleTypesGrid = document.getElementById('triangle-types-grid');
         if (!triangleTypesGrid) return;
@@ -804,7 +895,8 @@ class DomeSimulator {
         this.triangleTypes.forEach((typeData, typeKey) => {
             const card = document.createElement('div');
             const isSelected = this.selectedTriangleType === typeKey;
-            card.className = `data-card ${isSelected ? 'active' : ''}`;
+            const isActiveTimer = this.activeTimer === typeKey;
+            card.className = `data-card relative mb-3 cursor-pointer transition-all duration-300 ${isSelected ? 'active border-primary' : 'border-slate-700 hover:border-slate-500'} ${isActiveTimer ? 'timer-active ring-2 ring-emerald-500/50 scale-[1.02]' : ''}`;
             
             card.innerHTML = `
                 <div class="flex items-center gap-3">
@@ -821,13 +913,20 @@ class DomeSimulator {
                 </div>
                 ${this.isFocusMode ? `
                 <div class="mt-3 pt-3 border-t border-slate-700/50 px-2 pb-2 todo-progress" onclick="event.stopPropagation();">
-                    <div class="text-[10px] font-bold text-slate-400 mb-2">PROGRESS: <span id="todo-count-tri-${typeKey}">${this.todoProgressTriangle[typeKey] || 0}</span> / ${typeData.count}</div>
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="text-[10px] font-bold text-slate-400">PROGRESS: <span id="todo-count-tri-${typeKey}">${this.todoProgressTriangle[typeKey] || 0}</span> / ${typeData.count}</div>
+                        <div class="flex items-center gap-2">
+                            ${this.itemStats[typeKey] && this.itemStats[typeKey].piecesDone > 0 ? `<span class="text-[9px] text-info bg-info/10 px-1.5 py-0.5 rounded">Avg: ${Math.round(this.itemStats[typeKey].totalSeconds / this.itemStats[typeKey].piecesDone)}s/u</span>` : ''}
+                            <span id="timer-display-${typeKey}" class="text-[10px] font-mono ${this.activeTimer === typeKey ? 'text-green-400' : 'text-slate-500'}">${this.formatTime(this.itemStats[typeKey]?.totalSeconds || 0)}</span>
+                            <button onclick="sim.toggleTimer('${typeKey}', true)" class="w-6 h-6 rounded flex items-center justify-center transition-colors ${this.activeTimer === typeKey ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'}">
+                                <i class="bi ${this.activeTimer === typeKey ? 'bi-stop-fill' : 'bi-play-fill'}"></i>
+                            </button>
+                        </div>
+                    </div>
                     <div class="flex flex-wrap gap-1">
                         ${Array.from({ length: typeData.count }).map((_, i) => `
                             <div class="w-6 h-6 rounded border ${ (this.todoProgressTriangle[typeKey] || 0) > i ? 'bg-sky-500 border-sky-400' : 'bg-slate-800 border-slate-600' } cursor-pointer hover:border-sky-400 flex items-center justify-center transition-colors" onclick="
-                                sim.todoProgressTriangle['${typeKey}'] = ${ (this.todoProgressTriangle[typeKey] || 0) > i ? i : i + 1 };
-                                sim.saveTodoProgress();
-                                sim.updateTriangleInventory();
+                                sim.markProgress('${typeKey}', ${ (this.todoProgressTriangle[typeKey] || 0) > i ? i : i + 1 }, true);
                             ">
                                 ${ (this.todoProgressTriangle[typeKey] || 0) > i ? '<i class="bi bi-check text-white text-lg"></i>' : ''}
                             </div>
@@ -1157,7 +1256,8 @@ class DomeSimulator {
             struts.forEach(strut => {
                 const card = document.createElement('div');
                 const isSelected = this.selectedStrutType?.type === strut.type;
-                card.className = `data-card relative mb-3 cursor-pointer transition-colors ${isSelected ? 'active border-primary' : 'border-slate-700 hover:border-slate-500'}`;
+                const isActiveTimer = this.activeTimer === strut.type;
+                card.className = `data-card relative mb-3 cursor-pointer transition-all duration-300 ${isSelected ? 'active border-primary' : 'border-slate-700 hover:border-slate-500'} ${isActiveTimer ? 'timer-active ring-2 ring-emerald-500/50 scale-[1.02]' : ''}`;
                 
                 let qtyText = strut.count + ' Pieces';
 
@@ -1232,13 +1332,20 @@ class DomeSimulator {
                     ` : ''}
                     ${this.isFocusMode ? `
                     <div class="mt-3 pt-3 border-t border-slate-700/50 px-2 pb-2 todo-progress" onclick="event.stopPropagation();">
-                        <div class="text-[10px] font-bold text-slate-400 mb-2">PROGRESS: <span id="todo-count-${strut.type}">${this.todoProgress[strut.type] || 0}</span> / ${strut.count}</div>
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="text-[10px] font-bold text-slate-400">PROGRESS: <span id="todo-count-${strut.type}">${this.todoProgress[strut.type] || 0}</span> / ${strut.count}</div>
+                            <div class="flex items-center gap-2">
+                                ${this.itemStats[strut.type] && this.itemStats[strut.type].piecesDone > 0 ? `<span class="text-[9px] text-info bg-info/10 px-1.5 py-0.5 rounded">Avg: ${Math.round(this.itemStats[strut.type].totalSeconds / this.itemStats[strut.type].piecesDone)}s/u</span>` : ''}
+                                <span id="timer-display-${strut.type}" class="text-[10px] font-mono ${this.activeTimer === strut.type ? 'text-green-400' : 'text-slate-500'}">${this.formatTime(this.itemStats[strut.type]?.totalSeconds || 0)}</span>
+                                <button onclick="sim.toggleTimer('${strut.type}', false)" class="w-6 h-6 rounded flex items-center justify-center transition-colors ${this.activeTimer === strut.type ? 'bg-red-500/20 text-red-400 hover:bg-red-500/30' : 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30'}">
+                                    <i class="bi ${this.activeTimer === strut.type ? 'bi-stop-fill' : 'bi-play-fill'}"></i>
+                                </button>
+                            </div>
+                        </div>
                         <div class="flex flex-wrap gap-1">
                             ${Array.from({ length: strut.count }).map((_, i) => `
                                 <div class="w-6 h-6 rounded border ${ (this.todoProgress[strut.type] || 0) > i ? 'bg-sky-500 border-sky-400' : 'bg-slate-800 border-slate-600' } cursor-pointer hover:border-sky-400 flex items-center justify-center transition-colors" onclick="
-                                    sim.todoProgress['${strut.type}'] = ${ (this.todoProgress[strut.type] || 0) > i ? i : i + 1 };
-                                    sim.saveTodoProgress();
-                                    sim.updateStrutTypesList();
+                                    sim.markProgress('${strut.type}', ${ (this.todoProgress[strut.type] || 0) > i ? i : i + 1 }, false);
                                 ">
                                     ${ (this.todoProgress[strut.type] || 0) > i ? '<i class="bi bi-check text-white text-lg"></i>' : ''}
                                 </div>

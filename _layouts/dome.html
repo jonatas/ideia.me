@@ -236,9 +236,26 @@
             height: 100%;
             overflow-y: auto;
         }
-        body.focus-mode #tab-inventory > .section-title:nth-of-type(2),
-        body.focus-mode #triangle-types-grid {
+        body.focus-mode #inventory-focus-tabs {
+            display: flex !important;
+        }
+        body.focus-mode .focus-hidden {
             display: none !important;
+        }
+        
+        body.active-timer .data-card {
+            opacity: 0.3;
+            filter: grayscale(80%);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        
+        body.active-timer .data-card.timer-active {
+            opacity: 1;
+            filter: none;
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+            z-index: 10;
+            pointer-events: auto;
         }
     </style>
 </head>
