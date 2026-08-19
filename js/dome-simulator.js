@@ -25,6 +25,8 @@ class DomeSimulator {
         this.independentTriangles = true; // Use panelized for perfect joints
         this.isFocusMode = false;
         this.focusTab = 'struts';
+        this.currentTab = 'design';
+        this.customName = null;
         this.todoProgress = {};
         this.todoProgressTriangle = {};
         this.lastTap = 0; // For double-tap detection
@@ -127,6 +129,7 @@ class DomeSimulator {
                 trianglesContainer.style.display = 'block';
             }
         }
+        this.updateURL();
     }
     
     toggleFocusMode() {
@@ -147,6 +150,7 @@ class DomeSimulator {
         this.updateStrutTypesList();
         this.updateTriangleInventory();
         this.initMainDomeView();
+        this.updateURL();
     }
     
     switchTab(tabId) {
@@ -174,7 +178,7 @@ class DomeSimulator {
             this.exitAssemblyMode();
         }
 
-
+        this.updateURL();
     }
 
     showDetails(title, contentHtml) {
@@ -220,9 +224,7 @@ class DomeSimulator {
                 if (id === 'frequency-slider') this.selectedTriangle = null;
                 
                 // Update URL
-                const newUrlParams = new URLSearchParams(window.location.search);
-                newUrlParams.set(shortParam, e.target.value);
-                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+                this.updateURL();
                 
                 if (needsInit) this.initMainDomeView();
                 this.updateUI();
@@ -362,9 +364,7 @@ class DomeSimulator {
                 this.spherePortion = portion;
                 this.selectedTriangle = null;
                 updatePortionButtons();
-                const newUrlParams = new URLSearchParams(window.location.search);
-                newUrlParams.set('portion', this.spherePortion);
-                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+                this.updateURL();
                 this.initMainDomeView();
                 this.updateUI();
             };
@@ -374,9 +374,7 @@ class DomeSimulator {
                 this.domeStyle = style;
                 this.selectedTriangle = null;
                 updatePortionButtons();
-                const newUrlParams = new URLSearchParams(window.location.search);
-                newUrlParams.set('style', this.domeStyle);
-                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+                this.updateURL();
                 this.initMainDomeView();
                 this.updateUI();
             };
@@ -394,9 +392,7 @@ class DomeSimulator {
             const updateJointParams = (style) => {
                 this.jointStyle = style;
                 this.independentTriangles = this.jointStyle === 'karma';
-                const newUrlParams = new URLSearchParams(window.location.search);
-                newUrlParams.set('joint', style);
-                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+                this.updateURL();
                 this.initMainDomeView();
                 this.updateUI();
             };
@@ -586,9 +582,7 @@ class DomeSimulator {
             
             blueprintScaleSlider.addEventListener('input', (e) => {
                 document.getElementById('blueprint-scale-display').textContent = `1:${e.target.value}`;
-                const newUrlParams = new URLSearchParams(window.location.search);
-                newUrlParams.set('scale', e.target.value);
-                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+                this.updateURL();
                 if (this.blueprintMode) {
                     this.renderBlueprint();
                 }
@@ -601,9 +595,7 @@ class DomeSimulator {
             if (urlParams.has('flaps')) blueprintFlapsToggle.checked = urlParams.get('flaps') === '1';
             
             blueprintFlapsToggle.addEventListener('change', () => {
-                const newUrlParams = new URLSearchParams(window.location.search);
-                newUrlParams.set('flaps', blueprintFlapsToggle.checked ? '1' : '0');
-                window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+                this.updateURL();
                 if (this.blueprintMode) {
                     this.renderBlueprint();
                 }
@@ -636,8 +628,101 @@ class DomeSimulator {
                 if (!this.blueprintMode) this.toggleOrigamiMode();
             }, 100);
         }
+
+        if (urlParams.has('name')) {
+            this.customName = urlParams.get('name');
+        }
+
+        if (urlParams.has('tab')) {
+            this.switchTab(urlParams.get('tab'));
+        }
+
+        if (urlParams.has('focustab')) {
+            this.focusTab = urlParams.get('focustab');
+        }
+
+        if (urlParams.has('focus') && urlParams.get('focus') === '1') {
+            setTimeout(() => {
+                if (!this.isFocusMode) this.toggleFocusMode();
+            }, 100);
+        }
+
+        const appTitle = document.getElementById('app-title');
+        if (appTitle) {
+            appTitle.addEventListener('dblclick', () => {
+                appTitle.contentEditable = true;
+                appTitle.focus();
+                appTitle.classList.add('bg-slate-800', 'px-2', 'rounded', 'outline-none', 'ring-2', 'ring-sky-500');
+                
+                // Select all text inside app title
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(appTitle);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            });
+            appTitle.addEventListener('blur', () => {
+                appTitle.contentEditable = false;
+                appTitle.classList.remove('bg-slate-800', 'px-2', 'rounded', 'outline-none', 'ring-2', 'ring-sky-500');
+                this.customName = appTitle.textContent.trim();
+                this.updateURL();
+                if (window.userProfile) {
+                    const configId = this.getConfigHash();
+                    window.userProfile.saveItem('app', configId, window.location.pathname + window.location.search, this.customName, 'bi-hexagon');
+                    this.updateSaveButtonState();
+                }
+            });
+            appTitle.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    appTitle.blur();
+                }
+            });
+        }
     }
     
+    updateURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        urlParams.set('frequency', this.frequency);
+        urlParams.set('diameter', this.diameter);
+        urlParams.set('zoom', this.zoom);
+        urlParams.set('strut-width', this.strutWidth);
+        urlParams.set('strut-height', this.strutHeight);
+        urlParams.set('shape', this.baseShape);
+        urlParams.set('portion', this.spherePortion);
+        urlParams.set('style', this.domeStyle);
+        urlParams.set('joint', this.jointStyle);
+        
+        if (this.currentTab) urlParams.set('tab', this.currentTab);
+        
+        if (this.isFocusMode) {
+            urlParams.set('focus', '1');
+            urlParams.set('focustab', this.focusTab);
+        } else {
+            urlParams.delete('focus');
+            urlParams.delete('focustab');
+        }
+        
+        if (this.customName) {
+            urlParams.set('name', this.customName);
+        } else {
+            urlParams.delete('name');
+        }
+        
+        // Blueprint state
+        if (this.blueprintMode) {
+            urlParams.set('origami', '1');
+            if (this.blueprintViewMode) urlParams.set('origami_style', this.blueprintViewMode);
+            const flapToggle = document.getElementById('blueprint-flaps-toggle');
+            if (flapToggle) urlParams.set('flaps', flapToggle.checked ? '1' : '0');
+        } else {
+            urlParams.delete('origami');
+        }
+        
+        window.history.replaceState({}, '', `${window.location.pathname}?${urlParams.toString()}`);
+    }
+
     updateSaveButtonState() {
         const btnSaveDesign = document.getElementById('save-design-btn');
         if (btnSaveDesign && window.userProfile) {
@@ -664,7 +749,13 @@ class DomeSimulator {
         
         // Update app title
         const appTitle = document.getElementById('app-title');
-        if (appTitle) appTitle.textContent = `${this.diameter}m Geodesic Dome Builder`;
+        let shapeName = this.baseShape.charAt(0).toUpperCase() + this.baseShape.slice(1);
+        const generatedName = `${this.diameter}m ${this.frequency}V ${shapeName} ${this.domeStyle === 'zome' ? 'Zome' : 'Dome'}`;
+        const displayName = this.customName || generatedName;
+        if (appTitle && !appTitle.isContentEditable) {
+            appTitle.textContent = displayName;
+        }
+        document.title = displayName;
         
         // Update zoom display
         document.getElementById('zoom-display').textContent = `${this.zoom.toFixed(1)}x`;
@@ -4561,15 +4652,7 @@ class DomeSimulator {
         this.blueprintMode = !this.blueprintMode;
         if (!this.blueprintViewMode) this.blueprintViewMode = 'origami';
         
-        const newUrlParams = new URLSearchParams(window.location.search);
-        if (this.blueprintMode) {
-            newUrlParams.set('origami', '1');
-            newUrlParams.set('origami_style', this.blueprintViewMode);
-        } else {
-            newUrlParams.delete('origami');
-            // optionally leave origami_style or remove it. We'll leave it in case they re-open.
-        }
-        window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+        this.updateURL();
         
         const bpView = document.getElementById('blueprint-view');
         const btnBp = document.getElementById('btn-blueprint-mode');
@@ -4612,9 +4695,7 @@ class DomeSimulator {
             }
         }
         
-        const newUrlParams = new URLSearchParams(window.location.search);
-        newUrlParams.set('origami_style', this.blueprintViewMode);
-        window.history.replaceState({}, '', `${window.location.pathname}?${newUrlParams.toString()}`);
+        this.updateURL();
         
         this.renderBlueprint();
     }
