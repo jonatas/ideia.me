@@ -211,15 +211,29 @@ permalink: /dome-builder/
 
         <!-- Inventory Tab -->
         <div id="tab-inventory" class="panel-content hidden">
-            <div class="section-title"><i class="bi bi-list-check"></i> Strut Cutting List</div>
-            <div id="inventory-filters"></div>
-            <div id="strut-types-list" class="space-y-3 mb-8">
-                <!-- Populated by JS -->
+            <!-- Focus Mode Inner Tabs -->
+            <div id="inventory-focus-tabs" class="hidden border-b border-slate-700 text-center text-xs mb-4">
+                <button id="btn-focus-struts" class="tab-btn active flex-1 py-3" onclick="domeSimulator.switchFocusTab('struts')" title="Struts">
+                    <i class="bi bi-dash-lg"></i><span class="ml-1">Struts</span>
+                </button>
+                <button id="btn-focus-triangles" class="tab-btn flex-1 py-3" onclick="domeSimulator.switchFocusTab('triangles')" title="Triangles">
+                    <i class="bi bi-triangle"></i><span class="ml-1">Triangles</span>
+                </button>
             </div>
 
-            <div class="section-title"><i class="bi bi-triangle-half"></i> Triangle Types</div>
-            <div id="triangle-types-grid" class="grid grid-cols-1 gap-3">
-                <!-- Populated by JS -->
+            <div id="inventory-struts-container">
+                <div class="section-title focus-hidden"><i class="bi bi-list-check"></i> Strut Cutting List</div>
+                <div id="inventory-filters"></div>
+                <div id="strut-types-list" class="space-y-3 mb-8">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <div id="inventory-triangles-container">
+                <div class="section-title focus-hidden"><i class="bi bi-triangle-half"></i> Triangle Types</div>
+                <div id="triangle-types-grid" class="grid grid-cols-1 gap-3">
+                    <!-- Populated by JS -->
+                </div>
             </div>
         </div>
 
