@@ -58,7 +58,7 @@ shared_preload_libraries = 'spiral'
 Then try the short walkthrough:
 
 ```bash
-cargo pgrx run pg18 < examples/short_walkthrough.sql
+cargo pgrx run pg18 < examples/walkthrough.sql
 ```
 
 Or paste this into any psql session:
