@@ -86,7 +86,7 @@ FROM generate_series(1, 100000);
 SELECT spiral_refresh('ticks');
 
 -- Query the 1-minute rollup
-SELECT t, symbol_id, price_ohlcv_h, price_ohlcv_l, vol
+SELECT t, symbol_id, spiral_ohlcv_high(price) AS price_ohlcv_h, spiral_ohlcv_low(price) AS price_ohlcv_l, vol
 FROM ticks_1m ORDER BY t DESC LIMIT 10;
 ```
 
@@ -1678,13 +1678,13 @@ Once the table is created and the first `spiral_refresh` runs, you get three thi
 SELECT * FROM sensor_data WHERE sensor_id = 1 AND t >= now() - interval '5m';
 
 -- 1-minute rollup — columns auto-derived from magic comments
-SELECT t, sensor_id, temperature_ohlcv_o, temperature_ohlcv_h,
-       temperature_ohlcv_l, temperature_ohlcv_c, humidity, power_usage_stats
+SELECT t, sensor_id, spiral_ohlcv_open(temperature) AS temperature_ohlcv_o, spiral_ohlcv_high(temperature) AS temperature_ohlcv_h,
+       spiral_ohlcv_low(temperature) AS temperature_ohlcv_l, spiral_ohlcv_close(temperature) AS temperature_ohlcv_c, humidity, power_usage_stats
 FROM sensor_data_1m
 WHERE sensor_id = 1 AND t >= now() - interval '1h';
 
 -- 1-hour rollup for dashboards
-SELECT t, sensor_id, temperature_ohlcv_h AS max_temp, humidity
+SELECT t, sensor_id, spiral_ohlcv_high(temperature) AS max_temp, humidity
 FROM sensor_data_1h
 WHERE t >= now() - interval '7d';
 ```
@@ -1727,9 +1727,9 @@ The column names are dynamically derived from the magic comments:
 
 ```sql
 SELECT t, sensor_id, 
-       temperature_ohlcv_o, temperature_ohlcv_h, 
-       temperature_ohlcv_l, temperature_ohlcv_c,
-       humidity, power_usage_stats
+       spiral_ohlcv_open(temperature) AS temperature_ohlcv_o, spiral_ohlcv_high(temperature) AS temperature_ohlcv_h, 
+       spiral_ohlcv_low(temperature) AS temperature_ohlcv_l, spiral_ohlcv_close(temperature) AS temperature_ohlcv_c,
+       humidity
 FROM sensor_data_1m ORDER BY t, sensor_id;
 ```
 
@@ -1772,7 +1772,7 @@ WHERE t >= '2026-05-03 19:00:00'::timestamptz
 GROUP BY 1, 2;
 
 -- Spiral rewrites it to something like:
-SELECT date_trunc('hour', t) AS hour, sensor_id, max(temperature_ohlcv_h)
+SELECT date_trunc('hour', t) AS hour, sensor_id, max(spiral_ohlcv_high(temperature))
 FROM sensor_data_1h
 WHERE t >= '2026-05-03 19:00:00'::timestamptz
   AND t < '2026-05-03 23:00:00'::timestamptz
@@ -1799,8 +1799,8 @@ The planner hook doesn't stop at single-table rewrites. When Spiral detects an e
 
 ```sql
 -- Two independent time-series, joined by time
-SELECT s.t, s.sensor_id, s.temperature_ohlcv_h,
-       a.asset_id,       a.price_ohlcv_h
+SELECT s.t, s.sensor_id, spiral_ohlcv_high(s.temperature) AS temperature_ohlcv_h,
+       a.asset_id,       spiral_ohlcv_high(a.price) AS price_ohlcv_h
 FROM sensor_data s
 JOIN asset_ticks  a ON s.t = a.t
 WHERE s.t >= '2026-05-03 19:00:00'::timestamptz
@@ -1813,8 +1813,8 @@ With Spiral: the planner walks the JoinTree, detects `s.t = a.t`, propagates `WH
 
 ```sql
 -- Effective plan:
-SELECT s.t, s.sensor_id, s.temperature_ohlcv_h,
-       a.asset_id,       a.price_ohlcv_h
+SELECT s.t, s.sensor_id, spiral_ohlcv_high(s.temperature) AS temperature_ohlcv_h,
+       a.asset_id,       spiral_ohlcv_high(a.price) AS price_ohlcv_h
 FROM   sensor_data_1h s          -- ← accelerated
 JOIN   asset_ticks_1h  a ON s.t = a.t   -- ← also accelerated via propagation
 WHERE  s.t >= '2026-05-03 19:00:00'::timestamptz
@@ -1875,7 +1875,7 @@ GROUP BY 1, 2;
 ```sql
 -- Spiral actually runs (conceptual rewrite):
 SELECT date_trunc('hour', t) AS hour, sensor_id,
-       max(temperature_ohlcv_h) AS max_temperature
+       max(spiral_ohlcv_high(temperature)) AS max_temperature
 FROM sensor_data_1h                       -- ← pre-aggregated tier
 WHERE t >= '2026-05-03 19:00:00'::timestamptz
   AND t < '2026-05-03 22:00:00'::timestamptz  -- 3 clean hours
@@ -1926,7 +1926,7 @@ The entire time range is now clean. The same query now generates a single-tier p
 ```sql
 -- After refresh, Spiral rewrites to a single rollup scan:
 SELECT date_trunc('hour', t) AS hour, sensor_id,
-       max(temperature_ohlcv_h) AS max_temperature
+       max(spiral_ohlcv_high(temperature)) AS max_temperature
 FROM sensor_data_1h
 WHERE t >= '2026-05-03 19:00:00'::timestamptz
   AND t < '2026-05-03 23:00:00'::timestamptz
