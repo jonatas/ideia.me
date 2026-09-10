@@ -13,6 +13,8 @@ I recently fell into this exact trap while building [Spiral](https://github.com/
 
 Last week, I had the amazing opportunity to present Spiral at **PGConf Brasil**. 
 
+![Presenting Spiral at PGConf Brasil](/images/pgconf-brazil-2026-jonatasdp-talk.jpeg)
+
 While there, I got to catch up and share the extension with my former Timescale colleague, [Fabrízio Mello](https://www.linkedin.com/in/fabriziomello/). Fabrízio was instrumental in developing hierarchical continuous aggregates at Timescale, and most of Spiral's core architecture is heavily inspired by the lessons I learned from him while tackling this hardcore data problem. 
 
 The conversations at PGConf got me thinking deeply about how Spiral was interacting with Postgres. Here is the story of how deleting hundreds of lines of custom Rust code and leaning into PostgreSQL's native garbage collection made the entire system infinitely better.
@@ -88,3 +90,11 @@ When extending a mature platform like PostgreSQL, your first question shouldn't 
 Your first question should be: ***"Does PostgreSQL already do X, and can I hook into it?"***
 
 By replacing our custom background worker with a native Table Access Method hook into Autovacuum, we got scheduling, scaling, and pausing completely for free. We deleted hundreds of lines of code, and the engine became faster and more deeply integrated with the database it lives in.
+
+### A Perfect Weekend
+
+Beyond the technical breakthroughs and great conversations at the conference, the trip to Blumenau was incredibly special for another reason. My son Lorenzo lives nearby, and I had the amazing opportunity to spend the weekend with him after the event wrapped up. 
+
+![A great weekend with Lorenzo](/images/pgconf-brazil-2026-jonatas-lo.jpeg)
+
+Sometimes the best part about traveling for tech isn't the code you write, but the people you get to see.
