@@ -34,6 +34,144 @@ To achieve this, we use an *inducible* promoter (like the `Lac` promoter). This 
 2. We pour in the IPTG chemical trigger.
 3. Every single bacterium instantly toggles the feature flag to `TRUE` and begins massively parallel execution of our TeaFlon code.
 
+<div style="width: 100%; display: flex; justify-content: center; margin: 3rem 0;">
+  <canvas id="promoterCanvas" width="800" height="400" style="border: 1px solid #1e293b; border-radius: 12px; background: #0f172a; max-width: 100%; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);"></canvas>
+</div>
+<script>
+(function() {
+  const canvas = document.getElementById('promoterCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  let startTime = null;
+  const loopDuration = 30000; // 30 seconds slow motion loop
+  
+  function draw(timestamp) {
+    if (!startTime) startTime = timestamp;
+    let progress = ((timestamp - startTime) % loopDuration) / loopDuration;
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Background space
+    ctx.fillStyle = '#0f172a';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw E. coli cell (large pill shape)
+    ctx.strokeStyle = 'rgba(74, 222, 128, 0.4)';
+    ctx.lineWidth = 6;
+    ctx.fillStyle = 'rgba(20, 83, 45, 0.2)';
+    ctx.beginPath();
+    ctx.roundRect(150, 50, 500, 300, 150);
+    ctx.fill();
+    ctx.stroke();
+    
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '16px monospace';
+    ctx.fillText("E. coli Chassis (Hardware)", 280, 90);
+    
+    // Draw Plasmid (circle inside)
+    ctx.strokeStyle = '#94a3b8';
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.arc(400, 200, 80, 0, Math.PI * 2);
+    ctx.stroke();
+    
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '12px monospace';
+    ctx.fillText("Plasmid", 370, 205);
+    
+    // The Promoter region (Arc on the plasmid)
+    let isPromoterActive = progress > 0.35 && progress < 0.9;
+    ctx.strokeStyle = isPromoterActive ? '#4ade80' : '#ef4444';
+    ctx.lineWidth = 10;
+    ctx.beginPath();
+    ctx.arc(400, 200, 80, -Math.PI/4, Math.PI/4);
+    ctx.stroke();
+    
+    ctx.fillStyle = isPromoterActive ? '#4ade80' : '#ef4444';
+    ctx.font = '14px monospace';
+    ctx.fillText(isPromoterActive ? "PROMOTER: ON" : "PROMOTER: OFF (Dormant)", 490, 205);
+    
+    // IPTG (Trigger molecules)
+    if (progress > 0.05 && progress < 0.9) {
+      // Simulate molecules floating towards the promoter
+      let moveP = Math.max(0, (progress - 0.05) / 0.3); // 0 to 1 between 5% and 35%
+      if (moveP > 1) moveP = 1; // stay there
+      
+      // Easing function for smooth floating
+      let ease = 1 - Math.pow(1 - moveP, 3);
+      
+      let startX = 20, startY = 200;
+      let targetX = 460, targetY = 200;
+      
+      let currX = startX + (targetX - startX) * ease;
+      
+      // Draw IPTG molecules
+      ctx.fillStyle = '#facc15';
+      ctx.beginPath();
+      ctx.arc(currX, startY - 15, 6, 0, Math.PI * 2);
+      ctx.arc(currX + 15, startY + 15, 6, 0, Math.PI * 2);
+      ctx.arc(currX - 10, startY + 5, 6, 0, Math.PI * 2);
+      ctx.fill();
+      
+      if (progress < 0.35) {
+        ctx.fillStyle = '#facc15';
+        ctx.fillText("IPTG Trigger", currX - 40, startY - 30);
+      }
+    }
+    
+    // Protein Synthesis (RNA Polymerase reading the code)
+    if (isPromoterActive) {
+      let printProgress = ((progress - 0.35) / 0.55); // 0 to 1
+      
+      // RNA Polymerase
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+      let polyAngle = Math.PI/4 + (Math.PI * 1.5 * printProgress);
+      let px = 400 + 80 * Math.cos(polyAngle);
+      let py = 200 + 80 * Math.sin(polyAngle);
+      ctx.beginPath();
+      ctx.arc(px, py, 14, 0, Math.PI*2);
+      ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.fillText("Polymerase", px + 18, py);
+      
+      // Emit TeaFlon Proteins
+      for(let i=1; i<=Math.floor(printProgress * 30); i++) {
+         let spread = i * 0.4;
+         let pX = 400 + Math.cos(spread) * (110 + i*4);
+         let pY = 200 + Math.sin(spread) * (110 + i*4);
+         
+         // Destroyer (Red)
+         ctx.fillStyle = '#ef4444';
+         ctx.beginPath();
+         ctx.arc(pX, pY, 5, 0, Math.PI*2);
+         ctx.fill();
+         // Hook (Blue)
+         ctx.fillStyle = '#3b82f6';
+         ctx.beginPath();
+         ctx.arc(pX+10, pY+5, 5, 0, Math.PI*2);
+         ctx.fill();
+         // Linker (Line)
+         ctx.strokeStyle = '#fff';
+         ctx.lineWidth = 1;
+         ctx.beginPath();
+         ctx.moveTo(pX, pY);
+         ctx.lineTo(pX+10, pY+5);
+         ctx.stroke();
+      }
+    }
+    
+    if (progress > 0.9) {
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.fillText("Garbage collection & Reset...", 300, 380);
+    }
+    
+    requestAnimationFrame(draw);
+  }
+  
+  requestAnimationFrame(draw);
+})();
+</script>
+
 ### The Chassis: Booting the Hardware
 
 Now that our plasmid is fully engineered, we need a machine to run it. In synthetic biology, the host organism is called the **Chassis**.
