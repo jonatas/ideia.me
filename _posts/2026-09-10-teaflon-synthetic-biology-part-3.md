@@ -49,7 +49,7 @@ Instead of just looking at a static image, let's explore the compiled structure 
 
 Here is the interactive 3D model of our fusion protein:
 
-<div style="height: 400px; width: 100%; position: relative; border: 1px solid #ccc; border-radius: 8px;" class='viewer_3Dmoljs' data-href='/assets/teaflon_fusion.pdb' data-backgroundcolor='0xf8fafc' data-style='cartoon:color=spectrum' data-ui='true'></div>
+<div style="height: 400px; width: 100%; position: relative; border: 1px solid #ccc; border-radius: 8px;" class='viewer_3Dmoljs' data-href='/assets/teaflon_fusion.pdb' data-backgroundcolor='0xf8fafc' data-style='cartoon:color=spectrum' data-ui='true' data-zoom='1.8'></div>
 <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
 
 *Drag to rotate, scroll to zoom. The left side is the Dehalogenase (Destroyer), and the right side is the Hydrophobin (Hook).*
