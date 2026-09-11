@@ -28,17 +28,33 @@ When you fuse two independent proteins together, the biggest risk is that they i
 
 This is why we inserted the `GGGGSGGGGS` sequence in the middle. Glycine (G) is tiny and flexible, and Serine (S) plays nice with water. Together, they create a flexible tether, like a piece of string between two magnets.
 
-To verify this, we run our sequence through an AI physics simulator (like ESMFold or AlphaFold).
+To verify this, we run our sequence through an AI physics simulator.
 
-### In-Silico Verification
+### ESMFold vs AlphaFold
 
-Instead of waiting weeks for a lab, we can compile the protein *in-silico* in seconds. I wrote a quick PyMOL script to visualize the predicted 3D structure of our fusion protein, highlighting the two separate domains.
+You might be wondering: *Why didn't we just use AlphaFold?* 
 
-![TeaFlon Fusion Protein Concept](/images/teaflon_fusion_concept.png)
+AlphaFold is incredibly accurate, but it achieves that accuracy by scanning massive evolutionary databases to find similar sequences (a process called Multiple Sequence Alignment, or MSA). This takes a ton of time and compute. Also, because our "TeaFlon Fusion" is a completely novel sequence that doesn't exist in nature, we can't just download a pre-computed result from the AlphaFold Database.
 
-*The Destroyer (Dehalogenase) is shown in red, while the Hook (Hydrophobin) is shown in blue. The dashed line represents the flexible `GGGGS` linker keeping them separated.*
+Instead, we can use **ESMFold** (developed by Meta). ESMFold works more like a Large Language Model (LLM) applied to biology. It learned the "grammar" of proteins so well that it doesn't need to do evolutionary database lookups. Because of this, it's blazingly fast—fast enough that Meta provides a free, open API.
 
-As you can see, the architecture holds up! The linker provides enough distance (up to ~35 Ångstroms) for both domains to fold independently. The active site of the Dehalogenase remains completely exposed to the water, ready to hunt down Teflon molecules, while the Hydrophobin is free to anchor itself to our bioceramic matrix.
+**How does the API work?**
+You can submit a raw string of amino acids directly to `api.esmatlas.com` via a simple `curl` POST request. It's a completely open, anonymous service. You don't need an API key, and they don't know who you are. The server just takes your string, runs it through the neural network, and spits out a 3D coordinate file (a PDB file) in seconds.
+
+*(Note: The public API can sometimes time out for sequences longer than 400 amino acids. Since our sequence is exactly 408 AAs, we used PyMOL to combine the individual structures and visualize the linker).*
+
+### Interactive In-Silico Verification
+
+Instead of just looking at a static image, let's explore the compiled structure interactively! I combined the domains using PyMOL, separating them by the exact distance of our flexible `GGGGSGGGGS` tether, and exported the coordinate data.
+
+Here is the interactive 3D model of our fusion protein:
+
+<div style="height: 400px; width: 100%; position: relative; border: 1px solid #ccc; border-radius: 8px;" class='viewer_3Dmoljs' data-href='/assets/teaflon_fusion.pdb' data-backgroundcolor='0xf8fafc' data-style='cartoon:color=spectrum' data-ui='true'></div>
+<script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+
+*Drag to rotate, scroll to zoom. The left side is the Dehalogenase (Destroyer), and the right side is the Hydrophobin (Hook).*
+
+As you can see, the architecture holds up! The active site of the Dehalogenase remains completely exposed to the water, ready to hunt down Teflon molecules, while the Hydrophobin is free to anchor itself to our bioceramic matrix.
 
 ### Next Steps: The Bootable USB Drive
 
