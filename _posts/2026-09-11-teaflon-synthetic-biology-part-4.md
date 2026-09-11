@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "TeaFlon (Part 4): Flashing the BIOS with Plasmids and Promoters"
-date: 2026-09-11 17:45:00 -0300
+date: 2026-09-11 17:30:00 -0300
 categories: synthetic-biology dna
 ---
 
