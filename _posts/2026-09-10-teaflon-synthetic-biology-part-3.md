@@ -49,8 +49,24 @@ Instead of just looking at a static image, let's explore the compiled structure 
 
 Here is the interactive 3D model of our fusion protein:
 
-<div style="height: 400px; width: 100%; position: relative; border: 1px solid #ccc; border-radius: 8px;" class='viewer_3Dmoljs' data-href='/assets/teaflon_fusion.pdb' data-backgroundcolor='0xf8fafc' data-style='cartoon:color=spectrum' data-ui='true' data-zoom='1.8'></div>
+<div id="protein-viewer" style="height: 400px; width: 100%; position: relative; border: 1px solid #ccc; border-radius: 8px;"></div>
 <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    let element = document.querySelector('#protein-viewer');
+    let config = { backgroundColor: '#f8fafc' };
+    let viewer = $3Dmol.createViewer( element, config );
+    fetch('/assets/teaflon_fusion.pdb')
+      .then(response => response.text())
+      .then(data => {
+        viewer.addModel(data, "pdb");
+        viewer.setStyle({}, {cartoon: {color: 'spectrum'}});
+        viewer.zoomTo();
+        viewer.zoom(1.8);
+        viewer.render();
+      });
+  });
+</script>
 
 *Drag to rotate, scroll to zoom. The left side is the Dehalogenase (Destroyer), and the right side is the Hydrophobin (Hook).*
 
