@@ -27,8 +27,8 @@ We created a custom `ResidueCoord` type in Postgres. We then built a Rust functi
 
 {% mermaid %}
 graph TD
-    A[3D Atomic Coordinate] -->|X: 10.5, Y: 12.0, Z: 8.1| B{Bit Interleaving}
-    B -->|Morton Code Generation| C(1D Integer: 491029348)
+    A[3D Atomic Coordinate] -->|X 10.5, Y 12.0, Z 8.1| B{Bit Interleaving}
+    B -->|Morton Code Generation| C(1D Integer 491029348)
     C --> D[Standard PostgreSQL B-Tree Index]
 {% endmermaid %}
 
@@ -118,7 +118,7 @@ These matrices are notoriously massive. To solve this, `pg_bio` introduces the `
 graph LR
     A[ORCA Hi-C Output] -->|Compress to CSR| B(SparseAttentionMap)
     B -->|Stored Natively in pg_bio| C[(Postgres)]
-    C -->|SQL: get_top_interacting_residues()| D[Find Promoter Loops]
+    C -->|SQL Query| D[Find Promoter Loops]
 {% endmermaid %}
 
 By storing the contact map as a Compressed Sparse Row (CSR) structure natively in Postgres, we can write a simple SQL query to instantly ask the database: *"Which base pairs of this synthetic plasmid are physically wrapping around and touching the T7 Promoter in 3D space?"*
