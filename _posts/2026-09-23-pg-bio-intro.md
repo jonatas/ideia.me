@@ -122,4 +122,4 @@ By merging Rust, PostgreSQL, and PyTorch (via the Model Context Protocol), we ha
 
 The days of moving biological data to the compute layer are over. With `pg_bio`, we are moving the compute directly to the data. 
 
-*If you want to read about how we used this architecture to solve the 400-amino-acid limit on our Teflon-eating enzyme, check out [Part 7 of the TeaFlon Series](/synthetic-biology/2026/09/23/teaflon-synthetic-biology-part-7-pg-bio-and-local-ai.html).*
+*If you want to read about how we used this architecture to solve the 400-amino-acid limit on our Teflon-eating enzyme, check out [Part 7 of the TeaFlon Series]({% post_url 2026-09-23-teaflon-synthetic-biology-part-7-pg-bio-and-local-ai %}).*
