@@ -32,6 +32,30 @@ When we compile this new sequence and render the theoretical machine, we get a f
 
 ![TeaFlon Predicted TriFusion](/images/teaflon_trifusion_concept.png)
 
+### Interactive 3D Model
+
+Explore the TriFusion architecture below! *Drag to rotate, scroll to zoom.*
+
+<div id="trifusion-viewer" style="height: 400px; width: 100%; position: relative; margin: 2rem 0; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden;"></div>
+
+<script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    let element = document.querySelector('#trifusion-viewer');
+    let config = { backgroundColor: '#f8fafc' };
+    let viewer = $3Dmol.createViewer( element, config );
+    fetch('/assets/teaflon_trifusion_assembly.pdb')
+      .then(response => response.text())
+      .then(data => {
+        viewer.addModel(data, "pdb");
+        viewer.setStyle({}, {cartoon: {color: 'spectrum'}});
+        viewer.zoomTo();
+        viewer.zoom(1.5);
+        viewer.render();
+      });
+  });
+</script>
+
 ### Expanding the Research: Quantum Validation with ORCA
 
 While AI predictions and structural docking provide a fantastic visual blueprint, they don't prove that the chemical reaction will actually occur. The Carbon-Fluorine (C-F) bond in a polymer chain is significantly more sterically hindered and stable than in the enzyme's natural substrate (fluoroacetate). 
