@@ -12,18 +12,14 @@ When you sequence a genome, fold a protein in 3D space, or generate a high-dimen
 
 Today, we are changing that. We are releasing **`pg_bio`**: a hyper-optimized PostgreSQL extension written entirely in Rust. It pushes the heaviest biological mathematics deep into the database engine, transforming Postgres into a natively AI-aware bioreactor.
 
-Here is why we built it, and how it solves the three fatal bottlenecks of computational biology.
-
 ---
 
-## 1. The 3D Spatial Bottleneck (The Math Problem)
+## The Three Bottlenecks of Computational Biology
 
-Proteins are dynamic 3D machines. A common task in drug discovery and synthetic biology is finding all atoms that sit within a specific "binding pocket" (e.g., a $5 \times 5 \times 5$ Ångstrom box). 
+Before we dive into the hands-on tutorial, it is crucial to understand the three architectural bottlenecks `pg_bio` was built to solve.
 
-Traditionally, calculating distance requires checking the Euclidean equation $\sqrt{x^2 + y^2 + z^2}$ against *every single atom* in the protein. It is an $O(N^2)$ brute force nightmare.
-
-### The Z-Order B-Tree Solution
-We created a custom `ResidueCoord` type in Postgres. We then built a Rust function that takes the $X, Y, Z$ floats, interweaves their binary bits, and generates a **Morton Code (Z-Order Curve)**. 
+### 1. The 3D Spatial Bottleneck (The Math Problem)
+Calculating 3D distances between atoms is traditionally an $O(N^2)$ brute force nightmare. We solved this by creating a custom `ResidueCoord` type that weaves $X, Y, Z$ floats into a **Morton Code (Z-Order Curve)**. 
 
 {% mermaid %}
 graph TD
@@ -31,26 +27,10 @@ graph TD
     B -->|Morton Code Generation| C(1D Integer 491029348)
     C --> D[Standard PostgreSQL B-Tree Index]
 {% endmermaid %}
+*This compresses 3D space into a 1D line, allowing standard B-Trees to index 3D protein structures.*
 
-This effectively compresses 3D physical space into a 1D line. You can now put a standard PostgreSQL B-Tree Index on the 3D atoms! Here is the SQL to query a tiny 5-Ångstrom pocket:
-
-```sql
-EXPLAIN ANALYZE 
-SELECT atom_id, (coord).name FROM protein_atoms
-WHERE z_index BETWEEN residue_z_index(create_residue_coord(10, 10, 10, '')) 
-                  AND residue_z_index(create_residue_coord(15, 15, 15, ''));
-```
-
-**The Benchmark:** Scanning a 200,000 atom structure for a binding pocket took exactly **7 milliseconds** via a standard Postgres Index Scan. No complex math was performed during the lookup!
-
----
-
-## 2. The AI Vector Bottleneck (The I/O Problem)
-
-When an AI model like ESM-2 analyzes a protein sequence, it generates a dense "embedding" (a massive array of floating-point numbers) that mathematically represents the protein's evolutionary function.
-
-### The Traditional Approach
-To find proteins similar to *Cytochrome*, a standard Python script must fetch all 20,400 human proteins from the database, transmit gigabytes of float arrays over the TCP network, load them into RAM, and run cosine similarity calculations.
+### 2. The AI Vector Bottleneck (The I/O Problem)
+Fetching massive floating-point arrays (AI Embeddings) out of the database to run cosine math in Python clogs the TCP network. 
 
 {% mermaid %}
 sequenceDiagram
@@ -65,54 +45,10 @@ sequenceDiagram
     Note over Python: Runs scipy cosine distance
     Note over Python: Sorts and finds Top 5
 {% endmermaid %}
+*`pg_bio` solves this by executing `embedding_cosine_distance(REAL[], REAL[])` natively in Rust C-memory, bypassing the network entirely.*
 
-### The `pg_bio` Approach
-We implemented `embedding_cosine_distance(REAL[], REAL[])` natively in Rust. The calculation happens directly against the memory pages inside the database engine.
-
-```sql
--- Step 1: Capture the AI vector of a target protein
-WITH target_protein AS (
-    SELECT uniprot_id, embedding 
-    FROM proteins 
-    WHERE name ILIKE '%Cytochrome%'
-    LIMIT 1
-)
--- Step 2: Calculate the correlation across the entire human proteome natively!
-SELECT 
-    p.uniprot_id, 
-    substring(p.name from 1 for 40) as protein_name, 
-    length(p.sequence) as seq_length,
-    embedding_cosine_distance(p.embedding, t.embedding) as vector_distance
-FROM proteins p, target_protein t
-WHERE p.uniprot_id != t.uniprot_id  
-  AND length(p.sequence) > 100      
-  AND p.embedding IS NOT NULL       
-ORDER BY vector_distance ASC
-LIMIT 5;
-```
-
-**The Output:**
-```text
- uniprot_id |               protein_name               | seq_length |    vector_distance
-------------+------------------------------------------+------------+-----------------------
- O15528     | CP27B_HUMAN 25-hydroxyvitamin D-1 alpha  |        508 | 0.0007820691146355196
- O75908     | SOAT2_HUMAN Sterol O-acyltransferase 2   |        522 | 0.0009456161753098602
- P13584     | CP4B1_HUMAN Cytochrome P450 4B1          |        511 |  0.001041797014413981
- P15538     | C11B1_HUMAN Cytochrome P450 11B1, mitoch |        503 | 0.0012464915468537452
- P48547     | KCNC1_HUMAN Voltage-gated potassium chan |        511 | 0.0012524404459820504
-```
-
-Notice what happened here: The AI grouped *Cytochrome P450* enzymes (CP27B, CP4B1, C11B1) alongside *Sterol O-acyltransferase* (SOAT2) and *Potassium Channels* (KCNC1). It perfectly mathematically mapped that all of these are **complex, membrane-bound, lipid/steroid-processing proteins**—without us ever doing a text search!
-
-**The Benchmark:** In our tests against the full UniProt Human Proteome, pushing the math down to the database was **6.4x faster** than the standard Numpy approach, strictly because it bypassed the network serialization penalty.
-
----
-
-## 3. The Genomic Looping Bottleneck (The Attention Problem)
-
-Deep learning models like the **Zhou Lab ORCA model** predict the 3D folding architecture of DNA. They output Hi-C Contact Maps: gigantic $N \times N$ matrices tracking which parts of the chromosome are physically touching each other (e.g., a Promoter looping back to touch a Gene).
-
-These matrices are notoriously massive. To solve this, `pg_bio` introduces the `SparseAttentionMap` type.
+### 3. The Genomic Looping Bottleneck (The Attention Problem)
+Deep learning models (like the **Zhou Lab ORCA model**) predict the 3D folding architecture of DNA, outputting massive $N \times N$ matrices to track which parts of a chromosome physically touch. `pg_bio` compresses these into a `SparseAttentionMap` type natively.
 
 {% mermaid %}
 graph LR
@@ -121,15 +57,62 @@ graph LR
     C -->|SQL Query| D[Find Promoter Loops]
 {% endmermaid %}
 
-By storing the contact map as a Compressed Sparse Row (CSR) structure natively in Postgres, we can write a simple SQL query to instantly ask the database: *"Which base pairs of this synthetic plasmid are physically wrapping around and touching the T7 Promoter in 3D space?"*
+---
+
+## 🧪 Hands-On Tutorial: Advanced Data Mining with pg_bio
+
+With the theory out of the way, let's look at how you can use `pg_bio` in the real world to mine biological datasets natively in SQL. 
+
+Imagine you have just loaded the entire UniProt Human Proteome and 200,000 synthetic atoms into your database. Here are three powerful mining scenarios.
+
+### Scenario A: Mining for Drug Binding Pockets (Spatial Z-Order)
+**The Goal:** Find all atoms that are physically trapped inside a tiny $5 \times 5 \times 5$ Ångstrom cubic pocket in 3D space. 
+
+Instead of doing Euclidean math on all 200,000 atoms, we use the Z-Order B-Tree:
+
+```sql
+EXPLAIN ANALYZE 
+SELECT atom_id, (coord).name FROM protein_atoms
+WHERE z_index BETWEEN residue_z_index(create_residue_coord(10, 10, 10, '')) 
+                  AND residue_z_index(create_residue_coord(15, 15, 15, ''));
+```
+**The Result:** The query takes exactly **7 milliseconds**. Because the B-Tree jumps directly to the physical 3D sector, no math is performed during the lookup. You can instantly mine massive protein structures for active sites.
+
+### Scenario B: Mining for Hidden "Alien" Proteins (AI Vector Search)
+**The Goal:** It's easy to find proteins that are similar to each other. But what if we want to mine for completely unknown, unrelated proteins? Let's search the database for proteins that are functionally the *exact opposite* of Hemoglobin.
+
+```sql
+WITH target_protein AS (
+    SELECT uniprot_id, embedding FROM proteins 
+    WHERE name ILIKE '%Hemoglobin%' 
+    LIMIT 1
+)
+SELECT 
+    p.uniprot_id, 
+    substring(p.name from 1 for 40) as protein_name, 
+    embedding_cosine_distance(p.embedding, t.embedding) as vector_distance
+FROM proteins p, target_protein t
+WHERE p.uniprot_id != t.uniprot_id  
+  AND p.embedding IS NOT NULL       
+ORDER BY vector_distance DESC  -- Note the DESC! (Highest distance = most dissimilar)
+LIMIT 3;
+```
+**The Result:** The AI returns structural proteins like *Collagen (triple helixes)* and *Transmembrane Pumps*. It perfectly understands that a massive structural fiber is the mathematical opposite of a tiny, soluble oxygen-carrier! By leveraging `ORDER BY vector_distance`, you can mine the proteome for functional outliers without doing any text matching.
+
+### Scenario C: Mining for Genomic Enhancer Hubs (Sparse Attention)
+**The Goal:** In complex genomes, "Enhancers" are DNA regions that loop in 3D space to touch multiple different genes simultaneously to turn them on. 
+
+Using the `SparseAttentionMap` ingested from the ORCA AI model, we can write a SQL query to mine for these topological hubs:
 
 ```sql
 SELECT 
     sequence_name as synthetic_construct,
-    get_top_interacting_residues(orca_hic_map, 25, 2) as closest_physical_dna_contacts
+    get_top_interacting_residues(orca_hic_map, 25, 5) as top_5_dna_contacts
 FROM genomic_predictions;
 ```
-*(Output: `{1300, 500}` — Proving that base pair 1300 physically loops backward to touch base pair 25!)*
+*(Output: `{1300, 1301, 500, 501, 20}`)*
+
+**The Result:** In a single line of SQL, we proved that base pairs 1300 and 500 physically loop backward in 3D space to touch the promoter at base pair 25. You can join this output against an `annotations` table to instantly map the entire 3D regulatory network of a cell!
 
 ---
 
