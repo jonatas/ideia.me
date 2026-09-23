@@ -82,18 +82,18 @@ SELECT
     p.uniprot_id, 
     substring(p.name from 1 for 40) as protein_name, 
     length(p.sequence) as seq_length,
-    embedding_cosine_distance(p.embedding, t.embedding) as ai_distance
+    embedding_cosine_distance(p.embedding, t.embedding) as distance
 FROM proteins p, target_protein t
 WHERE p.uniprot_id != t.uniprot_id  
   AND length(p.sequence) > 100      
   AND p.embedding IS NOT NULL       
-ORDER BY ai_distance ASC
+ORDER BY distance ASC
 LIMIT 5;
 ```
 
 **The Output:**
 ```text
- uniprot_id |               protein_name               | seq_length |      ai_distance
+ uniprot_id |               protein_name               | seq_length |        distance
 ------------+------------------------------------------+------------+-----------------------
  O15528     | CP27B_HUMAN 25-hydroxyvitamin D-1 alpha  |        508 | 0.0007820691146355196
  O75908     | SOAT2_HUMAN Sterol O-acyltransferase 2   |        522 | 0.0009456161753098602
