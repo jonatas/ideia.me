@@ -58,11 +58,11 @@ sequenceDiagram
     participant Network
     participant Postgres
     
-    Python->>Network: "SELECT embedding FROM proteins;"
-    Network->>Postgres: (Request Data)
-    Postgres-->>Network: Transmitting 20,400 Arrays... 🔴 I/O BOTTLENECK
-    Network-->>Python: (Receives Megabytes of Floats)
-    Note over Python: Runs scipy.spatial.distance.cosine()
+    Python->>Network: SELECT embedding FROM proteins
+    Network->>Postgres: Request Data
+    Postgres-->>Network: Transmitting 20,400 Arrays (I/O BOTTLENECK)
+    Network-->>Python: Receives Megabytes of Floats
+    Note over Python: Runs scipy cosine distance
     Note over Python: Sorts and finds Top 5
 {% endmermaid %}
 
@@ -82,18 +82,18 @@ SELECT
     p.uniprot_id, 
     substring(p.name from 1 for 40) as protein_name, 
     length(p.sequence) as seq_length,
-    embedding_cosine_distance(p.embedding, t.embedding) as distance
+    embedding_cosine_distance(p.embedding, t.embedding) as vector_distance
 FROM proteins p, target_protein t
 WHERE p.uniprot_id != t.uniprot_id  
   AND length(p.sequence) > 100      
   AND p.embedding IS NOT NULL       
-ORDER BY distance ASC
+ORDER BY vector_distance ASC
 LIMIT 5;
 ```
 
 **The Output:**
 ```text
- uniprot_id |               protein_name               | seq_length |        distance
+ uniprot_id |               protein_name               | seq_length |    vector_distance
 ------------+------------------------------------------+------------+-----------------------
  O15528     | CP27B_HUMAN 25-hydroxyvitamin D-1 alpha  |        508 | 0.0007820691146355196
  O75908     | SOAT2_HUMAN Sterol O-acyltransferase 2   |        522 | 0.0009456161753098602
