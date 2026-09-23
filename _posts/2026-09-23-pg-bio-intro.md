@@ -78,8 +78,12 @@ WHERE z_index BETWEEN residue_z_index(create_residue_coord(10, 10, 10, ''))
 ```
 **The Result:** The query takes exactly **7 milliseconds**. Because the B-Tree jumps directly to the physical 3D sector, no math is performed during the lookup. You can instantly mine massive protein structures for active sites.
 
-### Scenario B: Mining for Hidden "Alien" Proteins (AI Vector Search)
-**The Goal:** It's easy to find proteins that are similar to each other. But what if we want to mine for completely unknown, unrelated proteins? Let's search the database for proteins that are functionally the *exact opposite* of Hemoglobin.
+### Scenario B: Off-Target Drug Prediction (AI Vector Search & Cosine Math)
+**The Goal:** In pharmacology, if a drug binds to Protein A, it might accidentally bind to Protein B if their 3D structures are identical (causing severe side effects). How do we find identical proteins? 
+
+We represent them as 320-dimensional mathematical vectors ($A$ and $B$). `pg_bio` then calculates the Cosine Distance using the formula:
+$$ \text{Distance} = 1 - \frac{A \cdot B}{\|A\| \|B\|} $$
+A distance close to `0.0` means they fold and function identically! But for this tutorial, let's mine for the *opposite*. What if we want to find proteins that are functionally the *exact opposite* of Hemoglobin? We just reverse the sort to `DESC`:
 
 ```sql
 WITH target_protein AS (
