@@ -1,34 +1,32 @@
 ---
 layout: post
-title: "Anthropic's Agents took 21 Hours to find a CRISPR enzyme. pg_bio does it in Milliseconds."
+title: "Accelerating Claude's CRISPR Discovery: Equipping AI Agents with Native Bio-Databases"
 date: 2026-09-24 10:00:00 -0300
 categories: [bioinformatics, AI, rust, postgres]
 ---
 
-Yesterday, Anthropic made waves by announcing that they set up an autonomous molecular biology lab. Their flagship achievement? A swarm of **950 Claude AI agents spent 21 hours** searching through a database of DNA sequences, eventually discovering a previously uncharacterized CRISPR-like enzyme via tandem repeat arrays.
+Yesterday, Anthropic made waves by announcing they set up an autonomous molecular biology lab. Their flagship achievement is truly inspiring: a swarm of **950 Claude AI agents spent 21 hours** searching through a massive database of DNA sequences, eventually discovering a previously uncharacterized CRISPR-like enzyme via tandem repeat arrays.
 
-This is a massive milestone for AI-driven science. But as a software engineer and bioinformatics builder, I couldn't help but look at the architecture of the experiment and think: *Why did it take 950 agents 21 hours?*
+This is a massive milestone for AI-driven science. As a software engineer and bioinformatics builder, I was thrilled by the news. It also got me thinking about the immense data engineering challenges those agents had to overcome, and how we can provide them with even better infrastructure for their next discovery.
 
-The answer lies in the **Cold Start Problem** of biological data.
+## The Infrastructure Challenge
+When AI agents (or human scientists) search biological databases today, they are usually forced to interact with files. They write ad-hoc Python scripts, download heavy FASTA or PDB files, parse them into memory using libraries like Pandas or BioPython, and loop through sequences.
 
-## The Bottleneck: Script-First Bioinformatics
-When AI agents (or human scientists) search biological databases today, they usually write ad-hoc Python scripts, download massive FASTA or PDB files, parse them into memory using Pandas or BioPython, and loop through sequences using standard string matching.
+This creates a severe "Cold Start Problem". The agents, and the CPUs they run on, spend the vast majority of their time just unzipping files, parsing text, and moving data into RAM before any actual discovery can begin.
 
-This is incredibly inefficient. The CPU spends 99% of its time unzipping files, parsing text, and moving data into RAM.
+## Empowering Agents with pg_bio
+To help accelerate these workflows, I've been building **`pg_bio`**—a native PostgreSQL bioinformatics engine. 
 
-## The Solution: pg_bio
-If Anthropic's agents had access to **`pg_bio`**—the native PostgreSQL bioinformatics engine we've been building—they wouldn't need to write Python parsers at all. They could have issued a single declarative SQL query.
+Because Large Language Models are inherently excellent at writing SQL, `pg_bio` aims to give them a declarative interface to biology. By moving complex biological algorithms (sequence motif matching, 3D spatial intersections, and Vector embeddings) directly into the database engine via Rust (`pgrx`), the data never has to leave the disk until it's perfectly filtered.
 
-Because `pg_bio` moves complex biological algorithms (sequence motif matching, 3D spatial intersections, molecular weight calculations, and Vector embeddings) directly into the database engine via Rust (`pgrx`), the data never leaves the disk until it's perfectly filtered.
-
-To prove it, I ran a miniature version of their experiment locally on my laptop.
+To explore how this could complement Anthropic's workflow, I ran a miniature version of a CRISPR discovery search locally.
 
 ## The Experiment: Deep Mining for CRISPR-like Enzymes
-CRISPR enzymes (like Cas9) are massive proteins (often > 100kDa) that contain specific nuclease domains. Let's write a SQL query to find unknown proteins that:
+CRISPR enzymes (like Cas9) are massive proteins (often > 100kDa) that contain specific domains. Let's imagine an agent writing a SQL query to find unknown proteins that:
 1. Have a molecular weight over 100,000 Daltons.
 2. Contain a specific catalytic triad motif proxy: `[DE]-x(2)-[DE]` or `[KRH]-x(3)-[DE]`.
 
-Here is the Python script simulating the agent's workflow using `pg_bio`:
+Here is the Python script simulating how an agent would use `pg_bio`:
 
 ```python
 import psycopg
@@ -52,7 +50,7 @@ with psycopg.connect(DB_URI) as conn:
         candidates = cur.fetchall()
         
         elapsed = time.time() - start_time
-        print(f"Time taken: {elapsed:.4f} seconds (vs 21 hours!)")
+        print(f"Time taken: {elapsed:.4f} seconds")
         for c in candidates[:3]:
             print(f" - {c[0]} | Mass: {c[2]:.2f} Da")
 ```
@@ -61,9 +59,8 @@ with psycopg.connect(DB_URI) as conn:
 When I executed this against my local AlphaFold/PDB populated database, here is what happened:
 
 ```text
-Anthropic's 950 Agents spent 21 hours searching... We will use 1 SQL Query!
 Scanning local DB...
-Time taken: 0.0672 seconds (vs 21 hours!)
+Time taken: 0.0672 seconds
 Found 95 potential CRISPR-like enzyme candidates > 100kDa.
  - 10AD | Mass: 125211.80 Da
  - 10AY | Mass: 196171.23 Da
@@ -72,11 +69,11 @@ Found 95 potential CRISPR-like enzyme candidates > 100kDa.
 
 **0.0672 seconds.** 
 
-Even scaled up to the 220 million proteins in the AlphaFold database, Postgres parallel workers running native Rust regex via `prosite_match` could sweep the entire known universe of proteins in minutes, not hours.
+By executing native Rust regex directly inside Postgres via `prosite_match`, the query runs instantly. Even scaled up to the 220 million proteins in the AlphaFold database, parallel Postgres workers could sweep the entire known universe of proteins incredibly fast.
 
-## Dear Anthropic...
-AI agents are incredibly smart, and they are native to SQL. By forcing them to write Python scripts to parse `.cif` and `.fasta` files, we are slowing them down. 
+## Building the Future of Bio-Agents Together
+Anthropic has proven that AI agents possess the reasoning capabilities to discover novel biology. Our next step as an engineering community is to give them the database infrastructure that matches their intelligence. 
 
-If we want Claude to cure diseases, we need to give it the right tools. Let's put the chemistry directly in the database.
+By eliminating the need to write Python parser scripts, we can free up Claude to spend 100% of its compute on actual scientific reasoning. 
 
-*Check out the [pg_bio repository](https://github.com/jonatas/pg_bio) to see how we use Rust to build spatial Z-Order indexes and Cheminformatics natively in Postgres.*
+I would love to collaborate with scientists and AI researchers pushing these boundaries. If you're building autonomous labs or bio-agents, check out the [pg_bio repository](https://github.com/jonatas/pg_bio) to see how we use Rust to build spatial indexing and cheminformatics natively in Postgres!
