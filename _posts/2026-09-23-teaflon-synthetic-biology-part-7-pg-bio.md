@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "TeaFlon Synthetic Biology, Part 7: The 419 Limit, Local AI Folding, and pg_bio"
+title: "TeaFlon Synthetic Biology, Part 7: The 419 Limit, Local Inference, and pg_bio"
 date: 2026-09-23 12:45:00 -0300
-categories: synthetic-biology ai postgresql rust mcp
+categories: synthetic-biology deep-learning postgresql rust mcp
 ---
 
 In [Part 5](/synthetic-biology/2026/09/11/teaflon-synthetic-biology-part-5.html) of our TeaFlon series, we finalized the design of our **TriFusion** enzyme: a Dehalogenase to chop the C-F bonds, a Hydrophobin to stick to the Teflon surface, and finally, a human Amelogenin domain to initiate biomineralization and turn the toxic waste into safe, insoluble mineral complexes. 
