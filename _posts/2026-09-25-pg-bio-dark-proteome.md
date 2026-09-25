@@ -38,41 +38,87 @@ TEP1 is composed of **WD40 repeats**—massive, all-beta strand structural motif
 
 Let's look at the incredible 3D structure of the Mouse TEP1 Telomerase component. 
 
-<div id="tep1-viewer" style="height: 500px; width: 100%; position: relative; border: 1px solid #ccc; border-radius: 8px;"></div>
+### Interactive Structural Breakdown
+
+The beauty of 3D visualization is that we can dissect this massive 2600-amino-acid engine into its core functional parts. `pg_bio` matched this protein to the Archaea orphan specifically because they share **repetitive scaffolding folds**.
+
+Use the interactive controls below to explore the architecture of TEP1 and understand exactly what the AI found:
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">
+  <button onclick="resetView()" style="padding: 8px 12px; background: #334155; color: white; border: none; border-radius: 4px; cursor: pointer;">Reset View</button>
+  <button onclick="highlightBeta()" style="padding: 8px 12px; background: #fbbf24; color: black; border: none; border-radius: 4px; cursor: pointer;">Show Beta Strands (Scaffolding)</button>
+  <button onclick="highlightHelices()" style="padding: 8px 12px; background: #38bdf8; color: black; border: none; border-radius: 4px; cursor: pointer;">Show Alpha Helices</button>
+  <button onclick="highlightWD40()" style="padding: 8px 12px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer;">Zoom to WD40 Beta-Propeller</button>
+</div>
+
+<div id="tep1-viewer" style="height: 600px; width: 100%; position: relative; border: 1px solid #ccc; border-radius: 8px;"></div>
 <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
 <script>
+  let glviewer = null;
+
   document.addEventListener("DOMContentLoaded", function() {
     let element = document.querySelector('#tep1-viewer');
     let config = { backgroundColor: '#1e293b' }; // dark background
-    let viewer = $3Dmol.createViewer( element, config );
+    glviewer = $3Dmol.createViewer( element, config );
     
-    // Fetch the CIF model we saved to assets
     fetch('/assets/AF-P97499-F1-model_v6.cif')
       .then(response => response.text())
       .then(data => {
-        viewer.addModel(data, "cif");
-        
-        // Color by secondary structure: beta strands in yellow, helices in cyan
-        viewer.setStyle({}, {cartoon: {
-            colorfunc: function(atom) {
-                if(atom.ss === 's') return '#fbbf24'; // yellow beta strands
-                if(atom.ss === 'h') return '#38bdf8'; // cyan alpha helices
-                return '#94a3b8'; // gray loops
-            }
-        }});
-        
-        viewer.zoomTo();
-        viewer.zoom(1.2);
-        
-        // Add a gentle rotation animation
-        viewer.spin("y", 0.3);
-        
-        viewer.render();
+        glviewer.addModel(data, "cif");
+        resetView();
+        glviewer.spin("y", 0.2); // Gentle continuous rotation
       });
   });
+
+  // Default coloring: Yellow Beta Strands, Cyan Helices, Gray Loops
+  function resetView() {
+    glviewer.setStyle({}, {cartoon: {
+        colorfunc: function(atom) {
+            if(atom.ss === 's') return '#fbbf24'; // Yellow
+            if(atom.ss === 'h') return '#38bdf8'; // Cyan
+            return '#475569'; // Dark Gray
+        }
+    }});
+    glviewer.spin("y", 0.2); // Resume spin
+    glviewer.zoomTo();
+    glviewer.zoom(1.2);
+    glviewer.render();
+  }
+
+  // Highlight only the Beta Strands (The structural scaffolding)
+  function highlightBeta() {
+    glviewer.setStyle({}, {cartoon: {color: '#334155'}}); // Dim everything
+    glviewer.setStyle({ss: 's'}, {cartoon: {color: '#fbbf24'}}); // Emphasize beta strands
+    glviewer.spin(false);
+    glviewer.render();
+  }
+
+  // Highlight only the Alpha Helices
+  function highlightHelices() {
+    glviewer.setStyle({}, {cartoon: {color: '#334155'}});
+    glviewer.setStyle({ss: 'h'}, {cartoon: {color: '#38bdf8'}});
+    glviewer.spin(false);
+    glviewer.render();
+  }
+
+  // Zoom into the massive C-terminal WD40 Beta-Propeller
+  function highlightWD40() {
+    let wd40_sel = {resi: "2000-2629"};
+    let rest_sel = {not: {resi: "2000-2629"}};
+    
+    glviewer.setStyle(rest_sel, {cartoon: {color: '#334155', opacity: 0.5}});
+    glviewer.setStyle(wd40_sel, {cartoon: {color: '#ef4444'}});
+    
+    glviewer.spin(false);
+    glviewer.zoomTo(wd40_sel);
+    glviewer.render();
+  }
 </script>
 
-*Interactive 3D Model: Mouse TEP1 (AlphaFold). Notice the massive repetitive secondary structures that `pg_bio` detected in the latent space. Drag to rotate!*
+#### What do these colors mean?
+* **<span style="color: #fbbf24; font-weight: bold;">Yellow (Beta-Strands)</span>:** These are flat, sheet-like structures. In TEP1, they arrange themselves into massive circular repeating patterns (Beta-propellers). This is the exact architectural "scaffolding" feature that `pg_bio` detected and linked to the Archaea orphan!
+* **<span style="color: #38bdf8; font-weight: bold;">Cyan (Alpha-Helices)</span>:** These coiled, spring-like structures often form the active sites or flexible hinge regions of the protein. 
+* **<span style="color: #ef4444; font-weight: bold;">Red (WD40 Propeller)</span>:** When you click "Zoom to WD40", you are isolating the C-terminus of TEP1. This massive ring of beta-strands acts as a docking station for other proteins in the Telomerase complex. This shape is universally used in biology for structural assembly.
 
 ## The Power of PostgreSQL + Vectors
 By converting protein sequences into structural vectors, `pg_bio` allows scientists to bypass the sequence "twilight zone". We aren't just searching text; we are querying the physical reality of the molecules directly inside the database using optimized `<=>` cosine distance operations.
