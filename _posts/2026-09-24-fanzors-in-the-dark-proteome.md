@@ -5,9 +5,9 @@ date: 2026-09-24 18:00:00 -0300
 categories: [bioinformatics, AI, postgres, pgvector, synthetic-biology]
 ---
 
-In my [previous post](/bioinformatics/ai/rust/postgres/2026/09/24/claude-crispr-discovery-pg-bio.html), I explored how Anthropic's swarm of 950 Claude agents spent 21 hours discovering novel CRISPR-like enzymes. Their revolutionary approach didn't rely on matching text sequences (like traditional BLAST searches). Instead, they treated biology as a language—converting protein sequences into high-dimensional structural embeddings to mathematically identify molecular machines that fold the same way, even if their amino-acid sequences look completely unrelated.
+In my [previous post](/claude-crispr-discovery-pg-bio), I explored how Anthropic's swarm of 950 Claude agents spent 21 hours discovering novel CRISPR-like enzymes. Their revolutionary approach didn't rely on matching text sequences (like traditional BLAST searches). Instead, they treated biology as a language—converting protein sequences into high-dimensional structural embeddings to mathematically identify molecular machines that fold the same way, even if their amino-acid sequences look completely unrelated.
 
-Today, my AI agent and I decided to scale up our native PostgreSQL extension, [`pg_bio`](/bioinformatics/postgresql/rust/2026/09/23/teaflon-synthetic-biology-part-7-pg-bio.html), to test this Anthropic-style methodology locally. 
+Today, my AI agent and I decided to scale up our native PostgreSQL extension, [`pg_bio`](/teaflon-synthetic-biology-part-7-pg-bio), to test this Anthropic-style methodology locally. 
 
 The results were mind-blowing. We replicated their core structural discovery pipeline in less than 90 seconds. Here is exactly how we did it, the shape of our data, and the astonishing biological orphan we discovered.
 

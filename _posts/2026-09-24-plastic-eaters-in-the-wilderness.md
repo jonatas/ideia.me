@@ -5,7 +5,7 @@ date: 2026-09-24 21:50:00 -0300
 categories: [bioinformatics, AI, postgres, pgvector, synthetic-biology, bioremediation]
 ---
 
-In my [previous post](/bioinformatics/ai/postgres/pgvector/synthetic-biology/2026/09/24/fanzors-in-the-dark-proteome.html), we used our local native PostgreSQL extension, `pg_bio`, and Anthropic-style structural embeddings to discover novel Fanzors (eukaryotic CRISPR cousins) hiding in the genome of green algae. Today, the mining script struck gold again—this time, targeting one of the biggest environmental crises on Earth.
+In my [previous post](/fanzors-in-the-dark-proteome), we used our local native PostgreSQL extension, `pg_bio`, and Anthropic-style structural embeddings to discover novel Fanzors (eukaryotic CRISPR cousins) hiding in the genome of green algae. Today, the mining script struck gold again—this time, targeting one of the biggest environmental crises on Earth.
 
 We ran our `batch_deorphanizer.py` script to mine the dark proteome for **Cutinases**. 
 

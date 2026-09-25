@@ -5,7 +5,7 @@ date: 2026-09-23 12:45:00 -0300
 categories: synthetic-biology deep-learning postgresql rust mcp
 ---
 
-In [Part 5](/synthetic-biology/2026/09/11/teaflon-synthetic-biology-part-5.html) of our TeaFlon series, we finalized the design of our **TriFusion** enzyme: a Dehalogenase to chop the C-F bonds, a Hydrophobin to stick to the Teflon surface, and finally, a human Amelogenin domain to initiate biomineralization and turn the toxic waste into safe, insoluble mineral complexes. 
+In [Part 5](/teaflon-synthetic-biology-part-5) of our TeaFlon series, we finalized the design of our **TriFusion** enzyme: a Dehalogenase to chop the C-F bonds, a Hydrophobin to stick to the Teflon surface, and finally, a human Amelogenin domain to initiate biomineralization and turn the toxic waste into safe, insoluble mineral complexes. 
 
 It was a beautiful design. But when we sent it to the Meta ESMFold public API to predict its 3D structure, we were met with a frustrating error:
 
@@ -38,7 +38,7 @@ This compresses the 3D space into a single 63-bit integer. When we create a stan
 
 **The Benchmark:** We loaded 100,000 synthetic atoms into Postgres. Querying the Z-Order B-Tree for a binding pocket took **~7 milliseconds**, running significantly faster than a highly-optimized Python Numpy script!
 
-### High-Dimensional AI Embeddings
+### High-Dimensional Neural Embeddings
 When ESMFold processes a sequence, it generates a dense numerical vector (embedding) that represents the "biological meaning" of the protein. We added the `embedding_cosine_distance` operator to `pg_bio`, allowing us to find functionally similar proteins natively in SQL:
 
 ```sql

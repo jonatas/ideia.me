@@ -10,7 +10,7 @@ image: images/teaflon_bioreactor.jpg
 ![TeaFlon Bioreactor Concept](/images/teaflon_bioreactor.jpg)
 *Artist's rendition of the TeaFlon Swarm: Blue "Destroyer" proteins binding to the dark Teflon chain, while white Amelogenin nanospheres capture the glowing green fluoride ions.*
 
-In [Part 1](/synthetic-biology/2026/09/09/teaflon-synthetic-biology-part-1.html), we successfully designed a computational blueprint for a fusion protein (The "Destroyer") that can anchor itself to Teflon and snap its Carbon-Fluorine bonds using a specialized enzyme.
+In [Part 1](/teaflon-synthetic-biology-part-1), we successfully designed a computational blueprint for a fusion protein (The "Destroyer") that can anchor itself to Teflon and snap its Carbon-Fluorine bonds using a specialized enzyme.
 
 But breaking Teflon is only half the battle. The chemical reaction releases free fluoride ions ($F^-$), which are highly toxic to the environment. To safely sequester the fluoride, we need to turn it into a solid rock.
 

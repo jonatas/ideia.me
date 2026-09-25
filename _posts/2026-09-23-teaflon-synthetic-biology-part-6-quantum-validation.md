@@ -11,7 +11,7 @@ But science never stops iterating. Today, we are pushing the boundaries of our o
 
 ### The TriFusion Architecture
 
-In [Part 3](/synthetic-biology/proteins/2026/09/10/teaflon-synthetic-biology-part-3.html), we compiled a fusion of just two domains: The Destroyer (Dehalogenase) and The Hook (Hydrophobin). But in [Part 5](/synthetic-biology/biomineralization/2026/09/11/teaflon-synthetic-biology-part-5.html), our bioreactor simulation relied on free-floating Amelogenin proteins to handle the biomineralization of the released fluoride.
+In [Part 3](/teaflon-synthetic-biology-part-3), we compiled a fusion of just two domains: The Destroyer (Dehalogenase) and The Hook (Hydrophobin). But in [Part 5](/teaflon-synthetic-biology-part-5), our bioreactor simulation relied on free-floating Amelogenin proteins to handle the biomineralization of the released fluoride.
 
 Why rely on separate proteins when we can build a single, all-in-one nanobot?
 
