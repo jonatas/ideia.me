@@ -12,6 +12,41 @@ Historically, scientists used tools like BLAST to find proteins that look simila
 
 Today, we'll explore how we used our custom PostgreSQL extension, **`pg_bio`**, coupled with Deep Learning vector embeddings (ESM-2), to search the Dark Proteome by *structure* rather than *sequence*.
 
+## A Primer for Newcomers: Why Structure Matters
+If you've never worked in bioinformatics, you might wonder: *What exactly is a protein embedding vector?* 
+
+To understand this, let's look at one of the most famous proteins in biology: **Green Fluorescent Protein (GFP)**. Originally found in jellyfish, GFP is a tiny molecular lantern that glows green under UV light. 
+
+Below is the 3D structure of GFP. Notice how the entire protein forms a hollow cylinder made of flat, ribbon-like walls. This specific architectural shape is called a **Beta-Barrel**. Hidden perfectly inside the center of this protective barrel is the chemical "bulb" that emits the green light. 
+
+<div id="gfp-viewer" style="height: 400px; width: 100%; position: relative; border: 1px solid #ccc; border-radius: 8px; margin-bottom: 20px;"></div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    let element = document.querySelector('#gfp-viewer');
+    let config = { backgroundColor: '#1e293b' };
+    let gfp_viewer = $3Dmol.createViewer( element, config );
+    
+    fetch('/assets/AF-P42212-F1-model_v6.cif')
+      .then(response => response.text())
+      .then(data => {
+        gfp_viewer.addModel(data, "cif");
+        gfp_viewer.setStyle({}, {cartoon: {color: 'spectrum'}}); // Beautiful colorful spectrum
+        
+        // Highlight the internal light-emitting fluorophore (residues ~65-67 in GFP)
+        gfp_viewer.addStyle({resi: "65-67"}, {stick: {colorscheme: 'greenCarbon', radius: 0.3}});
+        gfp_viewer.addLabel("Light Emitter", {position: {x:0, y:0, z:0}, alignment: "center", fontColor: "white", backgroundColor: "black", backgroundOpacity: 0.8}, {resi: "66"});
+        
+        gfp_viewer.zoomTo();
+        gfp_viewer.spin("y", 0.5); // Spin it
+        gfp_viewer.render();
+      });
+  });
+</script>
+
+If the amino acid "letters" of GFP mutated through millions of years of evolution, traditional sequence-matching tools (which act like a text search) would fail to recognize the mutated protein. However, a deep learning AI doesn't just read the letters—it "learns" the laws of physics and understands that the sequence will fold into this exact hollow barrel. 
+
+The AI then converts that 3D structural understanding into a **Vector Embedding**: a long list of numbers (e.g., `[0.45, -0.12, 0.89...]`). A vector is essentially a mathematical barcode for the protein's 3D shape. When we store these barcodes in a database like PostgreSQL and use `pg_bio` to search them, we aren't searching text. We are instantly finding proteins that *look and function* the same, even if their text is completely unrecognizable!
+
 ## The Mission: Telomerase
 We set out to find hidden homologues of **Telomerase**—the enzyme responsible for maintaining the ends of chromosomes. Using `pg_bio`, we loaded the 3D embedding vectors of known Telomerase proteins and performed a massive HNSW (Hierarchical Navigable Small World) index scan against uncharacterized proteins.
 
