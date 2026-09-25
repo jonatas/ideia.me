@@ -83,6 +83,7 @@ Use the interactive controls below to explore the architecture of TEP1 and under
   <button onclick="resetView()" style="padding: 8px 12px; background: #334155; color: white; border: none; border-radius: 4px; cursor: pointer;">Reset View</button>
   <button onclick="highlightBeta()" style="padding: 8px 12px; background: #fbbf24; color: black; border: none; border-radius: 4px; cursor: pointer;">Show Beta Strands (Scaffolding)</button>
   <button onclick="highlightHelices()" style="padding: 8px 12px; background: #38bdf8; color: black; border: none; border-radius: 4px; cursor: pointer;">Show Alpha Helices</button>
+  <button onclick="highlightFlexible()" style="padding: 8px 12px; background: #94a3b8; color: white; border: none; border-radius: 4px; cursor: pointer;">Show Flexible Regions (Tentacles)</button>
   <button onclick="highlightWD40()" style="padding: 8px 12px; background: #ef4444; color: white; border: none; border-radius: 4px; cursor: pointer;">Zoom to WD40 Beta-Propeller</button>
 </div>
 
@@ -136,6 +137,14 @@ Use the interactive controls below to explore the architecture of TEP1 and under
     glviewer.render();
   }
 
+  // Highlight only the flexible unstructured loops
+  function highlightFlexible() {
+    glviewer.setStyle({}, {cartoon: {color: '#1e293b', opacity: 0.3}}); // Heavily dim rigid parts
+    glviewer.setStyle({ss: 'c'}, {cartoon: {color: '#cbd5e1'}}); // Highlight coils in bright gray
+    glviewer.spin("y", 0.1); // Slow spin to appreciate the sweeping curves
+    glviewer.render();
+  }
+
   // Zoom into the massive C-terminal WD40 Beta-Propeller
   function highlightWD40() {
     let wd40_sel = {resi: "2000-2629"};
@@ -153,6 +162,7 @@ Use the interactive controls below to explore the architecture of TEP1 and under
 #### What do these colors mean?
 * **<span style="color: #fbbf24; font-weight: bold;">Yellow (Beta-Strands)</span>:** These are flat, sheet-like structures. In TEP1, they arrange themselves into massive circular repeating patterns (Beta-propellers). This is the exact architectural "scaffolding" feature that `pg_bio` detected and linked to the Archaea orphan!
 * **<span style="color: #38bdf8; font-weight: bold;">Cyan (Alpha-Helices)</span>:** These coiled, spring-like structures often form the active sites or flexible hinge regions of the protein. 
+* **<span style="color: #94a3b8; font-weight: bold;">Gray (Loops & Intrinsically Disordered Regions)</span>:** Notice the long, sweeping, string-like curves flying out into empty space? These are flexible "tentacles" that do not have a fixed 3D shape. In the Telomerase complex, these act like molecular lassos, flopping around dynamically until they find and bind to RNA!
 * **<span style="color: #ef4444; font-weight: bold;">Red (WD40 Propeller)</span>:** When you click "Zoom to WD40", you are isolating the C-terminus of TEP1. This massive ring of beta-strands acts as a docking station for other proteins in the Telomerase complex. This shape is universally used in biology for structural assembly.
 
 ## The Power of PostgreSQL + Vectors
