@@ -13,7 +13,7 @@ It was a beautiful design. But when we sent it to the Meta ESMFold public API to
 
 Our TriFusion sequence clocked in at **419 amino acids**. The public API servers simply rejected it to save on compute costs. 
 
-We had two choices: artificially truncate our carefully designed enzyme, or bring the AI to us. We chose the latter. This decision unexpectedly launched us into building our own high-performance bioinformatics database. Here is how we did it.
+We had two choices: artificially truncate our carefully designed enzyme, or bring the inference to us. We chose the latter. This decision unexpectedly launched us into building our own high-performance bioinformatics database. Here is how we did it.
 
 ## 1. Bringing ESMFold Local (The 11GB Brain)
 
