@@ -45,3 +45,5 @@ author :
 #
 production_url : https://ideia.me
 
+
+categories_path: /categories.html
