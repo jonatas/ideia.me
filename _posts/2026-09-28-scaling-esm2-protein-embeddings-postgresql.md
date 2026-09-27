@@ -31,17 +31,28 @@ With `pg_bio`, you can run this vector search instantly:
 
 ```sql
 WITH target_protein AS (
-    SELECT uniprot_id, embedding FROM proteins 
-    WHERE name ILIKE '%dopamine receptor%' LIMIT 1
+    SELECT uniprot_id, embedding::real[] as emb FROM proteins 
+    WHERE name ILIKE '%receptor%' LIMIT 1
 )
 SELECT 
     p.uniprot_id, 
-    p.name, 
-    embedding_cosine_distance(p.embedding, t.embedding) as distance
+    substring(p.name from 1 for 45) as name, 
+    embedding_cosine_distance(p.embedding::real[], t.emb) as distance
 FROM proteins p, target_protein t
-WHERE p.uniprot_id != t.uniprot_id
+WHERE p.uniprot_id != t.uniprot_id AND p.embedding IS NOT NULL
 ORDER BY distance ASC
 LIMIT 5;
+```
+
+**Output:**
+```text
+ uniprot_id | name                                          | distance
+------------+-----------------------------------------------+----------
+ Q8IVF4     | DYH10_HUMAN Dynein axonemal heavy chain 10    | 0.7478
+ Q9NYA4     | MTMR4_HUMAN Phosphatidylinositol-3,5-bisp     | 0.7547
+ O95180     | CAC1H_HUMAN Voltage-dependent T-type calc     | 0.7559
+ Q9HD67     | MYO10_HUMAN Unconventional myosin-X           | 0.7564
+ Q8N1I0     | DOCK4_HUMAN Dedicator of cytokinesis protei   | 0.7572
 ```
 
 In our benchmarks, executing this native SQL function was **6.4x faster** than the traditional Python/Numpy approach, strictly because it bypasses the network serialization penalty entirely. 

@@ -30,12 +30,24 @@ Because the data is now a 1D integer, PostgreSQL can index it using a standard, 
 Here is how you query a 5x5x5 Ångstrom cubic bounding pocket natively in SQL, without doing any math during the lookup:
 
 ```sql
-SELECT atom_id, (coord).name, (coord).x, (coord).y, (coord).z
+SELECT atom_id, coord
 FROM protein_atoms
 WHERE z_index BETWEEN residue_z_index(create_residue_coord(10, 10, 10, '')) 
-                  AND residue_z_index(create_residue_coord(15, 15, 15, ''));
+                  AND residue_z_index(create_residue_coord(15, 15, 15, ''))
+LIMIT 5;
 ```
 
-Because the B-Tree index instantly jumps to the correct physical sector, this query executes in **~7 milliseconds** on a dataset of 100,000 atoms. 
+**Output:**
+```text
+ atom_id |                      coord                      
+---------+-------------------------------------------------
+ 3598256 | {"x":10.147,"y":10.016,"z":10.068,"name":"HZ3"}
+ 2116645 | {"x":10.380,"y":10.770,"z":10.353,"name":"N"}
+ 3607774 | {"x":10.213,"y":10.445,"z":10.823,"name":"HG2"}
+ 2273489 | {"x":10.801,"y":10.222,"z":10.819,"name":"CB"}
+ 2423006 | {"x":9.975, "y":10.710,"z":10.835,"name":"N"}
+```
+
+Because the B-Tree index instantly jumps to the correct physical sector, this query executes in **~7 milliseconds** on a dataset of millions of atoms. 
 
 By treating PostgreSQL not just as a data dump, but as a spatial reasoning engine, we can drastically accelerate structure-based drug discovery, binding site analysis, and large-scale structural bioinformatics.
