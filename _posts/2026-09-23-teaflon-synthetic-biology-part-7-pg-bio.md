@@ -49,10 +49,10 @@ ORDER BY distance ASC LIMIT 1;
 ```
 
 ### Sparse Attention Matrices
-Finally, to understand *why* the AI folded our enzyme a certain way, we created a `SparseAttentionMap` type. It acts as a Compressed Sparse Row (CSR), storing only the strongest neural network attention weights between amino acids. We can now run a SQL query to ask: *"Which amino acids are structurally forcing Residue 105 into its current shape?"*
+Finally, to understand *why* the algorithm folded our enzyme a certain way, we created a `SparseAttentionMap` type. It acts as a Compressed Sparse Row (CSR), storing only the strongest neural network attention weights between amino acids. We can now run a SQL query to ask: *"Which amino acids are structurally forcing Residue 105 into its current shape?"*
 
 ## The Next Frontier
 
-By breaking past the 400-amino-acid limit, we didn't just get our TriFusion structure. We accidentally built an entire **Local Bio-AI Operating System**. 
+By breaking past the 400-amino-acid limit, we didn't just get our TriFusion structure. We accidentally built an entire **Local Bioinformatics Operating System**. 
 
-We have the `bio_demo` database continuously seeded with real UniProt sequences, optimized by Rust Z-Order spatial indices, and watched over by an MCP-enabled local PyTorch agent. The bioreactor is primed. In the next part, we will dive back into the quantum chemistry validation with ORCA to prove our Dehalogenase can actually break the C-F bonds of the Teflon oligomer. Stay tuned!
+We have the `bio_demo` database continuously seeded with real UniProt sequences, optimized by Rust Z-Order spatial indices, and watched over by an MCP-enabled local PyTorch service. The bioreactor is primed. In the next part, we will dive back into the quantum chemistry validation with ORCA to prove our Dehalogenase can actually break the C-F bonds of the Teflon oligomer. Stay tuned!
