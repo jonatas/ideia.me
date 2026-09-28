@@ -20,15 +20,14 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 | **Status** | Characterized | Uncharacterized |
 | **Cosine Distance** | - | **0.7310** |
 
-<div class="viewer-container">
-  <div class="viewer-panel">
-    <h3>B0KMY7 (Bait)</h3>
-    <div id="viewer-left" class="mol-container" data-pdb="/assets/models/AF-B0KMY7-F1-model_v4.pdb"></div>
+<div style="display: flex; justify-content: space-between; gap: 20px;">
+  <div style="flex: 1;">
+    <h4>Bait: B0KMY7</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-B0KMY7-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
-  <div class="resizer"></div>
-  <div class="viewer-panel">
-    <h3>A0AAE4MJL5 (Orphan)</h3>
-    <div id="viewer-right" class="mol-container" data-pdb="/assets/models/AF-A0AAE4MJL5-F1-model_v4.pdb"></div>
+  <div style="flex: 1;">
+    <h4>Discovery: A0AAE4MJL5</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0AAE4MJL5-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 
