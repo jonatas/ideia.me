@@ -53,6 +53,18 @@ The batch job returned an absolutely staggering hit. Deep within the Dark Proteo
 
 A vector distance of **0.0575** is exceptionally tight for such a massive, multi-subunit complex. While the amino acid sequence might have diverged over millions of years of evolution, the AI immediately recognized that the 3D atomic scaffolding is fundamentally identical.
 
+### The Ecosystem Context: From Salt Lakes to the Deep Ocean
+
+What makes this discovery truly breathtaking is the ecological divergence between the two organisms. 
+
+Our **Bait** (`L0JL84`) comes from *Natrinema pellirubrum*, an extreme halophile that lives in hypersaline lakes—environments so salty that almost no other life can survive. 
+
+But our **Discovery** (`A0A5B9DCV6`) comes from an entirely different and legendary organism: ***Promethearchaeum syntrophicum***. 
+
+Discovered deep in the Nankai Trough ocean trench off the coast of Japan, *Promethearchaeum* is an "Asgard archaeon"—the closest living relative to the ancient microbe that swallowed a bacterium to create the very first eukaryotic cell (and eventually, human life). It lives in anaerobic methane seeps, growing incredibly slowly by physically entangling itself with other bacteria in a symbiotic relationship (syntrophy). 
+
+Finding a functional RuBisCO analog inside an ancient, deep-sea Asgard archaeon completely rewrites our understanding of how early life managed carbon capture before the invention of photosynthesis!
+
 ### Interactive 3D Comparison
 
 Don’t just trust the math—explore the physical structures yourself using our interactive 3D widget. 
