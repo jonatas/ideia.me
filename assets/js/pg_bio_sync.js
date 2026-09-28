@@ -22,6 +22,71 @@ window.addEventListener('load', function() {
         const leftColor = getBaseColor(leftContainer) || 'cyan';
         const rightColor = getBaseColor(rightContainer) || 'magenta';
 
+        const flexContainer = leftContainer.parentElement;
+
+        // ----------------------------------------------------
+        // Feature 0: Fullscreen Mode
+        // ----------------------------------------------------
+        const fsButton = document.createElement('button');
+        fsButton.innerHTML = '<i class="bi bi-arrows-fullscreen"></i> Enter Fullscreen Comparison';
+        fsButton.style.cssText = 'display: block; margin: 10px auto 0 auto; padding: 8px 16px; background: #1e1e1e; color: #fff; border: 1px solid #444; border-radius: 4px; cursor: pointer; font-family: monospace; font-size: 14px; transition: 0.2s;';
+        
+        fsButton.onmouseover = () => fsButton.style.background = '#333';
+        fsButton.onmouseout = () => fsButton.style.background = '#1e1e1e';
+
+        flexContainer.parentNode.insertBefore(fsButton, flexContainer);
+
+        fsButton.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                flexContainer.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement === flexContainer) {
+                flexContainer.style.background = '#121212';
+                flexContainer.style.alignItems = 'center';
+                flexContainer.style.height = '100vh';
+                flexContainer.style.width = '100vw';
+                flexContainer.style.margin = '0';
+                flexContainer.style.gap = '5vw';
+                
+                // left container and viewer
+                leftContainer.style.width = '40vw';
+                const lv = leftContainer.querySelector('.viewer_3Dmoljs');
+                lv.style.height = '80vh';
+                lv.style.width = '100%';
+                
+                // right container and viewer
+                rightContainer.style.width = '40vw';
+                const rv = rightContainer.querySelector('.viewer_3Dmoljs');
+                rv.style.height = '80vh';
+                rv.style.width = '100%';
+                
+            } else {
+                flexContainer.style.background = 'transparent';
+                flexContainer.style.height = 'auto';
+                flexContainer.style.width = 'auto';
+                flexContainer.style.marginTop = '20px';
+                flexContainer.style.gap = '20px';
+                
+                leftContainer.style.width = 'auto';
+                const lv = leftContainer.querySelector('.viewer_3Dmoljs');
+                lv.style.height = '400px';
+                lv.style.width = '350px';
+                
+                rightContainer.style.width = 'auto';
+                const rv = rightContainer.querySelector('.viewer_3Dmoljs');
+                rv.style.height = '400px';
+                rv.style.width = '350px';
+            }
+        });
+
+
         // ----------------------------------------------------
         // Feature 1: Double Click to Sync Cameras
         // ----------------------------------------------------
