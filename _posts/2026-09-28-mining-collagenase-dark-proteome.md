@@ -1,11 +1,11 @@
 ---
 layout: post
-title: "Unearthing Aquaporin: Exploring the Dark Proteome of Extreme Ecosystems"
-date: 2026-09-28 10:16:09
+title: "Unearthing Collagenase: Exploring the Dark Proteome of Extreme Ecosystems"
+date: 2026-09-28 11:02:02
 categories: [biology, multiomics, synthetic-biology, pgbio]
 ---
 
-As the `pg_bio` autonomous night pipeline continues its sweep of the dark proteome, we set our sights on **Aquaporin**. 
+As the `pg_bio` autonomous night pipeline continues its sweep of the dark proteome, we set our sights on **Collagenase**. 
 
 Our native PostgreSQL multiomics engine scanned millions of vectors and found a high-confidence structural match that bridges two completely different biological worlds. 
 
@@ -15,19 +15,19 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `P61837` | `A0A8J7Y890` |
-| **Organism** | *Arabidopsis thaliana* | *Haloarcula limicola* |
+| **UniProt ID** | `A0A062V3Q9` | `W0JSR4` |
+| **Organism** | *Candidatus Methanoperedens nitratireducens* | *Halostagnicola larsenii XH-48* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.5894** |
+| **Cosine Distance** | - | **0.0464** |
 
 <div style="display: flex; justify-content: space-between; gap: 20px;">
   <div style="flex: 1;">
-    <h4>Bait: P61837</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-P61837-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
+    <h4>Bait: A0A062V3Q9</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A062V3Q9-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
   <div style="flex: 1;">
-    <h4>Discovery: A0A8J7Y890</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A8J7Y890-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+    <h4>Discovery: W0JSR4</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-W0JSR4-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 
@@ -38,7 +38,7 @@ This discovery was completely automated natively in PostgreSQL using our custom 
 ```sql
 WITH closest AS (
     SELECT uniprot_id, name, embedding,
-           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'P61837')) as dist
+           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'A0A062V3Q9')) as dist
     FROM proteins
     WHERE name ILIKE '%uncharacterized%'
     ORDER BY dist ASC LIMIT 1

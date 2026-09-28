@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Reductase: Exploring the Dark Proteome of Extreme Ecosystems"
-date: 2026-09-28 10:03:48
+date: 2026-09-28 12:04:17
 categories: [biology, multiomics, synthetic-biology, pgbio]
 ---
 

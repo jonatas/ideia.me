@@ -106,3 +106,31 @@ Don’t just trust the math—explore the physical structures yourself using our
 Finding a novel RuBisCO structural analog is a holy grail for synthetic biology and climate technology. If this newly discovered extremophile enzyme is naturally more efficient at capturing $CO_2$ than plant RuBisCO, it could be engineered into crops to drastically increase agricultural yields, or utilized in bioreactors to pull greenhouse gases out of the atmosphere. 
 
 By leveraging AI embeddings and standard PostgreSQL `pg_bio` queries, we are mapping the dark corners of biology faster than ever before.
+
+<div style="text-align: center; margin-top: 40px;">
+    <h3>3D Structural Superposition</h3>
+    <p><em>To prove they are identical, we used the TM-align algorithm to mathematically rotate and superimpose the AI's 3D coordinates onto the experimental PDB. The blue (bait) and magenta (discovery) backbones overlap almost perfectly!</em></p>
+    <div id="overlap-viewer" style="height: 500px; width: 100%; position: relative; border: 1px solid #ccc; border-radius: 8px;"></div>
+</div>
+
+<script>
+window.addEventListener('load', function() {
+    let viewer = $3Dmol.createViewer("overlap-viewer", {backgroundColor: "0x1e1e1e"});
+    
+    fetch('/assets/pdb/rubisco_bait.pdb')
+    .then(r => r.text())
+    .then(data => {
+        viewer.addModel(data, "pdb");
+        viewer.setStyle({model: 0}, {cartoon: {color: "cyan", opacity: 0.8}});
+        
+        fetch('/assets/pdb/rubisco_orphan_aligned.pdb')
+        .then(r => r.text())
+        .then(data2 => {
+            viewer.addModel(data2, "pdb");
+            viewer.setStyle({model: 1}, {cartoon: {color: "magenta", opacity: 0.8}});
+            viewer.zoomTo();
+            viewer.render();
+        });
+    });
+});
+</script>
