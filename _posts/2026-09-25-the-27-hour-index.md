@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "The 10-Hour Index: Database Optimization and Indexing the Dark Proteome"
+title: "The 27-Hour Index: Database Optimization and Indexing the Dark Proteome"
 date: 2026-09-25 10:45:00 -0300
 categories: [postgres, bioinformatics, data-engineering, pgvector]
 ---
@@ -56,9 +56,35 @@ But *building* this graph requires holding millions of edges in RAM.
 
 My Mac has 16GB of RAM. We tuned PostgreSQL's `maintenance_work_mem` to 4GB. It wasn't enough. Around the 1.3 million protein mark, the graph grew too large for RAM. PostgreSQL had to gracefully "spill" to disk, reading and writing graph edges to the SSD. 
 
-This IO thrashing turned what should be a 20-minute index build into a 10-hour marathon. 
+This IO thrashing turned what should be a 20-minute index build into a 27-hour marathon. 
 
-*(Update pending: We will post the exact size of the final index using `pg_relation_size` and the new lightning-fast `EXPLAIN ANALYZE` query plan as soon as the index build finishes!)*
+
+**Update:** It finally finished! The index build took roughly 27 hours to complete. The database survived the intense memory-swapping and successfully flushed the entire graph to disk.
+
+The final size of the `idx_protein_embedding` graph? A massive **8.7 GB**.
+
+But the wait was completely worth it. We re-ran the exact same vector search query against the 2.34 million 1280-dimensional arrays, forcing Postgres to use the new HNSW graph. Here is the new execution plan:
+
+```text
+                                                                          QUERY PLAN                                                                          
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=1691.96..1713.44 rows=5 width=17) (actual time=183.088..185.252 rows=5.00 loops=1)
+   Buffers: shared hit=123 read=1439
+   InitPlan 1
+     ->  Index Scan using proteins_pkey on proteins proteins_1  (cost=0.43..8.45 rows=1 width=32) (actual time=0.577..0.578 rows=1.00 loops=1)
+           Index Cond: ((uniprot_id)::text = 'P0DPB7'::text)
+           Index Searches: 1
+           Buffers: shared read=4
+   ->  Index Scan using idx_protein_embedding on proteins  (cost=1683.51..10056971.21 rows=2340053 width=17) (actual time=183.088..185.249 rows=5.00 loops=1)
+         Order By: (embedding <=> (InitPlan 1).col1)
+         Filter: ((uniprot_id)::text <> 'P0DPB7'::text)
+         Index Searches: 1
+         Buffers: shared hit=123 read=1439
+ Execution Time: 185.320 ms
+```
+
+**185 milliseconds.** We went from a massive parallel sequential scan taking almost a minute to querying 2.34 million structural embeddings in under 0.2 seconds.
+
 
 ## How Our Indices Complement Each Other
 
@@ -75,4 +101,4 @@ The magic of `pg_bio` isn't just in the vectors; it's how we combine completely 
 
 By chaining these indices together, we replicate the workflow of an entire molecular biology lab inside a single SQL query. HNSW gives us the structural match, B-Trees filter out the known biology, and Z-Order Curves extract the binding pocket. 
 
-It took 10 hours of heavy computational lifting to build the map, but now that we have it, the Dark Proteome is fully illuminated.
+It took 27 hours of heavy computational lifting to build the map, but now that we have it, the Dark Proteome is fully illuminated.
