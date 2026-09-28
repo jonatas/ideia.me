@@ -38,12 +38,12 @@ window.addEventListener('load', function() {
                 console.log("3D Viewers Unsynced");
             } else {
                 syncing = true;
-                targetViewer.setCamera(sourceViewer.getCamera());
+                targetViewer.setView(sourceViewer.getView());
                 targetViewer.render();
                 console.log("3D Viewers Synced");
                 
                 syncInterval = setInterval(() => {
-                    targetViewer.setCamera(sourceViewer.getCamera());
+                    targetViewer.setView(sourceViewer.getView());
                     targetViewer.render();
                 }, 30);
             }
