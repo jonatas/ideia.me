@@ -199,27 +199,57 @@ window.addEventListener('load', function() {
         leftCanvas.addEventListener('dblclick', () => toggleSync(vLeft, vRight));
 
         // ----------------------------------------------------
-        // Feature 2: Click to Highlight Matching Residues
+        // Feature 2: Click to Highlight Chain & Residue
         // ----------------------------------------------------
         vRight.setClickable({}, true, function(atom, viewer, event, container) {
             const resi = atom.resi;
+            const chain = atom.chain;
+
+            // Reset Right Viewer
             vRight.setStyle({}, {cartoon: {color: rightColor}});
-            vRight.setStyle({resi: resi}, {cartoon: {color: 'white'}});
+            if (chain) {
+                vRight.setStyle({chain: chain}, {cartoon: {color: 'orange'}}); // Highlight full chain
+                vRight.setStyle({chain: chain, resi: resi}, {cartoon: {color: 'white'}}); // Highlight specific residue
+            } else {
+                vRight.setStyle({resi: resi}, {cartoon: {color: 'white'}});
+            }
             vRight.render();
 
+            // Update Left Viewer
             vLeft.setStyle({}, {cartoon: {color: leftColor}});
-            vLeft.setStyle({resi: resi}, {cartoon: {color: rightColor}});
+            if (chain) {
+                vLeft.setStyle({chain: chain}, {cartoon: {color: 'orange'}}); // Try to highlight matching chain ID
+            }
+            vLeft.setStyle({resi: resi}, {cartoon: {color: rightColor}}); // Highlight residue on all chains as fallback
+            if (chain) {
+                vLeft.setStyle({chain: chain, resi: resi}, {cartoon: {color: 'white'}}); // Make the exact matching chain+residue white
+            }
             vLeft.render();
         });
 
         vLeft.setClickable({}, true, function(atom, viewer, event, container) {
             const resi = atom.resi;
+            const chain = atom.chain;
+
+            // Reset Left Viewer
             vLeft.setStyle({}, {cartoon: {color: leftColor}});
-            vLeft.setStyle({resi: resi}, {cartoon: {color: 'white'}});
+            if (chain) {
+                vLeft.setStyle({chain: chain}, {cartoon: {color: 'orange'}});
+                vLeft.setStyle({chain: chain, resi: resi}, {cartoon: {color: 'white'}});
+            } else {
+                vLeft.setStyle({resi: resi}, {cartoon: {color: 'white'}});
+            }
             vLeft.render();
 
+            // Update Right Viewer
             vRight.setStyle({}, {cartoon: {color: rightColor}});
+            if (chain) {
+                vRight.setStyle({chain: chain}, {cartoon: {color: 'orange'}});
+            }
             vRight.setStyle({resi: resi}, {cartoon: {color: leftColor}});
+            if (chain) {
+                vRight.setStyle({chain: chain, resi: resi}, {cartoon: {color: 'white'}});
+            }
             vRight.render();
         });
 
