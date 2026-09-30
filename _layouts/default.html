@@ -355,6 +355,13 @@
           }
         });
 
+        // Fix for Safari/bfcache: if the page is restored from cache after a back navigation, make sure it's visible
+        window.addEventListener('pageshow', function (event) {
+          if (event.persisted && contentContainer) {
+            contentContainer.style.opacity = '1';
+          }
+        });
+
         // Setup rotating menu text
         const rotatingText = document.getElementById('rotating-menu-text');
         if (rotatingText) {
