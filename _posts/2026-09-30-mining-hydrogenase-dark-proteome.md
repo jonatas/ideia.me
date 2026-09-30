@@ -68,8 +68,8 @@ A cosine vector distance of **0.0594** is remarkable. It means that despite the 
 <script>
 function highlightCore() {
     if (window.$3Dmol && window.$3Dmol.viewers) {
-        let v1 = window.$3Dmol.viewers[0];
-        let v2 = window.$3Dmol.viewers[1];
+        let v1 = $3Dmol.viewers[Object.keys($3Dmol.viewers)[0]];
+        let v2 = $3Dmol.viewers[Object.keys($3Dmol.viewers)[1]];
         
         // Reset styles and labels
         v1.setStyle({}, {cartoon: {color: 'cyan'}});
@@ -95,8 +95,8 @@ function highlightCore() {
 
 function highlightSurface() {
     if (window.$3Dmol && window.$3Dmol.viewers) {
-        let v1 = window.$3Dmol.viewers[0];
-        let v2 = window.$3Dmol.viewers[1];
+        let v1 = $3Dmol.viewers[Object.keys($3Dmol.viewers)[0]];
+        let v2 = $3Dmol.viewers[Object.keys($3Dmol.viewers)[1]];
         
         // Reset styles and labels
         v1.setStyle({}, {cartoon: {color: 'cyan'}});

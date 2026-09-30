@@ -76,8 +76,8 @@ Dive into the structures below! *Tip: This blog features an interactive 3D plugi
 
 <script>
 function highlightCore() {
-    let viewers = $3Dmol.viewers;
-    if(viewers.length >= 2) {
+    let viewers = [ $3Dmol.viewers[Object.keys($3Dmol.viewers)[0]], $3Dmol.viewers[Object.keys($3Dmol.viewers)[1]] ];
+    if(viewers[0] && viewers[1]) {
         viewers[0].setStyle({}, {cartoon: {color: 'cyan', opacity: 0.5}});
         viewers[0].setStyle({hydrophobic: true}, {cartoon: {color: 'yellow'}});
         viewers[0].render();
@@ -93,8 +93,8 @@ function highlightCore() {
 }
 
 function highlightSurface() {
-    let viewers = $3Dmol.viewers;
-    if(viewers.length >= 2) {
+    let viewers = [ $3Dmol.viewers[Object.keys($3Dmol.viewers)[0]], $3Dmol.viewers[Object.keys($3Dmol.viewers)[1]] ];
+    if(viewers[0] && viewers[1]) {
         viewers[0].setStyle({}, {cartoon: {color: 'cyan', opacity: 0.5}});
         viewers[0].setStyle({resn: ["ASP", "GLU"]}, {surface: {color: 'red', opacity: 0.8}});
         viewers[0].render();

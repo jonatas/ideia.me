@@ -60,8 +60,8 @@ Dive into the AlphaFold2 models below! Our blog features the built-in interactiv
 <script>
   function highlightCore() {
     if (window.$3Dmol && window.$3Dmol.viewers) {
-      const v1 = window.$3Dmol.viewers[0];
-      const v2 = window.$3Dmol.viewers[1];
+      const v1 = $3Dmol.viewers[Object.keys($3Dmol.viewers)[0]];
+      const v2 = $3Dmol.viewers[Object.keys($3Dmol.viewers)[1]];
       
       v1.setStyle({}, {cartoon: {color: 'cyan', opacity: 0.4}});
       v1.setStyle({hydrophobic: true}, {cartoon: {color: 'orange', style: 'trace'}});
@@ -79,8 +79,8 @@ Dive into the AlphaFold2 models below! Our blog features the built-in interactiv
 
   function highlightSurface() {
     if (window.$3Dmol && window.$3Dmol.viewers) {
-      const v1 = window.$3Dmol.viewers[0];
-      const v2 = window.$3Dmol.viewers[1];
+      const v1 = $3Dmol.viewers[Object.keys($3Dmol.viewers)[0]];
+      const v2 = $3Dmol.viewers[Object.keys($3Dmol.viewers)[1]];
       
       v1.setStyle({}, {cartoon: {color: 'cyan'}});
       v1.setStyle({resn: ['ASP', 'GLU']}, {surface: {color: 'red', opacity: 0.6}});
