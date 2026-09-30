@@ -1,9 +1,12 @@
 window.addEventListener('load', function() {
     setTimeout(() => {
-        if (typeof $3Dmol === 'undefined' || !$3Dmol.viewers || $3Dmol.viewers.length < 2) return;
+        if (typeof $3Dmol === 'undefined' || !$3Dmol.viewers) return;
+        
+        const viewerKeys = Object.keys($3Dmol.viewers);
+        if (viewerKeys.length < 2) return;
 
-        const vLeft = $3Dmol.viewers[0];
-        const vRight = $3Dmol.viewers[1];
+        const vLeft = $3Dmol.viewers[viewerKeys[0]];
+        const vRight = $3Dmol.viewers[viewerKeys[1]];
         
         const getBaseColor = (viewerContainer) => {
             const styleStr = viewerContainer.getAttribute('data-style');
