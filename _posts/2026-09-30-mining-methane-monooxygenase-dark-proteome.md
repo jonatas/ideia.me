@@ -74,7 +74,7 @@ Dive into the structures below! *Tip: This blog features our interactive 3D plug
 <script>
 function highlightCore() {
     if (window.$3Dmol && window.$3Dmol.viewers) {
-        window.$3Dmol.viewers.forEach(viewer => {
+        Object.values(window.$3Dmol.viewers).forEach(viewer => {
             viewer.setStyle({}, {cartoon: {color: 'white', opacity: 0.5}});
             viewer.setStyle({resi: "50-80"}, {cartoon: {color: 'yellow'}, stick: {}});
             viewer.render();
@@ -85,7 +85,7 @@ function highlightCore() {
 
 function highlightSurface() {
     if (window.$3Dmol && window.$3Dmol.viewers) {
-        window.$3Dmol.viewers.forEach((viewer, index) => {
+        Object.values(window.$3Dmol.viewers).forEach((viewer, index) => {
             viewer.setStyle({}, {cartoon: {color: 'white', opacity: 0.5}});
             let color = index === 0 ? 'cyan' : 'magenta';
             viewer.setStyle({resi: "1-30, 150-180"}, {surface: {opacity: 0.8, color: color}});

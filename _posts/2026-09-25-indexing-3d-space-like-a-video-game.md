@@ -95,3 +95,4 @@ In our final post of the series, we will tie all of this together to show you ho
 ---
 
 **Next up in the series:** [Part 4: Mining the Dark Proteome: Legacy Code with Missing Docs](/mining-the-dark-proteome-legacy-code-with-missing-docs.html)
+{% include pg_bio_promo.md %}

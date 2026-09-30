@@ -38,3 +38,5 @@ TrEMBL contains over **250 million** unreviewed, automatically translated protei
 By leveraging `pgvector` and HNSW indexes at the hundreds-of-millions scale, we are building the database infrastructure needed to map this wilderness. The search for the ultimate plastic-eating enzyme is just getting started.
 
 If you are a structural biologist or bioremediation researcher interested in testing `YEN1_SCHPO`, reach out! Let's clean up the world with PostgreSQL.
+
+{% include pg_bio_promo.md %}

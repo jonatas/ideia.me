@@ -102,3 +102,5 @@ The magic of `pg_bio` isn't just in the vectors; it's how we combine completely 
 By chaining these indices together, we replicate the workflow of an entire molecular biology lab inside a single SQL query. HNSW gives us the structural match, B-Trees filter out the known biology, and Z-Order Curves extract the binding pocket. 
 
 It took 27 hours of heavy computational lifting to build the map, but now that we have it, the Dark Proteome is fully illuminated.
+
+{% include pg_bio_promo.md %}

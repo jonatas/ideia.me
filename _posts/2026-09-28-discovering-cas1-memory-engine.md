@@ -102,3 +102,5 @@ Notice the beautiful butterfly-like architecture. The central cleft between the 
 ## Conclusion
 
 We are mapping the Dark Proteome one SQL query at a time. By isolating the exact proteins that archaea use to build genomic memories of viral attacks, we open up entirely new avenues for genome editing technologies. 
+
+{% include pg_bio_promo.md %}

@@ -189,3 +189,5 @@ Once the bacteria recover from the shock, they reboot. Their internal machinery 
 All that is left is to dump these bacteria into a vat of toxic Teflon waste, flip the chemical feature flag, and let the swarm do its job.
 
 In our final post, we'll put it all together: running the Swarm Bioreactor and watching our biomineralization architecture turn toxic waste into solid rock.
+
+{% include pg_bio_promo.md %}

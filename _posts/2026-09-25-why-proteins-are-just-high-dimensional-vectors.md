@@ -204,3 +204,4 @@ Want to dive deeper? Check out our next post on how we used **Z-Order curves** t
 ---
 
 **Next up in the series:** [Part 2: Writing a Hybrid Database Operator for Biology (<~>)](/writing-a-hybrid-database-operator-for-biology.html)
+{% include pg_bio_promo.md %}

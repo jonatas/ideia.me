@@ -126,3 +126,5 @@ We encourage you to go further! Try building complex topological queries. What i
 
 **Want to try it yourself?** Check out the open-source extension and dive into the Rust implementation here: 
 👉 **[pg_bio on GitHub](https://github.com/jonatas/pg_bio)**
+
+{% include pg_bio_promo.md %}

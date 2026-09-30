@@ -174,3 +174,5 @@ This workflow guarantees we can:
 3. **Validate** through domain architecture (InterPro) and 3D visualization.
 
 The Dark Proteome is no longer dark. With AI embeddings and Postgres, we have a flashlight!
+
+{% include pg_bio_promo.md %}

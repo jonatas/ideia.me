@@ -70,3 +70,5 @@ Here is how we will use it to validate the TeaFlon system:
 * **Electron Pathway Mapping:** ORCA will help us visualize the exact electron transfer mechanism during the cleavage, ensuring the fluoride ion is safely released and captured by the adjacent Amelogenin tag.
 
 By combining AI structural prediction with rigorous quantum chemistry, we bridge the gap between theoretical biological design and physical chemical reality. The next frontier of TeaFlon isn't just biology—it's quantum mechanics.
+
+{% include pg_bio_promo.md %}

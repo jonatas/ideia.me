@@ -66,3 +66,5 @@ Check out the side-by-side structural comparison of the bait and our new dark pr
 This kind of structural homology search represents a massive leap for computational biology. By storing structural embeddings in `pgvector` and querying them with `pg_bio` inside a standard PostgreSQL database, we can find uncharacterized structural homologues in milliseconds. 
 
 What used to take months of painstaking wet-lab work or massive distributed computing clusters to align 3D models can now be executed instantly using a SQL query, directly pointing us to new, robust enzymes that could revolutionize bioplastic recycling.
+
+{% include pg_bio_promo.md %}

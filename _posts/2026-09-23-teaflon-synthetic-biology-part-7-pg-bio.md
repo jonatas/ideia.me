@@ -56,3 +56,5 @@ Finally, to understand *why* the algorithm folded our enzyme a certain way, we c
 By breaking past the 400-amino-acid limit, we didn't just get our TriFusion structure. We accidentally built an entire **Local Bioinformatics Operating System**. 
 
 We have the `bio_demo` database continuously seeded with real UniProt sequences, optimized by Rust Z-Order spatial indices, and watched over by an MCP-enabled local PyTorch service. The bioreactor is primed. In the next part, we will dive back into the quantum chemistry validation with ORCA to prove our Dehalogenase can actually break the C-F bonds of the Teflon oligomer. Stay tuned!
+
+{% include pg_bio_promo.md %}

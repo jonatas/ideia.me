@@ -96,3 +96,5 @@ Check out the structural similarity below!
 This discovery highlights a monumental shift in computational biology. By embedding high-dimensional protein structures directly into PostgreSQL using `pg_bio`, we can execute complex spatial and functional homology searches across billions of records using simple SQL. 
 
 What used to take months of crystalline extraction, X-ray crystallography, and wet-lab alignment now takes milliseconds. The dark proteome isn't so dark anymore—it's just waiting to be queried.
+
+{% include pg_bio_promo.md %}

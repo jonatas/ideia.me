@@ -100,3 +100,5 @@ Notice the massive ring-like hexamer structure. This is the physical channel whe
 ## Conclusion
 
 This is the power of high-dimensional vector search. What used to take years of meticulous wet-lab protein crystallization and genome mapping was solved by a single SQL query running quietly overnight. We successfully indexed the Dark Proteome and found a life-saving DNA repair machine hiding in the depths of an extremophile genome.
+
+{% include pg_bio_promo.md %}

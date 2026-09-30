@@ -89,3 +89,4 @@ Clone the repo, pick your favorite undocumented protein, and go write some docum
 ---
 
 *This concludes the pg_bio series! Check out [Part 1](/why-proteins-are-just-high-dimensional-vectors.html) if you missed how it all started.*
+{% include pg_bio_promo.md %}

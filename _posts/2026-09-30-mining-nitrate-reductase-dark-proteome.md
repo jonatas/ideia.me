@@ -79,7 +79,7 @@ Explore the predicted structural models below!
 <script>
   function highlightCore() {
     if(window.$3Dmol && window.$3Dmol.viewers) {
-      window.$3Dmol.viewers.forEach(function(viewer) {
+      Object.values(window.$3Dmol.viewers).forEach(function(viewer) {
         viewer.setStyle({}, {cartoon: {color: 'lightgray', opacity: 0.6}});
         viewer.setStyle({resn: ['VAL', 'ILE', 'LEU', 'PHE', 'MET']}, {cartoon: {color: 'orange'}});
         viewer.render();
@@ -90,7 +90,7 @@ Explore the predicted structural models below!
 
   function highlightSurface() {
     if(window.$3Dmol && window.$3Dmol.viewers) {
-      window.$3Dmol.viewers.forEach(function(viewer) {
+      Object.values(window.$3Dmol.viewers).forEach(function(viewer) {
         viewer.setStyle({}, {cartoon: {color: 'lightgray', opacity: 0.6}});
         viewer.setStyle({resn: ['ASP', 'GLU']}, {surface: {color: 'red', opacity: 0.8}, cartoon: {color: 'red'}});
         viewer.render();

@@ -106,3 +106,5 @@ Historically, biologists classified proteins by observing phenotypes, mapping ge
 Today, using PostgreSQL and high-dimensional vector math, we were able to look at the number `0.080` and instantly deduce that a completely uncharacterized microbe living in a rabbit's gut possesses a thiamine-binding molecular machine physically identical to one found in a hyper-saline lake.
 
 Welcome to the era of computational biology!
+
+{% include pg_bio_promo.md %}

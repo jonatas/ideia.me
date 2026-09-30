@@ -161,3 +161,5 @@ We ran a Python script to measure the physical geometry of the Dehalogenase and 
 `[Fluoroacetate Dehalogenase] -- (Glycine Linker) -- [Hydrophobin]`
 
 We just computationally designed a fusion protein topology. Next up: we take this to the computer for simulated docking!
+
+{% include pg_bio_promo.md %}

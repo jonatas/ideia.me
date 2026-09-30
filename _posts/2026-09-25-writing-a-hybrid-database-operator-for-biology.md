@@ -141,3 +141,4 @@ In our next post, we'll dive into how we use **Z-Order curves**—the exact same
 ---
 
 **Next up in the series:** [Part 3: Indexing 3D Space like a Video Game](/indexing-3d-space-like-a-video-game.html)
+{% include pg_bio_promo.md %}

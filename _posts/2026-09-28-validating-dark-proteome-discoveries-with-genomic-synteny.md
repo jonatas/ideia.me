@@ -64,3 +64,5 @@ We have successfully built a closed-loop system entirely within PostgreSQL. We:
 Tasks that traditionally required brittle multi-container ETL architectures and weeks of manual processing are now running automatically overnight, safely recorded in `orphan_discoveries`.
 
 Synthetic biology just got a lot faster.
+
+{% include pg_bio_promo.md %}

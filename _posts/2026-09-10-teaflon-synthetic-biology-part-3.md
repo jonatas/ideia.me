@@ -77,3 +77,5 @@ As you can see, the architecture holds up! The active site of the Dehalogenase r
 Now that we know the protein compiles successfully in simulation, we are ready to move from software to hardware. 
 
 We have our genetic payload. Next, we need to wrap it in a plasmid with the right promoters—the biological equivalent of formatting a bootable USB drive—so we can inject it into a living bacterial cell and hit "run".
+
+{% include pg_bio_promo.md %}

@@ -58,3 +58,5 @@ LIMIT 5;
 In our benchmarks, executing this native SQL function was **6.4x faster** than the traditional Python/Numpy approach, strictly because it bypasses the network serialization penalty entirely. 
 
 If you are building the next generation of AI-driven biotech, stop moving your tensors over the network. Keep your embeddings in Postgres, and let the database do the math.
+
+{% include pg_bio_promo.md %}

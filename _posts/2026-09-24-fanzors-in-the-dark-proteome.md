@@ -92,3 +92,5 @@ Are you a structural biologist, a geneticist, or a biochemist? Does a 3,707 AA p
 Please reach out to me on [X/Twitter](https://twitter.com/jonatasdp) or [LinkedIn](https://www.linkedin.com/in/jonatasdp/). Let's cross-pollinate database engineering with cutting-edge synthetic biology. 
 
 *(You can find the code for pg_bio and the Batch De-Orphanizer on my [GitHub](https://github.com/jonatas/pg_bio))*
+
+{% include pg_bio_promo.md %}

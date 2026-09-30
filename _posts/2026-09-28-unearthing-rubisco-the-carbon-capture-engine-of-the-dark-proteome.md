@@ -134,3 +134,5 @@ window.addEventListener('load', function() {
     });
 });
 </script>
+
+{% include pg_bio_promo.md %}

@@ -235,3 +235,5 @@ Synthetic biology is the ultimate programming language. We aren't just flipping 
 By treating DNA as software and cells as hardware, we designed an architecture capable of digesting "indestructible" forever chemicals and sequestering them into safe, biological rocks. 
 
 The biological revolution is here. It's time to start coding.
+
+{% include pg_bio_promo.md %}

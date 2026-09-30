@@ -270,3 +270,5 @@ print(check_protein_rigidity("Q99217")) # Amelogenin -> Intrinsically Disordered
 ```
 
 We have now fully mapped the TeaFlon bioreactor concept. We are converting indestructible toxic plastic into artificial tooth enamel using a swarm of computational proteins.
+
+{% include pg_bio_promo.md %}

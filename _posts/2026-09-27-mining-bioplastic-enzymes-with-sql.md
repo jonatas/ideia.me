@@ -103,3 +103,5 @@ Notice how the massive, sprawling Alpha-helices form identical architectural sca
 ## Conclusion
 
 Biology is no longer limited to test tubes. By treating proteins as high-dimensional vectors and querying them with standard relational SQL, software engineers can now actively participate in discovering enzymes that could help solve the global plastic crisis. The Dark Proteome is full of incredible machines just waiting to be indexed.
+
+{% include pg_bio_promo.md %}

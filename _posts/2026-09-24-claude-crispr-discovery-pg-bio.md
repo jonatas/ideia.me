@@ -77,3 +77,5 @@ Anthropic has proven that AI agents possess the reasoning capabilities to discov
 By eliminating the need to write Python parser scripts, we can free up Claude to spend 100% of its compute on actual scientific reasoning. 
 
 I would love to collaborate with scientists and AI researchers pushing these boundaries. If you're building autonomous labs or bio-agents, check out the [pg_bio repository](https://github.com/jonatas/pg_bio) to see how we use Rust to build spatial indexing and cheminformatics natively in Postgres!
+
+{% include pg_bio_promo.md %}

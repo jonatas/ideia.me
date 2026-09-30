@@ -59,3 +59,5 @@ The query mathematically proves it: **Base pair 1300 loops perfectly backward to
 The 3D genomic architecture is completely stable. The enhancer elements are physically aligned with the transcription start site. 
 
 We are officially ready to synthesize the physical DNA. In the final part of this series, we will send this sequence to the lab, transform it into *E. coli*, and watch it eat Teflon!
+
+{% include pg_bio_promo.md %}
