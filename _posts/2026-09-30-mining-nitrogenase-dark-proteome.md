@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Nitrogenase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-09-29 12:36:52
+date: 2026-09-30 06:58:15
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -11,20 +11,20 @@ As the `pg_bio` autonomous night pipeline continues its exciting sweep of the da
 
 Our SQL engine scanned the embedding space and found a high-confidence structural match that bridges two completely different biological worlds. We found an uncharacterized orphan protein that exhibits an almost identical 3D fold to a known, well-studied bait!
 
-## The Bait: Nitrogenase-stabilizing/protective protein NifW (B2J5Z9)
-To understand the magnitude of this discovery, we first must look at the known bait protein from *Nostoc punctiforme (strain ATCC 29133 / PCC 73102)*. 
+## The Bait: Nitrogenase iron-iron protein delta chain (O68940)
+To understand the magnitude of this discovery, we first must look at the known bait protein from *Rhodospirillum rubrum*. 
 **What does it do?** 
-May protect the nitrogenase Fe-Mo protein from oxidative damage
+The key enzymatic reactions in nitrogen fixation are catalyzed by the nitrogenase complex, which has 2 components: the iron protein (component 2) and a component 1 which is either a molybdenum-iron protein, a vanadium-iron, or an iron-iron protein
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Methanocalculus taiwanensis*
-Our search revealed an entirely uncharacterized protein (`A0ABD4TIL8`) in *Methanocalculus taiwanensis*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Haloplanus litoreus*
+Our search revealed an entirely uncharacterized protein (`A0ABD5ZY80`) in *Haloplanus litoreus*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **Nitrogenase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Methanocalculus taiwanensis*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **Nitrogenase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Haloplanus litoreus*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,24 +33,24 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `B2J5Z9` | `A0ABD4TIL8` |
-| **Organism** | *Nostoc punctiforme (strain ATCC 29133 / PCC 73102)* | *Methanocalculus taiwanensis* |
+| **UniProt ID** | `O68940` | `A0ABD5ZY80` |
+| **Organism** | *Rhodospirillum rubrum* | *Haloplanus litoreus* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.7260** |
+| **Cosine Distance** | - | **0.6926** |
 
-*Note: A distance of 0.7260 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.6926 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
 <div style="display: flex; justify-content: space-between; gap: 20px;">
   <div style="flex: 1;">
-    <h4>Bait: B2J5Z9 (Nostoc punctiforme (strain ATCC 29133 / PCC 73102))</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-B2J5Z9-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
+    <h4>Bait: O68940 (Rhodospirillum rubrum)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-O68940-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
   <div style="flex: 1;">
-    <h4>Discovery: A0ABD4TIL8 (Methanocalculus taiwanensis)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0ABD4TIL8-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+    <h4>Discovery: A0ABD5ZY80 (Haloplanus litoreus)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0ABD5ZY80-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 
@@ -60,7 +60,7 @@ This discovery was completely automated natively in PostgreSQL using our custom 
 ```sql
 WITH closest AS (
     SELECT uniprot_id, name, embedding,
-           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'B2J5Z9')) as dist
+           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'O68940')) as dist
     FROM proteins
     WHERE name ILIKE '%uncharacterized%'
     ORDER BY dist ASC LIMIT 1
@@ -70,4 +70,4 @@ FROM closest c
 CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
-*This automated discovery was generated by the Antigravity Night Pipeline.*
+*This automated discovery was generated by the [pg_bio continuous discovery script](https://github.com/jonatas/pg_bio/blob/master/continuous_night_discovery.py).*
