@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Carbonic anhydrase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-09-30 07:29:14
+date: 2026-09-30 10:03:42
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -11,20 +11,20 @@ As the `pg_bio` autonomous night pipeline continues its exciting sweep of the da
 
 Our SQL engine scanned the embedding space and found a high-confidence structural match that bridges two completely different biological worlds. We found an uncharacterized orphan protein that exhibits an almost identical 3D fold to a known, well-studied bait!
 
-## The Bait: Carbonic anhydrase (Q5AJ71)
-To understand the magnitude of this discovery, we first must look at the known bait protein from *Candida albicans (strain SC5314 / ATCC MYA-2876)*. 
+## The Bait: Unknown protein (A0A1G5WBR8)
+To understand the magnitude of this discovery, we first must look at the known bait protein from *Methanobrevibacter millerae*. 
 **What does it do?** 
-Catalyzes the reversible hydration of CO(2) to H(2)CO(3). The main role may be to provide inorganic carbon for the bicarbonate-dependent carboxylation reactions catalyzed by pyruvate carboxylase, acetyl-CoA carboxylase and carbamoyl-phosphate synthetase. Involved in protection against oxidative damage. Acts as a CO(2) chemosensor and induces CO(2)-mediated filamentation. Essential for pathological growth in niches where sufficient CO(2) is not supplied by the host. Necessary for white-to-opaque switching at low CO(2) concentrations
+No specific function described.
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Ferroglobus placidus (strain DSM 10642 / AEDII12DO)*
-Our search revealed an entirely uncharacterized protein (`D3RXQ9`) in *Ferroglobus placidus (strain DSM 10642 / AEDII12DO)*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Halobellus salinus*
+Our search revealed an entirely uncharacterized protein (`A0A830EBS4`) in *Halobellus salinus*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **Carbonic anhydrase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Ferroglobus placidus (strain DSM 10642 / AEDII12DO)*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **Carbonic anhydrase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Halobellus salinus*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,24 +33,24 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `Q5AJ71` | `D3RXQ9` |
-| **Organism** | *Candida albicans (strain SC5314 / ATCC MYA-2876)* | *Ferroglobus placidus (strain DSM 10642 / AEDII12DO)* |
+| **UniProt ID** | `A0A1G5WBR8` | `A0A830EBS4` |
+| **Organism** | *Methanobrevibacter millerae* | *Halobellus salinus* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.5810** |
+| **Cosine Distance** | - | **0.0565** |
 
-*Note: A distance of 0.5810 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.0565 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
 <div style="display: flex; justify-content: space-between; gap: 20px;">
   <div style="flex: 1;">
-    <h4>Bait: Q5AJ71 (Candida albicans (strain SC5314 / ATCC MYA-2876))</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-Q5AJ71-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
+    <h4>Bait: A0A1G5WBR8 (Methanobrevibacter millerae)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A1G5WBR8-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
   <div style="flex: 1;">
-    <h4>Discovery: D3RXQ9 (Ferroglobus placidus (strain DSM 10642 / AEDII12DO))</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-D3RXQ9-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+    <h4>Discovery: A0A830EBS4 (Halobellus salinus)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A830EBS4-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 
@@ -60,7 +60,7 @@ This discovery was completely automated natively in PostgreSQL using our custom 
 ```sql
 WITH closest AS (
     SELECT uniprot_id, name, embedding,
-           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'Q5AJ71')) as dist
+           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'A0A1G5WBR8')) as dist
     FROM proteins
     WHERE name ILIKE '%uncharacterized%'
     ORDER BY dist ASC LIMIT 1
@@ -70,4 +70,4 @@ FROM closest c
 CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
-*This automated discovery was generated by the [pg_bio continuous discovery script](https://github.com/jonatas/pg_bio/blob/master/continuous_night_discovery.py).*
+{% include pg_bio_promo.md %}
