@@ -1,0 +1,147 @@
+<div id="container-3d-{{ include.discovery_id }}" style="background: #1e1e1e; padding: 10px; border: 1px solid #444; border-radius: 8px; position: relative; margin-bottom: 20px;">
+  
+  <!-- Overlay Controls -->
+  <div style="position: absolute; top: 15px; right: 15px; z-index: 100;">
+    <button onclick="toggleFullScreen_{{ include.discovery_id }}()" style="background: rgba(0,0,0,0.5); border: 1px solid #555; color: #fff; font-size: 16px; cursor: pointer; border-radius: 4px; padding: 4px 8px;" title="Fullscreen">⛶</button>
+  </div>
+
+  <!-- Minimal Dot Navigation -->
+  <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; z-index: 100;" id="morph-dots-{{ include.discovery_id }}">
+    <div onclick="setMorphStep_{{ include.discovery_id }}(0)" id="dot-{{ include.discovery_id }}-0" style="width: 14px; height: 14px; border-radius: 50%; background: #0d6efd; cursor: pointer; transition: all 0.3s; border: 2px solid #fff;"></div>
+    <div onclick="setMorphStep_{{ include.discovery_id }}(1)" id="dot-{{ include.discovery_id }}-1" style="width: 14px; height: 14px; border-radius: 50%; background: #555; cursor: pointer; transition: all 0.3s; border: 2px solid transparent;"></div>
+    <div onclick="setMorphStep_{{ include.discovery_id }}(2)" id="dot-{{ include.discovery_id }}-2" style="width: 14px; height: 14px; border-radius: 50%; background: #555; cursor: pointer; transition: all 0.3s; border: 2px solid transparent;"></div>
+    <div onclick="setMorphStep_{{ include.discovery_id }}(3)" id="dot-{{ include.discovery_id }}-3" style="width: 14px; height: 14px; border-radius: 50%; background: #555; cursor: pointer; transition: all 0.3s; border: 2px solid transparent;"></div>
+  </div>
+
+  <!-- Side by Side View -->
+  <div style="display: flex; justify-content: space-between; gap: 20px; margin-top: 10px;">
+    <div style="flex: 1;">
+      <h4 style="color: #ccc; font-size: 14px; text-align: center; margin: 0 0 10px 0;">Bait: {{ include.bait_id }}</h4>
+      <div id="viewer_bait_{{ include.discovery_id }}" style="height: 400px; width: 100%; position: relative; border-radius: 8px;"></div>
+    </div>
+    <div style="flex: 1;">
+      <h4 style="color: #ccc; font-size: 14px; text-align: center; margin: 0 0 10px 0;">Discovery: {{ include.discovery_id }}</h4>
+      <div id="viewer_discovery_{{ include.discovery_id }}" style="height: 400px; width: 100%; position: relative; border-radius: 8px;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  const uid = "{{ include.discovery_id }}";
+  let baitViewer = null;
+  let discoveryViewer = null;
+  let currentMorphStep = 0;
+  let activeCameraMaster = null;
+  let autoMorphInterval = null;
+
+  document.addEventListener("DOMContentLoaded", function() {
+    baitViewer = $3Dmol.createViewer("viewer_bait_" + uid, {backgroundColor: "0x1e1e1e"});
+    fetch("{{ include.bait_pdb }}")
+      .then(r => r.text())
+      .then(data => {
+        baitViewer.addModel(data, "pdb");
+        baitViewer.setStyle({model: 0}, {cartoon: {color: 'cyan', opacity: 0.7}});
+        baitViewer.zoomTo();
+        baitViewer.render();
+        activeCameraMaster = baitViewer;
+      });
+
+    discoveryViewer = $3Dmol.createViewer("viewer_discovery_" + uid, {backgroundColor: "0x1e1e1e"});
+    loadMorphStep(0);
+    
+    ['mousedown', 'touchstart', 'wheel'].forEach(evt => {
+        document.getElementById('viewer_bait_' + uid).addEventListener(evt, () => {
+            activeCameraMaster = baitViewer;
+            pauseAutoMorph();
+        });
+        document.getElementById('viewer_discovery_' + uid).addEventListener(evt, () => {
+            activeCameraMaster = discoveryViewer;
+            pauseAutoMorph();
+        });
+    });
+    
+    document.getElementById('viewer_bait_' + uid).addEventListener('dblclick', startAutoMorph);
+    document.getElementById('viewer_discovery_' + uid).addEventListener('dblclick', startAutoMorph);
+    
+    requestAnimationFrame(syncCameras);
+  });
+
+  function syncCameras() {
+      if (baitViewer && discoveryViewer && activeCameraMaster) {
+          let source = activeCameraMaster;
+          let target = (activeCameraMaster === baitViewer) ? discoveryViewer : baitViewer;
+          target.setView(source.getView());
+          target.render();
+      }
+      requestAnimationFrame(syncCameras);
+  }
+
+  function updateDotsUI(step) {
+      for(let i=0; i<4; i++) {
+          let dot = document.getElementById('dot-' + uid + '-' + i);
+          if(i === step) {
+              dot.style.background = '#0d6efd';
+              dot.style.borderColor = '#fff';
+          } else {
+              dot.style.background = '#555';
+              dot.style.borderColor = 'transparent';
+          }
+      }
+  }
+
+  function loadMorphStep(step) {
+    fetch(`{{ include.discovery_pdb_prefix }}-morph_step${step}.pdb`)
+      .then(r => r.text())
+      .then(data => {
+        discoveryViewer.clear();
+        discoveryViewer.addModel(data, "pdb");
+        discoveryViewer.setStyle({model: 0}, {cartoon: {color: 'magenta', thickness: 0.8}});
+        activeCameraMaster = discoveryViewer; 
+        discoveryViewer.zoomTo(); 
+        discoveryViewer.render();
+      })
+      .catch(err => console.error("Error loading step:", err));
+  }
+
+  window['setMorphStep_' + uid] = function(step) {
+    currentMorphStep = step;
+    loadMorphStep(currentMorphStep);
+    updateDotsUI(currentMorphStep);
+  };
+
+  function morphDiscovery() {
+    if (currentMorphStep < 3) {
+      window['setMorphStep_' + uid](currentMorphStep + 1);
+    } else {
+      window['setMorphStep_' + uid](0);
+    }
+  }
+
+  function pauseAutoMorph() {
+    if (autoMorphInterval) {
+      clearInterval(autoMorphInterval);
+      autoMorphInterval = null;
+    }
+  }
+
+  function startAutoMorph() {
+    pauseAutoMorph(); // Clear any existing to be safe
+    if (discoveryViewer) discoveryViewer.zoomTo();
+    autoMorphInterval = setInterval(() => {
+      morphDiscovery();
+    }, 1200);
+  }
+
+  window['toggleFullScreen_' + uid] = function() {
+    const elem = document.getElementById("container-3d-" + uid);
+    if (!document.fullscreenElement) {
+      if (elem.requestFullscreen) elem.requestFullscreen();
+      else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+    } else {
+      if (document.exitFullscreen) document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    }
+  };
+})();
+</script>
