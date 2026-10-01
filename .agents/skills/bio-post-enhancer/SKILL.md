@@ -19,7 +19,8 @@ When tasked with improving bio posts, follow this loop for each target markdown 
   * Unique biological quirks or survival mechanisms.
   * What the protein package/family specifically does in that environment.
 
-### 2. Rewrite for Adult Education
+### 2. Rewrite for Adult Education & Creative Titles
+* **Generate a Creative Title:** Replace the default/repetitive "Mining [Protein] Dark Proteome" title with a highly engaging, unique, and creative title that reflects the specific organism's environment or the protein's unique function. Do not repeat title structures across posts.
 * Elevate the writing style to be engaging for adults diving into new scientific areas.
 * Explicitly define and introduce complex biological terms (e.g., "synteny", "homolog", "orphan protein", "catalytic efficiency").
 * Add a "Curiosities" or "Did You Know?" section about the organism or the environment.
