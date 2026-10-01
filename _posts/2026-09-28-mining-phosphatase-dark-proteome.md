@@ -20,16 +20,7 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 | **Status** | Characterized | Uncharacterized |
 | **Cosine Distance** | - | **0.6281** |
 
-<div style="display: flex; justify-content: space-between; gap: 20px;">
-  <div style="flex: 1;">
-    <h4>Bait: P77625</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-P77625-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
-  </div>
-  <div style="flex: 1;">
-    <h4>Discovery: A0A830GQ55</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A830GQ55-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
-  </div>
-</div>
+{% include structural_alignment.html bait_id="P77625" discovery_id="A0A830GQ55" bait_pdb="/assets/models/AF-P77625-F1-model_v4_reference.pdb" discovery_pdb_prefix="/assets/models/AF-A0A830GQ55-F1-model_v4-morph" %}
 
 ### The SQL Pipeline
 

@@ -54,16 +54,7 @@ CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 Explore the predicted structural models below! 
 *Tip: Our blog features an interactive 3D plugin (`pg_bio_sync.js`). Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
-<div style="display: flex; justify-content: space-between; gap: 20px;">
-  <div style="flex: 1;">
-    <h4>Bait: Q9Z3W3 (Neorhizobium galegae)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-Q9Z3W3-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
-  </div>
-  <div style="flex: 1;">
-    <h4>Discovery: E7QQT8 (Haladaptatus paucihalophilus)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-E7QQT8-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
-  </div>
-</div>
+{% include structural_alignment.html bait_id="Q9Z3W3" discovery_id="E7QQT8" bait_pdb="/assets/models/AF-Q9Z3W3-F1-model_v4_reference.pdb" discovery_pdb_prefix="/assets/models/AF-E7QQT8-F1-model_v4-morph" %}
 
 <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
   <h4>Interactive Chemistry Lesson: Structural Adaptations</h4>

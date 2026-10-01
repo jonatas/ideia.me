@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Cellulase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-09-30 15:03:06
+date: 2026-09-30 20:58:23
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -11,20 +11,20 @@ As the `pg_bio` autonomous night pipeline continues its exciting sweep of the da
 
 Our SQL engine scanned the embedding space and found a high-confidence structural match that bridges two completely different biological worlds. We found an uncharacterized orphan protein that exhibits an almost identical 3D fold to a known, well-studied bait!
 
-## The Bait: Probable cellulase Cel12b (O53438)
-To understand the magnitude of this discovery, we first must look at the known bait protein from *Mycobacterium tuberculosis (strain ATCC 25618 / H37Rv)*. 
+## The Bait: Cellulase (A0A401HNQ9)
+To understand the magnitude of this discovery, we first must look at the known bait protein from *Methanofervidicoccus abyssi*. 
 **What does it do?** 
-Probable cellulase (PubMed:20826214). Can hydrolyze barley beta-glucan in vitro (PubMed:20826214). Could be important for the survival of M.tuberculosis in the environment, perhaps in amoebal hosts (PubMed:20826214)
+No specific function described.
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Methanooceanicella nereidis*
-Our search revealed an entirely uncharacterized protein (`A0AAP2W6H7`) in *Methanooceanicella nereidis*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Natrinema soli*
+Our search revealed an entirely uncharacterized protein (`A0ABD5SNI2`) in *Natrinema soli*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **Cellulase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Methanooceanicella nereidis*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **Cellulase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Natrinema soli*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,26 +33,17 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `O53438` | `A0AAP2W6H7` |
-| **Organism** | *Mycobacterium tuberculosis (strain ATCC 25618 / H37Rv)* | *Methanooceanicella nereidis* |
+| **UniProt ID** | `A0A401HNQ9` | `A0ABD5SNI2` |
+| **Organism** | *Methanofervidicoccus abyssi* | *Natrinema soli* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.6651** |
+| **Cosine Distance** | - | **0.0676** |
 
-*Note: A distance of 0.6651 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.0676 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
-<div style="display: flex; justify-content: space-between; gap: 20px;">
-  <div style="flex: 1;">
-    <h4>Bait: O53438 (Mycobacterium tuberculosis (strain ATCC 25618 / H37Rv))</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-O53438-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
-  </div>
-  <div style="flex: 1;">
-    <h4>Discovery: A0AAP2W6H7 (Methanooceanicella nereidis)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0AAP2W6H7-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
-  </div>
-</div>
+{% include structural_alignment.html bait_id="A0A401HNQ9" discovery_id="A0ABD5SNI2" bait_pdb="/assets/models/AF-A0A401HNQ9-F1-model_v4_reference.pdb" discovery_pdb_prefix="/assets/models/AF-A0ABD5SNI2-F1-model_v4-morph" %}
 
 ### The SQL Query
 This discovery was completely automated natively in PostgreSQL using our custom Z-Order indexing and the new UniProt SRF:
@@ -60,7 +51,7 @@ This discovery was completely automated natively in PostgreSQL using our custom 
 ```sql
 WITH closest AS (
     SELECT uniprot_id, name, embedding,
-           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'O53438')) as dist
+           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'A0A401HNQ9')) as dist
     FROM proteins
     WHERE name ILIKE '%uncharacterized%'
     ORDER BY dist ASC LIMIT 1

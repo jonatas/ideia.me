@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Manganese peroxidase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-09-30 14:30:27
+date: 2026-09-30 20:43:14
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -43,16 +43,7 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
-<div style="display: flex; justify-content: space-between; gap: 20px;">
-  <div style="flex: 1;">
-    <h4>Bait: P83918 (Irpex lacteus)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-P83918-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
-  </div>
-  <div style="flex: 1;">
-    <h4>Discovery: A0A897NAP9 (Halapricum desulfuricans)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A897NAP9-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
-  </div>
-</div>
+{% include structural_alignment.html bait_id="P83918" discovery_id="A0A897NAP9" bait_pdb="/assets/models/AF-P83918-F1-model_v4_reference.pdb" discovery_pdb_prefix="/assets/models/AF-A0A897NAP9-F1-model_v4-morph" %}
 
 ### The SQL Query
 This discovery was completely automated natively in PostgreSQL using our custom Z-Order indexing and the new UniProt SRF:
