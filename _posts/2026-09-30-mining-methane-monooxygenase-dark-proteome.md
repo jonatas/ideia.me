@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Methane monooxygenase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-09-30 19:26:25
+date: 2026-09-30 22:30:16
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -43,7 +43,16 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
-{% include structural_alignment.html bait_id="A0A2H1EG39" discovery_id="L9Z293" bait_pdb="/assets/models/AF-A0A2H1EG39-F1-model_v4_reference.pdb" discovery_pdb_prefix="/assets/models/AF-L9Z293-F1-model_v4-morph" %}
+<div style="display: flex; justify-content: space-between; gap: 20px;">
+  <div style="flex: 1;">
+    <h4>Bait: A0A2H1EG39 (Nitrosotalea sinensis)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A2H1EG39-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
+  </div>
+  <div style="flex: 1;">
+    <h4>Discovery: L9Z293 (Natrinema pellirubrum (strain DSM 15624 / CIP 106293 / JCM 10476 / NCIMB 786 / 157))</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-L9Z293-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+  </div>
+</div>
 
 ### The SQL Query
 This discovery was completely automated natively in PostgreSQL using our custom Z-Order indexing and the new UniProt SRF:

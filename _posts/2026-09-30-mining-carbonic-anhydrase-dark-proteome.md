@@ -43,7 +43,7 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
-{% include structural_alignment.html bait_id="A0A830GKZ4" discovery_id="U3TCL8" bait_pdb="/assets/models/AF-A0A830GKZ4-F1-model_v4_reference.pdb" discovery_pdb_prefix="/assets/models/AF-U3TCL8-F1-model_v4-morph" %}
+{% include structural_alignment.html bait_id="A0A830GKZ4" discovery_id="U3TCL8" bait_pdb="/assets/models/AF-A0A830GKZ4-F1-model_v4_reference.pdb" discovery_pdb_prefix="/assets/models/AF-U3TCL8-F1-model_v4" %}
 
 ### The SQL Query
 This discovery was completely automated natively in PostgreSQL using our custom Z-Order indexing and the new UniProt SRF:

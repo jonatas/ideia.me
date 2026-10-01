@@ -41,7 +41,7 @@ def upgrade_post(md_file):
 
     out_discovery = f"assets/models/{discovery_name}_aligned.pdb"
     out_bait = f"assets/models/{bait_name}_reference.pdb"
-    morph_prefix = f"assets/models/{discovery_name}-morph"
+    morph_prefix = f"assets/models/{discovery_name}"
 
     print(f"Upgrading {md_file}...")
     

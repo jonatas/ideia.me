@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing PHA synthase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-09-30 17:54:19
+date: 2026-09-30 22:15:01
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -43,7 +43,16 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
-{% include structural_alignment.html bait_id="M0G5K0" discovery_id="A0A346PQB3" bait_pdb="/assets/models/AF-M0G5K0-F1-model_v4_reference.pdb" discovery_pdb_prefix="/assets/models/AF-A0A346PQB3-F1-model_v4-morph" %}
+<div style="display: flex; justify-content: space-between; gap: 20px;">
+  <div style="flex: 1;">
+    <h4>Bait: M0G5K0 (Haloferax prahovense (strain DSM 18310 / JCM 13924 / TL6))</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-M0G5K0-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
+  </div>
+  <div style="flex: 1;">
+    <h4>Discovery: A0A346PQB3 (Natrarchaeobaculum sulfurireducens)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A346PQB3-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+  </div>
+</div>
 
 ### The SQL Query
 This discovery was completely automated natively in PostgreSQL using our custom Z-Order indexing and the new UniProt SRF:
