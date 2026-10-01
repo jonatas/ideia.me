@@ -19,11 +19,13 @@ When tasked with improving bio posts, follow this loop for each target markdown 
   * Unique biological quirks or survival mechanisms.
   * What the protein package/family specifically does in that environment.
 
-### 2. Rewrite for Adult Education & Creative Titles
-* **Generate a Creative Title:** Replace the default/repetitive "Mining [Protein] Dark Proteome" title with a highly engaging, unique, and creative title that reflects the specific organism's environment or the protein's unique function. Do not repeat title structures across posts.
-* Elevate the writing style to be engaging for adults diving into new scientific areas.
-* Explicitly define and introduce complex biological terms (e.g., "synteny", "homolog", "orphan protein", "catalytic efficiency").
-* Add a "Curiosities" or "Did You Know?" section about the organism or the environment.
+### 2. Enforce the 5-Step "Workshop Rhythm"
+To ensure these posts are effective for adult learners, you must strictly follow this structural rhythm:
+1. **The Hook (Narrative):** Start with the bizarre organism and its extreme environment. Give it a creative, unique title!
+2. **The Problem (Concept):** Explain the biological challenge it faces and the practical need for this specific protein/enzyme.
+3. **The Interactive Anchor (Active):** Keep the `{% include structural_alignment.html ... %}` tag exactly where it is, but weave it into the text. Instruct the user to interact with it (e.g., "Double-click the 3D widget below to watch...").
+4. **The Science (Theory):** Introduce and clearly define complex terms like *synteny*, *homolog*, or *orphan protein*. Include a "Did You Know?" or "Curiosities" section to add flavor.
+5. **The Tech (Application):** End with the SQL query and the math (vector embeddings, cosine distance) that actually powered the discovery.
 
 ### 3. Maintain Interactive Features
 * **CRITICAL:** Do NOT break or remove the `{% include structural_alignment.html ... %}` tags. 
