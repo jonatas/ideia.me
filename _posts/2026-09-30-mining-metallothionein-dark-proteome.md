@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Metallothionein: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-09-30 18:09:27
+date: 2026-09-30 22:47:05
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -11,20 +11,20 @@ As the `pg_bio` autonomous night pipeline continues its exciting sweep of the da
 
 Our SQL engine scanned the embedding space and found a high-confidence structural match that bridges two completely different biological worlds. We found an uncharacterized orphan protein that exhibits an almost identical 3D fold to a known, well-studied bait!
 
-## The Bait: Unknown protein (A0A075MVT4)
-To understand the magnitude of this discovery, we first must look at the known bait protein from *Candidatus Nitrososphaera evergladensis SR1*. 
+## The Bait: Metallothionein (A0ABU2D2G6)
+To understand the magnitude of this discovery, we first must look at the known bait protein from *Methanosarcina baikalica*. 
 **What does it do?** 
 No specific function described.
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Halapricum desulfuricans*
-Our search revealed an entirely uncharacterized protein (`A0A897NY25`) in *Halapricum desulfuricans*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Acidianus ambivalens*
+Our search revealed an entirely uncharacterized protein (`A0A650CYI0`) in *Acidianus ambivalens*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **Metallothionein** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Halapricum desulfuricans*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **Metallothionein** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Acidianus ambivalens*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,17 +33,26 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `A0A075MVT4` | `A0A897NY25` |
-| **Organism** | *Candidatus Nitrososphaera evergladensis SR1* | *Halapricum desulfuricans* |
+| **UniProt ID** | `A0ABU2D2G6` | `A0A650CYI0` |
+| **Organism** | *Methanosarcina baikalica* | *Acidianus ambivalens* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.0686** |
+| **Cosine Distance** | - | **0.0661** |
 
-*Note: A distance of 0.0686 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.0661 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
-{% include structural_alignment.html bait_id="A0A075MVT4" discovery_id="A0A897NY25" bait_pdb="/assets/models/AF-A0A075MVT4-F1-model_v4_reference.pdb" discovery_pdb_prefix="/assets/models/AF-A0A897NY25-F1-model_v4" %}
+<div style="display: flex; justify-content: space-between; gap: 20px;">
+  <div style="flex: 1;">
+    <h4>Bait: A0ABU2D2G6 (Methanosarcina baikalica)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0ABU2D2G6-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
+  </div>
+  <div style="flex: 1;">
+    <h4>Discovery: A0A650CYI0 (Acidianus ambivalens)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A650CYI0-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+  </div>
+</div>
 
 ### The SQL Query
 This discovery was completely automated natively in PostgreSQL using our custom Z-Order indexing and the new UniProt SRF:
@@ -51,7 +60,7 @@ This discovery was completely automated natively in PostgreSQL using our custom 
 ```sql
 WITH closest AS (
     SELECT uniprot_id, name, embedding,
-           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'A0A075MVT4')) as dist
+           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'A0ABU2D2G6')) as dist
     FROM proteins
     WHERE name ILIKE '%uncharacterized%'
     ORDER BY dist ASC LIMIT 1
