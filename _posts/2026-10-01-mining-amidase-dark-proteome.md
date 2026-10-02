@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Amidase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-10-01 03:42:25
+date: 2026-10-01 16:39:49
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -11,20 +11,20 @@ As the `pg_bio` autonomous night pipeline continues its exciting sweep of the da
 
 Our SQL engine scanned the embedding space and found a high-confidence structural match that bridges two completely different biological worlds. We found an uncharacterized orphan protein that exhibits an almost identical 3D fold to a known, well-studied bait!
 
-## The Bait: Unknown protein (H2C2B1)
-To understand the magnitude of this discovery, we first must look at the known bait protein from *Metallosphaera yellowstonensis MK1*. 
+## The Bait: Murein peptide amidase A (P0ACV7)
+To understand the magnitude of this discovery, we first must look at the known bait protein from *Escherichia coli O157:H7*. 
 **What does it do?** 
-No specific function described.
+Involved in muropeptide degradation. Catalyzes the hydrolysis of the gamma-D-glutamyl-diaminopimelic acid (gamma-D-Glu-Dap) amide bond in the murein tripeptide L-alanyl-gamma-D-glutamyl-meso-diaminopimelic acid, leading to the formation of L-Ala-gamma-D-Glu and Dap
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Metallosphaera yellowstonensis MK1*
-Our search revealed an entirely uncharacterized protein (`H2C2B1`) in *Metallosphaera yellowstonensis MK1*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Methanobacterium formicicum (strain DSM 3637 / PP1)*
+Our search revealed an entirely uncharacterized protein (`K2QFM5`) in *Methanobacterium formicicum (strain DSM 3637 / PP1)*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **Amidase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Metallosphaera yellowstonensis MK1*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **Amidase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Methanobacterium formicicum (strain DSM 3637 / PP1)*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,24 +33,24 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `H2C2B1` | `H2C2B1` |
-| **Organism** | *Metallosphaera yellowstonensis MK1* | *Metallosphaera yellowstonensis MK1* |
+| **UniProt ID** | `P0ACV7` | `K2QFM5` |
+| **Organism** | *Escherichia coli O157:H7* | *Methanobacterium formicicum (strain DSM 3637 / PP1)* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.0000** |
+| **Cosine Distance** | - | **0.6124** |
 
-*Note: A distance of 0.0000 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.6124 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
 <div style="display: flex; justify-content: space-between; gap: 20px;">
   <div style="flex: 1;">
-    <h4>Bait: H2C2B1 (Metallosphaera yellowstonensis MK1)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-H2C2B1-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
+    <h4>Bait: P0ACV7 (Escherichia coli O157:H7)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-P0ACV7-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
   <div style="flex: 1;">
-    <h4>Discovery: H2C2B1 (Metallosphaera yellowstonensis MK1)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-H2C2B1-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+    <h4>Discovery: K2QFM5 (Methanobacterium formicicum (strain DSM 3637 / PP1))</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-K2QFM5-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 
@@ -60,7 +60,7 @@ This discovery was completely automated natively in PostgreSQL using our custom 
 ```sql
 WITH closest AS (
     SELECT uniprot_id, name, embedding,
-           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'H2C2B1')) as dist
+           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'P0ACV7')) as dist
     FROM proteins
     WHERE name ILIKE '%uncharacterized%'
     ORDER BY dist ASC LIMIT 1

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Nitrate reductase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-10-01 05:53:50
+date: 2026-10-01 19:59:10
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -11,20 +11,20 @@ As the `pg_bio` autonomous night pipeline continues its exciting sweep of the da
 
 Our SQL engine scanned the embedding space and found a high-confidence structural match that bridges two completely different biological worlds. We found an uncharacterized orphan protein that exhibits an almost identical 3D fold to a known, well-studied bait!
 
-## The Bait: Periplasmic nitrate reductase, electron transfer subunit (Q9Z3W3)
-To understand the magnitude of this discovery, we first must look at the known bait protein from *Neorhizobium galegae*. 
+## The Bait: Nitrate reductase (A0A0F7FI37)
+To understand the magnitude of this discovery, we first must look at the known bait protein from *Infirmifilum uzonense*. 
 **What does it do?** 
-Electron transfer subunit of the periplasmic nitrate reductase complex NapAB. Receives electrons from the membrane-anchored tetraheme c-type NapC protein and transfers these to NapA subunit, thus allowing electron flow between membrane and periplasm. Essential for periplasmic nitrate reduction with nitrate as the terminal electron acceptor
+No specific function described.
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Haladaptatus paucihalophilus DX253*
-Our search revealed an entirely uncharacterized protein (`E7QQT8`) in *Haladaptatus paucihalophilus DX253*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Methanobrevibacter oralis*
+Our search revealed an entirely uncharacterized protein (`A0A162FQJ1`) in *Methanobrevibacter oralis*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **Nitrate reductase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Haladaptatus paucihalophilus DX253*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **Nitrate reductase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Methanobrevibacter oralis*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,24 +33,24 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `Q9Z3W3` | `E7QQT8` |
-| **Organism** | *Neorhizobium galegae* | *Haladaptatus paucihalophilus DX253* |
+| **UniProt ID** | `A0A0F7FI37` | `A0A162FQJ1` |
+| **Organism** | *Infirmifilum uzonense* | *Methanobrevibacter oralis* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.6615** |
+| **Cosine Distance** | - | **0.0509** |
 
-*Note: A distance of 0.6615 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.0509 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
 <div style="display: flex; justify-content: space-between; gap: 20px;">
   <div style="flex: 1;">
-    <h4>Bait: Q9Z3W3 (Neorhizobium galegae)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-Q9Z3W3-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
+    <h4>Bait: A0A0F7FI37 (Infirmifilum uzonense)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A0F7FI37-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
   <div style="flex: 1;">
-    <h4>Discovery: E7QQT8 (Haladaptatus paucihalophilus DX253)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-E7QQT8-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+    <h4>Discovery: A0A162FQJ1 (Methanobrevibacter oralis)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A162FQJ1-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 
@@ -60,7 +60,7 @@ This discovery was completely automated natively in PostgreSQL using our custom 
 ```sql
 WITH closest AS (
     SELECT uniprot_id, name, embedding,
-           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'Q9Z3W3')) as dist
+           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'A0A0F7FI37')) as dist
     FROM proteins
     WHERE name ILIKE '%uncharacterized%'
     ORDER BY dist ASC LIMIT 1

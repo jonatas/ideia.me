@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing PHA synthase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-10-01 08:15:10
+date: 2026-10-01 18:57:57
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
