@@ -70,6 +70,6 @@ CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 
 ### Related Discoveries
 Curious to learn more about enzymes breaking down and building plastics? Check out our related discovery:
-[Mining Bioplastic Enzymes in the Dark Proteome]({% post_url 2026-09-28-mining-bioplastic-enzymes-dark-proteome %})
+[Mining Bioplastic Enzymes in the Dark Proteome]({% post_url 2026-09-28-mining-bioplastic-enzymes-a0a151a8h2-a0a510du23-dark-proteome %})
 
 {% include pg_bio_promo.md %}

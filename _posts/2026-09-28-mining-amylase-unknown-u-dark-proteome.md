@@ -58,4 +58,4 @@ CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 {% include pg_bio_promo.md %}
 
 ### Related Discoveries
-If you enjoyed this deep dive into carbohydrate-busting enzymes in extreme environments, check out our recent post on [Unearthing Cellulase]({% post_url 2026-09-30-mining-cellulase-dark-proteome %}), where we explore another fascinating orphan protein capable of breaking down tough plant fibers!
+If you enjoyed this deep dive into carbohydrate-busting enzymes in extreme environments, check out our recent post on [Unearthing Cellulase]({% post_url 2026-09-30-mining-cellulase-a7e584-a0a1i6qwd0-dark-proteome %}), where we explore another fascinating orphan protein capable of breaking down tough plant fibers!

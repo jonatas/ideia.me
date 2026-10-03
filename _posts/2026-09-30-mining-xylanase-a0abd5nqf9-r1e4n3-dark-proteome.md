@@ -76,6 +76,6 @@ CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
 ### Related Discoveries
-If you enjoyed this deep dive into plant-digesting extremophiles, check out our related article on another crucial bio-industrial enzyme: [Mining Cellulase in the Dark Proteome]({% post_url 2026-10-01-mining-cellulase-dark-proteome %}).
+If you enjoyed this deep dive into plant-digesting extremophiles, check out our related article on another crucial bio-industrial enzyme: [Mining Cellulase in the Dark Proteome]({% post_url 2026-10-01-mining-cellulase-l9wnh9-d2ryy9-dark-proteome %}).
 
 {% include pg_bio_promo.md %}

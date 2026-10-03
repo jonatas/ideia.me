@@ -106,6 +106,6 @@ This discovery highlights a monumental shift in computational biology. By embedd
 What used to take months of crystalline extraction, X-ray crystallography, and wet-lab alignment now takes milliseconds. The dark proteome isn't so dark anymore—it's just waiting to be queried.
 
 ### Related Discoveries
-If you enjoyed tracking ancient enzymes across extreme environments, be sure to check out our related deep dive: [Mining Luciferase in the Dark Proteome]({% post_url 2026-09-30-mining-luciferase-dark-proteome %}) where we uncover even more bioluminescent mysteries.
+If you enjoyed tracking ancient enzymes across extreme environments, be sure to check out our related deep dive: [Mining Luciferase in the Dark Proteome]({% post_url 2026-09-30-mining-luciferase-a0a060hgf9-a0a1h6fx56-dark-proteome %}) where we uncover even more bioluminescent mysteries.
 
 {% include pg_bio_promo.md %}

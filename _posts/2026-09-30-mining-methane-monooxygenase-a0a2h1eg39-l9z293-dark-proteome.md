@@ -67,6 +67,6 @@ CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
 ### Related Discoveries
-If you enjoyed reading about gas-scrubbing enzymes in extreme environments, be sure to check out our related post on [Carbonic Anhydrase Dark Proteome]({% post_url 2026-09-30-mining-carbonic-anhydrase-dark-proteome %}) to see how nature captures CO2!
+If you enjoyed reading about gas-scrubbing enzymes in extreme environments, be sure to check out our related post on [Carbonic Anhydrase Dark Proteome]({% post_url 2026-09-30-mining-carbonic-anhydrase-d2ryr2-e0spk0-dark-proteome %}) to see how nature captures CO2!
 
 {% include pg_bio_promo.md %}

@@ -64,6 +64,6 @@ CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
 ### Related Discoveries
-If you enjoyed this deep dive, check out our related post on another extreme enzyme: [Mining Manganese Peroxidase in the Dark Proteome]({% post_url 2026-10-01-mining-manganese-peroxidase-dark-proteome %}).
+If you enjoyed this deep dive, check out our related post on another extreme enzyme: [Mining Manganese Peroxidase in the Dark Proteome]({% post_url 2026-10-01-mining-manganese-peroxidase-p83918-a0a897nap9-dark-proteome %}).
 
 {% include pg_bio_promo.md %}

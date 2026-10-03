@@ -54,6 +54,6 @@ CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
 ### Related Discoveries
-If you enjoyed exploring the nitrogen metabolism of extreme environments, you should check out our other recent dive into the dark proteome: [Exploring Nitrogenase in the Dark Proteome]({% post_url 2026-09-30-mining-nitrogenase-dark-proteome %}).
+If you enjoyed exploring the nitrogen metabolism of extreme environments, you should check out our other recent dive into the dark proteome: [Exploring Nitrogenase in the Dark Proteome]({% post_url 2026-09-30-mining-nitrogenase-q8tvh3-b5i9r0-dark-proteome %}).
 
 {% include pg_bio_promo.md %}
