@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Nitrite reductase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-10-02 20:43:15
+date: 2026-10-02 23:00:57
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -11,20 +11,20 @@ As the `pg_bio` autonomous night pipeline continues its exciting sweep of the da
 
 Our SQL engine scanned the embedding space and found a high-confidence structural match that bridges two completely different biological worlds. We found an uncharacterized orphan protein that exhibits an almost identical 3D fold to a known, well-studied bait!
 
-## The Bait: Copper-containing nitrite reductase (M0G2B3)
-To understand the magnitude of this discovery, we first must look at the known bait protein from *Haloferax prahovense (strain DSM 18310 / JCM 13924 / TL6)*. 
+## The Bait: Copper-containing nitrite reductase (A0A1I6K2J3)
+To understand the magnitude of this discovery, we first must look at the known bait protein from *Halomicrobium zhouii*. 
 **What does it do?** 
 No specific function described.
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Haloferax mediterranei (strain ATCC 33500 / DSM 1411 / JCM 8866 / NBRC 14739 / NCIMB 2177 / R-4)*
-Our search revealed an entirely uncharacterized protein (`A0ACN4YJ14`) in *Haloferax mediterranei (strain ATCC 33500 / DSM 1411 / JCM 8866 / NBRC 14739 / NCIMB 2177 / R-4)*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Halobacterium jilantaiense*
+Our search revealed an entirely uncharacterized protein (`A0A1I0QF85`) in *Halobacterium jilantaiense*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **Nitrite reductase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Haloferax mediterranei (strain ATCC 33500 / DSM 1411 / JCM 8866 / NBRC 14739 / NCIMB 2177 / R-4)*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **Nitrite reductase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Halobacterium jilantaiense*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,24 +33,24 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `M0G2B3` | `A0ACN4YJ14` |
-| **Organism** | *Haloferax prahovense (strain DSM 18310 / JCM 13924 / TL6)* | *Haloferax mediterranei (strain ATCC 33500 / DSM 1411 / JCM 8866 / NBRC 14739 / NCIMB 2177 / R-4)* |
+| **UniProt ID** | `A0A1I6K2J3` | `A0A1I0QF85` |
+| **Organism** | *Halomicrobium zhouii* | *Halobacterium jilantaiense* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.0882** |
+| **Cosine Distance** | - | **0.0687** |
 
-*Note: A distance of 0.0882 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.0687 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
 <div style="display: flex; justify-content: space-between; gap: 20px;">
   <div style="flex: 1;">
-    <h4>Bait: M0G2B3 (Haloferax prahovense (strain DSM 18310 / JCM 13924 / TL6))</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-M0G2B3-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
+    <h4>Bait: A0A1I6K2J3 (Halomicrobium zhouii)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A1I6K2J3-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
   <div style="flex: 1;">
-    <h4>Discovery: A0ACN4YJ14 (Haloferax mediterranei (strain ATCC 33500 / DSM 1411 / JCM 8866 / NBRC 14739 / NCIMB 2177 / R-4))</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0ACN4YJ14-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+    <h4>Discovery: A0A1I0QF85 (Halobacterium jilantaiense)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A1I0QF85-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 
@@ -60,7 +60,7 @@ This discovery was completely automated natively in PostgreSQL using our custom 
 ```sql
 WITH closest AS (
     SELECT uniprot_id, name, embedding,
-           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'M0G2B3')) as dist
+           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'A0A1I6K2J3')) as dist
     FROM proteins
     WHERE name ILIKE '%uncharacterized%'
     ORDER BY dist ASC LIMIT 1

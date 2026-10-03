@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Manganese peroxidase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-10-02 18:56:24
+date: 2026-10-02 22:45:42
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 

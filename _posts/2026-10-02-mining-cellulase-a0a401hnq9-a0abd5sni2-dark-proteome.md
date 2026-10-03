@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Cellulase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-10-02 20:12:13
+date: 2026-10-02 20:58:34
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -11,20 +11,20 @@ As the `pg_bio` autonomous night pipeline continues its exciting sweep of the da
 
 Our SQL engine scanned the embedding space and found a high-confidence structural match that bridges two completely different biological worlds. We found an uncharacterized orphan protein that exhibits an almost identical 3D fold to a known, well-studied bait!
 
-## The Bait: Unknown protein (A0A151AC13)
-To understand the magnitude of this discovery, we first must look at the known bait protein from *Halalkalicoccus paucihalophilus*. 
+## The Bait: Cellulase (A0A401HNQ9)
+To understand the magnitude of this discovery, we first must look at the known bait protein from *Methanofervidicoccus abyssi*. 
 **What does it do?** 
 No specific function described.
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Cenarchaeum symbiosum (strain A)*
-Our search revealed an entirely uncharacterized protein (`A0RYG7`) in *Cenarchaeum symbiosum (strain A)*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Natrinema soli*
+Our search revealed an entirely uncharacterized protein (`A0ABD5SNI2`) in *Natrinema soli*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **Cellulase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Cenarchaeum symbiosum (strain A)*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **Cellulase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Natrinema soli*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,24 +33,24 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `A0A151AC13` | `A0RYG7` |
-| **Organism** | *Halalkalicoccus paucihalophilus* | *Cenarchaeum symbiosum (strain A)* |
+| **UniProt ID** | `A0A401HNQ9` | `A0ABD5SNI2` |
+| **Organism** | *Methanofervidicoccus abyssi* | *Natrinema soli* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.0831** |
+| **Cosine Distance** | - | **0.0676** |
 
-*Note: A distance of 0.0831 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.0676 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
 <div style="display: flex; justify-content: space-between; gap: 20px;">
   <div style="flex: 1;">
-    <h4>Bait: A0A151AC13 (Halalkalicoccus paucihalophilus)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A151AC13-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
+    <h4>Bait: A0A401HNQ9 (Methanofervidicoccus abyssi)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A401HNQ9-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
   <div style="flex: 1;">
-    <h4>Discovery: A0RYG7 (Cenarchaeum symbiosum (strain A))</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0RYG7-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+    <h4>Discovery: A0ABD5SNI2 (Natrinema soli)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0ABD5SNI2-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 
@@ -60,7 +60,7 @@ This discovery was completely automated natively in PostgreSQL using our custom 
 ```sql
 WITH closest AS (
     SELECT uniprot_id, name, embedding,
-           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'A0A151AC13')) as dist
+           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'A0A401HNQ9')) as dist
     FROM proteins
     WHERE name ILIKE '%uncharacterized%'
     ORDER BY dist ASC LIMIT 1
