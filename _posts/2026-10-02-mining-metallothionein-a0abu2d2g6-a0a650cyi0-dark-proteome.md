@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Acidianus ambivalens*
-Our search revealed an entirely uncharacterized protein (`A0A650CYI0`) in *Acidianus ambivalens*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A650CYI0`) in *Acidianus ambivalens*—a thermoacidophilic archaeon isolated from acidic, boiling volcanic springs that oxidizes sulfur for energy. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

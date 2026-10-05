@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Nitrogenase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-10-01 22:48:03
+date: 2026-10-05 16:32:44
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -11,20 +11,20 @@ As the `pg_bio` autonomous night pipeline continues its exciting sweep of the da
 
 Our SQL engine scanned the embedding space and found a high-confidence structural match that bridges two completely different biological worlds. We found an uncharacterized orphan protein that exhibits an almost identical 3D fold to a known, well-studied bait!
 
-## The Bait: Unknown protein (A0A7G2D5C5)
-To understand the magnitude of this discovery, we first must look at the known bait protein from *Thermococcus camini*. 
+## The Bait: Dinitrogenase iron-molybdenum cofactor biosynthesis domain-containing protein (A0AA97FB87)
+To understand the magnitude of this discovery, we first must look at the known bait protein from *Methanochimaera problematica*. 
 **What does it do?** 
 No specific function described.
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Vulcanisaeta souniana JCM 11219*
-Our search revealed an entirely uncharacterized protein (`A0A830EDB7`) in *Vulcanisaeta souniana JCM 11219*—a hyperthermophilic (extreme heat-loving) archaeon isolated from a volcanic hot spring in Japan, thriving in highly acidic, near-boiling waters (up to 90°C/194°F). Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Candidatus Methanobinarius endosymbioticus*
+Our search revealed an entirely uncharacterized protein (`A0A366M992`) in *Candidatus Methanobinarius endosymbioticus*—a recently discovered methanogenic archaeon that lives entirely inside another organism as an endosymbiont, perfectly adapted to extreme intracellular conditions. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **Nitrogenase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Vulcanisaeta souniana JCM 11219*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **Nitrogenase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Candidatus Methanobinarius endosymbioticus*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,24 +33,24 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `A0A7G2D5C5` | `A0A830EDB7` |
-| **Organism** | *Thermococcus camini* | *Vulcanisaeta souniana JCM 11219* |
+| **UniProt ID** | `A0AA97FB87` | `A0A366M992` |
+| **Organism** | *Methanochimaera problematica* | *Candidatus Methanobinarius endosymbioticus* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.0622** |
+| **Cosine Distance** | - | **0.0547** |
 
-*Note: A distance of 0.0622 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.0547 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
 <div style="display: flex; justify-content: space-between; gap: 20px;">
   <div style="flex: 1;">
-    <h4>Bait: A0A7G2D5C5 (Thermococcus camini)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A7G2D5C5-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
+    <h4>Bait: A0AA97FB87 (Methanochimaera problematica)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0AA97FB87-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
   <div style="flex: 1;">
-    <h4>Discovery: A0A830EDB7 (Vulcanisaeta souniana JCM 11219)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A830EDB7-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+    <h4>Discovery: A0A366M992 (Candidatus Methanobinarius endosymbioticus)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A366M992-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 
@@ -60,7 +60,7 @@ This discovery was completely automated natively in PostgreSQL using our custom 
 ```sql
 WITH closest AS (
     SELECT uniprot_id, name, embedding,
-           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'A0A7G2D5C5')) as dist
+           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'A0AA97FB87')) as dist
     FROM proteins
     WHERE name ILIKE '%uncharacterized%'
     ORDER BY dist ASC LIMIT 1
@@ -70,10 +70,5 @@ FROM closest c
 CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
-
-
-### Related Discoveries for this Bait
-We also found other extremophile orphans that structurally match this exact same `a0a7g2d5c5` bait!
-- [Discovery `a0a830edb7` on 2026-10-03]({% post_url 2026-10-03-mining-nitrogenase-a0a7g2d5c5-a0a830edb7-dark-proteome %})
 
 {% include pg_bio_promo.md %}

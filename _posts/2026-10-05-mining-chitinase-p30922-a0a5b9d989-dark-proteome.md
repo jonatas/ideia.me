@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Chitinase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-09-30 23:35:20
+date: 2026-10-05 13:52:48
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -18,13 +18,13 @@ Carbohydrate-binding lectin with a preference for chitin. Has no chitinase activ
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Natrinema saccharevitans*
-Our search revealed an entirely uncharacterized protein (`A0A1S8B280`) in *Natrinema saccharevitans*—an extremely halophilic archaeon isolated from a hypersaline lake, capable of utilizing sugars for growth in extreme salt. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Promethearchaeum syntrophicum*
+Our search revealed an entirely uncharacterized protein (`A0A5B9D989`) in *Promethearchaeum syntrophicum*—a deeply-branching archaeon isolated from deep-sea sediments, believed to represent a key transitional form linking simple archaea to complex eukaryotic cells. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **Chitinase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Natrinema saccharevitans*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **Chitinase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Promethearchaeum syntrophicum*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,12 +33,12 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `P30922` | `A0A1S8B280` |
-| **Organism** | *Bos taurus* | *Natrinema saccharevitans* |
+| **UniProt ID** | `P30922` | `A0A5B9D989` |
+| **Organism** | *Bos taurus* | *Promethearchaeum syntrophicum* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.5317** |
+| **Cosine Distance** | - | **0.5323** |
 
-*Note: A distance of 0.5317 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.5323 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
@@ -49,8 +49,8 @@ Dive into the structures below! *Tip: Double-click either 3D viewer to lock thei
     <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-P30922-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
   <div style="flex: 1;">
-    <h4>Discovery: A0A1S8B280 (Natrinema saccharevitans)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A1S8B280-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+    <h4>Discovery: A0A5B9D989 (Promethearchaeum syntrophicum)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A5B9D989-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 

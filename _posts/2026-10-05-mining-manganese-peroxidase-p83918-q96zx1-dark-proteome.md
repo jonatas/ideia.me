@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Manganese peroxidase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-10-02 22:45:42
+date: 2026-10-05 15:45:10
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -18,13 +18,13 @@ Has manganese peroxidase activity
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Halapricum desulfuricans*
-Our search revealed an entirely uncharacterized protein (`A0A897NAP9`) in *Halapricum desulfuricans*—a fascinating halophilic archaeon capable of utilizing sulfur compounds in its metabolism while surviving in hyper-saline environments. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Sulfurisphaera tokodaii (strain DSM 16993 / JCM 10545 / NBRC 100140 / 7)*
+Our search revealed an entirely uncharacterized protein (`Q96ZX1`) in *Sulfurisphaera tokodaii (strain DSM 16993 / JCM 10545 / NBRC 100140 / 7)*—an extreme thermoacidophile isolated from a hot spring in Japan, capable of both oxidizing and reducing sulfur at near-boiling temperatures in acidic environments. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **Manganese peroxidase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Halapricum desulfuricans*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **Manganese peroxidase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Sulfurisphaera tokodaii (strain DSM 16993 / JCM 10545 / NBRC 100140 / 7)*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,12 +33,12 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `P83918` | `A0A897NAP9` |
-| **Organism** | *Irpex lacteus* | *Halapricum desulfuricans* |
+| **UniProt ID** | `P83918` | `Q96ZX1` |
+| **Organism** | *Irpex lacteus* | *Sulfurisphaera tokodaii (strain DSM 16993 / JCM 10545 / NBRC 100140 / 7)* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.8151** |
+| **Cosine Distance** | - | **0.8167** |
 
-*Note: A distance of 0.8151 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.8167 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
@@ -49,8 +49,8 @@ Dive into the structures below! *Tip: Double-click either 3D viewer to lock thei
     <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-P83918-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
   <div style="flex: 1;">
-    <h4>Discovery: A0A897NAP9 (Halapricum desulfuricans)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A897NAP9-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+    <h4>Discovery: Q96ZX1 (Sulfurisphaera tokodaii (strain DSM 16993 / JCM 10545 / NBRC 100140 / 7))</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-Q96ZX1-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 
@@ -70,11 +70,5 @@ FROM closest c
 CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
-
-
-### Related Discoveries for this Bait
-We also found other extremophile orphans that structurally match this exact same `p83918` bait!
-- [Discovery `a0a897nap9` on 2026-10-03]({% post_url 2026-10-03-mining-manganese-peroxidase-p83918-a0a897nap9-dark-proteome %})
-- [Discovery `a0a897nap9` on 2026-10-01]({% post_url 2026-10-01-mining-manganese-peroxidase-p83918-a0a897nap9-dark-proteome %})
 
 {% include pg_bio_promo.md %}

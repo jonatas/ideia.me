@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Natrarchaeobaculum sulfurireducens*
-Our search revealed an entirely uncharacterized protein (`A0A346PQB3`) in *Natrarchaeobaculum sulfurireducens*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A346PQB3`) in *Natrarchaeobaculum sulfurireducens*—an extremophile native to hypersaline soda lakes, perfectly adapted to a dual-extreme environment of brutal alkaline pH and massive salt concentrations. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

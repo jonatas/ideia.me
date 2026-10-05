@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Halobacterium jilantaiense*
-Our search revealed an entirely uncharacterized protein (`A0A1I0QF85`) in *Halobacterium jilantaiense*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A1I0QF85`) in *Halobacterium jilantaiense*—an extremely halophilic archaeon isolated from the hypersaline Jilantai salt lake in Inner Mongolia, perfectly adapted to extreme desiccation and salt. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

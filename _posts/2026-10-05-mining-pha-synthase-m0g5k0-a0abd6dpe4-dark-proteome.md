@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing PHA synthase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-10-01 18:57:57
+date: 2026-10-05 14:56:34
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -18,13 +18,13 @@ No specific function described.
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Natrarchaeobaculum sulfurireducens*
-Our search revealed an entirely uncharacterized protein (`A0A346PQB3`) in *Natrarchaeobaculum sulfurireducens*—an extremophile native to hypersaline soda lakes, perfectly adapted to a dual-extreme environment of brutal alkaline pH and massive salt concentrations. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Haloarchaeobius litoreus*
+Our search revealed an entirely uncharacterized protein (`A0ABD6DPE4`) in *Haloarchaeobius litoreus*—an extremely halophilic archaeon isolated from a marine solar saltern, uniquely adapted to thriving in extreme salinity. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **PHA synthase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Natrarchaeobaculum sulfurireducens*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **PHA synthase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Haloarchaeobius litoreus*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,12 +33,12 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `M0G5K0` | `A0A346PQB3` |
-| **Organism** | *Haloferax prahovense (strain DSM 18310 / JCM 13924 / TL6)* | *Natrarchaeobaculum sulfurireducens* |
+| **UniProt ID** | `M0G5K0` | `A0ABD6DPE4` |
+| **Organism** | *Haloferax prahovense (strain DSM 18310 / JCM 13924 / TL6)* | *Haloarchaeobius litoreus* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.0715** |
+| **Cosine Distance** | - | **0.0718** |
 
-*Note: A distance of 0.0715 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.0718 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
@@ -49,8 +49,8 @@ Dive into the structures below! *Tip: Double-click either 3D viewer to lock thei
     <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-M0G5K0-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
   <div style="flex: 1;">
-    <h4>Discovery: A0A346PQB3 (Natrarchaeobaculum sulfurireducens)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A346PQB3-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+    <h4>Discovery: A0ABD6DPE4 (Haloarchaeobius litoreus)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0ABD6DPE4-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 
@@ -70,12 +70,5 @@ FROM closest c
 CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
-
-
-### Related Discoveries for this Bait
-We also found other extremophile orphans that structurally match this exact same `m0g5k0` bait!
-- [Discovery `a0a346pqb3` on 2026-10-02]({% post_url 2026-10-02-mining-pha-synthase-m0g5k0-a0a346pqb3-dark-proteome %})
-- [Discovery `a0a346pqb3` on 2026-10-03]({% post_url 2026-10-03-mining-pha-synthase-m0g5k0-a0a346pqb3-dark-proteome %})
-- [Discovery `a0a346pqb3` on 2026-09-30]({% post_url 2026-09-30-mining-pha-synthase-m0g5k0-a0a346pqb3-dark-proteome %})
 
 {% include pg_bio_promo.md %}

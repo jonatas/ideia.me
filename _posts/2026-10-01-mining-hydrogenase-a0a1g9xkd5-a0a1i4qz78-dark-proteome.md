@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Methanolobus profundi*
-Our search revealed an entirely uncharacterized protein (`A0A1I4QZ78`) in *Methanolobus profundi*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A1I4QZ78`) in *Methanolobus profundi*—a methanogenic archaeon isolated from deep-sea sediments, uniquely adapted to the high pressure and cold temperatures of the ocean floor. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

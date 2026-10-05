@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Methanosarcina mazei*
-Our search revealed an entirely uncharacterized protein (`A0A0F8N3L7`) in *Methanosarcina mazei*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A0F8N3L7`) in *Methanosarcina mazei*—a versatile methanogenic archaeon capable of using a wide variety of substrates to produce methane, found in diverse anaerobic environments including sewage digestors. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

@@ -22,7 +22,7 @@ To appreciate this discovery, we started with a known bait protein (A0A1H3FLM3)�
 
 ## The Interactive Anchor: See the Alchemist in Action
 
-Our search revealed an entirely uncharacterized protein (`A0A166C495`) in *Methanobrevibacter oralis*. Though labeled as a mysterious "orphan," its vector embeddings tell us a story of remarkable structural conservation.
+Our search revealed an entirely uncharacterized protein (`A0A166C495`) in *Methanobrevibacter oralis*—a methanogenic archaeon found in the human oral cavity, frequently associated with periodontal disease and dental plaque. Though labeled as a mysterious "orphan," its vector embeddings tell us a story of remarkable structural conservation.
 
 Double-click the 3D widget below to watch the structural alignment in action. You can lock the cameras together for a synchronized view—try clicking on any twisted beta-sheet or fragment on one protein to automatically highlight the corresponding structural homolog on the other side!
 

@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Metallosphaera hakonensis JCM 8857 = DSM 7519*
-Our search revealed an entirely uncharacterized protein (`A0A2U9ISL2`) in *Metallosphaera hakonensis JCM 8857 = DSM 7519*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A2U9ISL2`) in *Metallosphaera hakonensis JCM 8857 = DSM 7519*—a thermoacidophilic archaeon isolated from a hot spring in Hakone, Japan, known for its ability to oxidize metal sulfides in highly acidic, high-temperature conditions. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

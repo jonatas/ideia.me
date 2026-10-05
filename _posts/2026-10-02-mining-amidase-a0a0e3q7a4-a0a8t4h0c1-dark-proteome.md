@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Halolamina salifodinae*
-Our search revealed an entirely uncharacterized protein (`A0A8T4H0C1`) in *Halolamina salifodinae*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A8T4H0C1`) in *Halolamina salifodinae*—an extremely halophilic archaeon discovered in a subterranean salt mine, surviving in ancient, isolated halite deposits. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

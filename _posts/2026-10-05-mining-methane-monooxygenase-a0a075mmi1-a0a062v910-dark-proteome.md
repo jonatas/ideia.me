@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Methane monooxygenase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-10-01 23:03:32
+date: 2026-10-05 12:50:31
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -18,13 +18,13 @@ No specific function described.
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Methanoculleus frigidifontis*
-Our search revealed an entirely uncharacterized protein (`A0ABT8MB54`) in *Methanoculleus frigidifontis*—a psychrotolerant (cold-loving) methanogenic archaeon that thrives in near-freezing environments, demonstrating that complex methane metabolism can operate efficiently at very low temperatures. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Candidatus Methanoperedens nitratireducens*
+Our search revealed an entirely uncharacterized protein (`A0A062V910`) in *Candidatus Methanoperedens nitratireducens*—an anaerobic archaeon that couples the anaerobic oxidation of methane to the reduction of nitrate, playing a crucial role in the global carbon and nitrogen cycles. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **Methane monooxygenase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Methanoculleus frigidifontis*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **Methane monooxygenase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Candidatus Methanoperedens nitratireducens*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,12 +33,12 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `A0A075MMI1` | `A0ABT8MB54` |
-| **Organism** | *Candidatus Nitrososphaera evergladensis SR1* | *Methanoculleus frigidifontis* |
+| **UniProt ID** | `A0A075MMI1` | `A0A062V910` |
+| **Organism** | *Candidatus Nitrososphaera evergladensis SR1* | *Candidatus Methanoperedens nitratireducens* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.0688** |
+| **Cosine Distance** | - | **0.0796** |
 
-*Note: A distance of 0.0688 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.0796 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
@@ -49,8 +49,8 @@ Dive into the structures below! *Tip: Double-click either 3D viewer to lock thei
     <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A075MMI1-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
   <div style="flex: 1;">
-    <h4>Discovery: A0ABT8MB54 (Methanoculleus frigidifontis)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0ABT8MB54-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+    <h4>Discovery: A0A062V910 (Candidatus Methanoperedens nitratireducens)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A062V910-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 
@@ -70,11 +70,5 @@ FROM closest c
 CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
-
-
-### Related Discoveries for this Bait
-We also found other extremophile orphans that structurally match this exact same `a0a075mmi1` bait!
-- [Discovery `a0abt8mb54` on 2026-10-02]({% post_url 2026-10-02-mining-methane-monooxygenase-a0a075mmi1-a0abt8mb54-dark-proteome %})
-- [Discovery `a0abt8mb54` on 2026-10-03]({% post_url 2026-10-03-mining-methane-monooxygenase-a0a075mmi1-a0abt8mb54-dark-proteome %})
 
 {% include pg_bio_promo.md %}

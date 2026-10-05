@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Methanimicrococcus hongohii*
-Our search revealed an entirely uncharacterized protein (`A0AA96ZT96`) in *Methanimicrococcus hongohii*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0AA96ZT96`) in *Methanimicrococcus hongohii*—a methanogenic archaeon isolated from the gut of a termite, playing a key role in the complex digestive microbiome of the insect. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

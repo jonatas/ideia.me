@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Haloterrigena turkmenica (strain ATCC 51198 / DSM 5511 / JCM 9101 / NCIMB 13204 / VKM B-1734 / 4k)*
-Our search revealed an entirely uncharacterized protein (`D2RYY9`) in *Haloterrigena turkmenica (strain ATCC 51198 / DSM 5511 / JCM 9101 / NCIMB 13204 / VKM B-1734 / 4k)*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`D2RYY9`) in *Haloterrigena turkmenica (strain ATCC 51198 / DSM 5511 / JCM 9101 / NCIMB 13204 / VKM B-1734 / 4k)*—one of the fastest-growing extreme halophiles, originally isolated from saline soil in Turkmenistan. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

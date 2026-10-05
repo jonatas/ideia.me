@@ -19,7 +19,7 @@ Involved in muropeptide degradation. Catalyzes the hydrolysis of the gamma-D-glu
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Methanobacterium formicicum (strain DSM 3637 / PP1)*
-Our search revealed an entirely uncharacterized protein (`K2QFM5`) in *Methanobacterium formicicum (strain DSM 3637 / PP1)*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`K2QFM5`) in *Methanobacterium formicicum (strain DSM 3637 / PP1)*—a methanogenic archaeon that produces methane by reducing carbon dioxide with formate or hydrogen, commonly found in anaerobic environments. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

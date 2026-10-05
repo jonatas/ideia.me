@@ -19,7 +19,7 @@ Endonuclease that removes tRNA introns. Cleaves pre-tRNA at the 5'- and 3'-splic
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Fervidicoccus fontis (strain DSM 19380 / JCM 18336 / VKM B-2539 / Kam940)*
-Our search revealed an entirely uncharacterized protein (`I0A0Q2`) in *Fervidicoccus fontis (strain DSM 19380 / JCM 18336 / VKM B-2539 / Kam940)*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`I0A0Q2`) in *Fervidicoccus fontis (strain DSM 19380 / JCM 18336 / VKM B-2539 / Kam940)*—an anaerobic, hyperthermophilic archaeon discovered in a hot spring in Kamchatka, Russia, which flourishes at extremely high temperatures. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

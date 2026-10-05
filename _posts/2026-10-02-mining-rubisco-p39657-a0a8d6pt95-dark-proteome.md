@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Methanocaldococcus lauensis*
-Our search revealed an entirely uncharacterized protein (`A0A8D6PT95`) in *Methanocaldococcus lauensis*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A8D6PT95`) in *Methanocaldococcus lauensis*—a hyperthermophilic methanogen isolated from a deep-sea hydrothermal vent, producing methane at extreme depths and temperatures. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

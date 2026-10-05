@@ -19,7 +19,7 @@ E3 ubiquitin-protein ligase which ubiquitinates histone H3 at 'Lys-14' (By simil
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Halomarina halobia*
-Our search revealed an entirely uncharacterized protein (`A0ABD6A645`) in *Halomarina halobia*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0ABD6A645`) in *Halomarina halobia*—a halophilic archaeon isolated from seawater, thriving in the saline conditions of marine ecosystems. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

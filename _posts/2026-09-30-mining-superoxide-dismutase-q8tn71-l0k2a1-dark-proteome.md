@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Natronococcus occultus SP4*
-Our search revealed an entirely uncharacterized protein (`L0K2A1`) in *Natronococcus occultus SP4*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`L0K2A1`) in *Natronococcus occultus SP4*—a haloalkaliphilic archaeon isolated from a soda lake in Kenya, thriving at pH levels and salt concentrations lethal to most organisms. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

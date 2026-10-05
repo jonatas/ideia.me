@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Halorubrum alkaliphilum*
-Our search revealed an entirely uncharacterized protein (`A0A8T4GFJ7`) in *Halorubrum alkaliphilum*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A8T4GFJ7`) in *Halorubrum alkaliphilum*—a dual-extreme haloalkaliphilic archaeon isolated from a soda lake, thriving in environments that are both incredibly salty and highly alkaline. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

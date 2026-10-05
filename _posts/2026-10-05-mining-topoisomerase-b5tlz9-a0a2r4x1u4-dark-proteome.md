@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Topoisomerase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-10-01 00:06:34
+date: 2026-10-05 16:00:43
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -11,20 +11,20 @@ As the `pg_bio` autonomous night pipeline continues its exciting sweep of the da
 
 Our SQL engine scanned the embedding space and found a high-confidence structural match that bridges two completely different biological worlds. We found an uncharacterized orphan protein that exhibits an almost identical 3D fold to a known, well-studied bait!
 
-## The Bait: Unknown protein (A0AAX0Q6T1)
-To understand the magnitude of this discovery, we first must look at the known bait protein from *Methanocorpusculum parvum*. 
+## The Bait: DNA topoisomerase (ATP-hydrolyzing) (B5TLZ9)
+To understand the magnitude of this discovery, we first must look at the known bait protein from *Halococcus sp. HSt 4.1*. 
 **What does it do?** 
 No specific function described.
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Candidatus Nitrosocosmicus arcticus*
-Our search revealed an entirely uncharacterized protein (`A0A557STQ6`) in *Candidatus Nitrosocosmicus arcticus*—an ammonia-oxidizing archaeon adapted to the harsh, freezing soils of the Arctic, demonstrating incredible metabolic resilience to extreme cold. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Halococcoides cellulosivorans*
+Our search revealed an entirely uncharacterized protein (`A0A2R4X1U4`) in *Halococcoides cellulosivorans*—a haloarchaeon uniquely capable of degrading cellulose in high-salt environments, hinting at a powerful extreme enzymatic toolkit. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **Topoisomerase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Candidatus Nitrosocosmicus arcticus*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **Topoisomerase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Halococcoides cellulosivorans*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,24 +33,24 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `A0AAX0Q6T1` | `A0A557STQ6` |
-| **Organism** | *Methanocorpusculum parvum* | *Candidatus Nitrosocosmicus arcticus* |
+| **UniProt ID** | `B5TLZ9` | `A0A2R4X1U4` |
+| **Organism** | *Halococcus sp. HSt 4.1* | *Halococcoides cellulosivorans* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.0597** |
+| **Cosine Distance** | - | **0.0646** |
 
-*Note: A distance of 0.0597 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.0646 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
 <div style="display: flex; justify-content: space-between; gap: 20px;">
   <div style="flex: 1;">
-    <h4>Bait: A0AAX0Q6T1 (Methanocorpusculum parvum)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0AAX0Q6T1-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
+    <h4>Bait: B5TLZ9 (Halococcus sp. HSt 4.1)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-B5TLZ9-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
   <div style="flex: 1;">
-    <h4>Discovery: A0A557STQ6 (Candidatus Nitrosocosmicus arcticus)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A557STQ6-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+    <h4>Discovery: A0A2R4X1U4 (Halococcoides cellulosivorans)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A2R4X1U4-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 
@@ -60,7 +60,7 @@ This discovery was completely automated natively in PostgreSQL using our custom 
 ```sql
 WITH closest AS (
     SELECT uniprot_id, name, embedding,
-           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'A0AAX0Q6T1')) as dist
+           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'B5TLZ9')) as dist
     FROM proteins
     WHERE name ILIKE '%uncharacterized%'
     ORDER BY dist ASC LIMIT 1
