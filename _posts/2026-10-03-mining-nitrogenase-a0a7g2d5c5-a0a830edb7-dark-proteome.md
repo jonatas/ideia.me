@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Vulcanisaeta souniana JCM 11219*
-Our search revealed an entirely uncharacterized protein (`A0A830EDB7`) in *Vulcanisaeta souniana JCM 11219*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A830EDB7`) in *Vulcanisaeta souniana JCM 11219*—a hyperthermophilic (extreme heat-loving) archaeon isolated from a volcanic hot spring in Japan, thriving in highly acidic, near-boiling waters (up to 90°C/194°F). Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
@@ -70,5 +70,10 @@ FROM closest c
 CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
+
+
+### Related Discoveries for this Bait
+We also found other extremophile orphans that structurally match this exact same `a0a7g2d5c5` bait!
+- [Discovery `a0a830edb7` on 2026-10-01]({% post_url 2026-10-01-mining-nitrogenase-a0a7g2d5c5-a0a830edb7-dark-proteome %})
 
 {% include pg_bio_promo.md %}

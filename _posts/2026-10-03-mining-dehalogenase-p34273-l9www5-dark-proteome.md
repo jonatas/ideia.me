@@ -19,7 +19,7 @@ May contribute to coordination of muscle contraction as regulatory subunit of th
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Natronococcus jeotgali DSM 18795*
-Our search revealed an entirely uncharacterized protein (`L9WWW5`) in *Natronococcus jeotgali DSM 18795*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`L9WWW5`) in *Natronococcus jeotgali DSM 18795*—a remarkable haloalkaliphilic archaeon—meaning it requires both extremely high salt and high alkaline pH to survive—originally isolated from jeotgal, a traditional fermented seafood. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

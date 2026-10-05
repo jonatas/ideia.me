@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Natrarchaeobaculum sulfurireducens*
-Our search revealed an entirely uncharacterized protein (`A0A346PQB3`) in *Natrarchaeobaculum sulfurireducens*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A346PQB3`) in *Natrarchaeobaculum sulfurireducens*—an extremophile native to hypersaline soda lakes, perfectly adapted to a dual-extreme environment of brutal alkaline pH and massive salt concentrations. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
@@ -70,5 +70,12 @@ FROM closest c
 CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
+
+
+### Related Discoveries for this Bait
+We also found other extremophile orphans that structurally match this exact same `m0g5k0` bait!
+- [Discovery `a0a346pqb3` on 2026-10-02]({% post_url 2026-10-02-mining-pha-synthase-m0g5k0-a0a346pqb3-dark-proteome %})
+- [Discovery `a0a346pqb3` on 2026-10-01]({% post_url 2026-10-01-mining-pha-synthase-m0g5k0-a0a346pqb3-dark-proteome %})
+- [Discovery `a0a346pqb3` on 2026-09-30]({% post_url 2026-09-30-mining-pha-synthase-m0g5k0-a0a346pqb3-dark-proteome %})
 
 {% include pg_bio_promo.md %}

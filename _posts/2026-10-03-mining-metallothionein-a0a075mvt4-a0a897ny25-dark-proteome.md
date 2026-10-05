@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Halapricum desulfuricans*
-Our search revealed an entirely uncharacterized protein (`A0A897NY25`) in *Halapricum desulfuricans*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A897NY25`) in *Halapricum desulfuricans*—a fascinating halophilic archaeon capable of utilizing sulfur compounds in its metabolism while surviving in hyper-saline environments. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
@@ -70,5 +70,11 @@ FROM closest c
 CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
+
+
+### Related Discoveries for this Bait
+We also found other extremophile orphans that structurally match this exact same `a0a075mvt4` bait!
+- [Discovery `a0a897ny25` on 2026-10-01]({% post_url 2026-10-01-mining-metallothionein-a0a075mvt4-a0a897ny25-dark-proteome %})
+- [Discovery `a0a897ny25` on 2026-10-02]({% post_url 2026-10-02-mining-metallothionein-a0a075mvt4-a0a897ny25-dark-proteome %})
 
 {% include pg_bio_promo.md %}

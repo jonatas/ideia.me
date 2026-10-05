@@ -71,4 +71,9 @@ CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
 
+
+### Related Discoveries for this Bait
+We also found other extremophile orphans that structurally match this exact same `a0a7g2d5c5` bait!
+- [Discovery `a0a830edb7` on 2026-10-03]({% post_url 2026-10-03-mining-nitrogenase-a0a7g2d5c5-a0a830edb7-dark-proteome %})
+
 {% include pg_bio_promo.md %}

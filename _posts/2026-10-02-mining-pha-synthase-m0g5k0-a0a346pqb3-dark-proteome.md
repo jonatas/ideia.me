@@ -71,4 +71,11 @@ CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
 
+
+### Related Discoveries for this Bait
+We also found other extremophile orphans that structurally match this exact same `m0g5k0` bait!
+- [Discovery `a0a346pqb3` on 2026-10-03]({% post_url 2026-10-03-mining-pha-synthase-m0g5k0-a0a346pqb3-dark-proteome %})
+- [Discovery `a0a346pqb3` on 2026-10-01]({% post_url 2026-10-01-mining-pha-synthase-m0g5k0-a0a346pqb3-dark-proteome %})
+- [Discovery `a0a346pqb3` on 2026-09-30]({% post_url 2026-09-30-mining-pha-synthase-m0g5k0-a0a346pqb3-dark-proteome %})
+
 {% include pg_bio_promo.md %}

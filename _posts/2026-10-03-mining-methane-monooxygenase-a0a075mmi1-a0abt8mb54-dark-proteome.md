@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Methanoculleus frigidifontis*
-Our search revealed an entirely uncharacterized protein (`A0ABT8MB54`) in *Methanoculleus frigidifontis*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0ABT8MB54`) in *Methanoculleus frigidifontis*—a psychrotolerant (cold-loving) methanogenic archaeon that thrives in near-freezing environments, demonstrating that complex methane metabolism can operate efficiently at very low temperatures. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
@@ -70,5 +70,11 @@ FROM closest c
 CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
+
+
+### Related Discoveries for this Bait
+We also found other extremophile orphans that structurally match this exact same `a0a075mmi1` bait!
+- [Discovery `a0abt8mb54` on 2026-10-02]({% post_url 2026-10-02-mining-methane-monooxygenase-a0a075mmi1-a0abt8mb54-dark-proteome %})
+- [Discovery `a0abt8mb54` on 2026-10-01]({% post_url 2026-10-01-mining-methane-monooxygenase-a0a075mmi1-a0abt8mb54-dark-proteome %})
 
 {% include pg_bio_promo.md %}

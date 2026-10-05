@@ -71,4 +71,9 @@ CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ```
 
 
+
+### Related Discoveries for this Bait
+We also found other extremophile orphans that structurally match this exact same `p39657` bait!
+- [Discovery `a0a8d6pt95` on 2026-10-02]({% post_url 2026-10-02-mining-rubisco-p39657-a0a8d6pt95-dark-proteome %})
+
 {% include pg_bio_promo.md %}

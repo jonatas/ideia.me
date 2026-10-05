@@ -75,4 +75,9 @@ CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 ### Related Discoveries
 Curious about how extremophiles handle harsh environments? Read our related post: [Mining Dehalogenase in the Dark Proteome](/2026/09/30/mining-dehalogenase-dark-proteome.html).
 
+
+### Related Discoveries for this Bait
+We also found other extremophile orphans that structurally match this exact same `a0abu2d2g6` bait!
+- [Discovery `a0a650cyi0` on 2026-10-02]({% post_url 2026-10-02-mining-metallothionein-a0abu2d2g6-a0a650cyi0-dark-proteome %})
+
 {% include pg_bio_promo.md %}

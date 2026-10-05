@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Haloarcula taiwanensis*
-Our search revealed an entirely uncharacterized protein (`A0A2H4ZVC4`) in *Haloarcula taiwanensis*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A2H4ZVC4`) in *Haloarcula taiwanensis*—an extremely halophilic (salt-loving) archaeon isolated from a saltern in Taiwan, which requires massive concentrations of salt (often exceeding 20% NaCl) just to maintain its cellular integrity. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

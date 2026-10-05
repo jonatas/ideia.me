@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Halobacterium hubeiense*
-Our search revealed an entirely uncharacterized protein (`A0A0U5H928`) in *Halobacterium hubeiense*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A0U5H928`) in *Halobacterium hubeiense*—an extremely halophilic archaeon isolated directly from deep underground ancient salt mines in Hubei, China, perfectly adapted to survive in subterranean crystal salt deposits. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 

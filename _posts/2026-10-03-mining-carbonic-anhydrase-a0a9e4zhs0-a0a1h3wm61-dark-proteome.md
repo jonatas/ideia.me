@@ -19,7 +19,7 @@ No specific function described.
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
 ## The Discovery: A Hidden Orphan in *Haloplanus vescus*
-Our search revealed an entirely uncharacterized protein (`A0A1H3WM61`) in *Haloplanus vescus*. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+Our search revealed an entirely uncharacterized protein (`A0A1H3WM61`) in *Haloplanus vescus*—an extreme halophile belonging to the Archaea domain that typically makes its home in hypersaline lakes and solar salterns, enduring osmotic stress that would instantly kill most known life. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
