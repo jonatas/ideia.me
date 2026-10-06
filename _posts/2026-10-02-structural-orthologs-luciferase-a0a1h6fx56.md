@@ -115,4 +115,4 @@ By analyzing this newly found structural ortholog, several exciting applications
 
 Thanks to `pg_bio`, we have transformed a meaningless "Uncharacterized" label into a potent candidate for extreme bioengineering!
 
-{{% include pg_bio_promo.md %}}
+{% include pg_bio_promo.md %}

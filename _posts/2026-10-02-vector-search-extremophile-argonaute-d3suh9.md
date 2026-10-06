@@ -115,4 +115,4 @@ This gives us immediate, actionable biotechnology targets:
 
 By utilizing `pg_bio` vector search, we've bypassed years of screening to land exactly on the protein engineering starting line.
 
-{{% include pg_bio_promo.md %}}
+{% include pg_bio_promo.md %}
