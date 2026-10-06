@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Unearthing Hydrogenase: Exploring the Dark Proteome of Extreme Ecosystems!"
-date: 2026-10-01 23:49:49
+date: 2026-10-06 00:39:18
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, pgbio]
 ---
 
@@ -11,20 +11,20 @@ As the `pg_bio` autonomous night pipeline continues its exciting sweep of the da
 
 Our SQL engine scanned the embedding space and found a high-confidence structural match that bridges two completely different biological worlds. We found an uncharacterized orphan protein that exhibits an almost identical 3D fold to a known, well-studied bait!
 
-## The Bait: homoserine dehydrogenase (A0A1G9XKD5)
-To understand the magnitude of this discovery, we first must look at the known bait protein from *Haloarchaeobius iranensis*. 
+## The Bait: Unknown protein (A0ABD5TSL4)
+To understand the magnitude of this discovery, we first must look at the known bait protein from *Halopelagius fulvigenes*. 
 **What does it do?** 
 No specific function described.
 
 This specific enzymatic function is crucial to its ecosystem. But what happens when we search the vast, uncharted territories of the database for something structurally similar?
 
-## The Discovery: A Hidden Orphan in *Methanolobus profundi*
-Our search revealed an entirely uncharacterized protein (`A0A1I4QZ78`) in *Methanolobus profundi*—a methanogenic archaeon isolated from deep-sea sediments, uniquely adapted to the high pressure and cold temperatures of the ocean floor. Despite its label as "uncharacterized", its vector embeddings tell a different story! 
+## The Discovery: A Hidden Orphan in *Pyrococcus furiosus (strain ATCC 43587 / DSM 3638 / JCM 8422 / Vc1)*
+Our search revealed an entirely uncharacterized protein (`Q8U2P0`) in *Pyrococcus furiosus (strain ATCC 43587 / DSM 3638 / JCM 8422 / Vc1)*. Despite its label as "uncharacterized", its vector embeddings tell a different story!  
 
 The structural similarity implies a massive evolutionary divergence or a conserved function adapted to a completely new environment. Could this extremophile or unique organism be harboring a more robust, efficient version of the enzyme? 
 
 ### Practical Applications & Impact
-What does this mean for the real world? Proteins in the **Hydrogenase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Methanolobus profundi*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
+What does this mean for the real world? Proteins in the **Hydrogenase** family have massive potential in industrial biotechnology, bioremediation, medicine, and synthetic biology. By finding a novel version of this protein in *Pyrococcus furiosus (strain ATCC 43587 / DSM 3638 / JCM 8422 / Vc1)*, we might have just discovered a variant that operates at extreme temperatures, pH levels, or with higher catalytic efficiency! This is the power of mining the dark proteome.
 
 ---
 
@@ -33,24 +33,24 @@ Using our newly built UniProt SQL Foreign Data Wrapper (`bio_search_uniprot`), w
 
 | Category | Known Bait | Orphan Discovery |
 | :--- | :--- | :--- |
-| **UniProt ID** | `A0A1G9XKD5` | `A0A1I4QZ78` |
-| **Organism** | *Haloarchaeobius iranensis* | *Methanolobus profundi* |
+| **UniProt ID** | `A0ABD5TSL4` | `Q8U2P0` |
+| **Organism** | *Halopelagius fulvigenes* | *Pyrococcus furiosus (strain ATCC 43587 / DSM 3638 / JCM 8422 / Vc1)* |
 | **Status** | Characterized | Uncharacterized |
-| **Cosine Distance** | - | **0.0636** |
+| **Cosine Distance** | - | **0.0544** |
 
-*Note: A distance of 0.0636 means the 3D backbone is mathematically incredibly similar!*
+*Note: A distance of 0.0544 means the 3D backbone is mathematically incredibly similar!*
 
 ### Interactive 3Dmol.js Preview
 Dive into the structures below! *Tip: Double-click either 3D viewer to lock their cameras together for synchronized rotation, and click any fragment to automatically highlight the matching residue on the opposite protein!*
 
 <div style="display: flex; justify-content: space-between; gap: 20px;">
   <div style="flex: 1;">
-    <h4>Bait: A0A1G9XKD5 (Haloarchaeobius iranensis)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A1G9XKD5-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
+    <h4>Bait: A0ABD5TSL4 (Halopelagius fulvigenes)</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0ABD5TSL4-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=cyan"></div>
   </div>
   <div style="flex: 1;">
-    <h4>Discovery: A0A1I4QZ78 (Methanolobus profundi)</h4>
-    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A1I4QZ78-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
+    <h4>Discovery: Q8U2P0 (Pyrococcus furiosus (strain ATCC 43587 / DSM 3638 / JCM 8422 / Vc1))</h4>
+    <div style="height: 400px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-Q8U2P0-F1-model_v4.pdb" data-backgroundcolor="0xffffff" data-style="cartoon:color=magenta"></div>
   </div>
 </div>
 
@@ -60,7 +60,7 @@ This discovery was completely automated natively in PostgreSQL using our custom 
 ```sql
 WITH closest AS (
     SELECT uniprot_id, name, embedding,
-           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'A0A1G9XKD5')) as dist
+           (embedding <=> (SELECT embedding FROM proteins WHERE uniprot_id = 'A0ABD5TSL4')) as dist
     FROM proteins
     WHERE name ILIKE '%uncharacterized%'
     ORDER BY dist ASC LIMIT 1

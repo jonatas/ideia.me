@@ -70,6 +70,5 @@ A vector distance of **0.0571** (cosine distance) is astonishingly low, meaning 
 
 ## Related Discoveries
 
-Curious about other incredible plastics-related proteins found in the dark proteome? Check out our deep dive into [PHA Synthases]({% post_url 2026-09-30-mining-pha-synthase-m0g5k0-a0a346pqb3-dark-proteome %}).
 
 {% include pg_bio_promo.md %}

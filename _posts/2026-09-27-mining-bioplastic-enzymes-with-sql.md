@@ -109,6 +109,5 @@ With a vector distance of just `0.0680`, the AI structural model guarantees that
 
 ### Related Discoveries
 If you enjoyed exploring this hidden factory, you might want to dive into another recent dark proteome breakthrough. Read about how we found a similar polymer-synthesizing marvel in an extremophile from a hypersaline lake:
-**[Plastic-Weaving in the Salt Lakes: A Sulfur-Breathing Archaeon's Hidden Secret]({% post_url 2026-09-30-mining-pha-synthase-m0g5k0-a0a346pqb3-dark-proteome %})**
 
 {% include pg_bio_promo.md %}
