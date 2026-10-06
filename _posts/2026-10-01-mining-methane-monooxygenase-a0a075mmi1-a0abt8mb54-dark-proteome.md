@@ -74,7 +74,5 @@ CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 
 ### Related Discoveries for this Bait
 We also found other extremophile orphans that structurally match this exact same `a0a075mmi1` bait!
-- [Discovery `a0abt8mb54` on 2026-10-02]({% post_url 2026-10-02-mining-methane-monooxygenase-a0a075mmi1-a0abt8mb54-dark-proteome %})
-- [Discovery `a0abt8mb54` on 2026-10-03]({% post_url 2026-10-03-mining-methane-monooxygenase-a0a075mmi1-a0abt8mb54-dark-proteome %})
 
 {% include pg_bio_promo.md %}

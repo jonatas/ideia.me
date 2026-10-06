@@ -74,7 +74,5 @@ CROSS JOIN LATERAL bio_search_uniprot('accession:' || c.uniprot_id) u;
 
 ### Related Discoveries for this Bait
 We also found other extremophile orphans that structurally match this exact same `a0a075mvt4` bait!
-- [Discovery `a0a897ny25` on 2026-10-03]({% post_url 2026-10-03-mining-metallothionein-a0a075mvt4-a0a897ny25-dark-proteome %})
-- [Discovery `a0a897ny25` on 2026-10-02]({% post_url 2026-10-02-mining-metallothionein-a0a075mvt4-a0a897ny25-dark-proteome %})
 
 {% include pg_bio_promo.md %}

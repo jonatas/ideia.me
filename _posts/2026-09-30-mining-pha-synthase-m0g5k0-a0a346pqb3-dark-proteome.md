@@ -75,8 +75,5 @@ Curious to learn more about enzymes breaking down and building plastics? Check o
 
 ### Related Discoveries for this Bait
 We also found other extremophile orphans that structurally match this exact same `m0g5k0` bait!
-- [Discovery `a0a346pqb3` on 2026-10-02]({% post_url 2026-10-02-mining-pha-synthase-m0g5k0-a0a346pqb3-dark-proteome %})
-- [Discovery `a0a346pqb3` on 2026-10-03]({% post_url 2026-10-03-mining-pha-synthase-m0g5k0-a0a346pqb3-dark-proteome %})
-- [Discovery `a0a346pqb3` on 2026-10-01]({% post_url 2026-10-01-mining-pha-synthase-m0g5k0-a0a346pqb3-dark-proteome %})
 
 {% include pg_bio_promo.md %}
