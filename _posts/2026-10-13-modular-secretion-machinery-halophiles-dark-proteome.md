@@ -4,6 +4,7 @@ title: "De-Orphanizing Modular Secretion Machinery in the Dark Proteome: A 0.64 
 date: 2026-10-13 22:10:00 -0300
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, alphafold]
 description: "How pg_bio's hybrid vector + Smith-Waterman engine and 3D Kabsch superposition uncovered a 371-residue modular PrgI/TraC membrane nanomachine shared between Halonotius terrestris and haloalkaliphilic Natrialba swarupiae with 0.64 Å domain RMSD."
+math: true
 ---
 
 Over the past four days, our autonomous `pg_bio` Swarm daemon has expanded the dark proteome correlation graph to **60,606 edges** (**25,079 fully Explored**, **940 actively Exploring**, and **34,587 Pending** across 22 protein families). When mining a graph of this scale, raw cosine distance alone is only the first filter—the real breakthrough happens when we combine high-dimensional vector search with in-database Smith-Waterman alignment (`sequence_alignment_score`), tri-peptide structural hashing (`get_esm_embedding`), and 3D atomic superposition.

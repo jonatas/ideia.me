@@ -4,6 +4,7 @@ title: "The Math Behind the Yoga SVG"
 categories: ['programming', 'math', 'yoga', 'svg']
 tags: ['svg', 'geometry', 'trigonometry', 'css-animations', 'front-end']
 description: "How simple trigonometry and CSS variables combine to create anatomically connected, fully animatable SVG stick figures for yoga."
+math: true
 ---
 
 When I set out to build an [Interactive Yoga Poses App](/yoga.html), I had virtually no prior experience working with complex animations and only the most basic knowledge of SVG.

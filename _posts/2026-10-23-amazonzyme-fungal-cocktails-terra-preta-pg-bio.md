@@ -4,6 +4,7 @@ title: "Bioprospecting the Amazonian Dark Proteome in SQL: 0.39 Å 3D Enzyme Dis
 date: 2026-10-23 10:00:00 -0300
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, alphafold, proteomics]
 description: "How we built a standalone open-source pg_bio application for AmazonZyme (UFAM) that validates published kDa/pI/LC-MS/MS benchmarks in SQL and uncovers a 0.39 Å RMSD (0.944 TM-score) acid-shifted GH10 xylanase ortholog and a 1.83 Å Terra Preta de Índio carboxylesterase homolog."
+math: true
 ---
 
 Deep in the heart of the Brazilian Amazon, researchers at the **Federal University of Amazonas (UFAM)** and the biotech startup **[AmazonZyme](https://amazonzyme.com.br/)** (**Dra. Pamella Suely Santa Rosa Pimentel**, **Prof. Dr. Edson Junior do Carmo**, **Samanta Gabriela Souza da Silva**, and **Prof. Dr. Spartaco Astolfi-Filho**) are tackling one of industrial biotechnology's hardest challenges: turning Amazonian filamentous fungi (*Penicillium citrinum*, *Aspergillus* spp., *Trichoderma* spp.) and **Amazonian Dark Earth (*Terra Preta de Índio*, TPI)** metagenomic libraries into high-performance industrial enzyme cocktails for lignocellulosic second-generation (2G) ethanol, single-tank starch simultaneous saccharification and fermentation (SSF), and bioplastic depolymerization.
@@ -58,9 +59,9 @@ And when characterizing crude fungal secretomes (`UFAM1`/`UFAM2`) by **LC-MS/MS*
 
 ## 2. The 3D Globular Discovery Swarm Across AmazonZyme's 8 Organism Scenarios
 
-Why do naive protein vector searches often return fibrous coiled-coils (`0 / N` core hits in PyMOL) instead of soluble industrial enzymes? Because an extended 300-residue $\alpha$-helix has high local tri-peptide regularity (`Ala-Glu-Leu` repeats) but a massive radius of gyration ($R_g > 60\text{ \AA}$).
+Why do naive protein vector searches often return fibrous coiled-coils (`0 / N` core hits in PyMOL) instead of soluble industrial enzymes? Because an extended 300-residue $\alpha$-helix has high local tri-peptide regularity (`Ala-Glu-Leu` repeats) but a massive radius of gyration ($R_g > 60\text{ Å}$).
 
-In [`amazonzyme_swarm.py`](https://github.com/jonatas/amazonzyme_poc/blob/main/amazonzyme_swarm.py), we coupled `pg_bio`'s hybrid operator (`<~>`) with a strict **3D AlphaFold Globular Compactness Gate** grounded in Flory's polymer scaling law for folded globular domains ($R_g^{\text{ideal}} \approx 2.25 \cdot N^{0.38}\text{ \AA}$):
+In [`amazonzyme_swarm.py`](https://github.com/jonatas/amazonzyme_poc/blob/main/amazonzyme_swarm.py), we coupled `pg_bio`'s hybrid operator (`<~>`) with a strict **3D AlphaFold Globular Compactness Gate** grounded in Flory's polymer scaling law for folded globular domains ($R_g^{\text{ideal}} \approx 2.25 \cdot N^{0.38}\text{ Å}$):
 * **Compactness Ratio Gate:** $R_g / R_g^{\text{ideal}} \le 1.45$
 * **Principal-Axis Elongation Gate:** $\sqrt{\lambda_1 / \lambda_2} \le 3.0$
 * **Crystal-Grade Folding Confidence:** $\text{Mean pLDDT} \ge 81.5$
@@ -123,7 +124,7 @@ ORDER BY cosine_dist ASC;
 
 Look at what the math is telling us:
 1. Between *Penicillium citrinum* **`B1B533`** and *Aspergillus niger* **`C5J411`**, a cosine distance of **`0.2445`** and hybrid score of **`0.2041`** correspond to an identical **327-residue chain length (`Δ = 0 aa`)** whose $(\beta/\alpha)_8$ TIM-barrel catalytic core locks together at **`0.39 Å` RMSD (`0.944` TM-score)**—while shifting the enzyme's isoelectric point down by **1.52 pH units (`pI 7.96 → 6.44`)**!
-2. Even at the extreme twilight zone of *Terra Preta de Índio* metagenomics—where **`A0A8E4UR43` (`Ade1`, PDB `8V16`)** and soil *Acidobacteriota* **`A0A5B9EAP1` (*Terriglobus albidus*)** have a Smith-Waterman score of just **`48`**—combining `pg_bio` search with our 3D Globular Compactness Gate ($R_g = 18.77\text{ \AA}$, compactness `0.950`) recovers an $\alpha/\beta$-hydrolase whose **247-residue core superimposes at `1.83 Å` RMSD (`0.896` TM-score)**!
+2. Even at the extreme twilight zone of *Terra Preta de Índio* metagenomics—where **`A0A8E4UR43` (`Ade1`, PDB `8V16`)** and soil *Acidobacteriota* **`A0A5B9EAP1` (*Terriglobus albidus*)** have a Smith-Waterman score of just **`48`**—combining `pg_bio` search with our 3D Globular Compactness Gate ($R_g = 18.77\text{ Å}$, compactness `0.950`) recovers an $\alpha/\beta$-hydrolase whose **247-residue core superimposes at `1.83 Å` RMSD (`0.896` TM-score)**!
 
 ---
 

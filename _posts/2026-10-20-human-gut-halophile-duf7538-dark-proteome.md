@@ -4,6 +4,7 @@ title: "From the Human Gut Archaeome to Marine Salterns: A 0.21 Å Dark Proteome
 date: 2026-10-20 15:35:00 -0300
 categories: [bioinformatics, pgvector, machine-learning, structural-biology, alphafold]
 description: "How pg_bio's autonomous Swarm expanded to 139,601 edges and uncovered a 0.207 Å RMSD (0.982 TM-score) DUF7538 structural ortholog shared between human gut archaeon Haloferax massiliensis and marine gelatin-degrading Halorussus gelatinilyticus."
+math: true
 ---
 
 In just seven days since our last deep dive on October 13, the autonomous `pg_bio` Swarm daemon has more than doubled the dark proteome homology graph—expanding from **60,606 edges** to **139,601 edges** (**86,590 fully Explored**, **3,771 actively Exploring**, and **49,240 Pending** across 22 protein families). By pairing `pgvector` HNSW cosine search (`<=>`) with native Rust tri-peptide structural hashing (`get_esm_embedding`), SIMD Smith-Waterman alignment (`sequence_alignment_score`), and automated 3D Kabsch/PyMOL superposition, our pipeline has been systematically hunting for uncharacterized proteins that preserve near-crystalline 3D folds across wildly different ecological niches.

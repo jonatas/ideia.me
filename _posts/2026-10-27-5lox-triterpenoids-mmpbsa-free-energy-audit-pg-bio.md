@@ -5,6 +5,7 @@ date: 2026-10-26 22:00:00 -0400
 categories: [bioinformatics, postgresql, rust, molecular-dynamics, drug-discovery]
 tags: [pg_bio, 5-lox, alox5, triterpenoids, mmpbsa, mmgbsa, amazonia, ufam, structural-biology, sql]
 description: "How we turned 4.5 microseconds of UFAM/COARACI 5-lipoxygenase triterpenoid molecular dynamics (Zenodo 23565306) into an in-database thermodynamic ledger and CSR call-graph profiler using PostgreSQL 18 and Rust."
+math: true
 ---
 
 When an Amazonian medicinal tree bleeds resin—whether *Protium* Pitch (*breu-branco*) rich in **$\alpha$-amyrin** and **$\beta$-amyrin**, or *Boswellia* frankincense rich in **3-O-acetyl-11-keto-$\beta$-boswellic acid (AKBA)**—it deploys a class of rigid, pentacyclic $C_{30}$ scaffolds called **triterpenoids**. For decades, ethnopharmacologists and medicinal chemists have known that these natural products calm runaway inflammation by targeting **human 5-lipoxygenase (5-LOX / `ALOX5`, UniProt `P09917`, ChEMBL `CHEMBL215`)**, the rate-limiting enzyme in leukotriene biosynthesis.
@@ -25,7 +26,7 @@ If you come from distributed systems, database kernels, or performance engineeri
 
 | Biophysical Concept | Computer Science Analogy | What `pg_bio` Computes Inside PostgreSQL |
 | :--- | :--- | :--- |
-| **MM/GBSA vs. MM/PBSA Decomposition Closure** | **Double-Entry Financial Ledger Auditing** | Every microservice (each of the `676` protein residues + `1` ligand) reports its local resource bill ($\Delta G_{\text{int}}, \Delta G_{\text{vdW}}, \Delta G_{\text{elec}}, \Delta G_{\text{polar}}$). When you sum all 677 line items, does it reconcile with the global invoice (`DELTA TOTAL`)? `audit_mmpbsa_decomposition()` proves that gas-phase (`GGAS`) and polar solvation (`EGB`/`EPB`) close to $\le 0.0026\text{ kcal/mol}$, while exposing an **unallocated infrastructure tax**: in MM/PBSA, per-residue nonpolar terms report `0.00 kcal/mol`, whereas the global solver bills a **`+20.72` to `+26.05 kcal/mol` cavity + dispersion tax (`ENPOLAR + EDISPER`)** (`solvent_shift_penalty()`). |
+| **MM/GBSA vs. MM/PBSA Decomposition Closure** | **Double-Entry Financial Ledger Auditing** | Every microservice (each of the `676` protein residues + `1` ligand) reports its local resource bill ($$\Delta G_{\text{int}}, \Delta G_{\text{vdW}}, \Delta G_{\text{elec}}, \Delta G_{\text{polar}}$$). When you sum all 677 line items, does it reconcile with the global invoice (`DELTA TOTAL`)? `audit_mmpbsa_decomposition()` proves that gas-phase (`GGAS`) and polar solvation (`EGB`/`EPB`) close to $\le 0.0026\text{ kcal/mol}$, while exposing an **unallocated infrastructure tax**: in MM/PBSA, per-residue nonpolar terms report `0.00 kcal/mol`, whereas the global solver bills a **`+20.72` to `+26.05 kcal/mol` cavity + dispersion tax (`ENPOLAR + EDISPER`)** (`solvent_shift_penalty()`). |
 | **676-Residue Energetic Network (`SparseAttentionMap`)** | **FlameGraph / Call-Graph Profiling for Cryptic Bottlenecks** | Inspecting only a fixed 9-residue pocket (`Arg68–Thr137`) is like monitoring 9 hardcoded endpoints in Grafana while ignoring 667 other services in your cluster. `build_energy_hotspot_map()` compiles the 676-residue decomposition into a **Compressed Sparse Row (CSR) bipartite graph**, and `discover_cryptic_hotspots()` diffs the live energetic call graph against the hardcoded watchlist—automatically discovering **`Ile126`**, **`Val29`**, and **`Leu66`** as an unannotated hydrophobic cradle! |
 | **500 ns Time-Resolved Pocket Trajectories (`PreorganizationProfile`)** | **Prometheus Latency Histograms & SLA Uptime Windows** | Average binding energy is like average HTTP latency—it hides tail spikes and bimodal regime switches. By casting 500-frame per-residue time series into `PreorganizationProfile` and querying `ensemble_fraction_between()`, we measure the exact **SLA Uptime** of individual salt-bridge locks (such as `AKBA` holding `Glu134` below $-1.0\text{ kcal/mol}$ for **64.8% of the 500 ns trajectory**). |
 
@@ -57,17 +58,17 @@ ORDER BY pg_bio_tanimoto_to_alpha_amyrin DESC;
 
 | System ID | Ligand | Skeleton / Class | Formula | HBD / HBA | TPSA ($\text{\AA}^2$) | `pg_bio` Tanimoto (vs $\alpha$-Amyrin) | Official Cross-Validation (PubChem / ChEMBL `CHEMBL215`) |
 | :--- | :--- | :--- | :--- | :---: | :---: | :---: | :--- |
-| **`1-alfa-amirina`** | **$\alpha$-Amyrin** | Ursane alcohol | $\text{C}_{30}\text{H}_{50}\text{O}$ | 1 / 1 | `20.2` | `1.0000` | PubChem `CID 73170` · `CHEMBL455098` |
-| **`2-beta-amirina`** | **$\beta$-Amyrin** | Oleanane alcohol | $\text{C}_{30}\text{H}_{50}\text{O}$ | 1 / 1 | `20.2` | `0.8182` | Constitutional isomer of $\alpha$-Amyrin (E-ring gem-dimethyl shift) |
-| **`4-alfa-amirina-acetato`** | **$\alpha$-Amyrin acetate** | Ursane C3-ester | $\text{C}_{32}\text{H}_{52}\text{O}_2$ | 0 / 2 | `26.3` | `0.7857` | C3-acetylated ursane (`0` H-bond donors) |
-| **`5-beta-amirina-acetato`** | **$\beta$-Amyrin acetate** | Oleanane C3-ester | $\text{C}_{32}\text{H}_{52}\text{O}_2$ | 0 / 2 | `26.3` | `0.6444` | C3-acetylated oleanane (`0` H-bond donors) |
-| **`3-lupeol`** | **Lupeol** | Lupane alcohol | $\text{C}_{30}\text{H}_{50}\text{O}$ | 1 / 1 | `20.2` | `0.6279` | PubChem `CID 259846` · `CHEMBL289191` (5-membered E-ring + isopropenyl) |
-| **`8-101663382`** | **PubChem 101663382** | Oxidized ursane diol-one | $\text{C}_{30}\text{H}_{48}\text{O}_3$ | 2 / 3 | `57.5` | `0.5833` | PubChem `CID 101663382` |
-| **`6-af7-6ncf`** | **AKBA (`AF7`)** | Boswellic acid (ursane) | $\text{C}_{32}\text{H}_{48}\text{O}_5$ | 1 / 5 | `80.7` | `0.4561` | Crystallographic co-ligand in `PDB: 6NCF` · `CHEMBL267225` / `CHEMBL437964` (`ALOX5 IC50 = 15.0 uM`) |
-| **`7-10598443`** | **Epigermanidiol (`10598443`)** | Oleanane diol | $\text{C}_{30}\text{H}_{50}\text{O}_2$ | 2 / 2 | `40.5` | `0.4000` | PubChem `CID 10598443` |
-| **`9-101685610`** | **PubChem 101685610** | Hopane-like keto-alcohol | $\text{C}_{30}\text{H}_{48}\text{O}_2$ | 1 / 2 | `37.3` | `0.3830` | PubChem `CID 101685610` |
+| **`1-alfa-amirina`** | **$\alpha$-Amyrin** | Ursane alcohol | $$\text{C}_{30}\text{H}_{50}\text{O}$$ | 1 / 1 | `20.2` | `1.0000` | PubChem `CID 73170` · `CHEMBL455098` |
+| **`2-beta-amirina`** | **$\beta$-Amyrin** | Oleanane alcohol | $$\text{C}_{30}\text{H}_{50}\text{O}$$ | 1 / 1 | `20.2` | `0.8182` | Constitutional isomer of $\alpha$-Amyrin (E-ring gem-dimethyl shift) |
+| **`4-alfa-amirina-acetato`** | **$\alpha$-Amyrin acetate** | Ursane C3-ester | $$\text{C}_{32}\text{H}_{52}\text{O}_2$$ | 0 / 2 | `26.3` | `0.7857` | C3-acetylated ursane (`0` H-bond donors) |
+| **`5-beta-amirina-acetato`** | **$\beta$-Amyrin acetate** | Oleanane C3-ester | $$\text{C}_{32}\text{H}_{52}\text{O}_2$$ | 0 / 2 | `26.3` | `0.6444` | C3-acetylated oleanane (`0` H-bond donors) |
+| **`3-lupeol`** | **Lupeol** | Lupane alcohol | $$\text{C}_{30}\text{H}_{50}\text{O}$$ | 1 / 1 | `20.2` | `0.6279` | PubChem `CID 259846` · `CHEMBL289191` (5-membered E-ring + isopropenyl) |
+| **`8-101663382`** | **PubChem 101663382** | Oxidized ursane diol-one | $$\text{C}_{30}\text{H}_{48}\text{O}_3$$ | 2 / 3 | `57.5` | `0.5833` | PubChem `CID 101663382` |
+| **`6-af7-6ncf`** | **AKBA (`AF7`)** | Boswellic acid (ursane) | $$\text{C}_{32}\text{H}_{48}\text{O}_5$$ | 1 / 5 | `80.7` | `0.4561` | Crystallographic co-ligand in `PDB: 6NCF` · `CHEMBL267225` / `CHEMBL437964` (`ALOX5 IC50 = 15.0 uM`) |
+| **`7-10598443`** | **Epigermanidiol (`10598443`)** | Oleanane diol | $$\text{C}_{30}\text{H}_{50}\text{O}_2$$ | 2 / 2 | `40.5` | `0.4000` | PubChem `CID 10598443` |
+| **`9-101685610`** | **PubChem 101685610** | Hopane-like keto-alcohol | $$\text{C}_{30}\text{H}_{48}\text{O}_2$$ | 1 / 2 | `37.3` | `0.3830` | PubChem `CID 101685610` |
 
-Notice how **AKBA (`6-af7-6ncf`)** stands out chemically: with a polar surface area of **$80.7\text{ \AA}^2$** and **5 hydrogen-bond acceptors** (a C3-acetyl group, a C11-ketone, and a C24-carboxylic acid), it is a polar/ionic outlier among hydrophobic triterpene hydrocarbons ($\text{TPSA} = 20.2\text{--}26.3\text{ \AA}^2$). And in `PDB: 6NCF` (Gilbert et al., *Nature Chemical Biology* 2020), AKBA is the exact co-crystallized allosteric modulator bound at the C2-like PLAT / catalytic interface of human 5-LOX!
+Notice how **AKBA (`6-af7-6ncf`)** stands out chemically: with a polar surface area of **$80.7\text{ Å}^2$** and **5 hydrogen-bond acceptors** (a C3-acetyl group, a C11-ketone, and a C24-carboxylic acid), it is a polar/ionic outlier among hydrophobic triterpene hydrocarbons ($\text{TPSA} = 20.2\text{--}26.3\text{ Å}^2$). And in `PDB: 6NCF` (Gilbert et al., *Nature Chemical Biology* 2020), AKBA is the exact co-crystallized allosteric modulator bound at the C2-like PLAT / catalytic interface of human 5-LOX!
 
 ---
 

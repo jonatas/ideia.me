@@ -59,8 +59,8 @@
       {% include mermaid.html %}
     {% endif %}
 
-    <!-- MathJax formulas (only load if page has math: true) -->
-    {% if page.math or layout.math %}
+    <!-- MathJax formulas (load if page/layout has math: true or content contains LaTeX delimiters) -->
+    {% if page.math or layout.math or content contains '$' or content contains '\(' or content contains '\[' %}
       {% include math.html %}
     {% endif %}
     

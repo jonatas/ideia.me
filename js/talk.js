@@ -309,6 +309,11 @@
       })(idx);
       heading.appendChild(anchor);
     });
+
+    // Re-typeset MathJax formulas after DOM restructuring into slide chapters
+    if (window.MathJax && typeof window.MathJax.typesetPromise === 'function') {
+      window.MathJax.typesetPromise([content]).catch(function () {});
+    }
   }
 
   // Detect list items with "bold + other text" and wrap non-bold content

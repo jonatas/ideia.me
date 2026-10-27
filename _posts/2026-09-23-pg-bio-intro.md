@@ -4,6 +4,7 @@ title: "Introducing pg_bio: The PostgreSQL Bioinformatics Operating System"
 date: 2026-09-23 15:15:00 -0300
 categories: synthetic-biology postgresql rust ai vector-database
 mermaid: true
+math: true
 ---
 
 Biological data is fundamentally incompatible with traditional database architectures. 
