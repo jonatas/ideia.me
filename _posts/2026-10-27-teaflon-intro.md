@@ -17,6 +17,8 @@ Polytetrafluoroethylene (**PTFE / Teflon**) and per- and polyfluoroalkyl substan
 
 Over an [eight-part research series](/categories#synthetic-biology), we built [**TeaFlon**](https://github.com/jonatas/teaflon): an open-source, 12-layer synthetic biology compiler powered by [**`pg_bio`**](https://github.com/jonatas/pg_bio) inside PostgreSQL 18. In this interactive guide—designed so you can step through each slide with the **`▶ Present`** button on the left—we break down every part of the molecular machine in live 3D, explain how to read each atomic structure, show how to dilute combined PFAS + PTFE waste streams, and lay out our **Top 5 Wet-Lab Protocols**.
 
+<script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+
 <div style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 55%, #0f172a 100%); color: #f8fafc; padding: 28px; border-radius: 16px; margin: 28px 0; border: 1px solid #334155; box-shadow: 0 20px 40px -15px rgba(0,0,0,0.6);">
   <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px; border-bottom: 1px solid #334155; padding-bottom: 18px; margin-bottom: 20px;">
     <div>
@@ -27,6 +29,75 @@ Over an [eight-part research series](/categories#synthetic-biology), we built [*
     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
       <a href="https://github.com/jonatas/teaflon" target="_blank" style="background: #10b981; color: #052e16; font-weight: 700; padding: 9px 16px; border-radius: 8px; text-decoration: none; font-size: 0.88rem;">⚡ GitHub: jonatas/teaflon</a>
       <a href="https://github.com/jonatas/pg_bio/pull/10" target="_blank" style="background: #1e293b; color: #e2e8f0; border: 1px solid #475569; font-weight: 600; padding: 9px 16px; border-radius: 8px; text-decoration: none; font-size: 0.88rem;">🦀 pg_bio Layer 12 Engine</a>
+    </div>
+  </div>
+
+  <!-- Interactive 3D Hero Timeline Animation: PTFE Breaking Through All 5 Stages -->
+  <div style="background: rgba(9, 13, 22, 0.92); border: 1px solid #334155; border-radius: 14px; padding: 18px; margin-bottom: 22px;">
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px;">
+      <div>
+        <span style="color: #38bdf8; font-size: 0.74rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em;">🎬 Live 3D Reaction Trajectory • Scrub or Play Through All 5 Stages</span>
+        <div id="hero-stage-title" style="color: #fff; font-size: 1.15rem; font-weight: 800; margin-top: 2px;">Stage 1 / 5: Hydrophobin Grapnel Hook Captures Drifting PTFE Chain</div>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+        <button id="hero-play-btn" onclick="toggleHeroTimelinePlay()" style="background: #10b981; color: #052e16; border: none; padding: 7px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 800; cursor: pointer;">⏸ Pause</button>
+        <button id="hero-cam-btn" onclick="toggleHeroCameraMode()" style="background: #1e293b; color: #38bdf8; border: 1px solid #0284c7; padding: 7px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">🌐 Camera: Full Nanobot</button>
+        <button id="hero-speed-btn" onclick="cycleHeroSpeed()" style="background: #1e293b; color: #e2e8f0; border: 1px solid #475569; padding: 7px 10px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; cursor: pointer;">1.0× Speed</button>
+      </div>
+    </div>
+
+    <!-- 5 Clickable Stage Milestones -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 6px; margin-bottom: 10px;">
+      <button id="hero-ms-1" onclick="jumpHeroTimeline(0.08)" style="background: #0284c7; color: #fff; border: 1px solid #38bdf8; padding: 7px 9px; border-radius: 8px; font-size: 0.74rem; font-weight: 700; text-align: left; cursor: pointer;">1. 🪝 Hook Adsorbs PTFE (0–20%)</button>
+      <button id="hero-ms-2" onclick="jumpHeroTimeline(0.32)" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 7px 9px; border-radius: 8px; font-size: 0.74rem; font-weight: 700; text-align: left; cursor: pointer;">2. 🔓 Cryptic Lid Opens (20–44%)</button>
+      <button id="hero-ms-3" onclick="jumpHeroTimeline(0.54)" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 7px 9px; border-radius: 8px; font-size: 0.74rem; font-weight: 700; text-align: left; cursor: pointer;">3. ✂️ Snap C–F Bonds (44–66%)</button>
+      <button id="hero-ms-4" onclick="jumpHeroTimeline(0.75)" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 7px 9px; border-radius: 8px; font-size: 0.74rem; font-weight: 700; text-align: left; cursor: pointer;">4. 🧲 F⁻ + Ca²⁺ Gather (66–85%)</button>
+      <button id="hero-ms-5" onclick="jumpHeroTimeline(0.94)" style="background: #1e293b; color: #cbd5e1; border: 1px solid #334155; padding: 7px 9px; border-radius: 8px; font-size: 0.74rem; font-weight: 700; text-align: left; cursor: pointer;">5. 🦷 Enamel Crystal Lock (85–100%)</button>
+    </div>
+
+    <!-- Timeline Scrubber Bar -->
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px; background: #1e293b; padding: 8px 14px; border-radius: 10px; border: 1px solid #334155;">
+      <span style="font-size: 0.75rem; font-weight: 800; color: #38bdf8; min-width: 72px;">TIMELINE</span>
+      <input id="hero-timeline-slider" type="range" min="0" max="1000" value="0" oninput="onHeroSliderInput(this.value)" style="flex: 1; accent-color: #10b981; cursor: pointer; height: 6px;">
+      <span id="hero-timeline-pct" style="font-family: monospace; font-size: 0.82rem; font-weight: 800; color: #34d399; min-width: 48px; text-align: right;">0%</span>
+    </div>
+
+    <!-- Main 3D Canvas + Live Telemetry Side Panel -->
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 16px; align-items: stretch;">
+      <div id="hero-timeline-viewer" style="width: 100%; min-height: 520px; height: 100%; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #1e293b;"></div>
+
+      <div style="background: #1e293b; border-radius: 10px; padding: 16px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #334155;">
+        <div>
+          <div style="color: #34d399; font-size: 0.76rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">⚡ Live Reaction Telemetry</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+            <div style="background: #0f172a; padding: 8px 10px; border-radius: 8px; border-left: 3px solid #ef4444;">
+              <div style="color: #94a3b8; font-size: 0.68rem; text-transform: uppercase; font-weight: 700;">C–F Bonds Snapped</div>
+              <div id="hero-cf-counter" style="color: #f87171; font-size: 1.15rem; font-weight: 800; font-family: monospace;">0 / 21</div>
+            </div>
+            <div style="background: #0f172a; padding: 8px 10px; border-radius: 8px; border-left: 3px solid #22c55e;">
+              <div style="color: #94a3b8; font-size: 0.68rem; text-transform: uppercase; font-weight: 700;">Enamel Lattice Lock</div>
+              <div id="hero-enamel-counter" style="color: #4ade80; font-size: 1.15rem; font-weight: 800; font-family: monospace;">0%</div>
+            </div>
+          </div>
+
+          <div id="hero-stage-desc" style="color: #e2e8f0; font-size: 0.83rem; line-height: 1.55; margin-bottom: 12px; background: rgba(15, 23, 42, 0.65); padding: 10px 12px; border-radius: 8px; border: 1px solid #334155;">
+            Watch the green <strong>PTFE chain ($\text{C}_{10}\text{F}_{21}\text{OH}$)</strong> drift in from water and lock onto the sky-blue <strong>Hydrophobin Hook (<code>P79073</code>)</strong>.
+          </div>
+
+          <div style="color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; margin-bottom: 6px;">🎨 3D Color Key</div>
+          <ul style="margin: 0; padding-left: 16px; color: #cbd5e1; font-size: 0.78rem; line-height: 1.5;">
+            <li><strong style="color: #38bdf8;">Sky-Blue Ribbon (Bottom-Left):</strong> <code>P79073</code> Hydrophobin Hook + yellow disulfide cage</li>
+            <li><strong style="color: #f59e0b;">Gold Cap + Orange Sticks:</strong> Cryptic Lid (<code>Trp179</code>/<code>Tyr147</code>) that hinges open</li>
+            <li><strong style="color: #ef4444;">Red Barrel &amp; Sticks (Top):</strong> <code>Q1JU72</code> Dehalogenase + <code>Asp104</code> $\text{S}_\text{N}2$ chisel</li>
+            <li><strong style="color: #22c55e;">Bright-Green Spheres:</strong> Fluorine atoms on PTFE $\rightarrow$ cleaved $\text{F}^-$ ions</li>
+            <li><strong style="color: #c084fc;">Purple Tail (Bottom-Right):</strong> Human <code>AMELX</code> tag gathering <strong style="color: #38bdf8;">Sky-Blue $\text{Ca}^{2+}$</strong> &amp; <strong style="color: #f59e0b;">Amber $\text{PO}_4^{3-}$</strong> into tooth enamel</li>
+          </ul>
+        </div>
+
+        <div style="background: #0f172a; border-left: 3px solid #10b981; padding: 8px 10px; border-radius: 6px; font-size: 0.75rem; color: #94a3b8; margin-top: 10px;">
+          💡 <strong>Tip:</strong> Drag the <strong>Timeline Slider</strong> to scrub through the exact moment at <code>45%–65%</code> where <code>Asp104</code> snaps all 21 $\text{C–F}$ bonds!
+        </div>
+      </div>
     </div>
   </div>
 
@@ -132,8 +203,6 @@ Every natural biological material—wood, fat, sugar, protein—is built from ca
     </div>
   </div>
 </div>
-
-<script src="https://3Dmol.org/build/3Dmol-min.js"></script>
 
 ---
 
@@ -317,6 +386,7 @@ Use the **6-Stage Interactive Walkthrough** below (`◀ Prev` / `Next Step ▶`)
       <div id="step-main-title" style="margin: 4px 0 0 0; color: #fff; font-size: 1.25rem; font-weight: 800;">Step 1 of 6: The Grapnel Hook Grabs the Slippery Teflon Chain</div>
     </div>
     <div style="display: flex; gap: 8px; align-items: center;">
+      <button id="step-auto-btn" onclick="toggleAutoMachinerySteps()" style="background: #0284c7; color: #fff; border: none; padding: 7px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 800; cursor: pointer;">▶ Auto-Cycle Steps</button>
       <button onclick="prevMachineryStep()" style="background: #1e293b; color: #e2e8f0; border: 1px solid #475569; padding: 7px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer;">◀ Prev</button>
       <span id="step-counter-pill" style="background: #10b981; color: #052e16; padding: 5px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 800;">STEP 1 / 6</span>
       <button onclick="nextMachineryStep()" style="background: #10b981; color: #052e16; border: none; padding: 7px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 800; cursor: pointer;">Next Step ▶</button>
@@ -773,6 +843,28 @@ async function setMachineryStep(step) {
   }
 }
 
+let autoStepTimer = null;
+
+function toggleAutoMachinerySteps() {
+  const btn = document.getElementById('step-auto-btn');
+  if (autoStepTimer) {
+    clearInterval(autoStepTimer);
+    autoStepTimer = null;
+    if (btn) {
+      btn.textContent = '▶ Auto-Cycle Steps';
+      btn.style.background = '#0284c7';
+    }
+  } else {
+    nextMachineryStep();
+    autoStepTimer = setInterval(nextMachineryStep, 4200);
+    if (btn) {
+      btn.textContent = '⏸ Pause Auto-Cycle';
+      btn.style.background = '#f59e0b';
+      btn.style.color = '#090d16';
+    }
+  }
+}
+
 function nextMachineryStep() {
   const next = currentMachineryStep >= 6 ? 1 : currentMachineryStep + 1;
   setMachineryStep(next);
@@ -784,15 +876,460 @@ function prevMachineryStep() {
 }
 
 function resizeAll3DViewers() {
-  [partViewer1, partViewer2, partViewer3, partViewer4, viewerLeft, viewerRight].forEach(function(v) {
+  [heroTimelineViewer, partViewer1, partViewer2, partViewer3, partViewer4, viewerLeft, viewerRight].forEach(function(v) {
     if (v) { v.resize(); v.render(); }
   });
 }
 
 window.addEventListener('resize', resizeAll3DViewers);
 
+// ============================================================================
+// Hero 3D Timeline Animation Engine (PTFE -> Hook -> Lid -> SN2 Cleavage -> AMELX Enamel)
+// ============================================================================
+let heroTimelineViewer = null;
+let heroPtfeModel = null;
+let heroFapModel = null;
+let heroGateModel = null;
+let heroPtfeAtoms = [];
+let heroFapAtoms = [];
+let heroGateAtoms = [];
+let gateOrigCoords = [];
+let ptfeHookCoords = [];
+let ptfeScissorCoords = [];
+let ptfeOrigBonds = [];
+let ptfeOrigBondOrder = [];
+let ptfeParentCarbon = {};
+let fapCrystalCoords = [];
+let fapCloudOffsets = [];
+let fapOrigBonds = [];
+let fapOrigBondOrder = [];
+let heroTimelineT = 0.0;
+let heroPlaying = true;
+let heroSpeed = 1.0;
+let heroCameraFollow = false;
+let heroLastCameraStage = 0;
+let heroLastDescStage = 0;
+let heroLastFrameTime = 0;
+
+function clamp01(v) { return v < 0 ? 0 : (v > 1 ? 1 : v); }
+function smoothstep(a, b, x) {
+  const u = clamp01((x - a) / (b - a));
+  return u * u * (3.0 - 2.0 * u);
+}
+
+function quadBezier(p0, p1, p2, u) {
+  const om = 1.0 - u;
+  return {
+    x: om * om * p0.x + 2.0 * om * u * p1.x + u * u * p2.x,
+    y: om * om * p0.y + 2.0 * om * u * p1.y + u * u * p2.y,
+    z: om * om * p0.z + 2.0 * om * u * p1.z + u * u * p2.z
+  };
+}
+
+async function initHeroTimelineViewer() {
+  const el = document.getElementById('hero-timeline-viewer');
+  if (!el || typeof $3Dmol === 'undefined') return;
+  heroTimelineViewer = $3Dmol.createViewer(el, {backgroundColor: '#090d16'});
+
+  const [tri, ptfeHookText, ptfeScissorText, fapText] = await Promise.all([
+    fetchModelText('/assets/models/teaflon_trifusion_local.pdb'),
+    fetchModelText('/assets/models/ptfe_at_hook.sdf'),
+    fetchModelText('/assets/models/ptfe_in_scissor.sdf'),
+    fetchModelText('/assets/models/fluorapatite_at_amelx.pdb')
+  ]);
+
+  // Model 0: Static 418-aa TeaFlon TriFusion Protein
+  heroTimelineViewer.addModel(tri, 'pdb');
+  heroTimelineViewer.setStyle({model: 0, resi: '1-304'}, {cartoon: {color: '#475569', opacity: 0.52}});
+  heroTimelineViewer.setStyle({model: 0, resi: '140-185'}, {cartoon: {color: '#f59e0b', opacity: 0.92}});
+  heroTimelineViewer.setStyle({model: 0, resi: [128]}, {cartoon: {color: '#ef4444'}, stick: {radius: 0.32, colorscheme: 'redCarbon'}});
+  heroTimelineViewer.setStyle({model: 0, resi: [108, 150, 212]}, {cartoon: {color: '#06b6d4'}, stick: {radius: 0.28, colorscheme: 'cyanCarbon'}});
+  heroTimelineViewer.setStyle({model: 0, resi: '305-314'}, {cartoon: {color: '#94a3b8'}});
+  heroTimelineViewer.setStyle({model: 0, resi: '315-400'}, {cartoon: {color: '#38bdf8', opacity: 0.92}});
+  heroTimelineViewer.setStyle({model: 0, resi: '315-400', resn: 'CYS'}, {stick: {radius: 0.30, colorscheme: 'yellowCarbon'}});
+  heroTimelineViewer.setStyle({model: 0, resi: '401-405'}, {cartoon: {color: '#94a3b8'}});
+  heroTimelineViewer.setStyle({model: 0, resi: '406-418'}, {cartoon: {color: '#a855f7'}, stick: {radius: 0.28, colorscheme: 'magentaCarbon'}});
+
+  heroTimelineViewer.addLabel('1. P79073 Hook', {model: 0, resi: 360, atom: 'CA'}, {backgroundColor: '#0284c7', fontColor: '#fff', fontSize: 10});
+  heroTimelineViewer.addLabel('2. Cryptic Lid (Trp179)', {model: 0, resi: 179, atom: 'CA'}, {backgroundColor: '#b45309', fontColor: '#fff', fontSize: 10});
+  heroTimelineViewer.addLabel('3. Asp104 SN2 Chisel', {model: 0, resi: 104, atom: 'OD2'}, {backgroundColor: '#991b1b', fontColor: '#fff', fontSize: 10});
+  heroTimelineViewer.addLabel('4. AMELX Enamel Magnet', {model: 0, resi: 416, atom: 'CA'}, {backgroundColor: '#6b21a8', fontColor: '#fff', fontSize: 10});
+
+  // Model 1: Dynamic 33-atom PTFE Molecule
+  heroPtfeModel = heroTimelineViewer.addModel(ptfeHookText, 'sdf');
+  // Parse scissor coordinates from temporary SDF parser
+  const tempViewer = {
+    lines: ptfeScissorText.split(/\r?\n/),
+    coords: []
+  };
+  const natoms = parseInt(tempViewer.lines[3].substring(0, 3).trim(), 10);
+  for (let i = 0; i < natoms; i++) {
+    const l = tempViewer.lines[4 + i];
+    ptfeScissorCoords.push({
+      x: parseFloat(l.substring(0, 10)),
+      y: parseFloat(l.substring(10, 20)),
+      z: parseFloat(l.substring(20, 30))
+    });
+  }
+
+  heroPtfeAtoms = heroPtfeModel.selectedAtoms({});
+  for (let i = 0; i < heroPtfeAtoms.length; i++) {
+    const a = heroPtfeAtoms[i];
+    ptfeHookCoords.push({x: a.x, y: a.y, z: a.z});
+    ptfeOrigBonds.push(a.bonds ? a.bonds.slice() : []);
+    ptfeOrigBondOrder.push(a.bondOrder ? a.bondOrder.slice() : []);
+    if (a.elem === 'F' && a.bonds && a.bonds.length > 0) {
+      ptfeParentCarbon[i] = a.bonds[0];
+    }
+  }
+
+  // Model 2: Dynamic 20-atom Fluorapatite Crystal (4 F, 10 Ca, 6 P)
+  heroFapModel = heroTimelineViewer.addModel(fapText, 'pdb');
+  heroFapAtoms = heroFapModel.selectedAtoms({});
+  for (let j = 0; j < heroFapAtoms.length; j++) {
+    const a = heroFapAtoms[j];
+    fapCrystalCoords.push({x: a.x, y: a.y, z: a.z});
+    fapOrigBonds.push(a.bonds ? a.bonds.slice() : []);
+    fapOrigBondOrder.push(a.bondOrder ? a.bondOrder.slice() : []);
+    const angle = (j * 2.39996) + 0.5;
+    const rad = 11.0 + (j % 4) * 3.2;
+    fapCloudOffsets.push({
+      dx: Math.cos(angle) * rad,
+      dy: Math.sin(angle) * rad,
+      dz: ((j % 5) - 2.0) * 3.5
+    });
+  }
+
+  // Model 3: Dynamic Cryptic Lid Gate (Tyr147, Trp179) + SN2 Chisel (Asp104, His271)
+  const gateLines = tri.split(/\r?\n/).filter(function(line) {
+    if (!line.startsWith('ATOM')) return false;
+    const resi = parseInt(line.substring(22, 26).trim(), 10);
+    return resi === 104 || resi === 147 || resi === 179 || resi === 271;
+  }).join('\n') + '\nEND\n';
+  heroGateModel = heroTimelineViewer.addModel(gateLines, 'pdb');
+  heroGateAtoms = heroGateModel.selectedAtoms({});
+  for (let g = 0; g < heroGateAtoms.length; g++) {
+    const ga = heroGateAtoms[g];
+    gateOrigCoords.push({x: ga.x, y: ga.y, z: ga.z, resi: ga.resi, atom: ga.atom});
+  }
+
+  heroTimelineViewer.resize();
+  updateHeroTimelineFrame(0.0);
+  heroTimelineViewer.zoomTo();
+  heroTimelineViewer.zoom(0.88);
+  heroTimelineViewer.render();
+
+  heroLastFrameTime = performance.now();
+  requestAnimationFrame(tickHeroTimeline);
+}
+
+function updateHeroTimelineFrame(t) {
+  if (!heroTimelineViewer || heroPtfeAtoms.length === 0) return;
+
+  // Determine which F atoms (indices 11..31) are cleaved at time t
+  let cleavedCount = 0;
+  const fCleaved = {};
+  for (let k = 0; k < 21; k++) {
+    const atomIdx = 11 + k;
+    const tCleave = 0.44 + (k / 20.0) * 0.19; // staggered cleavage across t = 0.44 .. 0.63
+    if (t >= tCleave) {
+      fCleaved[atomIdx] = tCleave;
+      cleavedCount++;
+    }
+  }
+
+  // Restore or sever C-F covalent bonds dynamically based on fCleaved
+  for (let i = 0; i < heroPtfeAtoms.length; i++) {
+    const a = heroPtfeAtoms[i];
+    const origB = ptfeOrigBonds[i];
+    const origBO = ptfeOrigBondOrder[i];
+    if (a.elem === 'F') {
+      if (fCleaved[i] !== undefined) {
+        a.bonds = [];
+        a.bondOrder = [];
+      } else {
+        a.bonds = origB.slice();
+        a.bondOrder = origBO.slice();
+      }
+    } else {
+      // Carbon / Oxygen spine: keep C-C and C-O bonds, remove bonds to cleaved F atoms
+      const newB = [];
+      const newBO = [];
+      for (let bIdx = 0; bIdx < origB.length; bIdx++) {
+        const nbr = origB[bIdx];
+        if (fCleaved[nbr] === undefined) {
+          newB.push(nbr);
+          newBO.push(origBO[bIdx] || 1);
+        }
+      }
+      a.bonds = newB;
+      a.bondOrder = newBO;
+    }
+  }
+
+  // Update 3D positions of all 33 PTFE atoms
+  const uHook = smoothstep(0.00, 0.18, t);
+  const uSlide = smoothstep(0.20, 0.43, t);
+  const uCarbonExit = smoothstep(0.58, 0.86, t);
+
+  for (let i = 0; i < heroPtfeAtoms.length; i++) {
+    const a = heroPtfeAtoms[i];
+    const hk = ptfeHookCoords[i];
+    const sc = ptfeScissorCoords[i];
+
+    // Base position before cleavage (Stage 1 -> Stage 2 -> Stage 3 active site)
+    let pos;
+    if (t < 0.20) {
+      const startBulk = {x: hk.x - 18.0, y: hk.y - 14.0, z: hk.z - 12.0};
+      pos = {
+        x: startBulk.x + (hk.x - startBulk.x) * uHook,
+        y: startBulk.y + (hk.y - startBulk.y) * uHook,
+        z: startBulk.z + (hk.z - startBulk.z) * uHook
+      };
+    } else if (t < 0.44) {
+      const lidWaypoint = {
+        x: (hk.x + sc.x) * 0.5 - 4.0,
+        y: (hk.y + sc.y) * 0.5 + 3.0,
+        z: (hk.z + sc.z) * 0.5 + 4.0
+      };
+      pos = quadBezier(hk, lidWaypoint, sc, uSlide);
+    } else {
+      pos = {x: sc.x, y: sc.y, z: sc.z};
+    }
+
+    if (a.elem === 'F' && fCleaved[i] !== undefined) {
+      // Cleaved F- ion flies from Q1JU72 active site down exit tunnel to AMELX Fluorapatite crystal
+      const k = i - 11;
+      const tCleave = fCleaved[i];
+      const uFly = smoothstep(tCleave, Math.min(0.88, tCleave + 0.25), t);
+      const fapTarget = fapCrystalCoords[k % fapCrystalCoords.length];
+      // Tightly cluster cleaved F- ions inside the hexagonal unit cell core
+      const targetPos = {
+        x: fapTarget.x * 0.55 + 8.8 * 0.45,
+        y: fapTarget.y * 0.55 + 0.2 * 0.45,
+        z: fapTarget.z * 0.55 + (-41.5) * 0.45
+      };
+      const tunnelMid = {x: 5.5 + (k % 3) * 1.2, y: -2.0 + (k % 4) * 1.0, z: -22.5};
+      pos = quadBezier(sc, tunnelMid, targetPos, uFly);
+    } else if (a.elem !== 'F' && t > 0.58) {
+      // Defluorinated harmless carbon chain drifts out the top of the enzyme
+      pos = {
+        x: sc.x + 15.0 * uCarbonExit,
+        y: sc.y + 16.0 * uCarbonExit,
+        z: sc.z + 9.0 * uCarbonExit
+      };
+    }
+
+    a.x = pos.x;
+    a.y = pos.y;
+    a.z = pos.z;
+  }
+
+  // Update 3D positions & crystal bonds of the 20 Fluorapatite atoms (Ca2+, PO4 3-, F-)
+  const uGather = smoothstep(0.56, 0.88, t);
+  const lockBonds = t >= 0.86;
+  for (let j = 0; j < heroFapAtoms.length; j++) {
+    const fa = heroFapAtoms[j];
+    const targ = fapCrystalCoords[j];
+    const off = fapCloudOffsets[j];
+    const wobble = Math.sin(t * 12.0 + j) * 1.2 * (1.0 - uGather);
+    fa.x = targ.x + (off.dx + wobble) * (1.0 - uGather);
+    fa.y = targ.y + (off.dy - wobble) * (1.0 - uGather);
+    fa.z = targ.z + off.dz * (1.0 - uGather);
+    if (lockBonds) {
+      fa.bonds = fapOrigBonds[j].slice();
+      fa.bondOrder = fapOrigBondOrder[j].slice();
+    } else {
+      fa.bonds = [];
+      fa.bondOrder = [];
+    }
+  }
+
+  // Animate Cryptic Lid Gate (Trp179, Tyr147) opening in Stage 2 and Asp104/His271 SN2 strike in Stage 3
+  const lidOpen = (t >= 0.16 && t <= 0.48) ? Math.sin(((t - 0.16) / 0.32) * Math.PI) : 0.0;
+  const chiselStrike = (t >= 0.43 && t <= 0.65) ? Math.abs(Math.sin((t - 0.43) * 95.0)) : 0.0;
+  for (let g = 0; g < heroGateAtoms.length; g++) {
+    const ga = heroGateAtoms[g];
+    const gc = gateOrigCoords[g];
+    // Keep backbone atoms anchored to ribbon; swing sidechain atoms
+    const isBackbone = (gc.atom === 'N' || gc.atom === 'CA' || gc.atom === 'C' || gc.atom === 'O');
+    if ((gc.resi === 147 || gc.resi === 179) && !isBackbone) {
+      const sign = gc.resi === 179 ? -1.0 : 1.0;
+      ga.x = gc.x + sign * 3.6 * lidOpen;
+      ga.y = gc.y - 3.2 * lidOpen;
+      ga.z = gc.z - 2.4 * lidOpen;
+    } else if ((gc.resi === 104 || gc.resi === 271) && !isBackbone) {
+      ga.x = gc.x - 0.9 * chiselStrike;
+      ga.y = gc.y + 0.7 * chiselStrike;
+      ga.z = gc.z - 1.3 * chiselStrike;
+    } else {
+      ga.x = gc.x;
+      ga.y = gc.y;
+      ga.z = gc.z;
+    }
+  }
+
+  // Restyle only Model 1 (33 atoms), Model 2 (20 atoms), and Model 3 (41 gate/chisel atoms)
+  heroTimelineViewer.setStyle({model: 1}, {
+    stick: {radius: 0.26, colorscheme: 'greenCarbon'},
+    sphere: {scale: 0.34, colorscheme: 'greenCarbon'}
+  });
+  if (cleavedCount > 0) {
+    const cleavedSerials = Object.keys(fCleaved).map(function(idx) { return heroPtfeAtoms[parseInt(idx, 10)].serial; });
+    heroTimelineViewer.setStyle({model: 1, serial: cleavedSerials}, {
+      sphere: {scale: 0.54, color: '#22c55e'}
+    });
+  }
+  styleFluorapatiteModel(heroTimelineViewer, 2, 0.45 + 0.55 * uGather);
+  heroTimelineViewer.setStyle({model: 3, resi: [147, 179]}, {
+    stick: {radius: 0.32 + 0.08 * lidOpen, colorscheme: 'orangeCarbon'}
+  });
+  heroTimelineViewer.setStyle({model: 3, resi: [104, 271]}, {
+    stick: {radius: 0.34 + 0.10 * chiselStrike, colorscheme: 'redCarbon'},
+    sphere: {scale: 0.22 * chiselStrike, color: '#ef4444'}
+  });
+  if (heroPtfeModel) heroPtfeModel.molObj = null;
+  if (heroFapModel) heroFapModel.molObj = null;
+  if (heroGateModel) heroGateModel.molObj = null;
+
+  // Update UI Telemetry & Stage Milestones
+  const pct = Math.round(t * 100);
+  const sliderEl = document.getElementById('hero-timeline-slider');
+  const pctEl = document.getElementById('hero-timeline-pct');
+  const cfEl = document.getElementById('hero-cf-counter');
+  const enamelEl = document.getElementById('hero-enamel-counter');
+  const stageTitleEl = document.getElementById('hero-stage-title');
+  const stageDescEl = document.getElementById('hero-stage-desc');
+
+  if (sliderEl) sliderEl.value = Math.round(t * 1000);
+  if (pctEl) pctEl.textContent = pct + '%';
+  if (cfEl) cfEl.textContent = cleavedCount + ' / 21';
+  const enamelPct = Math.round(smoothstep(0.68, 0.95, t) * 100);
+  if (enamelEl) enamelEl.textContent = enamelPct + '%';
+
+  let activeStage = 1;
+  if (t < 0.20) activeStage = 1;
+  else if (t < 0.44) activeStage = 2;
+  else if (t < 0.66) activeStage = 3;
+  else if (t < 0.85) activeStage = 4;
+  else activeStage = 5;
+
+  if (activeStage !== heroLastDescStage) {
+    heroLastDescStage = activeStage;
+    if (activeStage === 1) {
+      if (stageTitleEl) stageTitleEl.textContent = 'Stage 1 / 5: Hydrophobin Grapnel Hook Captures Drifting PTFE Chain';
+      if (stageDescEl) stageDescEl.innerHTML = 'The green-armored <strong>PTFE molecule (C<sub>10</sub>F<sub>21</sub>OH)</strong> drifts in from water and locks onto the sky-blue <strong><code>P79073</code> Hydrophobin Hook</strong> (<code>GRAVY +0.399</code>, reinforced by 4 yellow disulfide bridges).';
+    } else if (activeStage === 2) {
+      if (stageTitleEl) stageTitleEl.textContent = 'Stage 2 / 5: Interfacial Sliding & Gold Cryptic Lid Unlocking';
+      if (stageDescEl) stageDescEl.innerHTML = 'Pinned against the hydrophobic bridge, the PTFE chain slides up into the <strong>Gold Cryptic Lid (<code>Trp179</code> &amp; <code>Tyr147</code>)</strong>, which unlocks (<code>ΔG = −26.86 kcal/mol</code>) to feed the chain into the cutting chamber.';
+    } else if (activeStage === 3) {
+      if (stageTitleEl) stageTitleEl.textContent = 'Stage 3 / 5: Asp104 SN2 Bolt-Cutter Snaps All 21 C–F Bonds!';
+      if (stageDescEl) stageDescEl.innerHTML = 'Watch closely! Inside the red catalytic core, <strong><code>Asp104:OD2</code></strong> and the cyan <strong>Halide Hole (<code>Trp150/Tyr212/Arg108</code>)</strong> snap the covalent C–F sticks one by one—peeling bright-green <strong>F<sup>−</sup> ions</strong> off the carbon spine!';
+    } else if (activeStage === 4) {
+      if (stageTitleEl) stageTitleEl.textContent = 'Stage 4 / 5: Cleaved F⁻ Streams to the Human Amelogenin Magnet';
+      if (stageDescEl) stageDescEl.innerHTML = 'While the harmless defluorinated carbon chain exits upward, the severed green <strong>F<sup>−</sup> ions</strong> stream down to the purple <strong><code>AMELX</code> tail</strong> as sky-blue <strong>Ca<sup>2+</sup></strong> and amber <strong>PO<sub>4</sub><sup>3−</sup></strong> ions converge from water.';
+    } else {
+      if (stageTitleEl) stageTitleEl.textContent = 'Stage 5 / 5: Hexagonal Fluorapatite Tooth-Enamel Crystal Lock!';
+      if (stageDescEl) stageDescEl.innerHTML = 'All 10 sky-blue <strong>Ca<sup>2+</sup></strong>, 6 amber <strong>PO<sub>4</sub><sup>3−</sup></strong>, and cleaved green <strong>F<sup>−</sup></strong> ions snap into the hexagonal <em>P</em>6<sub>3</sub>/<em>m</em> <strong>Fluorapatite (Ca<sub>5</sub>(PO<sub>4</sub>)<sub>3</sub>F)</strong> crystal lattice (<code>K<sub>sp</sub> ≈ 10<sup>−60</sup></code>)!';
+    }
+  }
+
+  for (let m = 1; m <= 5; m++) {
+    const msBtn = document.getElementById('hero-ms-' + m);
+    if (!msBtn) continue;
+    if (m === activeStage) {
+      msBtn.style.background = '#0284c7';
+      msBtn.style.color = '#fff';
+      msBtn.style.border = '1px solid #38bdf8';
+    } else {
+      msBtn.style.background = '#1e293b';
+      msBtn.style.color = '#cbd5e1';
+      msBtn.style.border = '1px solid #334155';
+    }
+  }
+
+  if (heroCameraFollow && activeStage !== heroLastCameraStage) {
+    heroLastCameraStage = activeStage;
+    if (activeStage === 1) {
+      heroTimelineViewer.zoomTo({model: 0, resi: '315-400'}, 500);
+    } else if (activeStage === 2) {
+      heroTimelineViewer.zoomTo({model: 0, resi: '140-185'}, 500);
+    } else if (activeStage === 3) {
+      heroTimelineViewer.zoomTo({model: 0, resi: [104, 108, 128, 150, 212, 271]}, 500);
+    } else {
+      heroTimelineViewer.zoomTo({model: 2}, 500);
+    }
+  }
+
+  heroTimelineViewer.render();
+}
+
+function tickHeroTimeline(now) {
+  const dt = Math.min(0.1, (now - heroLastFrameTime) / 1000.0);
+  heroLastFrameTime = now;
+  if (heroPlaying) {
+    heroTimelineT += dt * 0.065 * heroSpeed; // ~15.4 seconds per full 5-stage reaction cycle at 1x
+    if (heroTimelineT > 1.0) heroTimelineT = 0.0;
+    updateHeroTimelineFrame(heroTimelineT);
+  }
+  requestAnimationFrame(tickHeroTimeline);
+}
+
+function toggleHeroTimelinePlay() {
+  heroPlaying = !heroPlaying;
+  const btn = document.getElementById('hero-play-btn');
+  if (btn) {
+    btn.textContent = heroPlaying ? '⏸ Pause' : '▶ Play';
+    btn.style.background = heroPlaying ? '#10b981' : '#f59e0b';
+  }
+}
+
+function onHeroSliderInput(val) {
+  heroPlaying = false;
+  const btn = document.getElementById('hero-play-btn');
+  if (btn) {
+    btn.textContent = '▶ Play';
+    btn.style.background = '#f59e0b';
+  }
+  heroTimelineT = clamp01(parseFloat(val) / 1000.0);
+  updateHeroTimelineFrame(heroTimelineT);
+}
+
+function jumpHeroTimeline(targetT) {
+  heroTimelineT = clamp01(targetT);
+  heroLastCameraStage = 0;
+  updateHeroTimelineFrame(heroTimelineT);
+}
+
+function toggleHeroCameraMode() {
+  heroCameraFollow = !heroCameraFollow;
+  heroLastCameraStage = 0;
+  const btn = document.getElementById('hero-cam-btn');
+  if (btn) {
+    btn.textContent = heroCameraFollow ? '🎥 Camera: Follow PTFE' : '🌐 Camera: Full Nanobot';
+    btn.style.background = heroCameraFollow ? '#0284c7' : '#1e293b';
+    btn.style.color = '#fff';
+  }
+  if (!heroCameraFollow && heroTimelineViewer) {
+    heroTimelineViewer.zoomTo();
+    heroTimelineViewer.zoom(0.88);
+    heroTimelineViewer.render();
+  } else {
+    updateHeroTimelineFrame(heroTimelineT);
+  }
+}
+
+function cycleHeroSpeed() {
+  if (heroSpeed === 1.0) heroSpeed = 2.0;
+  else if (heroSpeed === 2.0) heroSpeed = 0.5;
+  else heroSpeed = 1.0;
+  const btn = document.getElementById('hero-speed-btn');
+  if (btn) btn.textContent = heroSpeed.toFixed(1) + '× Speed';
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   if (typeof $3Dmol === 'undefined') return;
+  initHeroTimelineViewer();
   const e1 = document.getElementById('part-viewer-1');
   const e2 = document.getElementById('part-viewer-2');
   const e3 = document.getElementById('part-viewer-3');
