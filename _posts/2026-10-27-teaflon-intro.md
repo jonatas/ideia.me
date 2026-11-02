@@ -154,8 +154,8 @@ To solve **Trap #1 (The Greased Raincoat)**, we looked to filamentous wood-rotti
     </div>
   </div>
 
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 18px; align-items: stretch;">
-    <div id="part-viewer-1" style="width: 100%; height: 400px; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #1e293b;"></div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; align-items: stretch;">
+    <div id="part-viewer-1" style="width: 100%; min-height: 580px; height: 100%; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #1e293b;"></div>
 
     <div style="background: #1e293b; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
       <div>
@@ -195,14 +195,14 @@ We use **Fluoroacetate Dehalogenase (`Q1JU72`, 304 amino acids)** from *Burkhold
     </div>
   </div>
 
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 18px; align-items: stretch;">
-    <div id="part-viewer-2" style="width: 100%; height: 400px; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #1e293b;"></div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; align-items: stretch;">
+    <div id="part-viewer-2" style="width: 100%; min-height: 580px; height: 100%; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #1e293b;"></div>
 
     <div style="background: #1e293b; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
       <div>
         <div style="color: #f87171; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 10px;">📖 How to Read This 3D Structure</div>
         <ul style="margin: 0; padding-left: 18px; color: #e2e8f0; font-size: 0.84rem; line-height: 1.6;">
-          <li style="margin-bottom: 8px;"><strong>⬛ Slate Ribbon ($\alpha/\beta$-Hydrolase Barrel, 304 aa):</strong> The outer structural chassis (`97.0 pLDDT` confidence) that holds the catalytic residues at sub-ångström precision.</li>
+          <li style="margin-bottom: 8px;"><strong>⬛ Slate Ribbon ($\alpha/\beta$-Hydrolase Barrel, 304 aa):</strong> The outer structural chassis (<code>97.0 pLDDT</code> confidence) that holds the catalytic residues at sub-ångström precision.</li>
           <li style="margin-bottom: 8px;"><strong>🟧 Gold Cap &amp; Orange Sticks (The Cryptic Lid, <code>Trp179</code> &amp; <code>Tyr147</code>):</strong> Click <em>"2. Zoom: Gold Cryptic Lid"</em>. These bulky aromatic rings act as a revolving door over the active site, swinging open ($\Delta G = -26.86\text{ kcal/mol}$) to let the green fluorocarbon chain slide inside while keeping bulk water out.</li>
           <li style="margin-bottom: 8px;"><strong>🟥 Red Sticks (The $\text{S}_\text{N}2$ Chisel Triad: <code>Asp104</code>, <code>His271</code>, <code>Asp128</code>):</strong> Click <em>"3. Zoom: Red SN2 Jaws"</em>. <code>Asp128</code> and <code>His271</code> ($3.57\text{ Å}$ apart at a $114.48^\circ$ relay angle) supercharge <strong><code>Asp104:OD2</code></strong> so it slams into the fluorocarbon Carbon atom, forming a covalent ester intermediate and kicking out $\text{F}^-$.</li>
           <li style="margin-bottom: 8px;"><strong>🟦 Cyan Sticks (The 3-Point Halide Hole: <code>Trp150</code>, <code>Tyr212</code>, <code>Arg108</code>):</strong> Three positively polarized hydrogen-bond donors positioned like a 3-fingered claw that grips the negatively charged <strong>green Fluorine atom</strong> and pulls it off the Carbon atom!</li>
@@ -236,16 +236,16 @@ We attached a 13-amino-acid C-terminal peptide tag (**`WPSTDKTKREEVD`**, `residu
     </div>
   </div>
 
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 18px; align-items: stretch;">
-    <div id="part-viewer-3" style="width: 100%; height: 400px; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #1e293b;"></div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; align-items: stretch;">
+    <div id="part-viewer-3" style="width: 100%; min-height: 580px; height: 100%; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #1e293b;"></div>
 
     <div style="background: #1e293b; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
       <div>
         <div style="color: #c084fc; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 10px;">📖 How to Read This 3D Structure</div>
         <ul style="margin: 0; padding-left: 18px; color: #e2e8f0; font-size: 0.84rem; line-height: 1.6;">
-          <li style="margin-bottom: 8px;"><strong>🟪 Magenta Ribbon &amp; Sticks (The <code>WPSTDKTKREEVD</code> Tail, Residues 406–418):</strong> Unlike the greasy blue Hook (`GRAVY +0.399`), this tail is intensely water-loving and electrically charged (<code>GRAVY -0.533</code>). Its alternating acidic (`Asp`, `Glu`) and basic (`Lys`, `Arg`) sidechains act like an electrostatic pre-concentrator.</li>
-          <li style="margin-bottom: 8px;"><strong>🔵 Sky-Blue Spheres (Calcium Ions, $\text{Ca}^{2+}$):</strong> Drawn out of the surrounding water or gut fluid by the negatively charged `Glu`/`Asp` carboxylate groups on the magenta tail.</li>
-          <li style="margin-bottom: 8px;"><strong>🟠 Amber Spheres (Phosphate Ions, $\text{PO}_4^{3-}$):</strong> Coordinated by the positively charged `Lys`/`Arg` sidechains of the tail.</li>
+          <li style="margin-bottom: 8px;"><strong>🟪 Magenta Ribbon &amp; Sticks (The <code>WPSTDKTKREEVD</code> Tail, Residues 406–418):</strong> Unlike the greasy blue Hook (<code>GRAVY +0.399</code>), this tail is intensely water-loving and electrically charged (<code>GRAVY -0.533</code>). Its alternating acidic (<code>Asp</code>, <code>Glu</code>) and basic (<code>Lys</code>, <code>Arg</code>) sidechains act like an electrostatic pre-concentrator.</li>
+          <li style="margin-bottom: 8px;"><strong>🔵 Sky-Blue Spheres (Calcium Ions, $\text{Ca}^{2+}$):</strong> Drawn out of the surrounding water or gut fluid by the negatively charged <code>Glu</code>/<code>Asp</code> carboxylate groups on the magenta tail.</li>
+          <li style="margin-bottom: 8px;"><strong>🟠 Amber Spheres (Phosphate Ions, $\text{PO}_4^{3-}$):</strong> Coordinated by the positively charged <code>Lys</code>/<code>Arg</code> sidechains of the tail.</li>
           <li style="margin-bottom: 8px;"><strong>🟢 Bright Green Spheres (Caged Fluoride Ions, $\text{F}^-$):</strong> Click <em>"3. Zoom: Hexagonal Ca₅(PO₄)₃F Unit Cell"</em>. The moment $\text{F}^-$ leaves the enzyme, $10\,\text{Ca}^{2+} + 6\,\text{PO}_4^{3-} + 2\,\text{F}^-$ snap together around the green Fluoride ions, locking them inside a rock-hard hexagonal prism of <strong>Fluorapatite ($\text{Ca}_5(\text{PO}_4)_3\text{F}$)</strong>!</li>
         </ul>
       </div>
@@ -276,16 +276,16 @@ We built a **Biological Optical Watermark** by mining 5,654 carotenoid enzymes a
     </div>
   </div>
 
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(310px, 1fr)); gap: 18px; align-items: stretch;">
-    <div id="part-viewer-4" style="width: 100%; height: 400px; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #1e293b;"></div>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; align-items: stretch;">
+    <div id="part-viewer-4" style="width: 100%; min-height: 580px; height: 100%; position: relative; border-radius: 10px; overflow: hidden; border: 1px solid #1e293b;"></div>
 
     <div style="background: #1e293b; border-radius: 10px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between;">
       <div>
         <div style="color: #fbbf24; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 10px;">📖 How to Read This 3D Structure</div>
         <ul style="margin: 0; padding-left: 18px; color: #e2e8f0; font-size: 0.84rem; line-height: 1.6;">
-          <li style="margin-bottom: 8px;"><strong>🌈 Rainbow Ribbon (N-Terminus Blue $\rightarrow$ C-Terminus Red):</strong> In our earlier prototype, we used the bell pepper (*Capsicum annuum*) enzyme `P80093`, which unfolds in harsh industrial brines. Using `pg_bio`'s HNSW index, we discovered this compact archaeal homolog (**`W9DPJ6`**) that retains the exact catalytic core without fragile plant surface loops.</li>
-          <li style="margin-bottom: 8px;"><strong>🌺 Ruby-Red Catalytic Core (Click Button 2):</strong> Inside this hydrophobic tunnel, the enzyme introduces conjugated double bonds into colorless phytoene to manufacture bright red **Lycopene** (the 11-conjugated-double-bond chromophore that makes tomatoes and red peppers red).</li>
-          <li style="margin-bottom: 8px;"><strong>🔬 Fluoride-Riboswitch Coupling (`crcB`):</strong> By placing the carotenoid operon under a fluoride-activated `crcB` riboswitch, the cell only brews red Lycopene when $\text{F}^-$ is actively being cleaved from PFAS/PTFE—trapping the red pigment directly inside the growing white Fluorapatite crystal lattice!</li>
+          <li style="margin-bottom: 8px;"><strong>🌈 Rainbow Ribbon (N-Terminus Blue $\rightarrow$ C-Terminus Red):</strong> In our earlier prototype, we used the bell pepper (<em>Capsicum annuum</em>) enzyme <code>P80093</code>, which unfolds in harsh industrial brines. Using <code>pg_bio</code>'s HNSW index, we discovered this compact archaeal homolog (<strong><code>W9DPJ6</code></strong>) that retains the exact catalytic core without fragile plant surface loops.</li>
+          <li style="margin-bottom: 8px;"><strong>🌺 Ruby-Red Catalytic Core (Click Button 2):</strong> Inside this hydrophobic tunnel, the enzyme introduces conjugated double bonds into colorless phytoene to manufacture bright red <strong>Lycopene</strong> (the 11-conjugated-double-bond chromophore that makes tomatoes and red peppers red).</li>
+          <li style="margin-bottom: 8px;"><strong>🔬 Fluoride-Riboswitch Coupling (<code>crcB</code>):</strong> By placing the carotenoid operon under a fluoride-activated <code>crcB</code> riboswitch, the cell only brews red Lycopene when $\text{F}^-$ is actively being cleaved from PFAS/PTFE—trapping the red pigment directly inside the growing white Fluorapatite crystal lattice!</li>
         </ul>
       </div>
       <div style="background: #0f172a; border-left: 3px solid #fbbf24; padding: 10px 12px; border-radius: 6px; font-size: 0.8rem; color: #cbd5e1; margin-top: 12px;">
@@ -352,13 +352,13 @@ Use the **6-Stage Interactive Walkthrough** below (`◀ Prev` / `Next Step ▶`)
   </div>
 
   <!-- Dual Synchronized 3D Viewports -->
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin-bottom: 16px;">
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; margin-bottom: 16px;">
     <div style="background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 12px;">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
         <strong id="left-stage-header" style="color: #38bdf8; font-size: 0.86rem;">🔍 Atomic Close-Up: Active Domain &amp; Substrate</strong>
         <span id="left-viewer-badge" style="background: #0284c7; color: #fff; padding: 2px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700;">P79073 + PTFE</span>
       </div>
-      <div id="viewer-left" style="width: 100%; height: 400px; position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #090d16;"></div>
+      <div id="viewer-left" style="width: 100%; height: 500px; position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #090d16;"></div>
     </div>
 
     <div style="background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 12px;">
@@ -366,7 +366,7 @@ Use the **6-Stage Interactive Walkthrough** below (`◀ Prev` / `Next Step ▶`)
         <strong id="right-stage-header" style="color: #34d399; font-size: 0.86rem;">🧬 Full 418-aa TeaFlon TriFusion Context</strong>
         <span id="right-viewer-badge" style="background: #10b981; color: #052e16; padding: 2px 8px; border-radius: 6px; font-size: 0.72rem; font-weight: 700;">418-aa Chimera</span>
       </div>
-      <div id="viewer-right" style="width: 100%; height: 400px; position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #090d16;"></div>
+      <div id="viewer-right" style="width: 100%; height: 500px; position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #090d16;"></div>
     </div>
   </div>
 
@@ -399,6 +399,7 @@ async function fetchModelText(url) {
 
 async function focusPart1(mode) {
   if (!partViewer1) return;
+  partViewer1.resize();
   partViewer1.clear();
   const [p7, ptfeHook] = await Promise.all([
     fetchModelText('/assets/models/AF-P79073-aligned-to-trifusion.pdb'),
@@ -431,6 +432,7 @@ async function focusPart1(mode) {
 
 async function focusPart2(mode) {
   if (!partViewer2) return;
+  partViewer2.resize();
   partViewer2.clear();
   const [q1, ptfeScissor] = await Promise.all([
     fetchModelText('/assets/models/AF-Q1JU72-aligned-to-trifusion.pdb'),
@@ -464,8 +466,20 @@ async function focusPart2(mode) {
   partViewer2.render();
 }
 
+function styleFluorapatiteModel(viewer, modelIdx, scaleFactor) {
+  const s = scaleFactor || 1.0;
+  // In 3Dmol.js, two-letter elements are normalized to Title Case ('Ca'), while PDB atom name is 'CA' and serials are 5..14
+  viewer.setStyle({model: modelIdx}, {stick: {radius: 0.11 * s, color: '#64748b', opacity: 0.65}});
+  viewer.setStyle({model: modelIdx, elem: 'Ca'}, {stick: {radius: 0.11 * s, color: '#64748b', opacity: 0.65}, sphere: {scale: 0.60 * s, color: '#38bdf8'}});
+  viewer.setStyle({model: modelIdx, atom: 'CA'}, {stick: {radius: 0.11 * s, color: '#64748b', opacity: 0.65}, sphere: {scale: 0.60 * s, color: '#38bdf8'}});
+  viewer.setStyle({model: modelIdx, serial: [5,6,7,8,9,10,11,12,13,14]}, {stick: {radius: 0.11 * s, color: '#64748b', opacity: 0.65}, sphere: {scale: 0.60 * s, color: '#38bdf8'}});
+  viewer.setStyle({model: modelIdx, elem: 'P'}, {stick: {radius: 0.11 * s, color: '#64748b', opacity: 0.65}, sphere: {scale: 0.50 * s, color: '#f59e0b'}});
+  viewer.setStyle({model: modelIdx, elem: 'F'}, {stick: {radius: 0.11 * s, color: '#64748b', opacity: 0.65}, sphere: {scale: 0.66 * s, color: '#22c55e'}});
+}
+
 async function focusPart3(mode) {
   if (!partViewer3) return;
+  partViewer3.resize();
   partViewer3.clear();
   const [amelx, fap] = await Promise.all([
     fetchModelText('/assets/models/amelx_tag.pdb'),
@@ -474,22 +488,21 @@ async function focusPart3(mode) {
   partViewer3.addModel(amelx, 'pdb');
   partViewer3.addModel(fap, 'pdb');
   partViewer3.setStyle({model: 0}, {cartoon: {color: '#a855f7'}, stick: {radius: 0.3, colorscheme: 'magentaCarbon'}});
-  partViewer3.setStyle({model: 1, elem: 'CA'}, {sphere: {scale: 0.56, color: '#38bdf8'}});
-  partViewer3.setStyle({model: 1, elem: 'P'}, {sphere: {scale: 0.48, color: '#f59e0b'}});
-  partViewer3.setStyle({model: 1, elem: 'F'}, {sphere: {scale: 0.64, color: '#22c55e'}});
+  styleFluorapatiteModel(partViewer3, 1, 1.0);
 
   if (mode === 'tail') {
-    partViewer3.addLabel('AMELX: WPSTDKTKREEVD', {model: 0, resi: 412, atom: 'CA'}, {backgroundColor: '#6b21a8', fontColor: '#fff', fontSize: 11});
+    partViewer3.addLabel('AMELX: WPSTDKTKREEVD', {model: 0, resi: 414, atom: 'CA'}, {backgroundColor: '#6b21a8', fontColor: '#fff', fontSize: 11});
     partViewer3.zoomTo({model: 0});
     partViewer3.zoom(0.85);
   } else if (mode === 'crystal') {
-    partViewer3.addLabel('Caged F⁻ Ions (Green)', {model: 1, serial: 1}, {backgroundColor: '#15803d', fontColor: '#fff', fontSize: 11});
-    partViewer3.addLabel('Ca²⁺ (Blue) & PO₄³⁻ (Amber)', {model: 1, serial: 5}, {backgroundColor: '#0369a1', fontColor: '#fff', fontSize: 11});
+    partViewer3.addLabel('Caged F⁻ Ions (Green)', {model: 1, serial: 3}, {backgroundColor: '#15803d', fontColor: '#fff', fontSize: 11});
+    partViewer3.addLabel('Ca²⁺ (Sky-Blue) & PO₄³⁻ (Amber)', {model: 1, serial: 9}, {backgroundColor: '#0369a1', fontColor: '#fff', fontSize: 11});
     partViewer3.zoomTo({model: 1});
     partViewer3.zoom(0.82);
   } else {
-    partViewer3.addLabel('AMELX Tail (406–418)', {model: 0, resi: 412, atom: 'CA'}, {backgroundColor: '#6b21a8', fontColor: '#fff', fontSize: 11});
-    partViewer3.addLabel('Ca₅(PO₄)₃F Enamel Crystal', {model: 1, serial: 1}, {backgroundColor: '#15803d', fontColor: '#fff', fontSize: 11});
+    partViewer3.addLabel('AMELX Tail (406–418)', {model: 0, resi: 417, atom: 'CA'}, {backgroundColor: '#6b21a8', fontColor: '#fff', fontSize: 11});
+    partViewer3.addLabel('Ca²⁺ (Sky-Blue) & PO₄³⁻ (Amber)', {model: 1, serial: 6}, {backgroundColor: '#0369a1', fontColor: '#fff', fontSize: 11});
+    partViewer3.addLabel('Ca₅(PO₄)₃F Enamel Crystal', {model: 1, serial: 3}, {backgroundColor: '#15803d', fontColor: '#fff', fontSize: 11});
     partViewer3.zoomTo();
     partViewer3.zoom(0.88);
   }
@@ -498,6 +511,7 @@ async function focusPart3(mode) {
 
 async function focusPart4(mode) {
   if (!partViewer4) return;
+  partViewer4.resize();
   partViewer4.clear();
   const w9 = await fetchModelText('/assets/models/AF-W9DPJ6-F1-model_v4.pdb');
   partViewer4.addModel(w9, 'pdb');
@@ -532,6 +546,8 @@ async function setMachineryStep(step) {
   document.getElementById('step-counter-pill').textContent = 'STEP ' + step + ' / 6';
 
   if (!viewerLeft || !viewerRight) return;
+  viewerLeft.resize();
+  viewerRight.resize();
   viewerLeft.clear();
   viewerRight.clear();
 
@@ -609,7 +625,7 @@ async function setMachineryStep(step) {
     viewerRight.zoom(0.86);
     viewerRight.render();
 
-    plainBox.innerHTML = '<strong>How to read the viewports:</strong> Look at the <strong>gold ribbon (`residues 140–185`)</strong> and orange ring sticks (`Trp179` &amp; `Tyr147`). This is the enzyme’s "trapdoor." When the nanobot touches the hydrophobic fluorocarbon layer, the gold lid swings open so the green Teflon/PFAS chain can slide down into the red cutting chamber.';
+    plainBox.innerHTML = '<strong>How to read the viewports:</strong> Look at the <strong>gold ribbon (<code>residues 140–185</code>)</strong> and orange ring sticks (<code>Trp179</code> &amp; <code>Tyr147</code>). This is the enzyme’s "trapdoor." When the nanobot touches the hydrophobic fluorocarbon layer, the gold lid swings open so the green Teflon/PFAS chain can slide down into the red cutting chamber.';
     bioBox.innerHTML = '<strong><code>pg_bio</code> Layer 10 MM/PBSA Cryptic Pocket Proof:</strong> Running <code>discover_cryptic_hotspots()</code> and <code>audit_mmpbsa_decomposition()</code> identifies the aromatic lid dyad <code>[Trp179, Tyr147]</code> shielding <code>Asp104</code>, docking the perfluoroalkyl chain at <strong>$\\Delta G_{\\text{total}} = -26.86\\text{ kcal/mol}$</strong>.';
 
   } else if (step === 3) {
@@ -642,7 +658,7 @@ async function setMachineryStep(step) {
     viewerRight.zoom(0.86);
     viewerRight.render();
 
-    plainBox.innerHTML = '<strong>How to read the viewports:</strong> In the left close-up, the <strong>three cyan sticks (`Trp150`, `Tyr212`, `Arg108`)</strong> grip a green Fluorine atom while the <strong>red sticks (`Asp104`, powered by `His271` and `Asp128`)</strong> strike the Carbon atom from behind—snapping the Carbon–Fluorine bond in a two-step $\\text{S}_\\text{N}2$ reaction.';
+    plainBox.innerHTML = '<strong>How to read the viewports:</strong> In the left close-up, the <strong>three cyan sticks (<code>Trp150</code>, <code>Tyr212</code>, <code>Arg108</code>)</strong> grip a green Fluorine atom while the <strong>red sticks (<code>Asp104</code>, powered by <code>His271</code> and <code>Asp128</code>)</strong> strike the Carbon atom from behind—snapping the Carbon–Fluorine bond in a two-step $\\text{S}_\\text{N}2$ reaction.';
     bioBox.innerHTML = '<strong><code>pg_bio</code> Layer 2 &amp; 9 Kabsch Theozyme Proof:</strong> <code>bio_distance(Asp104:OD2, His271:NE2) = 3.57 Å</code>; charge-relay angle <code>bio_angle(Asp128, His271, Asp104) = 114.48°</code>; 6-residue halide-hole Kabsch alignment <code>theozyme_rmsd(pdb, \'q1ju72_dehalogenase_hexad\') = 0.0000 Å</code>.';
 
   } else if (step === 4) {
@@ -655,12 +671,10 @@ async function setMachineryStep(step) {
     viewerLeft.addModel(amelx, 'pdb');
     viewerLeft.addModel(fap, 'pdb');
     viewerLeft.setStyle({model: 0}, {cartoon: {color: '#a855f7'}, stick: {radius: 0.3, colorscheme: 'magentaCarbon'}});
-    viewerLeft.setStyle({model: 1, elem: 'CA'}, {sphere: {scale: 0.58, color: '#38bdf8'}});
-    viewerLeft.setStyle({model: 1, elem: 'P'}, {sphere: {scale: 0.5, color: '#f59e0b'}});
-    viewerLeft.setStyle({model: 1, elem: 'F'}, {sphere: {scale: 0.65, color: '#22c55e'}});
-    viewerLeft.addLabel('AMELX Tail (406–418)', {model: 0, resi: 412, atom: 'CA'}, {backgroundColor: '#6b21a8', fontColor: '#fff', fontSize: 11});
-    viewerLeft.addLabel('Caged F⁻ Ions (Green)', {model: 1, serial: 1}, {backgroundColor: '#15803d', fontColor: '#fff', fontSize: 11});
-    viewerLeft.addLabel('Ca²⁺ (Blue) & PO₄³⁻ (Amber)', {model: 1, serial: 5}, {backgroundColor: '#0369a1', fontColor: '#fff', fontSize: 10});
+    styleFluorapatiteModel(viewerLeft, 1, 1.0);
+    viewerLeft.addLabel('AMELX Tail (406–418)', {model: 0, resi: 417, atom: 'CA'}, {backgroundColor: '#6b21a8', fontColor: '#fff', fontSize: 11});
+    viewerLeft.addLabel('Caged F⁻ Ions (Green)', {model: 1, serial: 3}, {backgroundColor: '#15803d', fontColor: '#fff', fontSize: 11});
+    viewerLeft.addLabel('Ca²⁺ (Sky-Blue) & PO₄³⁻ (Amber)', {model: 1, serial: 6}, {backgroundColor: '#0369a1', fontColor: '#fff', fontSize: 10});
     viewerLeft.zoomTo();
     viewerLeft.zoom(0.85);
     viewerLeft.render();
@@ -670,16 +684,14 @@ async function setMachineryStep(step) {
     viewerRight.setStyle({model: 0, resi: '1-304'}, {cartoon: {color: '#475569', opacity: 0.45}});
     viewerRight.setStyle({model: 0, resi: '305-400'}, {cartoon: {color: '#38bdf8', opacity: 0.65}});
     viewerRight.setStyle({model: 0, resi: '401-418'}, {cartoon: {color: '#a855f7'}, stick: {radius: 0.28, colorscheme: 'magentaCarbon'}});
-    viewerRight.setStyle({model: 1, elem: 'CA'}, {sphere: {scale: 0.55, color: '#38bdf8'}});
-    viewerRight.setStyle({model: 1, elem: 'P'}, {sphere: {scale: 0.48, color: '#f59e0b'}});
-    viewerRight.setStyle({model: 1, elem: 'F'}, {sphere: {scale: 0.62, color: '#22c55e'}});
-    viewerRight.addLabel('Step 4: AMELX Enamel Tail', {model: 0, resi: 412, atom: 'CA'}, {backgroundColor: '#6b21a8', fontColor: '#fff', fontSize: 11});
-    viewerRight.addLabel('Ca₅(PO₄)₃F Crystal (3.98 g/L)', {model: 1, serial: 1}, {backgroundColor: '#15803d', fontColor: '#fff', fontSize: 11});
+    styleFluorapatiteModel(viewerRight, 1, 0.95);
+    viewerRight.addLabel('Step 4: AMELX Enamel Tail', {model: 0, resi: 417, atom: 'CA'}, {backgroundColor: '#6b21a8', fontColor: '#fff', fontSize: 11});
+    viewerRight.addLabel('Ca₅(PO₄)₃F Crystal (3.98 g/L)', {model: 1, serial: 3}, {backgroundColor: '#15803d', fontColor: '#fff', fontSize: 11});
     viewerRight.zoomTo();
     viewerRight.zoom(0.86);
     viewerRight.render();
 
-    plainBox.innerHTML = '<strong>How to read the viewports:</strong> Follow the purple C-terminal <strong>Amelogenin tail (`406-WPSTDKTKREEVD-418`)</strong> at the bottom tip of the nanobot. Its charged sidechains gather blue Calcium ($\\text{Ca}^{2+}$) and amber Phosphate ($\\text{PO}_4^{3-}$) spheres around the green Fluoride ($\\text{F}^-$) ions to crystallize solid <strong>Fluorapatite tooth enamel</strong>.';
+    plainBox.innerHTML = '<strong>How to read the viewports:</strong> Follow the purple C-terminal <strong>Amelogenin tail (<code>406-WPSTDKTKREEVD-418</code>)</strong> at the bottom tip of the nanobot. Its charged sidechains gather sky-blue Calcium ($\\text{Ca}^{2+}$) and amber Phosphate ($\\text{PO}_4^{3-}$) spheres around the green Fluoride ($\\text{F}^-$) ions to crystallize solid <strong>Fluorapatite tooth enamel</strong>.';
     bioBox.innerHTML = '<strong><code>pg_bio</code> Layer 12 Stoichiometric Mineralization Proof:</strong> $10\\,\\text{Ca}^{2+} + 6\\,\\text{PO}_4^{3-} + 2\\,\\text{F}^- \\rightarrow 2\\,\\text{Ca}_5(\\text{PO}_4)_3\\text{F}\\downarrow$ ($K_{sp} \\approx 10^{-60}$). At $149.97\\text{ ppm } [\\text{F}^-]$, the reactor precipitates <strong><code>3,980.6 mg/L</code> (<code>3.98 g/L</code>)</strong> of hexagonal $P6_3/m$ Fluorapatite.';
 
   } else if (step === 5) {
@@ -719,7 +731,7 @@ async function setMachineryStep(step) {
     viewerRight.zoom(0.86);
     viewerRight.render();
 
-    plainBox.innerHTML = '<strong>How to read the viewports:</strong> Left shows the AI folding confidence (`pLDDT`: deep blue = rock-solid $>90$; yellow = intentionally flexible `GGGGS` hinges). Right overlays the original natural monomers (translucent gold and emerald ribbons) directly onto our 418-aa chimera (red and blue), proving neither domain distorts the other.';
+    plainBox.innerHTML = '<strong>How to read the viewports:</strong> Left shows the AI folding confidence (<code>pLDDT</code>: deep blue = rock-solid $>90$; yellow = intentionally flexible <code>GGGGS</code> hinges). Right overlays the original natural monomers (translucent gold and emerald ribbons) directly onto our 418-aa chimera (red and blue), proving neither domain distorts the other.';
     bioBox.innerHTML = '<strong><code>pg_bio</code> Layer 12 Globular Compactness &amp; Kabsch Proof:</strong> <code>evaluate_globular_compactness(teaflon_trifusion_local.pdb)</code> confirms <code>418 CA</code> atoms, mean <code>pLDDT = 82.9</code>, $R_g = 22.96\\text{ Å}$ vs. Flory $R_g = 22.30\\text{ Å}$ (<strong>Flory ratio <code>1.030</code></strong>). Kabsch superposition yields <strong><code>1.986 Å</code> RMSD</strong> (Scissor) and <strong><code>1.416 Å</code> RMSD</strong> (Hook).';
 
   } else if (step === 6) {
@@ -752,7 +764,7 @@ async function setMachineryStep(step) {
     viewerRight.zoom(0.86);
     viewerRight.render();
 
-    plainBox.innerHTML = '<strong>How to read the viewports:</strong> Gray shows the room-temperature soil enzyme (`Q1JU72`). Superimposed in gold (left) is **`A1RTA7`** from a $100\\text{ }^\\circ\\text{C}$ boiling geothermal archaeon (*Pyrobaculum islandicum*), and in purple (right) is **`A0A031LSV2`** from a $\\text{pH } 2$ volcanic hot spring (*Candidatus Acidianus copahuensis*). Notice how the extremophiles trim away loose outer loops while keeping the exact same central $\\alpha/\\beta$-hydrolase core!';
+    plainBox.innerHTML = '<strong>How to read the viewports:</strong> Gray shows the room-temperature soil enzyme (<code>Q1JU72</code>). Superimposed in gold (left) is <strong><code>A1RTA7</code></strong> from a $100\\text{ }^\\circ\\text{C}$ boiling geothermal archaeon (<em>Pyrobaculum islandicum</em>), and in purple (right) is <strong><code>A0A031LSV2</code></strong> from a $\\text{pH } 2$ volcanic hot spring (<em>Candidatus Acidianus copahuensis</em>). Notice how the extremophiles trim away loose outer loops while keeping the exact same central $\\alpha/\\beta$-hydrolase core!';
     bioBox.innerHTML = '<strong><code>pg_bio</code> Layer 3 &amp; 8 Pan-Organism HNSW Proof:</strong> Hyperthermophilic archaeon <code>A1RTA7</code> superimposes onto <code>Q1JU72</code> at <strong><code>2.66 Å</code> core RMSD</strong> (154 $C_\\alpha$, cosine dist <code>0.0453</code>), while volcanic thermoacidophile <code>A0A031LSV2</code> aligns at <strong><code>2.67 Å</code> core RMSD</strong> (178 $C_\\alpha$).';
   }
 
@@ -770,6 +782,14 @@ function prevMachineryStep() {
   const prev = currentMachineryStep <= 1 ? 6 : currentMachineryStep - 1;
   setMachineryStep(prev);
 }
+
+function resizeAll3DViewers() {
+  [partViewer1, partViewer2, partViewer3, partViewer4, viewerLeft, viewerRight].forEach(function(v) {
+    if (v) { v.resize(); v.render(); }
+  });
+}
+
+window.addEventListener('resize', resizeAll3DViewers);
 
 document.addEventListener('DOMContentLoaded', function() {
   if (typeof $3Dmol === 'undefined') return;
@@ -789,6 +809,7 @@ document.addEventListener('DOMContentLoaded', function() {
     viewerRight = $3Dmol.createViewer(elRight, {backgroundColor: '#090d16'});
     setMachineryStep(1);
   }
+  setTimeout(resizeAll3DViewers, 300);
 });
 </script>
 

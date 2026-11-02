@@ -21,16 +21,24 @@ Jekyll::Hooks.register [:posts, :pages, :documents], :pre_render do |doc|
       # Replace `\text{ \AA}` with `\text{ Å}` so MathJax text-mode renders Angstroms cleanly
       seg.gsub!('\\text{ \\AA}', '\\text{ Å}')
 
-      # For lines outside raw HTML tags, convert inline `$...$` containing >=2 underscores to `$$...$$`
-      # so Kramdown natively emits `\(...\)` instead of parsing `_..._` as `<em>...</em>`
-      seg.gsub!(/(?<!\$)\$(?!\$)([^$\n]+?)\$(?!\$)/) do |match|
-        inner = Regexp.last_match(1)
-        if inner.count('_') >= 2 && !inner.include?('<') && !inner.include?('>')
-          "$$#{inner}$$"
+      # For Markdown lines outside raw HTML tags, convert inline `$...$` containing >=2 underscores to `$$...$$`
+      # so Kramdown natively emits `\(...\)` instead of parsing `_..._` as `<em>...</em>`.
+      # Skip lines that are part of raw HTML blocks (e.g. `<li`, `<div`, `<p`, `<td`, `<strong>`) because
+      # Kramdown does not parse underscores inside raw HTML blocks and would leave `$$...$$` as display math.
+      segments[idx] = seg.lines.map do |line|
+        if line.lstrip.start_with?('<')
+          line
         else
-          match
+          line.gsub(/(?<!\$)\$(?!\$)([^$\n]+?)\$(?!\$)/) do |match|
+            inner = Regexp.last_match(1)
+            if inner.count('_') >= 2 && !inner.include?('<') && !inner.include?('>')
+              "$$#{inner}$$"
+            else
+              match
+            end
+          end
         end
-      end
+      end.join
     end
     doc.content = segments.join
   end
