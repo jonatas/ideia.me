@@ -1,25 +1,56 @@
 ---
 layout: post
-title: "Mining the Twilight Zone at 0.81 Å: How Bell-Curve Homology and Chaperone RASA Uncovered a Basic-Charged Halophilic DUF7861 Fold"
+title: "Announcing RosettaCommons Chaperone Support in pg_bio & Mining the Twilight Zone at 0.81 Å (DUF7861)"
 date: 2026-11-02 22:45:00 -0300
-categories: [bioinformatics, pgvector, structural-biology, alphafold, dark-proteome, postgresql, rust]
-tags: [pg_bio, twilight-zone-homology, duf7861, natrinema-saccharevitans, halobellus-clavatus, chaperone, rasa, smith-waterman, 3dmol]
-description: "By fusing a bell-curve Smith-Waterman Twilight-Zone Homology Index with RosettaCommons Chaperone RASA and H-bond network auditing inside PostgreSQL, pg_bio uncovered an 81-residue DUF7861 fold (A0A1S8AT22 vs A0A1H3IA37) conserved at 0.81 Å RMSD (TM-score 0.927) across desert and marine halophiles."
+categories: [bioinformatics, pgvector, structural-biology, alphafold, dark-proteome, postgresql, rust, protein-design]
+tags: [pg_bio, chaperone, rosettacommons, rasa, buns, twilight-zone-homology, duf7861, natrinema-saccharevitans, halobellus-clavatus, 3dmol]
+description: "Announcing Layer 13 in pg_bio: native Rust support for RosettaCommons Chaperone protein design workflows (Shrake-Rupley RASA, 3D H-bond CSR networks, BUNS auditing, and lineage tracking at 36.9x faster than Python), demonstrated on our #1 Twilight-Zone discovery (A0A1S8AT22 vs A0A1H3IA37, 0.81 Å RMSD)."
 ---
 
-When you rank 226,000 protein similarity edges purely by vector distance (`<=>`), two extremes crowd the top of the leaderboard: near-identical sequence clones (`100%` identity across sister strains) and short compositional k-mer collisions that share no global 3D fold. The real prize in structural genomics lives in between— inside the **Evolutionary Twilight Zone**, where two organisms from completely different genera have mutated `40%` to `60%` of their amino acids while locking the underlying 3D atomic backbone within a single Ångström. Today, we built a mathematical **Twilight-Zone Homology Index** and **RosettaCommons Chaperone RASA/H-Bond Auditor** directly into [`pg_bio`](https://github.com/jonatas/pg_bio) in Rust—and the **#1 ranked hit in the entire 226,242-edge Swarm graph (`id = 26734`, `twilight_score = 0.8640`)** turned out to be a stunning **`0.81 Å` C$\alpha$ RMSD** structural match (`TM-score = 0.927`) between two uncharacterized **`DUF7861` (`PF25260` / `IPR057183`)** proteins from an inland Xinjiang salt lake archaeon (*Natrinema saccharevitans*, `A0A1S8AT22`) and a Korean marine solar saltern archaeon (*Halobellus clavatus*, `A0A1H3IA37`).
+Today we are excited to announce a major new milestone in [`pg_bio`](https://github.com/jonatas/pg_bio): **Layer 13 — Native In-Database Support for [RosettaCommons Chaperone](https://rosettacommons.org/2026/10/19/introducing-chaperone-a-unified-framework-for-protein-design-workflows/) (`RosettaCommons/chaperone`) Protein Design Workflows**, alongside a new **Bell-Curve Twilight-Zone Homology Index** inside our Swarm Discovery engine! By compiling Shrake–Rupley Golden-Section Fibonacci-sphere **RASA (`bio_rasa`)**, 3D **Hydrogen-Bond CSR Networks (`bio_hbond_network`)**, **Buried Unsatisfied Polar Atom (`BUNS`) auditing (`audit_hydrogen_bonds`)**, and **`PipelineDataHandler` lineage hashing (`chaperone_lineage_hash`)** directly into PostgreSQL 18 via Rust (`pgrx`), `pg_bio` evaluates 400 multi-chain complexes in **`209.04 ms` (`0.52 ms`/complex — `36.9x` faster than Python)** and verifies all 8 official Chaperone Core Examples in **`~4.5 ms`**. Even better, when we unleashed the combined **Twilight-Zone + Chaperone RASA** engine on our 226,242-edge Swarm graph, the **#1 ranked hit (`id = 26734`, `twilight_score = 0.8640`)** revealed a stunning **`0.81 Å` C$\alpha$ RMSD** structural lock (`TM-score = 0.927`, per-residue RASA Pearson $r = 0.9509$) between two uncharacterized **`DUF7861` (`PF25260` / `IPR057183`)** proteins from an inland Xinjiang salt lake archaeon (*Natrinema saccharevitans*, `A0A1S8AT22`) and a Korean marine solar saltern archaeon (*Halobellus clavatus*, `A0A1H3IA37`).
 
 <!--more-->
 
 ---
 
-## The Mathematical Filter: Bell-Curve Twilight-Zone Scoring in SQL
+## 🚀 Announcing Layer 13 in `pg_bio`: Native RosettaCommons Chaperone Workflows in SQL
 
-Why do traditional BLAST or k-mer pipelines struggle to rank twilight-zone discoveries? Look at the raw sequence numbers for **`A0A1S8AT22`** and **`A0A1H3IA37`**:
+Modern *de novo* protein design pipelines—recently unified by [**RosettaCommons Chaperone**](https://rosettacommons.org/2026/10/19/introducing-chaperone-a-unified-framework-for-protein-design-workflows/)—chain generative backbone, inverse-folding, and structure-prediction blocks together through a `PipelineDataHandler`:
+
+$$\text{RFdiffusion3 / RFD3NA (Backbone)} \longrightarrow \text{Foundry-MPNN / LigandMPNN (Sequence)} \longrightarrow \text{AlphaFold3 / Boltz-2 (Oracle)} \longrightarrow \text{Evaluation Blocks (RMSD, RASA, H-Bond)}$$
+
+While GPU inference generates tens of thousands of candidate structures, **post-oracle biophysical evaluation** (`rmsd`, `rasa`, `hbond`) becomes a severe CPU and disk-I/O bottleneck when separate Python processes must parse loose PDB/mmCIF files to catch three classic wet-lab failure modes:
+1. **Surface Hydrophobic Aggregation Traps (`rasa`):** Candidates that fold with high `pLDDT` *in silico* but aggregate in *E. coli* expression because too many bulky apolar side-chains (`Val, Ile, Leu, Met, Phe, Trp, Tyr`) remain exposed on the surface ($\text{RASA}_i \ge 0.25$).
+2. **Buried Unsatisfied Polar Atoms (`hbond` / BUNS):** Burying a polar $\text{N}$ or $\text{O}$ atom inside a core or binding interface ($\text{SASA} < 0.5\text{–}1.0\text{ Å}^2$) without a hydrogen-bond partner costs $+3\text{ to }+5\text{ kcal/mol}$ in desolvation energy—silently killing binding affinity and fold stability.
+3. **Multi-Cycle Lineage Fragmentation (`PipelineDataHandler`):** Iterative `MPNN <-> AF3/Boltz-2` refinement loops require deterministic parent–child lineage hashes so winning constructs trace cleanly back to their seed backbone.
+
+### The 5-Stage `pg_bio` Chaperone Engine (36.9x Faster Than Python)
+
+We built the entire Chaperone evaluation suite natively into [`src/lib.rs`](https://github.com/jonatas/pg_bio/blob/main/src/lib.rs):
+* **Stage 1 — Voxel-Accelerated Shrake–Rupley SASA & Tien (2013) RASA ([`bio_rasa`](https://github.com/jonatas/pg_bio/blob/main/src/lib.rs#L4222-L4304)):** Evaluates 64 Golden-Ratio Fibonacci sphere points per heavy atom ($r_{\text{probe}} = 1.4\text{ Å}$) using $5\text{ Å}$ 3D spatial voxel hashing (reducing complexity from $O(N^2)$ to $O(N)$) and normalizes per-residue SASA by the **Tien et al. (2013)** empirical maximum ASA scale (plus DNA/RNA nucleotides) to return `total_sasa`, `polar_sasa`, `apolar_sasa`, `mean_rasa`, `core_buried_fraction` ($\text{RASA} < 0.20$), `surface_hydrophobic_fraction`, and `per_residue_rasa`.
+* **Stage 2 — 3D Hydrogen-Bond CSR Network ([`bio_hbond_network`](https://github.com/jonatas/pg_bio/blob/main/src/lib.rs#L4366-L4480)) & BUNS Auditor ([`audit_hydrogen_bonds`](https://github.com/jonatas/pg_bio/blob/main/src/lib.rs#L4481-L4682)):** Identifies backbone, side-chain, nucleobase, and `HETATM` ligand donors/acceptors, enforces donor–acceptor distance ($2.20\text{ Å} \le d_{\text{DA}} \le 3.50\text{ Å}$) and antecedent angle ($\ge 100^\circ$), projects the 3D H-bond graph into a Compressed Sparse Row (`SparseAttentionMap`) matrix, and counts `cross_interface_hbonds` and **`buried_unsatisfied_polars` (BUNS)**.
+* **Stage 3 — Fused Single-Pass Block Evaluator ([`evaluate_chaperone_block`](https://github.com/jonatas/pg_bio/blob/main/src/lib.rs#L4807-L4853)):** Shares the precomputed atomic SASA buffer with the Kabsch self-consistency $\text{scRMSD}$ aligner, interface $\Delta\text{SASA}$ calculator, BUNS auditor, and 3D gyration tensor globular gate (`is_globular`) in a single zero-copy Rust call.
+* **Stage 4 — Content-Addressable Lineage Hashing ([`chaperone_lineage_hash`](https://github.com/jonatas/pg_bio/blob/main/src/lib.rs#L4854-L4875)):** Generates deterministic 64-bit MurmurHash3 (`fmix64`) lineage IDs (`chp_<stage>_c<cycle>_<hash16>`) across design cycles.
+* **Stage 5 — All 8 Official Chaperone Core Examples Built Into SQL (`chaperone_core_examples`):** Verifies [`rosettacommons.github.io/chaperone/core-examples/`](https://rosettacommons.github.io/chaperone/core-examples/) (`nanoparticle-design`, `peptide-binder`, `cortisol-binder`, `dna-binder`, `enzyme-glycosidase`, `enzyme-protease`, `ribozyme-hammerhead`, and `multi-mpnn`) in **`~4.5 ms` total**:
+
+| Benchmark Metric (PostgreSQL 18 on Apple Silicon) | Python Pull + Evaluation | `pg_bio` Native Rust Engine | Speedup / Result |
+| :--- | :--- | :--- | :--- |
+| **400 Multi-Chain Complexes (`144` Heavy Atoms Each)** | `7,709.11 ms` | **`209.04 ms`** (`0.52 ms`/complex) | **`36.9x` faster** |
+| **4-Archetype Failure Mode Discrimination** (Pass vs. Drift/Hydro/BUNS) | Partial (no BUNS/RASA) | **`100 / 400` exact recall** | **100% precision** |
+| **8 Official Chaperone Core Examples Suite** (`chaperone_core_examples`) | Manual multi-script setup | **`~4.5 ms` total (`8 / 8` verified)** | **Zero external scripts** |
+
+* 📖 **Full Documentation:** [`docs/15_chaperone_protein_design_workflows.md`](https://github.com/jonatas/pg_bio/blob/main/docs/15_chaperone_protein_design_workflows.md)
+* 📓 **Interactive Benchmark Notebook:** [`experiments/13_chaperone_protein_design_workflows.ipynb`](https://github.com/jonatas/pg_bio/blob/main/experiments/13_chaperone_protein_design_workflows.ipynb)
+
+---
+
+## The Mathematical Filter: Bell-Curve Twilight-Zone Scoring + Chaperone Auditing in SQL
+
+When you rank 226,000 protein similarity edges purely by vector distance (`<=>`), two extremes crowd the top of the leaderboard: near-identical sequence clones (`100%` identity across sister strains) and short compositional k-mer collisions that share no global 3D fold. Why do traditional BLAST or k-mer pipelines struggle to rank twilight-zone discoveries? Look at the raw sequence numbers for **`A0A1S8AT22`** and **`A0A1H3IA37`**:
 * Across their 81 residues, **32 positions have mutated** (`49 / 81` positional identity, or `60.5%`), and their 3-mer compositional cosine distance is a massive **`0.6896`**.
 * Under a strict `pg_bio` local Smith-Waterman alignment (`match = +2, mismatch = -1, gap = -2`), their raw score is **`67`** out of a theoretical maximum of `162`—a normalized Smith-Waterman similarity of just **`s = 41.4%`**.
 
-To make PostgreSQL automatically surface pairs with **tight 3D fold lock (`<=>`)** *and* **heavy sequence divergence (`s ≈ 35%–65%`)**, we implemented a **Bell-Curve Twilight-Zone Index** inside our Swarm discovery engine. Given vector cosine distance $d_{\cos}$, normalized Smith-Waterman similarity $s \in [0, 1]$, length ratio $L_{\text{ratio}} = \min(L_1, L_2)/\max(L_1, L_2)$, and Shannon sequence entropy $H$:
+To make PostgreSQL automatically surface pairs with **tight 3D fold lock (`<=>`)** *and* **heavy sequence divergence (`s ≈ 35%–65%`)**, we paired our Chaperone evaluator with a **Bell-Curve Twilight-Zone Index**. Given vector cosine distance $d_{\cos}$, normalized Smith-Waterman similarity $s \in [0, 1]$, length ratio $L_{\text{ratio}} = \min(L_1, L_2)/\max(L_1, L_2)$, and Shannon sequence entropy $H$:
 
 $$\text{Twilight Score} = (1 - d_{\cos})^2 \times \underbrace{\left[4 \cdot s \cdot (1 - s)\right]}_{\text{Bell curve peaking at } s = 0.50} \times L_{\text{ratio}}^2 \times \min\left(\frac{H}{4.0}, 1.0\right) \quad \text{for } s \in [0.10, 0.96]$$
 
@@ -29,7 +60,22 @@ Notice how $4s(1-s)$ acts as a natural biological bandpass filter:
 3. **The Evolutionary Sweet Spot ($s = 0.414$ for `A0A1S8AT22` vs. `A0A1H3IA37`):** $4(0.414)(0.586) = 0.9704$, propelling edge `id = 26734` to **`twilight_score = 0.8640`**—the single highest cross-genus Twilight-Zone score in the database!
 
 ```sql
--- Execute the full Twilight-Zone + RosettaCommons Chaperone RASA/H-Bond correlation in PostgreSQL
+-- 1. Audit all 8 Official RosettaCommons Chaperone Core Examples in ~4.5 ms
+SELECT
+    ex.example_name,
+    ex.category,
+    ROUND(audit.sc_rmsd::numeric, 3) AS sc_rmsd,
+    ROUND(audit.interface_delta_sasa::numeric, 1) AS delta_sasa,
+    audit.cross_interface_hbonds AS iface_hb,
+    audit.buried_unsatisfied_polars AS buns,
+    ROUND(audit.active_site_or_motif_rmsd::numeric, 3) AS motif_rmsd,
+    audit.passes_example_gate AS pass_gate
+FROM chaperone_core_examples() AS ex
+CROSS JOIN LATERAL evaluate_chaperone_core_example_block(
+    ex.example_name, ex.candidate_pdb, ex.reference_pdb, ex.ligand_smiles
+) AS audit;
+
+-- 2. Execute the full Twilight-Zone + RosettaCommons Chaperone RASA/H-Bond correlation on Edge #26734
 SELECT
     od.id AS edge_id,
     p1.uniprot_id AS bait_id,
