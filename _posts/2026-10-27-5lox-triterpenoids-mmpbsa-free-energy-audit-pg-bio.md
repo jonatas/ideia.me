@@ -76,7 +76,7 @@ Notice how **AKBA (`6-af7-6ncf`)** stands out chemically: with a polar surface a
 
 When we aggregate the 677 per-residue energetic rows (`676` protein residues + `1` ligand) for each of the 9 systems across both `gb` (Generalized Born) and `pb` (Poisson-Boltzmann) models, we want to know whether the local per-residue decomposition closes mathematically against the global thermodynamic cycle (`GGAS`, `GSOLV`, `DELTA TOTAL`).
 
-In `pg_bio`, we implemented [`audit_mmpbsa_decomposition()`](file:///Users/jonatas/code/pg_bio/src/lib.rs) and [`solvent_shift_penalty()`](file:///Users/jonatas/code/pg_bio/src/lib.rs) in Rust to perform this exact double-entry audit inside PostgreSQL:
+In `pg_bio`, we implemented [`audit_mmpbsa_decomposition()`](https://github.com/jonatas/pg_bio/blob/main/src/lib.rs) and [`solvent_shift_penalty()`](https://github.com/jonatas/pg_bio/blob/main/src/lib.rs) in Rust to perform this exact double-entry audit inside PostgreSQL:
 
 ```sql
 WITH decomp_arrays AS (
@@ -152,7 +152,7 @@ Look at what `audit_mmpbsa_decomposition()` immediately proves across all 18 `(s
 
 In the original UFAM study, 9 residues lining the 5-LOX interdomain cleft (`Arg68, Glu108, Val109, Val110, Gln129, His130, Lys133, Glu134, Thr137`) were defined as the **operational pocket**.
 
-What happens if we encode all `676` protein residues' `MM_plus_polar` binding contributions into a `pg_bio` **`SparseAttentionMap`** via [`build_energy_hotspot_map()`](file:///Users/jonatas/code/pg_bio/src/lib.rs) and call [`discover_cryptic_hotspots()`](file:///Users/jonatas/code/pg_bio/src/lib.rs) to search the remaining **667 non-pocket residues** for high-affinity energetic anchors?
+What happens if we encode all `676` protein residues' `MM_plus_polar` binding contributions into a `pg_bio` **`SparseAttentionMap`** via [`build_energy_hotspot_map()`](https://github.com/jonatas/pg_bio/blob/main/src/lib.rs) and call [`discover_cryptic_hotspots()`](https://github.com/jonatas/pg_bio/blob/main/src/lib.rs) to search the remaining **667 non-pocket residues** for high-affinity energetic anchors?
 
 ```sql
 WITH maps AS (
@@ -219,7 +219,7 @@ This is a textbook demonstration of why encoding full-protein energetic decompos
 
 Why do $\alpha$-amyrin, $\beta$-amyrin, and lupeol bind 5-LOX with `0.00%` direct hydrogen-bond occupancy, whereas **AKBA (`6-af7-6ncf`)** maintains **`66.01%` H-bond occupancy**?
 
-We implemented [`allosteric_mechanism_index()`](file:///Users/jonatas/code/pg_bio/src/lib.rs) in Rust (`pg_bio`) to compute the normalized balance between polar/ionic switch stabilization (`Arg68, Glu108, Gln129, Lys133, Glu134, Thr137`) and hydrophobic clamp stabilization (`Val29, Leu66, Val109, Val110, Ile126, His130`), and combined it with `ensemble_fraction_between()` on the 500-frame time series (`lox5_pocket_decomp_frames`):
+We implemented [`allosteric_mechanism_index()`](https://github.com/jonatas/pg_bio/blob/main/src/lib.rs) in Rust (`pg_bio`) to compute the normalized balance between polar/ionic switch stabilization (`Arg68, Glu108, Gln129, Lys133, Glu134, Thr137`) and hydrophobic clamp stabilization (`Val29, Leu66, Val109, Val110, Ile126, His130`), and combined it with `ensemble_fraction_between()` on the 500-frame time series (`lox5_pocket_decomp_frames`):
 
 $$
 \text{AMI} = \frac{|E_{\text{polar/ionic}}| - |E_{\text{hydrophobic}}|}{|E_{\text{polar/ionic}}| + |E_{\text{hydrophobic}}|} \in [-1, +1]
