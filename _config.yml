@@ -33,7 +33,7 @@ author :
   instagram: jonatasdp
   feedburner : ideiame
   avatar: "/images/drawing-animation.svg"
-  bio: "Independent researcher and senior engineer with 20+ years of experience in PostgreSQL, TimescaleDB, Ruby, and Rust. Driven by relentless experimentation—currently building pg_bio and TeaFlon to bring 3D structural biology and Dark Proteome mining natively into PostgreSQL, while optimizing large-scale systems at Hubstaff."
+  bio: "Jônatas Davi Paganini — Systems Researcher & Database Internals Engineer (20+ years experience). Creator of pg_bio (in-database structural biology & chemoinformatics engine for PostgreSQL in Rust) and spiral (geometry-aware multidimensional storage & Z-order indexing). Former Developer Advocate at Timescale."
 
 # The production_url is only used when full-domain names are needed
 # such as sitemap.txt
