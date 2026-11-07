@@ -9,7 +9,7 @@ mermaid: true
 math: true
 ---
 
-Two days ago, our [`pg_bio`](https://github.com/jonatas/pg_bio) Swarm Discovery engine held `390,667` cross-species protein correlation edges, and our all-time #1 Twilight-Zone record stood at `twilight_score = 0.8640` ([read our previous dark-proteome leaderboard post](/bioinformatics/pgvector/structural-biology/alphafold/protein-design/postgresql/rust/2026/11/05/duf7522-duf7124-cretaceous-halite-twilight-zone-dark-proteome.html) and our [RangeFinder GiST Query Planner architecture deep dive](/bioinformatics/postgresql/rust/pgvector/structural-biology/machine-learning/drug-discovery/2026/11/05/postgresql-query-planner-rangefinder-gist-bioinformatics-engine.html)).
+Two days ago, our [`pg_bio`](https://github.com/jonatas/pg_bio) Swarm Discovery engine held `390,667` cross-species protein correlation edges, and our all-time #1 Twilight-Zone record stood at `twilight_score = 0.8640` ([read our previous dark-proteome leaderboard post](/duf7522-duf7124-cretaceous-halite-twilight-zone-dark-proteome) and our [RangeFinder GiST Query Planner architecture deep dive](/postgresql-query-planner-rangefinder-gist-bioinformatics-engine)).
 
 Then we asked a simple systems-engineering question: **What happens if the swarm automatically scales its PostgreSQL worker pool to harvest idle Apple Silicon CPU cycles overnight (`00:00–07:00`) and whenever the workstation is idle?**
 
