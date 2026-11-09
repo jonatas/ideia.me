@@ -45,7 +45,7 @@ Systems engineer and independent database researcher with 20+ years of productio
 ## Professional & Research Experience
 
 **Principal Systems Researcher & Founder** — **IDEIA.ME** *(Feb 2026 – Present)*
-* Conducting full-time independent systems research on PostgreSQL storage extensions (`pg_bio`, `spiral`) and collaborating with academic bioprospecting and biocatalysis groups in Brazil (UFAM / AmazonZyme and UFAL / LAPRO) on enzyme discovery and structural benchmarking.
+* Conducting full-time independent systems research on PostgreSQL storage extensions (`pg_bio`, `spiral`) and collaborating with academic bioprospecting and biocatalysis groups in Brazil (UFAM / AmazonZyme) on enzyme discovery and structural benchmarking.
 
 **Staff Software Engineer (Distributed Energy Telemetry)** — **BaxEnergy** *(Jun 2025 – Feb 2026)*
 * Engineered high-throughput telemetry and real-time data processing pipelines for renewable energy power plants.
