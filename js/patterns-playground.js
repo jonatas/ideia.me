@@ -1,5 +1,5 @@
 /**
- * Interactive Waimiri Atroari Weaving Playground Controller (/patterns/)
+ * Interactive Waimiri Atroari Weaving Playground Controller (/waimiri-atroari-patterns/)
  * Follows AGENTS.md & Modern Web Guidance (safe DOM creation, roving tabindex spatial navigation,
  * native <dialog>, centralized aria-live announcer, offline localStorage persistence).
  */
