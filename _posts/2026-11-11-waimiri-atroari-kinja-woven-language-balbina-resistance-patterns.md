@@ -337,26 +337,6 @@ Today we are launching the [**Waimiri Atroari Weaving Patterns Playground (`/wai
 <!-- Full-Viewport Interpolating Arumã Tapestry Canvas -->
 <canvas id="kinja-ambient-bg-canvas" aria-hidden="true"></canvas>
 
-<!-- Sticky Scrollspy & Background Interpolation Controller -->
-<div class="kinja-chapter-hud" role="region" aria-label="Chapter navigation and live background pattern controller">
-  <nav class="kinja-scrollspy-nav" aria-label="Essay chapters">
-    <a href="#chapter-unwritten-code" class="kinja-spy-link" data-bg-pattern="1">1. A Língua Tecida (Tebaka)</a>
-    <a href="#chapter-balbina-flood" class="kinja-spy-link" data-bg-pattern="9">2. A Inundação de Balbina (Xirminja)</a>
-    <a href="#chapter-lucidity-resistance" class="kinja-spy-link" data-bg-pattern="2">3. Lucidez &amp; Resistência (Weri Nahpy)</a>
-    <a href="#chapter-interactive-loom" class="kinja-spy-link" data-bg-pattern="6">4. Tear Interativo (Weri Bixi)</a>
-    <a href="#chapter-literature" class="kinja-spy-link" data-bg-pattern="3">5. Literatura &amp; Memória (Dja)</a>
-  </nav>
-  <div style="display:flex; align-items:center; gap:0.5rem; flex-wrap:wrap;">
-    <span class="kinja-bg-status-pill" id="bg-pattern-indicator">Fundo Vivo: TEBAKA BENRY</span>
-    <button type="button" class="post-loom-btn" id="btn-toggle-bg-intensity" aria-pressed="false" title="Alternar destaque do grafismo no fundo da página">
-      ✨ Destacar Fundo
-    </button>
-    <a href="/waimiri-atroari-patterns/" class="post-loom-btn active" style="text-decoration:none;">
-      🚀 Abrir Estúdio Completo
-    </a>
-  </div>
-</div>
-
 ---
 
 <section id="chapter-unwritten-code" markdown="1" tabindex="-1" data-chapter-pattern="1">
