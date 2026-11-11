@@ -504,6 +504,27 @@ Below is a live embedded version of our [**Waimiri Atroari Weaving Patterns Stud
   </div>
 </div>
 
+### Emergent Complexity When Unrolling: The Indigenous Flag Woven in the Forest
+
+What happens when a single $19 \times 33$ primitive matrix is unrolled concentrically across a $4 \times 3$ tapestry ($55 \times 129 = 7,095$ splint intersections)? Look at what emerges when we expand **3. Weri Nahpy Benry** (*Desenho feito pela mulher* / *Costela de cobra*) in **Ondas 4×3 (`concentric`)** mode:
+
+<figure style="background-color:#0e131d !important; border:1px solid rgba(245, 158, 11, 0.45); border-radius:16px; padding:1.1rem; margin:1.75rem 0; box-shadow:0 20px 50px rgba(0,0,0,0.6);">
+  <img src="/images/patterns/weri-nahpy-concentric-4x3.jpg" alt="Weri Nahpy Benry unrolled in 4x3 concentric wave mode (55x129 splints), forming a giant stepped diamond inside a rectangular frame around a central constellation of crosses, resembling an indigenous woven Brazilian flag" style="width:100%; height:auto; display:block; border-radius:10px; border:1px solid rgba(255,255,255,0.15);">
+  <figcaption style="margin-top:0.85rem; display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
+    <div style="flex:1; min-width:260px; font-size:0.82rem; color:#cbd5e1; line-height:1.5;">
+      <strong style="color:#f59e0b;">Weri Nahpy Benry — Expansão Concêntrica 4×3 (55×129 talas = 7.095 cruzamentos):</strong> A partir de uma única célula primitiva $4 \times 8$, as ondas diagonais de $45^\circ$ da sarja <code>[▲1 ▼3]</code> irradiam um imenso <strong>losango central dentro do retângulo</strong> abrigando um núcleo constelado de cruzes — uma geometria ancestral que lembra de forma impressionante a <strong>Bandeira do Brasil</strong>, tecida em arumã séculos antes do Estado moderno existir.
+    </div>
+    <button type="button" class="post-loom-btn active" id="btn-load-brazil-flag-preset" style="flex-shrink:0;">
+      🇧🇷 Testar esta Configuração no Tear Acima
+    </button>
+  </figcaption>
+</figure>
+
+There is a profound visual and historical poetry in this emergent image:
+
+* **From Local Rule to Global Flag**: The weaver never sketches a giant diamond in advance. By locking the central $19 \times 33$ core of *Weri Nahpy Benry* (with its constellation of four-armed crosses) and propagating the Manhattan distance wave `abs(r - r0) + abs(c - c0) (mod 4)` across the surrounding `[▲1 ▼3]` twill rows, the $45^\circ$ stepped diagonals automatically converge at the top, bottom, left, and right midpoints—inscribing a **giant diamond (*losango*) inside the outer rectangular selvedge frame** with a starry core at its center.
+* **An Ancestral Mirror of the Brazilian Flag**: It is impossible to look at this $55 \times 129$ unrolled matrix without seeing the iconic silhouette of the **Brazilian Flag**—the outer rectangle, the radiating central diamond, and the inner constellation. Yet this geometry was not borrowed from positivist heraldry: it is the mathematical consequence of Amazonian 1/3 twill basketry practiced by the **Kinja** long before highways or hydroelectric dams cut through their forest.
+
 ### Quick Reference: All 12 Documented Patterns in the Catalog
 
 | # | Kinja Name (*Benry*) | Portuguese Name | English Translation | Matrix Size | Core Mathematical Motif |
@@ -787,6 +808,29 @@ Ready to weave your own variations, test your accuracy against all 12 Kinja matr
         renderPostLoom();
       });
     });
+
+    var flagPresetBtn = document.getElementById('btn-load-brazil-flag-preset');
+    if (flagPresetBtn) {
+      flagPresetBtn.addEventListener('click', function () {
+        stopPostAnim();
+        postState.patternIdx = 2; // 3. WERI NAHPY BENRY
+        postState.stepIdx = 4;
+        postState.lens = 'kinja';
+        postState.scaleMode = 'concentric';
+        postState.userGrid = null;
+        if (selectEl) selectEl.value = '2';
+        document.querySelectorAll('[data-post-lens]').forEach(function (b) {
+          b.setAttribute('aria-pressed', b.getAttribute('data-post-lens') === 'kinja' ? 'true' : 'false');
+        });
+        document.querySelectorAll('[data-post-scale]').forEach(function (b) {
+          b.setAttribute('aria-pressed', b.getAttribute('data-post-scale') === 'concentric' ? 'true' : 'false');
+        });
+        triggerBgMorphTo(2);
+        renderPostStepsList();
+        renderPostLoom();
+        if (canvas) canvas.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    }
 
     function stopPostAnim() {
       if (postState.animTimer) {
