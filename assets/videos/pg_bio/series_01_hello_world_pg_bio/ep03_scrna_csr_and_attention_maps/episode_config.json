@@ -1,0 +1,71 @@
+{
+  "ep_num": 3,
+  "slug": "ep03_scrna_csr_and_attention_maps",
+  "visual_mode": "csr_sparse_graph",
+  "title": "Ep 3: Transcriptomics & CSR Sparse Attention Graphs",
+  "subtitle": "Slashing 20-Billion-Cell scRNA Matrices & Mapping Allosteric Hotspots",
+  "layer": "Layers 3 & 9: Single-Cell CSR Arrays, Neural Attention & Allostery",
+  "bio_problem": "Every cell in your body shares the exact same DNA, yet a neuron and a T-cell behave completely differently because of which genes they express (Transcriptomics). Sequencing 1 million cells across 20,000 genes creates a 20-billion-cell matrix that is 90% zeroes\u2014crushing traditional SQL schemas and RAM.",
+  "cs_mechanism": "Compressed Sparse Row (CSR) storage (SparseAttentionMap, create_sparse_map, build_energy_hotspot_map) stores only non-zero contacts and expression counts, reducing O(L^2) dense scans to O(nnz) nanosecond slice lookups.",
+  "speedup": "31.1x faster than Python/NumPy & 90% less RAM footprint",
+  "docs_ref": "../../docs/12_mmpbsa_free_energy_auditing.md",
+  "notebook_ref": "../../experiments/11_5lox_triterpenoid_mmpbsa_validation.ipynb",
+  "blogs": [
+    {
+      "title": "500 ns 5-LOX Triterpenoid MD Audit in SQL",
+      "url": "https://ideia.me/5lox-triterpenoids-mmpbsa-free-energy-audit-pg-bio"
+    },
+    {
+      "title": "Analyzing Hi-C 3D Genomic Contact Maps in SQL",
+      "url": "https://ideia.me/analyzing-hic-3d-genomic-contact-maps-sql"
+    }
+  ],
+  "bullets": [
+    "\u2022 Sparse CSR Type: SparseAttentionMap (row_ptr, col_idx, values)",
+    "\u2022 Transformer Attention in SQL: get_top_interacting_residues(map, res_id, k)",
+    "\u2022 Cryptic Pocket Discovery: discover_cryptic_hotspots() in 7.97 ms",
+    "\u2022 Allosteric Mechanism Index: allosteric_mechanism_index() over CSR graphs"
+  ],
+  "rosetta_mappings": [
+    [
+      "Compressed Sparse Row (CSR: row_ptr, col_idx, val)",
+      "Drops 90%+ zero entries from 20-billion-point matrices and LxL contact maps",
+      "Stores single-cell RNA expression & protein attention graphs in L1 cache"
+    ],
+    [
+      "O(nnz) Slice Traversal (get_top_interacting_residues)",
+      "Indexes directly into row_ptr[i..i+1] without scanning dense zeroes",
+      "Extracts long-range amino acid couplings from ESM-2 transformer heads"
+    ],
+    [
+      "CSR Energy Network Profiler (discover_cryptic_hotspots)",
+      "Combines MM/PBSA ledger auditing with sparse graph neighborhood filtering",
+      "Uncovers hidden allosteric anchor residues outside the known active site"
+    ]
+  ],
+  "sql_lines": [
+    "bio_demo=# SELECT",
+    "    system_id,",
+    "    get_top_interacting_residues(attention_map, 94, 3) AS top_coupled_residues,",
+    "    discover_cryptic_hotspots(",
+    "        build_energy_hotspot_map(677, residue_ids, energy_arr, 677, -0.15),",
+    "        677, ARRAY[68, 108, 109, 110], 0.35, 3",
+    "    ) AS cryptic_allosteric_anchors",
+    "FROM protein_attention_and_energy_maps;"
+  ],
+  "sql_results": [
+    "\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510",
+    "\u2502 system_id  \u2502 top_coupled_residues \u2502 cryptic_allosteric_anchors \u2502",
+    "\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524",
+    "\u2502 5LOX_3B4F  \u2502 {96,106,201}         \u2502 {126,29,66}                \u2502",
+    "\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518",
+    "Time: 0.580 ms  (31.14x faster than dense NumPy matrix unpacking)"
+  ],
+  "narrations": [
+    "Welcome to Episode 3 of Hello World, pg_bio! If every cell in your body has the exact same DNA database, why is a brain cell different from a liver cell? The answer is Transcriptomics and allosteric regulation\u2014which genes are turned on, and how distant residues talk to each other.",
+    "When scientists run Single-Cell RNA sequencing on 1 million cells across 20,000 human genes, it creates a 20-billion-point matrix. Because a cell only expresses about 2,000 genes at a time, over 90 percent of that matrix is zeroes. Storing dense columns in SQL or Pandas wastes gigabytes of RAM.",
+    "Systems engineers already know the cure: Compressed Sparse Row, or C-S-R. pg_bio implements a native SparseAttentionMap type using row pointers, column indices, and non-zero values.",
+    "Whether you are unpacking single-cell RNA dosage, traversing ESM-2 transformer attention heads with get_top_interacting_residues, or discovering cryptic allosteric pockets across 500-nanosecond molecular dynamics trajectories, CSR scans only the non-zero edges in microseconds.",
+    "That slashes memory by 90 percent and runs 31 times faster than dense Python matrices. Read the full deep dive at ideia dot me and explore pg_bio on GitHub."
+  ]
+}

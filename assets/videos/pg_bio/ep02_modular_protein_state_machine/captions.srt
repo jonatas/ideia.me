@@ -1,0 +1,71 @@
+1
+00:00:00,000 --> 00:00:04,530
+Welcome to pg_bio: The Protein as a Modular State Machine:
+
+2
+00:00:04,530 --> 00:00:09,061
+Dock -> Cut -> Transform. In wet-lab synthetic biology, Natural and engineered enzymes are
+
+3
+00:00:09,061 --> 00:00:13,591
+modular pipelines: an Anchor segment docks the substrate, a Linker positions the cleft, a
+
+4
+00:00:13,591 --> 00:00:18,122
+Theozyme triad cuts the bond at 107 degrees, and a Sink transforms the product.
+
+5
+00:00:18,122 --> 00:00:22,652
+If you already understand B-trees, spatial indexes, and graph hashes, you already know the
+
+6
+00:00:22,652 --> 00:00:27,182
+math required to fix this.
+
+7
+00:00:27,182 --> 00:00:32,022
+Why do traditional Python pipelines hit a wall?
+
+8
+00:00:32,022 --> 00:00:36,862
+Because pulling hundreds of thousands of biological structures and sequences over a TCP socket
+
+9
+00:00:36,862 --> 00:00:41,702
+into Python spends 99 percent of your CPU time on serialization and memory allocation,
+
+10
+00:00:41,702 --> 00:00:46,541
+whereas pg_bio executes compiled Rust directly on PostgreSQL 8-kilobyte shared buffer pages.
+
+11
+00:00:46,541 --> 00:00:53,600
+Here is the systems-to-biotech Rosetta bridge: Pareto domain scoring, 9-property RangeFinder GiST, Horn 4x4
+
+12
+00:00:53,600 --> 00:01:00,658
+quaternion SVD, CSR H-bond graphs, and RK4 ODE cascade integration inside PostgreSQL shared buffers.
+
+13
+00:01:00,658 --> 00:01:07,716
+Every biological invariant maps directly to a high-performance PostgreSQL index or zero-allocation Rust loop.
+
+14
+00:01:07,716 --> 00:01:13,436
+Watch what happens inside psql. In a single declarative SQL query, we push multi-constraint
+
+15
+00:01:13,436 --> 00:01:19,155
+biological filtering and physical verification directly to the database engine in sub-millisecond time.
+
+16
+00:01:19,155 --> 00:01:24,768
+The result is verified across the benchmark: 94.9x to 1,513x faster in-database multi-stage screening
+
+17
+00:01:24,768 --> 00:01:30,380
+(0.67 ms vs 1,018 ms). Explore all discoveries at ideia dot me and star
+
+18
+00:01:30,380 --> 00:01:35,993
+the pg_bio repository on GitHub.

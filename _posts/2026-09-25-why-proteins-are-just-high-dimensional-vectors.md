@@ -19,6 +19,11 @@ If you are a software engineer, you already know the frustration of inheriting a
 
 <!--more-->
 
+> **🎬 Companion Voiced Video & Interactive 3D Homology Studio**
+> Watch **Episode 04: The Multiomics Holy Grail — Vectors & Live UniProt** to see how 1280-D ESM-2 `halfvec` HNSW graphs prune 2.34M dark-proteome sequences in `0.4 ms` before Smith-Waterman re-ranking:
+> * 🧪 [**Open Standalone 3D Studio Deck (`ep04_joint_vector_multiomics`)**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/studio_deck.html)
+> * 🔊 [**Watch 1080p Narrated MP4**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/ep04_joint_vector_multiomics.mp4) · [**Explore All Series 01 Videos (`/pg-bio-videos/`)**](/pg-bio-videos/)
+
 In biology, we call this the **Dark Proteome**. 
 
 Right now, there are hundreds of millions of proteins in global databases labeled simply as **"Uncharacterized Protein"**. We know their exact sequence of amino acids (the source code), but we have absolutely no idea what they do, what they bind to, or what biological processes they execute. 

@@ -1,0 +1,76 @@
+{
+  "ep_num": 2,
+  "slug": "ep02_3d_pockets_and_morton_curves",
+  "visual_mode": "morton_3d_pocket",
+  "title": "Ep 2: From 1D Strings to 3D Atoms with Morton Curves",
+  "subtitle": "3D PDB Folding, 64-Bit Z-Order B-Tree Bounding Boxes & Kabsch RMSD",
+  "layer": "Layers 2, 6 & 8: 3D Spatial Z-Order Curves & Structural Superposition",
+  "bio_problem": "Once translated, a 1D amino acid string folds into a 3D atomic cloud measured in Angstroms. Catalysis happens inside a tiny 3.5 to 5.0 Angstrom 3D pocket\u2014where residues that are 100 positions apart in the string snap together in 3D space to coordinate a metal cofactor.",
+  "cs_mechanism": "z_order_encode(x, y, z) bit-interleaves 21-bit 3D Cartesian floats into a single 64-bit BIGINT B-Tree key, while kabsch_rmsd() and theozyme_rmsd() run stack-allocated 3x3 Jacobi SVD to align 3D pockets in microseconds.",
+  "speedup": "120x faster 3D pocket extraction (Zero KD-Tree build time)",
+  "docs_ref": "../../docs/03_spatial_indexing.md",
+  "notebook_ref": "../../experiments/08_pdb_parsing.ipynb",
+  "blogs": [
+    {
+      "title": "Indexing 3D Space Like a Video Game",
+      "url": "https://ideia.me/indexing-3d-space-like-a-video-game"
+    },
+    {
+      "title": "Store & Query 3D Protein Structures in SQL",
+      "url": "https://ideia.me/store-query-3d-protein-structures-postgresql"
+    },
+    {
+      "title": "Query Planner & RangeFinder Pocket GiST",
+      "url": "https://ideia.me/postgresql-query-planner-rangefinder-gist-bioinformatics-engine"
+    }
+  ],
+  "bullets": [
+    "\u2022 Native PDB Parser: bio_parse_pdb(pdb_text) -> relational atom rows",
+    "\u2022 3D -> 1D Morton Key: z_order_encode(x, y, z) -> BIGINT B-Tree index",
+    "\u2022 Rotational Alignment: kabsch_rmsd() & theozyme_rmsd() via 3x3 SVD",
+    "\u2022 Bond & Attack Geometry: bio_distance(), bio_angle(), bio_dihedral()"
+  ],
+  "rosetta_mappings": [
+    [
+      "64-Bit Morton Space-Filling Curve (z_order_encode)",
+      "Interleaves (X, Y, Z) bits via split_by_3 into a 1D B-Tree indexable BIGINT",
+      "Slices out 4.0 \u00c5 3D enzyme binding pockets across millions of atoms instantly"
+    ],
+    [
+      "Set-Returning Streaming Parser (bio_parse_pdb)",
+      "Zero-copy Rust iterator parsing ATOM/HETATM records into SQL tuples",
+      "Turns raw AlphaFold / RCSB PDB files into queryable 3D atomic tables"
+    ],
+    [
+      "Stack-Allocated 3x3 Jacobi SVD (theozyme_rmsd)",
+      "Computes optimal 3D rotation matrix without external LAPACK/SciPy calls",
+      "Verifies sub-angstrom catalytic triad & Zn2+ water shell superposition"
+    ]
+  ],
+  "sql_lines": [
+    "bio_demo=# WITH pocket_bounds AS (",
+    "    SELECT z_order_encode(1.0, -4.0, -4.0) AS min_z,",
+    "           z_order_encode(6.0,  1.0,  1.0) AS max_z",
+    ")",
+    "SELECT atom_id, residue_name, x, y, z",
+    "FROM teaflon_atoms, pocket_bounds",
+    "WHERE z_curve_index BETWEEN min_z AND max_z",
+    "  AND theozyme_rmsd(active_site_coords, '4qhp_zn_pentad') <= 0.90;"
+  ],
+  "sql_results": [
+    "\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510",
+    "\u2502 atom_id \u2502 residue_name \u2502   x   \u2502   y   \u2502   z   \u2502 theozyme_rmsd \u2502",
+    "\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524",
+    "\u2502      13 \u2502 ZN           \u2502  3.95 \u2502 -1.65 \u2502 -2.15 \u2502         0.412 \u2502",
+    "\u2502      14 \u2502 HOH          \u2502  3.75 \u2502 -2.95 \u2502 -1.15 \u2502         0.412 \u2502",
+    "\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518",
+    "Time: 0.490 ms  (B-Tree Z-Order Index Scan + 3x3 Jacobi SVD)"
+  ],
+  "narrations": [
+    "Welcome to Episode 2 of Hello World, pg_bio! In Episode 1, we treated DNA and proteins as 1D strings. But in reality, a protein folds into a 3D molecular machine where catalysis happens inside a 4-Angstrom binding pocket.",
+    "Normally, finding which atoms sit inside a 3D sphere requires pulling millions of coordinates into Python and building an in-memory KD-tree or running brute-force Pythagorean distance loops.",
+    "pg_bio solves this with Morton coding\u2014also known as a Z-Order space-filling curve. Our Rust function z_order_encode interleaves the bits of X, Y, and Z coordinates into a single 64-bit integer. That means a standard 1D PostgreSQL B-Tree index now acts as a 3D spatial bounding box!",
+    "Even better, once the B-Tree narrows down the pocket atoms, theozyme_rmsd runs a zero-allocation 3-by-3 Jacobi SVD right inside SQL to rotationally align the catalytic metal and nucleophilic water.",
+    "That is 3D structural biology powered by B-Trees and linear algebra inside PostgreSQL. Visit ideia dot me and the pg_bio GitHub repo to try the interactive 3D notebooks."
+  ]
+}

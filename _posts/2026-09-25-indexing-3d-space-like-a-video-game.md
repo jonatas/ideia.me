@@ -19,6 +19,11 @@ If you have ever written a 3D video game, you know the hardest part isn't render
 
 <!--more-->
 
+> **🎬 Companion Voiced Video & Interactive 3D Pocket Studio**
+> Watch **Episode 02: From 1D Strings to 3D Atoms with Morton Curves** and rotate the 3D $\text{Zn}^{2+}$ catalytic pocket and Morton Z-Order bounding sphere live in your browser:
+> * 🧪 [**Open Standalone 3D Studio Deck (`ep02_3d_pockets_and_morton_curves`)**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep02_3d_pockets_and_morton_curves/studio_deck.html)
+> * 🔊 [**Watch 1080p Narrated MP4**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep02_3d_pockets_and_morton_curves/ep02_3d_pockets_and_morton_curves.mp4) · [**Explore All Series 01 Videos (`/pg-bio-videos/`)**](/pg-bio-videos/)
+
 When a player fires a machine gun, the game engine has to figure out if any of the hundreds of bullets intersect with any of the millions of polygons in the environment. If you calculate the exact distance between every bullet and every polygon on every frame, your game will run at 1 frame per minute. 
 
 To solve this, game engines use **spatial indexing** (like Quad-trees or Oct-trees) to instantly filter out 99% of the map, only performing the heavy math on objects that are in the same general "bucket" of space.

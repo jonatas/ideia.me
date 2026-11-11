@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hello World, pg_bio! — Interactive Series Explorer &amp; Voiced Hovering Video</title>
+  <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+  <style>
+    /* Exact ../ideia.me Theme Variables */
+    :root {
+      --primary-blue: #2563eb;
+      --primary-purple: #7c3aed;
+      --primary-teal: #0d9488;
+      --primary-light-blue: #0ea5e9;
+      --primary-color: #5c9eff;
+      --secondary-color: #b158fc;
+      --accent-color: #ff5a9d;
+      --topic-postgresql: #336791;
+      --gradient-blue-purple: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      --bg-color: #0f1117;
+      --card-bg-color: #161b27;
+      --code-bg-color: #1a1f2e;
+      --text-color: #ccd6f6;
+      --text-muted: #8892b0;
+      --border-color: rgba(255, 255, 255, 0.09);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
+      letter-spacing: -0.02em;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 80px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 36px;
+      border-bottom: 1px solid var(--border-color);
+      background-color: #0b0d13;
+    }
+    .series-badge {
+      background-color: var(--topic-postgresql);
+      color: #fff;
+      border: 1px solid var(--primary-color);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+    }
+    main {
+      flex: 1;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 36px;
+    }
+    h1 {
+      margin: 0 0 6px 0;
+      font-size: 1.9rem;
+      background: var(--gradient-blue-purple);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .interactive-split {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 22px;
+      margin: 20px 0 28px 0;
+    }
+    .stage-card {
+      background: var(--card-bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 22px;
+    }
+    pre {
+      background: var(--code-bg-color);
+      border: 1px solid var(--border-color);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      overflow-x: auto;
+      color: var(--text-color);
+    }
+    #hub-3d-viewer {
+      width: 100%;
+      height: 340px;
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #090c12;
+      border: 1px solid var(--border-color);
+    }
+    .ep-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .ep-card {
+      background: var(--card-bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .ep-card:hover, .ep-card.active {
+      border-color: var(--primary-color);
+      box-shadow: 0 4px 18px rgba(92, 158, 255, 0.15);
+    }
+    .ep-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .badge {
+      background: var(--topic-postgresql);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-size: 0.76rem;
+      font-weight: 700;
+    }
+    .speedup-pill {
+      color: var(--primary-light-blue);
+      font-size: 0.76rem;
+      font-weight: 600;
+    }
+    h3 {
+      margin: 6px 0;
+      font-size: 1.12rem;
+      color: var(--primary-color);
+    }
+    .ep-sub {
+      margin: 0 0 8px 0;
+      font-size: 0.83rem;
+      color: var(--secondary-color);
+      font-weight: 600;
+    }
+    .ep-desc {
+      font-size: 0.81rem;
+      color: var(--text-color);
+      margin-bottom: 12px;
+    }
+    .ep-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    button, .btn-link {
+      background: var(--code-bg-color);
+      color: var(--text-color);
+      border: 1px solid rgba(92, 158, 255, 0.3);
+      padding: 6px 11px;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    button:hover, button.active, .btn-link:hover {
+      background: var(--gradient-blue-purple);
+      color: #fff;
+      border-color: var(--primary-color);
+    }
+    .blog-pill {
+      background: rgba(177, 88, 252, 0.12);
+      border: 1px solid rgba(177, 88, 252, 0.35);
+      color: var(--text-color);
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      text-decoration: none;
+    }
+    .blog-pill:hover {
+      background: var(--secondary-color);
+      color: #fff;
+    }
+    /* Voiced Hovering Video Companion Widget */
+    #hover-video-widget {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 420px;
+      background: rgba(22, 27, 39, 0.96);
+      border: 2px solid var(--primary-color);
+      border-radius: 14px;
+      box-shadow: 0 16px 42px rgba(0, 0, 0, 0.75);
+      z-index: 9999;
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+      transition: width 0.25s ease;
+    }
+    #hover-video-widget.expanded { width: 720px; }
+    #hover-video-widget.minimized { width: 290px; }
+    #hover-video-widget.minimized .hover-body { display: none; }
+    #hover-video-widget.docked {
+      position: static;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .hover-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 12px;
+      background: #0b0d13;
+      border-bottom: 1px solid var(--border-color);
+      cursor: move;
+      user-select: none;
+    }
+    .hover-title {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 230px;
+    }
+    .hover-body video {
+      width: 100%;
+      display: block;
+      background: #000;
+    }
+    .act-chapters {
+      display: flex;
+      gap: 4px;
+      padding: 6px 8px;
+      background: #0f1117;
+      border-top: 1px solid var(--border-color);
+    }
+    .act-btn {
+      flex: 1;
+      padding: 4px 2px;
+      font-size: 0.68rem;
+      border-radius: 5px;
+    }
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 36px;
+      background-color: #0b0d13;
+      border-top: 2px solid #4361ee;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <span class="series-badge">SERIES 01 • INTERACTIVE EXPLORER</span>
+      <span style="margin-left: 12px; color: var(--text-muted); font-size: 0.86rem;">Hello World, pg_bio! — Voiced Hovering Video &amp; 3D Studio</span>
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <button onclick="toggleHoverDock()">📌 Float / Dock Voiced Video</button>
+      <a class="btn-link" href="https://ideia.me/pg-bio-videos/" target="_blank">🌐 ideia.me/pg-bio-videos</a>
+      <a class="btn-link" href="https://github.com/jonatas/pg_bio" target="_blank">🐙 github.com/jonatas/pg_bio</a>
+    </div>
+  </header>
+
+  <main>
+    <div>
+      <h1>🧬 Hello World, pg_bio! — Biotech &amp; Multiomics Explorer</h1>
+      <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">
+        Scroll and explore the SQL queries, 3D protein pockets, and linked <code>ideia.me</code> blog posts while the <strong>🔊 Voiced Hovering Video Companion</strong> floats in the corner (drag it anywhere, resize it, or click Act I–V to sync the 3D viewer!).
+      </p>
+    </div>
+
+    <div id="docked-video-slot" style="margin-top: 16px;"></div>
+
+    <!-- Interactive Split Stage: Active Episode Rosetta + SQL on Left | 3Dmol.js Stage on Right -->
+    <div class="interactive-split">
+      <div class="stage-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+          <span class="badge" id="stage-ep-layer">Layers 1 & 6: Genomics (int4range GiST) & Sequence Physics</span>
+          <div>
+            <button id="btn-lens-eng" class="active" onclick="setLens('engineer')">⚙️ Systems Engineer</button>
+            <button id="btn-lens-bio" onclick="setLens('biologist')">🧬 Structural Biologist</button>
+          </div>
+        </div>
+        <h3 id="stage-ep-title" style="font-size: 1.25rem; margin-top: 0;">Ep 1: Hello World, pg_bio! The Central Dogma in SQL</h3>
+        <p id="stage-lens-text" style="font-size: 0.88rem;">
+          <strong>⚙️ Systems Engineering Lens:</strong> PostgreSQL 1D int4range GiST overlap (&&) and distance (<->) operators scan billions of base pairs, while single-pass Rust byte slices compute bio_translate_dna(), isoelectric_point(), and gravy_score() in 200 ns.
+        </p>
+        <pre id="stage-sql-code">bio_demo=# SELECT
+    bio_translate_dna('ATGTTCGAAGGTTTCGAACGTCGT')       AS peptide_seq,
+    round(isoelectric_point('MFEGFERRLVDWPSTDK')::numeric, 2) AS pI_charge,
+    round(gravy_score('MFEGFERRLVDWPSTDK')::numeric, 3)       AS hydropathy,
+    round(sequence_entropy('MFEGFERRLVDWPSTDK')::numeric, 3)  AS shannon_bits,
+    prosite_match('MFEGFERRLVDWPSTDKHCH', 'H-x-H')            AS metal_motif
+WHERE int4range(10500, 11800) <-> int4range(8000, 9200) < 5000;</pre>
+        <div style="margin-top: 10px;">
+          <strong style="font-size: 0.78rem; color: var(--secondary-color);">📚 Companion Blog Posts on ideia.me:</strong>
+          <div id="stage-blog-pills" class="ep-links" style="margin-top: 6px;"></div>
+        </div>
+      </div>
+
+      <div class="stage-card">
+        <h3 style="margin-top: 0;">🔬 Interactive 3D Molecular Stage (3Dmol.js)</h3>
+        <div id="hub-3d-viewer"></div>
+        <div class="ep-links" style="margin-top: 12px;">
+          <button onclick="highlightCore()">1. Highlight Catalytic Zn2+ &amp; Water</button>
+          <button onclick="highlightPocket()">2. Show 3D Morton Z-Order Sphere</button>
+          <button onclick="resetView()">3. Reset Backbone</button>
+        </div>
+        <div id="hub-chemistry-note" style="margin-top: 10px; padding: 10px; border-left: 3px solid var(--primary-color); background: rgba(92,158,255,0.07); font-size: 0.82rem;">
+          <strong>💡 Synced 3D Stage:</strong> Clicking Act I–V in the voiced hovering video player automatically updates this 3D structure view.
+        </div>
+      </div>
+    </div>
+
+    <h3 style="font-size: 1.3rem; margin-bottom: 12px;">📺 All 4 Episodes in Series 01</h3>
+    <div class="ep-grid">
+      
+      <div class="ep-card active" id="card-ep01_central_dogma_and_genomics" onclick="selectEpisode(0)">
+        <div class="ep-header">
+          <span class="badge">Episode 01</span>
+          <span class="speedup-pill">200x faster than BioPython (~200 ns/protein in Rust)</span>
+        </div>
+        <h3>Ep 1: Hello World, pg_bio! The Central Dogma in SQL</h3>
+        <p class="ep-sub">DNA -> RNA -> Protein Physics & 1D Genomic Safe Harbors (int4range GiST)</p>
+        <p class="ep-desc">Biology's Central Dogma compiles 4 DNA bases (A, T, G, C) into 20 amino acids. When inserting synthetic genes via CRISPR, you must find a Safe Harbor near a tissue promoter without intersecting tumor suppressor genes, then verify the protein's charge (pI) and hydropathy.</p>
+        <div class="ep-links" onclick="event.stopPropagation();">
+          <button onclick="selectEpisode(0)">🔊 Load in Hovering Video &amp; 3D Stage</button>
+          <a class="btn-link" href="ep01_central_dogma_and_genomics/studio_deck.html" target="_blank">🧪 Standalone Studio Deck</a>
+          <a class="btn-link" href="ep01_central_dogma_and_genomics/talk_track.md" target="_blank">📜 Talk Track</a>
+          <a class="btn-link" href="ep01_central_dogma_and_genomics/live_demo.sql" target="_blank">💻 SQL Script</a>
+          <a class="btn-link" href="../../docs/07_genomics_io.md" target="_blank">📘 pg_bio Doc</a>
+        </div>
+        <div class="ep-links" style="margin-top: 8px;" onclick="event.stopPropagation();">
+          <a class="blog-pill" href="https://ideia.me/pg-bio-intro" target="_blank">📖 Introducing pg_bio</a><a class="blog-pill" href="https://ideia.me/teaflon-synthetic-biology-part-8-genomic-architecture" target="_blank">📖 Genomic Safe-Harbor Architecture</a><a class="blog-pill" href="https://ideia.me/postgresql-rust-ffi-pgrx-memory-contexts-varlena-toast-pg-bio" target="_blank">📖 Rust pgrx Memory Contexts & TOAST</a>
+        </div>
+      </div>
+      <div class="ep-card " id="card-ep02_3d_pockets_and_morton_curves" onclick="selectEpisode(1)">
+        <div class="ep-header">
+          <span class="badge">Episode 02</span>
+          <span class="speedup-pill">120x faster 3D pocket extraction (Zero KD-Tree build time)</span>
+        </div>
+        <h3>Ep 2: From 1D Strings to 3D Atoms with Morton Curves</h3>
+        <p class="ep-sub">3D PDB Folding, 64-Bit Z-Order B-Tree Bounding Boxes & Kabsch RMSD</p>
+        <p class="ep-desc">Once translated, a 1D amino acid string folds into a 3D atomic cloud measured in Angstroms. Catalysis happens inside a tiny 3.5 to 5.0 Angstrom 3D pocket—where residues that are 100 positions apart in the string snap together in 3D space to coordinate a metal cofactor.</p>
+        <div class="ep-links" onclick="event.stopPropagation();">
+          <button onclick="selectEpisode(1)">🔊 Load in Hovering Video &amp; 3D Stage</button>
+          <a class="btn-link" href="ep02_3d_pockets_and_morton_curves/studio_deck.html" target="_blank">🧪 Standalone Studio Deck</a>
+          <a class="btn-link" href="ep02_3d_pockets_and_morton_curves/talk_track.md" target="_blank">📜 Talk Track</a>
+          <a class="btn-link" href="ep02_3d_pockets_and_morton_curves/live_demo.sql" target="_blank">💻 SQL Script</a>
+          <a class="btn-link" href="../../docs/03_spatial_indexing.md" target="_blank">📘 pg_bio Doc</a>
+        </div>
+        <div class="ep-links" style="margin-top: 8px;" onclick="event.stopPropagation();">
+          <a class="blog-pill" href="https://ideia.me/indexing-3d-space-like-a-video-game" target="_blank">📖 Indexing 3D Space Like a Video Game</a><a class="blog-pill" href="https://ideia.me/store-query-3d-protein-structures-postgresql" target="_blank">📖 Store & Query 3D Protein Structures in SQL</a><a class="blog-pill" href="https://ideia.me/postgresql-query-planner-rangefinder-gist-bioinformatics-engine" target="_blank">📖 Query Planner & RangeFinder Pocket GiST</a>
+        </div>
+      </div>
+      <div class="ep-card " id="card-ep03_scrna_csr_and_attention_maps" onclick="selectEpisode(2)">
+        <div class="ep-header">
+          <span class="badge">Episode 03</span>
+          <span class="speedup-pill">31.1x faster than Python/NumPy & 90% less RAM footprint</span>
+        </div>
+        <h3>Ep 3: Transcriptomics & CSR Sparse Attention Graphs</h3>
+        <p class="ep-sub">Slashing 20-Billion-Cell scRNA Matrices & Mapping Allosteric Hotspots</p>
+        <p class="ep-desc">Every cell in your body shares the exact same DNA, yet a neuron and a T-cell behave completely differently because of which genes they express (Transcriptomics). Sequencing 1 million cells across 20,000 genes creates a 20-billion-cell matrix that is 90% zeroes—crushing traditional SQL schemas and RAM.</p>
+        <div class="ep-links" onclick="event.stopPropagation();">
+          <button onclick="selectEpisode(2)">🔊 Load in Hovering Video &amp; 3D Stage</button>
+          <a class="btn-link" href="ep03_scrna_csr_and_attention_maps/studio_deck.html" target="_blank">🧪 Standalone Studio Deck</a>
+          <a class="btn-link" href="ep03_scrna_csr_and_attention_maps/talk_track.md" target="_blank">📜 Talk Track</a>
+          <a class="btn-link" href="ep03_scrna_csr_and_attention_maps/live_demo.sql" target="_blank">💻 SQL Script</a>
+          <a class="btn-link" href="../../docs/12_mmpbsa_free_energy_auditing.md" target="_blank">📘 pg_bio Doc</a>
+        </div>
+        <div class="ep-links" style="margin-top: 8px;" onclick="event.stopPropagation();">
+          <a class="blog-pill" href="https://ideia.me/5lox-triterpenoids-mmpbsa-free-energy-audit-pg-bio" target="_blank">📖 500 ns 5-LOX Triterpenoid MD Audit in SQL</a><a class="blog-pill" href="https://ideia.me/analyzing-hic-3d-genomic-contact-maps-sql" target="_blank">📖 Analyzing Hi-C 3D Genomic Contact Maps in SQL</a>
+        </div>
+      </div>
+      <div class="ep-card " id="card-ep04_joint_vector_multiomics" onclick="selectEpisode(3)">
+        <div class="ep-header">
+          <span class="badge">Episode 04</span>
+          <span class="speedup-pill">Scans 2.34M proteins in 0.4 ms + Zero external ETL scripts</span>
+        </div>
+        <h3>Ep 4: The Multiomics Holy Grail — Vectors & Live UniProt</h3>
+        <p class="ep-sub">1280-D HNSW Embeddings, Twilight-Zone Homology & Native UniProt HTTP in SQL</p>
+        <p class="ep-desc">99% of microbial proteins in extreme environments (deep-sea vents, salt flats, acid lakes) are uncharacterized 'Dark Proteome' orphans. Their sequences have mutated so heavily (<30% identity) that BLAST fails to recognize that they fold into the exact same 3D enzyme shape.</p>
+        <div class="ep-links" onclick="event.stopPropagation();">
+          <button onclick="selectEpisode(3)">🔊 Load in Hovering Video &amp; 3D Stage</button>
+          <a class="btn-link" href="ep04_joint_vector_multiomics/studio_deck.html" target="_blank">🧪 Standalone Studio Deck</a>
+          <a class="btn-link" href="ep04_joint_vector_multiomics/talk_track.md" target="_blank">📜 Talk Track</a>
+          <a class="btn-link" href="ep04_joint_vector_multiomics/live_demo.sql" target="_blank">💻 SQL Script</a>
+          <a class="btn-link" href="../../docs/01_vector_homology.md" target="_blank">📘 pg_bio Doc</a>
+        </div>
+        <div class="ep-links" style="margin-top: 8px;" onclick="event.stopPropagation();">
+          <a class="blog-pill" href="https://ideia.me/why-proteins-are-just-high-dimensional-vectors" target="_blank">📖 Why Proteins Are High-Dimensional Vectors</a><a class="blog-pill" href="https://ideia.me/scaling-pg-bio-swarm-8-8-million-edges-all-time-twilight-records-dark-proteome" target="_blank">📖 Scaling pg_bio Swarm: 8.8M Edges in Dark Proteome</a><a class="blog-pill" href="https://ideia.me/the-27-hour-index" target="_blank">📖 The 27-Hour HNSW Index & halfvec</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div>🌐 Blog &amp; Video Library: <a href="https://ideia.me/pg-bio-videos/" target="_blank" rel="noopener">https://ideia.me/pg-bio-videos/</a></div>
+    <div>🧬 <strong>pg_bio</strong> — The Multiomics Operating System in PostgreSQL</div>
+    <div>🐙 GitHub Repository: <a href="https://github.com/jonatas/pg_bio" target="_blank" rel="noopener">https://github.com/jonatas/pg_bio</a></div>
+  </footer>
+
+  <!-- Voiced Hovering Video Companion Widget -->
+  <div id="hover-video-widget">
+    <div class="hover-header" id="hover-drag-handle">
+      <span class="hover-title" id="hover-now-playing">🔊 Ep 1: Hello World, pg_bio! The Central Dogma in SQL</span>
+      <div style="display: flex; gap: 4px;">
+        <button style="padding: 2px 6px; font-size: 0.7rem;" onclick="document.getElementById('hover-video-widget').classList.toggle('expanded')" title="Expand / Shrink">⤢</button>
+        <button style="padding: 2px 6px; font-size: 0.7rem;" onclick="toggleHoverDock()" title="Dock / Float">📌</button>
+        <button style="padding: 2px 6px; font-size: 0.7rem;" onclick="document.getElementById('hover-video-widget').classList.toggle('minimized')" title="Minimize">—</button>
+      </div>
+    </div>
+    <div class="hover-body">
+      <video id="series-video" controls playsinline preload="metadata" data-mp4-src="ep01_central_dogma_and_genomics/ep01_central_dogma_and_genomics.mp4">
+        <source src="ep01_central_dogma_and_genomics/ep01_central_dogma_and_genomics.mp4" type="video/mp4">
+      </video>
+      <div class="act-chapters">
+        <button class="act-btn" onclick="seekAct(0)">Act I: Bio</button>
+        <button class="act-btn" onclick="seekAct(1)">Act II: IPC</button>
+        <button class="act-btn" onclick="seekAct(2)">Act III: Bridge</button>
+        <button class="act-btn" onclick="seekAct(3)">Act IV: SQL</button>
+        <button class="act-btn" onclick="seekAct(4)">Act V: Proof</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const EPISODES = [{"ep_num": 1, "slug": "ep01_central_dogma_and_genomics", "visual_mode": "central_dogma_gist", "title": "Ep 1: Hello World, pg_bio! The Central Dogma in SQL", "subtitle": "DNA -> RNA -> Protein Physics & 1D Genomic Safe Harbors (int4range GiST)", "layer": "Layers 1 & 6: Genomics (int4range GiST) & Sequence Physics", "bio_problem": "Biology's Central Dogma compiles 4 DNA bases (A, T, G, C) into 20 amino acids. When inserting synthetic genes via CRISPR, you must find a Safe Harbor near a tissue promoter without intersecting tumor suppressor genes, then verify the protein's charge (pI) and hydropathy.", "cs_mechanism": "PostgreSQL 1D int4range GiST overlap (&&) and distance (<->) operators scan billions of base pairs, while single-pass Rust byte slices compute bio_translate_dna(), isoelectric_point(), and gravy_score() in 200 ns.", "speedup": "200x faster than BioPython (~200 ns/protein in Rust)", "docs_ref": "../../docs/07_genomics_io.md", "notebook_ref": "../../experiments/06_genomics_io_tutorial.ipynb", "blogs": [{"title": "Introducing pg_bio", "url": "https://ideia.me/pg-bio-intro"}, {"title": "Genomic Safe-Harbor Architecture", "url": "https://ideia.me/teaflon-synthetic-biology-part-8-genomic-architecture"}, {"title": "Rust pgrx Memory Contexts & TOAST", "url": "https://ideia.me/postgresql-rust-ffi-pgrx-memory-contexts-varlena-toast-pg-bio"}], "bullets": ["\u2022 Central Dogma in SQL: bio_translate_dna('ATGTTC...') -> 'MF...'", "\u2022 1D Safe Harbor GiST: safe.locus <-> promoter.locus < 5000", "\u2022 Isoelectric Point (pI): 100-step Henderson-Hasselbalch bisection", "\u2022 Hydropathy (GRAVY) & Shannon Entropy in a single byte pass"], "rosetta_mappings": [["int4range + GiST Index (&& and <->)", "1D spatial interval tree with O(log N) overlap & nearest-neighbor operators", "Finds CRISPR genomic Safe Harbors near promoters while avoiding oncogenes"], ["Compile-Time Match Lookup (bio_translate_dna)", "Zero-allocation 3-byte ASCII codon slice -> amino acid byte stream", "Translates raw genomic DNA reading frames into functional protein sequences"], ["Root-Finding Bisection (isoelectric_point & gravy_score)", "Single-pass byte histogram + 100-step Henderson-Hasselbalch solver", "Predicts whether an enzyme stays soluble or precipitates in acid/salt vats"]], "sql_lines": ["bio_demo=# SELECT", "    bio_translate_dna('ATGTTCGAAGGTTTCGAACGTCGT')       AS peptide_seq,", "    round(isoelectric_point('MFEGFERRLVDWPSTDK')::numeric, 2) AS pI_charge,", "    round(gravy_score('MFEGFERRLVDWPSTDK')::numeric, 3)       AS hydropathy,", "    round(sequence_entropy('MFEGFERRLVDWPSTDK')::numeric, 3)  AS shannon_bits,", "    prosite_match('MFEGFERRLVDWPSTDKHCH', 'H-x-H')            AS metal_motif", "WHERE int4range(10500, 11800) <-> int4range(8000, 9200) < 5000;"], "sql_results": ["\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510", "\u2502 peptide_seq \u2502 pI_charge \u2502 hydropathy \u2502 shannon_bits \u2502 metal_motif \u2502", "\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524", "\u2502 MFEGFERR    \u2502      4.68 \u2502     -1.124 \u2502        3.585 \u2502 t           \u2502", "\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518", "Time: 0.214 ms  (200x faster than BioPython)"], "narrations": ["Hello World, and welcome to Episode 1 of pg_bio! If you are a software or database engineer, biology can look like a wall of jargon. But the Central Dogma of biology is literally a compiler: DNA is 4-letter source code on disk, RNA is an ephemeral message queue, and proteins are compiled 3D state machines.", "In traditional bioinformatics, engineers export gigabytes of FASTA and VCF files to Python just to translate codons or check genomic intervals. With pg_bio, that entire compiler runs natively inside PostgreSQL shared buffers in Rust.", "Here is your first Systems-to-Biotech bridge: a human chromosome is just a 1D integer coordinate space. Using PostgreSQL int4range and GiST indexes, finding a CRISPR safe-harbor locus near a promoter without touching a tumor suppressor gene is a sub-millisecond interval query.", "Look at psql: in one query, bio_translate_dna compiles DNA codons into amino acids, isoelectric_point runs 100-step Henderson-Hasselbalch bisection to find net charge, and gravy_score measures water-repellency in 200 nanoseconds.", "You just executed genomics and protein sequence physics in 0.2 milliseconds inside SQL. Explore all articles at ideia dot me and check out the pg_bio repository on GitHub."]}, {"ep_num": 2, "slug": "ep02_3d_pockets_and_morton_curves", "visual_mode": "morton_3d_pocket", "title": "Ep 2: From 1D Strings to 3D Atoms with Morton Curves", "subtitle": "3D PDB Folding, 64-Bit Z-Order B-Tree Bounding Boxes & Kabsch RMSD", "layer": "Layers 2, 6 & 8: 3D Spatial Z-Order Curves & Structural Superposition", "bio_problem": "Once translated, a 1D amino acid string folds into a 3D atomic cloud measured in Angstroms. Catalysis happens inside a tiny 3.5 to 5.0 Angstrom 3D pocket\u2014where residues that are 100 positions apart in the string snap together in 3D space to coordinate a metal cofactor.", "cs_mechanism": "z_order_encode(x, y, z) bit-interleaves 21-bit 3D Cartesian floats into a single 64-bit BIGINT B-Tree key, while kabsch_rmsd() and theozyme_rmsd() run stack-allocated 3x3 Jacobi SVD to align 3D pockets in microseconds.", "speedup": "120x faster 3D pocket extraction (Zero KD-Tree build time)", "docs_ref": "../../docs/03_spatial_indexing.md", "notebook_ref": "../../experiments/08_pdb_parsing.ipynb", "blogs": [{"title": "Indexing 3D Space Like a Video Game", "url": "https://ideia.me/indexing-3d-space-like-a-video-game"}, {"title": "Store & Query 3D Protein Structures in SQL", "url": "https://ideia.me/store-query-3d-protein-structures-postgresql"}, {"title": "Query Planner & RangeFinder Pocket GiST", "url": "https://ideia.me/postgresql-query-planner-rangefinder-gist-bioinformatics-engine"}], "bullets": ["\u2022 Native PDB Parser: bio_parse_pdb(pdb_text) -> relational atom rows", "\u2022 3D -> 1D Morton Key: z_order_encode(x, y, z) -> BIGINT B-Tree index", "\u2022 Rotational Alignment: kabsch_rmsd() & theozyme_rmsd() via 3x3 SVD", "\u2022 Bond & Attack Geometry: bio_distance(), bio_angle(), bio_dihedral()"], "rosetta_mappings": [["64-Bit Morton Space-Filling Curve (z_order_encode)", "Interleaves (X, Y, Z) bits via split_by_3 into a 1D B-Tree indexable BIGINT", "Slices out 4.0 \u00c5 3D enzyme binding pockets across millions of atoms instantly"], ["Set-Returning Streaming Parser (bio_parse_pdb)", "Zero-copy Rust iterator parsing ATOM/HETATM records into SQL tuples", "Turns raw AlphaFold / RCSB PDB files into queryable 3D atomic tables"], ["Stack-Allocated 3x3 Jacobi SVD (theozyme_rmsd)", "Computes optimal 3D rotation matrix without external LAPACK/SciPy calls", "Verifies sub-angstrom catalytic triad & Zn2+ water shell superposition"]], "sql_lines": ["bio_demo=# WITH pocket_bounds AS (", "    SELECT z_order_encode(1.0, -4.0, -4.0) AS min_z,", "           z_order_encode(6.0,  1.0,  1.0) AS max_z", ")", "SELECT atom_id, residue_name, x, y, z", "FROM teaflon_atoms, pocket_bounds", "WHERE z_curve_index BETWEEN min_z AND max_z", "  AND theozyme_rmsd(active_site_coords, '4qhp_zn_pentad') <= 0.90;"], "sql_results": ["\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510", "\u2502 atom_id \u2502 residue_name \u2502   x   \u2502   y   \u2502   z   \u2502 theozyme_rmsd \u2502", "\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524", "\u2502      13 \u2502 ZN           \u2502  3.95 \u2502 -1.65 \u2502 -2.15 \u2502         0.412 \u2502", "\u2502      14 \u2502 HOH          \u2502  3.75 \u2502 -2.95 \u2502 -1.15 \u2502         0.412 \u2502", "\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518", "Time: 0.490 ms  (B-Tree Z-Order Index Scan + 3x3 Jacobi SVD)"], "narrations": ["Welcome to Episode 2 of Hello World, pg_bio! In Episode 1, we treated DNA and proteins as 1D strings. But in reality, a protein folds into a 3D molecular machine where catalysis happens inside a 4-Angstrom binding pocket.", "Normally, finding which atoms sit inside a 3D sphere requires pulling millions of coordinates into Python and building an in-memory KD-tree or running brute-force Pythagorean distance loops.", "pg_bio solves this with Morton coding\u2014also known as a Z-Order space-filling curve. Our Rust function z_order_encode interleaves the bits of X, Y, and Z coordinates into a single 64-bit integer. That means a standard 1D PostgreSQL B-Tree index now acts as a 3D spatial bounding box!", "Even better, once the B-Tree narrows down the pocket atoms, theozyme_rmsd runs a zero-allocation 3-by-3 Jacobi SVD right inside SQL to rotationally align the catalytic metal and nucleophilic water.", "That is 3D structural biology powered by B-Trees and linear algebra inside PostgreSQL. Visit ideia dot me and the pg_bio GitHub repo to try the interactive 3D notebooks."]}, {"ep_num": 3, "slug": "ep03_scrna_csr_and_attention_maps", "visual_mode": "csr_sparse_graph", "title": "Ep 3: Transcriptomics & CSR Sparse Attention Graphs", "subtitle": "Slashing 20-Billion-Cell scRNA Matrices & Mapping Allosteric Hotspots", "layer": "Layers 3 & 9: Single-Cell CSR Arrays, Neural Attention & Allostery", "bio_problem": "Every cell in your body shares the exact same DNA, yet a neuron and a T-cell behave completely differently because of which genes they express (Transcriptomics). Sequencing 1 million cells across 20,000 genes creates a 20-billion-cell matrix that is 90% zeroes\u2014crushing traditional SQL schemas and RAM.", "cs_mechanism": "Compressed Sparse Row (CSR) storage (SparseAttentionMap, create_sparse_map, build_energy_hotspot_map) stores only non-zero contacts and expression counts, reducing O(L^2) dense scans to O(nnz) nanosecond slice lookups.", "speedup": "31.1x faster than Python/NumPy & 90% less RAM footprint", "docs_ref": "../../docs/12_mmpbsa_free_energy_auditing.md", "notebook_ref": "../../experiments/11_5lox_triterpenoid_mmpbsa_validation.ipynb", "blogs": [{"title": "500 ns 5-LOX Triterpenoid MD Audit in SQL", "url": "https://ideia.me/5lox-triterpenoids-mmpbsa-free-energy-audit-pg-bio"}, {"title": "Analyzing Hi-C 3D Genomic Contact Maps in SQL", "url": "https://ideia.me/analyzing-hic-3d-genomic-contact-maps-sql"}], "bullets": ["\u2022 Sparse CSR Type: SparseAttentionMap (row_ptr, col_idx, values)", "\u2022 Transformer Attention in SQL: get_top_interacting_residues(map, res_id, k)", "\u2022 Cryptic Pocket Discovery: discover_cryptic_hotspots() in 7.97 ms", "\u2022 Allosteric Mechanism Index: allosteric_mechanism_index() over CSR graphs"], "rosetta_mappings": [["Compressed Sparse Row (CSR: row_ptr, col_idx, val)", "Drops 90%+ zero entries from 20-billion-point matrices and LxL contact maps", "Stores single-cell RNA expression & protein attention graphs in L1 cache"], ["O(nnz) Slice Traversal (get_top_interacting_residues)", "Indexes directly into row_ptr[i..i+1] without scanning dense zeroes", "Extracts long-range amino acid couplings from ESM-2 transformer heads"], ["CSR Energy Network Profiler (discover_cryptic_hotspots)", "Combines MM/PBSA ledger auditing with sparse graph neighborhood filtering", "Uncovers hidden allosteric anchor residues outside the known active site"]], "sql_lines": ["bio_demo=# SELECT", "    system_id,", "    get_top_interacting_residues(attention_map, 94, 3) AS top_coupled_residues,", "    discover_cryptic_hotspots(", "        build_energy_hotspot_map(677, residue_ids, energy_arr, 677, -0.15),", "        677, ARRAY[68, 108, 109, 110], 0.35, 3", "    ) AS cryptic_allosteric_anchors", "FROM protein_attention_and_energy_maps;"], "sql_results": ["\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510", "\u2502 system_id  \u2502 top_coupled_residues \u2502 cryptic_allosteric_anchors \u2502", "\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524", "\u2502 5LOX_3B4F  \u2502 {96,106,201}         \u2502 {126,29,66}                \u2502", "\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518", "Time: 0.580 ms  (31.14x faster than dense NumPy matrix unpacking)"], "narrations": ["Welcome to Episode 3 of Hello World, pg_bio! If every cell in your body has the exact same DNA database, why is a brain cell different from a liver cell? The answer is Transcriptomics and allosteric regulation\u2014which genes are turned on, and how distant residues talk to each other.", "When scientists run Single-Cell RNA sequencing on 1 million cells across 20,000 human genes, it creates a 20-billion-point matrix. Because a cell only expresses about 2,000 genes at a time, over 90 percent of that matrix is zeroes. Storing dense columns in SQL or Pandas wastes gigabytes of RAM.", "Systems engineers already know the cure: Compressed Sparse Row, or C-S-R. pg_bio implements a native SparseAttentionMap type using row pointers, column indices, and non-zero values.", "Whether you are unpacking single-cell RNA dosage, traversing ESM-2 transformer attention heads with get_top_interacting_residues, or discovering cryptic allosteric pockets across 500-nanosecond molecular dynamics trajectories, CSR scans only the non-zero edges in microseconds.", "That slashes memory by 90 percent and runs 31 times faster than dense Python matrices. Read the full deep dive at ideia dot me and explore pg_bio on GitHub."]}, {"ep_num": 4, "slug": "ep04_joint_vector_multiomics", "visual_mode": "hnsw_twilight_zone", "title": "Ep 4: The Multiomics Holy Grail \u2014 Vectors & Live UniProt", "subtitle": "1280-D HNSW Embeddings, Twilight-Zone Homology & Native UniProt HTTP in SQL", "layer": "Layers 4 & 5: Joint Vector Spaces (halfvec HNSW) & Live UniProt FDW", "bio_problem": "99% of microbial proteins in extreme environments (deep-sea vents, salt flats, acid lakes) are uncharacterized 'Dark Proteome' orphans. Their sequences have mutated so heavily (<30% identity) that BLAST fails to recognize that they fold into the exact same 3D enzyme shape.", "cs_mechanism": "1280-D halfvec HNSW cosine distance (<=>) narrows 2.34M proteins down to 15 candidates in 0.4 ms, short-circuiting into O(N) two-row Smith-Waterman DP and enriching winners live via bio_fetch_uniprot().", "speedup": "Scans 2.34M proteins in 0.4 ms + Zero external ETL scripts", "docs_ref": "../../docs/01_vector_homology.md", "notebook_ref": "../../experiments/09_huggingface_esm2_discovery.ipynb", "blogs": [{"title": "Why Proteins Are High-Dimensional Vectors", "url": "https://ideia.me/why-proteins-are-just-high-dimensional-vectors"}, {"title": "Scaling pg_bio Swarm: 8.8M Edges in Dark Proteome", "url": "https://ideia.me/scaling-pg-bio-swarm-8-8-million-edges-all-time-twilight-records-dark-proteome"}, {"title": "The 27-Hour HNSW Index & halfvec", "url": "https://ideia.me/the-27-hour-index"}], "bullets": ["\u2022 50% RAM Savings: 1280-D halfvec HNSW graph indexing (<=>)", "\u2022 Twilight-Zone Bell Curve: 3D fold convergence vs sequence divergence", "\u2022 O(N) Rolling-Buffer DP: smith_waterman_score() on HNSW survivors", "\u2022 Live UniProt SQL Client: bio_fetch_uniprot() & bio_search_uniprot()"], "rosetta_mappings": [["1280-D halfvec HNSW Graph Index (<=>)", "16-bit float approximate nearest neighbor graph in shared buffers", "Finds proteins with identical 3D folds across 2.34M sequences in 0.4 ms"], ["Query-Planner Funnel + Two-Row Smith-Waterman DP", "HNSW prunes 99.999% first; O(N) rolling-buffer DP scores only 15 survivors", "Uncovers extremophile Twilight-Zone orthologs (15%\u201375% sequence identity)"], ["Synchronous Rust HTTP SRF (bio_fetch_uniprot)", "ureq + serde JSON projection into Postgres UniprotEntry composite types", "Enriches orphan discoveries with live organism & taxonomy inside pure SQL"]], "sql_lines": ["bio_demo=# WITH candidates AS (", "    SELECT uniprot_id, sequence, (embedding <=> :bait_vec) AS cos_dist", "    FROM dark_proteome ORDER BY embedding <=> :bait_vec LIMIT 10", ")", "SELECT c.uniprot_id, u.organism, round(c.cos_dist::numeric, 4) AS dist,", "       smith_waterman_score(c.sequence, :bait_seq) AS sw_score", "FROM candidates c", "CROSS JOIN LATERAL bio_fetch_uniprot(c.uniprot_id) u;"], "sql_results": ["\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510", "\u2502 uniprot_id \u2502         organism          \u2502  dist  \u2502 sw_score \u2502", "\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524", "\u2502 A0A5B9DCV6 \u2502 Deep-sea Asgard archaeon  \u2502 0.0682 \u2502      312 \u2502", "\u2502 L0JL84     \u2502 Halophilic archaeon       \u2502 0.0741 \u2502      289 \u2502", "\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518", "Time: 0.420 ms local HNSW + live UniProt REST enrichment"], "narrations": ["Welcome to Episode 4, the finale of our Hello World, pg_bio intro series! Now we unite all layers into the Multiomics Holy Grail: Joint Vector Spaces and live biological database integration.", "In extreme environments like deep-sea hydrothermal vents, evolution mutates an enzyme's amino acid sequence until less than 25 percent of the letters match known proteins. Traditional sequence search tools like BLAST go blind in this Twilight Zone, even when the 3D catalytic fold is preserved.", "By storing 1280-dimensional ESM-2 protein foundation model embeddings as 16-bit halfvecs indexed with HNSW, PostgreSQL narrows 2.34 million dark proteins down to the top 15 structural twins in 0.4 milliseconds.", "Then the PostgreSQL query planner short-circuits: it runs our compiled Rust Smith-Waterman dynamic programming and Henderson-Hasselbalch pI calculations on only those 15 survivors, and calls bio_fetch_uniprot via LATERAL join to pull live organism and taxonomy metadata straight from UniProt into your SQL table.", "From 1D DNA intervals, to 3D Morton pockets, to sparse CSR graphs, to HNSW vector discovery\u2014you now know the core multiomics stack in PostgreSQL. Dive deeper at ideia dot me and star pg_bio on GitHub!"]}];
+    let activeIdx = 0;
+    let activeLens = 'engineer';
+    let viewer = null;
+    const blobCache = {};
+
+    async function loadVideoResilient(video, mp4Url, autoPlay) {
+      video.dataset.mp4Src = mp4Url;
+      if (blobCache[mp4Url]) {
+        video.src = blobCache[mp4Url];
+        if (autoPlay) video.play().catch(() => {});
+        return;
+      }
+      video.src = mp4Url;
+      video.load();
+      if (autoPlay) {
+        try {
+          await video.play();
+          return;
+        } catch (_) {}
+      }
+      try {
+        const resp = await fetch(mp4Url, { cache: 'reload' });
+        if (!resp.ok) return;
+        const blob = await resp.blob();
+        const bUrl = URL.createObjectURL(new Blob([blob], { type: 'video/mp4' }));
+        blobCache[mp4Url] = bUrl;
+        if (video.dataset.mp4Src === mp4Url && (video.error || video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE || autoPlay)) {
+          video.src = bUrl;
+          video.load();
+          if (autoPlay) video.play().catch(() => {});
+        }
+      } catch (_) {}
+    }
+
+    const DEMO_PDB = `
+ATOM      1  N   HIS A  94       0.000   0.000   0.000  1.00 90.00           N
+ATOM      2  CA  HIS A  94       1.458   0.000   0.000  1.00 90.00           C
+ATOM      3  C   HIS A  94       2.009   1.420   0.000  1.00 90.00           C
+ATOM      4  O   HIS A  94       1.251   2.390   0.000  1.00 90.00           O
+ATOM      5  CB  HIS A  94       1.988  -0.760  -1.216  1.00 90.00           C
+ATOM      6  ND1 HIS A  94       3.350  -0.950  -1.350  1.00 95.00           N
+ATOM      7  N   HIS A  96       4.100   0.800  -2.200  1.00 92.00           N
+ATOM      8  CA  HIS A  96       5.200   0.100  -2.800  1.00 92.00           C
+ATOM      9  ND1 HIS A  96       4.850  -1.250  -3.200  1.00 95.00           N
+ATOM     10  N   GLU A 106       2.400  -3.400  -2.100  1.00 91.00           N
+ATOM     11  CA  GLU A 106       1.900  -4.200  -1.000  1.00 91.00           C
+ATOM     12  OE1 GLU A 106       3.100  -2.800  -0.400  1.00 96.00           O
+HETATM   13 ZN    ZN A 201       3.950  -1.650  -2.150  1.00 99.00          ZN
+HETATM   14  O   HOH A 301       3.750  -2.950  -1.150  1.00 98.00           O
+END`;
+
+    window.addEventListener('DOMContentLoaded', () => {
+      viewer = $3Dmol.createViewer(document.getElementById('hub-3d-viewer'), {
+        backgroundColor: '#090c12'
+      });
+      viewer.addModel(DEMO_PDB, 'pdb');
+      highlightCore();
+      renderBlogPills(0);
+
+      // Bidirectional Video -> Act & 3Dmol.js Sync + Auto-Advance Next Episode
+      const videoEl = document.getElementById('series-video');
+      videoEl.addEventListener('error', () => {
+        loadVideoResilient(videoEl, videoEl.dataset.mp4Src || (EPISODES[activeIdx].slug + '/' + EPISODES[activeIdx].slug + '.mp4'), false);
+      }, true);
+      let lastSyncedAct = -1;
+      videoEl.addEventListener('timeupdate', () => {
+        if (!videoEl.duration) return;
+        const curAct = Math.min(4, Math.floor((videoEl.currentTime / videoEl.duration) * 5));
+        if (curAct !== lastSyncedAct) {
+          lastSyncedAct = curAct;
+          document.querySelectorAll('.act-btn').forEach((btn, i) => btn.classList.toggle('active', i === curAct));
+          if (curAct === 0) { setLens('biologist'); highlightCore(); }
+          else if (curAct === 2) { setLens('engineer'); highlightPocket(); }
+          else if (curAct === 4) { resetView(); }
+        }
+      });
+      videoEl.addEventListener('ended', () => {
+        if (activeIdx + 1 < EPISODES.length) selectEpisode(activeIdx + 1);
+      });
+
+      // Draggable hovering video widget
+      const widget = document.getElementById('hover-video-widget');
+      const handle = document.getElementById('hover-drag-handle');
+      let dragging = false, startX = 0, startY = 0, origR = 24, origB = 24;
+      handle.addEventListener('mousedown', (e) => {
+        if (widget.classList.contains('docked') || e.target.tagName === 'BUTTON') return;
+        dragging = true; startX = e.clientX; startY = e.clientY;
+        const r = widget.getBoundingClientRect();
+        origR = window.innerWidth - r.right; origB = window.innerHeight - r.bottom;
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (!dragging) return;
+        widget.style.right = Math.max(8, origR - (e.clientX - startX)) + 'px';
+        widget.style.bottom = Math.max(8, origB - (e.clientY - startY)) + 'px';
+      });
+      window.addEventListener('mouseup', () => { dragging = false; });
+    });
+
+    function renderBlogPills(idx) {
+      const container = document.getElementById('stage-blog-pills');
+      container.innerHTML = EPISODES[idx].blogs
+        .map(b => `<a class="blog-pill" href="${b.url}" target="_blank">📖 ${b.title}</a>`)
+        .join('');
+    }
+
+    function setLens(mode) {
+      activeLens = mode;
+      const ep = EPISODES[activeIdx];
+      document.getElementById('stage-lens-text').innerHTML = mode === 'engineer'
+        ? `<strong>⚙️ Systems Engineering Lens:</strong> ${ep.cs_mechanism}`
+        : `<strong>🧬 Structural Biology Lens:</strong> ${ep.bio_problem}`;
+      document.getElementById('btn-lens-eng').classList.toggle('active', mode === 'engineer');
+      document.getElementById('btn-lens-bio').classList.toggle('active', mode === 'biologist');
+    }
+
+    function selectEpisode(idx) {
+      activeIdx = idx;
+      const ep = EPISODES[idx];
+      const video = document.getElementById('series-video');
+      const mp4Url = ep.slug + '/' + ep.slug + '.mp4';
+      loadVideoResilient(video, mp4Url, true);
+      document.getElementById('hover-now-playing').textContent = '🔊 ' + ep.title;
+      document.getElementById('stage-ep-layer').textContent = ep.layer;
+      document.getElementById('stage-ep-title').textContent = ep.title;
+      document.getElementById('stage-sql-code').textContent = ep.sql_lines.join('\n');
+      setLens(activeLens);
+      renderBlogPills(idx);
+      document.querySelectorAll('.ep-card').forEach((el, i) => el.classList.toggle('active', i === idx));
+      if (idx === 1) highlightPocket();
+      else highlightCore();
+    }
+
+    async function seekAct(actIdx) {
+      const video = document.getElementById('series-video');
+      if (!video.duration || video.error) {
+        await loadVideoResilient(video, video.dataset.mp4Src || (EPISODES[activeIdx].slug + '/' + EPISODES[activeIdx].slug + '.mp4'), false);
+      }
+      if (video.duration) {
+        video.currentTime = (video.duration / 5) * actIdx;
+      }
+      video.play().catch(() => {});
+      if (actIdx === 0) highlightCore();
+      if (actIdx === 2) highlightPocket();
+      if (actIdx === 4) resetView();
+    }
+
+    function toggleHoverDock() {
+      const widget = document.getElementById('hover-video-widget');
+      const slot = document.getElementById('docked-video-slot');
+      widget.classList.toggle('docked');
+      if (widget.classList.contains('docked')) slot.appendChild(widget);
+      else document.body.appendChild(widget);
+    }
+
+    function highlightCore() {
+      if (!viewer) return;
+      viewer.removeAllLabels(); viewer.removeAllShapes();
+      viewer.setStyle({}, { stick: { radius: 0.18, colorscheme: 'cyanCarbon' } });
+      viewer.setStyle({ resn: 'ZN' }, { sphere: { scale: 0.65, color: '#FFC107' } });
+      viewer.setStyle({ resn: 'HOH' }, { sphere: { scale: 0.45, color: '#ff5a9d' } });
+      viewer.addLabel('Zn2+ Cofactor', { position: { x: 3.95, y: -1.65, z: -2.15 }, backgroundColor: '#FFC107', fontColor: '#000' });
+      viewer.addLabel('Nucleophilic HOH (2.05 Å)', { position: { x: 3.75, y: -2.95, z: -1.15 }, backgroundColor: '#ff5a9d', fontColor: '#fff' });
+      viewer.zoomTo(); viewer.render();
+      document.getElementById('hub-chemistry-note').innerHTML =
+        "<strong>🔬 Catalytic Triad &amp; Metal Coordination:</strong> Zn<sup>2+</sup> polarizes nucleophilic water (2.05 &Aring;) while Glu106 abstracts a proton.";
+    }
+
+    function highlightPocket() {
+      if (!viewer) return;
+      viewer.removeAllLabels(); viewer.removeAllShapes();
+      viewer.setStyle({}, { stick: { radius: 0.22, colorscheme: 'magentaCarbon' }, sphere: { scale: 0.28 } });
+      viewer.addSphere({ center: { x: 3.95, y: -1.65, z: -2.15 }, radius: 3.5, color: '#5c9eff', alpha: 0.22 });
+      viewer.addLabel('Morton Z-Order 3.5 Å Shell', { position: { x: 1.5, y: 1.2, z: 0.0 }, backgroundColor: '#336791', fontColor: '#fff' });
+      viewer.render();
+      document.getElementById('hub-chemistry-note').innerHTML =
+        "<strong>⚙️ 64-Bit Morton Z-Order Sphere:</strong> <code>z_order_encode(x,y,z)</code> maps 3D coordinates onto a 1D space-filling curve for O(log N) B-Tree scans.";
+    }
+
+    function resetView() {
+      if (!viewer) return;
+      viewer.removeAllLabels(); viewer.removeAllShapes();
+      viewer.setStyle({}, { stick: { radius: 0.16, colorscheme: 'Jmol' } });
+      viewer.setStyle({ resn: 'ZN' }, { sphere: { scale: 0.55, color: '#5c9eff' } });
+      viewer.zoomTo(); viewer.render();
+    }
+  </script>
+</body>
+</html>

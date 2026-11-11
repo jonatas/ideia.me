@@ -1,0 +1,55 @@
+1
+00:00:00,000 --> 00:00:03,972
+Welcome to Episode 2 of Hello World, pg_bio!
+
+2
+00:00:03,972 --> 00:00:07,944
+In Episode 1, we treated DNA and proteins as 1D strings.
+
+3
+00:00:07,944 --> 00:00:11,916
+But in reality, a protein folds into a 3D molecular machine where catalysis happens
+
+4
+00:00:11,916 --> 00:00:15,888
+inside a 4-Angstrom binding pocket.
+
+5
+00:00:15,888 --> 00:00:20,856
+Normally, finding which atoms sit inside a 3D sphere requires pulling millions of coordinates
+
+6
+00:00:20,856 --> 00:00:25,824
+into Python and building an in-memory KD-tree or running brute-force Pythagorean distance loops.
+
+7
+00:00:25,824 --> 00:00:30,720
+pg_bio solves this with Morton coding—also known as a Z-Order space-filling curve.
+
+8
+00:00:30,720 --> 00:00:35,616
+Our Rust function z_order_encode interleaves the bits of X, Y, and Z coordinates into
+
+9
+00:00:35,616 --> 00:00:40,512
+a single 64-bit integer. That means a standard 1D PostgreSQL B-Tree index now acts
+
+10
+00:00:40,512 --> 00:00:45,408
+as a 3D spatial bounding box!
+
+11
+00:00:45,408 --> 00:00:51,480
+Even better, once the B-Tree narrows down the pocket atoms, theozyme_rmsd runs a zero-allocation
+
+12
+00:00:51,480 --> 00:00:57,552
+3-by-3 Jacobi SVD right inside SQL to rotationally align the catalytic metal and nucleophilic water.
+
+13
+00:00:57,552 --> 00:01:03,240
+That is 3D structural biology powered by B-Trees and linear algebra inside PostgreSQL.
+
+14
+00:01:03,240 --> 00:01:08,928
+Visit ideia dot me and the pg_bio GitHub repo to try the interactive 3D notebooks.

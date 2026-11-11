@@ -12,6 +12,11 @@ Out of all **213,876 edges**, what is the single strongest full-length, non-iden
 
 <!--more-->
 
+> **🎬 Watch the Companion Voiced Videos & Interactive 3D Studio**
+> See how `pg_bio` combines 1280-D `halfvec` HNSW vector search (`<=>`), Smith-Waterman Twilight-Zone scoring, and 3D metal-pocket Kabsch superposition in **Series 01: "Hello World, `pg_bio`!"**:
+> * 🔭 [**Episode 04: The Multiomics Holy Grail — Vectors, Twilight-Zone Homology & Live UniProt**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/ep04_joint_vector_multiomics.mp4)
+> * 🎯 [**Episode 02: 3D Morton Z-Order Pockets & Metal Cofactor Alignment**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep02_3d_pockets_and_morton_curves/studio_deck.html) · 🌐 [**Full 3D Video Library (`/pg-bio-videos/`)**](/pg-bio-videos/)
+
 ## Swarm Completion Snapshot: Top Structural Discoveries (Oct 20 – Oct 30, 2026)
 
 Before dissecting the atomic coordinates of `DUF5787`, here is the leaderboard of top structural discoveries surfaced during the final wave from 139,601 to 213,876 edges, validated with our upgraded sequential direction-aware Kabsch aligner:

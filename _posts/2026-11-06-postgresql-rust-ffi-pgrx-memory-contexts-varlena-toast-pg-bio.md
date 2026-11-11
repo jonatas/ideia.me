@@ -32,6 +32,11 @@ In this first installment of the *PostgreSQL Extension Internals in Rust* series
 
 <!--more-->
 
+> **🎬 Companion Voiced Videos: Zero-IPC Rust FFI & CSR Memory Layout in Action**
+> Watch our narrated 1080p walkthroughs and interactive 3D studio decks showing how zero-IPC shared-buffer execution in Rust (`pgrx`) eliminates the Python serialization tax:
+> * 🦀 [**Episode 01: Zero-IPC Sequence Physics in Shared Buffers (`200 ns/protein`)**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep01_central_dogma_and_genomics/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep01_central_dogma_and_genomics/ep01_central_dogma_and_genomics.mp4)
+> * 🕸️ [**Episode 03: `SparseAttentionMap` CSR Memory Layout (`31.1x` Faster & `90%` Less RAM)**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep03_scrna_csr_and_attention_maps/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep03_scrna_csr_and_attention_maps/ep03_scrna_csr_and_attention_maps.mp4) · 🌐 [**Full 3D Video Library (`/pg-bio-videos/`)**](/pg-bio-videos/)
+
 ---
 
 ## 1. The Architectural Bottleneck: The IPC Serialization Tax vs. Shared Buffer Compute

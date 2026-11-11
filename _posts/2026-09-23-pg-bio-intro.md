@@ -13,6 +13,13 @@ When you sequence a genome, fold a protein in 3D space, or generate a high-dimen
 
 Today, we are changing that. We are releasing **`pg_bio`**: a hyper-optimized PostgreSQL extension written entirely in Rust. It pushes the heaviest biological mathematics deep into the database engine, transforming Postgres into a natively AI-aware bioreactor.
 
+> **🎬 Watch & Explore in 3D — Series 01: "Hello World, `pg_bio`!"**
+> Prefer an interactive visual walkthrough with a floating voiced video companion and live **3Dmol.js** structures? Open the [**Interactive Video Library (`/pg-bio-videos/`)**](/pg-bio-videos/) or jump straight into any episode's standalone 3D Studio Deck:
+> * **Episode 01:** [**The Central Dogma in SQL (`int4range` GiST, `isoelectric_point`, `gravy_score`)**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep01_central_dogma_and_genomics/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep01_central_dogma_and_genomics/ep01_central_dogma_and_genomics.mp4)
+> * **Episode 02:** [**From 1D Strings to 3D Atoms with Morton Curves (`z_order_encode` & `theozyme_rmsd`)**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep02_3d_pockets_and_morton_curves/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep02_3d_pockets_and_morton_curves/ep02_3d_pockets_and_morton_curves.mp4)
+> * **Episode 03:** [**Transcriptomics & CSR Sparse Attention Graphs (`SparseAttentionMap`)**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep03_scrna_csr_and_attention_maps/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep03_scrna_csr_and_attention_maps/ep03_scrna_csr_and_attention_maps.mp4)
+> * **Episode 04:** [**The Multiomics Holy Grail — Vectors & Live UniProt (`halfvec` HNSW & `bio_fetch_uniprot`)**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/ep04_joint_vector_multiomics.mp4)
+
 ---
 
 ## The Four Architectural Bottlenecks of Computational Biology

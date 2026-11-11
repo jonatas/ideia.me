@@ -17,6 +17,12 @@ Polytetrafluoroethylene (**PTFE / Teflon**) and per- and polyfluoroalkyl substan
 
 Over an [eight-part research series](/categories#synthetic-biology), we built [**TeaFlon**](https://github.com/jonatas/teaflon): an open-source, 12-layer synthetic biology compiler powered by [**`pg_bio`**](https://github.com/jonatas/pg_bio) inside PostgreSQL 18. In this interactive guide—designed so you can step through each slide with the **`▶ Present`** button on the left—we break down every part of the molecular machine in live 3D, explain how to read each atomic structure, show how to dilute combined PFAS + PTFE waste streams, and lay out our **Top 5 Wet-Lab Protocols**.
 
+> **🎬 Watch the Companion Voiced Videos & Interactive 3D Studio**
+> Explore the exact 4-module `Dock -> Cut -> Transform` state machine, 1D `int4range` GiST genomic safe-harbor design, and 3D Morton Z-Order `4QHP` theozyme pocket superposition powering TeaFlon:
+> * ⚙️ [**Feature Deep-Dive: The Protein as a Modular State Machine (`Dock -> Cut -> Transform`)**](/assets/videos/pg_bio/ep02_modular_protein_state_machine/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/ep02_modular_protein_state_machine/ep02_modular_protein_state_machine.mp4)
+> * 🧬 [**Episode 01: The Central Dogma & 1D `int4range` GiST Genomic Safe Harbors**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep01_central_dogma_and_genomics/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep01_central_dogma_and_genomics/ep01_central_dogma_and_genomics.mp4)
+> * 🎯 [**Episode 02: 3D Morton Z-Order Pockets & `4QHP` $\text{Zn}^{2+}$ Theozyme Alignment**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep02_3d_pockets_and_morton_curves/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep02_3d_pockets_and_morton_curves/ep02_3d_pockets_and_morton_curves.mp4) · 🌐 [**Full 3D Video Library (`/pg-bio-videos/`)**](/pg-bio-videos/)
+
 <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
 
 <div style="background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 55%, #0f172a 100%); color: #f8fafc; padding: 28px; border-radius: 16px; margin: 28px 0; border: 1px solid #334155; box-shadow: 0 20px 40px -15px rgba(0,0,0,0.6);">

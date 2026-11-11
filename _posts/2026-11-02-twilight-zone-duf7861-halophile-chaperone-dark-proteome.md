@@ -11,6 +11,11 @@ Today we are excited to announce a major new milestone in [`pg_bio`](https://git
 
 <!--more-->
 
+> **🎬 Watch the Companion Voiced Videos & Interactive 3D Chaperone Studio**
+> Explore 3D H-bond CSR networks (`SparseAttentionMap`), Shrake–Rupley RASA (`bio_rasa`), and Twilight-Zone HNSW discovery with a floating voiced video companion:
+> * 🕸️ [**Episode 03: CSR Sparse Attention & 3D H-Bond / Energetic Graphs (`SparseAttentionMap`)**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep03_scrna_csr_and_attention_maps/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep03_scrna_csr_and_attention_maps/ep03_scrna_csr_and_attention_maps.mp4)
+> * 🔭 [**Episode 04: Twilight-Zone HNSW Vectors & Smith-Waterman Re-Ranking**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/studio_deck.html) · 🌐 [**Full 3D Video Library (`/pg-bio-videos/`)**](/pg-bio-videos/)
+
 ---
 
 ## 🚀 Announcing Layer 13 in `pg_bio`: Native RosettaCommons Chaperone Workflows in SQL

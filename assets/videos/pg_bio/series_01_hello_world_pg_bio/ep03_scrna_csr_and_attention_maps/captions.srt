@@ -1,0 +1,59 @@
+1
+00:00:00,000 --> 00:00:03,480
+Welcome to Episode 3 of Hello World, pg_bio!
+
+2
+00:00:03,480 --> 00:00:06,960
+If every cell in your body has the exact same DNA database, why is
+
+3
+00:00:06,960 --> 00:00:10,440
+a brain cell different from a liver cell?
+
+4
+00:00:10,440 --> 00:00:13,920
+The answer is Transcriptomics and allosteric regulation—which genes are turned on, and how distant
+
+5
+00:00:13,920 --> 00:00:17,400
+residues talk to each other.
+
+6
+00:00:17,400 --> 00:00:22,230
+When scientists run Single-Cell RNA sequencing on 1 million cells across 20,000 human genes,
+
+7
+00:00:22,230 --> 00:00:27,060
+it creates a 20-billion-point matrix. Because a cell only expresses about 2,000 genes at
+
+8
+00:00:27,060 --> 00:00:31,890
+a time, over 90 percent of that matrix is zeroes.
+
+9
+00:00:31,890 --> 00:00:36,720
+Storing dense columns in SQL or Pandas wastes gigabytes of RAM.
+
+10
+00:00:36,720 --> 00:00:43,248
+Systems engineers already know the cure: Compressed Sparse Row, or C-S-R.
+
+11
+00:00:43,248 --> 00:00:49,776
+pg_bio implements a native SparseAttentionMap type using row pointers, column indices, and non-zero values.
+
+12
+00:00:49,776 --> 00:00:58,560
+Whether you are unpacking single-cell RNA dosage, traversing ESM-2 transformer attention heads with get_top_interacting_residues,
+
+13
+00:00:58,560 --> 00:01:07,344
+or discovering cryptic allosteric pockets across 500-nanosecond molecular dynamics trajectories, CSR scans only the non-zero edges in microseconds.
+
+14
+00:01:07,344 --> 00:01:12,816
+That slashes memory by 90 percent and runs 31 times faster than dense Python
+
+15
+00:01:12,816 --> 00:01:18,288
+matrices. Read the full deep dive at ideia dot me and explore pg_bio on GitHub.

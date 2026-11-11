@@ -18,6 +18,11 @@ Today, we are going to load all 82,000+ thermodynamic, structural, and chemical 
 
 <!--more-->
 
+> **🎬 Watch & Rotate the 5-LOX + AKBA / $\alpha$-Amyrin 500 ns MD Structures in 3D**
+> **Episode 03: Transcriptomics & CSR Sparse Attention Graphs** walks through this exact UFAM 5-LOX triterpenoid dataset (`Zenodo 23565306`), showing how `SparseAttentionMap` and `discover_cryptic_hotspots()` uncover the `Ile126–Val29–Leu66` hydrophobic cradle—and lets you interactively rotate the **5-LOX + AKBA (`5LOX-akba-af7-500ns.pdb`)** and **5-LOX + $\alpha$-Amyrin (`5LOX-alpha-amyrin-500ns.pdb`)** structures alongside a floating voiced video companion:
+> * 🧪 [**Open Episode 03 Interactive CSR & 3D Studio Deck**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep03_scrna_csr_and_attention_maps/studio_deck.html) · 🔊 [**1080p MP4**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep03_scrna_csr_and_attention_maps/ep03_scrna_csr_and_attention_maps.mp4)
+> * 🔬 [**Inspect 5-LOX + AKBA & $\alpha$-Amyrin in the Full 3D Video Library (`/pg-bio-videos/`)**](/pg-bio-videos/)
+
 ---
 
 ## Computer Science Analogies for Molecular Dynamics & Free-Energy Decomposition

@@ -13,7 +13,10 @@ title: "Videos by @jonatasdp"
   
   <div class="videos-intro">
     <p>Watch my conference talks, presentations, and workshops on topics like PostgreSQL, Ruby, TimescaleDB, and data science.</p>
-    <p class="talks-link"><a href="/talks" class="btn btn-primary">🎤 View All My Talks</a></p>
+    <p class="talks-link">
+      <a href="/talks" class="btn btn-primary">🎤 View All My Talks</a>
+      <a href="/pg-bio-videos/" class="btn btn-primary" style="margin-left: 10px; background: linear-gradient(135deg, #5c9eff, #b158fc); border: none;">🧬 Launch pg_bio Interactive 3D Video Studio</a>
+    </p>
   </div>
   
   <div class="category-filters">

@@ -1,0 +1,19 @@
+1
+00:00:00,000 --> 00:00:22,608
+Welcome to pg_bio: From B-Trees & GiST to 3D Catalytic Pockets. In wet-lab synthetic biology, De novo enzymes fail 85% of the time when metal cofactors, nucleophilic water, and substrate warheads drift by even 1 Angstrom in 3D space. If you already understand B-trees, spatial indexes, and graph hashes, you already know the math required to fix this.
+
+2
+00:00:22,608 --> 00:00:40,872
+Why do traditional Python pipelines hit a wall? Because pulling hundreds of thousands of PDB structures and SMILES strings over a TCP socket into Python spends 99 percent of your CPU time on serialization and memory allocation, whereas pg_bio executes compiled Rust directly on PostgreSQL 8-kilobyte shared buffer pages.
+
+3
+00:00:40,872 --> 00:01:05,928
+Here is the systems-to-biotech Rosetta bridge: 64-bit Morton Z-Order bit-interleaving, 3x3 Jacobi SVD Kabsch superposition, and Weisfeiler-Lehman 64-bit canonical hashing inside PostgreSQL shared buffers. A 64-bit Morton Z-order curve turns 3D Angstrom bounding spheres into a 1D B-Tree range scan, while Weisfeiler-Lehman hashing unifies Kekule, aromatic, and salted molecules.
+
+4
+00:01:05,928 --> 00:01:22,344
+Watch what happens inside psql. In a single declarative SQL query, we verify canonical molecular equivalence, compute 3D Kabsch R-M-S-D against a zinc-pentad theozyme, check the Burgi-Dunitz attack angle, and confirm a coordinated water shell in 0.67 milliseconds.
+
+5
+00:01:22,344 --> 00:01:39,672
+The result is verified across the benchmark: 1,513.7x faster than Python (0.67 ms vs 1,018 ms). Explore all discoveries at ideia dot me and star the pg_bio repository on GitHub.

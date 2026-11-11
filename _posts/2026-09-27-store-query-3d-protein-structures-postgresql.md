@@ -13,6 +13,10 @@ What if you could ditch the flat files and query 3D biological space natively in
 
 In this tutorial, we will explore how the [pg_bio](https://github.com/jonatas/pg_bio) PostgreSQL extension—written in Rust—allows you to store, index, and query 3D biological space natively.
 
+> **🎬 Companion Voiced Video & Interactive 3D Studio**
+> Explore this exact 3D Z-Order B-Tree and Kabsch SVD workflow interactively in **Episode 02: From 1D Strings to 3D Atoms with Morton Curves**:
+> * 🧪 [**Launch Interactive 3D Studio Deck**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep02_3d_pockets_and_morton_curves/studio_deck.html) · 🔊 [**1080p MP4**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep02_3d_pockets_and_morton_curves/ep02_3d_pockets_and_morton_curves.mp4) · 🌐 [**Full 3D Video Library (`/pg-bio-videos/`)**](/pg-bio-videos/)
+
 ---
 
 ## 1. The Math: Solving the Spatial Bottleneck with Z-Order Curves

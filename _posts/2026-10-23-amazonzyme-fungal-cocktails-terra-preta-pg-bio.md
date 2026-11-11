@@ -18,6 +18,11 @@ Today, we are releasing a standalone open-source proof-of-concept application—
 
 <!--more-->
 
+> **🎬 Watch the Companion Voiced Videos & Interactive 3D Studio**
+> Explore the exact `isoelectric_point()`, `gravy_score()`, and Twilight-Zone HNSW + Smith-Waterman primitives used in this AmazonZyme bioprospecting study:
+> * 🧬 [**Episode 01: The Central Dogma & Sequence Physics in SQL (`pI`, `GRAVY`, `int4range` GiST)**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep01_central_dogma_and_genomics/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep01_central_dogma_and_genomics/ep01_central_dogma_and_genomics.mp4)
+> * 🔭 [**Episode 04: Vectors, Twilight-Zone Homology & Live UniProt (`halfvec` HNSW)**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/ep04_joint_vector_multiomics.mp4) · [**Full 3D Video Library (`/pg-bio-videos/`)**](/pg-bio-videos/)
+
 ## 1. Validating the Founders' Published Wet-Lab Benchmarks & Tryptic LC-MS/MS Spectra in SQL
 
 Before hunting for new enzymes in the dark proteome, we first asked a foundational question: *Can `pg_bio`'s native Rust SQL functions reproduce the exact biophysical numbers reported across Dra. Pamella Pimentel's PhD thesis (UFAM, 2019), Prof. Edson do Carmo's glucoamylase & TPI studies, and Batalha Jr. et al.'s 2026 Terra Preta de Índio metagenomic paper?*

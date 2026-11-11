@@ -1,0 +1,59 @@
+1
+00:00:00,000 --> 00:00:04,584
+Welcome to Episode 4, the finale of our Hello World, pg_bio intro series!
+
+2
+00:00:04,584 --> 00:00:09,168
+Now we unite all layers into the Multiomics Holy Grail:
+
+3
+00:00:09,168 --> 00:00:13,752
+Joint Vector Spaces and live biological database integration.
+
+4
+00:00:13,752 --> 00:00:17,916
+In extreme environments like deep-sea hydrothermal vents, evolution mutates an enzyme's amino acid sequence
+
+5
+00:00:17,916 --> 00:00:22,080
+until less than 25 percent of the letters match known proteins.
+
+6
+00:00:22,080 --> 00:00:26,244
+Traditional sequence search tools like BLAST go blind in this Twilight Zone, even when
+
+7
+00:00:26,244 --> 00:00:30,408
+the 3D catalytic fold is preserved.
+
+8
+00:00:30,408 --> 00:00:37,548
+By storing 1280-dimensional ESM-2 protein foundation model embeddings as 16-bit halfvecs indexed with HNSW,
+
+9
+00:00:37,548 --> 00:00:44,688
+PostgreSQL narrows 2.34 million dark proteins down to the top 15 structural twins in 0.4 milliseconds.
+
+10
+00:00:44,688 --> 00:00:50,304
+Then the PostgreSQL query planner short-circuits: it runs our compiled Rust Smith-Waterman dynamic programming
+
+11
+00:00:50,304 --> 00:00:55,920
+and Henderson-Hasselbalch pI calculations on only those 15 survivors, and calls bio_fetch_uniprot via LATERAL
+
+12
+00:00:55,920 --> 00:01:01,536
+join to pull live organism and taxonomy metadata straight from UniProt into your SQL table.
+
+13
+00:01:01,536 --> 00:01:06,096
+From 1D DNA intervals, to 3D Morton pockets, to sparse CSR graphs, to HNSW
+
+14
+00:01:06,096 --> 00:01:10,656
+vector discovery—you now know the core multiomics stack in PostgreSQL.
+
+15
+00:01:10,656 --> 00:01:15,216
+Dive deeper at ideia dot me and star pg_bio on GitHub!

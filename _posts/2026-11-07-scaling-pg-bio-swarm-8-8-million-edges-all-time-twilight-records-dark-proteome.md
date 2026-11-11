@@ -24,6 +24,11 @@ Even more exciting than the raw throughput is what emerged from those 8.82 milli
 
 <!--more-->
 
+> **🎬 Watch the Companion Voiced Videos & Interactive 3D Discovery Studio**
+> Explore the exact multiomics stack powering this 8.82-million-edge Swarm Discovery engine—with a floating voiced video companion and interactive 3Dmol.js catalytic pockets:
+> * 🔭 [**Episode 04: The Multiomics Holy Grail — 1280-D `halfvec` HNSW, Twilight-Zone SW & Live UniProt**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/ep04_joint_vector_multiomics.mp4)
+> * 🎯 [**Episode 02: 3D Morton Z-Order Pockets & Sub-Ångström Kabsch Superposition**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep02_3d_pockets_and_morton_curves/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep02_3d_pockets_and_morton_curves/ep02_3d_pockets_and_morton_curves.mp4) · 🌐 [**Full 3D Video Library (`/pg-bio-videos/`)**](/pg-bio-videos/)
+
 ---
 
 ## ⚡ 1. Engineering the 22.6$\times$ Surge: The Adaptive Multi-Worker Swarm Governor

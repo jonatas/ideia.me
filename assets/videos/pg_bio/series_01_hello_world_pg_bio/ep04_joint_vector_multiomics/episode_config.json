@@ -1,0 +1,76 @@
+{
+  "ep_num": 4,
+  "slug": "ep04_joint_vector_multiomics",
+  "visual_mode": "hnsw_twilight_zone",
+  "title": "Ep 4: The Multiomics Holy Grail \u2014 Vectors & Live UniProt",
+  "subtitle": "1280-D HNSW Embeddings, Twilight-Zone Homology & Native UniProt HTTP in SQL",
+  "layer": "Layers 4 & 5: Joint Vector Spaces (halfvec HNSW) & Live UniProt FDW",
+  "bio_problem": "99% of microbial proteins in extreme environments (deep-sea vents, salt flats, acid lakes) are uncharacterized 'Dark Proteome' orphans. Their sequences have mutated so heavily (<30% identity) that BLAST fails to recognize that they fold into the exact same 3D enzyme shape.",
+  "cs_mechanism": "1280-D halfvec HNSW cosine distance (<=>) narrows 2.34M proteins down to 15 candidates in 0.4 ms, short-circuiting into O(N) two-row Smith-Waterman DP and enriching winners live via bio_fetch_uniprot().",
+  "speedup": "Scans 2.34M proteins in 0.4 ms + Zero external ETL scripts",
+  "docs_ref": "../../docs/01_vector_homology.md",
+  "notebook_ref": "../../experiments/09_huggingface_esm2_discovery.ipynb",
+  "blogs": [
+    {
+      "title": "Why Proteins Are High-Dimensional Vectors",
+      "url": "https://ideia.me/why-proteins-are-just-high-dimensional-vectors"
+    },
+    {
+      "title": "Scaling pg_bio Swarm: 8.8M Edges in Dark Proteome",
+      "url": "https://ideia.me/scaling-pg-bio-swarm-8-8-million-edges-all-time-twilight-records-dark-proteome"
+    },
+    {
+      "title": "The 27-Hour HNSW Index & halfvec",
+      "url": "https://ideia.me/the-27-hour-index"
+    }
+  ],
+  "bullets": [
+    "\u2022 50% RAM Savings: 1280-D halfvec HNSW graph indexing (<=>)",
+    "\u2022 Twilight-Zone Bell Curve: 3D fold convergence vs sequence divergence",
+    "\u2022 O(N) Rolling-Buffer DP: smith_waterman_score() on HNSW survivors",
+    "\u2022 Live UniProt SQL Client: bio_fetch_uniprot() & bio_search_uniprot()"
+  ],
+  "rosetta_mappings": [
+    [
+      "1280-D halfvec HNSW Graph Index (<=>)",
+      "16-bit float approximate nearest neighbor graph in shared buffers",
+      "Finds proteins with identical 3D folds across 2.34M sequences in 0.4 ms"
+    ],
+    [
+      "Query-Planner Funnel + Two-Row Smith-Waterman DP",
+      "HNSW prunes 99.999% first; O(N) rolling-buffer DP scores only 15 survivors",
+      "Uncovers extremophile Twilight-Zone orthologs (15%\u201375% sequence identity)"
+    ],
+    [
+      "Synchronous Rust HTTP SRF (bio_fetch_uniprot)",
+      "ureq + serde JSON projection into Postgres UniprotEntry composite types",
+      "Enriches orphan discoveries with live organism & taxonomy inside pure SQL"
+    ]
+  ],
+  "sql_lines": [
+    "bio_demo=# WITH candidates AS (",
+    "    SELECT uniprot_id, sequence, (embedding <=> :bait_vec) AS cos_dist",
+    "    FROM dark_proteome ORDER BY embedding <=> :bait_vec LIMIT 10",
+    ")",
+    "SELECT c.uniprot_id, u.organism, round(c.cos_dist::numeric, 4) AS dist,",
+    "       smith_waterman_score(c.sequence, :bait_seq) AS sw_score",
+    "FROM candidates c",
+    "CROSS JOIN LATERAL bio_fetch_uniprot(c.uniprot_id) u;"
+  ],
+  "sql_results": [
+    "\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510",
+    "\u2502 uniprot_id \u2502         organism          \u2502  dist  \u2502 sw_score \u2502",
+    "\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524",
+    "\u2502 A0A5B9DCV6 \u2502 Deep-sea Asgard archaeon  \u2502 0.0682 \u2502      312 \u2502",
+    "\u2502 L0JL84     \u2502 Halophilic archaeon       \u2502 0.0741 \u2502      289 \u2502",
+    "\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518",
+    "Time: 0.420 ms local HNSW + live UniProt REST enrichment"
+  ],
+  "narrations": [
+    "Welcome to Episode 4, the finale of our Hello World, pg_bio intro series! Now we unite all layers into the Multiomics Holy Grail: Joint Vector Spaces and live biological database integration.",
+    "In extreme environments like deep-sea hydrothermal vents, evolution mutates an enzyme's amino acid sequence until less than 25 percent of the letters match known proteins. Traditional sequence search tools like BLAST go blind in this Twilight Zone, even when the 3D catalytic fold is preserved.",
+    "By storing 1280-dimensional ESM-2 protein foundation model embeddings as 16-bit halfvecs indexed with HNSW, PostgreSQL narrows 2.34 million dark proteins down to the top 15 structural twins in 0.4 milliseconds.",
+    "Then the PostgreSQL query planner short-circuits: it runs our compiled Rust Smith-Waterman dynamic programming and Henderson-Hasselbalch pI calculations on only those 15 survivors, and calls bio_fetch_uniprot via LATERAL join to pull live organism and taxonomy metadata straight from UniProt into your SQL table.",
+    "From 1D DNA intervals, to 3D Morton pockets, to sparse CSR graphs, to HNSW vector discovery\u2014you now know the core multiomics stack in PostgreSQL. Dive deeper at ideia dot me and star pg_bio on GitHub!"
+  ]
+}

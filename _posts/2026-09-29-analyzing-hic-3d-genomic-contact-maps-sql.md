@@ -21,6 +21,10 @@ Instead of treating the genome as a flat file, we can treat it as a relational g
 
 `pg_bio` introduces the `SparseAttentionMap` PostgreSQL type. Under the hood, this uses a **Compressed Sparse Row (CSR)** structure natively in Rust. It entirely discards the empty space (the zeros) and only stores the exact base pairs that are physically interacting.
 
+> **🎬 Companion Voiced Video & CSR Interactive Studio**
+> See how `SparseAttentionMap` compresses 90%-zero single-cell RNA matrices, Hi-C chromosomal loops, and 500 ns MD residue networks in **Episode 03: Transcriptomics & CSR Sparse Attention Graphs**:
+> * 🧪 [**Launch Interactive 3D Studio Deck (`ep03_scrna_csr_and_attention_maps`)**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep03_scrna_csr_and_attention_maps/studio_deck.html) · 🔊 [**1080p MP4**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep03_scrna_csr_and_attention_maps/ep03_scrna_csr_and_attention_maps.mp4) · 🌐 [**Full 3D Video Library (`/pg-bio-videos/`)**](/pg-bio-videos/)
+
 ### Mining for Genomic Loops in SQL
 
 By storing the genomic architecture in PostgreSQL, finding complex 3D DNA loops becomes a trivial SQL query. 

@@ -18,6 +18,11 @@ Sitting at **#1 among all `59,723` newly seeded Dark Proteome Island discoveries
 
 <!--more-->
 
+> **🎬 Watch the Companion Voiced Videos & Interactive 3D Studio**
+> Dive into the HNSW vector islands, Smith-Waterman Twilight-Zone scoring, and 3D Kabsch pocket alignment behind this `0.61 Å` `DUF1684` discovery:
+> * 🔭 [**Episode 04: The Multiomics Holy Grail — Vectors, Twilight-Zone Homology & Live UniProt**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/ep04_joint_vector_multiomics.mp4)
+> * 🎯 [**Episode 02: From 1D Strings to 3D Atoms with Morton Curves**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep02_3d_pockets_and_morton_curves/studio_deck.html) · 🌐 [**Full 3D Video Library (`/pg-bio-videos/`)**](/pg-bio-videos/)
+
 ---
 
 ## 🏝️ Why Connected Components Stall—and How Auto-Island Seeding Unlocked 7 New `DUF` Families

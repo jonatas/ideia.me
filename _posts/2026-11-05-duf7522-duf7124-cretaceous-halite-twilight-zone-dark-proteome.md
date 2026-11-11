@@ -18,6 +18,11 @@ Two of these overnight hits immediately jumped off the screen:
 
 <!--more-->
 
+> **🎬 Watch the Companion Voiced Videos & Interactive 3D Studio**
+> See how `pg_bio` combines acidic halophile `isoelectric_point()` screening (`pI ~ 4.2`), 3D Morton Z-order pocket superposition (`kabsch_rmsd`), and 1280-D `halfvec` HNSW Twilight-Zone discovery in **Series 01: "Hello World, `pg_bio`!"**:
+> * 🔭 [**Episode 04: The Multiomics Holy Grail — HNSW Vectors & Twilight-Zone Discovery**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/ep04_joint_vector_multiomics.mp4)
+> * 🧬 [**Episode 01: Halophile Acidic `pI` & Central Dogma Physics in SQL**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep01_central_dogma_and_genomics/studio_deck.html) · 🌐 [**Full 3D Video Library (`/pg-bio-videos/`)**](/pg-bio-videos/)
+
 ---
 
 ## 📊 Overnight Graph Expansion (`347,627` $\rightarrow$ `372,286` Edges) & Top 7 New `DUF` Discoveries

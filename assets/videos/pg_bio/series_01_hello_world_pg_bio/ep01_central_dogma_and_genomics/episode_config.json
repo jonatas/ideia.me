@@ -1,0 +1,74 @@
+{
+  "ep_num": 1,
+  "slug": "ep01_central_dogma_and_genomics",
+  "visual_mode": "central_dogma_gist",
+  "title": "Ep 1: Hello World, pg_bio! The Central Dogma in SQL",
+  "subtitle": "DNA -> RNA -> Protein Physics & 1D Genomic Safe Harbors (int4range GiST)",
+  "layer": "Layers 1 & 6: Genomics (int4range GiST) & Sequence Physics",
+  "bio_problem": "Biology's Central Dogma compiles 4 DNA bases (A, T, G, C) into 20 amino acids. When inserting synthetic genes via CRISPR, you must find a Safe Harbor near a tissue promoter without intersecting tumor suppressor genes, then verify the protein's charge (pI) and hydropathy.",
+  "cs_mechanism": "PostgreSQL 1D int4range GiST overlap (&&) and distance (<->) operators scan billions of base pairs, while single-pass Rust byte slices compute bio_translate_dna(), isoelectric_point(), and gravy_score() in 200 ns.",
+  "speedup": "200x faster than BioPython (~200 ns/protein in Rust)",
+  "docs_ref": "../../docs/07_genomics_io.md",
+  "notebook_ref": "../../experiments/06_genomics_io_tutorial.ipynb",
+  "blogs": [
+    {
+      "title": "Introducing pg_bio",
+      "url": "https://ideia.me/pg-bio-intro"
+    },
+    {
+      "title": "Genomic Safe-Harbor Architecture",
+      "url": "https://ideia.me/teaflon-synthetic-biology-part-8-genomic-architecture"
+    },
+    {
+      "title": "Rust pgrx Memory Contexts & TOAST",
+      "url": "https://ideia.me/postgresql-rust-ffi-pgrx-memory-contexts-varlena-toast-pg-bio"
+    }
+  ],
+  "bullets": [
+    "\u2022 Central Dogma in SQL: bio_translate_dna('ATGTTC...') -> 'MF...'",
+    "\u2022 1D Safe Harbor GiST: safe.locus <-> promoter.locus < 5000",
+    "\u2022 Isoelectric Point (pI): 100-step Henderson-Hasselbalch bisection",
+    "\u2022 Hydropathy (GRAVY) & Shannon Entropy in a single byte pass"
+  ],
+  "rosetta_mappings": [
+    [
+      "int4range + GiST Index (&& and <->)",
+      "1D spatial interval tree with O(log N) overlap & nearest-neighbor operators",
+      "Finds CRISPR genomic Safe Harbors near promoters while avoiding oncogenes"
+    ],
+    [
+      "Compile-Time Match Lookup (bio_translate_dna)",
+      "Zero-allocation 3-byte ASCII codon slice -> amino acid byte stream",
+      "Translates raw genomic DNA reading frames into functional protein sequences"
+    ],
+    [
+      "Root-Finding Bisection (isoelectric_point & gravy_score)",
+      "Single-pass byte histogram + 100-step Henderson-Hasselbalch solver",
+      "Predicts whether an enzyme stays soluble or precipitates in acid/salt vats"
+    ]
+  ],
+  "sql_lines": [
+    "bio_demo=# SELECT",
+    "    bio_translate_dna('ATGTTCGAAGGTTTCGAACGTCGT')       AS peptide_seq,",
+    "    round(isoelectric_point('MFEGFERRLVDWPSTDK')::numeric, 2) AS pI_charge,",
+    "    round(gravy_score('MFEGFERRLVDWPSTDK')::numeric, 3)       AS hydropathy,",
+    "    round(sequence_entropy('MFEGFERRLVDWPSTDK')::numeric, 3)  AS shannon_bits,",
+    "    prosite_match('MFEGFERRLVDWPSTDKHCH', 'H-x-H')            AS metal_motif",
+    "WHERE int4range(10500, 11800) <-> int4range(8000, 9200) < 5000;"
+  ],
+  "sql_results": [
+    "\u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510",
+    "\u2502 peptide_seq \u2502 pI_charge \u2502 hydropathy \u2502 shannon_bits \u2502 metal_motif \u2502",
+    "\u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u253c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524",
+    "\u2502 MFEGFERR    \u2502      4.68 \u2502     -1.124 \u2502        3.585 \u2502 t           \u2502",
+    "\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518",
+    "Time: 0.214 ms  (200x faster than BioPython)"
+  ],
+  "narrations": [
+    "Hello World, and welcome to Episode 1 of pg_bio! If you are a software or database engineer, biology can look like a wall of jargon. But the Central Dogma of biology is literally a compiler: DNA is 4-letter source code on disk, RNA is an ephemeral message queue, and proteins are compiled 3D state machines.",
+    "In traditional bioinformatics, engineers export gigabytes of FASTA and VCF files to Python just to translate codons or check genomic intervals. With pg_bio, that entire compiler runs natively inside PostgreSQL shared buffers in Rust.",
+    "Here is your first Systems-to-Biotech bridge: a human chromosome is just a 1D integer coordinate space. Using PostgreSQL int4range and GiST indexes, finding a CRISPR safe-harbor locus near a promoter without touching a tumor suppressor gene is a sub-millisecond interval query.",
+    "Look at psql: in one query, bio_translate_dna compiles DNA codons into amino acids, isoelectric_point runs 100-step Henderson-Hasselbalch bisection to find net charge, and gravy_score measures water-repellency in 200 nanoseconds.",
+    "You just executed genomics and protein sequence physics in 0.2 milliseconds inside SQL. Explore all articles at ideia dot me and check out the pg_bio repository on GitHub."
+  ]
+}

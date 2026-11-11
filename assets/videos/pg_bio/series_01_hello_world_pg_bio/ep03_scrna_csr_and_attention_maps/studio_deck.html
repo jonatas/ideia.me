@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pg_bio Studio Deck — Ep 3: Transcriptomics & CSR Sparse Attention Graphs</title>
+  <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+  <style>
+    /* Exact ../ideia.me Theme Variables (css/main.css, css/custom.css & topic-colors.css) */
+    :root {
+      --primary-blue: #2563eb;
+      --primary-purple: #7c3aed;
+      --primary-teal: #0d9488;
+      --primary-light-blue: #0ea5e9;
+      --primary-color: #5c9eff;
+      --secondary-color: #b158fc;
+      --accent-color: #ff5a9d;
+      --topic-postgresql: #336791;
+      --gradient-blue-purple: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      --gradient-blue-teal: linear-gradient(135deg, var(--primary-blue), var(--primary-teal));
+      --bg-color: #0f1117;
+      --card-bg-color: #161b27;
+      --code-bg-color: #1a1f2e;
+      --text-color: #ccd6f6;
+      --text-muted: #8892b0;
+      --border-color: rgba(255, 255, 255, 0.09);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Menlo, Consolas, monospace;
+      letter-spacing: -0.02em;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 32px;
+      border-bottom: 1px solid var(--border-color);
+      background-color: var(--bg-color);
+    }
+    .badge {
+      background-color: var(--topic-postgresql);
+      color: #ffffff;
+      border: 1px solid var(--primary-color);
+      padding: 4px 12px;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .rosetta-toggle {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    button {
+      background: var(--code-bg-color);
+      color: var(--text-color);
+      border: 1px solid rgba(92, 158, 255, 0.25);
+      padding: 7px 13px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    button:hover, button.active {
+      background: var(--gradient-blue-purple);
+      color: #ffffff;
+      border-color: var(--primary-color);
+    }
+    main {
+      flex: 1;
+      max-width: 1320px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 32px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 24px;
+    }
+    .card {
+      background-color: var(--card-bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 1.65rem;
+      background: var(--gradient-blue-purple);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.25;
+    }
+    h2 {
+      margin-top: 14px;
+      margin-bottom: 10px;
+      font-size: 1.08rem;
+      color: var(--primary-color);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 6px;
+    }
+    pre {
+      background-color: var(--code-bg-color);
+      border: 1px solid var(--border-color);
+      padding: 14px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.82rem;
+      line-height: 1.45;
+      color: var(--text-color);
+    }
+    .bar-row {
+      margin: 12px 0;
+    }
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      margin-bottom: 4px;
+    }
+    .bar-track {
+      background: var(--code-bg-color);
+      height: 14px;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar-fill-py {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #f72585, var(--accent-color));
+    }
+    .bar-fill-pg {
+      width: 4%;
+      height: 100%;
+      background: var(--gradient-blue-teal);
+    }
+    #mol-viewer {
+      width: 100%;
+      height: 350px;
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+    }
+    .teaching-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    #chemistry-lesson {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 8px;
+      background: rgba(92, 158, 255, 0.06);
+      border-left: 4px solid var(--primary-color);
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 32px;
+      background-color: #0b0d13;
+      border-top: 2px solid #4361ee;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    footer a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    footer a:hover {
+      color: var(--secondary-color);
+      text-decoration: underline;
+    }
+    /* Voiced Hovering Video Companion Widget */
+    #hover-video-widget {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 390px;
+      background: rgba(22, 27, 39, 0.96);
+      border: 2px solid var(--primary-color);
+      border-radius: 14px;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+      backdrop-filter: blur(12px);
+      overflow: hidden;
+      transition: width 0.25s ease;
+    }
+    #hover-video-widget.expanded { width: 680px; }
+    #hover-video-widget.minimized { width: 280px; }
+    #hover-video-widget.minimized .hover-body { display: none; }
+    #hover-video-widget.docked {
+      position: static;
+      width: 100%;
+      margin-bottom: 18px;
+    }
+    .hover-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 12px;
+      background: #0b0d13;
+      border-bottom: 1px solid var(--border-color);
+      cursor: move;
+      user-select: none;
+    }
+    .hover-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 210px;
+    }
+    .hover-body video {
+      width: 100%;
+      display: block;
+      background: #000;
+    }
+    .act-chapters {
+      display: flex;
+      gap: 4px;
+      padding: 6px 8px;
+      background: #0f1117;
+      border-top: 1px solid var(--border-color);
+    }
+    .act-btn {
+      flex: 1;
+      padding: 4px 2px;
+      font-size: 0.68rem;
+      border-radius: 5px;
+    }
+    .blog-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .blog-pill {
+      background: rgba(177, 88, 252, 0.12);
+      border: 1px solid rgba(177, 88, 252, 0.35);
+      color: var(--text-color);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.76rem;
+      text-decoration: none;
+    }
+    .blog-pill:hover {
+      background: var(--secondary-color);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <span class="badge">Layers 3 & 9: Single-Cell CSR Arrays, Neural Attention & Allostery</span>
+      <span style="margin-left: 12px; color: var(--text-muted); font-size: 0.85rem;">pg_bio Biotech-for-Engineers Studio</span>
+    </div>
+    <div class="rosetta-toggle">
+      <audio id="deck-audio" src="voiceover.mp3" preload="auto"></audio>
+      <button id="btn-vo" onclick="toggleVoiceover()">🔊 Play Neural Voiceover</button>
+      <span style="color: var(--text-muted); font-size: 0.82rem; margin-left: 8px;">Lens:</span>
+      <button id="btn-eng" class="active" onclick="setLens('engineer')">⚙️ Systems Engineer</button>
+      <button id="btn-bio" onclick="setLens('biologist')">🧬 Structural Biologist</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Left Column: Rosetta Explanation + Live SQL + Benchmark Progress -->
+    <div class="card">
+      <h1>Ep 3: Transcriptomics & CSR Sparse Attention Graphs</h1>
+      <p id="lens-description" style="color: var(--text-color); font-size: 0.92rem; line-height: 1.55;">
+        <strong>⚙️ Systems Engineering Lens:</strong> Compressed Sparse Row (CSR) storage (SparseAttentionMap, create_sparse_map, build_energy_hotspot_map) stores only non-zero contacts and expression counts, reducing O(L^2) dense scans to O(nnz) nanosecond slice lookups.
+      </p>
+
+      <h2>1. In-Database SQL Pipeline</h2>
+      <pre><code>bio_demo=# SELECT
+    system_id,
+    get_top_interacting_residues(attention_map, 94, 3) AS top_coupled_residues,
+    discover_cryptic_hotspots(
+        build_energy_hotspot_map(677, residue_ids, energy_arr, 677, -0.15),
+        677, ARRAY[68, 108, 109, 110], 0.35, 3
+    ) AS cryptic_allosteric_anchors
+FROM protein_attention_and_energy_maps;</code></pre>
+
+      <h2>2. SQL vs. Python Pipeline Progress (31.1x faster than Python/NumPy & 90% less RAM footprint)</h2>
+      <div class="bar-row">
+        <div class="bar-label">
+          <span>🐍 Python Socket Pull + Biopython/SciPy</span>
+          <span style="color: var(--accent-color);">100% Baseline Wall-Clock</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill-py"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">
+          <span>🦀 <strong>pg_bio Native Rust (pgrx)</strong></span>
+          <span style="color: var(--primary-light-blue);">31.1x faster than Python/NumPy & 90% less RAM footprint</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill-pg"></div></div>
+      </div>
+
+      <h2>3. Integrated Blog Posts &amp; Video Library</h2>
+      <div class="blog-links">
+        <a class="blog-pill" href="https://ideia.me/pg-bio-videos/" target="_blank">🎬 Full Interactive Video Library (ideia.me)</a>
+        <a class="blog-pill" href="https://ideia.me/pg-bio-intro" target="_blank">📖 Introducing pg_bio</a>
+        <a class="blog-pill" href="https://ideia.me/postgresql-query-planner-rangefinder-gist-bioinformatics-engine" target="_blank">⚡ Query Planner &amp; RangeFinder GiST</a>
+        <a class="blog-pill" href="https://ideia.me/5lox-triterpenoids-mmpbsa-free-energy-audit-pg-bio" target="_blank">🔬 500 ns 5-LOX MD Audit</a>
+        <a class="blog-pill" href="live_demo.sql" target="_blank">💻 live_demo.sql</a>
+        <a class="blog-pill" href="talk_track.md" target="_blank">📜 talk_track.md</a>
+      </div>
+    </div>
+
+    <!-- Right Column: 3Dmol.js Interactive Chemistry Stage + Dock Slot -->
+    <div class="card">
+      <div id="docked-video-slot"></div>
+      <h2>4. Interactive 3D Molecular Proof</h2>
+      <div id="mol-viewer"></div>
+      <div class="teaching-controls">
+        <button onclick="highlightCore()">1. Highlight Catalytic Triad / Metal</button>
+        <button onclick="highlightPocket()">2. Show 3D Morton Bounding Pocket</button>
+        <button onclick="resetView()">3. Reset Cartoon Backbone</button>
+      </div>
+      <div id="chemistry-lesson">
+        <strong>💡 Click a teaching button above:</strong> Explore how PostgreSQL predicates map directly to 3D atomic coordinates, catalytic residues, and pocket solvation.
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div>🌐 Blog &amp; 3D Discoveries: <a href="https://ideia.me" target="_blank" rel="noopener">https://ideia.me</a> | <a href="https://ideia.me/pg-bio-videos/" target="_blank" rel="noopener">3D Video Library</a></div>
+    <div>🧬 <strong>pg_bio</strong> — The Multiomics Operating System in PostgreSQL</div>
+    <div>🐙 GitHub Repository: <a href="https://github.com/jonatas/pg_bio" target="_blank" rel="noopener">https://github.com/jonatas/pg_bio</a></div>
+  </footer>
+
+  <!-- Voiced Hovering Video Companion Widget -->
+  <div id="hover-video-widget">
+    <div class="hover-header" id="hover-drag-handle">
+      <span class="hover-title">🔊 Ep 3: Transcriptomics & CSR Sparse Attention Graphs</span>
+      <div style="display: flex; gap: 4px;">
+        <button style="padding: 2px 6px; font-size: 0.7rem;" onclick="document.getElementById('hover-video-widget').classList.toggle('expanded')">⤢</button>
+        <button style="padding: 2px 6px; font-size: 0.7rem;" onclick="toggleHoverDock()">📌</button>
+        <button style="padding: 2px 6px; font-size: 0.7rem;" onclick="document.getElementById('hover-video-widget').classList.toggle('minimized')">—</button>
+      </div>
+    </div>
+    <div class="hover-body">
+      <video id="hover-video-player" controls playsinline preload="metadata" data-mp4-src="ep03_scrna_csr_and_attention_maps.mp4">
+        <source src="ep03_scrna_csr_and_attention_maps.mp4" type="video/mp4">
+      </video>
+      <div class="act-chapters">
+        <button class="act-btn" onclick="seekAct(0)">Act I</button>
+        <button class="act-btn" onclick="seekAct(1)">Act II</button>
+        <button class="act-btn" onclick="seekAct(2)">Act III</button>
+        <button class="act-btn" onclick="seekAct(3)">Act IV</button>
+        <button class="act-btn" onclick="seekAct(4)">Act V</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const LENS_TEXT = {
+      engineer: "<strong>⚙️ Systems Engineering Lens:</strong> Compressed Sparse Row (CSR) storage (SparseAttentionMap, create_sparse_map, build_energy_hotspot_map) stores only non-zero contacts and expression counts, reducing O(L^2) dense scans to O(nnz) nanosecond slice lookups.",
+      biologist: "<strong>🧬 Structural Biology Lens:</strong> Every cell in your body shares the exact same DNA, yet a neuron and a T-cell behave completely differently because of which genes they express (Transcriptomics). Sequencing 1 million cells across 20,000 genes creates a 20-billion-cell matrix that is 90% zeroes—crushing traditional SQL schemas and RAM."
+    };
+
+    function setLens(mode) {
+      document.getElementById('lens-description').innerHTML = LENS_TEXT[mode];
+      document.getElementById('btn-eng').classList.toggle('active', mode === 'engineer');
+      document.getElementById('btn-bio').classList.toggle('active', mode === 'biologist');
+    }
+
+    let blobFallbackPromise = null;
+    async function ensureVideoSource(vid) {
+      if (!vid.error && vid.networkState !== HTMLMediaElement.NETWORK_NO_SOURCE && vid.readyState > 0) {
+        return true;
+      }
+      if (vid.dataset.blobLoaded === '1') return true;
+      const mp4Url = vid.dataset.mp4Src || 'ep03_scrna_csr_and_attention_maps.mp4';
+      if (!blobFallbackPromise) {
+        blobFallbackPromise = fetch(mp4Url, { cache: 'reload' })
+          .then(r => {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.blob();
+          })
+          .then(b => {
+            const blobUrl = URL.createObjectURL(new Blob([b], { type: 'video/mp4' }));
+            vid.removeAttribute('src');
+            while (vid.firstChild) vid.removeChild(vid.firstChild);
+            vid.src = blobUrl;
+            vid.dataset.blobLoaded = '1';
+            vid.load();
+            return new Promise(res => {
+              vid.addEventListener('loadedmetadata', () => res(true), { once: true });
+              vid.addEventListener('error', () => res(false), { once: true });
+              setTimeout(() => res(true), 1200);
+            });
+          })
+          .catch(() => false);
+      }
+      return blobFallbackPromise;
+    }
+
+    async function safePlayVideo(vid) {
+      const btn = document.getElementById('btn-vo');
+      const aud = document.getElementById('deck-audio');
+      try {
+        if (vid.error || vid.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) {
+          await ensureVideoSource(vid);
+        }
+        await vid.play();
+        if (btn) {
+          btn.textContent = '⏸ Pause Voiced Video';
+          btn.classList.add('active');
+        }
+      } catch (err) {
+        const ok = await ensureVideoSource(vid);
+        if (ok) {
+          try {
+            await vid.play();
+            if (btn) {
+              btn.textContent = '⏸ Pause Voiced Video';
+              btn.classList.add('active');
+            }
+            return;
+          } catch (_) {}
+        }
+        if (aud) {
+          aud.play().catch(() => {});
+          if (btn) {
+            btn.textContent = '⏸ Pause Neural Voiceover';
+            btn.classList.add('active');
+          }
+        }
+      }
+    }
+
+    function toggleVoiceover() {
+      const vid = document.getElementById('hover-video-player');
+      const aud = document.getElementById('deck-audio');
+      const btn = document.getElementById('btn-vo');
+      if (vid.paused && (!aud || aud.paused)) {
+        safePlayVideo(vid);
+      } else {
+        vid.pause();
+        if (aud) aud.pause();
+        if (btn) {
+          btn.textContent = '🔊 Play Voiced Video';
+          btn.classList.remove('active');
+        }
+      }
+    }
+
+    async function seekAct(actIdx) {
+      const vid = document.getElementById('hover-video-player');
+      if (!vid.duration || vid.error) {
+        await ensureVideoSource(vid);
+      }
+      if (vid.duration) {
+        vid.currentTime = (vid.duration / 5) * actIdx;
+      }
+      safePlayVideo(vid);
+      if (actIdx === 0) highlightCore();
+      if (actIdx === 2) highlightPocket();
+      if (actIdx === 4) resetView();
+    }
+
+    function toggleHoverDock() {
+      const widget = document.getElementById('hover-video-widget');
+      const slot = document.getElementById('docked-video-slot');
+      widget.classList.toggle('docked');
+      if (widget.classList.contains('docked')) {
+        slot.appendChild(widget);
+      } else {
+        document.body.appendChild(widget);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const widget = document.getElementById('hover-video-widget');
+      const handle = document.getElementById('hover-drag-handle');
+      const vid = document.getElementById('hover-video-player');
+      const btn = document.getElementById('btn-vo');
+      vid.addEventListener('error', () => { ensureVideoSource(vid); }, true);
+      vid.addEventListener('play', () => {
+        if (btn) { btn.textContent = '⏸ Pause Voiced Video'; btn.classList.add('active'); }
+      });
+      vid.addEventListener('pause', () => {
+        if (btn) { btn.textContent = '🔊 Play Voiced Video'; btn.classList.remove('active'); }
+      });
+      let lastAct = -1;
+      vid.addEventListener('timeupdate', () => {
+        if (!vid.duration) return;
+        const curAct = Math.min(4, Math.floor((vid.currentTime / vid.duration) * 5));
+        if (curAct !== lastAct) {
+          lastAct = curAct;
+          document.querySelectorAll('.act-btn').forEach((b, i) => b.classList.toggle('active', i === curAct));
+          if (curAct === 0) { setLens('biologist'); highlightCore(); }
+          else if (curAct === 2) { setLens('engineer'); highlightPocket(); }
+          else if (curAct === 4) { resetView(); }
+        }
+      });
+      let dragging = false, startX = 0, startY = 0, origR = 24, origB = 24;
+      handle.addEventListener('mousedown', (e) => {
+        if (widget.classList.contains('docked') || e.target.tagName === 'BUTTON') return;
+        dragging = true; startX = e.clientX; startY = e.clientY;
+        const r = widget.getBoundingClientRect();
+        origR = window.innerWidth - r.right; origB = window.innerHeight - r.bottom;
+      });
+      window.addEventListener('mousemove', (e) => {
+        if (!dragging) return;
+        widget.style.right = Math.max(8, origR - (e.clientX - startX)) + 'px';
+        widget.style.bottom = Math.max(8, origB - (e.clientY - startY)) + 'px';
+      });
+      window.addEventListener('mouseup', () => { dragging = false; });
+    });
+
+    const DEMO_PDB = `
+ATOM      1  N   HIS A  94       0.000   0.000   0.000  1.00 90.00           N
+ATOM      2  CA  HIS A  94       1.458   0.000   0.000  1.00 90.00           C
+ATOM      3  C   HIS A  94       2.009   1.420   0.000  1.00 90.00           C
+ATOM      4  O   HIS A  94       1.251   2.390   0.000  1.00 90.00           O
+ATOM      5  CB  HIS A  94       1.988  -0.760  -1.216  1.00 90.00           C
+ATOM      6  ND1 HIS A  94       3.350  -0.950  -1.350  1.00 95.00           N
+ATOM      7  N   HIS A  96       4.100   0.800  -2.200  1.00 92.00           N
+ATOM      8  CA  HIS A  96       5.200   0.100  -2.800  1.00 92.00           C
+ATOM      9  ND1 HIS A  96       4.850  -1.250  -3.200  1.00 95.00           N
+ATOM     10  N   GLU A 106       2.400  -3.400  -2.100  1.00 91.00           N
+ATOM     11  CA  GLU A 106       1.900  -4.200  -1.000  1.00 91.00           C
+ATOM     12  OE1 GLU A 106       3.100  -2.800  -0.400  1.00 96.00           O
+HETATM   13 ZN    ZN A 201       3.950  -1.650  -2.150  1.00 99.00          ZN
+HETATM   14  O   HOH A 301       3.750  -2.950  -1.150  1.00 98.00           O
+END`;
+
+    let viewer = null;
+    window.addEventListener('DOMContentLoaded', () => {
+      viewer = $3Dmol.createViewer(document.getElementById('mol-viewer'), {
+        backgroundColor: '#0f1117'
+      });
+      viewer.addModel(DEMO_PDB, 'pdb');
+      resetView();
+    });
+
+    function highlightCore() {
+      if (!viewer) return;
+      viewer.removeAllLabels();
+      viewer.setStyle({}, { stick: { radius: 0.18, colorscheme: 'cyanCarbon' } });
+      viewer.setStyle({ resn: 'ZN' }, { sphere: { scale: 0.65, color: '#FFC107' } });
+      viewer.setStyle({ resn: 'HOH' }, { sphere: { scale: 0.45, color: '#ff5a9d' } });
+      viewer.addLabel('Zn2+ Cofactor', { position: { x: 3.95, y: -1.65, z: -2.15 }, backgroundColor: '#FFC107', fontColor: '#000' });
+      viewer.addLabel('Nucleophilic HOH (2.05 Å)', { position: { x: 3.75, y: -2.95, z: -1.15 }, backgroundColor: '#ff5a9d', fontColor: '#fff' });
+      viewer.render();
+      document.getElementById('chemistry-lesson').innerHTML =
+        "<strong>🔬 Chemistry Insight (Catalytic Coordination):</strong> The Zn<sup>2+</sup> cofactor polarizes the bound water molecule (pink sphere), lowering its pK<sub>a</sub> so Glu106 can abstract a proton and generate a hydroxide nucleophile. In <code>pg_bio</code>, <code>has_coordinated_water_shell(coords, 'ZN', 2.4)</code> and <code>theozyme_rmsd()</code> verify this exact sub-angstrom geometry in &lt;1 ms.";
+    }
+
+    function highlightPocket() {
+      if (!viewer) return;
+      viewer.removeAllLabels();
+      viewer.setStyle({}, { stick: { radius: 0.22, colorscheme: 'magentaCarbon' }, sphere: { scale: 0.28 } });
+      viewer.addSphere({ center: { x: 3.95, y: -1.65, z: -2.15 }, radius: 3.5, color: '#5c9eff', alpha: 0.22 });
+      viewer.addLabel('Morton Z-Order 3.5 Å Bounding Shell', { position: { x: 1.5, y: 1.2, z: 0.0 }, backgroundColor: '#336791', fontColor: '#fff' });
+      viewer.render();
+      document.getElementById('chemistry-lesson').innerHTML =
+        "<strong>⚙️ Systems-to-Bio Insight (Z-Order Bounding Sphere):</strong> Instead of computing Euclidean distances across millions of atoms in Python, <code>z_order_encode(x,y,z)</code> maps 3D coordinates onto a 1D space-filling Morton curve so standard PostgreSQL B-Tree indexes can slice out this 3.5 Å contact shell instantly.";
+    }
+
+    function resetView() {
+      if (!viewer) return;
+      viewer.removeAllLabels();
+      viewer.removeAllShapes();
+      viewer.setStyle({}, { stick: { radius: 0.16, colorscheme: 'Jmol' } });
+      viewer.setStyle({ resn: 'ZN' }, { sphere: { scale: 0.55, color: '#5c9eff' } });
+      viewer.zoomTo();
+      viewer.render();
+      document.getElementById('chemistry-lesson').innerHTML =
+        "<strong>💡 Interactive Stage Ready:</strong> Click Button 1 to inspect the Zn<sup>2+</sup>–Water catalytic triad or Button 2 to visualize the 3D Morton B-Tree bounding query.";
+    }
+  </script>
+</body>
+</html>

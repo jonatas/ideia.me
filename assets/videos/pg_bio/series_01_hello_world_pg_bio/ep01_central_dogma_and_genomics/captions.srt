@@ -1,0 +1,59 @@
+1
+00:00:00,000 --> 00:00:03,912
+Hello World, and welcome to Episode 1 of pg_bio!
+
+2
+00:00:03,912 --> 00:00:07,824
+If you are a software or database engineer, biology can look like a wall
+
+3
+00:00:07,824 --> 00:00:11,736
+of jargon. But the Central Dogma of biology is literally a compiler:
+
+4
+00:00:11,736 --> 00:00:15,648
+DNA is 4-letter source code on disk, RNA is an ephemeral message queue, and
+
+5
+00:00:15,648 --> 00:00:19,560
+proteins are compiled 3D state machines.
+
+6
+00:00:19,560 --> 00:00:24,680
+In traditional bioinformatics, engineers export gigabytes of FASTA and VCF files to Python just
+
+7
+00:00:24,680 --> 00:00:29,800
+to translate codons or check genomic intervals. With pg_bio, that entire compiler runs natively
+
+8
+00:00:29,800 --> 00:00:34,920
+inside PostgreSQL shared buffers in Rust.
+
+9
+00:00:34,920 --> 00:00:40,496
+Here is your first Systems-to-Biotech bridge: a human chromosome is just a 1D integer
+
+10
+00:00:40,496 --> 00:00:46,072
+coordinate space. Using PostgreSQL int4range and GiST indexes, finding a CRISPR safe-harbor locus near
+
+11
+00:00:46,072 --> 00:00:51,648
+a promoter without touching a tumor suppressor gene is a sub-millisecond interval query.
+
+12
+00:00:51,648 --> 00:00:59,448
+Look at psql: in one query, bio_translate_dna compiles DNA codons into amino acids, isoelectric_point
+
+13
+00:00:59,448 --> 00:01:07,248
+runs 100-step Henderson-Hasselbalch bisection to find net charge, and gravy_score measures water-repellency in 200 nanoseconds.
+
+14
+00:01:07,248 --> 00:01:13,236
+You just executed genomics and protein sequence physics in 0.2 milliseconds inside SQL.
+
+15
+00:01:13,236 --> 00:01:19,224
+Explore all articles at ideia dot me and check out the pg_bio repository on GitHub.

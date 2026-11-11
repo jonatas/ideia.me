@@ -21,6 +21,12 @@ Today, we are going to explore how porting **RangeFinder's 9-dimensional pocket-
 
 <!--more-->
 
+> **🎬 Watch the Companion Voiced Videos & Interactive 3D Query-Planner Studio**
+> See the PostgreSQL Query Planner (`GiST` R-Trees, 64-bit Morton `B-Trees`, and `HNSW` vector short-circuiting) in action with synchronized 3Dmol.js molecular views:
+> * ⚡ [**Episode 01: 1D `int4range` GiST Safe Harbors & Sequence Physics**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep01_central_dogma_and_genomics/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep01_central_dogma_and_genomics/ep01_central_dogma_and_genomics.mp4)
+> * 🎯 [**Episode 02: 3D Morton Z-Order B-Trees & `kabsch_rmsd` Pocket Alignment**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep02_3d_pockets_and_morton_curves/studio_deck.html) · [1080p MP4](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep02_3d_pockets_and_morton_curves/ep02_3d_pockets_and_morton_curves.mp4)
+> * 🔭 [**Episode 04: HNSW Index Funnel + Smith-Waterman Short-Circuiting**](/assets/videos/pg_bio/series_01_hello_world_pg_bio/ep04_joint_vector_multiomics/studio_deck.html) · 🌐 [**Full 3D Video Library (`/pg-bio-videos/`)**](/pg-bio-videos/)
+
 ---
 
 ## 1. The Architectural Epiphany: Why the PostgreSQL Query Planner is an Algorithmic Supercomputer
