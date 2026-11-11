@@ -1,0 +1,406 @@
+---
+layout: null
+title: "Waimiri Atroari Weaving Patterns Playground | ideia.me"
+description: "Interactive indigenous basketry loom, step-by-step primitive weaving playground, and expanded tapestry unroller for Waimiri Atroari (Kinja) Benry patterns."
+permalink: /patterns/
+---
+<!DOCTYPE html>
+<html lang="en" class="dark-mode">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Waimiri Atroari Weaving Patterns Playground | ideia.me</title>
+  <meta name="description" content="Interactive indigenous basketry loom, step-by-step primitive weaving playground, and expanded tapestry unroller for Waimiri Atroari (Kinja) Benry patterns.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/css/patterns.css">
+</head>
+<body class="patterns-app-body">
+  <a href="#active-pattern-heading" class="visually-hidden">Skip to interactive weaving loom</a>
+
+  <!-- Centralized Polite Live Region for Screen Readers -->
+  <div id="loom-announcer" class="visually-hidden" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- Studio Header -->
+  <header class="patterns-header">
+    <div class="patterns-brand">
+      <nav aria-label="Breadcrumb navigation">
+        <a href="/apps/" class="patterns-back-link">
+          <i class="bi bi-arrow-left" aria-hidden="true"></i>
+          <span>Apps</span>
+        </a>
+      </nav>
+      <div class="patterns-title-group">
+        <h1>
+          <span>Tear de Grafismos</span>
+          <span class="kinja-badge" lang="pt">Waimiri Atroari • Amazonas</span>
+        </h1>
+        <p class="patterns-subtitle">Interactive Arumã Basketry Loom, Step-by-Step Primitives &amp; Expanded Tapestry Unroller</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button type="button" id="btn-quick-unroll" class="loom-btn" aria-pressed="false" title="Expand and unroll repeating pattern onto a larger surface">
+        <i class="bi bi-arrows-angle-expand" aria-hidden="true"></i>
+        <span>Desenrolar Tapete (Expandir)</span>
+      </button>
+      <button type="button" id="btn-open-gallery-dialog" class="loom-btn">
+        <i class="bi bi-images" aria-hidden="true"></i>
+        <span>Catálogo Fotográfico (12)</span>
+      </button>
+      <button type="button" id="btn-toggle-ref" class="loom-btn" aria-pressed="true">
+        <i class="bi bi-card-image" aria-hidden="true"></i>
+        <span>Foto Original</span>
+      </button>
+      <button type="button" id="btn-toggle-sound" class="loom-btn" aria-pressed="false">
+        <i class="bi bi-volume-up" aria-hidden="true"></i>
+        <span>Som do Arumã</span>
+      </button>
+      <button type="button" id="btn-export-png" class="loom-btn">
+        <i class="bi bi-camera" aria-hidden="true"></i>
+        <span>Baixar PNG</span>
+      </button>
+      <button type="button" id="btn-export-json" class="loom-btn">
+        <i class="bi bi-download" aria-hidden="true"></i>
+        <span>Export JSON</span>
+      </button>
+      <button type="button" id="btn-import-json" class="loom-btn">
+        <i class="bi bi-upload" aria-hidden="true"></i>
+        <span>Import JSON</span>
+      </button>
+      <input type="file" id="input-import-json" accept="application/json" hidden>
+    </div>
+  </header>
+
+  <!-- 3-Column Studio Workspace -->
+  <div class="patterns-workspace">
+    <!-- Left Sidebar: 12 Waimiri Atroari Patterns & Baskets -->
+    <aside class="catalog-sidebar" aria-label="Waimiri Atroari Pattern Catalog">
+      <div class="sidebar-section-header">
+        <h2 id="catalog-heading">12 Padrões Benry &amp; Cestos</h2>
+        <span style="font-size: 0.68rem; color: var(--loom-muted);">↑↓ Navegar</span>
+      </div>
+      <div id="pattern-catalog-list" class="pattern-catalog-list" role="listbox" aria-labelledby="catalog-heading">
+        <!-- Populated dynamically via safe DOM nodes -->
+      </div>
+    </aside>
+
+    <!-- Center Stage: Interactive Loom Canvas & Reference Card -->
+    <main class="loom-center-stage">
+      <div class="loom-stage-toolbar">
+        <div class="toolbar-group" role="group" aria-label="Visual Rendering Mode">
+          <span class="toolbar-label">Lente:</span>
+          <button type="button" class="loom-btn" data-render-mode="kinja" aria-pressed="true">
+            <i class="bi bi-stars" aria-hidden="true"></i> Grafismo Kinja
+          </button>
+          <button type="button" class="loom-btn" data-render-mode="basket" aria-pressed="false">
+            <i class="bi bi-grid-3x3" aria-hidden="true"></i> Cesto de Arumã 3D
+          </button>
+          <button type="button" class="loom-btn" data-render-mode="blueprint" aria-pressed="false">
+            <i class="bi bi-rulers" aria-hidden="true"></i> Matriz ▼/▲
+          </button>
+        </div>
+
+        <div class="toolbar-group" role="group" aria-label="Fiber Color Palette">
+          <span class="toolbar-label">Fibras:</span>
+          <button type="button" class="loom-btn" data-palette="natural" aria-pressed="true">
+            Arumã Natural
+          </button>
+          <button type="button" class="loom-btn" data-palette="urucum" aria-pressed="false">
+            Tricolor Urucum
+          </button>
+          <button type="button" class="loom-btn" data-palette="high-contrast" aria-pressed="false">
+            Alto Contraste
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Unroll Bar (Visible when Expanded / Unroll mode is active) -->
+      <div id="unroll-stage-bar" class="unroll-stage-bar" hidden>
+        <div class="toolbar-group">
+          <span class="toolbar-label">Escala:</span>
+          <button type="button" class="loom-btn unroll-preset-btn" data-rx="1" data-ry="1" aria-pressed="false">1×1</button>
+          <button type="button" class="loom-btn unroll-preset-btn" data-rx="2" data-ry="2" aria-pressed="false">2×2</button>
+          <button type="button" class="loom-btn unroll-preset-btn" data-rx="3" data-ry="2" aria-pressed="true">3×2</button>
+          <button type="button" class="loom-btn unroll-preset-btn" data-rx="4" data-ry="3" aria-pressed="false">4×3</button>
+          <button type="button" class="loom-btn unroll-preset-btn" data-rx="6" data-ry="3" aria-pressed="false">6×3 Mural</button>
+        </div>
+
+        <div class="toolbar-group">
+          <span class="toolbar-label">Cesto 3D ↔ Plano:</span>
+          <input type="range" id="unroll-cylinder-slider" min="0" max="100" value="100" style="width: 110px; accent-color: var(--loom-accent);" aria-label="Unroll cylinder basket from 0 percent 3D cylinder to 100 percent flat tapestry">
+          <span id="unroll-cylinder-val" style="font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; color: var(--loom-accent); min-width: 42px;">100%</span>
+          <button type="button" id="btn-animate-unroll" class="loom-btn loom-btn-primary" aria-pressed="false">
+            ▶ Desenrolar 3D
+          </button>
+        </div>
+
+        <div class="toolbar-group">
+          <span id="expanded-dims-badge" class="kinja-badge">37×97 (3.589 talas)</span>
+        </div>
+      </div>
+
+      <h2 id="active-pattern-heading" tabindex="-1" style="font-size: 0.92rem; font-weight: 700; margin: 0; color: var(--loom-text);">
+        WARAKI BENRY — Desenho do aracu (Aracu design)
+      </h2>
+
+      <div class="loom-canvas-area">
+        <div class="loom-canvas-wrapper" id="loom-canvas-scroll-viewport">
+          <canvas id="loom-canvas" width="700" height="530" tabindex="0" role="img" aria-label="Interactive Waimiri Atroari weaving loom matrix. Use arrow keys to position the shuttle cursor and Enter or Space to stamp the active primitive."></canvas>
+        </div>
+
+        <figure id="reference-photo-card" class="reference-photo-card" style="margin: 0;">
+          <img id="reference-photo-img" src="/images/patterns/waraki.jpg" alt="WARAKI BENRY - Desenho do aracu">
+          <figcaption id="reference-photo-caption" class="reference-photo-caption">
+            WARAKI BENRY • Desenho do aracu
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Live Step / Shuttle Weaving Instruction Banner -->
+      <div class="loom-live-callout">
+        <div class="callout-top-row">
+          <h3 id="callout-title" class="callout-step-title">Passo 5 — Padrão Completo</h3>
+          <span style="font-size: 0.72rem; color: var(--loom-muted);">
+            <strong>▼</strong> = Por Baixo (Urdidura Preta) &nbsp;|&nbsp; <strong>▲</strong> = Por Cima (Trama Clara/Urucum)
+          </span>
+        </div>
+        <p id="callout-desc" class="callout-step-desc">
+          Selecione um passo à direita para decompor o padrão em primitivas ou clique diretamente no tear para experimentar.
+        </p>
+        <div id="run-pills-container" class="run-pills-container" aria-label="Row weaving run-length sequence"></div>
+      </div>
+    </main>
+
+    <!-- Right Sidebar: Step-by-Step Primitives, Row Shuttle, Stamp Studio & Expanded Unroller -->
+    <aside class="inspector-sidebar" aria-label="Primitive Learning and Loom Controls">
+      <div class="mode-tabs mode-tabs-4" role="tablist" aria-label="Learning Mode Tabs">
+        <button type="button" class="mode-tab-btn" role="tab" id="tab-btn-steps" data-tab-target="steps" aria-controls="panel-steps" aria-selected="true">
+          <i class="bi bi-layers" aria-hidden="true"></i>
+          <span>1. Passos</span>
+        </button>
+        <button type="button" class="mode-tab-btn" role="tab" id="tab-btn-shuttle" data-tab-target="shuttle" aria-controls="panel-shuttle" aria-selected="false">
+          <i class="bi bi-distribute-vertical" aria-hidden="true"></i>
+          <span>2. Linhas</span>
+        </button>
+        <button type="button" class="mode-tab-btn" role="tab" id="tab-btn-playground" data-tab-target="playground" aria-controls="panel-playground" aria-selected="false">
+          <i class="bi bi-brush" aria-hidden="true"></i>
+          <span>3. Primitivas</span>
+        </button>
+        <button type="button" class="mode-tab-btn" role="tab" id="tab-btn-unroll" data-tab-target="unroll" aria-controls="panel-unroll" aria-selected="false">
+          <i class="bi bi-arrows-angle-expand" aria-hidden="true"></i>
+          <span>4. Expandir</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: Step-by-Step Primitive Decomposition -->
+      <div id="panel-steps" class="tab-panel-content" role="tabpanel" aria-labelledby="tab-btn-steps">
+        <div class="cultural-note-box" id="cultural-note-text">
+          Represents the scales and double-bar eye of the Aracu fish, woven with 4-quadrant symmetry.
+        </div>
+
+        <div style="display: flex; gap: 0.45rem; flex-wrap: wrap;">
+          <button type="button" id="btn-prev-step" class="loom-btn">
+            <i class="bi bi-chevron-left" aria-hidden="true"></i> Anterior
+          </button>
+          <button type="button" id="btn-play-steps" class="loom-btn loom-btn-primary" style="flex: 1;" aria-pressed="false">
+            ▶ Animar Primitivas
+          </button>
+          <button type="button" id="btn-next-step" class="loom-btn">
+            Próximo <i class="bi bi-chevron-right" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <h3 style="font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--loom-muted); margin: 0;">
+          Construção por Primitivas (5 Etapas)
+        </h3>
+        <div id="steps-timeline" class="steps-timeline">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+
+      <!-- TAB 2: Row-by-Row Loom Shuttle -->
+      <div id="panel-shuttle" class="tab-panel-content" role="tabpanel" aria-labelledby="tab-btn-shuttle" hidden>
+        <p style="font-size: 0.78rem; color: var(--loom-muted); margin: 0; line-height: 1.45;">
+          Na cestaria Waimiri Atroari, as talas verticais pretas (<strong>Urdidura</strong>) ficam fixas enquanto cada tala horizontal clara ou de urucum (<strong>Trama</strong>) é tecida linha por linha passando <strong>▼ por baixo</strong> ou <strong>▲ por cima</strong>.
+        </p>
+
+        <div style="display: flex; gap: 0.45rem; align-items: center;">
+          <button type="button" id="btn-prev-row" class="loom-btn" aria-label="Previous weaving row">
+            <i class="bi bi-arrow-up" aria-hidden="true"></i>
+          </button>
+          <button type="button" id="btn-play-shuttle" class="loom-btn loom-btn-primary" style="flex: 1;" aria-pressed="false">
+            ▶ Tecer Linha a Linha
+          </button>
+          <button type="button" id="btn-next-row" class="loom-btn" aria-label="Next weaving row">
+            <i class="bi bi-arrow-down" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.76rem; font-weight: 700; margin-bottom: 0.35rem;">
+            <label for="shuttle-row-slider">Posição da Tala (Linha Ativa):</label>
+            <span id="shuttle-row-label" style="color: var(--loom-accent);">Linha 0 / 18</span>
+          </div>
+          <input type="range" id="shuttle-row-slider" min="0" max="18" value="0" style="width: 100%; accent-color: var(--loom-accent);">
+        </div>
+
+        <div class="cultural-note-box">
+          <strong>Segredo Matemático do Trançado:</strong><br>
+          • Nas <strong>linhas pares</strong> (2, 4, 6...), a trama faz o ritmo base <code>[▲1 ▼3]</code> (expondo blocos de 3 talas pretas).<br>
+          • Nas <strong>linhas ímpares</strong> (1, 3, 5...), a trama flutua longa por cima (<code>▲3</code>, <code>▲5</code>, <code>▲7</code>) e mergulha sob apenas <code>▼1</code> tala preta para conectar as diagonais e formar olhos, sementes e ganchos!
+        </div>
+      </div>
+
+      <!-- TAB 3: Interactive Primitive Stamp & Symmetry Studio -->
+      <div id="panel-playground" class="tab-panel-content" role="tabpanel" aria-labelledby="tab-btn-playground" hidden>
+        <div class="match-meter-box">
+          <div class="match-meter-header">
+            <span>Fidelidade ao Padrão Original</span>
+            <span id="match-pct-val" style="color: var(--loom-emerald);">100%</span>
+          </div>
+          <div class="match-progress" role="progressbar" aria-label="Pattern match accuracy" aria-valuemin="0" aria-valuemax="100">
+            <div id="match-progress-bar" class="match-progress-bar" style="width: 100%;"></div>
+          </div>
+        </div>
+
+        <div>
+          <h3 id="primitives-heading" style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--loom-muted); margin: 0 0 0.5rem 0;">
+            Carimbos de Primitivas (Clique no Tear)
+          </h3>
+          <div id="primitives-grid" class="primitives-grid" role="listbox" aria-labelledby="primitives-heading">
+            <!-- Populated dynamically -->
+          </div>
+          <p id="selected-primitive-desc" style="font-size: 0.74rem; color: var(--loom-muted); margin: 0.5rem 0 0 0;">
+            Alterna uma única intersecção entre ▲ Por Cima (0) e ▼ Por Baixo (1).
+          </p>
+        </div>
+
+        <div>
+          <h3 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--loom-muted); margin: 0 0 0.45rem 0;">
+            Multiplicador de Simetria
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem;" role="group" aria-label="Symmetry Multiplier">
+            <button type="button" class="loom-btn" data-symmetry="none" aria-pressed="false">1× Livre</button>
+            <button type="button" class="loom-btn" data-symmetry="h" aria-pressed="false">2× Espelho ↔</button>
+            <button type="button" class="loom-btn" data-symmetry="4q" aria-pressed="true">4× Quadrantes ✚</button>
+            <button type="button" class="loom-btn" data-symmetry="tile" aria-pressed="false">∞ Mosaico 🔁</button>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.4rem; padding-top: 0.3rem; border-top: 1px solid var(--loom-border);">
+          <span style="font-size: 0.72rem; font-weight: 700; color: var(--loom-muted); text-transform: uppercase;">Desafios de Reconstrução:</span>
+          <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+            <button type="button" id="btn-clear-loom" class="loom-btn" style="flex: 1;">
+              Limpar (Passo 1)
+            </button>
+            <button type="button" id="btn-load-twill" class="loom-btn" style="flex: 1;">
+              Base Sarja (Passo 2)
+            </button>
+            <button type="button" id="btn-reset-pattern" class="loom-btn" style="flex: 1;">
+              Restaurar Original
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: Expanded Repeating Pattern & Unroll Playground -->
+      <div id="panel-unroll" class="tab-panel-content" role="tabpanel" aria-labelledby="tab-btn-unroll" hidden>
+        <div class="cultural-note-box">
+          <strong>Desenrolando o Grafismo (Esteiras, Balaios &amp; Jamaxis):</strong>
+          Veja como uma única célula primitiva se multiplica e se desenrola continuamente em superfícies maiores ou ao redor de um cesto cilíndrico 3D.
+        </div>
+
+        <div>
+          <h3 style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--loom-muted); margin: 0 0 0.45rem 0;">
+            Topologia de Expansão (Como Desenrola)
+          </h3>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.4rem;" role="group" aria-label="Unroll Topology Mode">
+            <button type="button" class="loom-btn" data-unroll-mode="seamless" aria-pressed="true">
+              Trama Contínua
+            </button>
+            <button type="button" class="loom-btn" data-unroll-mode="mirror" aria-pressed="false">
+              Caleidoscópio 4Q
+            </button>
+            <button type="button" class="loom-btn" data-unroll-mode="concentric" aria-pressed="false">
+              Ondas Gigantes
+            </button>
+            <button type="button" class="loom-btn" data-unroll-mode="framed" aria-pressed="false">
+              Painéis Moldurados
+            </button>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem;">
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 700; margin-bottom: 0.25rem;">
+              <label for="unroll-rx-slider">Repetições ↔ (X):</label>
+              <span id="unroll-rx-val" style="color: var(--loom-accent);">3×</span>
+            </div>
+            <input type="range" id="unroll-rx-slider" min="1" max="6" value="3" style="width: 100%; accent-color: var(--loom-accent);">
+          </div>
+          <div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 700; margin-bottom: 0.25rem;">
+              <label for="unroll-ry-slider">Repetições ↕ (Y):</label>
+              <span id="unroll-ry-val" style="color: var(--loom-accent);">2×</span>
+            </div>
+            <input type="range" id="unroll-ry-slider" min="1" max="4" value="2" style="width: 100%; accent-color: var(--loom-accent);">
+          </div>
+        </div>
+
+        <div>
+          <div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 700; margin-bottom: 0.25rem;">
+            <label for="unroll-zoom-slider">Zoom do Tapete Expandido:</label>
+            <span id="unroll-zoom-val" style="color: var(--loom-cyan);">100%</span>
+          </div>
+          <input type="range" id="unroll-zoom-slider" min="50" max="200" step="10" value="100" style="width: 100%; accent-color: var(--loom-cyan);">
+        </div>
+
+        <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+          <button type="button" id="btn-toggle-tile-bounds" class="loom-btn" style="flex: 1;" aria-pressed="true">
+            <i class="bi bi-bounding-box" aria-hidden="true"></i> Destacar Célula 1×1
+          </button>
+          <button type="button" id="btn-animate-unroll-side" class="loom-btn loom-btn-primary" style="flex: 1;" aria-pressed="false">
+            ▶ Girar / Desenrolar 3D
+          </button>
+        </div>
+
+        <!-- Mini Base Tile Editor (Live Synced with Giant Tapestry!) -->
+        <div class="mini-tile-editor-box">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+            <h3 style="font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--loom-accent); margin: 0;">
+              Célula Primitiva Base (Edição Ao Vivo)
+            </h3>
+            <span style="font-size: 0.66rem; color: var(--loom-muted);">Clique para editar</span>
+          </div>
+          <p style="font-size: 0.71rem; color: var(--loom-muted); margin: 0 0 0.5rem 0; line-height: 1.35;">
+            Edite qualquer ponto na célula abaixo (ou diretamente no tapete gigante!) e veja a mudança se propagar por todas as repetições em tempo real:
+          </p>
+          <div style="display: flex; justify-content: center; background: #090c12; padding: 0.5rem; border-radius: 8px; border: 1px solid var(--loom-border);">
+            <canvas id="mini-tile-canvas" width="264" height="152" style="max-width: 100%; height: auto; cursor: crosshair; border-radius: 4px;" aria-label="Mini base tile editor"></canvas>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Native <dialog> Modal for Photographic Reference Catalog -->
+  <dialog id="gallery-dialog" class="loom-dialog" aria-labelledby="gallery-dialog-title">
+    <div class="dialog-header">
+      <h2 id="gallery-dialog-title">Acervo Fotográfico: Grafismos &amp; Cestos Waimiri Atroari (12)</h2>
+      <button type="button" id="btn-close-gallery-dialog" class="loom-btn">Fechar ✕</button>
+    </div>
+    <p style="font-size: 0.8rem; color: var(--loom-muted); margin-top: 0;">
+      Selecione qualquer cartão tradicional <em>Benry</em> ou fotografia de cesto físico em arumã para carregar sua matriz matemática e decomposição em primitivas no tear:
+    </p>
+    <div id="dialog-gallery-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 0.65rem; max-height: 65vh; overflow-y: auto; padding: 0.25rem;">
+      <!-- Populated dynamically -->
+    </div>
+  </dialog>
+
+  <script src="/assets/js/weaving-patterns.js"></script>
+  <script src="/js/patterns-playground.js"></script>
+</body>
+</html>

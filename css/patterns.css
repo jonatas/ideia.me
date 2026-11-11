@@ -1,0 +1,754 @@
+/* Waimiri Atroari Weaving Patterns Playground (/patterns/) */
+:root {
+  --loom-bg: #0b0e14;
+  --loom-panel: #131822;
+  --loom-panel-alt: #1a2130;
+  --loom-border: #283246;
+  --loom-text: #e6edf3;
+  --loom-muted: #94a3b8;
+  --loom-accent: #f59e0b;
+  --loom-accent-soft: rgba(245, 158, 11, 0.16);
+  --loom-terracotta: #d97745;
+  --loom-emerald: #10b981;
+  --loom-cyan: #38bdf8;
+  --aruma-cream: #e8dcc4;
+  --aruma-dark: #16171a;
+}
+
+.visually-hidden:where(:not(:focus-within, :active)) {
+  position: absolute !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+.patterns-app-body {
+  margin: 0;
+  background-color: var(--loom-bg);
+  color: var(--loom-text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.patterns-app-body :where(a:any-link, button, input, select, [tabindex="0"]):focus-visible {
+  outline: 3px solid var(--loom-accent);
+  outline-offset: 2px;
+}
+
+/* Header */
+.patterns-header {
+  background: rgba(19, 24, 34, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--loom-border);
+  padding: 0.65rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  z-index: 50;
+}
+
+.patterns-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.patterns-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--loom-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.4rem 0.7rem;
+  border-radius: 8px;
+  border: 1px solid var(--loom-border);
+  background: var(--loom-panel-alt);
+  min-block-size: 32px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.patterns-back-link:hover {
+  color: var(--loom-text);
+  border-color: var(--loom-accent);
+}
+
+.patterns-title-group h1 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.02em;
+  color: var(--loom-text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.kinja-badge {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  font-weight: 700;
+}
+
+.patterns-subtitle {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--loom-muted);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.loom-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-block-size: 34px;
+  min-inline-size: 34px;
+  padding: 0.38rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--loom-text);
+  background: var(--loom-panel-alt);
+  border: 1px solid var(--loom-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.loom-btn:hover {
+  border-color: var(--loom-accent);
+  background: rgba(245, 158, 11, 0.1);
+}
+
+.loom-btn[aria-pressed="true"],
+.loom-btn.active {
+  background: var(--loom-accent);
+  color: #0b0e14;
+  border-color: var(--loom-accent);
+  font-weight: 700;
+}
+
+.loom-btn-primary {
+  background: var(--loom-accent);
+  color: #0b0e14;
+  border-color: var(--loom-accent);
+  font-weight: 700;
+}
+
+.loom-btn-primary:hover {
+  background: #fbbf24;
+  color: #0b0e14;
+}
+
+/* Main 3-Column Studio Workspace */
+.patterns-workspace {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 300px 1fr 370px;
+  min-height: calc(100vh - 61px);
+  overflow: hidden;
+}
+
+@media (max-width: 1200px) {
+  .patterns-workspace {
+    grid-template-columns: 260px 1fr 330px;
+  }
+}
+
+@media (max-width: 992px) {
+  .patterns-workspace {
+    grid-template-columns: 1fr;
+    overflow: visible;
+  }
+}
+
+/* Left Panel: Pattern Catalog */
+.catalog-sidebar {
+  background: var(--loom-panel);
+  border-right: 1px solid var(--loom-border);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 61px);
+  overflow: hidden;
+}
+
+@media (max-width: 992px) {
+  .catalog-sidebar {
+    max-height: 380px;
+    border-right: none;
+    border-bottom: 1px solid var(--loom-border);
+  }
+}
+
+.sidebar-section-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--loom-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar-section-header h2 {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--loom-muted);
+  margin: 0;
+}
+
+.pattern-catalog-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.pattern-card-item {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 0.65rem;
+  align-items: center;
+  padding: 0.55rem;
+  border-radius: 10px;
+  background: var(--loom-panel-alt);
+  border: 1px solid var(--loom-border);
+  cursor: pointer;
+  text-align: left;
+  color: var(--loom-text);
+  transition: border-color 0.15s, transform 0.1s, background 0.15s;
+}
+
+.pattern-card-item:hover {
+  border-color: rgba(245, 158, 11, 0.5);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.pattern-card-item[aria-selected="true"] {
+  border-color: var(--loom-accent);
+  background: var(--loom-accent-soft);
+  box-shadow: 0 0 0 1px var(--loom-accent);
+}
+
+.pattern-thumb-canvas {
+  width: 54px;
+  height: 54px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--aruma-cream);
+  display: block;
+}
+
+.pattern-card-meta {
+  min-width: 0;
+}
+
+.pattern-card-kinja {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--loom-text);
+  margin: 0 0 0.15rem 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pattern-card-pt {
+  font-size: 0.72rem;
+  color: var(--loom-accent);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pattern-card-en {
+  font-size: 0.68rem;
+  color: var(--loom-muted);
+  margin: 0.1rem 0 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Center Panel: Interactive Loom Stage */
+.loom-center-stage {
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(circle at center, #161d2a 0%, #0b0e14 100%);
+  max-height: calc(100vh - 61px);
+  overflow-y: auto;
+  padding: 1rem 1.25rem;
+  gap: 0.85rem;
+}
+
+@media (max-width: 992px) {
+  .loom-center-stage {
+    max-height: none;
+  }
+}
+
+/* Top Toolbar inside Center Stage */
+.loom-stage-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  background: var(--loom-panel);
+  border: 1px solid var(--loom-border);
+  border-radius: 12px;
+  padding: 0.6rem 0.9rem;
+}
+
+.toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.toolbar-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--loom-muted);
+  margin-right: 0.25rem;
+}
+
+/* Canvas Split / Comparison Area */
+.loom-canvas-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  position: relative;
+}
+
+@media (max-width: 1280px) {
+  .loom-canvas-area {
+    flex-direction: column;
+  }
+}
+
+.loom-canvas-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #0d1119;
+  border: 1px solid var(--loom-border);
+  border-radius: 14px;
+  padding: 0.7rem;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.55);
+  min-width: 0;
+  flex: 1;
+  overflow: auto;
+  max-height: 60vh;
+}
+
+.unroll-stage-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  background: linear-gradient(90deg, rgba(19, 24, 34, 0.98), rgba(26, 33, 48, 0.98));
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 12px;
+  padding: 0.5rem 0.9rem;
+}
+
+.unroll-stage-bar[hidden] {
+  display: none !important;
+}
+
+#loom-canvas {
+  max-width: 100%;
+  max-height: 54vh;
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  cursor: crosshair;
+  touch-action: none;
+  transition: width 0.15s ease;
+}
+
+.reference-photo-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--loom-panel);
+  border: 1px solid var(--loom-border);
+  border-radius: 14px;
+  padding: 0.65rem;
+  width: 230px;
+  flex-shrink: 0;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+}
+
+.reference-photo-card[hidden] {
+  display: none !important;
+}
+
+.reference-photo-card img {
+  width: 100%;
+  max-height: 220px;
+  object-fit: contain;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.reference-photo-caption {
+  margin-top: 0.5rem;
+  font-size: 0.72rem;
+  color: var(--loom-muted);
+  text-align: center;
+}
+
+/* Active Row / Step Banner Below Canvas */
+.loom-live-callout {
+  background: var(--loom-panel);
+  border: 1px solid var(--loom-border);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.callout-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.callout-step-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--loom-accent);
+  margin: 0;
+}
+
+.callout-step-desc {
+  font-size: 0.8rem;
+  color: var(--loom-text);
+  margin: 0;
+  line-height: 1.45;
+}
+
+.run-pills-container {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  padding-top: 0.25rem;
+}
+
+.run-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.18rem 0.48rem;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.run-pill-under {
+  background: #1e2430;
+  color: #f8fafc;
+  border: 1px solid #475569;
+}
+
+.run-pill-over {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+}
+
+/* Right Panel: Step-by-Step Pedagogical Guide & Primitive Stamp Studio */
+.inspector-sidebar {
+  background: var(--loom-panel);
+  border-left: 1px solid var(--loom-border);
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 61px);
+  overflow-y: auto;
+}
+
+@media (max-width: 992px) {
+  .inspector-sidebar {
+    max-height: none;
+    border-left: none;
+    border-top: 1px solid var(--loom-border);
+  }
+}
+
+.mode-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--loom-border);
+  background: #0e131b;
+}
+
+.mode-tabs-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.mode-tab-btn {
+  padding: 0.65rem 0.25rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--loom-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  min-block-size: 48px;
+}
+
+.mini-tile-editor-box {
+  background: var(--loom-panel-alt);
+  border: 1px solid var(--loom-border);
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+.mode-tab-btn:hover {
+  color: var(--loom-text);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.mode-tab-btn[aria-selected="true"] {
+  color: var(--loom-accent);
+  border-bottom-color: var(--loom-accent);
+  background: rgba(245, 158, 11, 0.06);
+}
+
+.tab-panel-content {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tab-panel-content[hidden] {
+  display: none !important;
+}
+
+/* Step Cards inside Learn Tab */
+.steps-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.step-card-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.7rem 0.85rem;
+  border-radius: 10px;
+  background: var(--loom-panel-alt);
+  border: 1px solid var(--loom-border);
+  color: var(--loom-text);
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.step-card-btn:hover {
+  border-color: rgba(245, 158, 11, 0.5);
+}
+
+.step-card-btn[aria-current="step"] {
+  border-color: var(--loom-accent);
+  background: var(--loom-accent-soft);
+  box-shadow: 0 0 0 1px var(--loom-accent);
+}
+
+.step-card-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--loom-accent);
+}
+
+.step-card-desc {
+  font-size: 0.74rem;
+  color: var(--loom-muted);
+  line-height: 1.35;
+}
+
+.step-card-formula {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--loom-cyan);
+  background: rgba(15, 23, 42, 0.65);
+  padding: 0.25rem 0.45rem;
+  border-radius: 5px;
+  margin-top: 0.2rem;
+}
+
+/* Primitive Stamp Grid */
+.primitives-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.55rem;
+}
+
+.primitive-stamp-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.55rem;
+  border-radius: 10px;
+  background: var(--loom-panel-alt);
+  border: 1px solid var(--loom-border);
+  color: var(--loom-text);
+  text-align: left;
+  cursor: pointer;
+  min-block-size: 54px;
+  transition: all 0.15s;
+}
+
+.primitive-stamp-btn:hover {
+  border-color: rgba(245, 158, 11, 0.5);
+}
+
+.primitive-stamp-btn[aria-selected="true"] {
+  border-color: var(--loom-accent);
+  background: var(--loom-accent-soft);
+  box-shadow: 0 0 0 1px var(--loom-accent);
+}
+
+.primitive-mini-canvas {
+  width: 38px;
+  height: 38px;
+  border-radius: 5px;
+  background: var(--aruma-cream);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  flex-shrink: 0;
+}
+
+.primitive-stamp-info {
+  min-width: 0;
+}
+
+.primitive-stamp-title {
+  font-size: 0.74rem;
+  font-weight: 700;
+  display: block;
+  color: var(--loom-text);
+}
+
+.primitive-stamp-sub {
+  font-size: 0.66rem;
+  color: var(--loom-muted);
+  display: block;
+}
+
+/* Accuracy Progress Bar */
+.match-meter-box {
+  background: var(--loom-panel-alt);
+  border: 1px solid var(--loom-border);
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+.match-meter-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.76rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.match-progress {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #0b0e14;
+  border: 1px solid var(--loom-border);
+}
+
+.match-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--loom-accent), var(--loom-emerald));
+  transition: width 0.25s ease;
+}
+
+/* Native Dialog Styling */
+.loom-dialog {
+  background: var(--loom-panel);
+  color: var(--loom-text);
+  border: 1px solid var(--loom-border);
+  border-radius: 16px;
+  padding: 1.25rem;
+  max-width: 720px;
+  width: 92vw;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75);
+}
+
+.loom-dialog::backdrop {
+  background: rgba(5, 8, 14, 0.78);
+  backdrop-filter: blur(4px);
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--loom-border);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.dialog-header h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.cultural-note-box {
+  background: rgba(16, 185, 129, 0.08);
+  border-left: 3px solid var(--loom-emerald);
+  padding: 0.65rem 0.85rem;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.76rem;
+  color: var(--loom-text);
+  line-height: 1.45;
+}
