@@ -4,7 +4,7 @@ title: "The Woven Language of the Waimiri Atroari (Kinja): Ethnomathematics, Rad
 date: 2026-11-11 16:00:00 -0300
 categories: [ethnomathematics, indigenous-knowledge, amazonia, generative-art, algorithms, interactive]
 tags: [waimiri-atroari, kinja, benry, aruma, basketry, balbina-dam, weaving-patterns, ethnomathematics, indigenous-resistance]
-image: images/patterns/tebaka.jpg
+image: images/patterns/waraki-banner-3x1.png
 description: "How the Waimiri Atroari (Kinja) encode their unwritten language, ecological memory, and ethic of total lucidity into binary arumã basketry matrices—and an interactive playground to weave and unroll all 12 Benry patterns."
 mermaid: true
 math: true
@@ -73,6 +73,24 @@ Today we are launching the [**Waimiri Atroari Weaving Patterns Playground (`/wai
   .article-wrapper {
     position: relative;
     z-index: 2;
+  }
+
+  /* Ensure the top cover banner fits 100% complete without any vertical cropping */
+  .article-cover {
+    background-color: #e4dfd3 !important;
+    border: 1px solid rgba(245, 158, 11, 0.45) !important;
+    border-radius: 14px !important;
+    padding: 0.35rem !important;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
+  }
+
+  .article-cover img {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    object-fit: contain !important;
+    border-radius: 10px !important;
+    display: block !important;
   }
 
   #talk-content {
@@ -450,6 +468,7 @@ Below is a live embedded version of our [**Waimiri Atroari Weaving Patterns Stud
     </div>
     <div class="post-loom-btn-group" role="group" aria-label="Expansão e Desenrolar">
       <button type="button" class="post-loom-btn" data-post-scale="1x1" aria-pressed="true">Peça 1×1</button>
+      <button type="button" class="post-loom-btn" data-post-scale="3x1" aria-pressed="false">Faixa 3×1</button>
       <button type="button" class="post-loom-btn" data-post-scale="3x2" aria-pressed="false">Tapete 3×2</button>
       <button type="button" class="post-loom-btn" data-post-scale="concentric" aria-pressed="false">Ondas 4×3</button>
       <button type="button" class="post-loom-btn" data-post-scale="cylinder" aria-pressed="false">🏺 Cesto Cilíndrico 3D</button>
@@ -843,6 +862,15 @@ Ready to weave your own variations, test your accuracy against all 12 Kinja matr
     function getPostDisplayGrid() {
       var pat = CATALOG[postState.patternIdx];
       var base = postState.userGrid || pat.steps[postState.stepIdx].grid;
+      if (postState.scaleMode === '3x1') {
+        return window.WeavingPatterns.generateExpandedGrid(base, {
+          repeatsX: 3,
+          repeatsY: 1,
+          unrollMode: 'seamless',
+          tilePeriod: pat.tilePeriod,
+          patternId: pat.id
+        }).grid;
+      }
       if (postState.scaleMode === '3x2' || postState.scaleMode === 'cylinder') {
         return window.WeavingPatterns.generateExpandedGrid(base, {
           repeatsX: 3,
