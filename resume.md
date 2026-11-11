@@ -34,6 +34,9 @@ Systems engineer and independent database researcher with 20+ years of productio
 ---
 
 ## Selected Working Papers & Technical Monographs
+* **[Interactive 3D Video Series, Nov 2026]** *"Hello World, `pg_bio`! — Biotech & Multiomics in PostgreSQL for Software Engineers"* — [ideia.me/pg-bio-videos/](https://ideia.me/pg-bio-videos/)
+* **[Systems Monograph, Nov 2026]** *"PostgreSQL Extension Internals in Rust (Part 1): Crossing the C ↔ Rust FFI Boundary, MemoryContexts, varlena Layout, and Parallel Workers in `pg_bio`"* — [ideia.me/postgresql-rust-ffi-pgrx-memory-contexts-varlena-toast-pg-bio](https://ideia.me/postgresql-rust-ffi-pgrx-memory-contexts-varlena-toast-pg-bio)
+* **[Systems Monograph, Nov 2026]** *"PostgreSQL as a Universal Scientific Engine: Delegating RangeFinder Pocket Intervals, GiST R-Trees, and 3D Cheminformatics to the Query Planner"* — [ideia.me/postgresql-query-planner-rangefinder-gist-bioinformatics-engine](https://ideia.me/postgresql-query-planner-rangefinder-gist-bioinformatics-engine)
 * **[Working Paper / Technical Report, Nov 2026]** *"Announcing RosettaCommons Chaperone Support in `pg_bio` & Mining the Twilight Zone at 0.81 Å (DUF7861)"* — [ideia.me/twilight-zone-duf7861-halophile-chaperone-dark-proteome](https://ideia.me/twilight-zone-duf7861-halophile-chaperone-dark-proteome)
 * **[Technical Report, Oct 2026]** *"Domain Chunking Massive Proteins & Heatmapping the Dark Proteome in `pg_bio`"* — [ideia.me/chunking-massive-proteins-pg-bio-swarm](https://ideia.me/chunking-massive-proteins-pg-bio-swarm)
 * **[Systems Monograph, May 2026]** *"Spiral: An Experiment in Geometry-Aware Storage for PostgreSQL (O(1) Buffer Seeks & Z-Order Curves)"* — [ideia.me/spiral-intro](https://ideia.me/spiral-intro)
@@ -45,7 +48,7 @@ Systems engineer and independent database researcher with 20+ years of productio
 ## Professional & Research Experience
 
 **Principal Systems Researcher & Founder** — **IDEIA.ME** *(Feb 2026 – Present)*
-* Conducting full-time independent systems research on PostgreSQL storage extensions (`pg_bio`, `spiral`) and collaborating with academic bioprospecting and biocatalysis groups in Brazil (UFAM / AmazonZyme) on enzyme discovery and structural benchmarking.
+* Conducting full-time independent systems research on PostgreSQL storage extensions (`pg_bio`, `spiral`), running in-database computational experiments on enzyme discovery, structural benchmarking, and open bioprospecting datasets.
 
 **Staff Software Engineer (Distributed Energy Telemetry)** — **BaxEnergy** *(Jun 2025 – Feb 2026)*
 * Engineered high-throughput telemetry and real-time data processing pipelines for renewable energy power plants.

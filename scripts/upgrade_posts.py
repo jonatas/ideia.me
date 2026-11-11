@@ -71,7 +71,10 @@ def upgrade_post(md_file):
     print(f"  ✅ Done.")
 
 def main():
-    posts = glob.glob("_posts/*-dark-proteome.md")
+    if len(sys.argv) > 1:
+        posts = sys.argv[1:]
+    else:
+        posts = glob.glob("_posts/*-dark-proteome.md")
     for post in posts:
         upgrade_post(post)
 

@@ -11,7 +11,8 @@ This skill outlines the standard operating procedure for upgrading "Dark Proteom
 ## Core Positioning Principle
 Every discovery on `ideia.me` is proof of a core systems thesis: **pushing sequence alignment, 3D structural superposition, molecular graph hashing, and space-filling curves directly into PostgreSQL's shared buffer manager via Rust (`pgrx`) eliminates external serialization bottlenecks and turns the PostgreSQL Query Planner into a scientific supercomputer.**
 
-Never let a post read like a biology-only article; always showcase the **PostgreSQL + Rust (`pgrx`) database engine mechanics** that made the discovery possible.
+* **Independent Home-Lab Attribution Rule:** All discoveries and benchmarks are independent in-database computational experiments run on open scientific datasets (UniProt, PDB, Zenodo, ChEMBL, arXiv). Never claim formal institutional collaboration with external universities or wet-labs (such as UFAL or UFAM)—always frame external papers and datasets as open benchmarks evaluated or reproduced in `pg_bio`.
+* Never let a post read like a biology-only article; always showcase the **PostgreSQL + Rust (`pgrx`) database engine mechanics** that made the discovery possible.
 
 ---
 

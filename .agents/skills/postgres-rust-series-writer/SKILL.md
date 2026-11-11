@@ -11,6 +11,7 @@ Use this skill when authoring deep-dive **Database Systems Engineering** blog po
 ## Target Audience
 * **Database Engine Companies & Hiring Teams:** Staff/Principal Database Engineers, PostgreSQL hackers, and extension architects (e.g., Timescale, Supabase, Neon, ParadeDB, Tembo, Crunchy Data, AWS).
 * **European Computer Science & Bioinformatics PIs:** Professors and research labs evaluating systems design, algorithmic rigor, reproducible benchmarks, and storage-engine innovation.
+* **Independent Research Attribution Rule:** All benchmarks and case studies are independent computational experiments run locally in PostgreSQL + Rust (`pgrx`) over open public datasets. Never claim formal institutional collaborations with external universities or wet-labs (e.g., UFAL, UFAM); cite external datasets/papers strictly as public benchmarks.
 
 ---
 
