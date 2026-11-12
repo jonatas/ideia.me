@@ -6,7 +6,7 @@
 (function () {
   'use strict';
 
-  const STORAGE_KEY = 'ideia_waimiri_patterns_v1';
+  const STORAGE_KEY = 'ideia_waimiri_patterns_v2';
 
   const state = {
     selectedPatternIndex: 0,
@@ -28,7 +28,8 @@
     repeatsY: 2,
     unrollZoom: 100,
     unrollCylinderPct: 100, // 100 = 2D flat unrolled tapestry, 0 = 3D cylindrical basket
-    showTileBounds: true,
+    showTileBounds: false,
+    canvasFocused: false,
     unrollAnimTimer: null,
     lastExpandedMeta: null,
     lastRenderGeom: null,
@@ -354,7 +355,7 @@
         dx, yCurve * 0.6, dw, totalH - yCurve * 0.9
       );
 
-      // Cylindrical shadow near left/right edges & subtle highlight near center-left
+      // Subtle shadow behind the vertical warp cap
       const light = Math.pow(Math.max(0, Math.cos(theta + 0.18)), 0.85);
       if (light < 0.88) {
         destCtx.fillStyle = 'rgba(6, 9, 15, ' + ((1 - light) * 0.68 * u).toFixed(3) + ')';
@@ -364,22 +365,6 @@
         destCtx.fillRect(dx, yCurve * 0.6, dw, totalH - yCurve * 0.9);
       }
     }
-
-    // Overlay badge indicating 3D Cylinder Unroll %
-    destCtx.save();
-    destCtx.fillStyle = 'rgba(15, 23, 42, 0.86)';
-    destCtx.strokeStyle = 'rgba(56, 189, 248, 0.6)';
-    destCtx.lineWidth = 1;
-    destCtx.beginPath();
-    destCtx.roundRect(12, 12, 235, 28, 6);
-    destCtx.fill();
-    destCtx.stroke();
-    destCtx.fillStyle = '#38bdf8';
-    destCtx.font = '700 11px "JetBrains Mono", monospace';
-    destCtx.textAlign = 'left';
-    destCtx.textBaseline = 'middle';
-    destCtx.fillText('Cesto 3D → Tapete 2D: ' + cylinderPct + '% aberto', 22, 26);
-    destCtx.restore();
   }
 
   /**
@@ -388,10 +373,12 @@
    *   2. 'basket'    - 3D Interlaced Arumã & Urucum physical basket splints
    *   3. 'blueprint' - Technical grid with coordinates, step diffs, and symmetry axes
    * Plus full support for Expanded Repeating Tapestries & 3D Cylindrical Unrolling!
+   * @param {boolean} [cleanExport=false] - When true, omits all UI markups/cursors/highlights for pure PNG download
    */
-  function renderMainLoom() {
+  function renderMainLoom(cleanExport) {
     const canvas = document.getElementById('loom-canvas');
     if (!canvas) return;
+    const isClean = cleanExport === true;
     const pat = getActivePattern();
     const grid = getDisplayGrid();
     const prevGrid = getPrevStepGrid();
@@ -491,52 +478,150 @@
         ctx.fillRect(padLeft, padTop + 4 * cellH, C * cellW, Math.max(0, (R - 8) * cellH));
       }
 
-      // Draw black cells + iconic 45-degree serrated sawtooth teeth along every black/white boundary!
+      // Draw black cells + authentic Waimiri Atroari serrated sawtooth card geometry!
       ctx.fillStyle = darkColor;
-      const toothW = cellW * 0.5;
-      const toothDepthY = Math.min(5.2, cellH * 0.24);
-      const toothDepthX = Math.min(4.8, cellW * 0.24);
+      const toothDepthY = Math.min(6.0, cellH * 0.25);
+      const toothDepthX = Math.min(5.5, cellW * 0.25);
+      const notchDepthX = Math.min(4.8, cellW * 0.22);
+      const isPanapna = pat && pat.id === 'panapna';
 
+      // Pass 1: Base black cells + 1-tooth-per-column horizontal teeth + odd-row lateral teeth
       for (let r = 0; r < R; r++) {
         for (let c = 0; c < C; c++) {
           if (grid[r][c] !== 1) continue;
           const x = padLeft + c * cellW;
           const y = padTop + r * cellH;
-          ctx.fillRect(x, y, cellW + 0.4, cellH + 0.4);
+          ctx.fillRect(x, y, cellW + 0.45, cellH + 0.45);
 
+          // Top boundary: 1 upward sawtooth peak per column
           if (r === 0 || grid[r - 1][c] === 0) {
             ctx.beginPath();
             ctx.moveTo(x, y);
-            ctx.lineTo(x + toothW * 0.5, y - toothDepthY);
-            ctx.lineTo(x + toothW, y);
-            ctx.lineTo(x + toothW * 1.5, y - toothDepthY);
+            ctx.lineTo(x + cellW * 0.5, y - toothDepthY);
             ctx.lineTo(x + cellW, y);
             ctx.closePath();
             ctx.fill();
           }
+          // Bottom boundary: 1 downward sawtooth peak per column
           if (r === R - 1 || grid[r + 1][c] === 0) {
             ctx.beginPath();
             ctx.moveTo(x, y + cellH);
-            ctx.lineTo(x + toothW * 0.5, y + cellH + toothDepthY);
-            ctx.lineTo(x + toothW, y + cellH);
-            ctx.lineTo(x + toothW * 1.5, y + cellH + toothDepthY);
+            ctx.lineTo(x + cellW * 0.5, y + cellH + toothDepthY);
             ctx.lineTo(x + cellW, y + cellH);
             ctx.closePath();
             ctx.fill();
           }
-          if (c > 0 && grid[r][c - 1] === 0) {
+          // Odd rows: outward lateral diamond points on left/right boundaries
+          if (r % 2 === 1) {
+            if (c === 0 || grid[r][c - 1] === 0) {
+              ctx.beginPath();
+              ctx.moveTo(x, y + cellH * 0.12);
+              ctx.lineTo(x - toothDepthX, y + cellH * 0.5);
+              ctx.lineTo(x, y + cellH * 0.88);
+              ctx.closePath();
+              ctx.fill();
+            }
+            if (c === C - 1 || grid[r][c + 1] === 0) {
+              ctx.beginPath();
+              ctx.moveTo(x + cellW, y + cellH * 0.12);
+              ctx.lineTo(x + cellW + toothDepthX, y + cellH * 0.5);
+              ctx.lineTo(x + cellW, y + cellH * 0.88);
+              ctx.closePath();
+              ctx.fill();
+            }
+          }
+        }
+      }
+
+      // Pass 2: Even interior rows have inward V-notches at left/right boundaries of horizontal black bars
+      for (let r = 2; r < R - 1; r += 2) {
+        const weftColor = getWeftColorForRow(r);
+        ctx.fillStyle = weftColor;
+        for (let c = 0; c < C; c++) {
+          if (grid[r][c] !== 1) continue;
+          const x = padLeft + c * cellW;
+          const y = padTop + r * cellH;
+          if (c === 0 || grid[r][c - 1] === 0) {
             ctx.beginPath();
-            ctx.moveTo(x, y + cellH * 0.15);
-            ctx.lineTo(x - toothDepthX, y + cellH * 0.5);
-            ctx.lineTo(x, y + cellH * 0.85);
+            ctx.moveTo(x - 0.6, y + cellH * 0.14);
+            ctx.lineTo(x + notchDepthX, y + cellH * 0.5);
+            ctx.lineTo(x - 0.6, y + cellH * 0.86);
             ctx.closePath();
             ctx.fill();
           }
-          if (c < C - 1 && grid[r][c + 1] === 0) {
+          if (c === C - 1 || grid[r][c + 1] === 0) {
             ctx.beginPath();
-            ctx.moveTo(x + cellW, y + cellH * 0.15);
-            ctx.lineTo(x + cellW + toothDepthX, y + cellH * 0.5);
-            ctx.lineTo(x + cellW, y + cellH * 0.85);
+            ctx.moveTo(x + cellW + 0.6, y + cellH * 0.14);
+            ctx.lineTo(x + cellW - notchDepthX, y + cellH * 0.5);
+            ctx.lineTo(x + cellW + 0.6, y + cellH * 0.86);
+            ctx.closePath();
+            ctx.fill();
+          }
+        }
+      }
+
+      // Pass 3: Isolated white seed cells (4-side pinched diagonal white X or Panapna twin vertical diamonds ♦♦)
+      for (let r = 1; r < R - 1; r++) {
+        for (let c = 0; c < C; c++) {
+          if (grid[r][c] !== 0) continue;
+          const enclosedTopBottom = (grid[r - 1][c] === 1 && grid[r + 1][c] === 1);
+          const enclosedLeft = (c === 0) ? (grid[r][c + 1] === 1) : (grid[r][c - 1] === 1);
+          const enclosedRight = (c === C - 1) ? (grid[r][c - 1] === 1) : (grid[r][c + 1] === 1);
+          if (!enclosedTopBottom || !enclosedLeft || !enclosedRight) continue;
+
+          const x = padLeft + c * cellW;
+          const y = padTop + r * cellH;
+          const weftColor = getWeftColorForRow(r);
+
+          if (isPanapna) {
+            // Panapna butterfly wing spot: black chamber enclosing two side-by-side vertical white diamonds (♦ ♦)
+            ctx.fillStyle = darkColor;
+            ctx.fillRect(x - 0.3, y - 0.3, cellW + 0.6, cellH + 0.6);
+            ctx.fillStyle = weftColor;
+            const dHalfW = cellW * 0.185;
+            const dHalfH = cellH * 0.39;
+            [0.27, 0.73].forEach(function (cxFrac) {
+              const cx = x + cellW * cxFrac;
+              const cy = y + cellH * 0.5;
+              ctx.beginPath();
+              ctx.moveTo(cx, cy - dHalfH);
+              ctx.lineTo(cx + dHalfW, cy);
+              ctx.lineTo(cx, cy + dHalfH);
+              ctx.lineTo(cx - dHalfW, cy);
+              ctx.closePath();
+              ctx.fill();
+            });
+          } else {
+            // Crisp diagonal white X-seed formed by 4 inward black triangles pinching the 4 midpoints
+            ctx.fillStyle = darkColor;
+            const pinchY = cellH * 0.36;
+            const pinchX = cellW * 0.36;
+            // Top pinch
+            ctx.beginPath();
+            ctx.moveTo(x + cellW * 0.08, y - 0.3);
+            ctx.lineTo(x + cellW * 0.5, y + pinchY);
+            ctx.lineTo(x + cellW * 0.92, y - 0.3);
+            ctx.closePath();
+            ctx.fill();
+            // Bottom pinch
+            ctx.beginPath();
+            ctx.moveTo(x + cellW * 0.08, y + cellH + 0.3);
+            ctx.lineTo(x + cellW * 0.5, y + cellH - pinchY);
+            ctx.lineTo(x + cellW * 0.92, y + cellH + 0.3);
+            ctx.closePath();
+            ctx.fill();
+            // Left pinch
+            ctx.beginPath();
+            ctx.moveTo(x - 0.3, y + cellH * 0.08);
+            ctx.lineTo(x + pinchX, y + cellH * 0.5);
+            ctx.lineTo(x - 0.3, y + cellH * 0.92);
+            ctx.closePath();
+            ctx.fill();
+            // Right pinch
+            ctx.beginPath();
+            ctx.moveTo(x + cellW + 0.3, y + cellH * 0.08);
+            ctx.lineTo(x + cellW - pinchX, y + cellH * 0.5);
+            ctx.lineTo(x + cellW + 0.3, y + cellH * 0.92);
             ctx.closePath();
             ctx.fill();
           }
@@ -688,36 +773,8 @@
       ctx.restore();
     }
 
-    // Draw Tile Boundaries in Unroll Mode when enabled
-    if (isUnroll && state.showTileBounds && state.lastExpandedMeta && state.lastExpandedMeta.tileBounds) {
-      ctx.save();
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.82)';
-      ctx.lineWidth = 1.8;
-      ctx.setLineDash([5, 4]);
-      const bounds = state.lastExpandedMeta.tileBounds;
-      for (let i = 0; i < bounds.length; i++) {
-        const b = bounds[i];
-        const bx = padLeft + b.c0 * cellW;
-        const by = padTop + b.r0 * cellH;
-        const bw = (b.c1 - b.c0 + 1) * cellW;
-        const bh = (b.r1 - b.r0 + 1) * cellH;
-        ctx.strokeRect(bx, by, bw, bh);
-
-        // Tile badge label in top-left corner of each repeating module
-        const label = 'Módulo (' + (b.ty + 1) + '×' + (b.tx + 1) + ')';
-        ctx.fillStyle = 'rgba(15, 23, 42, 0.82)';
-        ctx.fillRect(bx + 3, by + 3, 76, 16);
-        ctx.fillStyle = '#38bdf8';
-        ctx.font = '700 9px "JetBrains Mono", monospace';
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(label, bx + 7, by + 11);
-      }
-      ctx.restore();
-    }
-
     // Highlight newly added/changed cells in Step-by-Step mode (on intermediate steps 1..3)
-    if (state.activeTab === 'steps' && state.showDiffHighlight && prevGrid && state.activeStepIndex < pat.steps.length - 1) {
+    if (!isClean && state.activeTab === 'steps' && state.showDiffHighlight && prevGrid && state.activeStepIndex < pat.steps.length - 1) {
       ctx.save();
       ctx.strokeStyle = '#f59e0b';
       ctx.lineWidth = 2;
@@ -737,7 +794,7 @@
     }
 
     // Highlight Active Shuttle Row in Row-by-Row Shuttle mode
-    if (state.activeTab === 'shuttle') {
+    if (!isClean && state.activeTab === 'shuttle') {
       const sr = Math.min(R - 1, Math.max(0, state.activeShuttleRow));
       if (sr < R - 1) {
         ctx.fillStyle = 'rgba(11, 14, 20, 0.52)';
@@ -750,10 +807,10 @@
       ctx.restore();
     }
 
-    // Draw Keyboard / Pointer Cursor Highlight in Playground or Unroll Mode
-    const focusR = state.hoverR >= 0 ? state.hoverR : state.cursorR;
-    const focusC = state.hoverC >= 0 ? state.hoverC : state.cursorC;
-    if ((state.activeTab === 'playground' || state.activeTab === 'unroll') && focusR >= 0 && focusR < R && focusC >= 0 && focusC < C) {
+    // Draw Keyboard / Pointer Cursor Highlight in Playground Mode only when actively hovered or keyboard-focused
+    const focusR = state.hoverR >= 0 ? state.hoverR : (state.canvasFocused ? state.cursorR : -1);
+    const focusC = state.hoverC >= 0 ? state.hoverC : (state.canvasFocused ? state.cursorC : -1);
+    if (!isClean && state.activeTab === 'playground' && focusR >= 0 && focusR < R && focusC >= 0 && focusC < C) {
       const prim = window.WeavingPatterns.PRIMITIVES[state.selectedPrimitiveIndex];
       const pR = prim.matrix.length;
       const pC = prim.matrix[0].length;
@@ -1051,6 +1108,7 @@
           renderStepsTimeline();
           renderMainLoom();
           updateLiveCallout();
+          syncUrlWithState();
         }
         announce(st.title + '. ' + st.description);
       });
@@ -1110,6 +1168,7 @@
         if (descEl) descEl.textContent = prim.description;
         updateLiveCallout();
         renderMainLoom();
+        syncUrlWithState();
         announce('Primitiva selecionada: ' + prim.name);
       });
 
@@ -1220,6 +1279,7 @@
     if (shuttleLabel) {
       shuttleLabel.textContent = 'Linha ' + state.activeShuttleRow + ' / ' + (pat.rows - 1);
     }
+    syncUrlWithState();
   }
 
   function switchTab(tabId) {
@@ -1242,6 +1302,7 @@
     renderMiniTileEditor();
     updateLiveCallout();
     updateMatchMeter();
+    saveStateToStorage();
   }
 
   function selectPattern(idx) {
@@ -1265,6 +1326,7 @@
     renderMiniTileEditor();
     updateLiveCallout();
     updateMatchMeter();
+    saveStateToStorage();
     announce('Padrão selecionado: ' + pat.kinjaName + ', ' + pat.ptName);
   }
 
@@ -1396,6 +1458,220 @@
     } catch (_) {
       // Ignore quota errors
     }
+    syncUrlWithState();
+  }
+
+  function buildShareableUrlParams() {
+    const pat = getActivePattern();
+    const params = new URLSearchParams();
+    params.set('p', pat.id);
+
+    if (state.activeTab && state.activeTab !== 'steps') {
+      params.set('tab', state.activeTab);
+    }
+    if (state.renderMode && state.renderMode !== (pat.defaultRenderMode || 'kinja')) {
+      params.set('lens', state.renderMode);
+    }
+    if (state.palette && state.palette !== (pat.palette || 'natural')) {
+      params.set('pal', state.palette);
+    }
+    if (state.symmetryMode && state.symmetryMode !== (pat.symmetry || '4q')) {
+      params.set('sym', state.symmetryMode);
+    }
+    if (state.activeTab === 'steps' && state.activeStepIndex !== pat.steps.length - 1) {
+      params.set('step', String(state.activeStepIndex + 1));
+    }
+    if (state.activeTab === 'shuttle' && state.activeShuttleRow > 0) {
+      params.set('row', String(state.activeShuttleRow));
+    }
+    if (state.selectedPrimitiveIndex > 0) {
+      const prim = window.WeavingPatterns.PRIMITIVES[state.selectedPrimitiveIndex];
+      if (prim) params.set('prim', prim.id);
+    }
+    if (state.showReferencePhoto === false) {
+      params.set('ref', '0');
+    }
+    if (state.activeTab === 'unroll') {
+      if (state.unrollMode !== 'seamless') params.set('umode', state.unrollMode);
+      if (state.repeatsX !== 3) params.set('rx', String(state.repeatsX));
+      if (state.repeatsY !== 2) params.set('ry', String(state.repeatsY));
+      if (state.unrollCylinderPct !== 100) params.set('cyl', String(state.unrollCylinderPct));
+      if (state.unrollZoom !== 100) params.set('zoom', String(state.unrollZoom));
+    }
+    if (state.userGrid && typeof window.WeavingPatterns.encodeGridDiff === 'function') {
+      const diffPatch = window.WeavingPatterns.encodeGridDiff(pat.grid, state.userGrid);
+      if (diffPatch) {
+        params.set('diff', diffPatch);
+      }
+    }
+    return params;
+  }
+
+  function syncUrlWithState() {
+    if (typeof window.history === 'undefined' || typeof window.history.replaceState !== 'function') return;
+    const params = buildShareableUrlParams();
+    const qs = params.toString();
+    const newUrl = window.location.pathname + (qs ? '?' + qs : '') + window.location.hash;
+    window.history.replaceState(null, '', newUrl);
+  }
+
+  function loadStateFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    if (!params || Array.from(params.keys()).length === 0) return false;
+
+    const pVal = params.get('p') || params.get('pattern');
+    let patIdx = 0;
+    if (pVal !== null) {
+      const byId = window.WeavingPatterns.CATALOG.findIndex(function (item) {
+        return item.id === pVal;
+      });
+      if (byId !== -1) {
+        patIdx = byId;
+      } else {
+        const num = parseInt(pVal, 10);
+        if (!isNaN(num) && num >= 0 && num < window.WeavingPatterns.CATALOG.length) {
+          patIdx = num;
+        }
+      }
+    }
+
+    state.selectedPatternIndex = patIdx;
+    const pat = getActivePattern();
+    state.renderMode = pat.defaultRenderMode || 'kinja';
+    state.palette = pat.palette || 'natural';
+    state.symmetryMode = pat.symmetry || '4q';
+    state.activeStepIndex = pat.steps.length - 1;
+    state.activeShuttleRow = 0;
+    state.cursorR = Math.floor(pat.rows / 2);
+    state.cursorC = Math.floor(pat.cols / 2);
+    state.userGrid = window.WeavingPatterns.cloneGrid(pat.grid);
+
+    const lens = params.get('lens') || params.get('mode');
+    if (lens === 'kinja' || lens === 'basket' || lens === 'blueprint') {
+      state.renderMode = lens;
+    }
+
+    const pal = params.get('pal') || params.get('palette');
+    if (pal === 'natural' || pal === 'urucum' || pal === 'high-contrast') {
+      state.palette = pal;
+    }
+
+    const sym = params.get('sym') || params.get('symmetry');
+    if (sym === 'none' || sym === 'h' || sym === '4q' || sym === 'tile') {
+      state.symmetryMode = sym;
+    }
+
+    const stepParam = params.get('step');
+    if (stepParam !== null) {
+      const sNum = parseInt(stepParam, 10);
+      if (!isNaN(sNum)) {
+        state.activeStepIndex = Math.min(pat.steps.length - 1, Math.max(0, sNum - 1));
+      }
+    }
+
+    const rowParam = params.get('row');
+    if (rowParam !== null) {
+      const rNum = parseInt(rowParam, 10);
+      if (!isNaN(rNum)) {
+        state.activeShuttleRow = Math.min(pat.rows - 1, Math.max(0, rNum));
+      }
+    }
+
+    const primParam = params.get('prim');
+    if (primParam !== null) {
+      const pIdx = window.WeavingPatterns.PRIMITIVES.findIndex(function (pr) {
+        return pr.id === primParam;
+      });
+      if (pIdx !== -1) state.selectedPrimitiveIndex = pIdx;
+    }
+
+    if (params.get('ref') === '0') {
+      state.showReferencePhoto = false;
+    } else if (params.get('ref') === '1') {
+      state.showReferencePhoto = true;
+    }
+
+    const umode = params.get('umode');
+    if (umode === 'seamless' || umode === 'mirror' || umode === 'concentric' || umode === 'framed') {
+      state.unrollMode = umode;
+    }
+    const rxParam = params.get('rx');
+    if (rxParam !== null) {
+      const rx = parseInt(rxParam, 10);
+      if (!isNaN(rx) && rx >= 1 && rx <= 6) state.repeatsX = rx;
+    }
+    const ryParam = params.get('ry');
+    if (ryParam !== null) {
+      const ry = parseInt(ryParam, 10);
+      if (!isNaN(ry) && ry >= 1 && ry <= 4) state.repeatsY = ry;
+    }
+    const cylParam = params.get('cyl');
+    if (cylParam !== null) {
+      const cyl = parseInt(cylParam, 10);
+      if (!isNaN(cyl) && cyl >= 0 && cyl <= 100) state.unrollCylinderPct = cyl;
+    }
+    const zoomParam = params.get('zoom');
+    if (zoomParam !== null) {
+      const zm = parseInt(zoomParam, 10);
+      if (!isNaN(zm) && zm >= 50 && zm <= 200) state.unrollZoom = zm;
+    }
+
+    const diffParam = params.get('diff');
+    if (diffParam && typeof window.WeavingPatterns.applyGridDiff === 'function') {
+      state.userGrid = window.WeavingPatterns.applyGridDiff(pat.grid, diffParam);
+    }
+
+    const tabParam = params.get('tab');
+    if (tabParam === 'steps' || tabParam === 'shuttle' || tabParam === 'playground' || tabParam === 'unroll') {
+      state.activeTab = tabParam;
+    } else if (diffParam) {
+      state.activeTab = 'playground';
+    } else if (umode || rxParam || ryParam || cylParam) {
+      state.activeTab = 'unroll';
+    } else if (rowParam !== null) {
+      state.activeTab = 'shuttle';
+    }
+
+    document.querySelectorAll('[data-tab-target]').forEach(function (btn) {
+      const active = btn.dataset.tabTarget === state.activeTab;
+      btn.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    document.querySelectorAll('.tab-panel-content').forEach(function (panel) {
+      panel.hidden = panel.id !== 'panel-' + state.activeTab;
+    });
+
+    renderCatalogSidebar();
+    renderStepsTimeline();
+    renderPrimitivesPalette();
+    updateReferenceCard();
+    syncToolbarButtons();
+    renderMainLoom();
+    renderMiniTileEditor();
+    updateLiveCallout();
+    updateMatchMeter();
+    return true;
+  }
+
+  function copyShareableUrl() {
+    syncUrlWithState();
+    const fullUrl = window.location.href;
+    const labelEl = document.getElementById('btn-share-url-label');
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+      navigator.clipboard.writeText(fullUrl).then(function () {
+        if (labelEl) {
+          const prev = labelEl.textContent;
+          labelEl.textContent = 'Link Copiado! ✓';
+          setTimeout(function () {
+            labelEl.textContent = prev;
+          }, 1800);
+        }
+        announce('Link compartilhável copiado para a área de transferência.');
+      }).catch(function () {
+        announce('URL atualizada na barra de endereços.');
+      });
+    } else {
+      announce('URL atualizada na barra de endereços.');
+    }
   }
 
   function exportPatternJSON() {
@@ -1432,7 +1708,9 @@
     const canvas = document.getElementById('loom-canvas');
     if (!canvas) return;
     const pat = getActivePattern();
+    renderMainLoom(true);
     const url = canvas.toDataURL('image/png');
+    renderMainLoom(false);
     const a = document.createElement('a');
     a.href = url;
     const suffix = state.activeTab === 'unroll' ? '-tapete-' + state.repeatsX + 'x' + state.repeatsY : '-card';
@@ -1747,6 +2025,7 @@
         switchTab('playground');
         renderMainLoom();
         updateMatchMeter();
+        saveStateToStorage();
         announce('Tear limpo para a moldura inicial.');
       });
     }
@@ -1758,6 +2037,7 @@
         switchTab('playground');
         renderMainLoom();
         updateMatchMeter();
+        saveStateToStorage();
         announce('Base de sarja carregada no tear.');
       });
     }
@@ -1769,6 +2049,7 @@
         renderMainLoom();
         renderMiniTileEditor();
         updateMatchMeter();
+        saveStateToStorage();
         announce('Padrão original restaurado.');
       });
     }
@@ -1776,6 +2057,14 @@
     // Canvas pointer & keyboard interactions
     const canvas = document.getElementById('loom-canvas');
     if (canvas) {
+      canvas.addEventListener('focus', function () {
+        state.canvasFocused = true;
+        renderMainLoom();
+      });
+      canvas.addEventListener('blur', function () {
+        state.canvasFocused = false;
+        renderMainLoom();
+      });
       canvas.addEventListener('pointerdown', function (e) {
         const coords = getGridCoordsFromEvent(canvas, e);
         if (!coords) return;
@@ -1847,7 +2136,11 @@
       });
     }
 
-    // Export / Import JSON & PNG
+    // Export / Import JSON & PNG & Share URL
+    const shareUrlBtn = document.getElementById('btn-share-url');
+    if (shareUrlBtn) {
+      shareUrlBtn.addEventListener('click', copyShareableUrl);
+    }
     const exportBtn = document.getElementById('btn-export-json');
     if (exportBtn) {
       exportBtn.addEventListener('click', exportPatternJSON);
@@ -1948,6 +2241,11 @@
     renderPrimitivesPalette();
     populateGalleryDialog();
     initEvents();
-    selectPattern(0);
+    if (!loadStateFromUrl()) {
+      selectPattern(0);
+    }
+    window.addEventListener('popstate', function () {
+      loadStateFromUrl();
+    });
   });
 })();

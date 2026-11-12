@@ -510,17 +510,17 @@ There is a profound visual and historical poetry in this emergent image:
 | # | Kinja Name (*Benry*) | Portuguese Name | English Translation | Matrix Size | Core Mathematical Motif |
 | :--- | :--- | :--- | :--- | :---: | :--- |
 | **1** | **Waraki Benry** | *Desenho do aracu* | Aracu fish design | `19 × 33` | Nested fish-scale diamond with twin lateral hooks |
-| **2** | **Tebaka Benry** | *Desenho com olho* | Eye / Jaguar eye design | `19 × 33` | Concentric stepped eye with `1×1` pupil at `(9, 16)` |
-| **3** | **Weri Nahpy Benry** | *Desenho feito pela mulher* | Snake rib / Woman's design | `19 × 33` | Continuous translational `(4, 8)` diagonal chevron lattice |
-| **4** | **Dja Benry** | *Desenho da semente* | Seed design | `21 × 37` | Multi-seed lattice of `3×3` cross-seeds inside diamond cells |
-| **5** | **Manjiki Preny Benry** | *Desenho da aba do peixe* | Fish fin design | `17 × 29` | Bilateral pectoral fin triangles flanking a dorsal spine |
+| **2** | **Tebaka Benry** | *Desenho com olho* | Eye / Jaguar eye design | `17 × 29` | Concentric stepped eye with `1×1` pupil at `(8, 14)` and 4 corner eyes |
+| **3** | **Weri Nahpy Benry** | *Desenho feito pela mulher* | Snake rib / Woman's design | `19 × 33` | Continuous translational `(8, 8)` cross lattice with paired double-row twill |
+| **4** | **Dja Benry** | *Desenho da semente* | Seed design | `21 × 37` | Staggered cross lattice enclosing 30 white `X`-seeds in `6 × 5` chambers |
+| **5** | **Manjiki Preny Benry** | *Desenho da aba do peixe* | Fish fin design | `17 × 29` | Three vertical dorsal spines (`c=6, 14, 22`) with 5-unit pectoral fin bars |
 | **6** | **Axiwi Se'me Benry** | *Desenho do joelho da cutia* | Agouti's knee design | `19 × 33` | Bent-knee angular hooks (`L`-chevrons) around a central cross |
-| **7** | **Weri Bixi Benry** | *Desenho da pele da mulher* | Coral snake / Woman's skin | `21 × 37` | Concentric rectangular bands woven with terracotta *urucum* |
-| **8** | **Nana Bixi Benry** | *Desenho da casca do abacaxi* | Pineapple peel design | `21 × 37` | Horizontal register bands of repeating hexagonal pineapple scales |
-| **9** | **Panapna Benry** | *Desenho da borboleta grande* | Great butterfly design | `21 × 37` | Four expansive triangular wings radiating from a thorax axis |
-| **10** | **Xirminja Benry** | *Desenho da água* | Water / River current design | `21 × 37` | Three vertical columns of nested rectangular water-fret boxes |
+| **7** | **Weri Bixi Benry** | *Desenho da pele da mulher* | Coral snake / Woman's skin | `21 × 37` | Central 9-seed (`3 × 3`) cross medallion with stepped chevrons and triple-seed corners |
+| **8** | **Nana Bixi Benry** | *Desenho da casca do abacaxi* | Pineapple peel design | `21 × 37` | Staggered checkerboard of 5-`X` diamond scales across `21 × 37` splints |
+| **9** | **Panapna Benry** | *Desenho da borboleta grande* | Great butterfly design | `23 × 31` | Five Morpho butterfly medallions with twin vertical white wing diamonds (`♦ ♦`) |
+| **10** | **Xirminja Nahpy Benry** | *Desenho feito pela entidade mitológica da água* | Water mythologic entity design | `21 × 23` | Dual register split at Row 6: twin-eye fret boxes above, river vortex below |
 | **11** | **Kinja Paneiro (Urucum)** | *Trama Física Tricolor* | Urucum & Arumã physical weave | `19 × 33` | Close-up 3D splint interlacing with terracotta *urucum* weft |
-| **12** | **Kinja Paneiro (Natural)** | *Trama Física Natural* | Natural & Black Arumã weave | `19 × 33` | High-contrast `[▲5 ▼1 ▲5]` stepped diamond float architecture |
+| **12** | **Kinja Paneiro (Natural)** | *Trama Física Natural* | Natural & Black Arumã weave | `17 × 29` | Physical orthogonal cane weave of *Manjiki Preny Benry* |
 
 </section>
 
@@ -938,33 +938,139 @@ Ready to weave your own variations, test your accuracy against all 12 Kinja matr
       lastGeom = { pad: pad, cellW: cellW, cellH: cellH, R: R, C: C };
 
       if (postState.lens === 'kinja') {
-        ctx.fillStyle = '#e5dfd3';
+        var paperColor = '#e5dfd3';
+        var darkColor = '#17181c';
+        ctx.fillStyle = paperColor;
         ctx.fillRect(0, 0, totalW, totalH);
-        ctx.fillStyle = '#17181c';
-        var toothW = cellW * 0.5;
-        var toothY = Math.min(4.5, cellH * 0.22);
+        ctx.fillStyle = darkColor;
+        var toothY = Math.min(5.2, cellH * 0.24);
+        var toothX = Math.min(4.8, cellW * 0.24);
+        var notchX = Math.min(4.2, cellW * 0.22);
+        var isPanapna = pat && pat.id === 'panapna';
+
         for (var r = 0; r < R; r++) {
           for (var c = 0; c < C; c++) {
             if (grid[r][c] !== 1) continue;
             var x = pad + c * cellW;
             var y = pad + r * cellH;
-            ctx.fillRect(x, y, cellW + 0.4, cellH + 0.4);
+            ctx.fillRect(x, y, cellW + 0.45, cellH + 0.45);
             if (r === 0 || grid[r - 1][c] === 0) {
               ctx.beginPath();
               ctx.moveTo(x, y);
-              ctx.lineTo(x + toothW * 0.5, y - toothY);
-              ctx.lineTo(x + toothW, y);
-              ctx.lineTo(x + toothW * 1.5, y - toothY);
+              ctx.lineTo(x + cellW * 0.5, y - toothY);
               ctx.lineTo(x + cellW, y);
+              ctx.closePath();
               ctx.fill();
             }
             if (r === R - 1 || grid[r + 1][c] === 0) {
               ctx.beginPath();
               ctx.moveTo(x, y + cellH);
-              ctx.lineTo(x + toothW * 0.5, y + cellH + toothY);
-              ctx.lineTo(x + toothW, y + cellH);
-              ctx.lineTo(x + toothW * 1.5, y + cellH + toothY);
+              ctx.lineTo(x + cellW * 0.5, y + cellH + toothY);
               ctx.lineTo(x + cellW, y + cellH);
+              ctx.closePath();
+              ctx.fill();
+            }
+            if (r % 2 === 1) {
+              if (c === 0 || grid[r][c - 1] === 0) {
+                ctx.beginPath();
+                ctx.moveTo(x, y + cellH * 0.12);
+                ctx.lineTo(x - toothX, y + cellH * 0.5);
+                ctx.lineTo(x, y + cellH * 0.88);
+                ctx.closePath();
+                ctx.fill();
+              }
+              if (c === C - 1 || grid[r][c + 1] === 0) {
+                ctx.beginPath();
+                ctx.moveTo(x + cellW, y + cellH * 0.12);
+                ctx.lineTo(x + cellW + toothX, y + cellH * 0.5);
+                ctx.lineTo(x + cellW, y + cellH * 0.88);
+                ctx.closePath();
+                ctx.fill();
+              }
+            }
+          }
+        }
+
+        // Even interior rows: inward V-notches on lateral edges
+        ctx.fillStyle = paperColor;
+        for (var re = 2; re < R - 1; re += 2) {
+          for (var ce = 0; ce < C; ce++) {
+            if (grid[re][ce] !== 1) continue;
+            var xe = pad + ce * cellW;
+            var ye = pad + re * cellH;
+            if (ce === 0 || grid[re][ce - 1] === 0) {
+              ctx.beginPath();
+              ctx.moveTo(xe - 0.5, ye + cellH * 0.14);
+              ctx.lineTo(xe + notchX, ye + cellH * 0.5);
+              ctx.lineTo(xe - 0.5, ye + cellH * 0.86);
+              ctx.closePath();
+              ctx.fill();
+            }
+            if (ce === C - 1 || grid[re][ce + 1] === 0) {
+              ctx.beginPath();
+              ctx.moveTo(xe + cellW + 0.5, ye + cellH * 0.14);
+              ctx.lineTo(xe + cellW - notchX, ye + cellH * 0.5);
+              ctx.lineTo(xe + cellW + 0.5, ye + cellH * 0.86);
+              ctx.closePath();
+              ctx.fill();
+            }
+          }
+        }
+
+        // Isolated white seed cells (white X-seeds or Panapna twin vertical diamonds)
+        for (var rs = 1; rs < R - 1; rs++) {
+          for (var cs = 0; cs < C; cs++) {
+            if (grid[rs][cs] !== 0) continue;
+            var encTB = (grid[rs - 1][cs] === 1 && grid[rs + 1][cs] === 1);
+            var encL = (cs === 0) ? (grid[rs][cs + 1] === 1) : (grid[rs][cs - 1] === 1);
+            var encR = (cs === C - 1) ? (grid[rs][cs - 1] === 1) : (grid[rs][cs + 1] === 1);
+            if (!encTB || !encL || !encR) continue;
+            var xs = pad + cs * cellW;
+            var ys = pad + rs * cellH;
+            if (isPanapna) {
+              ctx.fillStyle = darkColor;
+              ctx.fillRect(xs - 0.3, ys - 0.3, cellW + 0.6, cellH + 0.6);
+              ctx.fillStyle = paperColor;
+              var dHW = cellW * 0.185;
+              var dHH = cellH * 0.39;
+              [0.27, 0.73].forEach(function (cf) {
+                var cx = xs + cellW * cf;
+                var cy = ys + cellH * 0.5;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy - dHH);
+                ctx.lineTo(cx + dHW, cy);
+                ctx.lineTo(cx, cy + dHH);
+                ctx.lineTo(cx - dHW, cy);
+                ctx.closePath();
+                ctx.fill();
+              });
+            } else {
+              ctx.fillStyle = darkColor;
+              var pY = cellH * 0.36;
+              var pX = cellW * 0.36;
+              ctx.beginPath();
+              ctx.moveTo(xs + cellW * 0.08, ys - 0.3);
+              ctx.lineTo(xs + cellW * 0.5, ys + pY);
+              ctx.lineTo(xs + cellW * 0.92, ys - 0.3);
+              ctx.closePath();
+              ctx.fill();
+              ctx.beginPath();
+              ctx.moveTo(xs + cellW * 0.08, ys + cellH + 0.3);
+              ctx.lineTo(xs + cellW * 0.5, ys + cellH - pY);
+              ctx.lineTo(xs + cellW * 0.92, ys + cellH + 0.3);
+              ctx.closePath();
+              ctx.fill();
+              ctx.beginPath();
+              ctx.moveTo(xs - 0.3, ys + cellH * 0.08);
+              ctx.lineTo(xs + pX, ys + cellH * 0.5);
+              ctx.lineTo(xs - 0.3, ys + cellH * 0.92);
+              ctx.closePath();
+              ctx.fill();
+              ctx.beginPath();
+              ctx.moveTo(xs + cellW + 0.3, ys + cellH * 0.08);
+              ctx.lineTo(xs + cellW - pX, ys + cellH * 0.5);
+              ctx.lineTo(xs + cellW + 0.3, ys + cellH * 0.92);
+              ctx.closePath();
               ctx.fill();
             }
           }
