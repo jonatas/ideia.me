@@ -515,7 +515,7 @@ There is a profound visual and historical poetry in this emergent image:
 | **4** | **Dja Benry** | *Desenho da semente* | Seed design | `21 × 37` | Staggered cross lattice enclosing 30 white `X`-seeds in `6 × 5` chambers |
 | **5** | **Manjiki Preny Benry** | *Desenho da aba do peixe* | Fish fin design | `17 × 29` | Three vertical dorsal spines (`c=6, 14, 22`) with 5-unit pectoral fin bars |
 | **6** | **Axiwi Se'me Benry** | *Desenho do joelho da cutia* | Agouti's knee design | `19 × 33` | Bent-knee angular hooks (`L`-chevrons) around a central cross |
-| **7** | **Weri Bixi Benry** | *Desenho da pele da mulher* | Coral snake / Woman's skin | `21 × 37` | Central 9-seed (`3 × 3`) cross medallion with stepped chevrons and triple-seed corners |
+| **7** | **Weri Bixi Benry** | *Desenho da pele da mulher* | Coral snake / Woman's skin | `21 × 37` | Central 5-seed cross medallion with stepped chevrons and triple-seed corners |
 | **8** | **Nana Bixi Benry** | *Desenho da casca do abacaxi* | Pineapple peel design | `21 × 37` | Staggered checkerboard of 5-`X` diamond scales across `21 × 37` splints |
 | **9** | **Panapna Benry** | *Desenho da borboleta grande* | Great butterfly design | `23 × 31` | Five Morpho butterfly medallions with twin vertical white wing diamonds (`♦ ♦`) |
 | **10** | **Xirminja Nahpy Benry** | *Desenho feito pela entidade mitológica da água* | Water mythologic entity design | `21 × 23` | Dual register split at Row 6: twin-eye fret boxes above, river vortex below |
@@ -1021,6 +1021,7 @@ Ready to weave your own variations, test your accuracy against all 12 Kinja matr
         for (var rs = 1; rs < R - 1; rs++) {
           for (var cs = 0; cs < C; cs++) {
             if (grid[rs][cs] !== 0) continue;
+            if (rs % 2 === 0 && cs > 0 && cs < C - 1) continue;
             var encTB = (grid[rs - 1][cs] === 1 && grid[rs + 1][cs] === 1);
             var encL = (cs === 0) ? (grid[rs][cs + 1] === 1) : (grid[rs][cs - 1] === 1);
             var encR = (cs === C - 1) ? (grid[rs][cs - 1] === 1) : (grid[rs][cs + 1] === 1);

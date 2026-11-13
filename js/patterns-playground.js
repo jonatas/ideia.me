@@ -561,9 +561,11 @@
       }
 
       // Pass 3: Isolated white seed cells (4-side pinched diagonal white X or Panapna twin vertical diamonds ♦♦)
+      // Only on ODD rows (where vertical warp pillars flank the seed chamber) or border columns (c=0, c=C-1)
       for (let r = 1; r < R - 1; r++) {
         for (let c = 0; c < C; c++) {
           if (grid[r][c] !== 0) continue;
+          if (r % 2 === 0 && c > 0 && c < C - 1) continue;
           const enclosedTopBottom = (grid[r - 1][c] === 1 && grid[r + 1][c] === 1);
           const enclosedLeft = (c === 0) ? (grid[r][c + 1] === 1) : (grid[r][c - 1] === 1);
           const enclosedRight = (c === C - 1) ? (grid[r][c - 1] === 1) : (grid[r][c + 1] === 1);

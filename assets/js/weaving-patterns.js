@@ -589,38 +589,30 @@
     const s2 = cloneGrid(s1);
     [2, 6, 12, 16].forEach(function (r) { applyTwillRow(s2, r, 0); });
     [4, 8, 10, 14].forEach(function (r) { applyTwillRow(s2, r, 2); });
-    // Rows 8 and 10 form the central 7-wide medallion bars (c=15..21)
+    // Rows 8 and 10 form the central 7-wide medallion bars (c=15..21), 5-wide bracket caps (c=3..7, 29..33),
+    // and open 3-wide white channels at c=8..10 and c=26..28!
     [8, 10].forEach(function (r) {
-      s2[r][18] = 1;
-    });
-    // Rows 6 and 12 close the top and bottom caps of the central medallion at c=16 and c=20 (forming ▼5 at c=16..20)
-    [6, 12].forEach(function (r) {
-      s2[r][16] = 1;
-      s2[r][20] = 1;
+      setPoints(s2, r, [6, 18, 30], 1);
+      setPoints(s2, r, [8, 9, 27, 28], 0);
     });
     // Row 18 forms the bottom triple-seed border bar
     fillRow(s2, 18, 1);
     setPoints(s2, 18, [2, 10, 14, 22, 26, 34], 0);
 
     const s3 = cloneGrid(s2);
-    // Central 9-Seed Cross Medallion (centered at r=9, c=18):
-    // 3 top X-seeds at (7, 16), (7, 18), (7, 20)
-    // 3 middle X-seeds at (9, 16), (9, 18), (9, 20)
-    // 3 bottom X-seeds at (11, 16), (11, 18), (11, 20)
-    setPoints(s3, 7, [13, 15, 17, 19, 21, 23], 1);
+    // Central 5-Seed Cross Medallion (centered at r=9, c=18):
+    // 1 top X-seed at (7, 18), 3 middle X-seeds at (9, 16), (9, 18), (9, 20), 1 bottom X-seed at (11, 18)
+    setPoints(s3, 7, [13, 17, 19, 23], 1);
     setPoints(s3, 9, [15, 17, 19, 21], 1);
-    setPoints(s3, 11, [13, 15, 17, 19, 21, 23], 1);
+    setPoints(s3, 11, [13, 17, 19, 23], 1);
 
     const s4 = cloneGrid(s3);
-    // 45-degree stepped diagonal chevrons radiating from the central 9-X medallion to the left & right edges
+    // 45-degree stepped diagonal chevrons radiating from the central 5-X medallion to the left & right edges
     [1, 5, 13, 17].forEach(function (r) {
       setPoints(s4, r, [1, 5, 7, 11, 15, 21, 25, 29, 31, 35], 1);
     });
-    [3, 15].forEach(function (r) {
+    [3, 7, 11, 15].forEach(function (r) {
       setPoints(s4, r, [3, 9, 13, 17, 19, 23, 27, 33], 1);
-    });
-    [7, 11].forEach(function (r) {
-      setPoints(s4, r, [3, 9, 13, 15, 17, 19, 21, 23, 27, 33], 1);
     });
     setPoints(s4, 9, [1, 5, 7, 11, 15, 17, 19, 21, 25, 29, 31, 35], 1);
 
@@ -639,22 +631,22 @@
       {
         title: '2. Campo de Sarja & Barras Centrais (Twill & Medallion Bars)',
         primitiveId: 'twill-3-1',
-        description: 'Establish Phase A twill on rows 2, 6, 12, 16, Phase B on rows 4, 14, the central medallion bars on rows 6, 8, 10, 12, and the bottom seed-cluster bar on row 18.',
-        formula: 'Rows 6, 12: ▼5 center cap (c=16..20) | Rows 8, 10: ▼7 center bar (c=15..21)',
+        description: 'Establish Phase A twill on rows 2, 6, 12, 16, Phase B on rows 4, 14, the 7-unit central medallion bars on rows 8, 10, and the bottom seed-cluster bar on row 18.',
+        formula: 'Rows 8, 10: ▼7 center bar (c=15..21) | Row 18: ▼7 corner bars (c=3..9, 27..33)',
         grid: s2
       },
       {
-        title: '3. Medalhão de 9 Sementes (3×3 Seed Cross Core)',
+        title: '3. Medalhão de 5 Sementes (5-Seed Cross Core)',
         primitiveId: 'pineapple-5x',
-        description: 'Weave the central 3×3 grid of 9 white X-seeds around (r=9, c=18): 3 horizontal X-seeds each on Rows 7, 9, and 11 at c=16, 18, 20.',
-        formula: 'Center (r=7,9,11; c=16,18,20): 3×3 matrix of ▲1 white X-seeds inside ▼1 walls at c=15,17,19,21',
+        description: 'Weave the central 5-seed cross medallion around (r=9, c=18): 3 horizontal white X-seeds on Row 9 (c=16,18,20) and 1 X-seed each on Rows 7 & 11 (c=18).',
+        formula: 'Center (r=7..11): ▲1 seeds at (7,18), (9,16), (9,18), (9,20), (11,18)',
         grid: s3
       },
       {
         title: '4. Chevrons Diagonais da Pele (Stepped Diagonal Chevrons)',
         primitiveId: 'step-diagonal',
-        description: 'Propagate 45° stepped diagonal chevrons (< and >) from the central 9-seed medallion out to the left and right borders.',
-        formula: 'Rows 1,5,13,17: ▼1 at c=1,5,7,11,15,21,25,29,31,35 | Rows 7,11: ▼1 at c=3,9,13,15,17,19,21,23,27,33',
+        description: 'Propagate 45° stepped diagonal chevrons (< and >) from the central medallion out to the left and right borders.',
+        formula: 'Rows 1,5,13,17: ▼1 at c=1,5,7,11,15,21,25,29,31,35 | Rows 3,7,11,15: ▼1 at c=3,9,13,17,19,23,27,33',
         grid: s4
       },
       {
@@ -1181,7 +1173,7 @@
         defaultRenderMode: 'kinja',
         palette: 'natural',
         symmetry: '4q',
-        culturalNote: 'Honors traditional body painting with a central 9-seed (3×3) cross medallion surrounded by stepped diamond waves and triple-seed border clusters.',
+        culturalNote: 'Honors traditional body painting with a central 5-seed cross medallion surrounded by stepped diamond waves and triple-seed border clusters.',
         steps: buildWeriBixiSteps()
       },
       {
