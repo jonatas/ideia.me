@@ -1,0 +1,3520 @@
+---
+layout: default
+title: "Lote — Mapa Proporcional, Inventário Botânico & Plaquinhas | ideia.me"
+description: "Mapa proporcional horizontal interativo em tela cheia do lote em Santa Catarina (baseado no Domo de 6m e Divisa Jair), arraste e posicione as 81 árvores com exportação direta para _data/lote_plantas.csv e plaquinhas de 4 linhas."
+permalink: /lote/
+---
+
+<style>
+  :root {
+    --lote-card-bg: rgba(22, 27, 38, 0.88);
+    --lote-border: rgba(148, 163, 184, 0.18);
+    --lote-emerald: #10b981;
+    --lote-amber: #f59e0b;
+    --lote-sky: #38bdf8;
+    --lote-violet: #8b5cf6;
+  }
+
+  /* Visually hidden utility for single status announcements (no display:none) */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Compact Sidebar & Full-Width Content Container to maximize workspace on /lote/ */
+  #appSidebar {
+    padding: 0.6rem 0.45rem !important;
+  }
+
+  #appSidebar.menu-folded {
+    width: 42px !important;
+    padding: 0.5rem 0.15rem !important;
+    align-items: center;
+  }
+
+  #appSidebar.menu-folded > div:first-child {
+    justify-content: center !important;
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+    width: 100%;
+  }
+
+  @media (min-width: 768px) {
+    .app-layout.menu-folded .app-main {
+      margin-left: 42px !important;
+    }
+  }
+
+  .app-main > .container.content-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-top: 0 !important;
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  .lote-hero {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.14) 0%, rgba(15, 23, 42, 0.92) 60%, rgba(245, 158, 11, 0.12) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 18px;
+    padding: 1.5rem 1.75rem;
+  }
+
+  .lote-kpi-card {
+    background: var(--lote-card-bg);
+    border: 1px solid var(--lote-border);
+    border-radius: 14px;
+    padding: 0.95rem 1.15rem;
+    height: 100%;
+  }
+
+  .lote-kpi-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .lote-characteristic-card {
+    background: var(--lote-card-bg);
+    border: 1px solid var(--lote-border);
+    border-radius: 14px;
+    padding: 1.15rem;
+    height: 100%;
+  }
+
+  /* Proportional Horizontal Lot Map Studio & Fullscreen Mode */
+  .lote-map-panel {
+    background: #0b101b;
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+
+  .lote-map-panel:fullscreen,
+  .lote-map-panel.map-fullscreen-active {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: 100vw !important;
+    max-height: 100vh !important;
+    z-index: 2500 !important;
+    border-radius: 0 !important;
+    border: 0 !important;
+    margin: 0 !important;
+    padding: 0.45rem 0.65rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    background: #070b12 !important;
+    overflow: hidden !important;
+  }
+
+  .lote-map-panel:fullscreen .map-studio-body,
+  .lote-map-panel.map-fullscreen-active .map-studio-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .lote-map-panel:fullscreen .lote-svg-viewport-wrapper,
+  .lote-map-panel.map-fullscreen-active .lote-svg-viewport-wrapper {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 0 !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lote-map-panel:fullscreen .lote-svg-stage,
+  .lote-map-panel.map-fullscreen-active .lote-svg-stage {
+    flex: 1 1 auto;
+    min-height: 0;
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    padding: 0;
+    border: 0;
+  }
+
+  .lote-map-panel:fullscreen #lote-proportional-svg,
+  .lote-map-panel.map-fullscreen-active #lote-proportional-svg {
+    max-width: none !important;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .lote-map-panel:fullscreen .map-bottom-dock,
+  .lote-map-panel.map-fullscreen-active .map-bottom-dock {
+    flex: 0 0 auto;
+    max-height: 25vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .lote-map-panel.bottom-dock-hidden .map-bottom-dock {
+    display: none !important;
+  }
+
+  .lote-svg-viewport-wrapper {
+    position: relative;
+    width: 100%;
+  }
+
+  .lote-svg-stage {
+    position: relative;
+    width: 100%;
+    max-height: 74vh;
+    background: radial-gradient(circle at 50% 40%, #132038 0%, #090d16 100%);
+    display: block;
+    overflow: auto;
+    padding: 0.35rem;
+    border-radius: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+  }
+
+  #lote-proportional-svg {
+    display: block;
+    margin: 0 auto;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    border-radius: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    background: #0b1320;
+    cursor: crosshair;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .map-structure-shape {
+    transition: fill-opacity 0.2s ease, stroke-width 0.2s ease;
+  }
+
+  .map-structure-shape:hover {
+    fill-opacity: 0.52;
+    stroke-width: 3px;
+  }
+
+  /* Draggable Plant Pin Handle (following modern-web-guidance: drag) */
+  .map-plant-pin {
+    cursor: grab;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .map-plant-pin:hover .pin-main-circle,
+  .map-plant-pin:focus-visible .pin-main-circle {
+    stroke: #facc15;
+    stroke-width: 2px;
+    r: 5.2px;
+  }
+
+  .map-plant-pin:focus-visible {
+    outline: none;
+  }
+
+  .map-plant-pin.dragging {
+    cursor: grabbing;
+    filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.9));
+  }
+
+  .map-plant-pin .pin-text-label {
+    paint-order: stroke;
+    stroke: rgba(7, 11, 18, 0.92);
+    stroke-width: 2.6px;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    pointer-events: none;
+  }
+
+  .map-plant-pin .pin-leader-line {
+    stroke: rgba(226, 232, 240, 0.65);
+    stroke-width: 1.1px;
+    pointer-events: none;
+  }
+
+  /* Dark Triangle Hover Inspector HUD (occupies the lower-left dark triangle of the horizontal map) */
+  .dark-triangle-hud {
+    position: absolute;
+    left: 1.25rem;
+    bottom: 1.25rem;
+    width: min(420px, 44%);
+    background: linear-gradient(145deg, rgba(15, 23, 42, 0.94) 0%, rgba(9, 13, 22, 0.96) 100%);
+    border: 1.5px solid rgba(56, 189, 248, 0.35);
+    border-radius: 14px;
+    padding: 0.9rem 1.05rem;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(8px);
+    pointer-events: none;
+    z-index: 10;
+    transition: opacity 0.15s ease, visibility 0.15s ease, border-color 0.2s ease, transform 0.15s ease;
+  }
+
+  .dark-triangle-hud.hud-hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateY(6px);
+  }
+
+  @media (max-width: 767px) {
+    .dark-triangle-hud {
+      position: static;
+      width: 100%;
+      margin-top: 0.5rem;
+    }
+  }
+
+  /* Bottom Fruit Palette Grid (Prioritizing Unpinned Fruits) */
+  .tree-palette-grid {
+    max-height: 195px;
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+    gap: 0.45rem;
+    padding-right: 0.25rem;
+  }
+
+  .lote-map-panel:fullscreen .tree-palette-grid,
+  .lote-map-panel.map-fullscreen-active .tree-palette-grid {
+    max-height: 18vh;
+  }
+
+  .tree-palette-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.45rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 9px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    color: #e2e8f0;
+    font-size: 0.78rem;
+    cursor: grab;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.12s ease;
+  }
+
+  .tree-palette-item.is-unpinned {
+    border-left: 3px solid var(--lote-amber);
+  }
+
+  .tree-palette-item.is-pinned {
+    opacity: 0.78;
+    border-left: 3px solid var(--lote-emerald);
+  }
+
+  .tree-palette-item:hover,
+  .tree-palette-item:focus-visible {
+    border-color: var(--lote-sky);
+    background: rgba(56, 189, 248, 0.12);
+    transform: translateY(-1px);
+    opacity: 1;
+    outline: none;
+  }
+
+  .tree-palette-item.active-to-pin {
+    border-color: var(--lote-amber);
+    background: rgba(245, 158, 11, 0.2);
+    box-shadow: 0 0 0 1px var(--lote-amber);
+    opacity: 1;
+  }
+
+  /* Compact Reference Legend Pills below Map */
+  .ref-metric-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.65rem;
+    border-radius: 8px;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    font-size: 0.76rem;
+    color: #cbd5e1;
+  }
+
+  /* Category Icon Dock (Compact Icon-First Filter Bar) */
+  .lote-cat-icon-dock {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+  }
+
+  .lote-cat-icon-btn {
+    --cat-color: #10b981;
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 68px;
+    height: 68px;
+    border-radius: 16px;
+    background: var(--lote-card-bg);
+    border: 1.5px solid var(--lote-border);
+    color: var(--cat-color);
+    cursor: pointer;
+    transition: transform 0.15s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    padding: 0.35rem;
+  }
+
+  .lote-cat-icon-btn i {
+    font-size: 1.55rem;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .lote-cat-icon-btn .cat-icon-count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 700;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #0f172a;
+    color: #f8fafc;
+    border: 1.5px solid var(--cat-color);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .lote-cat-icon-btn .cat-icon-short {
+    font-size: 0.62rem;
+    color: #cbd5e1;
+    margin-top: 0.28rem;
+    max-width: 58px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  .lote-cat-icon-btn:hover,
+  .lote-cat-icon-btn:focus-visible {
+    transform: translateY(-2px);
+    border-color: var(--cat-color);
+    background: rgba(255, 255, 255, 0.04);
+    outline: 2px solid transparent;
+  }
+
+  .lote-cat-icon-btn[aria-pressed="true"] {
+    border-color: var(--cat-color);
+    background: rgba(16, 185, 129, 0.16);
+    box-shadow: 0 0 0 2px var(--cat-color), 0 8px 20px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Inline Category Icon Badge inside Table & Plaques */
+  .cat-icon-badge {
+    --cat-color: #10b981;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1.5px solid var(--cat-color);
+    color: var(--cat-color);
+    font-size: 1.05rem;
+    transition: transform 0.15s ease, background-color 0.15s ease;
+  }
+
+  .cat-icon-badge:hover {
+    transform: scale(1.08);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  /* Segmented View Switcher (Tabela <-> Plaquinhas) */
+  .view-toggle-group {
+    display: inline-flex;
+    background: #0b0f17;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+    border-radius: 12px;
+    padding: 4px;
+    gap: 4px;
+  }
+
+  .view-toggle-btn {
+    border: 0;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 0.86rem;
+    font-weight: 600;
+    padding: 0.45rem 1rem;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .view-toggle-btn:hover {
+    color: #f8fafc;
+  }
+
+  .view-toggle-btn[aria-pressed="true"] {
+    background: var(--lote-emerald);
+    color: #052e16;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+  }
+
+  /* 4-Line Botanical Identification Plaques */
+  .plaque-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.1rem;
+  }
+
+  .plaque-card {
+    position: relative;
+    border-radius: 12px;
+    padding: 1.15rem 1.3rem;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.22rem;
+    min-height: 142px;
+    view-transition-name: match-element;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 142px;
+  }
+
+  .plaque-actions-floating {
+    position: absolute;
+    top: 0.65rem;
+    right: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  /* Theme 1: Slate / Black Anodized Aluminum (Default) */
+  .plaque-theme-ardosia .plaque-card {
+    background: linear-gradient(145deg, #161b26 0%, #0d1117 100%);
+    border: 1.5px solid #334155;
+    color: #f8fafc;
+    box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.03), 0 8px 20px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Theme 2: Laser-Engraved Wood */
+  .plaque-theme-madeira .plaque-card {
+    background: linear-gradient(145deg, #432818 0%, #2b1810 100%);
+    border: 2px solid #99582a;
+    color: #ffe6a7;
+    box-shadow: inset 0 0 0 3px rgba(255, 230, 167, 0.08), 0 8px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Theme 3: Brushed Stainless / Aluminum */
+  .plaque-theme-inox .plaque-card {
+    background: linear-gradient(135deg, #334155 0%, #1e293b 50%, #0f172a 100%);
+    border: 1.5px solid #94a3b8;
+    color: #f1f5f9;
+    box-shadow: inset 0 0 0 2px rgba(226, 232, 240, 0.15), 0 8px 20px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Theme 4: High-Contrast Print / 3D / Stencil */
+  .plaque-theme-contraste .plaque-card {
+    background: #ffffff !important;
+    border: 2px solid #000000 !important;
+    color: #000000 !important;
+    box-shadow: none;
+  }
+  .plaque-theme-contraste .plaque-card .plaque-line-1,
+  .plaque-theme-contraste .plaque-card .plaque-line-2,
+  .plaque-theme-contraste .plaque-card .plaque-line-3,
+  .plaque-theme-contraste .plaque-card .plaque-line-4 {
+    color: #000000 !important;
+  }
+
+  .plaque-line-1 {
+    font-size: 1.04rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    line-height: 1.25;
+    padding-right: 4rem;
+  }
+
+  .plaque-line-2 {
+    font-size: 0.9rem;
+    opacity: 0.94;
+    line-height: 1.3;
+  }
+
+  .plaque-line-3 {
+    font-size: 0.84rem;
+    opacity: 0.82;
+    line-height: 1.3;
+  }
+
+  .plaque-line-4 {
+    font-size: 0.84rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-top: 0.15rem;
+  }
+
+  /* Responsive & Sortable Table (following modern-web-guidance) */
+  .table-wrapper {
+    overflow: auto;
+    max-inline-size: 100%;
+    max-block-size: min(720px, 82vh);
+    container-type: inline-size;
+    border: 1px solid var(--lote-border);
+    border-radius: 12px;
+    background: #0f141d;
+  }
+
+  #lote-table {
+    width: 100%;
+    min-inline-size: 860px;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: #e2e8f0;
+    --label-2: "Categoria";
+    --label-3: "Científico";
+    --label-4: "Família";
+    --label-5: "Origem";
+    --label-6: "Plantio";
+    --label-7: "Qtd";
+    --label-8: "Mapa / Ações";
+  }
+
+  #lote-table caption {
+    caption-side: top;
+    padding: 0.75rem 1rem;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    border-bottom: 1px solid var(--lote-border);
+    background: #131924;
+  }
+
+  #lote-table thead {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+    background: #161f2e;
+  }
+
+  #lote-table th,
+  #lote-table td {
+    padding: 0.65rem 0.85rem;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+    vertical-align: middle;
+    font-size: 0.88rem;
+  }
+
+  #lote-table th:has(> button) {
+    padding: 0;
+  }
+
+  #lote-table thead th > button {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    font: inherit;
+    font-weight: 600;
+    width: 100%;
+    min-height: 38px;
+    padding: 0.65rem 0.85rem;
+    text-align: left;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+    cursor: pointer;
+  }
+
+  #lote-table thead th > button:focus-visible {
+    outline: 2px solid var(--lote-emerald);
+    outline-offset: -2px;
+  }
+
+  #lote-table thead th .sort-indicator {
+    opacity: 0.35;
+    font-size: 0.75rem;
+  }
+
+  #lote-table thead th[aria-sort="ascending"] .sort-indicator,
+  #lote-table thead th[aria-sort="descending"] .sort-indicator {
+    opacity: 1;
+    color: var(--lote-emerald);
+  }
+
+  #lote-table thead th[aria-sort="descending"] .sort-indicator {
+    transform: rotate(180deg);
+  }
+
+  #lote-table tbody th {
+    position: sticky;
+    inset-inline-start: 0;
+    background: #131924;
+    z-index: 1;
+    font-weight: 600;
+    color: #f8fafc;
+  }
+
+  #lote-table tbody tr {
+    view-transition-name: match-element;
+  }
+
+  #lote-table tbody tr:hover td,
+  #lote-table tbody tr:hover th {
+    background: #1c2536;
+  }
+
+  @container (width < 600px) {
+    #lote-table {
+      min-inline-size: 100%;
+    }
+    #lote-table,
+    #lote-table thead,
+    #lote-table tbody,
+    #lote-table tr,
+    #lote-table th,
+    #lote-table td {
+      display: block;
+    }
+    #lote-table thead {
+      display: none;
+    }
+    #lote-table tbody tr {
+      margin-block-end: 1rem;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    #lote-table tbody th {
+      position: sticky;
+      inset-block-start: 0;
+      z-index: 2;
+      background: #1e293b;
+    }
+    #lote-table td:nth-child(2)::before { content: var(--label-2) ": "; font-weight: 600; color: #94a3b8; margin-right: 0.4rem; }
+    #lote-table td:nth-child(3)::before { content: var(--label-3) ": "; font-weight: 600; color: #94a3b8; }
+    #lote-table td:nth-child(4)::before { content: var(--label-4) ": "; font-weight: 600; color: #94a3b8; }
+    #lote-table td:nth-child(5)::before { content: var(--label-5) ": "; font-weight: 600; color: #94a3b8; }
+    #lote-table td:nth-child(6)::before { content: var(--label-6) ": "; font-weight: 600; color: #94a3b8; }
+    #lote-table td:nth-child(7)::before { content: var(--label-7) ": "; font-weight: 600; color: #94a3b8; }
+    #lote-table td:nth-child(8)::before { content: var(--label-8) ": "; font-weight: 600; color: #94a3b8; }
+  }
+
+  /* Native Modal Dialog rules */
+  dialog:modal {
+    overscroll-behavior: contain;
+    background: #161b26;
+    color: #f8fafc;
+    border: 1px solid #334155;
+    border-radius: 16px;
+    padding: 1.5rem;
+    max-width: 560px;
+    width: calc(100% - 2rem);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  }
+
+  dialog::backdrop {
+    overflow: hidden;
+    overscroll-behavior: contain;
+    background: rgba(9, 13, 22, 0.75);
+    backdrop-filter: blur(4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation: none;
+    }
+  }
+
+  /* Strict Print Stylesheet: ONLY output the 4-line Plaques in exact format */
+  @media print {
+    @page {
+      margin: 10mm;
+    }
+
+    html,
+    body,
+    .app-layout,
+    .app-main,
+    .content-container {
+      background: #ffffff !important;
+      background-color: #ffffff !important;
+      color: #000000 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      opacity: 1 !important;
+    }
+
+    .geometric-bg,
+    .app-sidebar,
+    .sidebar-toggler,
+    .page-title-header,
+    .footer,
+    .no-print,
+    #view-table-section {
+      display: none !important;
+    }
+
+    /* Force the plaques section to print even if the user was viewing the Table */
+    #view-plaques-section,
+    #view-plaques-section[hidden] {
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    #plaque-grid-container {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 8mm !important;
+      width: 100% !important;
+    }
+
+    .plaque-card {
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      gap: 2pt !important;
+      break-inside: avoid !important;
+      page-break-inside: avoid !important;
+      border: 1.5pt solid #000000 !important;
+      border-radius: 6pt !important;
+      padding: 10pt 12pt !important;
+      min-height: 0 !important;
+      background: #ffffff !important;
+      color: #000000 !important;
+      box-shadow: none !important;
+      content-visibility: visible !important;
+    }
+
+    .plaque-card[hidden] {
+      display: none !important;
+    }
+
+    .plaque-card .plaque-line-1 {
+      font-size: 11pt !important;
+      font-weight: 800 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.03em !important;
+      color: #000000 !important;
+      padding-right: 0 !important;
+      margin: 0 !important;
+    }
+
+    .plaque-card .plaque-line-2 {
+      font-size: 9.5pt !important;
+      color: #000000 !important;
+      opacity: 1 !important;
+      margin: 0 !important;
+    }
+
+    .plaque-card .plaque-line-3 {
+      font-size: 9pt !important;
+      color: #222222 !important;
+      opacity: 1 !important;
+      margin: 0 !important;
+    }
+
+    .plaque-card .plaque-line-4 {
+      font-size: 9pt !important;
+      font-weight: 600 !important;
+      color: #000000 !important;
+      margin: 0 !important;
+    }
+  }
+</style>
+<script>
+  (function () {
+    var sb = document.getElementById('appSidebar');
+    var ly = document.querySelector('.app-layout');
+    if (sb) sb.classList.add('menu-folded');
+    if (ly) ly.classList.add('menu-folded');
+  })();
+</script>
+
+<!-- Single status element for screen reader announcements -->
+<p id="lote-status" role="status" class="visually-hidden no-print"></p>
+
+<!-- Hero Header -->
+<section class="lote-hero mb-4 no-print">
+  <div class="row align-items-center g-4">
+    <div class="col-lg-7">
+      <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+        <span class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-3 py-1">
+          <i class="bi bi-tree-fill me-1" aria-hidden="true"></i> Pomar &amp; Agrofloresta • Santa Catarina
+        </span>
+        <span class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-50 px-3 py-1">
+          <i class="bi bi-rulers me-1" aria-hidden="true"></i> Escala Real: Domo Ø 6,0 m (1m = 10px)
+        </span>
+      </div>
+      <h1 class="display-6 fw-bold text-white mb-2">O Lote — Mapa Proporcional, Frutíferas &amp; Plaquinhas</h1>
+      <p class="text-muted mb-0">
+        Inventário de <strong>{{ site.data.lote_plantas | size }} variedades</strong> (plantios de <strong>Set/2022</strong> e <strong>2026</strong>) sincronizado em CSV (<a href="/assets/data/lote_plantas.csv" download class="text-info text-decoration-underline">lote_plantas.csv</a> e <a href="/assets/data/lote_categorias.csv" download class="text-info text-decoration-underline">lote_categorias.csv</a>). Posicione e arraste as árvores no mapa horizontal abaixo e exporte o CSV pronto para atualizar a versão estática oficial do site.
+      </p>
+    </div>
+    <div class="col-lg-5 text-lg-end">
+      <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+        <button type="button" id="btn-export-custom-csv" class="btn btn-sm btn-success d-inline-flex align-items-center" title="Baixar _data/lote_plantas.csv com todas as posições do mapa para atualizar o site estático">
+          <i class="bi bi-download me-1" aria-hidden="true"></i> Baixar <code>lote_plantas.csv</code>
+        </button>
+        <button type="button" id="btn-copy-csv-clipboard" class="btn btn-sm btn-outline-info d-inline-flex align-items-center" title="Copiar conteúdo do CSV para colar direto em _data/lote_plantas.csv">
+          <i class="bi bi-clipboard-check me-1" aria-hidden="true"></i> <span id="copy-csv-label">Copiar CSV</span>
+        </button>
+        <button type="button" id="btn-import-csv" class="btn btn-sm btn-outline-secondary d-inline-flex align-items-center" title="Importar arquivo CSV de plantas">
+          <i class="bi bi-upload me-1" aria-hidden="true"></i> Importar CSV
+        </button>
+        <input type="file" id="input-import-csv" accept=".csv,text/csv" hidden>
+        <button type="button" id="btn-add-plant" class="btn btn-sm btn-primary d-inline-flex align-items-center">
+          <i class="bi bi-plus-lg me-1" aria-hidden="true"></i> Nova Planta
+        </button>
+        <button type="button" id="btn-print-plaques" class="btn btn-sm btn-outline-light d-inline-flex align-items-center">
+          <i class="bi bi-printer me-1" aria-hidden="true"></i> Imprimir Plaquinhas
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mapa Proporcional Horizontal do Lote (Limite Oeste paralelo ao topo horizontal, Barra de Frutíferas na Base) -->
+<section id="lote-map-studio-panel" aria-labelledby="heading-mapa-lote" class="lote-map-panel p-3 p-md-4 mb-4 no-print">
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom border-secondary border-opacity-25">
+    <div>
+      <h2 id="heading-mapa-lote" class="h5 text-white mb-0">
+        <i class="bi bi-geo-alt-fill text-info me-2" aria-hidden="true"></i>Mapa Proporcional do Lote &amp; Estúdio de Posicionamento
+      </h2>
+      <p class="small text-muted mb-0">
+        Vista rotacionada (+103,4°): <strong>Limite Oeste (102,6m)</strong> paralelo ao topo horizontal e <strong>Divisa Jair (49,1m)</strong> à direita • Escala: <strong>Domo Ø 6,0m = 60px</strong>.
+      </p>
+    </div>
+
+    <div class="d-flex flex-wrap align-items-center gap-2">
+      <!-- Controles de Zoom do Mapa Horizontal (1x até 5x) -->
+      <div class="btn-group btn-group-sm" role="group" aria-label="Zoom do mapa até 5x">
+        <button type="button" class="btn btn-outline-secondary map-zoom-btn active" data-zoom-scale="1">1x</button>
+        <button type="button" class="btn btn-outline-secondary map-zoom-btn" data-zoom-scale="1.5">1.5x</button>
+        <button type="button" class="btn btn-outline-secondary map-zoom-btn" data-zoom-scale="2">2x</button>
+        <button type="button" class="btn btn-outline-secondary map-zoom-btn" data-zoom-scale="3">3x</button>
+        <button type="button" class="btn btn-outline-secondary map-zoom-btn" data-zoom-scale="4">4x</button>
+        <button type="button" class="btn btn-outline-secondary map-zoom-btn" data-zoom-scale="5">5x</button>
+      </div>
+
+      <button type="button" id="btn-toggle-satellite" class="btn btn-sm btn-outline-info" aria-pressed="true">
+        <i class="bi bi-image me-1" aria-hidden="true"></i> Foto Aérea
+      </button>
+      <button type="button" id="btn-toggle-grid" class="btn btn-sm btn-outline-secondary" aria-pressed="true">
+        <i class="bi bi-grid-3x3 me-1" aria-hidden="true"></i> Grade 10m
+      </button>
+      <button type="button" id="btn-toggle-bottom-dock" class="btn btn-sm btn-outline-success d-inline-flex align-items-center" aria-pressed="true" title="Mostrar ou ocultar completamente o painel inferior de frutíferas">
+        <i class="bi bi-layout-sidebar-inset-reverse me-1" aria-hidden="true"></i>
+        <span id="bottom-dock-btn-label">Ocultar Painel</span>
+      </button>
+      <span id="map-cursor-readout" class="badge bg-dark border border-secondary text-info font-monospace px-2 py-1">
+        X 0.0m, Y 0.0m
+      </span>
+      <button type="button" id="btn-map-fullscreen" class="btn btn-sm btn-primary d-inline-flex align-items-center" aria-pressed="false">
+        <i class="bi bi-arrows-fullscreen me-1" aria-hidden="true"></i>
+        <span id="fullscreen-btn-label">Tela Cheia</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="map-studio-body">
+    <!-- Stage Superior: Mapa Horizontal Largura Total (viewBox 1190 x 600) -->
+    <div class="lote-svg-viewport-wrapper mb-3">
+      <div id="lote-svg-scroll-stage" class="lote-svg-stage">
+        <svg id="lote-proportional-svg" viewBox="0 0 1190 600" role="img" aria-label="Mapa proporcional horizontal do lote com Limite Oeste no topo, Divisa Jair à direita, Domo de 6m, Casa, Casinha, Ateliê, Depósito e pinos arrastáveis das árvores">
+        <defs>
+          <clipPath id="triangle-lot-clip">
+            <polygon points="1086,60 1127.9,548 846.5,365.8 742.6,310.2 450.4,164.4 192.7,81.4 60,60 227.1,40.2 359.5,36.9 539.5,32.5 613,34.6 865.8,43.5 1048.1,55.1" />
+          </clipPath>
+          <pattern id="metric-grid-10m" width="100" height="100" patternUnits="userSpaceOnUse">
+            <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(148, 163, 184, 0.18)" stroke-width="1" stroke-dasharray="3,3" />
+          </pattern>
+          <pattern id="solar-panel-grid" width="5.2" height="10.4" patternUnits="userSpaceOnUse" patternTransform="rotate(5.38)">
+            <rect width="5.2" height="10.4" fill="#172554" stroke="#60a5fa" stroke-width="0.65" />
+            <line x1="2.6" y1="0" x2="2.6" y2="10.4" stroke="rgba(147, 197, 253, 0.38)" stroke-width="0.35" />
+            <line x1="0" y1="5.2" x2="5.2" y2="5.2" stroke="rgba(147, 197, 253, 0.38)" stroke-width="0.35" />
+          </pattern>
+          <pattern id="stone-path-pattern" width="10" height="10" patternUnits="userSpaceOnUse">
+            <rect width="10" height="10" fill="#3b3632" />
+            <polygon points="1,1 4,1 4.5,3.5 1.5,4" fill="#a8a29e" opacity="0.65" />
+            <polygon points="5.5,1 9,1.5 8.5,4 5,3.5" fill="#d97706" opacity="0.65" />
+            <polygon points="1,5.5 4.5,5 5,8.5 1.5,9" fill="#b45309" opacity="0.6" />
+            <polygon points="6,5.5 9,5 9.5,8.5 6,9" fill="#78716c" opacity="0.75" />
+          </pattern>
+          <pattern id="bamboo-web-pattern" width="12" height="12" patternUnits="userSpaceOnUse">
+            <rect width="12" height="12" fill="rgba(101, 163, 13, 0.28)" />
+            <path d="M 0 6 L 6 0 M 6 12 L 12 6 M 0 6 L 6 12 M 6 0 L 12 6" stroke="rgba(163, 230, 53, 0.42)" stroke-width="0.9" fill="none" />
+          </pattern>
+        </defs>
+
+        <!-- Imagem Aérea de Fundo Rotacionada (+103.4132 deg) e Recortada no Triângulo -->
+        <g id="svg-satellite-layer" opacity="0.6" clip-path="url(#triangle-lot-clip)">
+          <image
+            href="/images/lote-aereo.jpg"
+            x="0" y="0"
+            width="764" height="1238"
+            preserveAspectRatio="none"
+            transform="translate(60, 60) rotate(103.4132) translate(-283, -1178)" />
+        </g>
+
+        <!-- Preenchimento Base do Triângulo -->
+        <polygon
+          points="1086,60 1127.9,548 846.5,365.8 742.6,310.2 450.4,164.4 192.7,81.4 60,60 227.1,40.2 359.5,36.9 539.5,32.5 613,34.6 865.8,43.5 1048.1,55.1"
+          fill="rgba(16, 185, 129, 0.08)"
+          stroke="none" />
+
+        <!-- Grade Métrica de 10m x 10m (100px x 100px) -->
+        <rect id="svg-grid-layer" x="0" y="0" width="1190" height="600" fill="url(#metric-grid-10m)" pointer-events="none" />
+
+        <!-- Estrada Leste (Borda Inferior/Diagonal) -->
+        <polyline
+          points="48.8,76.9 188.3,99.8 444.8,179.5 735.4,322.9 840.4,378.7 1125.1,559.7"
+          fill="none"
+          stroke="rgba(217, 119, 6, 0.35)"
+          stroke-width="22"
+          stroke-linecap="round"
+          pointer-events="none" />
+
+        <!-- Limite Oeste (Azul • 102,6 m — Paralelo ao Topo Horizontal) -->
+        <polyline
+          points="60,60 227.1,40.2 359.5,36.9 539.5,32.5 613,34.6 865.8,43.5 1048.1,55.1 1086,60"
+          fill="none"
+          stroke="#3b82f6"
+          stroke-width="4"
+          pointer-events="none" />
+        <text x="565" y="24" fill="#60a5fa" font-size="13" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
+          Limite Oeste (Azul) • 102,6 m
+        </text>
+
+        <!-- Divisa Jair (1ª Linha Preta • 49,1 m — Direita) -->
+        <line x1="1086" y1="60" x2="1127.9" y2="548" stroke="#f8fafc" stroke-width="3.5" stroke-dasharray="8,4" pointer-events="none" />
+        <text x="1124" y="304" fill="#f8fafc" font-size="13" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" transform="rotate(85.1, 1124, 304)" pointer-events="none">
+          Divisa Jair • 49,1 m
+        </text>
+
+        <!-- Limite Leste / Estrada (Azul • 117,4 m — Inferior Diagonal) -->
+        <polyline
+          points="60,60 192.7,81.4 450.4,164.4 742.6,310.2 846.5,365.8 1127.9,548"
+          fill="none"
+          stroke="#3b82f6"
+          stroke-width="4"
+          pointer-events="none" />
+        <text x="580" y="278" fill="#60a5fa" font-size="13" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" transform="rotate(25.2, 580, 278)" pointer-events="none">
+          Limite Leste / Estrada (Azul) • 117,4 m
+        </text>
+
+        <!-- Vértices do Triângulo -->
+        <circle cx="60" cy="60" r="5" fill="#f8fafc" stroke="#3b82f6" stroke-width="2" pointer-events="none" />
+        <circle cx="1086" cy="60" r="5" fill="#f8fafc" stroke="#3b82f6" stroke-width="2" pointer-events="none" />
+        <circle cx="1127.9" cy="548" r="5" fill="#f8fafc" stroke="#3b82f6" stroke-width="2" pointer-events="none" />
+
+        <!-- CAMINHOS DE PEDRA & PÁTIOS UNIFICADOS (Sem linhas brancas internas entre segmentos e pátios) -->
+        <g class="map-structure-group" data-structure-id="stone-paths">
+          <!-- Camada 1: Meio-fio branco externo unificado (todos os caminhos e pátios desenhados primeiro na camada de borda) -->
+          <g fill="rgba(226, 232, 240, 0.88)" stroke="rgba(226, 232, 240, 0.88)" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Pátios e Calçamentos Poligonais (Borda Externa) -->
+            <polygon points="740.1,61.2 765.0,62.9 760.1,126.5 795.5,129.0 794.5,146.5 733.8,144.0" stroke-width="2.2" />
+            <polygon points="891.5,156.2 893.0,140.3 928.9,143.6 928.9,54.2 1036.3,56.5 1036.3,71.3 973.5,71.3 973.5,147.5 961.1,162.8" stroke-width="2.2" />
+            <polygon points="883.9,289.2 943.7,294.8 942.0,310.8 882.2,305.2" stroke-width="2.2" />
+
+            <!-- Pátio Curvo Frontal da Casa, Contorno da Ilha de Pedras, Piso da Garagem e Rampa de Pedra até a Divisa Jair (Borda Externa) -->
+            <path d="M 926 308 C 931 322, 928 334, 912 337 L 943 340 L 941 360 L 936 368 L 934 404 L 970 404 L 1121.5 506 L 1118 466 L 982 372 L 958 340 L 948 295 Z" stroke-width="2.2" />
+
+            <!-- Caminhos Lineares e Curvos (Borda Externa) -->
+            <path d="M 883 297 C 854 290, 820 268, 804 232 C 793 205, 794 162, 795 129" fill="none" stroke-width="8.5" />
+            <path d="M 880.5 297 L 886 229.4 L 881 228.9 L 889.5 148" fill="none" stroke-width="7.2" />
+            <path d="M 760 128 L 839 132 L 892 148" fill="none" stroke-width="7.5" />
+            <path d="M 839 132 L 843.5 70" fill="none" stroke-width="5.5" />
+            <path d="M 956 352 C 951 330, 948 312, 948 295 L 954 236 L 959 233 L 964 155" fill="none" stroke-width="9.0" />
+            <path d="M 961 192 L 971 192" fill="none" stroke-width="6.5" />
+            <path d="M 966.5 192 C 967 214, 974 236, 986 250 C 994 258, 1002 263, 1014 266 C 1032 269, 1051 273, 1061 269 C 1067 264, 1068 245, 1069 212" fill="none" stroke-width="6.5" />
+            <path d="M 1002 263 C 988 262, 976 271, 968 286 C 962 299, 959 316, 956 340" fill="none" stroke-width="6.5" />
+          </g>
+
+          <!-- Camada 2: Revestimento Interno Unificado em Pedra Irregular (sobrepõe todas as junções eliminando linhas brancas internas) -->
+          <g stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="740.1,61.2 765.0,62.9 760.1,126.5 795.5,129.0 794.5,146.5 733.8,144.0" class="map-structure-shape" fill="url(#stone-path-pattern)" stroke="none" />
+            <polygon points="891.5,156.2 893.0,140.3 928.9,143.6 928.9,54.2 1036.3,56.5 1036.3,71.3 973.5,71.3 973.5,147.5 961.1,162.8" class="map-structure-shape" fill="url(#stone-path-pattern)" stroke="none" />
+            <polygon points="883.9,289.2 943.7,294.8 942.0,310.8 882.2,305.2" class="map-structure-shape" fill="url(#stone-path-pattern)" stroke="none" />
+            <path d="M 926 308 C 931 322, 928 334, 912 337 L 943 340 L 941 360 L 936 368 L 934 404 L 970 404 L 1121.5 506 L 1118 466 L 982 372 L 958 340 L 948 295 Z" class="map-structure-shape" fill="url(#stone-path-pattern)" stroke="none" />
+
+            <path d="M 883 297 C 854 290, 820 268, 804 232 C 793 205, 794 162, 795 129" fill="none" stroke="url(#stone-path-pattern)" stroke-width="6.3" />
+            <path d="M 880.5 297 L 886 229.4 L 881 228.9 L 889.5 148" fill="none" stroke="url(#stone-path-pattern)" stroke-width="5.0" />
+            <path d="M 760 128 L 839 132 L 892 148" fill="none" stroke="url(#stone-path-pattern)" stroke-width="5.3" />
+            <path d="M 839 132 L 843.5 70" fill="none" stroke="url(#stone-path-pattern)" stroke-width="3.7" />
+            <path d="M 956 352 C 951 330, 948 312, 948 295 L 954 236 L 959 233 L 964 155" fill="none" stroke="url(#stone-path-pattern)" stroke-width="6.8" />
+            <path d="M 961 192 L 971 192" fill="none" stroke="url(#stone-path-pattern)" stroke-width="4.5" />
+            <path d="M 966.5 192 C 967 214, 974 236, 986 250 C 994 258, 1002 263, 1014 266 C 1032 269, 1051 273, 1061 269 C 1067 264, 1068 245, 1069 212" fill="none" stroke="url(#stone-path-pattern)" stroke-width="4.5" />
+            <path d="M 1002 263 C 988 262, 976 271, 968 286 C 962 299, 959 316, 956 340" fill="none" stroke="url(#stone-path-pattern)" stroke-width="4.5" />
+          </g>
+        </g>
+
+        <!-- ESTRUTURA 1D: Ilha de Pedras & Escada (em frente ao gramado da Casa 6×6m) -->
+        <g class="map-structure-group" data-structure-id="stone-island-stairs">
+          <polygon
+            points="910,337 943,340 941,360 908,355"
+            class="map-structure-shape"
+            fill="rgba(217, 119, 6, 0.34)"
+            stroke="#f59e0b"
+            stroke-width="1.8" />
+          <!-- Degraus da Escada de Pedra integrada à Ilha -->
+          <line x1="935" y1="340" x2="933" y2="359" stroke="#fde68a" stroke-width="1.3" pointer-events="none" />
+          <line x1="935" y1="344" x2="942.5" y2="344.5" stroke="#fde68a" stroke-width="1.1" pointer-events="none" />
+          <line x1="934.5" y1="349" x2="942" y2="349.5" stroke="#fde68a" stroke-width="1.1" pointer-events="none" />
+          <line x1="934" y1="354" x2="941.5" y2="354.5" stroke="#fde68a" stroke-width="1.1" pointer-events="none" />
+          <text x="922" y="351" fill="#fef3c7" font-size="7.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
+            Ilha/Escada
+          </text>
+        </g>
+
+        <!-- ESTRUTURA 1E: Garagem (estendendo-se do canto do #2 de Banana Maçã #2 no ângulo do Ingá-Banana até a Divisa Jair) -->
+        <g class="map-structure-group" data-structure-id="garage">
+          <polygon
+            points="936,368 982,372 1118,466 1121.5,506 970,404 934,404"
+            class="map-structure-shape"
+            fill="rgba(16, 185, 129, 0.24)"
+            stroke="#34d399"
+            stroke-width="1.8"
+            stroke-dasharray="4,2" />
+          <line x1="946" y1="369" x2="944" y2="404" stroke="rgba(110, 231, 183, 0.38)" stroke-width="1.0" pointer-events="none" />
+          <line x1="958" y1="370" x2="956" y2="404" stroke="rgba(110, 231, 183, 0.38)" stroke-width="1.0" pointer-events="none" />
+          <line x1="970" y1="371" x2="970" y2="404" stroke="rgba(110, 231, 183, 0.38)" stroke-width="1.0" pointer-events="none" />
+          <text x="958" y="388" fill="#ffffff" font-size="8.8" font-weight="700" text-anchor="middle" pointer-events="none">
+            Garagem
+          </text>
+          <text x="958" y="398" fill="#a7f3d0" font-size="7.2" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
+            até Divisa Jair
+          </text>
+        </g>
+
+        <!-- ESTRUTURA 1F: Muro de Pedra & Fatia Triangular do Muro até a Garagem (Canteiro Elevado da Estrada) -->
+        <g class="map-structure-group" data-structure-id="wall-slice-triangle">
+          <polygon
+            points="936,424 970,404 1121.5,506 1106,533"
+            class="map-structure-shape"
+            fill="rgba(132, 204, 22, 0.22)"
+            stroke="#84cc16"
+            stroke-width="1.5" />
+          <!-- Muro de Contenção em Blocos de Pedra (divisa entre a Rampa/Garagem e a Fatia Triangular da Rua) -->
+          <line x1="970" y1="404" x2="1121.5" y2="506" stroke="#78350f" stroke-width="4.2" stroke-linecap="round" pointer-events="none" />
+          <line x1="970" y1="404" x2="1121.5" y2="506" stroke="#f59e0b" stroke-width="2.6" stroke-dasharray="5,2.5" stroke-linecap="round" pointer-events="none" />
+        </g>
+
+        <!-- ESTRUTURA 1A: Lago / Tanque (WIP Pond • Azul) -->
+        <g class="map-structure-group" data-structure-id="wip-pond">
+          <rect
+            x="978.4" y="73.0" width="54.4" height="67.4" rx="3"
+            class="map-structure-shape"
+            fill="rgba(14, 165, 233, 0.34)"
+            stroke="#38bdf8"
+            stroke-width="2.2" />
+          <path d="M 988 94 Q 997 91, 1006 94 T 1024 94" fill="none" stroke="rgba(186, 230, 253, 0.55)" stroke-width="1.2" pointer-events="none" />
+          <path d="M 986 122 Q 996 119, 1006 122 T 1025 122" fill="none" stroke="rgba(186, 230, 253, 0.45)" stroke-width="1.1" pointer-events="none" />
+          <text x="1005.6" y="105" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle" pointer-events="none">
+            Lago (WIP)
+          </text>
+          <text x="1005.6" y="117" fill="#bae6fd" font-size="8.2" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
+            5,4m × 6,8m
+          </text>
+        </g>
+
+        <!-- ESTRUTURA 1B: Estrutura de Bambu & Redes (Bamboo Web Structure • https://ideia.me/bamboo-web-structure-project) -->
+        <g class="map-structure-group" data-structure-id="bamboo-structure" data-structure-url="/bamboo-web-structure-project">
+          <polygon
+            points="1038.3,55.8 1083.0,59.2 1083.5,141.2 1038.3,141.2"
+            class="map-structure-shape"
+            fill="url(#bamboo-web-pattern)"
+            stroke="#84cc16"
+            stroke-width="2.2" />
+          <text x="1060.9" y="94" fill="#ffffff" font-size="9.5" font-weight="700" text-anchor="middle" pointer-events="none">
+            Bambu &amp; Redes
+          </text>
+          <text x="1060.9" y="106" fill="#d9f99d" font-size="8" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
+            4,5m × 8,6m
+          </text>
+        </g>
+
+        <!-- ESTRUTURA 1C: Domo • Estufa (Ø 6,0 m = 60 px • Verde) -->
+        <g class="map-structure-group" data-structure-id="dome">
+          <circle
+            cx="1001.1" cy="191.9" r="30"
+            class="map-structure-shape"
+            fill="rgba(34, 197, 94, 0.32)"
+            stroke="#4ade80"
+            stroke-width="2.5" />
+          <line x1="971.1" y1="191.9" x2="1031.1" y2="191.9" stroke="#bbf7d0" stroke-width="1.5" stroke-dasharray="2,2" pointer-events="none" />
+          <text x="1001.1" y="188" fill="#ffffff" font-size="10.5" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
+            Ø 6,0m
+          </text>
+          <text x="1001.1" y="156" fill="#4ade80" font-size="10.5" font-weight="700" text-anchor="middle" pointer-events="none">
+            Domo • Estufa (6m)
+          </text>
+        </g>
+
+        <!-- ESTRUTURA 2: Casa (2 A-Frames Alinhados pelo Centro: 6×6m Solar + 7×6m Proporcionalmente Maior) -->
+        <g class="map-structure-group" data-structure-id="main-house">
+          <!-- A-Frame 1 (Superior/Norte): Extensão 7×6m proporcionalmente maior (70px largura = 35px p/ cada lado da cumeeira central) -->
+          <polygon
+            points="891.5,156.2 926.3,159.5 919.5,232.2 884.7,228.9"
+            class="map-structure-shape"
+            fill="rgba(16, 185, 129, 0.32)"
+            stroke="#10b981"
+            stroke-width="1.8" />
+          <polygon
+            points="926.3,159.5 961.1,162.8 954.4,235.5 919.5,232.2"
+            class="map-structure-shape"
+            fill="rgba(5, 150, 105, 0.40)"
+            stroke="#10b981"
+            stroke-width="1.8" />
+          <!-- Mansardas Simétricas (Dormers) na Extensão 7×6m -->
+          <polygon
+            points="888.8,178.5 914.5,180.9 912.7,199.5 887.0,197.1"
+            fill="rgba(167, 243, 208, 0.42)"
+            stroke="#6ee7b7"
+            stroke-width="1.2"
+            pointer-events="none" />
+          <polygon
+            points="931.5,182.5 957.2,184.9 955.4,203.5 929.7,201.1"
+            fill="rgba(167, 243, 208, 0.42)"
+            stroke="#6ee7b7"
+            stroke-width="1.2"
+            pointer-events="none" />
+          <!-- 3 Painéis Solares na Água Leste da Extensão 7×6m (abaixo da mansarda leste) -->
+          <polygon
+            points="938.2,205.5 954.2,207.0 951.8,232.5 935.8,231.0"
+            fill="url(#solar-panel-grid)"
+            stroke="#93c5fd"
+            stroke-width="1.1"
+            pointer-events="none" />
+          <line x1="937.4" y1="214.5" x2="953.4" y2="216.0" stroke="#93c5fd" stroke-width="0.7" opacity="0.8" pointer-events="none" />
+          <line x1="936.6" y1="223.5" x2="952.6" y2="225.0" stroke="#93c5fd" stroke-width="0.7" opacity="0.8" pointer-events="none" />
+
+          <!-- A-Frame 2 (Inferior/Sul): Casa 6,0m × 6,0m c/ Painéis Solares (60px largura = 30px p/ cada lado da cumeeira central) -->
+          <polygon
+            points="889.6,229.4 919.5,232.2 913.8,292.0 883.9,289.2"
+            class="map-structure-shape"
+            fill="rgba(16, 185, 129, 0.36)"
+            stroke="#10b981"
+            stroke-width="1.8" />
+          <polygon
+            points="919.5,232.2 949.3,235.0 943.7,294.8 913.8,292.0"
+            class="map-structure-shape"
+            fill="rgba(5, 150, 105, 0.44)"
+            stroke="#10b981"
+            stroke-width="1.8" />
+          <!-- Matriz Principal de 10 Painéis Solares (2×5) na Água Leste do A-Frame 6×6m -->
+          <polygon
+            points="920.8,234.8 947.4,237.3 942.4,291.8 915.8,289.3"
+            fill="url(#solar-panel-grid)"
+            stroke="#93c5fd"
+            stroke-width="1.3"
+            pointer-events="none" />
+          <line x1="934.1" y1="236.0" x2="929.1" y2="290.5" stroke="#93c5fd" stroke-width="0.9" opacity="0.85" pointer-events="none" />
+          <line x1="919.8" y1="245.7" x2="946.4" y2="248.2" stroke="#93c5fd" stroke-width="0.75" opacity="0.8" pointer-events="none" />
+          <line x1="918.8" y1="256.6" x2="945.4" y2="259.1" stroke="#93c5fd" stroke-width="0.75" opacity="0.8" pointer-events="none" />
+          <line x1="917.8" y1="267.5" x2="944.4" y2="270.0" stroke="#93c5fd" stroke-width="0.75" opacity="0.8" pointer-events="none" />
+          <line x1="916.8" y1="278.4" x2="943.4" y2="280.9" stroke="#93c5fd" stroke-width="0.75" opacity="0.8" pointer-events="none" />
+
+          <!-- Cumeeira Central Alinhada dos 2 A-Frames & Junção 7×6m / 6×6m -->
+          <line x1="926.3" y1="159.5" x2="913.8" y2="292.0" stroke="#ecfdf5" stroke-width="2.2" pointer-events="none" />
+          <line x1="884.7" y1="228.9" x2="954.4" y2="235.5" stroke="#a7f3d0" stroke-width="1.4" stroke-dasharray="3,2" pointer-events="none" />
+
+          <text x="907" y="172" fill="#ffffff" font-size="9.5" font-weight="700" text-anchor="middle" pointer-events="none">
+            Casa A-Frame
+          </text>
+          <text x="903" y="216" fill="#d1fae5" font-size="8.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
+            7×6m
+          </text>
+          <text x="901" y="263" fill="#d1fae5" font-size="8.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
+            6×6m
+          </text>
+          <text x="931" y="266" fill="#bfdbfe" font-size="7.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
+            ☀ Solar
+          </text>
+        </g>
+
+        <!-- ESTRUTURA 3: Casinha -->
+        <g class="map-structure-group" data-structure-id="casinha">
+          <polygon
+            points="843.9,68.3 839.0,131.9 760.1,126.5 765.0,62.9"
+            class="map-structure-shape"
+            fill="rgba(245, 158, 11, 0.32)"
+            stroke="#f59e0b"
+            stroke-width="2.5" />
+          <text x="802.0" y="94" fill="#ffffff" font-size="11.5" font-weight="700" text-anchor="middle" pointer-events="none">
+            Casinha
+          </text>
+          <text x="802.0" y="108" fill="#fde68a" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
+            6,4m × 7,9m
+          </text>
+        </g>
+
+        <!-- Área do Fogo em Meia-Lua & Fogueira (Fireplace) + ESTRUTURA 4: Ateliê -->
+        <g class="map-structure-group" data-structure-id="patio-circle">
+          <path
+            d="M 699.5 90.0 C 724.0 100.0, 737.5 122.0, 733.5 145.5 C 726.0 156.0, 692.0 166.0, 661.5 163.5 C 677.0 146.0, 693.0 118.0, 699.5 90.0 Z"
+            class="map-structure-shape"
+            fill="rgba(249, 115, 22, 0.18)"
+            stroke="#fb923c"
+            stroke-width="1.8" />
+          <!-- Fogueira (Círculo Vermelho Interno) -->
+          <circle
+            cx="701.5" cy="135.5" r="5.5"
+            fill="rgba(239, 68, 68, 0.45)"
+            stroke="#ef4444"
+            stroke-width="1.8"
+            pointer-events="none" />
+          <circle
+            cx="701.5" cy="135.5" r="2.2"
+            fill="#fca5a5"
+            pointer-events="none" />
+          <text x="703" y="151" fill="#fed7aa" font-size="8.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
+            Fogo
+          </text>
+        </g>
+        <g class="map-structure-group" data-structure-id="atelie">
+          <polygon
+            points="695,87.1 656.1,164.1 582.9,126.1 620.9,52.9"
+            class="map-structure-shape"
+            fill="rgba(168, 85, 247, 0.30)"
+            stroke="#a855f7"
+            stroke-width="2.5" />
+          <text x="638.5" y="106" fill="#ffffff" font-size="11.5" font-weight="700" text-anchor="middle" pointer-events="none">
+            Ateliê
+          </text>
+          <text x="638.5" y="120" fill="#e9d5ff" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
+            8,6m × 8,2m
+          </text>
+        </g>
+
+        <!-- ESTRUTURA 5: Depósito -->
+        <g class="map-structure-group" data-structure-id="deposito-madeira">
+          <polygon
+            points="554.8,106 546.1,133.8 448.8,102.3 457.5,74.6"
+            fill="rgba(249, 115, 22, 0.16)"
+            stroke="#fb923c"
+            stroke-width="1.2"
+            stroke-dasharray="3,2"
+            pointer-events="none" />
+          <polygon
+            points="546.1,133.8 528.3,191.2 431,159.8 448.8,102.3"
+            class="map-structure-shape"
+            fill="rgba(249, 115, 22, 0.34)"
+            stroke="#f97316"
+            stroke-width="2.5" />
+          <text x="488.6" y="143" fill="#ffffff" font-size="11.5" font-weight="700" text-anchor="middle" pointer-events="none">
+            Depósito
+          </text>
+          <text x="488.6" y="157" fill="#fed7aa" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
+            6,0m × 10,2m
+          </text>
+        </g>
+
+        <!-- Camada Dinâmica de Pinos Arrastáveis das Plantas -->
+        <g id="svg-plants-pin-layer"></g>
+      </svg>
+      </div>
+
+      <!-- Dark Triangle Hover Inspector HUD (fixo no canto inferior-esquerdo do viewport do mapa) -->
+      <aside id="dark-triangle-inspector" class="dark-triangle-hud hud-hidden" aria-live="polite">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-1">
+          <span id="hud-badge-type" class="badge bg-info bg-opacity-25 text-info border border-info border-opacity-50" style="font-size: 0.68rem;">
+            <i class="bi bi-compass me-1" aria-hidden="true"></i>Inspetor do Lote
+          </span>
+          <span id="hud-coords-badge" class="font-monospace small text-warning">Escala: Domo Ø 6,0m = 10px/m</span>
+        </div>
+        <div id="hud-line-1" class="fw-bold text-white text-uppercase" style="font-size: 0.96rem; letter-spacing: 0.03em;">
+          PASSE O MOUSE EM UMA PLANTA OU CONSTRUÇÃO
+        </div>
+        <div id="hud-line-2" class="small text-info">
+          <em>Triângulo Azul até a Divisa Jair</em> • ~2.509 m²
+        </div>
+        <div id="hud-line-3" class="small text-muted">
+          Limite Oeste: 102,6 m (topo) • Divisa Jair: 49,1 m (direita) • Estrada: 117,4 m
+        </div>
+        <div id="hud-line-4" class="small font-monospace text-light mt-1 pt-1 border-top border-secondary border-opacity-25 d-flex flex-wrap justify-content-between gap-2">
+          <span id="hud-footer-left">15 árvores já posicionadas</span>
+          <span id="hud-footer-right">Arraste p/ ajustar</span>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Barra Inferior (Bottom Dock): Busca e Paleta de Frutíferas Priorizando as Não Fixadas -->
+    <div class="map-bottom-dock p-3 rounded border border-success border-opacity-50 bg-dark bg-opacity-75">
+      <div class="row g-2 align-items-center mb-2">
+        <div class="col-md-4">
+          <div class="d-flex align-items-center gap-2">
+            <h3 class="h6 text-success fw-bold mb-0">
+              <i class="bi bi-arrows-move me-1" aria-hidden="true"></i>Frutíferas &amp; Plantas (Arraste p/ o Mapa)
+            </h3>
+            <span id="pinned-plants-counter" class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 font-monospace">
+              0 / {{ site.data.lote_plantas | size }} fixadas
+            </span>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4">
+          <label for="palette-search" class="visually-hidden">Buscar fruta para posicionar no mapa</label>
+          <div class="input-group input-group-sm">
+            <span class="input-group-text bg-black border-secondary text-muted"><i class="bi bi-search" aria-hidden="true"></i></span>
+            <input type="search" id="palette-search" class="form-control bg-black border-secondary text-white" placeholder="Buscar fruta para posicionar (não fixadas primeiro)...">
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 d-flex align-items-center justify-content-md-end gap-2">
+          <label for="palette-filter-state" class="visually-hidden">Filtrar por status no mapa</label>
+          <select id="palette-filter-state" class="form-select form-select-sm bg-black border-secondary text-white" style="max-width: 175px;">
+            <option value="all">Priorizar Faltantes ({{ site.data.lote_plantas | size }})</option>
+            <option value="unpinned">Apenas Faltam Fixar</option>
+            <option value="pinned">Apenas Já Fixadas</option>
+          </select>
+          <button type="button" id="btn-studio-copy-csv" class="btn btn-sm btn-outline-info text-nowrap" title="Copiar CSV atualizado para _data/lote_plantas.csv">
+            <i class="bi bi-clipboard-check me-1" aria-hidden="true"></i> Copiar CSV
+          </button>
+          <button type="button" id="btn-studio-download-csv" class="btn btn-sm btn-success text-nowrap" title="Baixar lote_plantas.csv atualizado">
+            <i class="bi bi-download me-1" aria-hidden="true"></i> CSV
+          </button>
+        </div>
+      </div>
+
+      <div id="pinning-active-hint" class="p-2 mb-2 rounded bg-warning bg-opacity-10 border border-warning border-opacity-50 small text-warning font-monospace d-flex align-items-center justify-content-between" hidden>
+        <span id="pinning-active-text"><i class="bi bi-crosshair me-1" aria-hidden="true"></i>Clique no mapa acima para posicionar</span>
+        <button type="button" id="btn-cancel-pin-mode" class="btn btn-sm btn-link text-warning p-0 ms-2">Cancelar</button>
+      </div>
+
+      <!-- Grade Horizontal de Frutíferas (Faltantes Primeiro) -->
+      <div id="tree-palette-container" class="tree-palette-grid" role="listbox" aria-label="Lista de plantas priorizando as não posicionadas no mapa"></div>
+
+      <!-- Faixa Compacta de Referências e Proporções do Mapa Rotacionado -->
+      <div class="d-flex flex-wrap align-items-center gap-2 mt-2 pt-2 border-top border-secondary border-opacity-25">
+        <span class="ref-metric-pill"><i class="bi bi-pentagon text-success" aria-hidden="true"></i>Área: <strong>~2.509 m²</strong></span>
+        <span class="ref-metric-pill"><i class="bi bi-distribute-vertical text-primary" aria-hidden="true"></i>Limite Oeste (Topo): <strong>102,6 m</strong></span>
+        <span class="ref-metric-pill"><i class="bi bi-distribute-horizontal text-light" aria-hidden="true"></i>Divisa Jair (Direita): <strong>49,1 m</strong></span>
+        <span class="ref-metric-pill"><i class="bi bi-signpost-split text-primary" aria-hidden="true"></i>Limite Leste / Estrada: <strong>117,4 m</strong></span>
+        <span class="ref-metric-pill"><i class="bi bi-circle-fill" style="color: #22c55e;" aria-hidden="true"></i>Domo (Estufa): <strong>Ø 6,0 m</strong></span>
+        <span class="ref-metric-pill"><i class="bi bi-water" style="color: #38bdf8;" aria-hidden="true"></i>Lago (WIP): <strong>5,4×6,8 m</strong></span>
+        <a href="/bamboo-web-structure-project" class="ref-metric-pill text-decoration-none"><i class="bi bi-grid-3x3-gap-fill" style="color: #84cc16;" aria-hidden="true"></i>Bambu &amp; Redes: <strong>4,5×8,6 m</strong></a>
+        <span class="ref-metric-pill"><i class="bi bi-house-fill" style="color: #10b981;" aria-hidden="true"></i>Casa (2 A-Frames): <strong>6×6m (Solar) + 7×6m</strong></span>
+        <span class="ref-metric-pill"><i class="bi bi-bezier2" style="color: #d97706;" aria-hidden="true"></i>Caminhos de Pedra: <strong>Casa &amp; Casinha</strong></span>
+        <span class="ref-metric-pill"><i class="bi bi-house-heart-fill" style="color: #f59e0b;" aria-hidden="true"></i>Casinha: <strong>6,4×7,9 m</strong></span>
+        <span class="ref-metric-pill"><i class="bi bi-hammer" style="color: #a855f7;" aria-hidden="true"></i>Ateliê: <strong>8,6×8,2 m</strong></span>
+        <span class="ref-metric-pill"><i class="bi bi-box-seam-fill" style="color: #f97316;" aria-hidden="true"></i>Depósito: <strong>6,0×10,2 m</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KPI Row -->
+<section aria-label="Resumo quantitativo do lote" class="row row-cols-2 row-cols-md-3 row-cols-xl-6 g-3 mb-4 no-print">
+  <div class="col">
+    <div class="lote-kpi-card">
+      <div class="text-muted small mb-1"><i class="bi bi-flower2 text-success me-1" aria-hidden="true"></i>Variedades</div>
+      <div class="lote-kpi-value text-white" id="kpi-total-varieties">{{ site.data.lote_plantas | size }}</div>
+      <div class="small text-muted mt-1">Registros no CSV</div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="lote-kpi-card">
+      <div class="text-muted small mb-1"><i class="bi bi-trees text-info me-1" aria-hidden="true"></i>Total de Mudas</div>
+      <div class="lote-kpi-value text-info" id="kpi-total-individuals">92+</div>
+      <div class="small text-muted mt-1">+ Canteiros &amp; sementes</div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="lote-kpi-card">
+      <div class="text-muted small mb-1"><i class="bi bi-diagram-3 text-warning me-1" aria-hidden="true"></i>Famílias Botânicas</div>
+      <div class="lote-kpi-value text-warning" id="kpi-total-families">25</div>
+      <div class="small text-muted mt-1">10 categorias</div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="lote-kpi-card">
+      <div class="text-muted small mb-1"><i class="bi bi-calendar-check text-primary me-1" aria-hidden="true"></i>Pomar Base (2022)</div>
+      <div class="lote-kpi-value text-primary" id="kpi-year-2022">30</div>
+      <div class="small text-muted mt-1">Plantio Set/2022</div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="lote-kpi-card">
+      <div class="text-muted small mb-1"><i class="bi bi-calendar-plus text-success me-1" aria-hidden="true"></i>Expansão (2026)</div>
+      <div class="lote-kpi-value text-success" id="kpi-year-2026">50</div>
+      <div class="small text-muted mt-1">Jan, Set e Nov/2026</div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="lote-kpi-card">
+      <div class="text-muted small mb-1"><i class="bi bi-pencil-square text-warning me-1" aria-hidden="true"></i>Cultivares 2022</div>
+      <div class="lote-kpi-value text-warning" id="kpi-pending-confirm">12</div>
+      <div class="small text-muted mt-1">Sugestões SC</div>
+    </div>
+  </div>
+</section>
+
+<!-- Categorias em Ícones (Dock Compacto de Ícones + Resumo Contextual) -->
+<section aria-labelledby="heading-categorias" class="mb-4 no-print">
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+    <h2 id="heading-categorias" class="h6 text-uppercase text-muted fw-bold mb-0" style="letter-spacing: 0.05em;">
+      <i class="bi bi-grid-1x2 text-warning me-1" aria-hidden="true"></i>Categorias Botânicas (Clique no ícone para filtrar)
+    </h2>
+    <span id="active-category-label" class="small text-info fw-semibold">Todas as 10 categorias selecionadas</span>
+  </div>
+
+  <div class="lote-cat-icon-dock" role="group" aria-label="Filtrar por ícone de categoria botânica">
+    <button type="button" id="btn-reset-category" class="lote-cat-icon-btn" style="--cat-color: #10b981;" aria-pressed="true" title="Mostrar todas as 10 categorias ({{ site.data.lote_plantas | size }} variedades)" aria-label="Mostrar todas as categorias">
+      <i class="bi bi-grid-fill" aria-hidden="true"></i>
+      <span class="cat-icon-count" id="all-cat-count">{{ site.data.lote_plantas | size }}</span>
+      <span class="cat-icon-short">Todas</span>
+    </button>
+
+    {% for cat in site.data.lote_categorias %}
+    {% assign short_label = cat.nome_categoria | split: " (" | first | split: "," | first %}
+    <button
+      type="button"
+      class="lote-cat-icon-btn lote-cat-pill"
+      style="--cat-color: {{ cat.cor_hex }};"
+      data-category-id="{{ cat.categoria_id }}"
+      data-category-name="{{ cat.nome_categoria }}"
+      data-category-desc="{{ cat.caracteristicas_locais }} Manejo: {{ cat.manejo_recomendado }}"
+      data-category-stratum="{{ cat.estrato_predominante }} • Safra: {{ cat.epoca_foco }}"
+      aria-pressed="false"
+      title="{{ cat.nome_categoria }} — {{ cat.estrato_predominante }} ({{ cat.familias_botanicas }})"
+      aria-label="Filtrar categoria {{ cat.nome_categoria }}">
+      <i class="bi {{ cat.icone }}" aria-hidden="true"></i>
+      <span class="cat-icon-count" data-cat-count="{{ cat.categoria_id }}">0</span>
+      <span class="cat-icon-short">{{ short_label }}</span>
+    </button>
+    {% endfor %}
+  </div>
+
+  <!-- Banner contextual que exibe os detalhes da categoria quando um ícone é selecionado -->
+  <div id="category-detail-banner" class="mt-2 p-3 rounded border border-secondary bg-dark bg-opacity-50 small" hidden>
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-1">
+      <strong id="category-banner-title" class="text-white fs-6"></strong>
+      <span id="category-banner-stratum" class="badge bg-secondary bg-opacity-25 text-info border border-info border-opacity-25"></span>
+    </div>
+    <p id="category-banner-desc" class="text-muted mb-0"></p>
+  </div>
+</section>
+
+<!-- Barra Enxuta: Alternância (Tabela vs Plaquinhas) + Busca -->
+<section aria-label="Alternância de visualização e busca" class="card glass-card border-secondary p-3 mb-4 no-print">
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+    <!-- Alternador Principal: Tabela (Padrão) <-> Plaquinhas -->
+    <div class="d-flex flex-wrap align-items-center gap-3">
+      <div class="view-toggle-group" role="group" aria-label="Alternar entre Tabela e Plaquinhas">
+        <button type="button" class="view-toggle-btn view-mode-btn" data-view-mode="table" aria-pressed="true">
+          <i class="bi bi-table" aria-hidden="true"></i>
+          <span>Tabela</span>
+        </button>
+        <button type="button" class="view-toggle-btn view-mode-btn" data-view-mode="plaques" aria-pressed="false">
+          <i class="bi bi-postcard" aria-hidden="true"></i>
+          <span>Plaquinhas (4 Linhas)</span>
+        </button>
+      </div>
+
+      <!-- Seletor de acabamento das plaquinhas (exibido quando no modo Plaquinhas) -->
+      <div id="plaque-material-wrapper" class="d-flex align-items-center gap-2" hidden>
+        <label for="plaque-material-select" class="small text-muted mb-0 text-nowrap">Material:</label>
+        <select id="plaque-material-select" class="form-select form-select-sm bg-dark border-secondary text-white">
+          <option value="plaque-theme-ardosia">Ardósia / Alumínio Preto</option>
+          <option value="plaque-theme-madeira">Madeira Gravada a Laser</option>
+          <option value="plaque-theme-inox">Inox / Alumínio Escovado</option>
+          <option value="plaque-theme-contraste">Alto Contraste P&amp;B (3D / Print)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Busca Rápida -->
+    <div class="flex-grow-1" style="max-width: 380px;">
+      <label for="filter-search" class="visually-hidden">Buscar planta, espécie, família ou origem</label>
+      <div class="input-group input-group-sm">
+        <span class="input-group-text bg-dark border-secondary text-muted"><i class="bi bi-search" aria-hidden="true"></i></span>
+        <input type="search" id="filter-search" class="form-control bg-dark border-secondary text-white" placeholder="Buscar planta, espécie, família, origem ou ano...">
+      </div>
+    </div>
+
+    <div class="d-flex flex-wrap align-items-center gap-2">
+      <span id="visible-count-badge" class="badge bg-secondary bg-opacity-25 text-light border border-secondary px-2 py-1">
+        Exibindo {{ site.data.lote_plantas | size }} de {{ site.data.lote_plantas | size }} variedades
+      </span>
+      <button type="button" id="btn-Batch-year-toggle" class="btn btn-sm btn-outline-warning" title="Alternar ano das compras de expansão entre 2026 e 2025">
+        <i class="bi bi-calendar-event me-1" aria-hidden="true"></i> <span id="batch-year-label">Lote 2026 → 2025</span>
+      </button>
+      <button type="button" id="btn-reset-local-storage" class="btn btn-sm btn-outline-secondary" title="Restaurar dados originais do CSV">
+        <i class="bi bi-arrow-counterclockwise" aria-hidden="true"></i> Restaurar
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- VIEW 1 (DEFAULT): Tabela Botânica Ordenável (CSV 1: lote_plantas.csv) -->
+<section id="view-table-section" aria-labelledby="heading-table" class="mb-5 no-print">
+  <div class="d-flex align-items-center justify-content-between mb-2">
+    <h2 id="heading-table" class="h5 text-white mb-0">
+      <i class="bi bi-table text-info me-2" aria-hidden="true"></i>Tabela de Frutíferas e Plantas (<code>_data/lote_plantas.csv</code>)
+    </h2>
+    <span class="small text-muted">Clique em <i class="bi bi-geo-alt" aria-hidden="true"></i> para posicionar a planta no mapa</span>
+  </div>
+
+  <div tabindex="0" role="region" aria-labelledby="lote-table-caption" class="table-wrapper">
+    <table id="lote-table">
+      <caption id="lote-table-caption">
+        Inventário botânico do lote em Santa Catarina — {{ site.data.lote_plantas | size }} variedades entre o Pomar Base (Set/2022) e a Expansão (2026)
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col" data-type="text" aria-sort="ascending">
+            <button type="button" commandfor="lote-table" command="--sort">
+              <span>Nome na Plaquinha</span>
+              <i class="bi bi-arrow-up sort-indicator" aria-hidden="true"></i>
+            </button>
+          </th>
+          <th scope="col" data-type="text">
+            <button type="button" commandfor="lote-table" command="--sort">
+              <span>Cat.</span>
+              <i class="bi bi-arrow-up sort-indicator" aria-hidden="true"></i>
+            </button>
+          </th>
+          <th scope="col" data-type="text">
+            <button type="button" commandfor="lote-table" command="--sort">
+              <span>Nome Científico</span>
+              <i class="bi bi-arrow-up sort-indicator" aria-hidden="true"></i>
+            </button>
+          </th>
+          <th scope="col" data-type="text">
+            <button type="button" commandfor="lote-table" command="--sort">
+              <span>Família</span>
+              <i class="bi bi-arrow-up sort-indicator" aria-hidden="true"></i>
+            </button>
+          </th>
+          <th scope="col" data-type="text">
+            <button type="button" commandfor="lote-table" command="--sort">
+              <span>Origem</span>
+              <i class="bi bi-arrow-up sort-indicator" aria-hidden="true"></i>
+            </button>
+          </th>
+          <th scope="col" data-type="number">
+            <button type="button" commandfor="lote-table" command="--sort">
+              <span>Plantio</span>
+              <i class="bi bi-arrow-up sort-indicator" aria-hidden="true"></i>
+            </button>
+          </th>
+          <th scope="col" data-type="number">
+            <button type="button" commandfor="lote-table" command="--sort">
+              <span>Qtd.</span>
+              <i class="bi bi-arrow-up sort-indicator" aria-hidden="true"></i>
+            </button>
+          </th>
+          <th scope="col">Mapa / Ações</th>
+        </tr>
+      </thead>
+      <tbody id="lote-table-tbody">
+        {% for p in site.data.lote_plantas %}
+        {% assign cat_obj = site.data.lote_categorias | where: "categoria_id", p.categoria_id | first %}
+        <tr data-plant-id="{{ p.id }}" data-categoria-id="{{ p.categoria_id }}" data-secao="{{ p.secao_lote }}" data-plantio="{{ p.plantio }}" data-ano="{{ p.ano_base }}" data-familia="{{ p.familia }}" data-status="{{ p.status_cultivar }}">
+          <th scope="row" data-value="{{ p.nome_popular }}">
+            <span class="fw-bold">{{ p.nome_popular }}</span>
+            {% if p.nota_variedade != "" %}
+            <small class="d-block text-warning fw-normal">({{ p.nota_variedade }})</small>
+            {% endif %}
+          </th>
+          <td data-value="{{ cat_obj.nome_categoria }}">
+            <span class="cat-icon-badge" style="--cat-color: {{ cat_obj.cor_hex }};" title="{{ cat_obj.nome_categoria }}">
+              <i class="bi {{ cat_obj.icone }}" aria-hidden="true"></i>
+              <span class="visually-hidden">{{ cat_obj.nome_categoria }}</span>
+            </span>
+          </td>
+          <td data-value="{{ p.nome_cientifico }}"><em>{{ p.nome_cientifico }}</em></td>
+          <td data-value="{{ p.familia }}">{{ p.familia }}</td>
+          <td data-value="{{ p.origem }}">{{ p.origem }}</td>
+          <td data-value="{{ p.ano_base }}">{{ p.plantio }}</td>
+          <td data-value="{{ p.quantidade }}">{{ p.quantidade }}</td>
+          <td>
+            <div class="d-inline-flex align-items-center gap-1">
+              <button type="button" class="btn btn-sm btn-outline-success py-0 px-2 btn-pin-plant" data-pin-id="{{ p.id }}" title="Posicionar {{ p.nome_popular }} no mapa" aria-label="Posicionar {{ p.nome_popular }} no mapa">
+                <i class="bi bi-geo-alt" aria-hidden="true"></i>
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-info py-0 px-2 btn-edit-plant" data-edit-id="{{ p.id }}" aria-label="Editar {{ p.nome_popular }}">
+                <i class="bi bi-pencil" aria-hidden="true"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- VIEW 2: Grade de Plaquinhas de 4 Linhas (Exibida no modo Plaquinhas e SEMPRE na Impressão) -->
+<section id="view-plaques-section" aria-labelledby="heading-plaques" class="mb-5" hidden>
+  <div class="d-flex align-items-center justify-content-between mb-3 no-print">
+    <h2 id="heading-plaques" class="h5 text-white mb-0">
+      <i class="bi bi-postcard text-success me-2" aria-hidden="true"></i>Plaquinhas de Identificação (Padrão 4 Linhas)
+    </h2>
+    <span class="small text-muted">Na impressão, serão geradas apenas estas plaquinhas no formato de 4 linhas</span>
+  </div>
+
+  <div id="plaque-grid-container" class="plaque-grid plaque-theme-ardosia">
+    {% for p in site.data.lote_plantas %}
+    {% assign cat_obj = site.data.lote_categorias | where: "categoria_id", p.categoria_id | first %}
+    <article class="plaque-card" data-plant-id="{{ p.id }}" data-categoria-id="{{ p.categoria_id }}" data-secao="{{ p.secao_lote }}" data-plantio="{{ p.plantio }}" data-ano="{{ p.ano_base }}" data-familia="{{ p.familia }}" data-status="{{ p.status_cultivar }}">
+      <div class="plaque-actions-floating no-print">
+        <span class="cat-icon-badge" style="--cat-color: {{ cat_obj.cor_hex }}; width: 24px; height: 24px; font-size: 0.78rem; border-radius: 6px;" title="{{ cat_obj.nome_categoria }}">
+          <i class="bi {{ cat_obj.icone }}" aria-hidden="true"></i>
+          <span class="visually-hidden">{{ cat_obj.nome_categoria }}</span>
+        </span>
+        <button type="button" class="btn btn-link btn-sm text-secondary p-0 btn-edit-plant" data-edit-id="{{ p.id }}" aria-label="Editar plaquinha de {{ p.nome_popular }}">
+          <i class="bi bi-pencil-square" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <!-- Linha 1: NOME POPULAR / VARIEDADE -->
+      <div class="plaque-line-1">{{ p.nome_popular | upcase }}</div>
+
+      <!-- Linha 2: Nome Científico • Família -->
+      <div class="plaque-line-2"><em>{{ p.nome_cientifico }}</em> • <span>{{ p.familia }}</span></div>
+
+      <!-- Linha 3: Origem / Destaque -->
+      <div class="plaque-line-3">{{ p.placa_linha_3 }}</div>
+
+      <!-- Linha 4: Plantio: Mês/Ano -->
+      <div class="plaque-line-4">Plantio: {{ p.plantio }}</div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Características Agronômicas e Ecofisiológicas do Local -->
+<section aria-labelledby="heading-caracteristicas" class="mb-5 no-print">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 id="heading-caracteristicas" class="h5 text-white mb-0">
+      <i class="bi bi-compass text-success me-2" aria-hidden="true"></i>Características do Local &amp; Desenho Agroflorestal (SC)
+    </h2>
+    <span class="small text-muted">Transição Subtropical • Mata Atlântica &amp; Pomar Temperado/Tropical</span>
+  </div>
+
+  <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-3">
+    <div class="col">
+      <div class="lote-characteristic-card">
+        <h3 class="h6 text-warning fw-bold mb-2">
+          <i class="bi bi-thermometer-half me-1" aria-hidden="true"></i>1. Microclima &amp; Horas de Frio
+        </h3>
+        <p class="small text-muted mb-2">
+          Localizado em Santa Catarina, o lote combina invernos amenos a frios (ideais para a dormência de rosáceas de baixo frio e viticultura) com verões quentes e úmidos que viabilizam mirtáceas, anonas, mangas e espécies amazônicas abrigadas.
+        </p>
+        <div class="small text-white-50">
+          <strong>Pares polinizadores:</strong> <em>Maçã Eva</em> + <em>Maçã Julieta</em> (IAPAR); <em>Ameixa Santa Rosa</em> + <em>Pluma 7</em>.
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="lote-characteristic-card">
+        <h3 class="h6 text-success fw-bold mb-2">
+          <i class="bi bi-layers-half me-1" aria-hidden="true"></i>2. Estratificação Agroflorestal
+        </h3>
+        <p class="small text-muted mb-2">
+          O plantio ocupa 4 estratos verticais: <strong>Emergentes</strong> (Jequitibá-Branco, Jatobá, Jaca), <strong>Copa Média</strong> (Cítricas, Abacate, Mangas, Abiu, Lichia, Ingá), <strong>Sub-Bosque Úmido</strong> (Cacau, Cupuaçu, Café Arábica, Fruta-do-Milagre) e <strong>Herbáceo/Arbustivo</strong> (Mirtilos, Framboesas, Menta, Hortelã, Babosa).
+        </p>
+        <div class="small text-white-50">
+          <strong>Biomassa viva:</strong> 6 touceiras de bananeiras (<em>Maçã</em> e <em>Prata Catarina</em>) + <em>Ingá-Cipó</em>.
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="lote-characteristic-card">
+        <h3 class="h6 text-info fw-bold mb-2">
+          <i class="bi bi-calendar3-range me-1" aria-hidden="true"></i>3. Escalonamento de Safras (12 Meses)
+        </h3>
+        <p class="small text-muted mb-2">
+          <strong>Outono/Inverno (Mai–Set):</strong> 12 variedades cítricas (Ponkan, Mimosa, Montenegrina, Murcott, Laranjas e Limões), Abacate e Macadâmia.<br>
+          <strong>Primavera (Set–Nov):</strong> Nativas (Cereja-do-Rio-Grande, Pitanga, Grumixama, Ariticum), Pêssegos, Mirtilos e Framboesas.<br>
+          <strong>Verão (Dez–Mar):</strong> Uvas, Ameixas, Maçãs, Mangas, Carambola, Lichia, Caquis e Figo.
+        </p>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="lote-characteristic-card">
+        <h3 class="h6 text-primary fw-bold mb-2">
+          <i class="bi bi-postcard-heart me-1" aria-hidden="true"></i>4. Padrão de Plaquinha (4 Linhas)
+        </h3>
+        <div class="p-2 rounded border border-secondary bg-dark font-monospace small mb-2">
+          <div class="fw-bold text-white">CEREJA-DO-RIO-GRANDE</div>
+          <div class="text-info"><em>Eugenia involucrata</em> • Myrtaceae</div>
+          <div class="text-muted">Nativa do Sul do Brasil</div>
+          <div class="text-warning">Plantio: Jan/2026</div>
+        </div>
+        <p class="small text-muted mb-0">
+          Leitura rápida à distância sem poluição visual para gravação em madeira, alumínio anodizado, ardósia ou impressão 3D.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal Native Dialog for Editing / Confirming a Plant or Adding a New One -->
+<dialog id="edit-plant-dialog" class="no-print" closedby="any" aria-labelledby="edit-plant-dialog-title">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h2 id="edit-plant-dialog-title" class="h5 text-white mb-0">Editar / Confirmar Plaquinha</h2>
+    <button type="button" id="btn-close-dialog-top" class="btn-close btn-close-white" aria-label="Fechar janela de edição"></button>
+  </div>
+
+  <form id="edit-plant-form" method="dialog">
+    <input type="hidden" id="edit-plant-id">
+
+    <div class="row g-3">
+      <div class="col-md-8">
+        <label for="edit-nome-popular" class="form-label small text-muted mb-1">Nome na Plaquinha (Linha 1)</label>
+        <input type="text" id="edit-nome-popular" class="form-control form-control-sm bg-dark border-secondary text-white" required autofocus>
+      </div>
+
+      <div class="col-md-4">
+        <label for="edit-quantidade" class="form-label small text-muted mb-1">Quantidade</label>
+        <input type="text" id="edit-quantidade" class="form-control form-control-sm bg-dark border-secondary text-white" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="edit-nome-cientifico" class="form-label small text-muted mb-1">Nome Científico (Linha 2)</label>
+        <input type="text" id="edit-nome-cientifico" class="form-control form-control-sm bg-dark border-secondary text-white" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="edit-familia" class="form-label small text-muted mb-1">Família Botânica (Linha 2)</label>
+        <input type="text" id="edit-familia" class="form-control form-control-sm bg-dark border-secondary text-white" required>
+      </div>
+
+      <div class="col-md-12">
+        <label for="edit-placa-linha-3" class="form-label small text-muted mb-1">Texto de Origem / Destaque na Placa (Linha 3)</label>
+        <input type="text" id="edit-placa-linha-3" class="form-control form-control-sm bg-dark border-secondary text-white" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="edit-origem" class="form-label small text-muted mb-1">Origem Geográfica (Tabela/CSV)</label>
+        <input type="text" id="edit-origem" class="form-control form-control-sm bg-dark border-secondary text-white" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="edit-plantio" class="form-label small text-muted mb-1">Mês/Ano de Plantio (Linha 4)</label>
+        <input type="text" id="edit-plantio" class="form-control form-control-sm bg-dark border-secondary text-white" placeholder="Ex: Set/2022 ou Nov/2026" required>
+      </div>
+
+      <div class="col-md-6">
+        <label for="edit-categoria-id" class="form-label small text-muted mb-1">Categoria Botânica</label>
+        <select id="edit-categoria-id" class="form-select form-select-sm bg-dark border-secondary text-white">
+          {% for cat in site.data.lote_categorias %}
+          <option value="{{ cat.categoria_id }}">{{ cat.nome_categoria }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label for="edit-status-cultivar" class="form-label small text-muted mb-1">Status do Cultivar</label>
+        <select id="edit-status-cultivar" class="form-select form-select-sm bg-dark border-secondary text-white">
+          <option value="Confirmado">Confirmado (Pronto para Gravar)</option>
+          <option value="Sugestão SC (Confirmar)">Sugestão SC (Confirmar)</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label for="edit-mapa-x" class="form-label small text-muted mb-1">Posição X no Mapa (metros, separe múltiplos por <code>;</code>)</label>
+        <input type="text" id="edit-mapa-x" class="form-control form-control-sm bg-dark border-secondary text-white" placeholder="Ex: 88.5 ou 88.5;90.2">
+      </div>
+
+      <div class="col-md-6">
+        <label for="edit-mapa-y" class="form-label small text-muted mb-1">Posição Y no Mapa (metros, separe múltiplos por <code>;</code>)</label>
+        <input type="text" id="edit-mapa-y" class="form-control form-control-sm bg-dark border-secondary text-white" placeholder="Ex: 24.0 ou 24.0;25.1">
+      </div>
+
+      <div class="col-md-12">
+        <label for="edit-nota-variedade" class="form-label small text-muted mb-1">Nota / Observação de Variedade (opcional)</label>
+        <input type="text" id="edit-nota-variedade" class="form-control form-control-sm bg-dark border-secondary text-white" placeholder="Ex: Polinizadora, Porta-enxerto, Seleção SC...">
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top border-secondary">
+      <button type="submit" value="cancel" formnovalidate class="btn btn-sm btn-outline-secondary">Cancelar</button>
+      <button type="submit" value="save" class="btn btn-sm btn-success">
+        <i class="bi bi-check2-circle me-1" aria-hidden="true"></i> Salvar na Plaquinha
+      </button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Embedded JSON from Jekyll _data CSVs for instant zero-backend initialization -->
+<script id="lote-initial-plants-json" type="application/json">
+  {{ site.data.lote_plantas | jsonify }}
+</script>
+<script id="lote-initial-categories-json" type="application/json">
+  {{ site.data.lote_categorias | jsonify }}
+</script>
+
+<script src="/assets/js/lote-manager.js?v=15"></script>
+<script>
+  (function () {
+    'use strict';
+
+    document.addEventListener('DOMContentLoaded', function () {
+      var Lote = window.LoteManager;
+      if (!Lote) return;
+
+      var initialPlantsEl = document.getElementById('lote-initial-plants-json');
+      var initialCategoriesEl = document.getElementById('lote-initial-categories-json');
+      var defaultPlants = [];
+      var categories = [];
+
+      try {
+        defaultPlants = JSON.parse(initialPlantsEl.textContent || '[]');
+        categories = JSON.parse(initialCategoriesEl.textContent || '[]');
+      } catch (err) {
+        console.error('Erro ao carregar dados iniciais do lote:', err);
+      }
+
+      var categoryMap = {};
+      for (var c = 0; c < categories.length; c++) {
+        categoryMap[categories[c].categoria_id] = categories[c];
+      }
+
+      var defaultById = {};
+      for (var d = 0; d < defaultPlants.length; d++) {
+        defaultById[defaultPlants[d].id] = defaultPlants[d];
+      }
+
+      var plants = defaultPlants.map(function (p) {
+        var copy = Object.assign({}, p);
+        if (!Lote.hasValidCoords(copy)) {
+          copy.mapa_x = '';
+          copy.mapa_y = '';
+        }
+        return copy;
+      });
+
+      // Load user overrides from v6 or migrate/fix unrotated portrait pins from v5/v4/v3
+      try {
+        var rawSaved = localStorage.getItem(Lote.STORAGE_KEY_PLANTS) ||
+          localStorage.getItem('ideiame_lote_plantas_v5') ||
+          localStorage.getItem('ideiame_lote_plantas_v4') ||
+          localStorage.getItem('ideiame_lote_plantas_v3');
+
+        if (rawSaved) {
+          var parsedSaved = JSON.parse(rawSaved);
+          if (Array.isArray(parsedSaved) && parsedSaved.length > 0) {
+            var savedById = {};
+            for (var s = 0; s < parsedSaved.length; s++) {
+              if (parsedSaved[s] && parsedSaved[s].id && parsedSaved[s].id !== 'limao-siciliano') {
+                savedById[parsedSaved[s].id] = parsedSaved[s];
+              }
+            }
+
+            plants = defaultPlants.map(function (defPlant) {
+              var merged = Object.assign({}, defPlant, savedById[defPlant.id] || {});
+              // Ensure all peaches belong to the first batch (Set/2022)
+              if ((merged.id || '').indexOf('pessego') !== -1 || (merged.nome_popular || '').toLowerCase().indexOf('pêssego') !== -1) {
+                merged.plantio = 'Set/2022';
+                merged.ano_base = '2022';
+                merged.secao_lote = '1. Pomar Base (Set/2022)';
+                merged.status_cultivar = 'Confirmado';
+              }
+              if (Lote.hasValidCoords(merged)) {
+                // If the pin in localStorage was placed before rotation (or is one of the 15 pre-rotation pins with x <= 52),
+                // use its rotated horizontal coordinates!
+                if (defPlant.mapa_x && defPlant.mapa_y && Number(merged.mapa_x) <= 52) {
+                  merged.mapa_x = String(defPlant.mapa_x);
+                  merged.mapa_y = String(defPlant.mapa_y);
+                } else if (Lote.isUnrotatedPortraitCoord && Lote.isUnrotatedPortraitCoord(merged.mapa_x, merged.mapa_y)) {
+                  var rotPt = Lote.rotateLegacyPointMeters(merged.mapa_x, merged.mapa_y);
+                  merged.mapa_x = rotPt.mapa_x;
+                  merged.mapa_y = rotPt.mapa_y;
+                }
+              } else if (Lote.hasValidCoords(defPlant)) {
+                merged.mapa_x = String(defPlant.mapa_x);
+                merged.mapa_y = String(defPlant.mapa_y);
+              } else {
+                merged.mapa_x = '';
+                merged.mapa_y = '';
+              }
+              return merged;
+            });
+
+            // Also preserve any custom user-added plants not in defaultPlants
+            for (var extraId in savedById) {
+              if (!defaultById[extraId]) {
+                var extraPlant = Object.assign({}, savedById[extraId]);
+                if (Lote.hasValidCoords(extraPlant) && Lote.isUnrotatedPortraitCoord && Lote.isUnrotatedPortraitCoord(extraPlant.mapa_x, extraPlant.mapa_y)) {
+                  var rotExtra = Lote.rotateLegacyPointMeters(extraPlant.mapa_x, extraPlant.mapa_y);
+                  extraPlant.mapa_x = rotExtra.mapa_x;
+                  extraPlant.mapa_y = rotExtra.mapa_y;
+                } else if (!Lote.hasValidCoords(extraPlant)) {
+                  extraPlant.mapa_x = '';
+                  extraPlant.mapa_y = '';
+                }
+                plants.push(extraPlant);
+              }
+            }
+
+            localStorage.setItem(Lote.STORAGE_KEY_PLANTS, JSON.stringify(plants));
+          }
+        }
+      } catch (e) {
+        // Ignore storage errors in private mode
+      }
+
+      function savePlantsToStorage() {
+        try {
+          localStorage.setItem(Lote.STORAGE_KEY_PLANTS, JSON.stringify(plants));
+        } catch (e) {
+          // Ignore storage quota errors
+        }
+      }
+
+      // Cache DOM references outside event listeners
+      var statusEl = document.getElementById('lote-status');
+      var plaqueGrid = document.getElementById('plaque-grid-container');
+      var tableEl = document.getElementById('lote-table');
+      var tbodyEl = document.getElementById('lote-table-tbody');
+      var searchInput = document.getElementById('filter-search');
+      var materialSelect = document.getElementById('plaque-material-select');
+      var materialWrapper = document.getElementById('plaque-material-wrapper');
+      var visibleBadge = document.getElementById('visible-count-badge');
+      var categoryPills = document.querySelectorAll('.lote-cat-pill');
+      var btnResetCategory = document.getElementById('btn-reset-category');
+      var allCatCount = document.getElementById('all-cat-count');
+      var activeCategoryLabel = document.getElementById('active-category-label');
+      var categoryDetailBanner = document.getElementById('category-detail-banner');
+      var categoryBannerTitle = document.getElementById('category-banner-title');
+      var categoryBannerStratum = document.getElementById('category-banner-stratum');
+      var categoryBannerDesc = document.getElementById('category-banner-desc');
+      var categoryCountBadges = document.querySelectorAll('[data-cat-count]');
+      var viewModeBtns = document.querySelectorAll('.view-mode-btn');
+
+      var sectionPlaques = document.getElementById('view-plaques-section');
+      var sectionTable = document.getElementById('view-table-section');
+
+      var kpiVarieties = document.getElementById('kpi-total-varieties');
+      var kpiIndividuals = document.getElementById('kpi-total-individuals');
+      var kpiFamilies = document.getElementById('kpi-total-families');
+      var kpi2022 = document.getElementById('kpi-year-2022');
+      var kpi2026 = document.getElementById('kpi-year-2026');
+      var kpiPending = document.getElementById('kpi-pending-confirm');
+
+      // Map Studio DOM elements
+      var mapStudioPanel = document.getElementById('lote-map-studio-panel');
+      var svgMap = document.getElementById('lote-proportional-svg');
+      var svgSatelliteLayer = document.getElementById('svg-satellite-layer');
+      var svgGridLayer = document.getElementById('svg-grid-layer');
+      var svgPinsLayer = document.getElementById('svg-plants-pin-layer');
+      var btnToggleSatellite = document.getElementById('btn-toggle-satellite');
+      var btnToggleGrid = document.getElementById('btn-toggle-grid');
+      var btnMapFullscreen = document.getElementById('btn-map-fullscreen');
+      var fullscreenBtnLabel = document.getElementById('fullscreen-btn-label');
+      var zoomBtns = document.querySelectorAll('.map-zoom-btn');
+      var mapCursorReadout = document.getElementById('map-cursor-readout');
+
+      var paletteContainer = document.getElementById('tree-palette-container');
+      var paletteSearchInput = document.getElementById('palette-search');
+      var paletteFilterState = document.getElementById('palette-filter-state');
+      var pinningActiveHint = document.getElementById('pinning-active-hint');
+      var pinningActiveText = document.getElementById('pinning-active-text');
+      var btnCancelPinMode = document.getElementById('btn-cancel-pin-mode');
+      var pinnedPlantsCounter = document.getElementById('pinned-plants-counter');
+
+      // Dark Triangle Inspector HUD elements
+      var hudInspector = document.getElementById('dark-triangle-inspector');
+      var hudBadgeType = document.getElementById('hud-badge-type');
+      var hudCoordsBadge = document.getElementById('hud-coords-badge');
+      var hudLine1 = document.getElementById('hud-line-1');
+      var hudLine2 = document.getElementById('hud-line-2');
+      var hudLine3 = document.getElementById('hud-line-3');
+      var hudFooterLeft = document.getElementById('hud-footer-left');
+      var hudFooterRight = document.getElementById('hud-footer-right');
+      var isDraggingAnyPin = false;
+
+      function hideDarkTriangleHud() {
+        if (hudInspector) {
+          hudInspector.classList.add('hud-hidden');
+        }
+      }
+
+      function showPlantInDarkTriangleHud(plantObj) {
+        if (!plantObj || !hudInspector || isDraggingAnyPin || selectedPlantIdToPin) return;
+        hudInspector.classList.remove('hud-hidden');
+        var lines = Lote.formatPlaqueLines(plantObj);
+        var catObj = categoryMap[plantObj.categoria_id] || { nome_categoria: plantObj.categoria_id, cor_hex: '#10b981' };
+        var pins = Lote.parsePlantPins(plantObj);
+        var isPinned = pins.length > 0;
+
+        hudInspector.style.borderColor = catObj.cor_hex || '#10b981';
+        if (hudBadgeType) {
+          hudBadgeType.textContent = catObj.nome_categoria;
+          hudBadgeType.style.color = catObj.cor_hex || '#10b981';
+        }
+        if (hudCoordsBadge) {
+          hudCoordsBadge.textContent = isPinned
+            ? 'Mapa: X ' + pins[0].x + 'm, Y ' + pins[0].y + 'm' + (pins.length > 1 ? ' (+' + (pins.length - 1) + ')' : '')
+            : 'Ainda não posicionada no mapa';
+        }
+        if (hudLine1) hudLine1.textContent = lines.line1;
+        if (hudLine2) hudLine2.textContent = lines.line2;
+        if (hudLine3) hudLine3.textContent = lines.line3;
+        if (hudFooterLeft) {
+          hudFooterLeft.textContent = lines.line4 + ' • Qtd: ' + (plantObj.quantidade || '1');
+        }
+        if (hudFooterRight) {
+          if (isPinned) {
+            var distCasa = Math.hypot(Number(pins[0].x) - 92.3, Number(pins[0].y) - 22.8).toFixed(1);
+            hudFooterRight.textContent = distCasa + 'm da Casa';
+          } else {
+            hudFooterRight.textContent = plantObj.status_cultivar || '';
+          }
+        }
+      }
+
+      function showStructureInDarkTriangleHud(structId) {
+        if (!hudInspector || !Lote.LOTE_GEOMETRY || isDraggingAnyPin || selectedPlantIdToPin) return;
+        var st = Lote.LOTE_GEOMETRY.structures.find(function (s) { return s.id === structId; });
+        if (!st) return;
+        hudInspector.classList.remove('hud-hidden');
+        hudInspector.style.borderColor = st.color || '#38bdf8';
+        if (hudBadgeType) {
+          hudBadgeType.textContent = 'Construção / Referência do Lote';
+          hudBadgeType.style.color = st.color || '#38bdf8';
+        }
+        if (hudCoordsBadge) {
+          hudCoordsBadge.textContent = 'Centro: X ' + Lote.pxToMeters(st.labelX) + 'm, Y ' + Lote.pxToMeters(st.labelY) + 'm';
+        }
+        if (hudLine1) hudLine1.textContent = st.name.toUpperCase();
+        if (hudLine2) hudLine2.textContent = 'Dimensões: ' + st.dimensionsMeters + ' • Área: ~' + st.areaSqMeters + ' m²';
+        if (hudLine3) {
+          hudLine3.textContent = st.description || 'Mapeado proporcionalmente a partir do Domo Geodésico (Ø 6,0 m = 60 px)';
+        }
+        if (hudFooterLeft) hudFooterLeft.textContent = st.url ? 'Artigo: ' + st.url : 'Escala: 1m = 10px';
+        if (hudFooterRight) hudFooterRight.textContent = 'Divisa Jair: 49,1m';
+      }
+
+      var structGroups = document.querySelectorAll('.map-structure-group');
+      for (var sg = 0; sg < structGroups.length; sg++) {
+        structGroups[sg].addEventListener('pointerenter', function (e) {
+          var sid = e.currentTarget.getAttribute('data-structure-id');
+          showStructureInDarkTriangleHud(sid);
+        });
+        structGroups[sg].addEventListener('pointerleave', function () {
+          hideDarkTriangleHud();
+        });
+        structGroups[sg].addEventListener('click', function (e) {
+          var surl = e.currentTarget.getAttribute('data-structure-url');
+          if (surl && !selectedPlantIdToPin) {
+            window.open(surl, '_blank', 'noopener');
+          }
+        });
+      }
+
+      var selectedPlantIdToPin = '';
+      var currentZoomScale = 1;
+
+      var activeFilters = {
+        query: '',
+        categoria_id: 'all'
+      };
+
+      function announceStatus(msg) {
+        if (statusEl) {
+          statusEl.textContent = msg;
+        }
+      }
+
+      function clampSvgCoord(x, y) {
+        return {
+          x: Math.max(15, Math.min(1175, x)),
+          y: Math.max(15, Math.min(585, y))
+        };
+      }
+
+      function setSelectedPlantToPin(plantId) {
+        selectedPlantIdToPin = plantId || '';
+        if (selectedPlantIdToPin) {
+          hideDarkTriangleHud();
+        }
+        if (pinningActiveHint && pinningActiveText) {
+          if (selectedPlantIdToPin) {
+            var pObj = plants.find(function (item) { return item.id === selectedPlantIdToPin; });
+            pinningActiveText.textContent = pObj
+              ? 'Posicionar "' + pObj.nome_popular + '": clique no local desejado do mapa acima'
+              : 'Clique no mapa acima para posicionar';
+            pinningActiveHint.hidden = false;
+          } else {
+            pinningActiveHint.hidden = true;
+          }
+        }
+        renderTreePalette();
+      }
+
+      if (btnCancelPinMode) {
+        btnCancelPinMode.addEventListener('click', function () {
+          setSelectedPlantToPin('');
+        });
+      }
+
+      function createCategoryIconBadge(catId, compact) {
+        var catObj = categoryMap[catId] || {
+          nome_categoria: catId,
+          icone: 'bi-tag-fill',
+          cor_hex: '#10b981'
+        };
+        var badge = document.createElement('span');
+        badge.className = 'cat-icon-badge';
+        badge.style.setProperty('--cat-color', catObj.cor_hex || '#10b981');
+        if (compact) {
+          badge.style.width = '22px';
+          badge.style.height = '22px';
+          badge.style.fontSize = '0.74rem';
+          badge.style.borderRadius = '6px';
+        }
+        badge.title = catObj.nome_categoria;
+
+        var icon = document.createElement('i');
+        icon.className = 'bi ' + (catObj.icone || 'bi-tag-fill');
+        icon.setAttribute('aria-hidden', 'true');
+
+        var sr = document.createElement('span');
+        sr.className = 'visually-hidden';
+        sr.textContent = catObj.nome_categoria;
+
+        badge.appendChild(icon);
+        badge.appendChild(sr);
+        return badge;
+      }
+
+      // Render interactive Bottom Fruit Palette (prioritizing unpinned fruits first, allowing multi-pin additions!)
+      function renderTreePalette() {
+        if (!paletteContainer) return;
+        while (paletteContainer.firstChild) paletteContainer.removeChild(paletteContainer.firstChild);
+
+        var q = paletteSearchInput ? paletteSearchInput.value.toLowerCase().trim() : '';
+        var stateFilter = paletteFilterState ? paletteFilterState.value : 'all';
+
+        // Sort so unpinned or partially pinned fruits come FIRST, followed by fully pinned fruits
+        var orderedForPalette = plants.slice().sort(function (a, b) {
+          var aPins = Lote.parsePlantPins(a).length;
+          var bPins = Lote.parsePlantPins(b).length;
+          var aTarget = Math.max(1, Lote.parseNumericQuantity(a.quantidade));
+          var bTarget = Math.max(1, Lote.parseNumericQuantity(b.quantidade));
+          var aComplete = aPins >= aTarget ? 1 : 0;
+          var bComplete = bPins >= bTarget ? 1 : 0;
+          if (aComplete !== bComplete) return aComplete - bComplete;
+          return (a.nome_popular || '').localeCompare(b.nome_popular || '', 'pt-BR');
+        });
+
+        for (var i = 0; i < orderedForPalette.length; i++) {
+          var p = orderedForPalette[i];
+          var pins = Lote.parsePlantPins(p);
+          var pinCount = pins.length;
+          var targetQty = Math.max(1, Lote.parseNumericQuantity(p.quantidade));
+          var isPinned = pinCount > 0;
+          var isFullyPinned = pinCount >= targetQty;
+
+          if (stateFilter === 'pinned' && !isPinned) continue;
+          if (stateFilter === 'unpinned' && isFullyPinned) continue;
+          if (q) {
+            var hay = (p.nome_popular + ' ' + p.nome_cientifico + ' ' + p.familia + ' ' + p.plantio).toLowerCase();
+            if (hay.indexOf(q) === -1) continue;
+          }
+
+          var item = document.createElement('div');
+          item.className = 'tree-palette-item ' +
+            (isFullyPinned ? 'is-pinned' : 'is-unpinned') +
+            (selectedPlantIdToPin === p.id ? ' active-to-pin' : '');
+          item.draggable = true;
+          item.tabIndex = 0;
+          item.setAttribute('role', 'option');
+          item.setAttribute('aria-selected', selectedPlantIdToPin === p.id ? 'true' : 'false');
+          item.dataset.plantId = p.id;
+          item.title = 'Arraste para o mapa ou clique para adicionar mais uma muda de ' + p.nome_popular;
+
+          var left = document.createElement('div');
+          left.className = 'd-flex align-items-center gap-2 text-truncate';
+          left.appendChild(createCategoryIconBadge(p.categoria_id, true));
+
+          var nameSpan = document.createElement('span');
+          nameSpan.className = 'fw-semibold text-truncate';
+          nameSpan.textContent = p.nome_popular;
+          left.appendChild(nameSpan);
+
+          var right = document.createElement('div');
+          right.className = 'd-flex align-items-center gap-1 flex-shrink-0';
+
+          if (isPinned) {
+            var coordBadge = document.createElement('span');
+            coordBadge.className = 'badge ' +
+              (isFullyPinned
+                ? 'bg-success bg-opacity-25 text-success border border-success border-opacity-50'
+                : 'bg-warning bg-opacity-25 text-warning border border-warning border-opacity-50') +
+              ' font-monospace';
+            coordBadge.style.fontSize = '0.64rem';
+            coordBadge.textContent = pinCount > 1 || targetQty > 1
+              ? pinCount + '/' + targetQty + ' (+1)'
+              : pins[0].x + ',' + pins[0].y + 'm (+1)';
+            right.appendChild(coordBadge);
+
+            var unpinBtn = document.createElement('button');
+            unpinBtn.type = 'button';
+            unpinBtn.className = 'btn btn-link btn-sm text-danger p-0 ms-1 btn-unpin-item';
+            unpinBtn.dataset.unpinId = p.id;
+            unpinBtn.title = pinCount > 1 ? 'Remover último pino desta planta' : 'Remover pino do mapa';
+            unpinBtn.setAttribute('aria-label', 'Remover pino de ' + p.nome_popular);
+            var trashIcon = document.createElement('i');
+            trashIcon.className = 'bi bi-x-circle';
+            trashIcon.setAttribute('aria-hidden', 'true');
+            unpinBtn.appendChild(trashIcon);
+            right.appendChild(unpinBtn);
+          } else {
+            var unpinnedBadge = document.createElement('span');
+            unpinnedBadge.className = 'badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25';
+            unpinnedBadge.style.fontSize = '0.64rem';
+            unpinnedBadge.textContent = targetQty > 1 ? '0/' + targetQty + ' fixadas' : 'Falta fixar';
+            right.appendChild(unpinnedBadge);
+          }
+
+          item.appendChild(left);
+          item.appendChild(right);
+
+          item.addEventListener('pointerenter', function (evt) {
+            var pid = evt.currentTarget.dataset.plantId;
+            var pHover = plants.find(function (pl) { return pl.id === pid; });
+            if (pHover) showPlantInDarkTriangleHud(pHover);
+          });
+
+          item.addEventListener('focus', function (evt) {
+            var pid = evt.currentTarget.dataset.plantId;
+            var pHover = plants.find(function (pl) { return pl.id === pid; });
+            if (pHover) showPlantInDarkTriangleHud(pHover);
+          });
+
+          item.addEventListener('pointerleave', function () {
+            hideDarkTriangleHud();
+          });
+
+          item.addEventListener('dragstart', function (evt) {
+            isDraggingAnyPin = true;
+            hideDarkTriangleHud();
+            var pid = evt.currentTarget.dataset.plantId;
+            if (evt.dataTransfer) {
+              evt.dataTransfer.setData('text/plain', pid);
+              evt.dataTransfer.effectAllowed = 'copyMove';
+            }
+          });
+
+          item.addEventListener('dragend', function () {
+            isDraggingAnyPin = false;
+            hideDarkTriangleHud();
+          });
+
+          item.addEventListener('click', function (evt) {
+            if (evt.target.closest('.btn-unpin-item')) return;
+            var pid = evt.currentTarget.dataset.plantId;
+            setSelectedPlantToPin(selectedPlantIdToPin === pid ? '' : pid);
+          });
+
+          item.addEventListener('keydown', function (evt) {
+            if (evt.key === 'Enter' || evt.key === ' ') {
+              evt.preventDefault();
+              var pid = evt.currentTarget.dataset.plantId;
+              setSelectedPlantToPin(selectedPlantIdToPin === pid ? '' : pid);
+            }
+          });
+
+          paletteContainer.appendChild(item);
+        }
+      }
+
+      if (paletteSearchInput) {
+        paletteSearchInput.addEventListener('input', renderTreePalette);
+      }
+      if (paletteFilterState) {
+        paletteFilterState.addEventListener('change', renderTreePalette);
+      }
+
+      // Attach pointer-capture dragging & keyboard movement to a specific SVG plant pin (supporting multi-pin!)
+      function wireDraggablePin(gEl, plantObj, pinIndex) {
+        var pointerOffsetX = 0;
+        var pointerOffsetY = 0;
+        var startSvgX = 0;
+        var startSvgY = 0;
+        var hasMoved = false;
+
+        function getCurrentPinPt() {
+          var pins = Lote.parsePlantPins(plantObj);
+          return pins[pinIndex] || pins[0] || { x: 60, y: 60 };
+        }
+
+        function setPinSvgCoordinates(nx, ny) {
+          var clamped = clampSvgCoord(nx, ny);
+          var invZ = Math.round((1 / Math.max(1, currentZoomScale || 1)) * 1000) / 1000;
+          gEl.setAttribute('transform', 'translate(' + clamped.x + ', ' + clamped.y + ') scale(' + invZ + ')');
+
+          var pins = Lote.parsePlantPins(plantObj);
+          if (pins[pinIndex]) {
+            pins[pinIndex].x = Lote.pxToMeters(clamped.x);
+            pins[pinIndex].y = Lote.pxToMeters(clamped.y);
+            Lote.setPlantPins(plantObj, pins, false);
+          }
+
+          if (mapCursorReadout) {
+            mapCursorReadout.textContent = plantObj.nome_popular +
+              (pins.length > 1 ? ' #' + (pinIndex + 1) : '') +
+              ': X ' + Lote.pxToMeters(clamped.x) + 'm, Y ' + Lote.pxToMeters(clamped.y) + 'm';
+          }
+        }
+
+        gEl.addEventListener('pointerenter', function () {
+          showPlantInDarkTriangleHud(plantObj);
+        });
+
+        gEl.addEventListener('pointerleave', function () {
+          hideDarkTriangleHud();
+        });
+
+        gEl.addEventListener('focus', function () {
+          showPlantInDarkTriangleHud(plantObj);
+        });
+
+        gEl.addEventListener('blur', function () {
+          hideDarkTriangleHud();
+        });
+
+        gEl.addEventListener('pointerdown', function (event) {
+          if (event.button !== 0) return;
+          event.stopPropagation();
+          isDraggingAnyPin = true;
+          hideDarkTriangleHud();
+          var pt = getSvgPointFromEvent(event);
+          var curPin = getCurrentPinPt();
+          var curX = Lote.metersToPx(curPin.x);
+          var curY = Lote.metersToPx(curPin.y);
+          pointerOffsetX = pt.x - curX;
+          pointerOffsetY = pt.y - curY;
+          startSvgX = pt.x;
+          startSvgY = pt.y;
+          hasMoved = false;
+          gEl.setPointerCapture(event.pointerId);
+        });
+
+        gEl.addEventListener('pointermove', function (event) {
+          if (!gEl.hasPointerCapture(event.pointerId)) return;
+          hideDarkTriangleHud();
+          var pt = getSvgPointFromEvent(event);
+          if (!hasMoved && Math.hypot(pt.x - startSvgX, pt.y - startSvgY) < 2.5) {
+            return;
+          }
+          hasMoved = true;
+          gEl.classList.add('dragging');
+          setPinSvgCoordinates(pt.x - pointerOffsetX, pt.y - pointerOffsetY);
+        });
+
+        gEl.addEventListener('lostpointercapture', function () {
+          isDraggingAnyPin = false;
+          hideDarkTriangleHud();
+          if (gEl.classList.contains('dragging')) {
+            gEl.classList.remove('dragging');
+            savePlantsToStorage();
+            syncDOMFromPlantsArray();
+            announceStatus(plantObj.nome_popular + ' movida no mapa');
+          }
+        });
+
+        // Keyboard arrow keys support for accessibility + Delete/Backspace to remove an individual pin
+        gEl.addEventListener('keydown', function (event) {
+          if (event.key === 'Delete' || event.key === 'Backspace') {
+            event.preventDefault();
+            var pinsAfterRemove = Lote.parsePlantPins(plantObj);
+            pinsAfterRemove.splice(pinIndex, 1);
+            Lote.setPlantPins(plantObj, pinsAfterRemove, true);
+            savePlantsToStorage();
+            syncDOMFromPlantsArray();
+            announceStatus('Pino removido de ' + plantObj.nome_popular);
+            return;
+          }
+
+          var stepPx = event.shiftKey ? 1 : 5;
+          var curPin = getCurrentPinPt();
+          var curX = Lote.metersToPx(curPin.x);
+          var curY = Lote.metersToPx(curPin.y);
+          var dirName = '';
+
+          if (event.key === 'ArrowLeft') { curX -= stepPx; dirName = 'para a esquerda'; }
+          else if (event.key === 'ArrowRight') { curX += stepPx; dirName = 'para a direita'; }
+          else if (event.key === 'ArrowUp') { curY -= stepPx; dirName = 'para cima'; }
+          else if (event.key === 'ArrowDown') { curY += stepPx; dirName = 'para baixo'; }
+          else if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openEditDialog(plantObj.id);
+            return;
+          } else {
+            return;
+          }
+
+          event.preventDefault();
+          setPinSvgCoordinates(curX, curY);
+          savePlantsToStorage();
+          renderMapPins();
+          renderTreePalette();
+          announceStatus(plantObj.nome_popular + ' movida ' + dirName);
+        });
+      }
+
+      // Render Plant Pins on the Proportional SVG Map with Smart Angular Label Rotation & Multi-Pin support
+      function renderMapPins() {
+        if (!svgPinsLayer) return;
+        while (svgPinsLayer.firstChild) svgPinsLayer.removeChild(svgPinsLayer.firstChild);
+
+        var matched = Lote.filterPlants(plants, activeFilters);
+        var matchedIds = {};
+        for (var m = 0; m < matched.length; m++) {
+          matchedIds[matched[m].id] = true;
+        }
+
+        var pinnedItems = [];
+        var varietiesWithPinCount = 0;
+        for (var k = 0; k < plants.length; k++) {
+          var plantPins = Lote.parsePlantPins(plants[k]);
+          if (plantPins.length > 0) {
+            varietiesWithPinCount += 1;
+            for (var pi = 0; pi < plantPins.length; pi++) {
+              var suffix = plantPins.length > 1 ? ' #' + (pi + 1) : '';
+              pinnedItems.push({
+                id: plants[k].id + '__' + pi,
+                plantId: plants[k].id,
+                pinIndex: pi,
+                totalForPlant: plantPins.length,
+                pinX: plantPins[pi].x,
+                pinY: plantPins[pi].y,
+                cx: Lote.metersToPx(plantPins[pi].x),
+                cy: Lote.metersToPx(plantPins[pi].y),
+                text: plants[k].nome_popular + suffix,
+                plant: plants[k]
+              });
+            }
+          }
+        }
+
+        var zScale = Math.max(1, currentZoomScale || 1);
+        var invZ = Math.round((1 / zScale) * 1000) / 1000;
+        var labelPlacements = Lote.computePinLabelPlacements(pinnedItems, zScale);
+
+        for (var i = 0; i < pinnedItems.length; i++) {
+          var item = pinnedItems[i];
+          var p = item.plant;
+          var cx = item.cx;
+          var cy = item.cy;
+          var placement = labelPlacements[item.id] || {
+            angleDeg: 0,
+            anchor: 'start',
+            localLabelX: 8.5,
+            localLabelY: 0,
+            localLineX2: 6.5,
+            localLineY2: 0,
+            isRotated: false
+          };
+          var lx = placement.localLabelX !== undefined ? placement.localLabelX : 8.5;
+          var ly = placement.localLabelY !== undefined ? placement.localLabelY : 0;
+          var l2x = placement.localLineX2 !== undefined ? placement.localLineX2 : 6.5;
+          var l2y = placement.localLineY2 !== undefined ? placement.localLineY2 : 0;
+
+          var catObj = categoryMap[p.categoria_id] || { cor_hex: '#10b981', nome_categoria: '' };
+          var isVisible = Boolean(matchedIds[p.id]);
+
+          var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+          g.setAttribute('class', 'map-plant-pin');
+          g.setAttribute('data-plant-id', p.id);
+          g.setAttribute('data-pin-index', String(item.pinIndex));
+          g.setAttribute('tabindex', '0');
+          g.setAttribute('role', 'button');
+          g.setAttribute('aria-label', item.text + ' pino no mapa. Use as setas do teclado para mover ou Delete para remover.');
+          g.setAttribute('opacity', isVisible ? '1' : '0.22');
+          g.setAttribute('transform', 'translate(' + cx + ', ' + cy + ') scale(' + invZ + ')');
+
+          var title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+          title.textContent = item.text + ' (' + p.nome_cientifico + ') — X: ' + item.pinX + 'm, Y: ' + item.pinY + 'm (Arraste para mover, Delete para remover)';
+          g.appendChild(title);
+
+          var leader = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          leader.setAttribute('class', 'pin-leader-line');
+          leader.setAttribute('x1', '0');
+          leader.setAttribute('y1', '0');
+          leader.setAttribute('x2', String(l2x));
+          leader.setAttribute('y2', String(l2y));
+          g.appendChild(leader);
+
+          var halo = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          halo.setAttribute('class', 'pin-halo-circle');
+          halo.setAttribute('cx', '0');
+          halo.setAttribute('cy', '0');
+          halo.setAttribute('r', '7.5');
+          halo.setAttribute('fill', catObj.cor_hex || '#10b981');
+          halo.setAttribute('fill-opacity', '0.26');
+          g.appendChild(halo);
+
+          var dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          dot.setAttribute('class', 'pin-main-circle');
+          dot.setAttribute('cx', '0');
+          dot.setAttribute('cy', '0');
+          dot.setAttribute('r', '4.0');
+          dot.setAttribute('fill', catObj.cor_hex || '#10b981');
+          dot.setAttribute('stroke', '#ffffff');
+          dot.setAttribute('stroke-width', '1.3');
+          g.appendChild(dot);
+
+          var label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+          label.setAttribute('class', 'pin-text-label');
+          label.setAttribute('x', String(lx));
+          label.setAttribute('y', String(ly + 2.8));
+          label.setAttribute('text-anchor', placement.anchor);
+          label.setAttribute('fill', '#ffffff');
+          label.setAttribute('font-size', '8.2');
+          label.setAttribute('font-weight', '700');
+          if (placement.angleDeg !== 0) {
+            label.setAttribute(
+              'transform',
+              'rotate(' + placement.angleDeg + ', ' + lx + ', ' + ly + ')'
+            );
+          }
+          label.textContent = item.text;
+          g.appendChild(label);
+
+          wireDraggablePin(g, p, item.pinIndex);
+          svgPinsLayer.appendChild(g);
+        }
+
+        if (pinnedPlantsCounter) {
+          pinnedPlantsCounter.textContent = varietiesWithPinCount + ' var. (' + pinnedItems.length + ' pinos)';
+        }
+      }
+
+      // Build a single 4-line plaque card DOM node safely without innerHTML
+      function createPlaqueElement(p) {
+        var lines = Lote.formatPlaqueLines(p);
+        var article = document.createElement('article');
+        article.className = 'plaque-card';
+        article.dataset.plantId = p.id;
+        article.dataset.categoriaId = p.categoria_id;
+        article.dataset.secao = p.secao_lote;
+        article.dataset.plantio = p.plantio;
+        article.dataset.ano = p.ano_base;
+        article.dataset.familia = p.familia;
+        article.dataset.status = p.status_cultivar;
+
+        var actionsFloating = document.createElement('div');
+        actionsFloating.className = 'plaque-actions-floating no-print';
+        actionsFloating.appendChild(createCategoryIconBadge(p.categoria_id, true));
+
+        var editBtn = document.createElement('button');
+        editBtn.type = 'button';
+        editBtn.className = 'btn btn-link btn-sm text-secondary p-0 btn-edit-plant';
+        editBtn.dataset.editId = p.id;
+        editBtn.setAttribute('aria-label', 'Editar plaquinha de ' + p.nome_popular);
+        var editIcon = document.createElement('i');
+        editIcon.className = 'bi bi-pencil-square';
+        editIcon.setAttribute('aria-hidden', 'true');
+        editBtn.appendChild(editIcon);
+        actionsFloating.appendChild(editBtn);
+
+        var l1 = document.createElement('div');
+        l1.className = 'plaque-line-1';
+        l1.textContent = lines.line1;
+
+        var l2 = document.createElement('div');
+        l2.className = 'plaque-line-2';
+        var em = document.createElement('em');
+        em.textContent = lines.scientific;
+        var sep = document.createTextNode(' • ');
+        var fam = document.createElement('span');
+        fam.textContent = lines.family;
+        l2.appendChild(em);
+        l2.appendChild(sep);
+        l2.appendChild(fam);
+
+        var l3 = document.createElement('div');
+        l3.className = 'plaque-line-3';
+        l3.textContent = lines.line3;
+
+        var l4 = document.createElement('div');
+        l4.className = 'plaque-line-4';
+        l4.textContent = lines.line4;
+
+        article.appendChild(actionsFloating);
+        article.appendChild(l1);
+        article.appendChild(l2);
+        article.appendChild(l3);
+        article.appendChild(l4);
+        return article;
+      }
+
+      // Build a single table row DOM node safely without innerHTML
+      function createTableRowElement(p) {
+        var tr = document.createElement('tr');
+        tr.dataset.plantId = p.id;
+        tr.dataset.categoriaId = p.categoria_id;
+        tr.dataset.secao = p.secao_lote;
+        tr.dataset.plantio = p.plantio;
+        tr.dataset.ano = p.ano_base;
+        tr.dataset.familia = p.familia;
+        tr.dataset.status = p.status_cultivar;
+
+        var th = document.createElement('th');
+        th.scope = 'row';
+        th.dataset.value = p.nome_popular;
+        var strong = document.createElement('span');
+        strong.className = 'fw-bold';
+        strong.textContent = p.nome_popular;
+        th.appendChild(strong);
+        if (p.nota_variedade) {
+          var note = document.createElement('small');
+          note.className = 'd-block text-warning fw-normal';
+          note.textContent = '(' + p.nota_variedade + ')';
+          th.appendChild(note);
+        }
+
+        var catObj = categoryMap[p.categoria_id] || { nome_categoria: p.categoria_id };
+        var tdCat = document.createElement('td');
+        tdCat.dataset.value = catObj.nome_categoria;
+        tdCat.appendChild(createCategoryIconBadge(p.categoria_id, false));
+
+        var tdSci = document.createElement('td');
+        tdSci.dataset.value = p.nome_cientifico;
+        var em = document.createElement('em');
+        em.textContent = p.nome_cientifico;
+        tdSci.appendChild(em);
+
+        var tdFam = document.createElement('td');
+        tdFam.dataset.value = p.familia;
+        tdFam.textContent = p.familia;
+
+        var tdOrig = document.createElement('td');
+        tdOrig.dataset.value = p.origem;
+        tdOrig.textContent = p.origem;
+
+        var tdPlantio = document.createElement('td');
+        tdPlantio.dataset.value = String(Lote.plantingSortValue(p.plantio));
+        tdPlantio.textContent = p.plantio;
+
+        var tdQtd = document.createElement('td');
+        tdQtd.dataset.value = String(Lote.parseNumericQuantity(p.quantidade));
+        tdQtd.textContent = p.quantidade;
+
+        var tdAct = document.createElement('td');
+        var actGroup = document.createElement('div');
+        actGroup.className = 'd-inline-flex align-items-center gap-1';
+
+        var hasCoords = Lote.hasValidCoords(p);
+        var pinBtn = document.createElement('button');
+        pinBtn.type = 'button';
+        pinBtn.className = 'btn btn-sm ' + (hasCoords ? 'btn-success' : 'btn-outline-success') + ' py-0 px-2 btn-pin-plant';
+        pinBtn.dataset.pinId = p.id;
+        pinBtn.title = hasCoords
+          ? 'Fixada em X: ' + p.mapa_x + 'm, Y: ' + p.mapa_y + 'm (clique para reposicionar)'
+          : 'Posicionar ' + p.nome_popular + ' no mapa';
+        pinBtn.setAttribute('aria-label', 'Posicionar ' + p.nome_popular + ' no mapa');
+        var pinIcon = document.createElement('i');
+        pinIcon.className = hasCoords ? 'bi bi-geo-alt-fill' : 'bi bi-geo-alt';
+        pinIcon.setAttribute('aria-hidden', 'true');
+        pinBtn.appendChild(pinIcon);
+
+        var editBtn = document.createElement('button');
+        editBtn.type = 'button';
+        editBtn.className = 'btn btn-sm btn-outline-info py-0 px-2 btn-edit-plant';
+        editBtn.dataset.editId = p.id;
+        editBtn.setAttribute('aria-label', 'Editar ' + p.nome_popular);
+        var editIcon = document.createElement('i');
+        editIcon.className = 'bi bi-pencil';
+        editIcon.setAttribute('aria-hidden', 'true');
+        editBtn.appendChild(editIcon);
+
+        actGroup.appendChild(pinBtn);
+        actGroup.appendChild(editBtn);
+        tdAct.appendChild(actGroup);
+
+        tr.appendChild(th);
+        tr.appendChild(tdCat);
+        tr.appendChild(tdSci);
+        tr.appendChild(tdFam);
+        tr.appendChild(tdOrig);
+        tr.appendChild(tdPlantio);
+        tr.appendChild(tdQtd);
+        tr.appendChild(tdAct);
+        return tr;
+      }
+
+      function refreshKPIsAndCounts() {
+        var stats = Lote.computeLoteStats(plants, categories);
+        if (kpiVarieties) kpiVarieties.textContent = String(stats.totalVarieties);
+        if (allCatCount) allCatCount.textContent = String(stats.totalVarieties);
+        if (kpiIndividuals) kpiIndividuals.textContent = stats.totalIndividuals + '+';
+        if (kpiFamilies) kpiFamilies.textContent = String(stats.totalFamilies);
+        if (kpi2022) kpi2022.textContent = String(stats.byYear['2022']);
+        if (kpi2026) kpi2026.textContent = String(stats.byYear['2026'] + stats.byYear.outros);
+        if (kpiPending) kpiPending.textContent = String(stats.pendingConfirmCount);
+
+        for (var i = 0; i < categoryCountBadges.length; i++) {
+          var badge = categoryCountBadges[i];
+          var cid = badge.getAttribute('data-cat-count');
+          var cStats = stats.byCategory[cid];
+          badge.textContent = cStats ? String(cStats.varieties) : '0';
+        }
+
+        var rows = tbodyEl ? tbodyEl.rows : [];
+        for (var r = 0; r < rows.length; r++) {
+          var row = rows[r];
+          var pid = row.dataset.plantId;
+          var pObj = plants.find(function (item) { return item.id === pid; });
+          if (pObj && row.cells.length >= 7) {
+            row.cells[5].dataset.value = String(Lote.plantingSortValue(pObj.plantio));
+            row.cells[6].dataset.value = String(Lote.parseNumericQuantity(pObj.quantidade));
+          }
+        }
+        renderMapPins();
+        renderTreePalette();
+      }
+
+      function syncDOMFromPlantsArray() {
+        if (!plaqueGrid || !tbodyEl) return;
+        while (plaqueGrid.firstChild) plaqueGrid.removeChild(plaqueGrid.firstChild);
+        while (tbodyEl.firstChild) tbodyEl.removeChild(tbodyEl.firstChild);
+
+        for (var i = 0; i < plants.length; i++) {
+          plaqueGrid.appendChild(createPlaqueElement(plants[i]));
+          tbodyEl.appendChild(createTableRowElement(plants[i]));
+        }
+        refreshKPIsAndCounts();
+        applyFilters();
+      }
+
+      function applyFilters() {
+        var matched = Lote.filterPlants(plants, activeFilters);
+        var matchedIds = {};
+        for (var i = 0; i < matched.length; i++) {
+          matchedIds[matched[i].id] = true;
+        }
+
+        var cards = plaqueGrid ? plaqueGrid.children : [];
+        for (var c = 0; c < cards.length; c++) {
+          var card = cards[c];
+          card.hidden = !matchedIds[card.dataset.plantId];
+        }
+
+        var rows = tbodyEl ? tbodyEl.rows : [];
+        for (var r = 0; r < rows.length; r++) {
+          var row = rows[r];
+          row.hidden = !matchedIds[row.dataset.plantId];
+        }
+
+        if (visibleBadge) {
+          visibleBadge.textContent = 'Exibindo ' + matched.length + ' de ' + plants.length + ' variedades';
+        }
+        renderMapPins();
+        announceStatus('Filtro aplicado: ' + matched.length + ' de ' + plants.length + ' variedades visíveis');
+      }
+
+      if (localStorage.getItem(Lote.STORAGE_KEY_PLANTS)) {
+        syncDOMFromPlantsArray();
+      } else {
+        refreshKPIsAndCounts();
+      }
+
+      // Interactive SVG Map Coordinate Readout, Drop from Palette & Click-to-Pin
+      function getSvgPointFromEvent(evt) {
+        if (!svgMap) return { x: 0, y: 0 };
+        var pt = svgMap.createSVGPoint();
+        pt.x = evt.clientX;
+        pt.y = evt.clientY;
+        var ctm = svgMap.getScreenCTM();
+        if (!ctm) return { x: 0, y: 0 };
+        return pt.matrixTransform(ctm.inverse());
+      }
+
+      function placePlantAtSvgPoint(plantId, svgPt) {
+        var pObj = plants.find(function (item) { return item.id === plantId; });
+        if (!pObj) return;
+        var clamped = clampSvgCoord(svgPt.x, svgPt.y);
+        var currentPins = Lote.parsePlantPins(pObj);
+        currentPins.push({
+          index: currentPins.length,
+          x: Lote.pxToMeters(clamped.x),
+          y: Lote.pxToMeters(clamped.y)
+        });
+        Lote.setPlantPins(pObj, currentPins, true);
+        savePlantsToStorage();
+        syncDOMFromPlantsArray();
+        announceStatus(pObj.nome_popular + ' (muda #' + currentPins.length + ') posicionada no mapa • Quantidade: ' + pObj.quantidade);
+      }
+
+      if (svgMap) {
+        svgMap.addEventListener('pointermove', function (e) {
+          var loc = getSvgPointFromEvent(e);
+          var xm = Lote.pxToMeters(loc.x);
+          var ym = Lote.pxToMeters(loc.y);
+          if (mapCursorReadout) {
+            mapCursorReadout.textContent = 'X ' + xm.toFixed(1) + 'm, Y ' + ym.toFixed(1) + 'm';
+          }
+        });
+
+        svgMap.addEventListener('dragover', function (e) {
+          e.preventDefault();
+          hideDarkTriangleHud();
+          if (e.dataTransfer) e.dataTransfer.dropEffect = 'move';
+        });
+
+        svgMap.addEventListener('drop', function (e) {
+          e.preventDefault();
+          isDraggingAnyPin = false;
+          hideDarkTriangleHud();
+          var pid = e.dataTransfer ? e.dataTransfer.getData('text/plain') : '';
+          if (!pid) return;
+          var loc = getSvgPointFromEvent(e);
+          placePlantAtSvgPoint(pid, loc);
+          setSelectedPlantToPin('');
+        });
+
+        svgMap.addEventListener('click', function (e) {
+          if (e.target.closest('.map-plant-pin')) return;
+          if (!selectedPlantIdToPin) return;
+          var loc = getSvgPointFromEvent(e);
+          placePlantAtSvgPoint(selectedPlantIdToPin, loc);
+          setSelectedPlantToPin('');
+        });
+      }
+
+      // Hide/fold the left navigation sidebar by default on /lote/ to maximize map workspace
+      var globalSidebar = document.getElementById('appSidebar');
+      var globalLayout = document.querySelector('.app-layout');
+      if (globalSidebar) globalSidebar.classList.add('menu-folded');
+      if (globalLayout) globalLayout.classList.add('menu-folded');
+
+      // Fullscreen Mode Toggle (Native Fullscreen API + CSS Fixed Fallback) & Bottom Panel Hide Toggle
+      var btnToggleBottomDock = document.getElementById('btn-toggle-bottom-dock');
+      var bottomDockBtnLabel = document.getElementById('bottom-dock-btn-label');
+
+      function setBottomDockHidden(hidden) {
+        if (!mapStudioPanel) return;
+        mapStudioPanel.classList.toggle('bottom-dock-hidden', Boolean(hidden));
+        if (btnToggleBottomDock) {
+          btnToggleBottomDock.setAttribute('aria-pressed', hidden ? 'false' : 'true');
+          btnToggleBottomDock.classList.toggle('btn-outline-success', !hidden);
+          btnToggleBottomDock.classList.toggle('btn-outline-warning', Boolean(hidden));
+        }
+        if (bottomDockBtnLabel) {
+          bottomDockBtnLabel.textContent = hidden ? 'Mostrar Painel' : 'Ocultar Painel';
+        }
+        applyMapZoom(currentZoomScale || 1);
+      }
+
+      if (btnToggleBottomDock) {
+        btnToggleBottomDock.addEventListener('click', function () {
+          var currentlyHidden = mapStudioPanel && mapStudioPanel.classList.contains('bottom-dock-hidden');
+          setBottomDockHidden(!currentlyHidden);
+        });
+      }
+
+      function isMapFullscreen() {
+        return document.fullscreenElement === mapStudioPanel ||
+          (mapStudioPanel && mapStudioPanel.classList.contains('map-fullscreen-active'));
+      }
+
+      function updateFullscreenButtonUI() {
+        var active = isMapFullscreen();
+        if (btnMapFullscreen) {
+          btnMapFullscreen.setAttribute('aria-pressed', active ? 'true' : 'false');
+          btnMapFullscreen.classList.toggle('btn-warning', active);
+          btnMapFullscreen.classList.toggle('btn-primary', !active);
+        }
+        if (fullscreenBtnLabel) {
+          fullscreenBtnLabel.textContent = active ? 'Sair da Tela Cheia' : 'Tela Cheia';
+        }
+        applyMapZoom(currentZoomScale || 1);
+      }
+
+      if (btnMapFullscreen && mapStudioPanel) {
+        btnMapFullscreen.addEventListener('click', function () {
+          if (isMapFullscreen()) {
+            if (document.fullscreenElement === mapStudioPanel && document.exitFullscreen) {
+              document.exitFullscreen();
+            }
+            mapStudioPanel.classList.remove('map-fullscreen-active');
+            updateFullscreenButtonUI();
+          } else {
+            mapStudioPanel.classList.add('map-fullscreen-active');
+            if (mapStudioPanel.requestFullscreen) {
+              mapStudioPanel.requestFullscreen().catch(function () {
+                // Keep CSS fixed fullscreen active if browser blocks native requestFullscreen
+              });
+            }
+            updateFullscreenButtonUI();
+          }
+        });
+      }
+
+      document.addEventListener('fullscreenchange', function () {
+        if (!document.fullscreenElement && mapStudioPanel) {
+          mapStudioPanel.classList.remove('map-fullscreen-active');
+        }
+        updateFullscreenButtonUI();
+      });
+
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && mapStudioPanel && mapStudioPanel.classList.contains('map-fullscreen-active') && !document.fullscreenElement) {
+          mapStudioPanel.classList.remove('map-fullscreen-active');
+          updateFullscreenButtonUI();
+        }
+      });
+
+      var svgScrollStage = document.getElementById('lote-svg-scroll-stage');
+      var BASE_SVG_WIDTH = 1190;
+
+      function applyMapZoom(scaleFactor) {
+        var clampedScale = Math.max(1, Math.min(5, Number(scaleFactor) || 1));
+        if (!svgMap || !svgScrollStage) return;
+
+        var stageWidth = Math.max(BASE_SVG_WIDTH, svgScrollStage.clientWidth || BASE_SVG_WIDTH);
+        var stageHeight = Math.max(600, svgScrollStage.clientHeight || 600);
+
+        // Preserve center point ratio when changing zoom level
+        var prevScrollWidth = svgScrollStage.scrollWidth || stageWidth;
+        var prevScrollHeight = svgScrollStage.scrollHeight || stageHeight;
+        var centerRatioX = (svgScrollStage.scrollLeft + svgScrollStage.clientWidth / 2) / prevScrollWidth;
+        var centerRatioY = (svgScrollStage.scrollTop + svgScrollStage.clientHeight / 2) / prevScrollHeight;
+
+        currentZoomScale = clampedScale;
+        var fullActive = isMapFullscreen();
+        if (clampedScale === 1) {
+          svgMap.style.maxWidth = 'none';
+          svgMap.style.width = '100%';
+          svgMap.style.height = fullActive ? '100%' : 'auto';
+        } else {
+          var targetW = Math.round(stageWidth * clampedScale);
+          var targetH = Math.round((fullActive ? stageHeight : (stageWidth * 600 / 1190)) * clampedScale);
+          svgMap.style.maxWidth = 'none';
+          svgMap.style.width = targetW + 'px';
+          svgMap.style.height = fullActive ? targetH + 'px' : 'auto';
+        }
+
+        for (var k = 0; k < zoomBtns.length; k++) {
+          var btnScale = Number(zoomBtns[k].getAttribute('data-zoom-scale'));
+          zoomBtns[k].classList.toggle('active', Math.abs(btnScale - clampedScale) < 0.05);
+        }
+
+        // Re-render pins with inverse zoom scale so pins and labels remain constant screen size
+        renderMapPins();
+
+        requestAnimationFrame(function () {
+          var newScrollWidth = svgScrollStage.scrollWidth;
+          var newScrollHeight = svgScrollStage.scrollHeight;
+          svgScrollStage.scrollLeft = Math.max(0, centerRatioX * newScrollWidth - svgScrollStage.clientWidth / 2);
+          svgScrollStage.scrollTop = Math.max(0, centerRatioY * newScrollHeight - svgScrollStage.clientHeight / 2);
+        });
+      }
+
+      for (var z = 0; z < zoomBtns.length; z++) {
+        zoomBtns[z].addEventListener('click', function (e) {
+          var btn = e.currentTarget;
+          var scale = Number(btn.getAttribute('data-zoom-scale')) || 1;
+          applyMapZoom(scale);
+        });
+      }
+
+      if (svgScrollStage) {
+        svgScrollStage.addEventListener('wheel', function (e) {
+          if (e.ctrlKey || e.metaKey) {
+            e.preventDefault();
+            var delta = e.deltaY < 0 ? 0.5 : -0.5;
+            applyMapZoom(currentZoomScale + delta);
+          }
+        }, { passive: false });
+      }
+
+      if (btnToggleSatellite && svgSatelliteLayer) {
+        btnToggleSatellite.addEventListener('click', function () {
+          var isPressed = btnToggleSatellite.getAttribute('aria-pressed') === 'true';
+          var nextState = !isPressed;
+          btnToggleSatellite.setAttribute('aria-pressed', nextState ? 'true' : 'false');
+          svgSatelliteLayer.style.display = nextState ? '' : 'none';
+        });
+      }
+
+      if (btnToggleGrid && svgGridLayer) {
+        btnToggleGrid.addEventListener('click', function () {
+          var isPressed = btnToggleGrid.getAttribute('aria-pressed') === 'true';
+          var nextState = !isPressed;
+          btnToggleGrid.setAttribute('aria-pressed', nextState ? 'true' : 'false');
+          svgGridLayer.style.display = nextState ? '' : 'none';
+        });
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', function () {
+          activeFilters.query = searchInput.value;
+          applyFilters();
+        });
+      }
+
+      function updateCategoryUI(selectedBtn) {
+        var isAll = !selectedBtn || activeFilters.categoria_id === 'all';
+        if (btnResetCategory) {
+          btnResetCategory.setAttribute('aria-pressed', isAll ? 'true' : 'false');
+        }
+        for (var j = 0; j < categoryPills.length; j++) {
+          var active = !isAll && categoryPills[j].getAttribute('data-category-id') === activeFilters.categoria_id;
+          categoryPills[j].setAttribute('aria-pressed', active ? 'true' : 'false');
+        }
+
+        if (isAll) {
+          if (activeCategoryLabel) activeCategoryLabel.textContent = 'Todas as 10 categorias selecionadas';
+          if (categoryDetailBanner) categoryDetailBanner.hidden = true;
+        } else if (selectedBtn) {
+          var cName = selectedBtn.getAttribute('data-category-name') || '';
+          var cStratum = selectedBtn.getAttribute('data-category-stratum') || '';
+          var cDesc = selectedBtn.getAttribute('data-category-desc') || '';
+          if (activeCategoryLabel) activeCategoryLabel.textContent = 'Categoria ativa: ' + cName;
+          if (categoryBannerTitle) categoryBannerTitle.textContent = cName;
+          if (categoryBannerStratum) categoryBannerStratum.textContent = cStratum;
+          if (categoryBannerDesc) categoryBannerDesc.textContent = cDesc;
+          if (categoryDetailBanner) categoryDetailBanner.hidden = false;
+        }
+      }
+
+      for (var i = 0; i < categoryPills.length; i++) {
+        categoryPills[i].addEventListener('click', function (e) {
+          var btn = e.currentTarget;
+          var cid = btn.getAttribute('data-category-id');
+          var isAlreadyActive = activeFilters.categoria_id === cid;
+          activeFilters.categoria_id = isAlreadyActive ? 'all' : cid;
+          updateCategoryUI(isAlreadyActive ? null : btn);
+          applyFilters();
+        });
+      }
+
+      if (btnResetCategory) {
+        btnResetCategory.addEventListener('click', function () {
+          activeFilters.categoria_id = 'all';
+          updateCategoryUI(null);
+          applyFilters();
+        });
+      }
+
+      if (materialSelect && plaqueGrid) {
+        materialSelect.addEventListener('change', function () {
+          plaqueGrid.className = 'plaque-grid ' + materialSelect.value;
+          announceStatus('Tema visual das plaquinhas alterado para ' + materialSelect.options[materialSelect.selectedIndex].text);
+        });
+      }
+
+      // View Mode Switcher: Tabela (Default) <-> Plaquinhas
+      function setViewMode(mode) {
+        for (var k = 0; k < viewModeBtns.length; k++) {
+          var isTarget = viewModeBtns[k].getAttribute('data-view-mode') === mode;
+          viewModeBtns[k].setAttribute('aria-pressed', isTarget ? 'true' : 'false');
+        }
+        if (sectionTable) sectionTable.hidden = mode !== 'table';
+        if (sectionPlaques) sectionPlaques.hidden = mode !== 'plaques';
+        if (materialWrapper) materialWrapper.hidden = mode !== 'plaques';
+      }
+
+      for (var v = 0; v < viewModeBtns.length; v++) {
+        viewModeBtns[v].addEventListener('click', function (e) {
+          var btn = e.currentTarget;
+          var mode = btn.getAttribute('data-view-mode');
+          setViewMode(mode);
+          announceStatus('Visualização alterada para ' + btn.textContent.trim());
+        });
+      }
+
+      // Sortable Table (following modern-web-guidance: sortable-table & dynamic-sort)
+      var collator = new Intl.Collator('pt-BR', { numeric: true, sensitivity: 'base' });
+
+      function reorderNodes(container, orderedNodes) {
+        var move = Object.hasOwn(Element.prototype, 'moveBefore')
+          ? function (node) { container.moveBefore(node, null); }
+          : function (node) { container.append(node); };
+        for (var idx = 0; idx < orderedNodes.length; idx++) {
+          move(orderedNodes[idx]);
+        }
+      }
+
+      function reorderWithTransition(container, orderedNodes) {
+        var update = function () { reorderNodes(container, orderedNodes); };
+        if (tableEl && tableEl.startViewTransition) {
+          tableEl.startViewTransition(update);
+        } else if (document.startViewTransition) {
+          document.startViewTransition(update);
+        } else {
+          update();
+        }
+      }
+
+      function sortRows(rows, cellIndex, type, direction) {
+        var factor = direction === 'ascending' ? 1 : -1;
+        var getValue = function (row) {
+          var cell = row.cells[cellIndex];
+          return (cell.dataset.value !== undefined ? cell.dataset.value : cell.textContent).trim();
+        };
+        return rows.sort(function (a, b) {
+          if (type === 'number') {
+            return factor * (Number(getValue(a)) - Number(getValue(b)));
+          }
+          return factor * collator.compare(getValue(a), getValue(b));
+        });
+      }
+
+      function handleSortActivation(buttonEl) {
+        if (!tableEl || !tbodyEl || !buttonEl) return;
+        var th = buttonEl.closest('th');
+        if (!th) return;
+        var direction = th.getAttribute('aria-sort') === 'ascending' ? 'descending' : 'ascending';
+
+        var headerCells = tableEl.tHead.rows[0].cells;
+        for (var h = 0; h < headerCells.length; h++) {
+          headerCells[h].removeAttribute('aria-sort');
+        }
+        th.setAttribute('aria-sort', direction);
+
+        var rows = Array.prototype.slice.call(tbodyEl.rows);
+        var sorted = sortRows(rows, th.cellIndex, th.dataset.type, direction);
+        reorderWithTransition(tbodyEl, sorted);
+
+        var dirLabel = direction === 'ascending' ? 'crescente' : 'decrescente';
+        announceStatus('Tabela ordenada por ' + buttonEl.textContent.trim() + ', ordem ' + dirLabel + ', ' + sorted.length + ' linhas');
+      }
+
+      if (tableEl) {
+        tableEl.addEventListener('command', function (event) {
+          if (event.command !== '--sort') return;
+          handleSortActivation(event.source);
+        });
+
+        if (!('commandForElement' in HTMLButtonElement.prototype)) {
+          var sortButtons = tableEl.querySelectorAll('thead th > button[command="--sort"]');
+          for (var sb = 0; sb < sortButtons.length; sb++) {
+            sortButtons[sb].addEventListener('click', function (e) {
+              handleSortActivation(e.currentTarget);
+            });
+          }
+        }
+      }
+
+      // Native Dialog Modal & Light-Dismiss Fallback (following modern-web-guidance: dialog)
+      var editDialog = document.getElementById('edit-plant-dialog');
+      var btnCloseDialogTop = document.getElementById('btn-close-dialog-top');
+
+      if (!('closedBy' in HTMLDialogElement.prototype) && editDialog) {
+        var outside = function (e, dialog) {
+          var r = dialog.getBoundingClientRect();
+          return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom;
+        };
+        var pressedOutside = false;
+        editDialog.addEventListener('pointerdown', function (e) {
+          pressedOutside = outside(e, editDialog);
+        });
+        editDialog.addEventListener('pointerup', function (e) {
+          if (pressedOutside && outside(e, editDialog)) editDialog.close();
+        });
+      }
+
+      if (btnCloseDialogTop && editDialog) {
+        btnCloseDialogTop.addEventListener('click', function () {
+          editDialog.close('cancel');
+        });
+      }
+
+      function openEditDialog(plantId) {
+        if (!editDialog) return;
+        var p = plants.find(function (item) { return item.id === plantId; });
+        var isNew = !p;
+        if (isNew) {
+          p = {
+            id: 'planta-' + Date.now(),
+            nome_popular: '',
+            nota_variedade: '',
+            nome_cientifico: '',
+            familia: '',
+            origem: 'Brasil',
+            plantio: 'Nov/2026',
+            ano_base: '2026',
+            secao_lote: '2. Expansão de Frutíferas (2026)',
+            quantidade: '1',
+            categoria_id: 'nativas-mata-atlantica-cerrado',
+            placa_linha_3: 'Nativa do Brasil',
+            status_cultivar: 'Confirmado',
+            mapa_x: '',
+            mapa_y: ''
+          };
+        }
+
+        document.getElementById('edit-plant-dialog-title').textContent = isNew
+          ? 'Adicionar Nova Planta ao Lote'
+          : 'Editar / Confirmar Plaquinha: ' + p.nome_popular;
+        document.getElementById('edit-plant-id').value = p.id;
+        document.getElementById('edit-nome-popular').value = p.nome_popular || '';
+        document.getElementById('edit-quantidade').value = p.quantidade || '1';
+        document.getElementById('edit-nome-cientifico').value = p.nome_cientifico || '';
+        document.getElementById('edit-familia').value = p.familia || '';
+        document.getElementById('edit-placa-linha-3').value = p.placa_linha_3 || p.origem || '';
+        document.getElementById('edit-origem').value = p.origem || '';
+        document.getElementById('edit-plantio').value = p.plantio || '';
+        document.getElementById('edit-categoria-id').value = p.categoria_id || 'citricas';
+        document.getElementById('edit-status-cultivar').value = p.status_cultivar || 'Confirmado';
+        document.getElementById('edit-mapa-x').value = p.mapa_x || '';
+        document.getElementById('edit-mapa-y').value = p.mapa_y || '';
+        document.getElementById('edit-nota-variedade').value = p.nota_variedade || '';
+
+        editDialog.showModal();
+      }
+
+      document.addEventListener('click', function (e) {
+        var unpinBtn = e.target.closest('.btn-unpin-item');
+        if (unpinBtn) {
+          var uid = unpinBtn.dataset.unpinId;
+          var upObj = plants.find(function (item) { return item.id === uid; });
+          if (upObj) {
+            var existingPins = Lote.parsePlantPins(upObj);
+            if (existingPins.length > 1) {
+              existingPins.pop();
+              Lote.setPlantPins(upObj, existingPins, true);
+            } else {
+              Lote.setPlantPins(upObj, [], false);
+            }
+            savePlantsToStorage();
+            syncDOMFromPlantsArray();
+            announceStatus('Pino removido de ' + upObj.nome_popular);
+          }
+          return;
+        }
+
+        var pinBtn = e.target.closest('.btn-pin-plant');
+        if (pinBtn) {
+          var pid = pinBtn.dataset.pinId;
+          setSelectedPlantToPin(pid);
+          if (svgMap) {
+            svgMap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          return;
+        }
+
+        var editBtn = e.target.closest('.btn-edit-plant');
+        if (editBtn) {
+          openEditDialog(editBtn.dataset.editId);
+        }
+      });
+
+      var btnAddPlant = document.getElementById('btn-add-plant');
+      if (btnAddPlant) {
+        btnAddPlant.addEventListener('click', function () {
+          openEditDialog(null);
+        });
+      }
+
+      if (editDialog) {
+        editDialog.addEventListener('close', function () {
+          var action = editDialog.returnValue;
+          editDialog.returnValue = '';
+          if (action !== 'save') return;
+
+          var id = document.getElementById('edit-plant-id').value;
+          var plantioVal = document.getElementById('edit-plantio').value.trim();
+          var yearMatch = plantioVal.match(/(\d{4})/);
+          var anoBase = yearMatch ? yearMatch[1] : '2026';
+
+          var updated = {
+            id: id,
+            nome_popular: document.getElementById('edit-nome-popular').value.trim(),
+            nota_variedade: document.getElementById('edit-nota-variedade').value.trim(),
+            nome_cientifico: document.getElementById('edit-nome-cientifico').value.trim(),
+            familia: document.getElementById('edit-familia').value.trim(),
+            origem: document.getElementById('edit-origem').value.trim(),
+            plantio: plantioVal,
+            ano_base: anoBase,
+            secao_lote: anoBase === '2022' ? '1. Pomar Base (Set/2022)' : '2. Expansão de Frutíferas (2026)',
+            quantidade: document.getElementById('edit-quantidade').value.trim(),
+            categoria_id: document.getElementById('edit-categoria-id').value,
+            placa_linha_3: document.getElementById('edit-placa-linha-3').value.trim(),
+            status_cultivar: document.getElementById('edit-status-cultivar').value,
+            mapa_x: document.getElementById('edit-mapa-x').value.trim(),
+            mapa_y: document.getElementById('edit-mapa-y').value.trim()
+          };
+
+          var existingIdx = plants.findIndex(function (item) { return item.id === id; });
+          if (existingIdx !== -1) {
+            updated.secao_lote = plants[existingIdx].secao_lote;
+            plants[existingIdx] = updated;
+          } else {
+            plants.push(updated);
+          }
+
+          savePlantsToStorage();
+          syncDOMFromPlantsArray();
+          announceStatus('Plaquinha de ' + updated.nome_popular + ' salva com sucesso');
+        });
+      }
+
+      // Toggle expansion batch year between 2026 and 2025
+      var batchYearIs2025 = false;
+      var btnBatchYearToggle = document.getElementById('btn-Batch-year-toggle');
+      var batchYearLabel = document.getElementById('batch-year-label');
+      if (btnBatchYearToggle) {
+        btnBatchYearToggle.addEventListener('click', function () {
+          batchYearIs2025 = !batchYearIs2025;
+          var fromYear = batchYearIs2025 ? '2026' : '2025';
+          var toYear = batchYearIs2025 ? '2025' : '2026';
+
+          for (var i = 0; i < plants.length; i++) {
+            if (plants[i].secao_lote.indexOf('2022') === -1) {
+              plants[i].plantio = (plants[i].plantio || '').replace(new RegExp(fromYear, 'g'), toYear);
+              plants[i].ano_base = toYear;
+            }
+          }
+          if (batchYearLabel) {
+            batchYearLabel.textContent = batchYearIs2025
+              ? 'Lote 2025 → 2026'
+              : 'Lote 2026 → 2025';
+          }
+          savePlantsToStorage();
+          syncDOMFromPlantsArray();
+          announceStatus('Datas do lote de expansão alternadas para ' + toYear);
+        });
+      }
+
+      // Generate official CSV string matching _data/lote_plantas.csv schema
+      var CSV_COLUMNS = [
+        'id', 'nome_popular', 'nota_variedade', 'nome_cientifico', 'familia',
+        'origem', 'plantio', 'ano_base', 'secao_lote', 'quantidade',
+        'categoria_id', 'placa_linha_3', 'status_cultivar', 'mapa_x', 'mapa_y'
+      ];
+
+      function downloadOfficialCsv() {
+        var csvContent = Lote.toCSV(plants, CSV_COLUMNS);
+        var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'lote_plantas.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        announceStatus('Arquivo lote_plantas.csv exportado para atualizar o site estático');
+      }
+
+      function copyOfficialCsvToClipboard(feedbackEl) {
+        var csvContent = Lote.toCSV(plants, CSV_COLUMNS);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(csvContent).then(function () {
+            if (feedbackEl) {
+              var orig = feedbackEl.textContent;
+              feedbackEl.textContent = 'CSV Copiado!';
+              setTimeout(function () { feedbackEl.textContent = orig; }, 2000);
+            }
+            announceStatus('CSV copiado para a área de transferência');
+          });
+        }
+      }
+
+      var btnExportCsv = document.getElementById('btn-export-custom-csv');
+      var btnStudioDownloadCsv = document.getElementById('btn-studio-download-csv');
+      if (btnExportCsv) btnExportCsv.addEventListener('click', downloadOfficialCsv);
+      if (btnStudioDownloadCsv) btnStudioDownloadCsv.addEventListener('click', downloadOfficialCsv);
+
+      var btnCopyCsv = document.getElementById('btn-copy-csv-clipboard');
+      var copyCsvLabel = document.getElementById('copy-csv-label');
+      var btnStudioCopyCsv = document.getElementById('btn-studio-copy-csv');
+      if (btnCopyCsv) {
+        btnCopyCsv.addEventListener('click', function () {
+          copyOfficialCsvToClipboard(copyCsvLabel);
+        });
+      }
+      if (btnStudioCopyCsv) {
+        btnStudioCopyCsv.addEventListener('click', function () {
+          copyOfficialCsvToClipboard(btnStudioCopyCsv);
+        });
+      }
+
+      // Import CSV file to restore/update state
+      var btnImportCsv = document.getElementById('btn-import-csv');
+      var inputImportCsv = document.getElementById('input-import-csv');
+      if (btnImportCsv && inputImportCsv) {
+        btnImportCsv.addEventListener('click', function () {
+          inputImportCsv.click();
+        });
+        inputImportCsv.addEventListener('change', function () {
+          var file = inputImportCsv.files && inputImportCsv.files[0];
+          if (!file) return;
+          var reader = new FileReader();
+          reader.onload = function (evt) {
+            var parsed = Lote.parseCSV(String(evt.target.result || ''));
+            if (parsed.length > 0 && parsed[0].id && parsed[0].nome_popular) {
+              plants = parsed;
+              savePlantsToStorage();
+              syncDOMFromPlantsArray();
+              announceStatus('CSV importado com ' + parsed.length + ' plantas');
+            }
+          };
+          reader.readAsText(file);
+          inputImportCsv.value = '';
+        });
+      }
+
+      // Reset localStorage customizations
+      var btnResetStorage = document.getElementById('btn-reset-local-storage');
+      if (btnResetStorage) {
+        btnResetStorage.addEventListener('click', function () {
+          localStorage.removeItem(Lote.STORAGE_KEY_PLANTS);
+          localStorage.removeItem('ideiame_lote_plantas_v4');
+          localStorage.removeItem('ideiame_lote_plantas_v3');
+          plants = defaultPlants.map(function (p) {
+            var copy = Object.assign({}, p);
+            if (!Lote.hasValidCoords(copy)) {
+              copy.mapa_x = '';
+              copy.mapa_y = '';
+            }
+            return copy;
+          });
+          syncDOMFromPlantsArray();
+          announceStatus('Inventário restaurado para os dados originais do CSV');
+        });
+      }
+
+      // Print Plaques: prints ONLY the 4-line plaques regardless of current view mode
+      var btnPrint = document.getElementById('btn-print-plaques');
+      if (btnPrint) {
+        btnPrint.addEventListener('click', function () {
+          window.print();
+        });
+      }
+    });
+  })();
+</script>
