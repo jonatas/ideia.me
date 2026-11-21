@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Stealing pg_vectorsearch’s Best Ideas for 3D Atoms, Molecules & Active Sites: 100% Lossless Layered Centroids and Register-Direct Fastscan in pg_bio"
+title: "Adopting pg_vectorsearch’s Best Ideas for 3D Atoms, Molecules & Active Sites: 100% Lossless Layered Centroids and Register-Direct Fastscan in pg_bio"
 date: 2026-11-21 20:30:00 -0300
 categories: [postgresql, bioinformatics, rust, pgrx, database-internals, structural-biology, cheminformatics]
 tags: [pg_bio, pg_vectorsearch, prism, tigerdata, rabitq, morton-curve, octree, ecfp4, tanimoto, rangefinder, fastscan, 3dmol]
