@@ -231,7 +231,8 @@ permalink: /lote/
     filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.9));
   }
 
-  .map-plant-pin .pin-text-label {
+  .map-plant-pin .pin-text-label,
+  .map-element-label {
     paint-order: stroke;
     stroke: rgba(7, 11, 18, 0.92);
     stroke-width: 2.6px;
@@ -946,10 +947,10 @@ permalink: /lote/
   </div>
 
   <div class="map-studio-body">
-    <!-- Stage Superior: Mapa Horizontal Largura Total (viewBox 1190 x 600) -->
+    <!-- Stage Superior: Mapa Horizontal Largura Total Expandido (viewBox -30 -30 1280 680 sem cortar a foto aérea) -->
     <div class="lote-svg-viewport-wrapper mb-3">
       <div id="lote-svg-scroll-stage" class="lote-svg-stage">
-        <svg id="lote-proportional-svg" viewBox="0 0 1190 600" role="img" aria-label="Mapa proporcional horizontal do lote com Limite Oeste no topo, Divisa Jair à direita, Domo de 6m, Casa, Casinha, Ateliê, Depósito e pinos arrastáveis das árvores">
+        <svg id="lote-proportional-svg" viewBox="-30 -30 1280 680" role="img" aria-label="Mapa proporcional horizontal expandido do lote com Limite Oeste no topo, Divisa Jair à direita, Domo de 6m, Casa, Casinha, Ateliê, Depósito e pinos arrastáveis das árvores">
         <defs>
           <clipPath id="triangle-lot-clip">
             <polygon points="1086,60 1127.9,548 846.5,365.8 742.6,310.2 450.4,164.4 192.7,81.4 60,60 227.1,40.2 359.5,36.9 539.5,32.5 613,34.6 865.8,43.5 1048.1,55.1" />
@@ -957,17 +958,17 @@ permalink: /lote/
           <pattern id="metric-grid-10m" width="100" height="100" patternUnits="userSpaceOnUse">
             <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(148, 163, 184, 0.18)" stroke-width="1" stroke-dasharray="3,3" />
           </pattern>
-          <pattern id="solar-panel-grid" width="5.2" height="10.4" patternUnits="userSpaceOnUse" patternTransform="rotate(5.38)">
-            <rect width="5.2" height="10.4" fill="#172554" stroke="#60a5fa" stroke-width="0.65" />
-            <line x1="2.6" y1="0" x2="2.6" y2="10.4" stroke="rgba(147, 197, 253, 0.38)" stroke-width="0.35" />
-            <line x1="0" y1="5.2" x2="5.2" y2="5.2" stroke="rgba(147, 197, 253, 0.38)" stroke-width="0.35" />
+          <pattern id="solar-panel-grid" width="4.0" height="4.8" patternUnits="userSpaceOnUse" patternTransform="rotate(5.1)">
+            <rect width="4.0" height="4.8" fill="#0f172a" stroke="#60a5fa" stroke-width="0.45" />
+            <line x1="2.0" y1="0" x2="2.0" y2="4.8" stroke="rgba(147, 197, 253, 0.35)" stroke-width="0.28" />
+            <line x1="0" y1="2.4" x2="4.0" y2="2.4" stroke="rgba(147, 197, 253, 0.35)" stroke-width="0.28" />
           </pattern>
           <pattern id="stone-path-pattern" width="10" height="10" patternUnits="userSpaceOnUse">
-            <rect width="10" height="10" fill="#3b3632" />
-            <polygon points="1,1 4,1 4.5,3.5 1.5,4" fill="#a8a29e" opacity="0.65" />
-            <polygon points="5.5,1 9,1.5 8.5,4 5,3.5" fill="#d97706" opacity="0.65" />
-            <polygon points="1,5.5 4.5,5 5,8.5 1.5,9" fill="#b45309" opacity="0.6" />
-            <polygon points="6,5.5 9,5 9.5,8.5 6,9" fill="#78716c" opacity="0.75" />
+            <rect width="10" height="10" fill="#1f242d" />
+            <polygon points="0.8,0.8 4.4,1.0 4.7,4.2 1.2,4.4" fill="#47505e" opacity="0.88" />
+            <polygon points="5.4,0.8 9.2,1.3 8.8,4.3 5.1,3.9" fill="#343b46" opacity="0.92" />
+            <polygon points="0.9,5.3 4.6,4.9 4.9,8.8 1.3,9.1" fill="#3b4351" opacity="0.90" />
+            <polygon points="5.7,5.2 9.1,4.9 9.4,8.9 5.8,9.2" fill="#566070" opacity="0.85" />
           </pattern>
           <pattern id="bamboo-web-pattern" width="12" height="12" patternUnits="userSpaceOnUse">
             <rect width="12" height="12" fill="rgba(101, 163, 13, 0.28)" />
@@ -975,24 +976,23 @@ permalink: /lote/
           </pattern>
         </defs>
 
-        <!-- Imagem Aérea de Fundo Rotacionada (+103.4132 deg) e Recortada no Triângulo -->
-        <g id="svg-satellite-layer" opacity="0.6" clip-path="url(#triangle-lot-clip)">
+        <!-- Imagem Aérea de Fundo em Alta Resolução Expandida (Sem recorte pelo triângulo para exibir todo o entorno do lote) -->
+        <g id="svg-satellite-layer" opacity="0.82">
           <image
-            href="/images/lote-aereo.jpg"
-            x="0" y="0"
-            width="764" height="1238"
-            preserveAspectRatio="none"
-            transform="translate(60, 60) rotate(103.4132) translate(-283, -1178)" />
+            href="/images/lote-aereo.jpg?v=3"
+            x="-30" y="-30"
+            width="1280" height="680"
+            preserveAspectRatio="none" />
         </g>
 
-        <!-- Preenchimento Base do Triângulo -->
+        <!-- Preenchimento Base Sutil do Triângulo do Lote -->
         <polygon
           points="1086,60 1127.9,548 846.5,365.8 742.6,310.2 450.4,164.4 192.7,81.4 60,60 227.1,40.2 359.5,36.9 539.5,32.5 613,34.6 865.8,43.5 1048.1,55.1"
-          fill="rgba(16, 185, 129, 0.08)"
+          fill="rgba(16, 185, 129, 0.05)"
           stroke="none" />
 
-        <!-- Grade Métrica de 10m x 10m (100px x 100px) -->
-        <rect id="svg-grid-layer" x="0" y="0" width="1190" height="600" fill="url(#metric-grid-10m)" pointer-events="none" />
+        <!-- Grade Métrica de 10m x 10m (100px x 100px) cobrindo todo o Mapa Expandido -->
+        <rect id="svg-grid-layer" x="-30" y="-30" width="1280" height="680" fill="url(#metric-grid-10m)" pointer-events="none" />
 
         <!-- Estrada Leste (Borda Inferior/Diagonal) -->
         <polyline
@@ -1010,13 +1010,13 @@ permalink: /lote/
           stroke="#3b82f6"
           stroke-width="4"
           pointer-events="none" />
-        <text x="565" y="24" fill="#60a5fa" font-size="13" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
+        <text class="map-element-label" data-label-px="565" data-label-py="24" x="565" y="24" fill="#60a5fa" font-size="13" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
           Limite Oeste (Azul) • 102,6 m
         </text>
 
         <!-- Divisa Jair (1ª Linha Preta • 49,1 m — Direita) -->
         <line x1="1086" y1="60" x2="1127.9" y2="548" stroke="#f8fafc" stroke-width="3.5" stroke-dasharray="8,4" pointer-events="none" />
-        <text x="1124" y="304" fill="#f8fafc" font-size="13" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" transform="rotate(85.1, 1124, 304)" pointer-events="none">
+        <text class="map-element-label" data-label-px="1124" data-label-py="304" data-label-rot="85.1" x="1124" y="304" fill="#f8fafc" font-size="13" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" transform="rotate(85.1, 1124, 304)" pointer-events="none">
           Divisa Jair • 49,1 m
         </text>
 
@@ -1027,7 +1027,7 @@ permalink: /lote/
           stroke="#3b82f6"
           stroke-width="4"
           pointer-events="none" />
-        <text x="580" y="278" fill="#60a5fa" font-size="13" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" transform="rotate(25.2, 580, 278)" pointer-events="none">
+        <text class="map-element-label" data-label-px="580" data-label-py="278" data-label-rot="25.2" x="580" y="278" fill="#60a5fa" font-size="13" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" transform="rotate(25.2, 580, 278)" pointer-events="none">
           Limite Leste / Estrada (Azul) • 117,4 m
         </text>
 
@@ -1036,112 +1036,169 @@ permalink: /lote/
         <circle cx="1086" cy="60" r="5" fill="#f8fafc" stroke="#3b82f6" stroke-width="2" pointer-events="none" />
         <circle cx="1127.9" cy="548" r="5" fill="#f8fafc" stroke="#3b82f6" stroke-width="2" pointer-events="none" />
 
-        <!-- CAMINHOS DE PEDRA & PÁTIOS UNIFICADOS (Sem linhas brancas internas entre segmentos e pátios) -->
+        <!-- CAMINHOS DE PEDRA & PÁTIOS UNIFICADOS (Chão de pedra cinza-escuro, curvas arredondadas fiéis às linhas Azul/Verde/Vermelha e reconexão da escada c/ o calçamento inferior) -->
         <g class="map-structure-group" data-structure-id="stone-paths">
-          <!-- Camada 1: Meio-fio branco externo unificado (todos os caminhos e pátios desenhados primeiro na camada de borda) -->
-          <g fill="rgba(226, 232, 240, 0.88)" stroke="rgba(226, 232, 240, 0.88)" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Pátios e Calçamentos Poligonais (Borda Externa) -->
-            <polygon points="740.1,61.2 765.0,62.9 760.1,126.5 795.5,129.0 794.5,146.5 733.8,144.0" stroke-width="2.2" />
-            <polygon points="891.5,156.2 893.0,140.3 928.9,143.6 928.9,54.2 1036.3,56.5 1036.3,71.3 973.5,71.3 973.5,147.5 961.1,162.8" stroke-width="2.2" />
-            <polygon points="883.9,289.2 943.7,294.8 942.0,310.8 882.2,305.2" stroke-width="2.2" />
+          <!-- Camada 1: Meio-fio branco externo unificado -->
+          <g fill="rgba(226, 232, 240, 0.90)" stroke="rgba(226, 232, 240, 0.90)" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Calçada Frontal e Lateral da Casinha -->
+            <polygon points="736.0,123.0 837.5,129.5 836.5,141.5 735.0,135.0" stroke-width="2.0" />
+            <!-- Pátio Leste Superior entre a Casa 7×6m e o Portal do Domo -->
+            <polygon points="958.0,160.0 972.5,161.5 970.5,202.0 955.0,201.0" stroke-width="2.0" />
 
-            <!-- Pátio Curvo Frontal da Casa, Contorno da Ilha de Pedras, Piso da Garagem e Rampa de Pedra até a Divisa Jair (Borda Externa) -->
-            <path d="M 926 308 C 931 322, 928 334, 912 337 L 943 340 L 941 360 L 936 368 L 934 404 L 970 404 L 1121.5 506 L 1118 466 L 982 372 L 958 340 L 948 295 Z" stroke-width="2.2" />
+            <!-- Pátio Arredondado (Linha Azul), Contorno Leste da Ilha (Linha Verde), Caminho da Escada em Calçamento (Linha Vermelha) e Reconexão c/ a Saída de Calçamento / Garagem mais abaixo -->
+            <path
+              d="M 932.0 307.0
+                 C 933.0 317.0, 945.0 321.0, 958.0 323.0
+                 C 967.0 325.0, 971.0 329.0, 971.0 333.0
+                 C 971.0 337.0, 964.0 339.0, 956.0 340.0
+                 C 949.0 341.0, 945.0 346.0, 945.0 353.0
+                 C 945.0 359.0, 949.0 363.0, 953.0 366.0
+                 C 957.0 369.0, 961.0 372.0, 960.0 376.0
+                 C 959.0 380.0, 948.0 383.0, 943.0 390.0
+                 C 940.0 395.0, 938.0 402.0, 936.0 410.0
+                 L 972.0 418.0
+                 L 1119.0 448.0
+                 L 1114.0 388.0
+                 L 992.0 368.0
+                 C 998.0 352.0, 999.0 336.0, 993.0 326.0
+                 C 986.0 317.0, 974.0 313.0, 965.0 308.0
+                 Z"
+              stroke-width="2.0" />
 
-            <!-- Caminhos Lineares e Curvos (Borda Externa) -->
-            <path d="M 883 297 C 854 290, 820 268, 804 232 C 793 205, 794 162, 795 129" fill="none" stroke-width="8.5" />
-            <path d="M 880.5 297 L 886 229.4 L 881 228.9 L 889.5 148" fill="none" stroke-width="7.2" />
-            <path d="M 760 128 L 839 132 L 892 148" fill="none" stroke-width="7.5" />
-            <path d="M 839 132 L 843.5 70" fill="none" stroke-width="5.5" />
-            <path d="M 956 352 C 951 330, 948 312, 948 295 L 954 236 L 959 233 L 964 155" fill="none" stroke-width="9.0" />
-            <path d="M 961 192 L 971 192" fill="none" stroke-width="6.5" />
-            <path d="M 966.5 192 C 967 214, 974 236, 986 250 C 994 258, 1002 263, 1014 266 C 1032 269, 1051 273, 1061 269 C 1067 264, 1068 245, 1069 212" fill="none" stroke-width="6.5" />
-            <path d="M 1002 263 C 988 262, 976 271, 968 286 C 962 299, 959 316, 956 340" fill="none" stroke-width="6.5" />
+            <!-- Caminho Reto Diagonal Superior: Casinha -> Canto Noroeste da Casa 7×6m (largura real ~13.5px) -->
+            <path d="M 832.0 139.0 L 883.5 159.0" fill="none" stroke-width="13.5" />
+            <!-- Caminho Lateral Oeste da Casa (dobrado p/ ~14px acompanhando a lateral dos 2 A-Frames) -->
+            <path d="M 881.0 156.0 L 874.5 232.0 L 879.0 232.5 L 875.5 301.0" fill="none" stroke-width="14.0" />
+            <!-- Terraço Frontal Sul da Casa 6×6m (dobrado p/ ~14px) -->
+            <path d="M 875.5 301.0 L 957.0 307.5" fill="none" stroke-width="14.0" />
+            <!-- Corredor Lateral Leste da Casa entre os 2 A-Frames e o Domo (dobrado p/ ~14.5px) -->
+            <path d="M 964.0 161.5 L 961.5 198.0 L 956.5 242.0 L 953.0 307.5" fill="none" stroke-width="14.5" />
+            <!-- Conexão p/ o Portal Oeste do Domo -->
+            <path d="M 961.5 187.5 L 972.5 187.5" fill="none" stroke-width="11.0" />
+
+            <!-- Caminho Curvo Oeste: Casinha -> Gramado Oeste -> Canto Sudoeste da Casa (exatamente sobre o caminho real da Foto 3, largura 12.5px) -->
+            <path d="M 784.0 133.0 L 784.5 172.0 L 790.0 206.0 L 791.0 225.0 C 792.0 236.0, 798.0 243.0, 810.0 251.0 L 860.0 289.5 C 867.0 295.0, 872.5 300.0, 878.0 301.5" fill="none" stroke-width="12.5" />
+
+            <!-- Bifurcação em "Y" ao Sul do Domo + Extensão Leste que sobe entre as Ameixas (x=1052.5 até y=205) -->
+            <path d="M 962.0 198.0 C 966.0 212.0, 969.0 235.0, 984.0 251.0 L 1011.0 268.0 L 1038.0 271.5 C 1048.0 272.0, 1052.0 267.0, 1052.5 256.0 L 1052.0 205.0" fill="none" stroke-width="12.5" />
+            <path d="M 983.0 214.0 C 984.0 232.0, 996.0 249.0, 1011.0 268.0" fill="none" stroke-width="11.0" />
+            <!-- Arco Inferior da Bifurcação: (1011, 268) -> Curva Arredondada do Pátio e Ilha -->
+            <path d="M 1011.0 268.0 C 990.0 269.0, 972.0 276.0, 962.0 291.0 C 958.0 300.0, 958.0 310.0, 962.0 318.0" fill="none" stroke-width="13.0" />
           </g>
 
-          <!-- Camada 2: Revestimento Interno Unificado em Pedra Irregular (sobrepõe todas as junções eliminando linhas brancas internas) -->
+          <!-- Camada 2: Revestimento Interno Unificado em Pedra Cinza-Escura (sobrepõe todas as junções eliminando linhas brancas internas) -->
           <g stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="740.1,61.2 765.0,62.9 760.1,126.5 795.5,129.0 794.5,146.5 733.8,144.0" class="map-structure-shape" fill="url(#stone-path-pattern)" stroke="none" />
-            <polygon points="891.5,156.2 893.0,140.3 928.9,143.6 928.9,54.2 1036.3,56.5 1036.3,71.3 973.5,71.3 973.5,147.5 961.1,162.8" class="map-structure-shape" fill="url(#stone-path-pattern)" stroke="none" />
-            <polygon points="883.9,289.2 943.7,294.8 942.0,310.8 882.2,305.2" class="map-structure-shape" fill="url(#stone-path-pattern)" stroke="none" />
-            <path d="M 926 308 C 931 322, 928 334, 912 337 L 943 340 L 941 360 L 936 368 L 934 404 L 970 404 L 1121.5 506 L 1118 466 L 982 372 L 958 340 L 948 295 Z" class="map-structure-shape" fill="url(#stone-path-pattern)" stroke="none" />
+            <polygon points="736.0,123.0 837.5,129.5 836.5,141.5 735.0,135.0" class="map-structure-shape" fill="url(#stone-path-pattern)" stroke="none" />
+            <polygon points="958.0,160.0 972.5,161.5 970.5,202.0 955.0,201.0" class="map-structure-shape" fill="url(#stone-path-pattern)" stroke="none" />
+            <path
+              d="M 932.0 307.0
+                 C 933.0 317.0, 945.0 321.0, 958.0 323.0
+                 C 967.0 325.0, 971.0 329.0, 971.0 333.0
+                 C 971.0 337.0, 964.0 339.0, 956.0 340.0
+                 C 949.0 341.0, 945.0 346.0, 945.0 353.0
+                 C 945.0 359.0, 949.0 363.0, 953.0 366.0
+                 C 957.0 369.0, 961.0 372.0, 960.0 376.0
+                 C 959.0 380.0, 948.0 383.0, 943.0 390.0
+                 C 940.0 395.0, 938.0 402.0, 936.0 410.0
+                 L 972.0 418.0
+                 L 1119.0 448.0
+                 L 1114.0 388.0
+                 L 992.0 368.0
+                 C 998.0 352.0, 999.0 336.0, 993.0 326.0
+                 C 986.0 317.0, 974.0 313.0, 965.0 308.0
+                 Z"
+              class="map-structure-shape"
+              fill="url(#stone-path-pattern)"
+              stroke="none" />
 
-            <path d="M 883 297 C 854 290, 820 268, 804 232 C 793 205, 794 162, 795 129" fill="none" stroke="url(#stone-path-pattern)" stroke-width="6.3" />
-            <path d="M 880.5 297 L 886 229.4 L 881 228.9 L 889.5 148" fill="none" stroke="url(#stone-path-pattern)" stroke-width="5.0" />
-            <path d="M 760 128 L 839 132 L 892 148" fill="none" stroke="url(#stone-path-pattern)" stroke-width="5.3" />
-            <path d="M 839 132 L 843.5 70" fill="none" stroke="url(#stone-path-pattern)" stroke-width="3.7" />
-            <path d="M 956 352 C 951 330, 948 312, 948 295 L 954 236 L 959 233 L 964 155" fill="none" stroke="url(#stone-path-pattern)" stroke-width="6.8" />
-            <path d="M 961 192 L 971 192" fill="none" stroke="url(#stone-path-pattern)" stroke-width="4.5" />
-            <path d="M 966.5 192 C 967 214, 974 236, 986 250 C 994 258, 1002 263, 1014 266 C 1032 269, 1051 273, 1061 269 C 1067 264, 1068 245, 1069 212" fill="none" stroke="url(#stone-path-pattern)" stroke-width="4.5" />
-            <path d="M 1002 263 C 988 262, 976 271, 968 286 C 962 299, 959 316, 956 340" fill="none" stroke="url(#stone-path-pattern)" stroke-width="4.5" />
+            <path d="M 832.0 139.0 L 883.5 159.0" fill="none" stroke="url(#stone-path-pattern)" stroke-width="11.0" />
+            <path d="M 881.0 156.0 L 874.5 232.0 L 879.0 232.5 L 875.5 301.0" fill="none" stroke="url(#stone-path-pattern)" stroke-width="11.5" />
+            <path d="M 875.5 301.0 L 957.0 307.5" fill="none" stroke="url(#stone-path-pattern)" stroke-width="11.5" />
+            <path d="M 964.0 161.5 L 961.5 198.0 L 956.5 242.0 L 953.0 307.5" fill="none" stroke="url(#stone-path-pattern)" stroke-width="12.0" />
+            <path d="M 961.5 187.5 L 972.5 187.5" fill="none" stroke="url(#stone-path-pattern)" stroke-width="8.6" />
+            <path d="M 784.0 133.0 L 784.5 172.0 L 790.0 206.0 L 791.0 225.0 C 792.0 236.0, 798.0 243.0, 810.0 251.0 L 860.0 289.5 C 867.0 295.0, 872.5 300.0, 878.0 301.5" fill="none" stroke="url(#stone-path-pattern)" stroke-width="10.0" />
+            <path d="M 962.0 198.0 C 966.0 212.0, 969.0 235.0, 984.0 251.0 L 1011.0 268.0 L 1038.0 271.5 C 1048.0 272.0, 1052.0 267.0, 1052.5 256.0 L 1052.0 205.0" fill="none" stroke="url(#stone-path-pattern)" stroke-width="10.0" />
+            <path d="M 983.0 214.0 C 984.0 232.0, 996.0 249.0, 1011.0 268.0" fill="none" stroke="url(#stone-path-pattern)" stroke-width="8.6" />
+            <path d="M 1011.0 268.0 C 990.0 269.0, 972.0 276.0, 962.0 291.0 C 958.0 300.0, 958.0 310.0, 962.0 318.0" fill="none" stroke="url(#stone-path-pattern)" stroke-width="10.5" />
+
+            <!-- Degraus do Caminho da Escada (Linha Vermelha: entre a curva azul superior e a reconexão c/ o calçamento inferior) -->
+            <line x1="953.5" y1="365.5" x2="963.0" y2="359.5" stroke="rgba(226, 232, 240, 0.75)" stroke-width="1.2" pointer-events="none" />
+            <line x1="957.0" y1="370.0" x2="967.5" y2="365.5" stroke="rgba(226, 232, 240, 0.70)" stroke-width="1.1" pointer-events="none" />
+            <line x1="960.0" y1="375.0" x2="970.5" y2="372.5" stroke="rgba(226, 232, 240, 0.70)" stroke-width="1.1" pointer-events="none" />
+            <line x1="954.0" y1="381.0" x2="964.0" y2="380.0" stroke="rgba(226, 232, 240, 0.70)" stroke-width="1.1" pointer-events="none" />
+            <line x1="946.0" y1="387.5" x2="956.5" y2="387.5" stroke="rgba(226, 232, 240, 0.70)" stroke-width="1.1" pointer-events="none" />
+            <line x1="941.5" y1="395.0" x2="953.0" y2="395.5" stroke="rgba(226, 232, 240, 0.70)" stroke-width="1.1" pointer-events="none" />
           </g>
         </g>
 
-        <!-- ESTRUTURA 1D: Ilha de Pedras & Escada (em frente ao gramado da Casa 6×6m) -->
+        <!-- ESTRUTURA 1D: Ilha Arredondada (Linha Verde) & Caminho da Escada (Linha Vermelha) -->
         <g class="map-structure-group" data-structure-id="stone-island-stairs">
-          <polygon
-            points="910,337 943,340 941,360 908,355"
+          <path
+            d="M 963.0 359.0
+               C 957.0 355.0, 955.0 349.0, 957.5 344.5
+               C 960.5 340.5, 968.5 340.5, 975.5 345.0
+               C 983.5 350.0, 987.5 360.0, 985.5 374.0
+               C 983.5 385.0, 980.0 393.5, 976.0 397.0
+               C 968.0 399.5, 958.0 398.0, 953.0 393.5
+               C 954.5 387.5, 961.0 381.5, 971.0 375.0
+               C 972.0 369.0, 968.0 363.0, 963.0 359.0
+               Z"
             class="map-structure-shape"
-            fill="rgba(217, 119, 6, 0.34)"
-            stroke="#f59e0b"
+            fill="rgba(22, 101, 52, 0.58)"
+            stroke="#4ade80"
             stroke-width="1.8" />
-          <!-- Degraus da Escada de Pedra integrada à Ilha -->
-          <line x1="935" y1="340" x2="933" y2="359" stroke="#fde68a" stroke-width="1.3" pointer-events="none" />
-          <line x1="935" y1="344" x2="942.5" y2="344.5" stroke="#fde68a" stroke-width="1.1" pointer-events="none" />
-          <line x1="934.5" y1="349" x2="942" y2="349.5" stroke="#fde68a" stroke-width="1.1" pointer-events="none" />
-          <line x1="934" y1="354" x2="941.5" y2="354.5" stroke="#fde68a" stroke-width="1.1" pointer-events="none" />
-          <text x="922" y="351" fill="#fef3c7" font-size="7.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
+          <text class="map-element-label" data-label-px="972" data-label-py="369" x="972" y="369" fill="#dcfce7" font-size="7.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
             Ilha/Escada
           </text>
         </g>
 
-        <!-- ESTRUTURA 1E: Garagem (estendendo-se do canto do #2 de Banana Maçã #2 no ângulo do Ingá-Banana até a Divisa Jair) -->
+        <!-- ESTRUTURA 1E: Garagem & Pátio de Acesso (alinhada perfeitamente à ortofoto e ao muro de contenção até a Divisa Jair) -->
         <g class="map-structure-group" data-structure-id="garage">
           <polygon
-            points="936,368 982,372 1118,466 1121.5,506 970,404 934,404"
+            points="938,352 978,356 1114,388 1119,448 972,418 934,410"
             class="map-structure-shape"
             fill="rgba(16, 185, 129, 0.24)"
             stroke="#34d399"
             stroke-width="1.8"
             stroke-dasharray="4,2" />
-          <line x1="946" y1="369" x2="944" y2="404" stroke="rgba(110, 231, 183, 0.38)" stroke-width="1.0" pointer-events="none" />
-          <line x1="958" y1="370" x2="956" y2="404" stroke="rgba(110, 231, 183, 0.38)" stroke-width="1.0" pointer-events="none" />
-          <line x1="970" y1="371" x2="970" y2="404" stroke="rgba(110, 231, 183, 0.38)" stroke-width="1.0" pointer-events="none" />
-          <text x="958" y="388" fill="#ffffff" font-size="8.8" font-weight="700" text-anchor="middle" pointer-events="none">
-            Garagem
+          <line x1="952" y1="354" x2="948" y2="412" stroke="rgba(110, 231, 183, 0.38)" stroke-width="1.0" pointer-events="none" />
+          <line x1="966" y1="355" x2="962" y2="415" stroke="rgba(110, 231, 183, 0.38)" stroke-width="1.0" pointer-events="none" />
+          <line x1="980" y1="357" x2="976" y2="418" stroke="rgba(110, 231, 183, 0.38)" stroke-width="1.0" pointer-events="none" />
+          <text class="map-element-label" data-label-px="1024" data-label-py="398" x="1024" y="393" fill="#ffffff" font-size="9.0" font-weight="700" text-anchor="middle" pointer-events="none">
+            Garagem &amp; Acesso
           </text>
-          <text x="958" y="398" fill="#a7f3d0" font-size="7.2" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
+          <text class="map-element-label" data-label-px="1024" data-label-py="398" x="1024" y="404" fill="#a7f3d0" font-size="7.4" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
             até Divisa Jair
           </text>
         </g>
 
-        <!-- ESTRUTURA 1F: Muro de Pedra & Fatia Triangular do Muro até a Garagem (Canteiro Elevado da Estrada) -->
+        <!-- ESTRUTURA 1F: Muro de Pedra & Fatia Triangular do Muro até a Estrada -->
         <g class="map-structure-group" data-structure-id="wall-slice-triangle">
           <polygon
-            points="936,424 970,404 1121.5,506 1106,533"
+            points="934,410 972,418 1119,448 1127.9,548 936,428"
             class="map-structure-shape"
-            fill="rgba(132, 204, 22, 0.22)"
+            fill="rgba(132, 204, 22, 0.20)"
             stroke="#84cc16"
             stroke-width="1.5" />
-          <!-- Muro de Contenção em Blocos de Pedra (divisa entre a Rampa/Garagem e a Fatia Triangular da Rua) -->
-          <line x1="970" y1="404" x2="1121.5" y2="506" stroke="#78350f" stroke-width="4.2" stroke-linecap="round" pointer-events="none" />
-          <line x1="970" y1="404" x2="1121.5" y2="506" stroke="#f59e0b" stroke-width="2.6" stroke-dasharray="5,2.5" stroke-linecap="round" pointer-events="none" />
+          <!-- Muro de Contenção em Blocos de Pedra (divisa real na ortofoto entre o Pátio da Garagem e o Talude Sul) -->
+          <polyline points="934,410 972,418 1119,448" fill="none" stroke="#78350f" stroke-width="4.2" stroke-linecap="round" pointer-events="none" />
+          <polyline points="934,410 972,418 1119,448" fill="none" stroke="#f59e0b" stroke-width="2.6" stroke-dasharray="5,2.5" stroke-linecap="round" pointer-events="none" />
         </g>
 
         <!-- ESTRUTURA 1A: Lago / Tanque (WIP Pond • Azul) -->
         <g class="map-structure-group" data-structure-id="wip-pond">
-          <rect
-            x="978.4" y="73.0" width="54.4" height="67.4" rx="3"
+          <polygon
+            points="952.0,58.0 1014.0,62.0 1010.0,142.0 948.0,138.0"
             class="map-structure-shape"
-            fill="rgba(14, 165, 233, 0.34)"
+            fill="rgba(14, 165, 233, 0.30)"
             stroke="#38bdf8"
-            stroke-width="2.2" />
-          <path d="M 988 94 Q 997 91, 1006 94 T 1024 94" fill="none" stroke="rgba(186, 230, 253, 0.55)" stroke-width="1.2" pointer-events="none" />
-          <path d="M 986 122 Q 996 119, 1006 122 T 1025 122" fill="none" stroke="rgba(186, 230, 253, 0.45)" stroke-width="1.1" pointer-events="none" />
-          <text x="1005.6" y="105" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle" pointer-events="none">
+            stroke-width="2.0" />
+          <path d="M 960 86 Q 971 83, 982 86 T 1002 86" fill="none" stroke="rgba(186, 230, 253, 0.55)" stroke-width="1.2" pointer-events="none" />
+          <path d="M 958 116 Q 970 113, 982 116 T 1001 116" fill="none" stroke="rgba(186, 230, 253, 0.45)" stroke-width="1.1" pointer-events="none" />
+          <text class="map-element-label" data-label-px="981.0" data-label-py="101" x="981.0" y="95" fill="#ffffff" font-size="10" font-weight="700" text-anchor="middle" pointer-events="none">
             Lago (WIP)
           </text>
-          <text x="1005.6" y="117" fill="#bae6fd" font-size="8.2" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
+          <text class="map-element-label" data-label-px="981.0" data-label-py="101" x="981.0" y="107" fill="#bae6fd" font-size="8.2" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
             5,4m × 6,8m
           </text>
         </g>
@@ -1149,130 +1206,140 @@ permalink: /lote/
         <!-- ESTRUTURA 1B: Estrutura de Bambu & Redes (Bamboo Web Structure • https://ideia.me/bamboo-web-structure-project) -->
         <g class="map-structure-group" data-structure-id="bamboo-structure" data-structure-url="/bamboo-web-structure-project">
           <polygon
-            points="1038.3,55.8 1083.0,59.2 1083.5,141.2 1038.3,141.2"
+            points="1018.0,50.0 1084.0,54.0 1082.0,150.0 1015.0,146.0"
             class="map-structure-shape"
             fill="url(#bamboo-web-pattern)"
             stroke="#84cc16"
             stroke-width="2.2" />
-          <text x="1060.9" y="94" fill="#ffffff" font-size="9.5" font-weight="700" text-anchor="middle" pointer-events="none">
+          <text class="map-element-label" data-label-px="1050.0" data-label-py="100" x="1050.0" y="94" fill="#ffffff" font-size="9.5" font-weight="700" text-anchor="middle" pointer-events="none">
             Bambu &amp; Redes
           </text>
-          <text x="1060.9" y="106" fill="#d9f99d" font-size="8" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
+          <text class="map-element-label" data-label-px="1050.0" data-label-py="100" x="1050.0" y="106" fill="#d9f99d" font-size="8" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
             4,5m × 8,6m
           </text>
         </g>
 
         <!-- ESTRUTURA 1C: Domo • Estufa (Ø 6,0 m = 60 px • Verde) -->
         <g class="map-structure-group" data-structure-id="dome">
+          <!-- Portal / Vestíbulo Oeste do Domo -->
+          <polygon
+            points="968.5,182.0 973.5,182.5 973.0,192.5 968.0,192.0"
+            fill="rgba(187, 247, 208, 0.45)"
+            stroke="#4ade80"
+            stroke-width="1.3"
+            pointer-events="none" />
           <circle
-            cx="1001.1" cy="191.9" r="30"
+            cx="1001.5" cy="188.5" r="29.8"
             class="map-structure-shape"
-            fill="rgba(34, 197, 94, 0.32)"
+            fill="rgba(34, 197, 94, 0.30)"
             stroke="#4ade80"
             stroke-width="2.5" />
-          <line x1="971.1" y1="191.9" x2="1031.1" y2="191.9" stroke="#bbf7d0" stroke-width="1.5" stroke-dasharray="2,2" pointer-events="none" />
-          <text x="1001.1" y="188" fill="#ffffff" font-size="10.5" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
+          <line x1="971.7" y1="188.5" x2="1031.3" y2="188.5" stroke="#bbf7d0" stroke-width="1.5" stroke-dasharray="2,2" pointer-events="none" />
+          <text class="map-element-label" data-label-px="1001.5" data-label-py="185.5" x="1001.5" y="184.5" fill="#ffffff" font-size="10.5" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
             Ø 6,0m
           </text>
-          <text x="1001.1" y="156" fill="#4ade80" font-size="10.5" font-weight="700" text-anchor="middle" pointer-events="none">
+          <text class="map-element-label" data-label-px="1001.5" data-label-py="154.5" x="1001.5" y="152.5" fill="#4ade80" font-size="10.5" font-weight="700" text-anchor="middle" pointer-events="none">
             Domo • Estufa (6m)
           </text>
         </g>
 
-        <!-- ESTRUTURA 2: Casa (2 A-Frames Alinhados pelo Centro: 6×6m Solar + 7×6m Proporcionalmente Maior) -->
+        <!-- ESTRUTURA 2: Casa (2 A-Frames Alinhados c/ Mansardas e 13 Painéis Solares calibrados na ortofoto) -->
         <g class="map-structure-group" data-structure-id="main-house">
-          <!-- A-Frame 1 (Superior/Norte): Extensão 7×6m proporcionalmente maior (70px largura = 35px p/ cada lado da cumeeira central) -->
+          <!-- A-Frame 1 (Superior/Norte): Extensão 7×6m (Água Oeste + Água Leste) -->
           <polygon
-            points="891.5,156.2 926.3,159.5 919.5,232.2 884.7,228.9"
+            points="882.5,154.0 924.0,157.8 917.5,235.8 876.0,232.0"
             class="map-structure-shape"
-            fill="rgba(16, 185, 129, 0.32)"
+            fill="rgba(16, 185, 129, 0.30)"
             stroke="#10b981"
             stroke-width="1.8" />
           <polygon
-            points="926.3,159.5 961.1,162.8 954.4,235.5 919.5,232.2"
+            points="924.0,157.8 965.5,161.5 959.0,239.5 917.5,235.8"
             class="map-structure-shape"
-            fill="rgba(5, 150, 105, 0.40)"
+            fill="rgba(5, 150, 105, 0.36)"
             stroke="#10b981"
             stroke-width="1.8" />
-          <!-- Mansardas Simétricas (Dormers) na Extensão 7×6m -->
+          <!-- Mansardas Simétricas (Dormers) na Extensão 7×6m com linhas de cumeeira e águas -->
           <polygon
-            points="888.8,178.5 914.5,180.9 912.7,199.5 887.0,197.1"
-            fill="rgba(167, 243, 208, 0.42)"
+            points="881.5,179.5 911.0,182.0 909.5,200.0 880.0,197.5"
+            fill="rgba(167, 243, 208, 0.45)"
             stroke="#6ee7b7"
-            stroke-width="1.2"
-            pointer-events="none" />
-          <polygon
-            points="931.5,182.5 957.2,184.9 955.4,203.5 929.7,201.1"
-            fill="rgba(167, 243, 208, 0.42)"
-            stroke="#6ee7b7"
-            stroke-width="1.2"
-            pointer-events="none" />
-          <!-- 3 Painéis Solares na Água Leste da Extensão 7×6m (abaixo da mansarda leste) -->
-          <polygon
-            points="938.2,205.5 954.2,207.0 951.8,232.5 935.8,231.0"
-            fill="url(#solar-panel-grid)"
-            stroke="#93c5fd"
-            stroke-width="1.1"
-            pointer-events="none" />
-          <line x1="937.4" y1="214.5" x2="953.4" y2="216.0" stroke="#93c5fd" stroke-width="0.7" opacity="0.8" pointer-events="none" />
-          <line x1="936.6" y1="223.5" x2="952.6" y2="225.0" stroke="#93c5fd" stroke-width="0.7" opacity="0.8" pointer-events="none" />
-
-          <!-- A-Frame 2 (Inferior/Sul): Casa 6,0m × 6,0m c/ Painéis Solares (60px largura = 30px p/ cada lado da cumeeira central) -->
-          <polygon
-            points="889.6,229.4 919.5,232.2 913.8,292.0 883.9,289.2"
-            class="map-structure-shape"
-            fill="rgba(16, 185, 129, 0.36)"
-            stroke="#10b981"
-            stroke-width="1.8" />
-          <polygon
-            points="919.5,232.2 949.3,235.0 943.7,294.8 913.8,292.0"
-            class="map-structure-shape"
-            fill="rgba(5, 150, 105, 0.44)"
-            stroke="#10b981"
-            stroke-width="1.8" />
-          <!-- Matriz Principal de 10 Painéis Solares (2×5) na Água Leste do A-Frame 6×6m -->
-          <polygon
-            points="920.8,234.8 947.4,237.3 942.4,291.8 915.8,289.3"
-            fill="url(#solar-panel-grid)"
-            stroke="#93c5fd"
             stroke-width="1.3"
             pointer-events="none" />
-          <line x1="934.1" y1="236.0" x2="929.1" y2="290.5" stroke="#93c5fd" stroke-width="0.9" opacity="0.85" pointer-events="none" />
-          <line x1="919.8" y1="245.7" x2="946.4" y2="248.2" stroke="#93c5fd" stroke-width="0.75" opacity="0.8" pointer-events="none" />
-          <line x1="918.8" y1="256.6" x2="945.4" y2="259.1" stroke="#93c5fd" stroke-width="0.75" opacity="0.8" pointer-events="none" />
-          <line x1="917.8" y1="267.5" x2="944.4" y2="270.0" stroke="#93c5fd" stroke-width="0.75" opacity="0.8" pointer-events="none" />
-          <line x1="916.8" y1="278.4" x2="943.4" y2="280.9" stroke="#93c5fd" stroke-width="0.75" opacity="0.8" pointer-events="none" />
+          <line x1="880.8" y1="188.5" x2="910.2" y2="191.0" stroke="#ecfdf5" stroke-width="1.1" pointer-events="none" />
+          <polygon
+            points="932.0,184.0 962.5,186.8 961.0,204.2 930.5,201.5"
+            fill="rgba(167, 243, 208, 0.45)"
+            stroke="#6ee7b7"
+            stroke-width="1.3"
+            pointer-events="none" />
+          <line x1="931.2" y1="192.8" x2="961.8" y2="195.5" stroke="#ecfdf5" stroke-width="1.1" pointer-events="none" />
+          <!-- 3 Painéis Solares na Água Leste da Extensão 7×6m (logo abaixo da mansarda leste) -->
+          <polygon
+            points="945.2,204.0 961.0,205.4 958.4,238.4 942.6,237.0"
+            fill="url(#solar-panel-grid)"
+            stroke="#93c5fd"
+            stroke-width="1.2"
+            pointer-events="none" />
+          <line x1="944.3" y1="215.0" x2="960.1" y2="216.4" stroke="#93c5fd" stroke-width="0.85" opacity="0.9" pointer-events="none" />
+          <line x1="943.5" y1="226.0" x2="959.3" y2="227.4" stroke="#93c5fd" stroke-width="0.85" opacity="0.9" pointer-events="none" />
+
+          <!-- A-Frame 2 (Inferior/Sul): Casa 6,0m × 6,0m (recuo simétrico em relação ao 7×6m) -->
+          <polygon
+            points="881.5,232.5 917.5,235.8 913.0,297.8 877.5,294.5"
+            class="map-structure-shape"
+            fill="rgba(16, 185, 129, 0.34)"
+            stroke="#10b981"
+            stroke-width="1.8" />
+          <polygon
+            points="917.5,235.8 953.5,239.0 948.5,301.0 913.0,297.8"
+            class="map-structure-shape"
+            fill="rgba(5, 150, 105, 0.42)"
+            stroke="#10b981"
+            stroke-width="1.8" />
+          <!-- Matriz Principal de 10 Painéis Solares (2 colunas × 5 linhas) na Água Leste do A-Frame 6×6m (com faixa de telhado superior visível de y=239 a y=250.2) -->
+          <polygon
+            points="917.8,250.2 950.2,253.0 946.2,300.2 913.8,297.4"
+            fill="url(#solar-panel-grid)"
+            stroke="#93c5fd"
+            stroke-width="1.35"
+            pointer-events="none" />
+          <line x1="934.0" y1="251.6" x2="930.0" y2="298.8" stroke="#93c5fd" stroke-width="1.0" opacity="0.9" pointer-events="none" />
+          <line x1="917.0" y1="259.6" x2="949.4" y2="262.4" stroke="#93c5fd" stroke-width="0.8" opacity="0.85" pointer-events="none" />
+          <line x1="916.2" y1="269.1" x2="948.6" y2="271.9" stroke="#93c5fd" stroke-width="0.8" opacity="0.85" pointer-events="none" />
+          <line x1="915.4" y1="278.5" x2="947.8" y2="281.3" stroke="#93c5fd" stroke-width="0.8" opacity="0.85" pointer-events="none" />
+          <line x1="914.6" y1="288.0" x2="947.0" y2="290.8" stroke="#93c5fd" stroke-width="0.8" opacity="0.85" pointer-events="none" />
 
           <!-- Cumeeira Central Alinhada dos 2 A-Frames & Junção 7×6m / 6×6m -->
-          <line x1="926.3" y1="159.5" x2="913.8" y2="292.0" stroke="#ecfdf5" stroke-width="2.2" pointer-events="none" />
-          <line x1="884.7" y1="228.9" x2="954.4" y2="235.5" stroke="#a7f3d0" stroke-width="1.4" stroke-dasharray="3,2" pointer-events="none" />
+          <line x1="924.0" y1="157.8" x2="913.0" y2="297.8" stroke="#ecfdf5" stroke-width="2.2" pointer-events="none" />
+          <line x1="876.0" y1="232.0" x2="959.0" y2="239.5" stroke="#a7f3d0" stroke-width="1.4" stroke-dasharray="3,2" pointer-events="none" />
 
-          <text x="907" y="172" fill="#ffffff" font-size="9.5" font-weight="700" text-anchor="middle" pointer-events="none">
+          <text class="map-element-label" data-label-px="903" data-label-py="171" x="903" y="171" fill="#ffffff" font-size="9.5" font-weight="700" text-anchor="middle" pointer-events="none">
             Casa A-Frame
           </text>
-          <text x="903" y="216" fill="#d1fae5" font-size="8.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
+          <text class="map-element-label" data-label-px="900" data-label-py="216" x="900" y="216" fill="#d1fae5" font-size="8.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
             7×6m
           </text>
-          <text x="901" y="263" fill="#d1fae5" font-size="8.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
+          <text class="map-element-label" data-label-px="897" data-label-py="266" x="897" y="266" fill="#d1fae5" font-size="8.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
             6×6m
           </text>
-          <text x="931" y="266" fill="#bfdbfe" font-size="7.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
-            ☀ Solar
+          <text class="map-element-label" data-label-px="932" data-label-py="276" x="932" y="276" fill="#bfdbfe" font-size="7.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
+            ☀ 13 Painéis
           </text>
         </g>
 
         <!-- ESTRUTURA 3: Casinha -->
         <g class="map-structure-group" data-structure-id="casinha">
           <polygon
-            points="843.9,68.3 839.0,131.9 760.1,126.5 765.0,62.9"
+            points="841.5,67.5 836.5,131.5 753.0,126.0 757.5,62.0"
             class="map-structure-shape"
-            fill="rgba(245, 158, 11, 0.32)"
+            fill="rgba(245, 158, 11, 0.30)"
             stroke="#f59e0b"
-            stroke-width="2.5" />
-          <text x="802.0" y="94" fill="#ffffff" font-size="11.5" font-weight="700" text-anchor="middle" pointer-events="none">
+            stroke-width="2.4" />
+          <line x1="755.2" y1="94.0" x2="839.0" y2="99.5" stroke="rgba(254, 243, 199, 0.65)" stroke-width="1.4" pointer-events="none" />
+          <text class="map-element-label" data-label-px="797.0" data-label-py="98" x="797.0" y="91" fill="#ffffff" font-size="11.5" font-weight="700" text-anchor="middle" pointer-events="none">
             Casinha
           </text>
-          <text x="802.0" y="108" fill="#fde68a" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
+          <text class="map-element-label" data-label-px="797.0" data-label-py="98" x="797.0" y="105" fill="#fde68a" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
             6,4m × 7,9m
           </text>
         </g>
@@ -1280,37 +1347,41 @@ permalink: /lote/
         <!-- Área do Fogo em Meia-Lua & Fogueira (Fireplace) + ESTRUTURA 4: Ateliê -->
         <g class="map-structure-group" data-structure-id="patio-circle">
           <path
-            d="M 699.5 90.0 C 724.0 100.0, 737.5 122.0, 733.5 145.5 C 726.0 156.0, 692.0 166.0, 661.5 163.5 C 677.0 146.0, 693.0 118.0, 699.5 90.0 Z"
+            d="M 692.0 91.0 L 753.0 126.0 L 751.0 138.0 C 736.0 154.0, 714.0 171.0, 686.0 174.0 C 670.0 175.0, 658.0 169.0, 653.0 163.0 Z"
             class="map-structure-shape"
             fill="rgba(249, 115, 22, 0.18)"
             stroke="#fb923c"
             stroke-width="1.8" />
           <!-- Fogueira (Círculo Vermelho Interno) -->
           <circle
-            cx="701.5" cy="135.5" r="5.5"
+            cx="699.5" cy="135.5" r="5.5"
             fill="rgba(239, 68, 68, 0.45)"
             stroke="#ef4444"
             stroke-width="1.8"
             pointer-events="none" />
           <circle
-            cx="701.5" cy="135.5" r="2.2"
+            cx="699.5" cy="135.5" r="2.2"
             fill="#fca5a5"
             pointer-events="none" />
-          <text x="703" y="151" fill="#fed7aa" font-size="8.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
+          <text class="map-element-label" data-label-px="700" data-label-py="151" x="700" y="151" fill="#fed7aa" font-size="8.2" font-family="JetBrains Mono, monospace" font-weight="700" text-anchor="middle" pointer-events="none">
             Fogo
           </text>
         </g>
         <g class="map-structure-group" data-structure-id="atelie">
           <polygon
-            points="695,87.1 656.1,164.1 582.9,126.1 620.9,52.9"
+            points="622.0,55.0 692.0,91.0 653.0,163.0 585.0,127.0 598.0,104.0 563.0,73.0 568.0,61.0"
             class="map-structure-shape"
-            fill="rgba(168, 85, 247, 0.30)"
+            fill="rgba(168, 85, 247, 0.28)"
             stroke="#a855f7"
-            stroke-width="2.5" />
-          <text x="638.5" y="106" fill="#ffffff" font-size="11.5" font-weight="700" text-anchor="middle" pointer-events="none">
+            stroke-width="2.4" />
+          <!-- Cumeeiras e Águas do Telhado do Ateliê -->
+          <line x1="631.0" y1="93.0" x2="632.0" y2="152.0" stroke="rgba(233, 213, 255, 0.65)" stroke-width="1.3" pointer-events="none" />
+          <line x1="631.0" y1="93.0" x2="676.0" y2="83.0" stroke="rgba(233, 213, 255, 0.55)" stroke-width="1.1" pointer-events="none" />
+          <line x1="631.0" y1="93.0" x2="565.0" y2="70.0" stroke="rgba(233, 213, 255, 0.55)" stroke-width="1.1" pointer-events="none" />
+          <text class="map-element-label" data-label-px="636.0" data-label-py="112" x="636.0" y="105" fill="#ffffff" font-size="11.5" font-weight="700" text-anchor="middle" pointer-events="none">
             Ateliê
           </text>
-          <text x="638.5" y="120" fill="#e9d5ff" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
+          <text class="map-element-label" data-label-px="636.0" data-label-py="112" x="636.0" y="119" fill="#e9d5ff" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
             8,6m × 8,2m
           </text>
         </g>
@@ -1318,22 +1389,22 @@ permalink: /lote/
         <!-- ESTRUTURA 5: Depósito -->
         <g class="map-structure-group" data-structure-id="deposito-madeira">
           <polygon
-            points="554.8,106 546.1,133.8 448.8,102.3 457.5,74.6"
+            points="547.5,108.5 538.5,139.5 453.5,110.5 462.5,80.0"
             fill="rgba(249, 115, 22, 0.16)"
             stroke="#fb923c"
             stroke-width="1.2"
             stroke-dasharray="3,2"
             pointer-events="none" />
           <polygon
-            points="546.1,133.8 528.3,191.2 431,159.8 448.8,102.3"
+            points="538.5,139.5 520.0,189.5 435.0,159.5 453.5,110.5"
             class="map-structure-shape"
-            fill="rgba(249, 115, 22, 0.34)"
+            fill="rgba(249, 115, 22, 0.32)"
             stroke="#f97316"
-            stroke-width="2.5" />
-          <text x="488.6" y="143" fill="#ffffff" font-size="11.5" font-weight="700" text-anchor="middle" pointer-events="none">
+            stroke-width="2.4" />
+          <text class="map-element-label" data-label-px="486.8" data-label-py="150" x="486.8" y="143" fill="#ffffff" font-size="11.5" font-weight="700" text-anchor="middle" pointer-events="none">
             Depósito
           </text>
-          <text x="488.6" y="157" fill="#fed7aa" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
+          <text class="map-element-label" data-label-px="486.8" data-label-py="150" x="486.8" y="157" fill="#fed7aa" font-size="9.5" font-family="JetBrains Mono, monospace" text-anchor="middle" pointer-events="none">
             6,0m × 10,2m
           </text>
         </g>
@@ -1879,7 +1950,7 @@ permalink: /lote/
   {{ site.data.lote_categorias | jsonify }}
 </script>
 
-<script src="/assets/js/lote-manager.js?v=15"></script>
+<script src="/assets/js/lote-manager.js?v=17"></script>
 <script>
   (function () {
     'use strict';
@@ -2038,6 +2109,7 @@ permalink: /lote/
       var btnMapFullscreen = document.getElementById('btn-map-fullscreen');
       var fullscreenBtnLabel = document.getElementById('fullscreen-btn-label');
       var zoomBtns = document.querySelectorAll('.map-zoom-btn');
+      var mapElementLabels = document.querySelectorAll('.map-element-label');
       var mapCursorReadout = document.getElementById('map-cursor-readout');
 
       var paletteContainer = document.getElementById('tree-palette-container');
@@ -2154,8 +2226,8 @@ permalink: /lote/
 
       function clampSvgCoord(x, y) {
         return {
-          x: Math.max(15, Math.min(1175, x)),
-          y: Math.max(15, Math.min(585, y))
+          x: Math.max(-15, Math.min(1235, x)),
+          y: Math.max(-15, Math.min(635, y))
         };
       }
 
@@ -2491,8 +2563,29 @@ permalink: /lote/
         });
       }
 
+      // Dynamically scale lot element & boundary labels by inverse zoom (1/z) so zoom normalizes them like plant labels
+      function normalizeMapElementLabels(zoomScale) {
+        var zScale = Math.max(1, Number(zoomScale) || 1);
+        for (var elIdx = 0; elIdx < mapElementLabels.length; elIdx++) {
+          var labelEl = mapElementLabels[elIdx];
+          var px = labelEl.getAttribute('data-label-px') || labelEl.getAttribute('x') || '0';
+          var py = labelEl.getAttribute('data-label-py') || labelEl.getAttribute('y') || '0';
+          var rot = labelEl.getAttribute('data-label-rot') || '0';
+          var tf = Lote.computeElementLabelTransform
+            ? Lote.computeElementLabelTransform(px, py, zScale, rot)
+            : '';
+          if (tf) {
+            labelEl.setAttribute('transform', tf);
+          } else {
+            labelEl.removeAttribute('transform');
+          }
+        }
+      }
+
       // Render Plant Pins on the Proportional SVG Map with Smart Angular Label Rotation & Multi-Pin support
       function renderMapPins() {
+        var zScale = Math.max(1, currentZoomScale || 1);
+        normalizeMapElementLabels(zScale);
         if (!svgPinsLayer) return;
         while (svgPinsLayer.firstChild) svgPinsLayer.removeChild(svgPinsLayer.firstChild);
 
@@ -2526,7 +2619,6 @@ permalink: /lote/
           }
         }
 
-        var zScale = Math.max(1, currentZoomScale || 1);
         var invZ = Math.round((1 / zScale) * 1000) / 1000;
         var labelPlacements = Lote.computePinLabelPlacements(pinnedItems, zScale);
 
@@ -2996,14 +3088,14 @@ permalink: /lote/
       });
 
       var svgScrollStage = document.getElementById('lote-svg-scroll-stage');
-      var BASE_SVG_WIDTH = 1190;
+      var BASE_SVG_WIDTH = 1280;
 
       function applyMapZoom(scaleFactor) {
         var clampedScale = Math.max(1, Math.min(5, Number(scaleFactor) || 1));
         if (!svgMap || !svgScrollStage) return;
 
         var stageWidth = Math.max(BASE_SVG_WIDTH, svgScrollStage.clientWidth || BASE_SVG_WIDTH);
-        var stageHeight = Math.max(600, svgScrollStage.clientHeight || 600);
+        var stageHeight = Math.max(680, svgScrollStage.clientHeight || 680);
 
         // Preserve center point ratio when changing zoom level
         var prevScrollWidth = svgScrollStage.scrollWidth || stageWidth;
@@ -3019,7 +3111,7 @@ permalink: /lote/
           svgMap.style.height = fullActive ? '100%' : 'auto';
         } else {
           var targetW = Math.round(stageWidth * clampedScale);
-          var targetH = Math.round((fullActive ? stageHeight : (stageWidth * 600 / 1190)) * clampedScale);
+          var targetH = Math.round((fullActive ? stageHeight : (stageWidth * 680 / 1280)) * clampedScale);
           svgMap.style.maxWidth = 'none';
           svgMap.style.width = targetW + 'px';
           svgMap.style.height = fullActive ? targetH + 'px' : 'auto';

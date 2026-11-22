@@ -6,6 +6,8 @@ tangerina-morgote,Tangerina Morgote (Murcott),,Citrus reticulata × C. sinensis,
 laranja-bahia,Laranja Bahia (de Umbigo),,Citrus sinensis,Rutaceae,Brasil (Mutação natural),Set/2022,2022,1. Pomar Base (Set/2022),1,citricas,Mutação Natural Brasileira,Confirmado,76.9,19.9
 laranja-valencia-pera,Laranja Valência / Pera,,Citrus sinensis,Rutaceae,Sudeste Asiático,Set/2022,2022,1. Pomar Base (Set/2022),1,citricas,Originária do Sudeste Asiático,Sugestão SC (Confirmar),,
 laranja-lima,Laranja Lima (do Céu),,Citrus sinensis,Rutaceae,Ásia / Mediterrâneo,Set/2022,2022,1. Pomar Base (Set/2022),1,citricas,Originária da Ásia / Mediterrâneo,Confirmado,74.9,19.7
+laranja-sanguinea,Laranja Sanguínea,Polpa vermelha,Citrus sinensis,Rutaceae,Mediterrâneo (Sicília),Set/2022,2022,1. Pomar Base (Set/2022),3,citricas,Polpa Sanguínea • Mediterrâneo (Sicília),Confirmado,,
+lima-da-persia,Lima (Lima-da-Pérsia),,Citrus limettioides,Rutaceae,Ásia / Oriente Médio,Set/2022,2022,1. Pomar Base (Set/2022),1,citricas,Cítrica Doce • Ásia / Oriente Médio,Confirmado,,
 limao-taiti,Limão Taiti,,Citrus × latifolia,Rutaceae,Sudeste Asiático,Set/2022,2022,1. Pomar Base (Set/2022),1,citricas,Originário do Sudeste Asiático,Confirmado,84.5,18.5
 limao-cravo,Limão Cravo (Rosa / Caipira),,Citrus × limonia,Rutaceae,Índia / Sul da China,Set/2022,2022,1. Pomar Base (Set/2022),1,citricas,Rústico • Índia / Sul da China,Confirmado,65.3,19.3
 limao-galego,Limão Galego,,Citrus × aurantiifolia,Rutaceae,Sudeste Asiático,Set/2022,2022,1. Pomar Base (Set/2022),1,citricas,Originário do Sudeste Asiático,Confirmado,,
@@ -38,6 +40,7 @@ babosa-2022,Babosa (Aloe Vera),,Aloe vera,Asphodelaceae,Península Arábica / No
 abiu-amarelo,Abiu Amarelo,,Pouteria caimito,Sapotaceae,Amazônia,Nov/2026,2026,2. Expansão de Frutíferas (2026),1,amazonicas-sombreadas,Nativa da Amazônia,Confirmado,93,34.5
 acerola-doce-gigante,Acerola Doce Gigante,,Malpighia emarginata,Malpighiaceae,Antilhas / América Central,Jan/2026,2026,2. Expansão de Frutíferas (2026),1,pequenas-frutas-berries,Nativa das Antilhas e América Central,Confirmado,73,11.2
 ameixa-italiana,Ameixa Italiana,,Prunus domestica,Rosaceae,Cáucaso / Europa,Nov/2026,2026,2. Expansão de Frutíferas (2026),1,rosaceas-temperadas,Originária do Cáucaso / Europa,Confirmado,106.8,18.2
+amora-grande,Amora Grande,,Morus nigra,Moraceae,Ásia Ocidental / Pérsia,Nov/2026,2026,2. Expansão de Frutíferas (2026),1,pequenas-frutas-berries,Fruto Grande e Doce • Ásia,Confirmado,,
 araca-amarelo,Araçá Amarelo,,Psidium cattleyanum,Myrtaceae,Brasil (Mata Atlântica),Nov/2026,2026,2. Expansão de Frutíferas (2026),1,nativas-mata-atlantica-cerrado,Nativa da Mata Atlântica,Confirmado,71.5,18.6
 atemoia-gigante,Atemoia Gigante,,Annona × atemoya,Annonaceae,Híbrido Am. Tropical,Jan/2026,2026,2. Expansão de Frutíferas (2026),1,tropicais-subtropicais,Híbrido da América Tropical,Confirmado,70,20.2
 banana-maca,Banana Maçã,,Musa × paradisiaca,Musaceae,Sudeste Asiático,Nov/2026,2026,2. Expansão de Frutíferas (2026),2,bananeiras-musaceas,Originária do Sudeste Asiático,Confirmado,97.8;98,30.3;29.7
@@ -51,13 +54,17 @@ caqui-kyoto,Caqui Kyoto,,Diospyros kaki,Ebenaceae,Japão / Ásia Oriental,Jan/20
 cereja-do-rio-grande,Cereja-do-Rio-Grande,,Eugenia involucrata,Myrtaceae,Sul e Sudeste do Brasil,Jan/2026 e Nov/2026,2026,2. Expansão de Frutíferas (2026),2,nativas-mata-atlantica-cerrado,Nativa do Sul do Brasil,Confirmado,,
 cupuacu,Cupuaçu,,Theobroma grandiflorum,Malvaceae,Amazônia,Nov/2026,2026,2. Expansão de Frutíferas (2026),2,amazonicas-sombreadas,Nativo da Floresta Amazônica,Confirmado,,
 figo-branco-pingo-de-mel,Figo Branco Pingo-de-Mel,,Ficus carica,Moraceae,Mediterrâneo / Oriente Médio,Nov/2026,2026,2. Expansão de Frutíferas (2026),1,rosaceas-temperadas,Originário do Mediterrâneo,Confirmado,69.8,5.1
+figo-roxo,Figo Roxo,,Ficus carica,Moraceae,Mediterrâneo / Oriente Médio,Nov/2026,2026,2. Expansão de Frutíferas (2026),1,rosaceas-temperadas,Cultivar Roxo de Mesa • Mediterrâneo,Confirmado,,
 framboesa-autumn-bliss,Framboesa Autumn Bliss,,Rubus idaeus,Rosaceae,Europa (Cultivar Reino Unido),Jan/2026,2026,2. Expansão de Frutíferas (2026),1,pequenas-frutas-berries,Cultivar Europeia de Baixo Frio,Confirmado,,
 framboesa-vermelha-doce,Framboesa Vermelha Doce,,Rubus idaeus,Rosaceae,Europa / Ásia,Nov/2026,2026,2. Expansão de Frutíferas (2026),1,pequenas-frutas-berries,Originária da Europa e Ásia,Confirmado,,
 fruta-do-milagre,Fruta-do-Milagre,,Synsepalum dulcificum,Sapotaceae,África Ocidental,Nov/2026,2026,2. Expansão de Frutíferas (2026),1,pequenas-frutas-berries,Nativa da África Ocidental,Confirmado,,
+goiaba-2021,Goiaba,,Psidium guajava,Myrtaceae,América Tropical,Jan/2021,2021,1. Pomar Base (Set/2022),1,tropicais-subtropicais,Nativa da América Tropical,Confirmado,,
 goiaba-polpa-amarela,Goiaba de Polpa Amarela,,Psidium guajava,Myrtaceae,América Tropical,Jan/2026,2026,2. Expansão de Frutíferas (2026),1,tropicais-subtropicais,Nativa da América Tropical,Confirmado,73.2,19.6
 goiaba-maca,Goiaba Maçã,,Psidium guajava,Myrtaceae,América Tropical,Jan/2026,2026,2. Expansão de Frutíferas (2026),2,tropicais-subtropicais,Nativa da América Tropical,Confirmado,80.8;72.3,20.8;19.5
+goiaba-vermelha,Goiaba Vermelha,,Psidium guajava,Myrtaceae,América Tropical,Nov/2026,2026,2. Expansão de Frutíferas (2026),1,tropicais-subtropicais,Polpa Vermelha • América Tropical,Confirmado,,
 graviola,Graviola,,Annona muricata,Annonaceae,Antilhas / América Central,Jan/2026,2026,2. Expansão de Frutíferas (2026),1,tropicais-subtropicais,Originária das Antilhas e Am. Central,Confirmado,,
 grumixama,Grumixama,,Eugenia brasiliensis,Myrtaceae,Brasil (Mata Atlântica),Jan/2026,2026,2. Expansão de Frutíferas (2026),1,nativas-mata-atlantica-cerrado,Nativa da Mata Atlântica,Confirmado,72.4,18
+guajuvira,Guajuvira,,Cordia americana,Boraginaceae,Sul do Brasil (Mata Atlântica),Nov/2026,2026,"3. Especiarias, Estimulantes, Palmeiras e Nativas",1,madeireiras-palmeiras-nozes,Árvore Nativa do Sul do Brasil,Confirmado,,
 guarana-da-amazonia,Guaraná-da-Amazônia,,Paullinia cupana,Sapindaceae,Amazônia,Nov/2026,2026,2. Expansão de Frutíferas (2026),1+,amazonicas-sombreadas,Nativo da Amazônia Brasileira,Confirmado,,
 inga-banana,Ingá-Banana (Ingá-Cipó),,Inga edulis,Fabaceae,Amazônia / Mata Atlântica,Nov/2026,2026,2. Expansão de Frutíferas (2026),1,nativas-mata-atlantica-cerrado,Nativa da Amazônia e Mata Atlântica,Confirmado,100.5,33.5
 jaca-dura,Jaca Dura,,Artocarpus heterophyllus,Moraceae,Índia / Sudeste Asiático,Nov/2026,2026,2. Expansão de Frutíferas (2026),1,tropicais-subtropicais,Originária da Índia e Sudeste Asiático,Confirmado,,
@@ -69,20 +76,28 @@ maca-eva,Maçã Eva,,Malus domestica,Rosaceae,Brasil (IAPAR - Baixo frio),Nov/20
 maca-julieta,Maçã Julieta,,Malus domestica,Rosaceae,Brasil (IAPAR - Polinizadora),Nov/2026,2026,2. Expansão de Frutíferas (2026),1,rosaceas-temperadas,Cultivar Polinizadora • IAPAR Brasil,Confirmado,,
 manga-haden,Manga Haden,,Mangifera indica,Anacardiaceae,Sul da Ásia (Cultivar EUA),Nov/2026,2026,2. Expansão de Frutíferas (2026),1,tropicais-subtropicais,Sul da Ásia • Cultivar Clássica,Confirmado,83.6,21.9
 manga-palmer,Manga Palmer,,Mangifera indica,Anacardiaceae,Sul da Ásia (Cultivar EUA),Nov/2026,2026,2. Expansão de Frutíferas (2026),1,tropicais-subtropicais,Sul da Ásia • Polpa Sem Fibras,Confirmado,72.9,5.2
+maracuja-azedo,Maracujá-Azedo,,Passiflora edulis,Passifloraceae,Brasil / América Tropical,Nov/2026,2026,2. Expansão de Frutíferas (2026),1,nativas-mata-atlantica-cerrado,Nativo do Brasil,Confirmado,,
 maracuja-doce,Maracujá-Doce,,Passiflora alata,Passifloraceae,Brasil,Nov/2026,2026,2. Expansão de Frutíferas (2026),1,nativas-mata-atlantica-cerrado,Nativo do Brasil,Confirmado,,
 marmelo-do-cerrado,Marmelo-do-Cerrado,,Alibertia edulis,Rubiaceae,Brasil (Cerrado),Set/2026,2026,2. Expansão de Frutíferas (2026),1,nativas-mata-atlantica-cerrado,Nativo do Cerrado Brasileiro,Confirmado,,
 mirtilo-clima-quente,Mirtilo (Clima Quente),,Vaccinium corymbosum,Ericaceae,América do Norte,Nov/2026,2026,2. Expansão de Frutíferas (2026),1,pequenas-frutas-berries,Seleção de Baixa Exigência em Frio,Confirmado,,
 mirtilo-emerald,Mirtilo Emerald,,Vaccinium corymbosum,Ericaceae,EUA (Híbrido clima ameno),Jan/2026,2026,2. Expansão de Frutíferas (2026),3,pequenas-frutas-berries,Híbrido de Clima Ameno • EUA,Confirmado,,
 mirtilo-jewel,Mirtilo Jewel,,Vaccinium corymbosum,Ericaceae,EUA (Híbrido clima ameno),Jan/2026,2026,2. Expansão de Frutíferas (2026),1,pequenas-frutas-berries,Híbrido de Clima Ameno • EUA,Confirmado,,
 pitanga-preta,Pitanga Preta,,Eugenia uniflora,Myrtaceae,Brasil (Mata Atlântica),Jan/2026,2026,2. Expansão de Frutíferas (2026),1,nativas-mata-atlantica-cerrado,Nativa da Mata Atlântica,Confirmado,69,19.1
+pitanga-vermelha,Pitanga Vermelha,,Eugenia uniflora,Myrtaceae,Brasil (Mata Atlântica),Jan/2021,2021,1. Pomar Base (Set/2022),1,nativas-mata-atlantica-cerrado,Nativa da Mata Atlântica,Confirmado,,
 rambuta,Rambutã (Rambutão),,Nephelium lappaceum,Sapindaceae,Malásia / Indonésia,Jan/2026,2026,2. Expansão de Frutíferas (2026),1,tropicais-subtropicais,Originário da Malásia e Indonésia,Confirmado,67.8,18.9
 seriguela,Seriguela,,Spondias purpurea,Anacardiaceae,América Central / Brasil,Jan/2026,2026,2. Expansão de Frutíferas (2026),1,tropicais-subtropicais,Nativa da América Tropical,Confirmado,,
+acai,Açaí,,Euterpe oleracea,Arecaceae,Amazônia,Nov/2026,2026,"3. Especiarias, Estimulantes, Palmeiras e Nativas",2,madeireiras-palmeiras-nozes,Palmeira Nativa da Amazônia,Confirmado,,
 cafe-arabica,Café Arábica,,Coffea arabica,Rubiaceae,Etiópia,Nov/2026,2026,"3. Especiarias, Estimulantes, Palmeiras e Nativas",1,especiarias-estimulantes,Originário das Terras Altas da Etiópia,Confirmado,66,18.2
+canela,Canela,,Cinnamomum verum,Lauraceae,Sri Lanka / Sul da Ásia,Nov/2021,2021,"3. Especiarias, Estimulantes, Palmeiras e Nativas",5,especiarias-estimulantes,Especiaria Aromática • Sri Lanka / Ásia,Confirmado,,
+coco-anao,Coco Anão (Coqueiro-Anão),,Cocos nucifera,Arecaceae,Sudeste Asiático / Pacífico,Nov/2026,2026,"3. Especiarias, Estimulantes, Palmeiras e Nativas",2,madeireiras-palmeiras-nozes,Palmeira Tropical • Ásia / Pacífico,Confirmado,,
 cominho-preto,Cominho-Preto,,Nigella sativa,Ranunculaceae,Sudoeste Asiático,Nov/2026,2026,"3. Especiarias, Estimulantes, Palmeiras e Nativas",Sementes,especiarias-estimulantes,Originário do Sudoeste Asiático,Confirmado,,
 cravo-da-india,Cravo-da-Índia,,Syzygium aromaticum,Myrtaceae,Indonésia (Ilhas Molucas),Jan/2026,2026,"3. Especiarias, Estimulantes, Palmeiras e Nativas",1,especiarias-estimulantes,Originário das Ilhas Molucas,Confirmado,,
 dama-da-noite,Dama-da-Noite,,Cestrum nocturnum,Solanaceae,América Central / Caribe,Nov/2026,2026,"3. Especiarias, Estimulantes, Palmeiras e Nativas",1,especiarias-estimulantes,Aromática Noturna • América Central,Confirmado,,
+jasmim,Jasmim,,Jasminum spp.,Oleaceae,Ásia Tropical e Subtropical,Ago/2023,2023,"3. Especiarias, Estimulantes, Palmeiras e Nativas",2,especiarias-estimulantes,Flor Aromática • Ásia Subtropical,Confirmado,,
+jasmim-poeta,Jasmim-do-Poeta,,Jasminum polyanthum,Oleaceae,China (Yunnan),Nov/2026,2026,"3. Especiarias, Estimulantes, Palmeiras e Nativas",1,especiarias-estimulantes,Trepadeira Aromática • China,Confirmado,,
 jequitiba-branco,Jequitibá-Branco,,Cariniana legalis,Lecythidaceae,Brasil (Mata Atlântica),Jan/2026,2026,"3. Especiarias, Estimulantes, Palmeiras e Nativas",1,madeireiras-palmeiras-nozes,Árvore Matriz da Mata Atlântica,Confirmado,71.9,7.6
 noz-moscada,Noz-Moscada,,Myristica fragrans,Myristicaceae,Indonésia (Ilhas Banda),Nov/2026,2026,"3. Especiarias, Estimulantes, Palmeiras e Nativas",1,especiarias-estimulantes,Originária das Ilhas Banda • Indonésia,Confirmado,,
+palmeira-azul,Palmeira-Azul (Bismarckia),,Bismarckia nobilis,Arecaceae,Madagascar,Ago/2023,2023,"3. Especiarias, Estimulantes, Palmeiras e Nativas",1,madeireiras-palmeiras-nozes,Palmeira Ornamental • Madagascar,Confirmado,,
 palmito-pupunha,Palmito Pupunha,,Bactris gasipaes,Arecaceae,Amazônia,Nov/2026,2026,"3. Especiarias, Estimulantes, Palmeiras e Nativas",1,madeireiras-palmeiras-nozes,Palmeira Nativa da Amazônia,Confirmado,,
 pinheiro-do-parana,Pinheiro-do-Paraná (Araucária),Pinhão,Araucaria angustifolia,Araucariaceae,Sul do Brasil (Mata de Araucárias),2023,2023,"3. Especiarias, Estimulantes, Palmeiras e Nativas",1,madeireiras-palmeiras-nozes,Nativa do Sul do Brasil • Pinhão,Confirmado,104.6,28.2
 urucum-coloral,Urucum (Coloral),,Bixa orellana,Bixaceae,Amazônia / América Tropical,Nov/2026,2026,"3. Especiarias, Estimulantes, Palmeiras e Nativas",1,especiarias-estimulantes,Nativo da Amazônia / América Tropical,Confirmado,,

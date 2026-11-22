@@ -8,14 +8,14 @@ const ROOT = path.resolve(__dirname, '../..');
 const PLANTS_CSV_PATH = path.join(ROOT, '_data/lote_plantas.csv');
 const CATEGORIES_CSV_PATH = path.join(ROOT, '_data/lote_categorias.csv');
 
-test('CSV files exist and parse all 87 plant varieties and 10 categories', () => {
+test('CSV files exist and parse all 102 plant varieties and 10 categories', () => {
   const plantsRaw = fs.readFileSync(PLANTS_CSV_PATH, 'utf8');
   const categoriesRaw = fs.readFileSync(CATEGORIES_CSV_PATH, 'utf8');
 
   const plants = LoteManager.parseCSV(plantsRaw);
   const categories = LoteManager.parseCSV(categoriesRaw);
 
-  assert.equal(plants.length, 87, 'Should contain all 87 plant entries across the 3 tables');
+  assert.equal(plants.length, 102, 'Should contain all 102 plant entries across the 3 tables');
   assert.equal(categories.length, 10, 'Should contain 10 structured botanical/agronomic categories');
 
   const categoryIds = new Set(categories.map((c) => c.categoria_id));
@@ -49,14 +49,14 @@ test('computeLoteStats and filterPlants aggregate and filter accurately', () => 
   const categories = LoteManager.parseCSV(fs.readFileSync(CATEGORIES_CSV_PATH, 'utf8'));
 
   const stats = LoteManager.computeLoteStats(plants, categories);
-  assert.equal(stats.totalVarieties, 87);
-  assert.equal(stats.byYear['2022'], 36);
-  assert.equal(stats.byYear['2026'], 50);
+  assert.equal(stats.totalVarieties, 102);
+  assert.equal(stats.byYear['2022'], 38);
+  assert.equal(stats.byYear['2026'], 58);
   assert.equal(stats.pendingConfirmCount, 11);
   assert.equal(stats.pinnedCount, 46);
 
   const citricas = LoteManager.filterPlants(plants, { categoria_id: 'citricas' });
-  assert.equal(citricas.length, 12);
+  assert.equal(citricas.length, 14);
 
   const viticultura = LoteManager.filterPlants(plants, { familia: 'Vitaceae' });
   assert.equal(viticultura.length, 6);
@@ -163,6 +163,24 @@ test('parsePlantPins and setPlantPins support multiple pins per plant and auto-u
   const reparsed = LoteManager.parsePlantPins(plant);
   assert.equal(reparsed.length, 2);
 });
+
+test('computeElementLabelTransform normalizes lot element labels dynamically on zoom like plant labels', () => {
+  assert.equal(LoteManager.computeElementLabelTransform(907, 172, 1, 0), '');
+  assert.equal(LoteManager.computeElementLabelTransform(1124, 304, 1, 85.1), 'rotate(85.1, 1124, 304)');
+  assert.equal(
+    LoteManager.computeElementLabelTransform(907, 172, 5, 0),
+    'translate(907, 172) scale(0.2) translate(-907, -172)'
+  );
+  assert.equal(
+    LoteManager.computeElementLabelTransform(1124, 304, 5, 85.1),
+    'translate(1124, 304) rotate(85.1) scale(0.2) translate(-1124, -304)'
+  );
+
+  const loteHtml = fs.readFileSync(path.join(ROOT, 'lote.html'), 'utf8');
+  const labelMatches = loteHtml.match(/<text class="map-element-label"[^>]*>/g) || [];
+  assert.equal(labelMatches.length, 23, 'All 23 lot structure and boundary SVG text labels must be zoom-normalized');
+});
+
 
 
 

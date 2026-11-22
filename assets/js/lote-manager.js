@@ -48,11 +48,11 @@
   var LOTE_GEOMETRY = {
     scalePxPerMeter: 10.0,
     rotationDeg: ROTATION_DEG,
-    viewBox: { width: 1190, height: 600 },
+    viewBox: { minX: -30, minY: -30, width: 1280, height: 680 },
     domeReference: {
-      cx: 1001.1,
-      cy: 191.9,
-      r: 30,
+      cx: 1001.5,
+      cy: 188.5,
+      r: 29.8,
       diameterMeters: 6.0,
       areaSqMeters: 28.3
     },
@@ -90,14 +90,14 @@
         name: 'Domo • Estufa (Ref. Ø 6m)',
         shortName: 'Domo (Estufa 6m)',
         type: 'circle',
-        cx: 1001.1,
-        cy: 191.9,
-        r: 30,
-        labelX: 1001.1,
-        labelY: 156,
+        cx: 1001.5,
+        cy: 188.5,
+        r: 29.8,
+        labelX: 1001.5,
+        labelY: 154.5,
         dimensionsMeters: 'Ø 6,0 m',
         areaSqMeters: 28.3,
-        description: 'Estufa Geodésica (Greenhouse) de Ø 6,0 m — referência oficial de escala do mapa (60 px = 6,0 m)',
+        description: 'Estufa Geodésica (Greenhouse) de Ø 6,0 m c/ portal oeste — referência oficial de escala do mapa (60 px = 6,0 m)',
         color: '#22c55e'
       },
       {
@@ -105,12 +105,12 @@
         name: 'Lago / Tanque (WIP Pond)',
         shortName: 'Lago (WIP)',
         type: 'polygon',
-        points: '978.4,73.0 1032.8,73.0 1032.8,140.4 978.4,140.4',
-        labelX: 1005.6,
-        labelY: 106.7,
+        points: '952.0,58.0 1014.0,62.0 1010.0,142.0 948.0,138.0',
+        labelX: 981.0,
+        labelY: 101.0,
         dimensionsMeters: '5,4 m × 6,8 m',
         areaSqMeters: 36.7,
-        description: 'Lago / Tanque em construção (WIP Pond) entre o caminho de pedra norte, o Domo (Estufa) e a Estrutura de Bambu',
+        description: 'Lago / Tanque em construção (WIP Pond) entre o Limite Oeste, a Casa A-Frame, o Domo e a Estrutura de Bambu',
         color: '#38bdf8'
       },
       {
@@ -118,9 +118,9 @@
         name: 'Estrutura de Bambu & Redes (Bamboo Web)',
         shortName: 'Bambu & Redes',
         type: 'polygon',
-        points: '1038.3,55.5 1083.5,58.5 1083.5,141.2 1038.3,141.2',
-        labelX: 1060.9,
-        labelY: 98.5,
+        points: '1018.0,50.0 1084.0,54.0 1082.0,150.0 1015.0,146.0',
+        labelX: 1050.0,
+        labelY: 100.0,
         dimensionsMeters: '4,5 m × 8,6 m',
         areaSqMeters: 38.7,
         url: '/bamboo-web-structure-project',
@@ -132,17 +132,17 @@
         name: 'Casa (2 A-Frames Unidos: 6×6m + 7×6m)',
         shortName: 'Casa',
         type: 'polygon',
-        points: '891.5,156.2 961.1,162.8 954.4,235.5 949.3,235.0 943.7,294.8 883.9,289.2 889.6,229.4 884.7,228.9',
-        aFrame7x6Points: '891.5,156.2 961.1,162.8 954.4,235.5 884.7,228.9',
-        aFrame6x6Points: '889.6,229.4 949.3,235.0 943.7,294.8 883.9,289.2',
-        ridgeLine: '926.3,159.5 913.8,292.0',
-        solarPoints: '920.8,234.8 947.4,237.3 942.4,291.8 915.8,289.3',
-        solarUpperPoints: '938.2,205.5 954.2,207.0 951.8,232.5 935.8,231.0',
-        labelX: 919.8,
-        labelY: 227.2,
-        dimensionsMeters: '13,0 m × 6,0–7,0 m (6×6m Solar + 7×6m)',
+        points: '882.5,154.0 965.5,161.5 959.0,239.5 953.5,239.0 948.5,301.0 877.5,294.5 881.5,232.5 876.0,232.0',
+        aFrame7x6Points: '882.5,154.0 965.5,161.5 959.0,239.5 876.0,232.0',
+        aFrame6x6Points: '881.5,232.5 953.5,239.0 948.5,301.0 877.5,294.5',
+        ridgeLine: '924.0,157.8 913.0,297.8',
+        solarPoints: '917.8,250.2 950.2,253.0 946.2,300.2 913.8,297.4',
+        solarUpperPoints: '945.2,204.0 961.0,205.4 958.4,238.4 942.6,237.0',
+        labelX: 918.5,
+        labelY: 227.5,
+        dimensionsMeters: '13,0 m × 6,0–7,0 m (6×6m c/ 10 Painéis + 7×6m c/ 3 Painéis)',
         areaSqMeters: 84.0,
-        description: '2 A-Frames alinhados pela cumeeira central: 6×6m frontal c/ 10 painéis solares + extensão proporcional 7×6m c/ mansardas e 3 painéis',
+        description: '2 A-Frames alinhados pela cumeeira central: 6×6m frontal c/ matriz 2×5 de 10 painéis solares + extensão 7×6m c/ 2 mansardas e 3 painéis solares',
         color: '#10b981'
       },
       {
@@ -150,50 +150,50 @@
         name: 'Caminhos de Pedra & Pátios (Casa, Garagem, Casinha e Domo)',
         shortName: 'Caminhos de Pedra',
         type: 'path',
-        labelX: 884.0,
-        labelY: 296.0,
-        dimensionsMeters: 'Pátios, Curvas Frontais, Garagem e Rampa até a Rua',
+        labelX: 960.0,
+        labelY: 300.0,
+        dimensionsMeters: 'Caminho Reto e Curvo da Casinha, Bifurcação em Y do Domo e Acesso à Garagem',
         areaSqMeters: 112.0,
-        description: 'Caminhos de pedra basalto c/ meio-fio branco unificados: curvas frontais da Casa, contorno da Ilha de Pedras, Garagem e acesso até a Rua',
+        description: 'Caminhos de pedra basalto c/ meio-fio branco calibrados na ortofoto: ligação reta e curva c/ a Casinha, corredor e bifurcação em Y ao sul do Domo, e integração c/ a Garagem',
         color: '#d97706'
       },
       {
         id: 'stone-island-stairs',
-        name: 'Ilha de Pedras & Escada (Frente da Casa)',
+        name: 'Ilha de Pedras & Escada (Transição Casa / Domo / Garagem)',
         shortName: 'Ilha & Escada',
         type: 'polygon',
-        points: '910,337 943,340 941,360 908,355',
-        labelX: 925.5,
-        labelY: 348.5,
-        dimensionsMeters: '3,3 m × 2,2 m (c/ Escada de Pedra)',
-        areaSqMeters: 7.3,
-        description: 'Canteiro elevado em pedra (Ilha de Pedras) com degraus de pedra integrados entre o gramado frontal da Casa e o pátio da Garagem',
+        points: '938,332 976,335 974,355 936,351',
+        labelX: 954.0,
+        labelY: 345.0,
+        dimensionsMeters: '3,8 m × 2,2 m (c/ Escada de Pedra)',
+        areaSqMeters: 8.4,
+        description: 'Ilha de Pedras e degraus integrados na confluência entre o terraço frontal da Casa, o caminho em Y do Domo e a entrada da Garagem',
         color: '#f59e0b'
       },
       {
         id: 'garage',
-        name: 'Garagem & Rampa de Pedra (até a Divisa Jair)',
+        name: 'Garagem & Pátio de Acesso (até a Divisa Jair)',
         shortName: 'Garagem',
         type: 'polygon',
-        points: '936,368 982,372 1118,466 1121.5,506 970,404 934,404',
-        labelX: 968.0,
-        labelY: 389.0,
-        dimensionsMeters: '~19,5 m × 3,8 m (até a Divisa Jair)',
-        areaSqMeters: 74.0,
-        description: 'Garagem coberta por pergolado verde e acesso calçado em pedra estendendo-se no ângulo do Ingá-Banana até a Divisa Jair',
+        points: '938,352 978,356 1114,388 1119,448 972,418 934,410',
+        labelX: 1024.0,
+        labelY: 398.0,
+        dimensionsMeters: '~18,5 m × 5,8 m (até a Divisa Jair)',
+        areaSqMeters: 96.0,
+        description: 'Garagem e pátio de manobra/acesso perfeitamente alinhados à ortofoto e ao muro de contenção inferior até a Divisa Jair',
         color: '#38bdf8'
       },
       {
         id: 'wall-slice-triangle',
-        name: 'Muro de Pedra & Triângulo do Muro (Canteiro da Rua)',
-        shortName: 'Triângulo do Muro',
+        name: 'Muro de Contenção em Pedra & Talude Sul (Canteiro da Estrada)',
+        shortName: 'Muro & Talude Sul',
         type: 'polygon',
-        points: '936,424 970,404 1121.5,506 1106,533',
-        labelX: 1018.0,
-        labelY: 462.0,
-        dimensionsMeters: 'Muro ~18,2 m • Fatia Triangular c/ Frutíferas e Agaves',
-        areaSqMeters: 45.0,
-        description: 'Muro de contenção em blocos de pedra e fatia triangular elevada entre a Garagem/Rampa e a Estrada (Kinkan, Pêssegos e Agaves)',
+        points: '934,410 972,418 1119,448 1127.9,548 936,428',
+        labelX: 1030.0,
+        labelY: 465.0,
+        dimensionsMeters: 'Muro ~18,8 m • Fatia Triangular c/ Frutíferas entre a Garagem e a Estrada',
+        areaSqMeters: 85.0,
+        description: 'Muro de contenção em blocos de pedra na borda sul da Garagem e talude triangular arborizado até o vértice da Estrada Municipal',
         color: '#84cc16'
       },
       {
@@ -201,12 +201,12 @@
         name: 'Casinha',
         shortName: 'Casinha',
         type: 'polygon',
-        points: '843.9,68.3 839.0,131.9 760.1,126.5 765.0,62.9',
-        labelX: 802.0,
-        labelY: 94,
+        points: '841.5,67.5 836.5,131.5 753.0,126.0 757.5,62.0',
+        labelX: 797.0,
+        labelY: 98.0,
         dimensionsMeters: '6,4 m × 7,9 m',
         areaSqMeters: 50.6,
-        description: 'Casinha conectada pelos caminhos de pedra frontais e laterais aos pátios da Casa A-Frame e ao Pátio Circular',
+        description: 'Casinha conectada pelo caminho reto diagonal ao canto norte da Casa 7×6m, pelo caminho curvo oeste ao terraço 6×6m e à Área do Fogo',
         color: '#f59e0b'
       },
       {
@@ -214,14 +214,14 @@
         name: 'Área do Fogo & Fogueira (Meia-Lua)',
         shortName: 'Área do Fogo',
         type: 'path',
-        cx: 701.5,
+        cx: 699.5,
         cy: 135.5,
         r: 24,
-        labelX: 705.0,
+        labelX: 700.0,
         labelY: 135.5,
         dimensionsMeters: 'Meia-lua ~8,2 m × 4,1 m (Fogueira Ø 1,1 m)',
         areaSqMeters: 26.5,
-        description: 'Área do Fogo em formato de meia-lua ao lado do Ateliê com a Fogueira circular (em vermelho) no centro',
+        description: 'Área do Fogo em meia-lua com mureta curva de pedra entre a Casinha e o Ateliê, com a Fogueira circular e cadeiras ao centro',
         color: '#f97316'
       },
       {
@@ -229,10 +229,10 @@
         name: 'Ateliê',
         shortName: 'Ateliê',
         type: 'polygon',
-        points: '695,87.1 656.1,164.1 582.9,126.1 620.9,52.9',
-        labelX: 638.5,
-        labelY: 106,
-        dimensionsMeters: '8,6 m × 8,2 m',
+        points: '622.0,55.0 692.0,91.0 653.0,163.0 585.0,127.0 598.0,104.0 563.0,73.0 568.0,61.0',
+        labelX: 636.0,
+        labelY: 112.0,
+        dimensionsMeters: '8,6 m × 8,2 m (+ Ala Noroeste)',
         areaSqMeters: 70.5,
         color: '#a855f7'
       },
@@ -241,10 +241,10 @@
         name: 'Depósito',
         shortName: 'Depósito',
         type: 'polygon',
-        points: '546.1,133.8 528.3,191.2 431,159.8 448.8,102.3',
-        overhangPoints: '554.8,106 546.1,133.8 448.8,102.3 457.5,74.6',
-        labelX: 488.6,
-        labelY: 145,
+        points: '538.5,139.5 520.0,189.5 435.0,159.5 453.5,110.5',
+        overhangPoints: '547.5,108.5 538.5,139.5 453.5,110.5 462.5,80.0',
+        labelX: 486.8,
+        labelY: 150.0,
         dimensionsMeters: '6,0 m × 10,2 m (+2,9 m aba)',
         areaSqMeters: 61.2,
         color: '#f97316'
@@ -345,6 +345,23 @@
    */
   function hasValidCoords(p) {
     return parsePlantPins(p).length > 0;
+  }
+
+  /**
+   * Compute an SVG transform string that normalizes a lot element label (single or multi-line)
+   * by inverse zoom scale around its anchor pivot (px, py), preserving optional base rotation.
+   */
+  function computeElementLabelTransform(px, py, zoomScale, rotateDeg) {
+    var x = Number(px) || 0;
+    var y = Number(py) || 0;
+    var z = Math.max(1, Number(zoomScale) || 1);
+    var rot = Number(rotateDeg) || 0;
+    if (Math.abs(z - 1) < 0.001) {
+      return rot !== 0 ? 'rotate(' + rot + ', ' + x + ', ' + y + ')' : '';
+    }
+    var invZ = Math.round((1 / z) * 1000) / 1000;
+    var rotPart = rot !== 0 ? ' rotate(' + rot + ')' : '';
+    return 'translate(' + x + ', ' + y + ')' + rotPart + ' scale(' + invZ + ') translate(' + (-x) + ', ' + (-y) + ')';
   }
 
   /**
@@ -769,6 +786,7 @@
     parsePlantPins: parsePlantPins,
     setPlantPins: setPlantPins,
     hasValidCoords: hasValidCoords,
+    computeElementLabelTransform: computeElementLabelTransform,
     computePinLabelPlacements: computePinLabelPlacements,
     parseCSV: parseCSV,
     toCSV: toCSV,
