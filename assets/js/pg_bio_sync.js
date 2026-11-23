@@ -161,40 +161,63 @@ window.addEventListener('load', function() {
         });
 
         // ----------------------------------------------------
-        // Feature 1: Double Click to Sync Rotations (Ignore Center/Translation)
+        // Feature 1: Default Bi-Directional Mirrored Rotations & Zoom (Double Click to Toggle)
         // ----------------------------------------------------
-        let syncing = false;
-        let syncInterval;
+        let syncing = true;
+        let activeSource = vLeft;
+        let activeTarget = vRight;
 
         const rightCanvas = vRight.renderer.domElement;
         const leftCanvas = vLeft.renderer.domElement;
 
         const syncViewsRobustly = (source, target) => {
-            let sView = source.getView(); // [cx, cy, cz, zoom, qx, qy, qz, qw]
-            let tView = target.getView();
-            
+            if (!source || !target) return;
+            const sView = source.getView(); // [cx, cy, cz, zoom, qx, qy, qz, qw]
+            const tView = target.getView();
+            if (!sView || !tView || sView.length < 8 || tView.length < 8) return;
+
+            const delta =
+                Math.abs(tView[3] - sView[3]) +
+                Math.abs(tView[4] - sView[4]) +
+                Math.abs(tView[5] - sView[5]) +
+                Math.abs(tView[6] - sView[6]) +
+                Math.abs(tView[7] - sView[7]);
+            if (delta < 1e-5) return;
+
             // Keep target's translation (tView 0,1,2), copy zoom (3) and rotation (4,5,6,7)
             tView[3] = sView[3];
             tView[4] = sView[4];
             tView[5] = sView[5];
             tView[6] = sView[6];
             tView[7] = sView[7];
-            
+
             target.setView(tView);
             target.render();
         };
 
+        const setActiveLeader = (source, target) => {
+            activeSource = source;
+            activeTarget = target;
+        };
+
+        ['pointerdown', 'mousedown', 'touchstart', 'wheel'].forEach(evtName => {
+            leftCanvas.addEventListener(evtName, () => setActiveLeader(vLeft, vRight), { passive: true });
+            rightCanvas.addEventListener(evtName, () => setActiveLeader(vRight, vLeft), { passive: true });
+        });
+
+        let syncInterval = setInterval(() => {
+            if (syncing) {
+                syncViewsRobustly(activeSource, activeTarget);
+            }
+        }, 25);
+
         const toggleSync = (sourceViewer, targetViewer) => {
-            if(syncing) {
-                clearInterval(syncInterval);
+            setActiveLeader(sourceViewer, targetViewer);
+            if (syncing) {
                 syncing = false;
             } else {
                 syncing = true;
-                syncViewsRobustly(sourceViewer, targetViewer);
-                
-                syncInterval = setInterval(() => {
-                    syncViewsRobustly(sourceViewer, targetViewer);
-                }, 30);
+                syncViewsRobustly(activeSource, activeTarget);
             }
         };
 

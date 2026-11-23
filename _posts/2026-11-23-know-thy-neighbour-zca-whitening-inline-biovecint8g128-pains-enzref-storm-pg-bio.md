@@ -312,6 +312,74 @@ const ZCA_PAIRS = {
 let zcaViewerLeft = null;
 let zcaViewerRight = null;
 let zcaPdbCache = {};
+let zcaMirrorSyncActive = true;
+let zcaLeaderViewer = null;
+let zcaFollowerViewer = null;
+let zcaSyncTimer = null;
+
+function ensureZcaDefaultMirrorSync(vLeft, vRight) {
+  if (!vLeft || !vRight) return;
+  if (!zcaLeaderViewer) {
+    zcaLeaderViewer = vLeft;
+    zcaFollowerViewer = vRight;
+  }
+
+  const mirrorView = (src, dst) => {
+    if (!src || !dst || !zcaMirrorSyncActive) return;
+    const sv = src.getView();
+    const tv = dst.getView();
+    if (!sv || !tv || sv.length < 8 || tv.length < 8) return;
+    const delta =
+      Math.abs(tv[3] - sv[3]) +
+      Math.abs(tv[4] - sv[4]) +
+      Math.abs(tv[5] - sv[5]) +
+      Math.abs(tv[6] - sv[6]) +
+      Math.abs(tv[7] - sv[7]);
+    if (delta < 1e-5) return;
+    tv[3] = sv[3];
+    tv[4] = sv[4];
+    tv[5] = sv[5];
+    tv[6] = sv[6];
+    tv[7] = sv[7];
+    dst.setView(tv);
+    dst.render();
+  };
+
+  const leftEl = document.getElementById('zca-mol-left');
+  const rightEl = document.getElementById('zca-mol-right');
+  if (leftEl && !leftEl.dataset.mirrorBound) {
+    leftEl.dataset.mirrorBound = "1";
+    ['pointerdown', 'mousedown', 'touchstart', 'wheel'].forEach(evt => {
+      leftEl.addEventListener(evt, () => {
+        zcaLeaderViewer = vLeft;
+        zcaFollowerViewer = vRight;
+      }, { passive: true });
+    });
+    leftEl.addEventListener('dblclick', () => {
+      zcaMirrorSyncActive = !zcaMirrorSyncActive;
+      if (zcaMirrorSyncActive) mirrorView(vLeft, vRight);
+    });
+  }
+  if (rightEl && !rightEl.dataset.mirrorBound) {
+    rightEl.dataset.mirrorBound = "1";
+    ['pointerdown', 'mousedown', 'touchstart', 'wheel'].forEach(evt => {
+      rightEl.addEventListener(evt, () => {
+        zcaLeaderViewer = vRight;
+        zcaFollowerViewer = vLeft;
+      }, { passive: true });
+    });
+    rightEl.addEventListener('dblclick', () => {
+      zcaMirrorSyncActive = !zcaMirrorSyncActive;
+      if (zcaMirrorSyncActive) mirrorView(vRight, vLeft);
+    });
+  }
+
+  if (!zcaSyncTimer) {
+    zcaSyncTimer = setInterval(() => {
+      mirrorView(zcaLeaderViewer, zcaFollowerViewer);
+    }, 25);
+  }
+}
 
 async function fetchZcaPdb(url) {
   if (!zcaPdbCache[url]) {
@@ -334,6 +402,7 @@ async function loadZcaPairModels() {
   if (!zcaViewerRight) {
     zcaViewerRight = existing[1] || $3Dmol.createViewer(document.getElementById('zca-mol-right'), {backgroundColor: '#020617'});
   }
+  ensureZcaDefaultMirrorSync(zcaViewerLeft, zcaViewerRight);
 
   const [t1, t2] = await Promise.all([fetchZcaPdb(cfg.pdb1), fetchZcaPdb(cfg.pdb2)]);
   [zcaViewerLeft, zcaViewerRight].forEach((viewer, idx) => {
