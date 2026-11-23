@@ -184,38 +184,53 @@ To make microprotein engineering intuitive for systems engineers and synthetic b
 
 ---
 
-## 🔬 5. Interactive 3Dmol.js Inspection: Examining the Thermal Weak Seam & Microprotein Clamps
+## 🔬 5. Interactive 3Dmol.js Inspection: Symmetric Homodimer Clamps vs. Asymmetric Multi-Domain Staples
 
-Below you can interactively inspect our three headline **CETSA/TPP Microprotein Clamp $\times$ Target Enzyme Complex** discoveries promoted to `bio-pipelines` (`HYP-TPP-011`, `HYP-TPP-012`, and `HYP-TPP-013`).
-* **Double-click either 3D canvas** to lock and synchronize camera rotation via `pg_bio_sync.js`.
-* **Click any residue** on the microprotein clamp or target complex to highlight its counterpart across the 3D seam, or use the **4 Chemistry Teaching Buttons** below to inspect the **Unmasked Thermal Weak Seam (`TPP Seam`)**, the **Interfacial H-Bond Staple Anchors**, and the **Electrostatic / Transmembrane Clamp Geometry**.
+Why do some microprotein pairs in `swarm_tpp_knockout_cascades` look like **identical 3D mirror twins** (`0.50 Å` to `0.78 Å` Kabsch RMSD), while others look completely different in size and shape (`54–90 aa` single-helix pin vs. `250–472 aa` multi-lobe enzyme)?
+
+Because evolution uses microproteins in **two distinct structural regimes**:
+1. **Symmetric Inter-Subunit Homodimer Clamps (High 3D Structural Similarity, `0.50 Å – 3.83 Å` RMSD):**  
+   Two `133–145 aa` microproteins share the **exact same 3D fold** (`98.3%–99.4%` RangeFinder 9D pocket IoU) and interlock face-to-face via a **#4 Dovetail Leucine Zipper** or **#5 Beta-Sheet Edge-Gasket** (`L9VFW7 × A0A1G9H210` in *Natronorubrum* `DUF2073`, `A0ABD5SLL6 × A0A7D6CP77` in *Natrinema* `DUF302`, and our `/tpp?hub=A0A0U5HVU0` benchmark hub `A0A0U5HVU0 × Q9HP46` in *Halobacterium* `DUF7124`). Neither monomer is thermally stable alone at $60^\circ\text{C}$—they mutually staple each other's exposed seam!
+2. **Asymmetric Lock-and-Key Hardware Staples (Cross-Fold Complementarity, `54–90 aa` Pin $\times$ `250–472 aa` Enzyme):**  
+   A tiny `54–90 aa` single-helix dowel pin or electrostatic C-clamp (`V5TNY2`, `A0A897MT85`, `A0A660HSA9`) has **no global fold similarity** to its `250–472 aa` partner enzyme (`Q8TRP6`, `A0A3P3R4S2`, `A8M8Y0`). Instead of looking like the whole enzyme, it is shaped like the **negative mold (key)** of the enzyme's weakest inter-domain seam (**`92.8%–95.6%` local 10 Å seam complementarity**).
+
+* **Double-click either 3D canvas** to lock and synchronize camera rotation (`🔄 Sync: ON`), or click the **`🔗 Lock / Sync 3D Rotation`** toggle button.
+* **Click any residue** on the left or right structure to highlight the matching residue index across both structures (`pg_bio_sync.js`).
 
 <div style="margin: 18px 0; padding: 14px; background: #0f172a; border: 1px solid #334155; border-radius: 10px;">
   <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-    <label for="select-tpp-pair" style="color: #e2e8f0; font-weight: 700; font-size: 0.95rem;">Select CETSA/TPP Microprotein Clamp Pair:</label>
+    <label for="select-tpp-pair" style="color: #e2e8f0; font-weight: 700; font-size: 0.95rem;">Select 3D CETSA/TPP Clamp Architecture (Symmetric Homodimers vs. Asymmetric Staples):</label>
     <select id="select-tpp-pair" onchange="switchTppPair()" style="background: #1e293b; color: #38bdf8; border: 1px solid #38bdf8; border-radius: 6px; padding: 6px 12px; font-weight: 600; flex: 1; min-width: 280px;">
-      <option value="v5tny2">1. HYP-TPP-011 (#6 TM Dowel Pin): V5TNY2 (77 aa, GRAVY +1.23) × Q8TRP6 (472 aa) [ΔTm -11.49°C · T_opt 47.0°C → 58.5°C · 2.61× Output]</option>
-      <option value="a0a897">2. HYP-TPP-012 (#1 Electrostatic C-Clamp): A0A897MT85 (54 aa, pI 8.28) × A0A3P3R4S2 (250 aa, pI 4.48) [ΔTm -11.15°C · T_opt 47.8°C → 58.8°C · 2.54× Output]</option>
-      <option value="a0a660">3. HYP-TPP-013 (#17 Keystone Hub-Cap): A0A660HSA9 (90 aa, pI 9.45) × A8M8Y0 Amidase (309 aa, pI 5.23) [ΔTm -10.45°C · TPCA 30.2% · 2.42× Output]</option>
+      <optgroup label="I. Symmetric Homodimer &amp; Paralog Clamps (High 3D Fold Similarity · 0.50 Å – 3.83 Å)">
+        <option value="duf2073" selected>1. Symmetric DUF2073 Homodimer Clamp: L9VFW7 (133 aa) × A0A1G9H210 (133 aa) [0.50 Å RMSD · 99.4% Pocket IoU · ΔTm -8.15°C · T_opt 53.3°C → 61.5°C]</option>
+        <option value="duf302">2. Symmetric DUF302 Beta-Cap Clamp: A0ABD5SLL6 (145 aa) × A0A7D6CP77 (145 aa) [0.78 Å RMSD · 98.9% Pocket IoU · ΔTm -7.90°C · T_opt 52.0°C → 60.0°C]</option>
+        <option value="duf7124">3. Halobacterium DUF7124 Hub Clamp: A0A0U5HVU0 (139 aa) × Q9HP46 (139 aa) [3.83 Å RMSD · 98.3% Pocket IoU · ΔTm -8.03°C · T_opt 51.3°C → 59.3°C]</option>
+      </optgroup>
+      <optgroup label="II. Asymmetric Lock-and-Key Bio-Pipeline Staples (Small Pin × Giant Enzyme)">
+        <option value="v5tny2">4. HYP-TPP-011 (#6 TM Dowel Pin): V5TNY2 (77 aa, GRAVY +1.23) × Q8TRP6 (472 aa) [ΔTm -11.49°C · T_opt 47.0°C → 58.5°C · 2.61× Output]</option>
+        <option value="a0a897">5. HYP-TPP-012 (#1 Electrostatic C-Clamp): A0A897MT85 (54 aa, pI 8.28) × A0A3P3R4S2 (250 aa, pI 4.48) [ΔTm -11.15°C · T_opt 47.8°C → 58.8°C · 2.54× Output]</option>
+        <option value="a0a660">6. HYP-TPP-013 (#17 Keystone Hub-Cap): A0A660HSA9 (90 aa, pI 9.45) × A8M8Y0 Amidase (309 aa, pI 5.23) [ΔTm -10.45°C · TPCA 30.2% · 2.42× Output]</option>
+      </optgroup>
     </select>
   </div>
 
   <div style="display: flex; flex-wrap: wrap; gap: 12px;">
     <div style="flex: 1; min-width: 300px; background: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 8px;">
-      <div id="tpp-title-left" style="color: #fb7185; font-weight: 700; font-size: 0.84rem; margin-bottom: 6px; font-family: monospace;">Microprotein Clamp: V5TNY2 (77 aa)</div>
-      <div id="tpp-mol-left" class="mol-container" data-href="/assets/models/AF-V5TNY2-F1-model_v4.pdb" style="width: 100%; height: 390px; position: relative;"></div>
+      <div id="tpp-title-left" style="color: #fb7185; font-weight: 700; font-size: 0.84rem; margin-bottom: 6px; font-family: monospace;">Microprotein Clamp: L9VFW7 (133 aa)</div>
+      <div id="tpp-mol-left" class="viewer_3Dmoljs" data-href="/assets/models/AF-L9VFW7-F1-model_v4.pdb" data-backgroundcolor="0x020617" data-style="cartoon:color=magenta" style="width: 100%; height: 390px; position: relative;"></div>
     </div>
     <div style="flex: 1; min-width: 300px; background: #020617; border: 1px solid #1e293b; border-radius: 8px; padding: 8px;">
-      <div id="tpp-title-right" style="color: #38bdf8; font-weight: 700; font-size: 0.84rem; margin-bottom: 6px; font-family: monospace;">Target Enzyme Complex: Q8TRP6 (472 aa)</div>
-      <div id="tpp-mol-right" class="mol-container" data-href="/assets/models/AF-Q8TRP6-F1-model_v4.pdb" style="width: 100%; height: 390px; position: relative;"></div>
+      <div id="tpp-title-right" style="color: #38bdf8; font-weight: 700; font-size: 0.84rem; margin-bottom: 6px; font-family: monospace;">Partner Complex / Homolog: A0A1G9H210 (133 aa)</div>
+      <div id="tpp-mol-right" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A1G9H210-F1-model_v4.pdb" data-backgroundcolor="0x020617" data-style="cartoon:color=cyan" style="width: 100%; height: 390px; position: relative;"></div>
     </div>
   </div>
 
-  <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+  <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center;">
     <button onclick="highlightTppWeakSeam()" style="background: #be123c; color: #fff; border: none; padding: 7px 13px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.83rem;">🌡️ Highlight Thermal Weak Seam &amp; Ideal T_opt</button>
     <button onclick="highlightTppHbondAnchors()" style="background: #0284c7; color: #fff; border: none; padding: 7px 13px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.83rem;">🔩 Highlight Interfacial H-Bond Staple Anchors</button>
     <button onclick="highlightTppElectrostaticClamp()" style="background: #7c3aed; color: #fff; border: none; padding: 7px 13px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.83rem;">⚡ Highlight Electrostatic / Hydrophobic Clamp Glue</button>
     <button onclick="resetTppView()" style="background: #334155; color: #e2e8f0; border: none; padding: 7px 13px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.83rem;">🔄 Reset Holo-View</button>
+    <button id="btn-tpp-sync" onclick="toggleTppRotationSync()" style="background: #059669; color: #fff; border: 1px solid #34d399; padding: 7px 13px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.83rem; margin-left: auto;">🔗 Sync Rotation: ON (Double-Click Canvas)</button>
   </div>
 
   <div id="tpp-chemistry-lesson" style="margin-top: 12px; padding: 12px; background: #1e293b; border-left: 4px solid #fb7185; border-radius: 4px; color: #f1f5f9; font-size: 0.88rem; line-height: 1.55;">
@@ -223,11 +238,57 @@ Below you can interactively inspect our three headline **CETSA/TPP Microprotein 
   </div>
 </div>
 
+<script src="https://3Dmol.csb.pitt.edu/build/3Dmol-min.js"></script>
 <script>
 const TPP_BLOG_PAIRS = {
+  duf2073: {
+    title1: "Clamp Subunit A: L9VFW7 (133 aa · Natronorubrum tibetense GA33 · DUF2073 · pI 4.37)",
+    title2: "Homodimer Partner B: A0A1G9H210 (133 aa · Natronorubrum texcoconense · 0.50 Å RMSD · 99.4% IoU · T_opt 53.3°C → 61.5°C)",
+    pdb1: "/assets/models/AF-L9VFW7-F1-model_v4.pdb",
+    pdb2: "/assets/models/AF-A0A1G9H210-F1-model_v4.pdb",
+    seamRes1: [18,19,20,21,22,23,24,25,52,53,54,55,56,57,58,88,89,90,91,92,93,94],
+    seamRes2: [18,19,20,21,22,23,24,25,52,53,54,55,56,57,58,88,89,90,91,92,93,94],
+    center1: {x: -4.18, y: 1.836, z: -1.279},
+    center2: {x: -4.002, y: 2.198, z: -1.39},
+    label1: "L9VFW7 DUF2073 Clamp Face (133 aa · pI 4.37)",
+    label2: "A0A1G9H210 Symmetric Partner (0.50 Å RMSD · T_opt 61.5°C · 2.04×)",
+    seamLesson: "<strong>Symmetric Homodimer / Paralog Clamp (<code>0.50 Å</code> 3D Kabsch RMSD · <code>99.40%</code> RangeFinder Pocket IoU · <code>T_opt: 53.25°C → 61.50°C</code>):</strong> Rotate either structure! Because <code>L9VFW7</code> (<em>Natronorubrum tibetense</em> GA33) and <code>A0A1G9H210</code> (<em>Natronorubrum texcoconense</em>) are 133-aa <code>DUF2073</code> homodimeric clamp subunits, their 3D folds superimpose at <code>0.50 Å</code> across all 133 Cα atoms (`vector_distance = 0.0000`, `Interface Complementarity = 99.0%`). Alone, each monomer exposes a raw hydrophobic dimerization seam (`Tm_KO = 57.16°C`, capping `T_opt_KO` at `53.25°C`). When clamped together face-to-face, `Tm_WT` jumps to <code>65.31°C</code> (<code>ΔTm = +8.15°C</code>), unlocking <code>T_opt_WT = 61.50°C</code> (`2.04×` catalytic flux across <code>209</code> soda-lake spillover enzymes)!",
+    hbondLesson: "<strong>Mirror-Symmetric Interfacial H-Bond Zipper (Residues 18–25, 52–58, 88–94 · <code>99.40%</code> Pocket IoU):</strong> Notice how residues <code>18–25</code> and <code>52–58</code> occupy the exact same 3D coordinates in both canvases! The two DUF2073 monomers zip together via symmetric antiparallel hydrogen bonds and salt bridges.",
+    clampLesson: "<strong>Soda-Lake Haloalkaliphilic Acidic Shell (<code>pI 4.37</code> vs <code>4.37</code> · <code>GRAVY -0.363</code>):</strong> Orange sticks mark the exterior Asp/Glu acidic hydration shell that keeps the homodimer soluble in 4 M NaCl soda lakes, while cyan/rose cores mark the buried dimerization lock."
+  },
+  duf302: {
+    title1: "Clamp Subunit A: A0ABD5SLL6 (145 aa · Natrinema soli · DUF302 · pI 4.26)",
+    title2: "Homodimer Partner B: A0A7D6CP77 (145 aa · Natrinema zhouii · 0.78 Å RMSD · 98.9% IoU · T_opt 52.0°C → 60.0°C)",
+    pdb1: "/assets/models/AF-A0ABD5SLL6-F1-model_v4.pdb",
+    pdb2: "/assets/models/AF-A0A7D6CP77-F1-model_v4.pdb",
+    seamRes1: [24,25,26,27,28,29,30,64,65,66,67,68,69,70,104,105,106,107,108,109],
+    seamRes2: [24,25,26,27,28,29,30,64,65,66,67,68,69,70,104,105,106,107,108,109],
+    center1: {x: -0.647, y: -0.434, z: -1.12},
+    center2: {x: -0.712, y: -0.821, z: -1.463},
+    label1: "A0ABD5SLL6 DUF302 Clamp (145 aa · Natrinema soli)",
+    label2: "A0A7D6CP77 Homolog Partner (0.78 Å RMSD · T_opt 60.0°C · 2.01×)",
+    seamLesson: "<strong>Conserved DUF302 Edge-Gasket Homodimer (<code>0.78 Å</code> Kabsch RMSD · <code>98.87%</code> Pocket IoU · <code>T_opt: 52.0°C → 60.0°C</code>):</strong> Both 145-aa <code>DUF302</code> microproteins from <em>Natrinema soli</em> and <em>Natrinema zhouii</em> share an identical α+β sandwich clamp architecture (`0.78 Å` RMSD). Unclamping the interface triggers a <code>-7.90°C</code> thermal collapse (<code>63.84°C → 55.94°C</code>) and <code>22.4%</code> TPCA decoherence across <code>72</code> partner enzymes.",
+    hbondLesson: "<strong>Beta-Sheet Edge-Gasket H-Bond Lattice (Pattern #5 · Residues 24–30 &amp; 64–70):</strong> Green and cyan sticks highlight the conserved β-edge hydrogen-bond staple that prevents raw sheet edges from aggregating at 60°C.",
+    clampLesson: "<strong>Halophilic Surface Charge Balance (<code>pI 4.26</code> vs <code>4.32</code>):</strong> Exterior acidic carboxylates (orange) shield the outer barrel in hypersaline soil brines while basic Arg/Lys pins (cyan) lock the interior dimer cleft."
+  },
+  duf7124: {
+    title1: "Hub Clamp A: A0A0U5HVU0 (139 aa · Halobacterium hubeiense · DUF7124 · pI 4.38)",
+    title2: "Homolog Partner B: Q9HP46 (139 aa · Halobacterium salinarum · 3.83 Å RMSD · 98.3% IoU · T_opt 51.3°C → 59.3°C)",
+    pdb1: "/assets/models/AF-A0A0U5HVU0-F1-model_v4.pdb",
+    pdb2: "/assets/models/AF-Q9HP46-F1-model_v4.pdb",
+    seamRes1: [15,16,17,18,19,20,21,48,49,50,51,52,53,54,92,93,94,95,96,97,98],
+    seamRes2: [15,16,17,18,19,20,21,48,49,50,51,52,53,54,92,93,94,95,96,97,98],
+    center1: {x: -1.268, y: 0.936, z: -3.061},
+    center2: {x: -2.264, y: 0.716, z: -3.364},
+    label1: "A0A0U5HVU0 DUF7124 Hub (139 aa · Halobacterium hubeiense)",
+    label2: "Q9HP46 DUF7124 Partner (98.3% IoU · ΔTm -8.03°C · T_opt 59.3°C)",
+    seamLesson: "<strong>Our <code>/tpp?hub=A0A0U5HVU0</code> Benchmark Hub (<code>139 aa × 139 aa</code> · <code>98.29%</code> Pocket IoU · <code>ΔTm = -8.03°C</code> · <code>2.04×</code> Flux):</strong> This is the exact <code>A0A0U5HVU0</code> <em>Halobacterium hubeiense</em> <code>DUF7124</code> microprotein hub from our `/tpp` Domino Lab! Comparing it against its 139-aa <em>Halobacterium salinarum</em> partner <code>Q9HP46</code> shows how the conserved helical core (`98.29%` 9D RangeFinder pocket overlap) acts as an induced-fit allosteric pin, shifting <code>Tm</code> from <code>55.18°C → 63.21°C</code> and raising <code>T_opt</code> from <code>51.25°C → 59.25°C</code>.",
+    hbondLesson: "<strong>Conserved DUF7124 Helical Bundle Staple (Residues 15–21, 48–54, 92–98):</strong> Emerald and cyan sticks highlight the matching interfacial H-bond rungs across both 139-residue halobacterial proteins.",
+    clampLesson: "<strong>Extreme Halophile Hydration Armor (<code>GRAVY -0.771</code> · <code>pI 4.38</code> vs <code>4.43</code>):</strong> High density of Asp/Glu residues (orange sticks) enables this clamp to stay folded in saturated 4.5 M solar saltern brines."
+  },
   v5tny2: {
-    title1: "Clamp: V5TNY2 (77 aa · 8.2 kDa · Haloarcula hispanica · #6 Transmembrane Dowel Pin · GRAVY +1.227)",
-    title2: "Complex: Q8TRP6 (472 aa · 51.9 kDa · Methanosarcina acetivorans · T_opt 47.0°C → 58.5°C · 2.61× Output)",
+    title1: "Asymmetric Clamp: V5TNY2 (77 aa · 8.2 kDa · Haloarcula hispanica · #6 Transmembrane Dowel Pin · GRAVY +1.227)",
+    title2: "Target Complex: Q8TRP6 (472 aa · 51.9 kDa · Methanosarcina acetivorans · T_opt 47.0°C → 58.5°C · 2.61× Output)",
     pdb1: "/assets/models/AF-V5TNY2-F1-model_v4.pdb",
     pdb2: "/assets/models/AF-Q8TRP6-F1-model_v4.pdb",
     seamRes1: [12,13,14,15,16,17,18,19,20,21,22,23,24,25,38,39,40,41,42,43,44,45],
@@ -236,13 +297,13 @@ const TPP_BLOG_PAIRS = {
     center2: {x: 0.55, y: 0.448, z: -7.187},
     label1: "V5TNY2 TM Dowel Pin (GRAVY +1.23 · pI 11.88)",
     label2: "Q8TRP6 Unmasked Seam (KO Tm 50.7°C → WT Tm 62.2°C · T_opt 58.5°C)",
-    seamLesson: "<strong>Thermal Weak Seam &amp; Ideal Bioreactor Temp (<code>tpp_optimal_bioreactor_window</code> · <code>T_opt: 47.0°C → 58.5°C</code> · <code>2.61×</code> Flux):</strong> Rose/Amber spheres highlight the exposed hydrophobic seam (`Val, Ile, Leu, Phe`) on the 51.9 kDa <em>Methanosarcina acetivorans</em> Q8TRP6 catalytic subunit. Without the 77-aa <em>Haloarcula hispanica</em> transmembrane dowel pin <code>V5TNY2</code>, thermal vibration unbuckles this seam at <code>Tm_KO = 50.73°C</code>, capping bioreactor operation at <code>47.0°C</code>. Co-expressing <code>V5TNY2</code> (`HYP-TPP-011`) plugs the lipid-facing groove, raising <code>Tm_WT</code> to <code>62.22°C</code> (<code>ΔTm = +11.49°C</code>) and unlocking <code>58.5°C</code> operation with <code>2.61×</code> higher catalytic productivity!",
+    seamLesson: "<strong>Asymmetric Lock-and-Key Hardware Staple (<code>77 aa</code> Dowel Pin × <code>472 aa</code> Enzyme · <code>T_opt: 47.0°C → 58.5°C</code> · <code>2.61×</code> Flux):</strong> Unlike the symmetric homodimers above (options 1–3), here the two structures are intentionally <em>different</em> in size: <code>V5TNY2</code> is a 77-aa transmembrane dowel pin (left) that plugs into the exposed hydrophobic seam (Rose/Amber spheres, right) of the 472-aa <em>Methanosarcina acetivorans</em> <code>Q8TRP6</code> enzyme (`HYP-TPP-011`). Without the 77-aa pin, the enzyme unbuckles at <code>Tm_KO = 50.73°C</code>; bolting the pin into the seam raises <code>Tm_WT</code> to <code>62.22°C</code> (<code>ΔTm = +11.49°C</code>)!",
     hbondLesson: "<strong>Interfacial H-Bond Staple Anchors &amp; Basic Stop-Nuts (<code>pI 11.88</code> Arg/Lys Collar):</strong> Cyan and emerald sticks highlight the terminal Arg/Lys hydrogen-bond anchors on <code>V5TNY2</code> that lock onto the 10 Å active-site rim of <code>Q8TRP6</code> (`MW [148, 348] Da`), preventing the transmembrane helix from sliding out of the groove during high-temperature turnover.",
     clampLesson: "<strong>Transmembrane Helix Plug Chemistry (<code>GRAVY +1.227</code> vs <code>+0.422</code>):</strong> Nearly 70% of <code>V5TNY2</code> consists of aliphatic and aromatic hydrophobic sidechains (golden spheres) with a `G-x-x-x-G` packing notch that presses flush against the transmembrane helices of <code>Q8TRP6</code>, sealing the complex against thermal and solvent penetration."
   },
   a0a897: {
-    title1: "Clamp: A0A897MT85 (54 aa · 6.3 kDa · Natranaeroarchaeum sulfidigenes · #1 Electrostatic C-Clamp · pI 8.28)",
-    title2: "Complex: A0A3P3R4S2 (250 aa · 27.6 kDa · Halocatena pleomorpha · pI 4.48 · T_opt 47.8°C → 58.8°C · 2.54×)",
+    title1: "Asymmetric Clamp: A0A897MT85 (54 aa · 6.3 kDa · Natranaeroarchaeum sulfidigenes · #1 Electrostatic C-Clamp · pI 8.28)",
+    title2: "Target Complex: A0A3P3R4S2 (250 aa · 27.6 kDa · Halocatena pleomorpha · pI 4.48 · T_opt 47.8°C → 58.8°C · 2.54×)",
     pdb1: "/assets/models/AF-A0A897MT85-F1-model_v4.pdb",
     pdb2: "/assets/models/AF-A0A3P3R4S2-F1-model_v4.pdb",
     seamRes1: [8,9,10,11,12,15,18,22,25,28,31,34,37,40,42],
@@ -251,13 +312,13 @@ const TPP_BLOG_PAIRS = {
     center2: {x: 3.166, y: -0.34, z: -2.528},
     label1: "A0A897MT85 C-Clamp (54 aa · pI 8.28 Cationic Face)",
     label2: "A0A3P3R4S2 Acidic Seam (pI 4.48 · ΔTm -11.15°C · T_opt 58.8°C)",
-    seamLesson: "<strong>Electrostatic C-Clamp across a Halophilic Domain Seam (<code>|ΔpI| = 3.80</code> · <code>T_opt: 47.75°C → 58.75°C</code> · <code>2.54×</code> Output):</strong> In high-salt halophilic enzymes like <em>Halocatena pleomorpha</em> <code>A0A3P3R4S2</code> (<code>pI 4.48</code>), dense negative Asp/Glu charges repel each other across domain hinges when heated above <code>51.4°C</code>. The tiny 54-aa sulfidogenic archaeal microprotein <code>A0A897MT85</code> (<code>pI 8.28</code>) acts as a cationic C-clamp (`HYP-TPP-012`), neutralizing the seam repulsion and raising <code>Tm_WT</code> to <code>62.57°C</code>!",
+    seamLesson: "<strong>Asymmetric Electrostatic C-Clamp across a Halophilic Domain Seam (<code>|ΔpI| = 3.80</code> · <code>T_opt: 47.75°C → 58.75°C</code> · <code>2.54×</code> Output):</strong> In high-salt halophilic enzymes like <em>Halocatena pleomorpha</em> <code>A0A3P3R4S2</code> (<code>250 aa, pI 4.48</code>), dense negative Asp/Glu charges repel each other across domain hinges when heated above <code>51.4°C</code>. The tiny 54-aa sulfidogenic archaeal microprotein <code>A0A897MT85</code> (<code>pI 8.28</code>) acts as a cationic C-clamp (`HYP-TPP-012`), neutralizing the seam repulsion and raising <code>Tm_WT</code> to <code>62.57°C</code>!",
     hbondLesson: "<strong>Salt-Bridge &amp; Hydrogen-Bond Lattice (<code>92.85%</code> RangeFinder Pocket IoU):</strong> Cyan and green sticks show the complementary hydrogen-bond donors and acceptors aligning the `MW [152, 352] Da` clamp interface onto the `MW [167, 372] Da` catalytic cleft of <code>A0A3P3R4S2</code>.",
     clampLesson: "<strong>Cationic Lys/Arg Teeth (Blue) vs. Anionic Asp/Glu Groove (Orange):</strong> Highlighting charged residues reveals the physical dipole lock: basic Lys/Arg sidechains on the 54-aa clamp interlock with acidic Asp/Glu carboxylates on the 250-aa enzyme."
   },
   a0a660: {
-    title1: "Clamp: A0A660HSA9 (90 aa · 11.0 kDa · Methanosarcina flavescens · #17 Keystone Hub-Cap · pI 9.45)",
-    title2: "Complex: A8M8Y0 (309 aa · 34.5 kDa · Caldivirga maquilingensis · Amidase · TPCA Decoherence 30.2% · 2.42×)",
+    title1: "Asymmetric Clamp: A0A660HSA9 (90 aa · 11.0 kDa · Methanosarcina flavescens · #17 Keystone Hub-Cap · pI 9.45)",
+    title2: "Target Complex: A8M8Y0 (309 aa · 34.5 kDa · Caldivirga maquilingensis · Amidase · TPCA Decoherence 30.2% · 2.42×)",
     pdb1: "/assets/models/AF-A0A660HSA9-F1-model_v4.pdb",
     pdb2: "/assets/models/AF-A8M8Y0-F1-model_v4.pdb",
     seamRes1: [14,15,16,19,23,27,33,36,41,45,52,58,63,67,72],
@@ -266,7 +327,7 @@ const TPP_BLOG_PAIRS = {
     center2: {x: -0.025, y: -1.116, z: 2.019},
     label1: "A0A660HSA9 Keystone Staple (90 aa · iComp 95.6%)",
     label2: "A8M8Y0 Amidase Complex (TPCA Loss 30.2% · 551 Spillover Enzymes)",
-    seamLesson: "<strong>Oligomerization Keystone &amp; TPCA Subunit Decoherence (<code>tpp_tpca_decoherence_raw = 30.2%</code> · <code>551</code> Spillover Enzymes):</strong> When the 90-aa <em>Methanosarcina flavescens</em> keystone microprotein <code>A0A660HSA9</code> (`Interface Complementarity = 95.58%`) is removed from the 309-aa hyperthermophilic <em>Caldivirga maquilingensis</em> Amidase <code>A8M8Y0</code>, the complex loses cooperative co-melting (<code>30.2%</code> TPCA decoherence, <code>Tm: 62.38°C → 51.94°C</code>) and triggers substrate accumulation across <code>551</code> downstream enzymes. Co-expression in <code>cyanide-mine-tailings</code> (`HYP-TPP-013`) locks <code>T_opt = 58.5°C</code> for <code>2.42×</code> faster nitrile/amide hydrolysis!",
+    seamLesson: "<strong>Asymmetric Oligomerization Keystone &amp; TPCA Subunit Decoherence (<code>tpp_tpca_decoherence_raw = 30.2%</code> · <code>551</code> Spillover Enzymes):</strong> When the 90-aa <em>Methanosarcina flavescens</em> keystone microprotein <code>A0A660HSA9</code> (`Interface Complementarity = 95.58%`) is removed from the 309-aa hyperthermophilic <em>Caldivirga maquilingensis</em> Amidase <code>A8M8Y0</code>, the complex loses cooperative co-melting (<code>30.2%</code> TPCA decoherence, <code>Tm: 62.38°C → 51.94°C</code>) and triggers substrate accumulation across <code>551</code> downstream enzymes. Co-expression in <code>cyanide-mine-tailings</code> (`HYP-TPP-013`) locks <code>T_opt = 58.5°C</code> for <code>2.42×</code> faster nitrile/amide hydrolysis!",
     hbondLesson: "<strong>95.58% Interface Complementarity &amp; H-Bond Keystone Ring:</strong> Sticks mark the conserved interfacial H-bond network that pins the catalytic amidase cleft (`MW [180, 387] Da`, `LogP [1.96, 5.78]`) against thermal shear.",
     clampLesson: "<strong>Acidothermophile vs. Methanogen Charge Lock (<code>pI 9.45</code> Staple on <code>pI 5.23</code> Amidase):</strong> Basic residues on <code>A0A660HSA9</code> form a high-temperature salt-bridge crown over the acidic catalytic face of <code>A8M8Y0</code>."
   }
@@ -275,6 +336,10 @@ const TPP_BLOG_PAIRS = {
 let tppViewerLeft = null;
 let tppViewerRight = null;
 let tppPdbCache = {};
+let tppSyncActive = true;
+let tppSyncDriver = "left";
+let tppSyncInterval = null;
+let tppEventsBound = false;
 
 async function fetchTppPdb(url) {
   if (!tppPdbCache[url]) {
@@ -282,6 +347,90 @@ async function fetchTppPdb(url) {
     tppPdbCache[url] = await resp.text();
   }
   return tppPdbCache[url];
+}
+
+function syncTppCameraNow(source, target) {
+  if (!source || !target) return;
+  const sView = source.getView();
+  const tView = target.getView();
+  if (!sView || !tView || sView.length < 8 || tView.length < 8) return;
+  const changed = (
+    Math.abs(tView[3] - sView[3]) > 1e-4 ||
+    Math.abs(tView[4] - sView[4]) > 1e-4 ||
+    Math.abs(tView[5] - sView[5]) > 1e-4 ||
+    Math.abs(tView[6] - sView[6]) > 1e-4 ||
+    Math.abs(tView[7] - sView[7]) > 1e-4
+  );
+  if (changed) {
+    tView[3] = sView[3];
+    tView[4] = sView[4];
+    tView[5] = sView[5];
+    tView[6] = sView[6];
+    tView[7] = sView[7];
+    target.setView(tView);
+    target.render();
+  }
+}
+
+function updateTppSyncButtonUI() {
+  const btn = document.getElementById('btn-tpp-sync');
+  if (!btn) return;
+  if (tppSyncActive) {
+    btn.textContent = "🔗 Sync Rotation: ON (Double-Click Canvas)";
+    btn.style.background = "#059669";
+    btn.style.borderColor = "#34d399";
+  } else {
+    btn.textContent = "🔓 Sync Rotation: OFF (Click or Double-Click)";
+    btn.style.background = "#334155";
+    btn.style.borderColor = "#64748b";
+  }
+}
+
+function toggleTppRotationSync(preferredDriver) {
+  if (preferredDriver) tppSyncDriver = preferredDriver;
+  tppSyncActive = !tppSyncActive;
+  updateTppSyncButtonUI();
+  if (tppSyncActive && tppViewerLeft && tppViewerRight) {
+    if (tppSyncDriver === "right") {
+      syncTppCameraNow(tppViewerRight, tppViewerLeft);
+    } else {
+      syncTppCameraNow(tppViewerLeft, tppViewerRight);
+    }
+  }
+}
+
+function bindTppSyncListeners() {
+  if (tppEventsBound || !tppViewerLeft || !tppViewerRight) return;
+  const leftEl = document.getElementById('tpp-mol-left');
+  const rightEl = document.getElementById('tpp-mol-right');
+  if (!leftEl || !rightEl) return;
+
+  leftEl.addEventListener('pointerdown', () => { tppSyncDriver = "left"; }, {passive: true});
+  leftEl.addEventListener('wheel', () => { tppSyncDriver = "left"; }, {passive: true});
+  rightEl.addEventListener('pointerdown', () => { tppSyncDriver = "right"; }, {passive: true});
+  rightEl.addEventListener('wheel', () => { tppSyncDriver = "right"; }, {passive: true});
+
+  leftEl.addEventListener('dblclick', (e) => {
+    e.preventDefault();
+    toggleTppRotationSync("left");
+  });
+  rightEl.addEventListener('dblclick', (e) => {
+    e.preventDefault();
+    toggleTppRotationSync("right");
+  });
+
+  if (tppSyncInterval) clearInterval(tppSyncInterval);
+  tppSyncInterval = setInterval(() => {
+    if (!tppSyncActive || !tppViewerLeft || !tppViewerRight) return;
+    if (tppSyncDriver === "right") {
+      syncTppCameraNow(tppViewerRight, tppViewerLeft);
+    } else {
+      syncTppCameraNow(tppViewerLeft, tppViewerRight);
+    }
+  }, 30);
+
+  tppEventsBound = true;
+  updateTppSyncButtonUI();
 }
 
 async function loadTppPairModels() {
@@ -297,6 +446,8 @@ async function loadTppPairModels() {
   if (!tppViewerRight) {
     tppViewerRight = existing[1] || $3Dmol.createViewer(document.getElementById('tpp-mol-right'), {backgroundColor: '#020617'});
   }
+
+  bindTppSyncListeners();
 
   const [t1, t2] = await Promise.all([fetchTppPdb(cfg.pdb1), fetchTppPdb(cfg.pdb2)]);
   [tppViewerLeft, tppViewerRight].forEach((viewer, idx) => {
