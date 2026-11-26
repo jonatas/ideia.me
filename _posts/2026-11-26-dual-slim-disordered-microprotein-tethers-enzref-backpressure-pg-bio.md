@@ -54,7 +54,9 @@ Why did our first-generation pipeline completely overlook flexible microprotein 
 
 1. **The 3D Pocket Filter Blind Spot:** Rigid 3D Kabsch/Morton octree filters ask: *"Does this microprotein have a stable 3D fold in isolation?"* A disordered tether has no fixed 3D shape until its two tips touch their partner surfaces (**coupled folding and binding**). Filtering by global rigid 3D geometry throws them away before the search even starts.
 2. **The Mean-Pooled Embedding Blur:** Standard protein language model (ESM-2) pipelines average all residue vectors across the entire sequence into a single 1280-D vector:
+
    $$\mathbf{v}_{\text{whole}} = \frac{1}{L}\sum_{i=1}^{L} \mathbf{h}_i$$
+
    If a 41-aa microprotein like **`L0JP89`** has **Plug A** at residues `3..10` (`CDNCDSDA`, matching `M2_Scissor`), **Plug B** at residues `31..38` (`FCSTDCLH`, matching `M3_Sink`), and a 20-aa disordered linker in between (`YVEPDGRESVDLH`), averaging all 41 residues together **blurs Plug A, Plug B, and the linker noise into a muddled middle vector** that matches neither `M2_Scissor` nor `M3_Sink`!
 
 ---
@@ -63,12 +65,14 @@ Why did our first-generation pipeline completely overlook flexible microprotein 
 
 To see both plugs clearly without changing a single byte of our PostgreSQL 2-level layered-centroid index format, `bio_pslim_window_pool` slides an 8-residue window (`window_len = 8`, `stride = 2`) along the microprotein (`sORF <= 110 aa`):
 
-1. **Local Motif Extraction & Shannon Entropy Gate:** For each 8-aa slice $W_k = S[a_k \dots b_k]$, it computes the local Shannon sequence entropy:
-   $$H(W_k) = -\sum_{aa \in \Sigma} p(aa)\log_2 p(aa)$$
-   Low-complexity homopolymer repeats (e.g., `GGGGGGGG`) have $H \to 0$, whereas genuine amphipathic or zinc/cysteine recognition SLiMs carry rich informational diversity ($H \in [2.0, 3.0]\text{ bits}$).
-2. **Per-Window ZCA Whitening + L2 Unit Normalization:** Raw ESM-2 representations suffer from severe cone anisotropy (mean pairwise cosine `0.9963`), where every short peptide window points in almost the exact same direction. Inside `bio_pslim_window_pool`, each pooled 8-aa window vector $\mathbf{w}_k$ is centered, projected through our zero-copy ZCA whitening transform (`71.68x` anisotropy collapse down to `-0.0139`), and L2-normalized to unit length ($\|\hat{\mathbf{w}}_k\|_2 = 1.0$).
+1. **Local Motif Extraction & Shannon Entropy Gate:** For each 8-aa slice $$W_k = S[a_k \dots b_k]$$, it computes the local Shannon sequence entropy:
 
-Because $\hat{\mathbf{w}}_k$ lives in the exact same whitened unit hypersphere as our existing `pg_bio` tables, **Window A (`3..10`)** and **Window B (`31..38`)** drop straight into distinct Stage-1 coarse/fine centroids (`l1_centroid`, `l2_centroid`) and 32-wide NEON/AVX2 `fastscan` buckets:
+   $$H(W_k) = -\sum_{aa \in \Sigma} p(aa)\log_2 p(aa)$$
+
+   Low-complexity homopolymer repeats (e.g., `GGGGGGGG`) have $$H \to 0$$, whereas genuine amphipathic or zinc/cysteine recognition SLiMs carry rich informational diversity ($$H \in [2.0, 3.0]\text{ bits}$$).
+2. **Per-Window ZCA Whitening + L2 Unit Normalization:** Raw ESM-2 representations suffer from severe cone anisotropy (mean pairwise cosine `0.9963`), where every short peptide window points in almost the exact same direction. Inside `bio_pslim_window_pool`, each pooled 8-aa window vector $$\mathbf{w}_k$$ is centered, projected through our zero-copy ZCA whitening transform (`71.68x` anisotropy collapse down to `-0.0139`), and L2-normalized to unit length ($$\|\hat{\mathbf{w}}_k\|_2 = 1.0$$).
+
+Because $$\hat{\mathbf{w}}_k$$ lives in the exact same whitened unit hypersphere as our existing `pg_bio` tables, **Window A (`3..10`)** and **Window B (`31..38`)** drop straight into distinct Stage-1 coarse/fine centroids (`l1_centroid`, `l2_centroid`) and 32-wide NEON/AVX2 `fastscan` buckets:
 
 ```sql
 -- Slide an 8-aa window (stride 2) across the 41-aa halophilic microprotein L0JP89
@@ -105,9 +109,9 @@ Having two binding motifs on one microprotein isn't enough if they overlap (`3..
 
 Our SQL table function `bio_match_dual_slim_tether` enforces a strict geometric separation constraint:
 
-$$\text{start}_B - \text{end}_A \ge L_{\text{min\_linker}} \quad (\text{typically } 10\text{–}15\text{ aa})$$
+$$\text{start}_B - \text{end}_A \ge L_{\text{min-linker}} \quad (\text{typically } 10\text{–}15\text{ aa})$$
 
-At roughly $3.5\text{ \AA}$ per extended disordered residue, a 20-to-34 residue hydrophilic linker gives an end-to-end reach of **$35\text{–}70\text{ \AA}$**—wide enough for `M2_Scissor` and `M3_Sink` to sit side-by-side without clashing, yet tight enough to trap every intermediate molecule inside a shared hydration shell!
+At roughly $$3.5\text{ \AA}$$ per extended disordered residue, a 20-to-34 residue hydrophilic linker gives an end-to-end reach of **$$35\text{–}70\text{ \AA}$$**—wide enough for `M2_Scissor` and `M3_Sink` to sit side-by-side without clashing, yet tight enough to trap every intermediate molecule inside a shared hydration shell!
 
 ```sql
 -- Match dual non-overlapping SLiMs on L0JP89 against M2_Scissor (D3SWG7) and M3_Sink (A0AAE3P9N2)
@@ -157,27 +161,34 @@ That contrast between **`A0A897MT85` / `L0JP89` / `A0A2G1WGQ6`** (`linker_gravy`
 
 Now comes the deeper systems-biology realization: **what happens when you bring `M2_Scissor` and `M3_Sink` mouth-to-mouth?**
 
-When the Dual-SLiM tether holds `M2_Scissor` and `M3_Sink` within $35\text{–}60\text{ \AA}$, the dimensionless macromolecular crowding factor $c / c^*$ jumps from `0.00` (un-tethered bulk diffusion) to **`0.65 - 0.72`**. In our 48-hour RK4 cascade solver (`simulate_cascade_kinetics`), crowding accelerates substrate channeling between `M2_Scissor` and `M3_Sink`:
+When the Dual-SLiM tether holds `M2_Scissor` and `M3_Sink` within $$35\text{–}60\text{ \AA}$$, the dimensionless macromolecular crowding factor $$c / c^*$$ jumps from `0.00` (un-tethered bulk diffusion) to **`0.65 - 0.72`**. In our 48-hour RK4 cascade solver (`simulate_cascade_kinetics`), crowding accelerates substrate channeling between `M2_Scissor` and `M3_Sink`:
 
-$$\text{crowding\_boost} = 1 + 0.35\,\frac{c / c^*}{1 + 0.5\,(c / c^*)}$$
+$$\text{CrowdingBoost} = 1 + 0.35\,\frac{c / c^*}{1 + 0.5\,(c / c^*)}$$
 
-**Here is the catch:** Standard `kcat` predictors sum or average reactant and product representations together and entangle them with the static enzyme background $\mathbf{v}_{\text{bg}}$. As a result, they often select an `M3_Sink` enzyme that binds the product **more tightly than the reactant** ($\|\mathbf{d}_{\text{prod}}\|_2 \gg \|\mathbf{d}_{\text{react}}\|_2$).
+**Here is the catch:** Standard `kcat` predictors sum or average reactant and product representations together and entangle them with the static enzyme background $$\mathbf{v}_{\text{bg}}$$. As a result, they often select an `M3_Sink` enzyme that binds the product **more tightly than the reactant** ($$\|\mathbf{d}_{\text{prod}}\|_2 \gg \|\mathbf{d}_{\text{react}}\|_2$$).
 
-In an un-tethered bulk tank, you might not notice mild product retention right away. **In a mouth-to-mouth tethered metabolon, high product retention is fatal:** `M3_Sink` stalls on its own product, creating **reversible backpressure ($K_p$)** that floods the $50\text{ \AA}$ micro-compartment and chokes `M2_Scissor`!
+In an un-tethered bulk tank, you might not notice mild product retention right away. **In a mouth-to-mouth tethered metabolon, high product retention is fatal:** `M3_Sink` stalls on its own product, creating **reversible backpressure ($$K_p$$)** that floods the $$50\text{ \AA}$$ micro-compartment and chokes `M2_Scissor`!
 
 ### `EnzRef` Reference-Centered Kinetic Role-Contrast (2.09 Million Pairs/Sec/Core)
 
 To eliminate product-inhibited `M3_Sink` candidates at **Stage 2.5** (right after `RangeFinder` GiST + `ECFP4` Tanimoto filtering), we built `bio_split_reaction_roles` and `bio_enzref_kinetics` in Rust (`aarch64` NEON + `x86_64` AVX2):
 
-1. **Reaction Role Splitting (`bio_split_reaction_roles`):** Decomposes any Daylight reaction SMILES (`Reactants > Agents > Products` or `A.B>>C.D`), strips spectator catalysts/solvents, and generates separate reactant ($\mathbf{r}_{\text{react}}$) and product ($\mathbf{r}_{\text{prod}}$) conditioned vectors.
-2. **Enzyme-Background Centering:** Subtracts the static enzyme residue-mean background $\mathbf{v}_{\text{bg}}$ so static fold family bias cancels out:
+1. **Reaction Role Splitting (`bio_split_reaction_roles`):** Decomposes any Daylight reaction SMILES (`Reactants > Agents > Products` or `A.B>>C.D`), strips spectator catalysts/solvents, and generates separate reactant ($$\mathbf{r}_{\text{react}}$$) and product ($$\mathbf{r}_{\text{prod}}$$) conditioned vectors.
+2. **Enzyme-Background Centering:** Subtracts the static enzyme residue-mean background $$\mathbf{v}_{\text{bg}}$$ so static fold family bias cancels out:
+
    $$\mathbf{d}_{\text{react}} = \mathbf{r}_{\text{react}} - \mathbf{v}_{\text{bg}}, \qquad \mathbf{d}_{\text{prod}} = \mathbf{r}_{\text{prod}} - \mathbf{v}_{\text{bg}}$$
+
 3. **Symmetry-Aware Recomposition & Antisymmetric Flux Rank:**
+
    $$\mathbf{m} = \frac{1}{2}(\mathbf{d}_{\text{react}} + \mathbf{d}_{\text{prod}}), \qquad \mathbf{c}_{\text{fwd}} = \mathbf{d}_{\text{prod}} - \mathbf{d}_{\text{react}}$$
-   Notice that if you swap reactants and products ($\mathbf{r}_{\text{react}} \leftrightarrow \mathbf{r}_{\text{prod}}$), the catalytic response $\mathbf{m}$ is **strictly symmetric** while the directed role contrast $\mathbf{c}_{\text{fwd}}$ flips sign ($\mathbf{c}_{\text{fwd}} \to -\mathbf{c}_{\text{fwd}}$). Projecting $\mathbf{c}_{\text{fwd}}$ onto the enzyme's active catalytic axis yields an **exact antisymmetric forward flux rank**:
-   $$\text{bio\_enzref\_flux\_rank}(\mathbf{v}_{\text{bg}}, \mathbf{r}_{\text{prod}}, \mathbf{r}_{\text{react}}) = -\text{bio\_enzref\_flux\_rank}(\mathbf{v}_{\text{bg}}, \mathbf{r}_{\text{react}}, \mathbf{r}_{\text{prod}})$$
-4. **Backpressure Risk (`backpressure_risk`):** Measures product-over-reactant retention and counter-aligned contrast, feeding directly into the 48-hour RK4 effective product inhibition penalty on `M3_Sink`:
-   $$v_3(t) = \frac{k_{\text{cat},3,\text{eff}}\,[E_3](t)\,[I_1](t)}{K_{m,3} \cdot \underbrace{(1 + 2.25\,\text{backpressure\_risk})}_{\text{Active-Site Product Retention}} + [I_1](t) + \frac{[P_{\text{final}}](t)}{K_{p,\text{eff}}}} - k_{\text{rev}}\,[P_{\text{final}}](t)$$
+
+   Notice that if you swap reactants and products ($$\mathbf{r}_{\text{react}} \leftrightarrow \mathbf{r}_{\text{prod}}$$), the catalytic response $$\mathbf{m}$$ is **strictly symmetric** while the directed role contrast $$\mathbf{c}_{\text{fwd}}$$ flips sign ($$\mathbf{c}_{\text{fwd}} \to -\mathbf{c}_{\text{fwd}}$$). Projecting $$\mathbf{c}_{\text{fwd}}$$ onto the enzyme's active catalytic axis yields an **exact antisymmetric forward flux rank** (`bio_enzref_flux_rank`):
+
+   $$\operatorname{FluxRank}_{\text{EnzRef}}(\mathbf{v}_{\text{bg}}, \mathbf{r}_{\text{prod}}, \mathbf{r}_{\text{react}}) = -\operatorname{FluxRank}_{\text{EnzRef}}(\mathbf{v}_{\text{bg}}, \mathbf{r}_{\text{react}}, \mathbf{r}_{\text{prod}})$$
+
+4. **Backpressure Risk (`backpressure_risk`, $$R_{\text{bp}}$$):** Measures product-over-reactant retention and counter-aligned contrast, feeding directly into the 48-hour RK4 effective product inhibition penalty on `M3_Sink`:
+
+   $$v_3(t) = \frac{k_{\text{cat},3,\text{eff}}\,[E_3](t)\,[I_1](t)}{K_{m,3} \cdot \underbrace{(1 + 2.25\,R_{\text{bp}})}_{\text{Active-Site Product Retention}} + [I_1](t) + \frac{[P_{\text{final}}](t)}{K_{p,\text{eff}}}} - k_{\text{rev}}\,[P_{\text{final}}](t)$$
 
 ```sql
 -- Split a reaction SMILES and score an M3_Sink candidate with EnzRef Role-Contrast + 48h RK4 Cascade Kinetics
@@ -234,22 +245,22 @@ Explore the four key structural archetypes from our live `swarm_pslim_metabolon_
 <script src="https://3Dmol.csb.pitt.edu/build/3Dmol-min.js"></script>
 <script src="/assets/js/pg_bio_sync.js"></script>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 20px 0;">
-  <div style="border: 1px solid #334155; border-radius: 8px; padding: 8px; background: #0f172a;">
-    <div style="font-size: 0.85rem; font-weight: 700; color: #38bdf8; margin-bottom: 6px;">1. L0JP89 (41 aa Dual-SLiM Ribbon Cable)</div>
-    <div style="height: 320px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-L0JP89-F1-model_v4.pdb" data-backgroundcolor="0x0f172a" data-style="cartoon:color=spectrum" data-select1="resi:3-10" data-style1="cartoon:color=0x10b981;stick:radius=0.18,colorscheme=greenCarbon" data-select2="resi:31-38" data-style2="cartoon:color=0xf43f5e;stick:radius=0.18,colorscheme=magentaCarbon"></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 20px 0;">
+  <div style="border: 1px solid #334155; border-radius: 8px; padding: 10px; background: #0f172a;">
+    <div style="font-size: 0.9rem; font-weight: 700; color: #38bdf8; margin-bottom: 8px;">1. L0JP89 (41 aa Dual-SLiM Ribbon Cable)</div>
+    <div style="height: 340px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-L0JP89-F1-model_v4.pdb" data-backgroundcolor="0x0f172a" data-style="cartoon:color=spectrum" data-select1="resi:3-10" data-style1="cartoon:color=0x10b981;stick:radius=0.18,colorscheme=greenCarbon" data-select2="resi:31-38" data-style2="cartoon:color=0xf43f5e;stick:radius=0.18,colorscheme=magentaCarbon"></div>
   </div>
-  <div style="border: 1px solid #334155; border-radius: 8px; padding: 8px; background: #0f172a;">
-    <div style="font-size: 0.85rem; font-weight: 700; color: #10b981; margin-bottom: 6px;">2. A0A897MT85 (54 aa Top Dual-SLiM Tether, Score 0.975)</div>
-    <div style="height: 320px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A897MT85-F1-model_v4.pdb" data-backgroundcolor="0x0f172a" data-style="cartoon:color=spectrum" data-select1="resi:3-10" data-style1="cartoon:color=0x10b981;stick:radius=0.18,colorscheme=greenCarbon" data-select2="resi:45-52" data-style2="cartoon:color=0xf43f5e;stick:radius=0.18,colorscheme=magentaCarbon"></div>
+  <div style="border: 1px solid #334155; border-radius: 8px; padding: 10px; background: #0f172a;">
+    <div style="font-size: 0.9rem; font-weight: 700; color: #10b981; margin-bottom: 8px;">2. A0A897MT85 (54 aa Top Dual-SLiM Tether, Score 0.975)</div>
+    <div style="height: 340px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-A0A897MT85-F1-model_v4.pdb" data-backgroundcolor="0x0f172a" data-style="cartoon:color=spectrum" data-select1="resi:3-10" data-style1="cartoon:color=0x10b981;stick:radius=0.18,colorscheme=greenCarbon" data-select2="resi:45-52" data-style2="cartoon:color=0xf43f5e;stick:radius=0.18,colorscheme=magentaCarbon"></div>
   </div>
-  <div style="border: 1px solid #334155; border-radius: 8px; padding: 8px; background: #0f172a;">
-    <div style="font-size: 0.85rem; font-weight: 700; color: #f59e0b; margin-bottom: 6px;">3. V5TNY2 (77 aa Split-Core -> Bicistronic Operon)</div>
-    <div style="height: 320px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-V5TNY2-F1-model_v4.pdb" data-backgroundcolor="0x0f172a" data-style="cartoon:color=spectrum" data-select1="resi:11-66" data-style1="cartoon:color=0xfacc15;stick:radius=0.14,colorscheme=yellowCarbon"></div>
+  <div style="border: 1px solid #334155; border-radius: 8px; padding: 10px; background: #0f172a;">
+    <div style="font-size: 0.9rem; font-weight: 700; color: #f59e0b; margin-bottom: 8px;">3. V5TNY2 (77 aa Split-Core -> Bicistronic Operon)</div>
+    <div style="height: 340px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-V5TNY2-F1-model_v4.pdb" data-backgroundcolor="0x0f172a" data-style="cartoon:color=spectrum" data-select1="resi:11-66" data-style1="cartoon:color=0xfacc15;stick:radius=0.14,colorscheme=yellowCarbon"></div>
   </div>
-  <div style="border: 1px solid #334155; border-radius: 8px; padding: 8px; background: #0f172a;">
-    <div style="font-size: 0.85rem; font-weight: 700; color: #c084fc; margin-bottom: 6px;">4. D3SWG7 (Lake Magadi M2_Scissor Partner)</div>
-    <div style="height: 320px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-D3SWG7-F1-model_v4.pdb" data-backgroundcolor="0x0f172a" data-style="cartoon:color=spectrum"></div>
+  <div style="border: 1px solid #334155; border-radius: 8px; padding: 10px; background: #0f172a;">
+    <div style="font-size: 0.9rem; font-weight: 700; color: #c084fc; margin-bottom: 8px;">4. D3SWG7 (Lake Magadi M2_Scissor Partner)</div>
+    <div style="height: 340px; width: 100%; position: relative;" class="viewer_3Dmoljs" data-href="/assets/models/AF-D3SWG7-F1-model_v4.pdb" data-backgroundcolor="0x0f172a" data-style="cartoon:color=spectrum"></div>
   </div>
 </div>
 
