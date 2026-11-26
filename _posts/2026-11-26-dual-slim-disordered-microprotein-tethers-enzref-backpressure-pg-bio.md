@@ -29,7 +29,7 @@ Think of a 3-enzyme industrial cascade (`M1_Anchor -> M2_Scissor -> M3_Sink`) in
 
 If `M2` and `M3` float freely in the reactor bulk, `I1` escapes into solution, degrades, or inhibits the cell before `M3` ever sees it. You want to physically tie `M2` and `M3` together into a **synthetic metabolon**:
 
-```mermaid
+{% mermaid %}
 flowchart LR
     subgraph Rigid["1. Rigid Lock-and-Key Staple (V5TNY2, 77 aa)"]
         direction LR
@@ -46,7 +46,7 @@ flowchart LR
 
     style Rigid fill:#1e1b4b,stroke:#818cf8,color:#f8fafc
     style DualSLiM fill:#064e3b,stroke:#10b981,color:#f8fafc
-```
+{% endmermaid %}
 
 ### Why Standard 3D Filters and Whole-Protein Embeddings Miss Dual-SLiMs
 
