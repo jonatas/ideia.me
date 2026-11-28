@@ -12,6 +12,7 @@ math: true
 > **📚 PostgreSQL & Rust (`pgrx`) Systems Internals Series**
 > This monograph is part of an ongoing systems engineering series exploring how we turned PostgreSQL 18 into a high-performance scientific and multidimensional computing engine using Rust:
 > * **Part 1: Crossing the C ↔ Rust FFI Boundary (`MemoryContext`, `varlena`, TOAST & Parallel Workers)** *(You are here)*
+> * [Part 2: Memory Ordering, MESI Cache Coherency & a `10.09×` Lock-Free `Release`/`Acquire` ZCA Whitening Cache](/memory-ordering-release-acquire-mesi-cache-zca-whitening-pg-bio)
 > * [Companion Systems Monograph: Delegating RangeFinder Pocket Intervals, GiST R-Trees & 3D Cheminformatics to the Query Planner](/postgresql-query-planner-rangefinder-gist-bioinformatics-engine)
 > * [Part 2: Writing a Hybrid Database Operator in Rust (`<~>`)](/writing-a-hybrid-database-operator-for-biology)
 > * [Part 3: Indexing 3D Space Like a Video Game (Morton Z-Order B-Trees)](/indexing-3d-space-like-a-video-game)
